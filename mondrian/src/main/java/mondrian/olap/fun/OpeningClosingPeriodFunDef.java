@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -30,6 +31,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
@@ -44,7 +46,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since 2005/8/14
  */
-class OpeningClosingPeriodFunDef extends FunDefBase {
+class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
     private final boolean opening;
 
     static final FunctionResolver OpeningPeriodResolver =
@@ -55,8 +57,8 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm"})
     {
         @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
-            return new OpeningClosingPeriodFunDef(dummyFunDef, true);
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
+            return new OpeningClosingPeriodFunDef(functionMetaData, true);
         }
     };
 
@@ -68,16 +70,16 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm", "fmm"})
     {
         @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
-            return new OpeningClosingPeriodFunDef(dummyFunDef, false);
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
+            return new OpeningClosingPeriodFunDef(functionMetaData, false);
         }
     };
 
     public OpeningClosingPeriodFunDef(
-        FunctionDefinition dummyFunDef,
+        FunctionMetaData functionMetaData ,
         boolean opening)
     {
-        super(dummyFunDef);
+        super(functionMetaData);
         this.opening = opening;
     }
 
@@ -89,7 +91,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             // dimension.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                    getName());
+                		getFunctionMetaData().name());
             return MemberType.forHierarchy(defaultTimeHierarchy);
         }
         return super.getResultType(validator, args);
@@ -105,7 +107,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
         case 0:
             defaultTimeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getName());
+                    .getTimeHierarchy(getFunctionMetaData().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                         MemberType.forHierarchy(defaultTimeHierarchy),
@@ -115,7 +117,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
         case 1:
             defaultTimeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getName());
+                    .getTimeHierarchy(getFunctionMetaData().name());
             levelCalc = compiler.compileLevel(call.getArg(0));
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(

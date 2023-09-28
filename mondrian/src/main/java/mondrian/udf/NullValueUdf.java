@@ -57,9 +57,5 @@ public class NullValueUdf implements UserDefinedFunction {
         return Util.nullValue;
     }
 
-    @Override
-	public String[] getReservedWords() {
-        // This function does not require any reserved words.
-        return null;
-    }
+
 }

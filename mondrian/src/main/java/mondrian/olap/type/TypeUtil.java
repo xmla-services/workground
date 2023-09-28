@@ -36,6 +36,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -338,6 +339,87 @@ public class TypeUtil {
                 new StringBuilder("unknown category ").append(from).append(" for type ").append(fromType).toString());
         }
     }
+
+
+	/**
+	 * Converts a type to a different category, maintaining as much type information
+	 * as possible.
+	 *
+	 * For example, given <code>LevelType(dimension=Time, hierarchy=unknown,
+	 * level=unkown)</code> and category=Hierarchy, returns
+	 * <code>HierarchyType(dimension=Time)</code>.
+	 *
+	 * @param type     Type
+	 * @param category Desired category
+	 * @return Type after conversion to desired category
+	 */
+	public static Type castType(Type type, DataType category) {
+		switch (category) {
+		case LOGICAL:
+			return BooleanType.INSTANCE;
+		case NUMERIC:
+			return NumericType.INSTANCE;// TODO: RIGHT ORDER?
+		case INTEGER:
+			return new DecimalType(Integer.MAX_VALUE, 0);
+		case STRING:
+			return StringType.INSTANCE;
+		case DATE_TIME:
+			return DateTimeType.INSTANCE;
+		case SYMBOL:
+			return SymbolType.INSTANCE;
+		case VALUE:
+			return ScalarType.INSTANCE;
+		case CUBE:
+			if (type instanceof Cube cube) {
+				return new CubeType(cube);
+			}
+			return null;
+		case DIMENSION:
+			if (type != null) {
+				return DimensionType.forType(type);
+			}
+			return null;
+		case HIERARCHY:
+			if (type != null) {
+				return HierarchyType.forType(type);
+			}
+			return null;
+		case LEVEL:
+			if (type != null) {
+				return LevelType.forType(type);
+			}
+			return null;
+		case MEMBER:
+			if (type != null) {
+				final MemberType memberType = TypeUtil.toMemberType(type);
+				if (memberType != null) {
+					return memberType;
+				}
+			}
+			// Take a wild guess.
+			return MemberType.Unknown;
+		case TUPLE:
+			if (type != null) {
+				final Type memberType = TypeUtil.toMemberOrTupleType(type);
+				if (memberType != null) {
+					return memberType;
+				}
+			}
+			return null;
+		case SET:
+			if (type != null) {
+				final Type memberType = TypeUtil.toMemberOrTupleType(type);
+				if (memberType != null) {
+					return new SetType(memberType);
+				}
+			}
+			return null;
+		case EMPTY:
+			return EmptyType.INSTANCE;
+		default:
+			throw new RuntimeException("Unexpected Category: " + category);
+		}
+	}
 
 	private static boolean convertFromNull(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
 			final DataType from) {

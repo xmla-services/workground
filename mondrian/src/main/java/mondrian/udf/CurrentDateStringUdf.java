@@ -57,10 +57,7 @@ public class CurrentDateStringUdf implements UserDefinedFunction {
         return new Type[] { StringType.INSTANCE };
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return null;
-    }
+
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {

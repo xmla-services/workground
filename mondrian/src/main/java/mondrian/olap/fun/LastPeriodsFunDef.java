@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -40,7 +41,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class LastPeriodsFunDef extends FunDefBase {
+class LastPeriodsFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "LastPeriods",
@@ -49,8 +50,8 @@ class LastPeriodsFunDef extends FunDefBase {
             new String[] {"fxn", "fxnm"},
             LastPeriodsFunDef.class);
 
-    public LastPeriodsFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public LastPeriodsFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -60,7 +61,7 @@ class LastPeriodsFunDef extends FunDefBase {
             // it is Time.CurrentMember.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                    getName());
+                		getFunctionMetaData().name());
             return new SetType(MemberType.forHierarchy(defaultTimeHierarchy));
         } else {
             Type type = args[1].getType();
@@ -78,7 +79,7 @@ class LastPeriodsFunDef extends FunDefBase {
         if (args.length == 1) {
             final RolapHierarchy timeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getName());
+                    .getTimeHierarchy(getFunctionMetaData().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);

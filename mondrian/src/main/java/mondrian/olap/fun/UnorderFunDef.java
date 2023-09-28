@@ -9,10 +9,11 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>Unorder</code> MDX function.
@@ -20,7 +21,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
  * @author jhyde
  * @since Sep 06, 2008
  */
-class UnorderFunDef extends FunDefBase {
+class UnorderFunDef extends AbstractFunctionDefinition {
 
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
@@ -30,8 +31,8 @@ class UnorderFunDef extends FunDefBase {
             new String[]{"fxx"},
             UnorderFunDef.class);
 
-    public UnorderFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public UnorderFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

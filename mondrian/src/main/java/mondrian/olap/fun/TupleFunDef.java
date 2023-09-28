@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -28,6 +29,8 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.type.MemberType;
@@ -42,7 +45,7 @@ import mondrian.olap.type.TypeUtil;
  * @author jhyde
  * @since 3 March, 2002
  */
-public class TupleFunDef extends FunDefBase {
+public class TupleFunDef extends AbstractFunctionDefinition {
     private final DataType[] argTypes;
     static final ResolverImpl Resolver = new ResolverImpl();
 
@@ -57,15 +60,7 @@ public class TupleFunDef extends FunDefBase {
         this.argTypes = argTypes;
     }
 
-    @Override
-	public DataType getReturnCategory() {
-        return DataType.TUPLE;
-    }
 
-    @Override
-	public DataType[] getParameterCategories() {
-        return argTypes;
-    }
 
     @Override
 	public void unparse(Expression[] args, PrintWriter pw) {
@@ -170,8 +165,12 @@ public class TupleFunDef extends FunDefBase {
                     }
                 }
                 if(hasSet){
-                    FunctionDefinition dummy = FunUtil.createDummyFunDef(this, DataType.SET, args);
-                    return new CrossJoinFunDef(dummy);
+                	
+        			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+        					getSyntax(), DataType.SET, Expressions.categoriesOf(args));
+        			
+        
+                    return new CrossJoinFunDef(functionMetaData);
                 }
                 else {
                     return new TupleFunDef(argTypes);

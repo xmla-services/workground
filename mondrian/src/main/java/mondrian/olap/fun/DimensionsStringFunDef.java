@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.Util;
 import mondrian.olap.type.HierarchyType;
@@ -35,8 +36,8 @@ import mondrian.olap.type.HierarchyType;
  * @author jhyde
  * @since Jul 20, 2009
  */
-class DimensionsStringFunDef extends FunDefBase {
-    public static final FunDefBase INSTANCE = new DimensionsStringFunDef();
+class DimensionsStringFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition INSTANCE = new DimensionsStringFunDef();
 
     private DimensionsStringFunDef() {
         super(
@@ -86,10 +87,10 @@ class DimensionsStringFunDef extends FunDefBase {
             return hierarchy;
         } else if (o == null) {
             throw FunUtil.newEvalException(
-                this, new StringBuilder("Hierarchy '").append(name).append("' not found").toString());
+                this.getFunctionMetaData(), new StringBuilder("Hierarchy '").append(name).append("' not found").toString());
         } else {
             throw FunUtil.newEvalException(
-                this, new StringBuilder("Hierarchy(").append(name).append(") found ").append(o).toString());
+                this.getFunctionMetaData(), new StringBuilder("Hierarchy(").append(name).append(") found ").append(o).toString());
         }
     }
 }

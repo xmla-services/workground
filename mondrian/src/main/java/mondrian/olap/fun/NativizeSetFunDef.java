@@ -40,6 +40,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
@@ -58,6 +59,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +69,6 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.FormulaImpl;
@@ -82,7 +83,7 @@ import mondrian.resource.MondrianResource;
  * @author jrand
  * @since Oct 14, 2009
  */
-public class NativizeSetFunDef extends FunDefBase {
+public class NativizeSetFunDef extends AbstractFunctionDefinition {
     /*
      * Static final fields.
      */
@@ -124,8 +125,8 @@ public class NativizeSetFunDef extends FunDefBase {
     private static final String PARTIAL_ESTIMATE_MESSAGE =
         "isHighCardinality=%b: partial estimate=%,d threshold=%,d";
 
-    public NativizeSetFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public NativizeSetFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
         NativizeSetFunDef.LOGGER.debug("---- NativizeSetFunDef constructor");
     }
 

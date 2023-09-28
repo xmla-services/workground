@@ -30,6 +30,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.rolap.agg.Aggregator;
@@ -52,6 +53,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCa
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
@@ -99,7 +101,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // Empty expression
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "",
                 "",
                 "Dummy function representing the empty expression",
@@ -107,6 +109,12 @@ public class BuiltinFunTable extends FunTableImpl {
                 DataType.EMPTY,
                 new DataType[0])
             {
+
+				@Override
+				public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
+					// TODO Auto-generated method stub
+					return null;
+				}
             }
         );
 
@@ -116,7 +124,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // ARRAY FUNCTIONS
 
         // "SetToArray(<Set>[, <Set>]...[, <Numeric Expression>])"
-        if (false) builder.define(new FunDefBase(
+        if (false) builder.define(new AbstractFunctionDefinition(
                 "SetToArray",
                 "SetToArray(<Set>[, <Set>]...[, <Numeric Expression>])",
                 "Converts one or more sets to an array for use in a user-defined function.",
@@ -159,7 +167,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "<Hierarchy>.Levels(<Numeric Expression>)"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 LEVELS,
                 "Returns the level whose position in a hierarchy is specified by a numeric expression.",
                 "mlhn")
@@ -195,7 +203,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
                 if (n >= levels.length || n < 0) {
                     throw FunUtil.newEvalException(
-                        this, new StringBuilder("Index '").append(n).append("' out of bounds").toString());
+                        this.getFunctionMetaData(), new StringBuilder("Index '").append(n).append("' out of bounds").toString());
                 }
                 return levels[n];
             }
@@ -203,7 +211,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "<Hierarchy>.Levels(<String Expression>)"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 LEVELS,
                 "Returns the level whose name is specified by a string expression.",
                 "mlhS")
@@ -235,7 +243,7 @@ public class BuiltinFunTable extends FunTableImpl {
                             }
                         }
                         throw FunUtil.newEvalException(
-                            call.getFunDef(),
+                            call.getFunDef().getFunctionMetaData(),
                             new StringBuilder("Level '").append(name).append("' not found in hierarchy '")
                                 .append(hierarchy).append("'").toString());
                     }
@@ -245,7 +253,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "Levels(<String Expression>)"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 LEVELS,
                 "Returns the level whose name is specified by a string expression.",
                 "flS")
@@ -286,10 +294,10 @@ public class BuiltinFunTable extends FunTableImpl {
                 if (o instanceof Level level) {
                     return level;
                 } else if (o == null) {
-                    throw FunUtil.newEvalException(this, new StringBuilder("Level '").append(s).append("' not found").toString());
+                    throw FunUtil.newEvalException(this.getFunctionMetaData(), new StringBuilder("Level '").append(s).append("' not found").toString());
                 } else {
                     throw FunUtil.newEvalException(
-                        this, new StringBuilder("Levels('").append(s).append("') found ").append(o).toString());
+                        this.getFunctionMetaData(), new StringBuilder("Levels('").append(s).append("') found ").append(o).toString());
                 }
             }
         });
@@ -308,7 +316,7 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AncestorsFunDef.Resolver);
 
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Cousin",
                 "<Member> Cousin(<Member>, <Ancestor Member>)",
                 "Returns the member with the same relative position under <ancestor member> as the member specified.",
@@ -344,7 +352,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "<Member>.DataMember"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DataMember",
                 "Returns the system-generated data member that is associated with a nonleaf member of a dimension.",
                 "pmm")
@@ -375,7 +383,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "<Hierarchy>.DefaultMember"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DefaultMember",
                 "Returns the default member of a hierarchy.",
                 "pmh")
@@ -401,7 +409,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // "<Member>.FirstChild"
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "FirstChild",
                 "Returns the first child of a member.",
                 "pmm")
@@ -431,7 +439,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.FirstSibling
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "FirstSibling",
                 "Returns the first child of the parent of a member.",
                 "pmm")
@@ -471,7 +479,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.LastChild
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "LastChild",
                 "Returns the last child of a member.",
                 "pmm")
@@ -501,7 +509,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.LastSibling
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "LastSibling",
                 "Returns the last child of the parent of a member.",
                 "pmm")
@@ -541,7 +549,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // Members(<String Expression>)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 MEMBERS,
                 "Returns the member whose name is specified by a string expression.",
                 "fmS")
@@ -555,7 +563,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.NextMember
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "NextMember",
                 "Returns the next member in the level that contains a specified member.",
                 "pmm")
@@ -585,7 +593,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Parent
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Parent",
                 "Returns the parent of a member.",
                 "pmm")
@@ -616,7 +624,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.PrevMember
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "PrevMember",
                 "Returns the previous member in the level that contains a specified member.",
                 "pmm")
@@ -652,8 +660,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 "Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
                 new String[] {"Inh"}) {
             @Override
-			protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
-                return new FunDefBase(dummyFunDef) {
+			protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
+                return new AbstractFunctionDefinition(functionMetaData) {
                     @Override
 					public void unparse(Expression[] args, PrintWriter pw) {
                         pw.print(getName());
@@ -736,7 +744,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Set>.Count
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Count",
                 "Returns the number of tuples in a set including empty cells.",
                 "pnx")
@@ -783,7 +791,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Level>.Ordinal
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Ordinal",
                 "Returns the zero-based ordinal value associated with a level.",
                 "pnl")
@@ -817,7 +825,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Measure>.Value
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Value",
                 "Returns the value of a measure.",
                 "pnm")
@@ -869,7 +877,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // Ascendants(<Member>)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Ascendants",
                 "Returns the set of the ascendants of a specified member.",
                 "fxm")
@@ -910,7 +918,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Children
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Children",
                 "Returns the children of a member.",
                 "pxm")
@@ -952,7 +960,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         if (false)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DrilldownMemberBottom",
                 "DrilldownMemberBottom(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
                 "Like DrilldownMember except that it includes only the bottom N children.",
@@ -967,7 +975,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         if (false)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DrilldownMemberTop",
                 "DrilldownMemberTop(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
                 "Like DrilldownMember except that it includes only the top N children.",
@@ -982,7 +990,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         if (false)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DrillupLevel",
                 "DrillupLevel(<Set>[, <Level>])",
                 "Drills up the members of a set that are below a specified level.",
@@ -997,7 +1005,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         if (false)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "DrillupMember",
                 "DrillupMember(<Set1>, <Set2>)",
                 "Drills up the members in a set that are present in a second specified set.",
@@ -1033,7 +1041,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Hierarchy>.Members
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 MEMBERS,
                 "Returns the set of members in a hierarchy.",
                 "pxh")
@@ -1059,7 +1067,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Hierarchy>.AllMembers
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "AllMembers",
                 "Returns a set that contains all members, including calculated members, of the specified hierarchy.",
                 "pxh")
@@ -1088,7 +1096,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Level>.AllMembers
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "AllMembers",
                 "Returns a set that contains all members, including calculated members, of the specified level.",
                 "pxl")
@@ -1118,7 +1126,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // StripCalculatedMembers(<Set>)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "StripCalculatedMembers",
                 "Removes calculated members from a set.",
                 "fxx")
@@ -1141,7 +1149,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Siblings
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Siblings",
                 "Returns the siblings of a specified member, including the member itself.",
                 "pxm")
@@ -1200,7 +1208,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Dimension>.Caption
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Caption",
                 "Returns the caption of a dimension.",
                 "pSd")
@@ -1224,7 +1232,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Hierarchy>.Caption
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Caption",
                 "Returns the caption of a hierarchy.",
                 "pSh")
@@ -1248,7 +1256,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Level>.Caption
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Caption",
                 "Returns the caption of a level.",
                 "pSl")
@@ -1270,7 +1278,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Caption
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Caption",
                 "Returns the caption of a member.",
                 "pSm")
@@ -1293,7 +1301,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Member_Caption
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                     "Member_Caption",
                     "Returns the caption of a member.",
                     "pSm")
@@ -1316,7 +1324,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Dimension>.Name
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Name",
                 "Returns the name of a dimension.",
                 "pSd")
@@ -1340,7 +1348,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Hierarchy>.Name
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Name",
                 "Returns the name of a hierarchy.",
                 "pSh")
@@ -1364,7 +1372,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Level>.Name
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Name",
                 "Returns the name of a level.",
                 "pSl")
@@ -1386,7 +1394,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Name
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Name",
                 "Returns the name of a member.",
                 "pSm")
@@ -1413,7 +1421,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Dimension>.UniqueName
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "UniqueName",
                 "Returns the unique name of a dimension.",
                 "pSd")
@@ -1437,7 +1445,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Hierarchy>.UniqueName
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "UniqueName",
                 "Returns the unique name of a hierarchy.",
                 "pSh")
@@ -1461,7 +1469,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Level>.UniqueName
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "UniqueName",
                 "Returns the unique name of a level.",
                 "pSl")
@@ -1483,7 +1491,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Level_Number
         builder.define(
-                new FunDefBase(
+                new AbstractFunctionDefinition(
                         "Level_Number",
                         "Returns the level number of a member.",
                         "pim")
@@ -1506,7 +1514,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.UniqueName
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "UniqueName",
                 "Returns the unique name of a member.",
                 "pSm")
@@ -1529,7 +1537,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Member>.Unique_Name
         builder.define(
-                new FunDefBase(
+                new AbstractFunctionDefinition(
                         "Unique_Name",
                         "Returns the unique name of a member.",
                         "pSm")
@@ -1556,7 +1564,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // <Set>.Current
         if (false)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Current",
                 "Returns the current tuple from a set during an iteration.",
                 "ptx")
@@ -1593,7 +1601,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> + <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "+",
                 "Adds two numbers.",
                 "innn")
@@ -1629,7 +1637,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> - <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "-",
                 "Subtracts two numbers.",
                 "innn")
@@ -1664,7 +1672,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> * <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "*",
                 "Multiplies two numbers.",
                 "innn")
@@ -1693,7 +1701,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> / <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "/",
                 "Divides two numbers.",
                 "innn")
@@ -1758,7 +1766,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // - <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "-",
                 "Returns the negative of a number.",
                 "Pnn")
@@ -1804,7 +1812,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> || <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "||",
                 "Concatenates two strings.",
                 "iSSS")
@@ -1827,7 +1835,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Logical Expression> AND <Logical Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "AND",
                 "Returns the conjunction of two conditions.",
                 "ibbb")
@@ -1859,7 +1867,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Logical Expression> OR <Logical Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "OR",
                 "Returns the disjunction of two conditions.",
                 "ibbb")
@@ -1891,7 +1899,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Logical Expression> XOR <Logical Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "XOR",
                 "Returns whether two conditions are mutually exclusive.",
                 "ibbb")
@@ -1917,7 +1925,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // NOT <Logical Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "NOT",
                 "Returns the negation of a condition.",
                 "Pbb")
@@ -1938,7 +1946,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> = <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "=",
                 "Returns whether two expressions are equal.",
                 "ibSS")
@@ -1965,7 +1973,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> = <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "=",
                 "Returns whether two expressions are equal.",
                 "ibnn")
@@ -1996,7 +2004,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> <> <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<>",
                 "Returns whether two expressions are not equal.",
                 "ibSS")
@@ -2023,7 +2031,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> <> <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<>",
                 "Returns whether two expressions are not equal.",
                 "ibnn")
@@ -2054,7 +2062,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> < <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<",
                 "Returns whether an expression is less than another.",
                 "ibnn")
@@ -2085,7 +2093,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> < <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<",
                 "Returns whether an expression is less than another.",
                 "ibSS")
@@ -2112,7 +2120,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> <= <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<=",
                 "Returns whether an expression is less than or equal to another.",
                 "ibnn")
@@ -2143,7 +2151,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> <= <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "<=",
                 "Returns whether an expression is less than or equal to another.",
                 "ibSS")
@@ -2170,7 +2178,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> > <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 ">",
                 "Returns whether an expression is greater than another.",
                 "ibnn")
@@ -2201,7 +2209,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> > <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 ">",
                 "Returns whether an expression is greater than another.",
                 "ibSS")
@@ -2228,7 +2236,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Numeric Expression> >= <Numeric Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 ">=",
                 "Returns whether an expression is greater than or equal to another.",
                 "ibnn")
@@ -2259,7 +2267,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <String Expression> >= <String Expression>
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 ">=",
                 "Returns whether an expression is greater than or equal to another.",
                 "ibSS")
@@ -2298,7 +2306,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // UCase(<String Expression>)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "UCase",
                 "Returns a string that has been converted to uppercase",
                 "fSS")
@@ -2311,7 +2319,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 final StringCalc stringCalc =
                     compiler.compileString(call.getArg(0));
                 if (stringCalc.getType().getClass().equals(NullType.class)) {
-                    throw FunUtil.newEvalException(this,
+                    throw FunUtil.newEvalException(this.getFunctionMetaData(),
                         "No method with the signature UCase(NULL) matches known functions.");
                 }
                 return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[]{stringCalc}) {
@@ -2326,7 +2334,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // Len(<String Expression>)
         builder.define(
-            new FunDefBase(
+            new AbstractFunctionDefinition(
                 "Len",
                 "Returns the number of characters in a string",
                 "fnS")

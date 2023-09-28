@@ -1910,7 +1910,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // TODO: Don't assume it's a string.
                 // TODO: Create expression which will get the value from the
                 //  statement at the time the query is executed.
-                AbstractLiteralImpl defaultValue =
+                StringLiteralImpl defaultValue =
                     StringLiteralImpl.create(String.valueOf(value));
                 return new ConnectionParameterImpl(name, defaultValue);
             }
@@ -1982,7 +1982,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     private static class ConnectionParameterImpl
         extends ParameterImpl
     {
-        public ConnectionParameterImpl(String name, AbstractLiteralImpl defaultValue) {
+        public ConnectionParameterImpl(String name, StringLiteralImpl defaultValue) {
             super(name, defaultValue, "Connection property", StringType.INSTANCE);
         }
 

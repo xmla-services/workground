@@ -9,9 +9,11 @@
 
 package mondrian.olap.fun;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -30,7 +32,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCa
  * @since Mar 23, 2006
  */
 class CountFunDef extends AbstractAggregateFunDef {
-  static final String[] ReservedWords = new String[] { "INCLUDEEMPTY", "EXCLUDEEMPTY" };
+  static final List<String> ReservedWords =  List.of( "INCLUDEEMPTY", "EXCLUDEEMPTY" );
 
   static final ReflectiveMultiResolver Resolver =
       new ReflectiveMultiResolver( "Count", "Count(<Set>[, EXCLUDEEMPTY | INCLUDEEMPTY])",
@@ -38,8 +40,8 @@ class CountFunDef extends AbstractAggregateFunDef {
           new String[] { "fnx", "fnxy" }, CountFunDef.class, CountFunDef.ReservedWords );
   private static final String TIMING_NAME = CountFunDef.class.getSimpleName();
 
-  public CountFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public CountFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override

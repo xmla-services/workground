@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
@@ -39,8 +39,8 @@ class SumFunDef extends AbstractAggregateFunDef {
           SumFunDef.class );
   private static final String TIMING_NAME = SumFunDef.class.getSimpleName();
 
-  public SumFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public SumFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override

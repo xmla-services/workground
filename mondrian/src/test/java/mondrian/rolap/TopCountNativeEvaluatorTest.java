@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import mondrian.olap.NumericLiteralImpl;
 
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,7 +108,10 @@ class TopCountNativeEvaluatorTest {
 
     private FunctionDefinition mockFunctionDef() {
         FunctionDefinition topCountFunMock = mock(FunctionDefinition.class);
-        when(topCountFunMock.getName()).thenReturn("TOPCOUNT");
+        FunctionMetaData functionInformation = mock(FunctionMetaData.class);
+        when(topCountFunMock.getFunctionMetaData()).thenReturn(functionInformation);
+        when(functionInformation.name()).thenReturn("TOPCOUNT");
+
         return topCountFunMock;
     }
 }

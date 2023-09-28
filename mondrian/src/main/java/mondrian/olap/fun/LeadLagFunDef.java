@@ -11,13 +11,14 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>Lead</code> and <code>Lag</code> MDX functions.
@@ -25,7 +26,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
  * @author jhyde
  * @since Mar 23, 2006
  */
-class LeadLagFunDef extends FunDefBase {
+class LeadLagFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver LagResolver =
         new ReflectiveMultiResolver(
             "Lag",
@@ -42,8 +43,8 @@ class LeadLagFunDef extends FunDefBase {
             new String[]{"mmmn"},
             LeadLagFunDef.class);
 
-    public LeadLagFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public LeadLagFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -52,7 +53,7 @@ class LeadLagFunDef extends FunDefBase {
                 compiler.compileMember(call.getArg(0));
         final IntegerCalc integerCalc =
                 compiler.compileInteger(call.getArg(1));
-        final boolean lag = call.getFunDef().getName().equals("Lag");
+        final boolean lag = call.getFunDef().getFunctionMetaData().name().equals("Lag");
         return new AbstractProfilingNestedMemberCalc(
         		call.getType(),
             new Calc[] {memberCalc, integerCalc})

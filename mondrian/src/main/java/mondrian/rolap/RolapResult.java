@@ -320,7 +320,7 @@ public class RolapResult extends ResultBase {
                 new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
         Expression partialExp =
                 new ResolvedFunCallImpl(
-                        new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
+                        new org.eclipse.daanse.olap.function.AbstractFunctionDefinition("$x", "x", "In") {
                           @Override
 						public Calc compileCall(
                                   ResolvedFunCall call, org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler compiler)

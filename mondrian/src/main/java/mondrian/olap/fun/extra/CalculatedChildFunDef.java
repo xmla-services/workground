@@ -21,8 +21,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
-
-import mondrian.olap.fun.FunDefBase;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>CalculatedChild</code> MDX function.
@@ -34,7 +33,7 @@ import mondrian.olap.fun.FunDefBase;
  * @author bchow
  * @since 2006/4/12
  */
-public class CalculatedChildFunDef extends FunDefBase {
+public class CalculatedChildFunDef extends AbstractFunctionDefinition {
     public static final CalculatedChildFunDef instance =
         new CalculatedChildFunDef();
 

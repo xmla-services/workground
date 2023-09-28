@@ -10,11 +10,12 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>IsEmpty</code> MDX function.
@@ -22,7 +23,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
  * @author jhyde
  * @since Mar 23, 2006
  */
-class IsEmptyFunDef extends FunDefBase {
+class IsEmptyFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver FunctionResolver =
         new ReflectiveMultiResolver(
             "IsEmpty",
@@ -39,8 +40,8 @@ class IsEmptyFunDef extends FunDefBase {
             new String[] {"Qbm", "Qbt"},
             IsEmptyFunDef.class);
 
-    public IsEmptyFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public IsEmptyFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

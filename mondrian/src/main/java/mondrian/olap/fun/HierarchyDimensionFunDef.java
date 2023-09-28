@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>&lt;Hierarchy&gt;.Dimension</code> MDX
@@ -26,7 +27,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimension
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class HierarchyDimensionFunDef extends FunDefBase {
+public class HierarchyDimensionFunDef extends AbstractFunctionDefinition {
     static final HierarchyDimensionFunDef instance =
         new HierarchyDimensionFunDef();
 

@@ -15,12 +15,13 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ArrayTupleList;
@@ -31,7 +32,7 @@ import mondrian.calc.impl.ArrayTupleList;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class ExceptFunDef extends FunDefBase {
+class ExceptFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "Except",
@@ -40,8 +41,8 @@ class ExceptFunDef extends FunDefBase {
             new String[]{"fxxx", "fxxxy"},
             ExceptFunDef.class);
 
-    public ExceptFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public ExceptFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

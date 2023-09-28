@@ -58,7 +58,7 @@ public class RolapNativeRegistry extends RolapNative {
         RolapNative rn = null;
         readLock.lock();
         try {
-            rn = nativeEvaluatorMap.get(fun.getName().toUpperCase());
+            rn = nativeEvaluatorMap.get(fun.getFunctionMetaData().name().toUpperCase());
         } finally {
             readLock.unlock();
         }

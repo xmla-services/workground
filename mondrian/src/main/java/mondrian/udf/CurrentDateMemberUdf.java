@@ -131,12 +131,8 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
     }
 
     @Override
-	public String[] getReservedWords() {
-        return new String[] {
-            "EXACT",
-            "BEFORE",
-            "AFTER"
-        };
+	public List<String> getReservedWords() {
+		return List.of("EXACT", "BEFORE", "AFTER");
     }
 
     @Override

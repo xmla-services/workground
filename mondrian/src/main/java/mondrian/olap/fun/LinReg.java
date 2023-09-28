@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -26,6 +27,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil.SetWrapper;
@@ -112,7 +114,7 @@ import mondrian.olap.fun.FunUtil.SetWrapper;
  */
 
 
-public abstract class LinReg extends FunDefBase {
+public abstract class LinReg extends AbstractFunctionDefinition {
     /** Code for the specific function. */
     final int regType;
 
@@ -259,8 +261,8 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class InterceptFunDef extends LinReg {
-        public InterceptFunDef(FunctionDefinition funDef) {
-            super(funDef, LinReg.INTERCEPT);
+        public InterceptFunDef(FunctionMetaData functionMetaData) {
+            super(functionMetaData, LinReg.INTERCEPT);
         }
     }
 
@@ -274,8 +276,8 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class PointFunDef extends LinReg {
-        public PointFunDef(FunctionDefinition funDef) {
-            super(funDef, LinReg.POINT);
+        public PointFunDef(FunctionMetaData functionMetaData) {
+            super(functionMetaData, LinReg.POINT);
         }
 
         @Override
@@ -335,8 +337,8 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class SlopeFunDef extends LinReg {
-        public SlopeFunDef(FunctionDefinition funDef) {
-            super(funDef, LinReg.SLOPE);
+        public SlopeFunDef(FunctionMetaData functionMetaData) {
+            super(functionMetaData, LinReg.SLOPE);
         }
     }
 
@@ -350,8 +352,8 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class R2FunDef extends LinReg {
-        public R2FunDef(FunctionDefinition funDef) {
-            super(funDef, LinReg.R2);
+        public R2FunDef(FunctionMetaData functionMetaData) {
+            super(functionMetaData, LinReg.R2);
         }
     }
 
@@ -365,8 +367,8 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class VarianceFunDef extends LinReg {
-        public VarianceFunDef(FunctionDefinition funDef) {
-            super(funDef, LinReg.VARIANCE);
+        public VarianceFunDef(FunctionMetaData functionMetaData) {
+            super(functionMetaData, LinReg.VARIANCE);
         }
     }
 
@@ -376,8 +378,8 @@ public abstract class LinReg extends FunDefBase {
     }
 
 
-    protected LinReg(FunctionDefinition funDef, int regType) {
-        super(funDef);
+    protected LinReg(FunctionMetaData functionMetaData, int regType) {
+        super(functionMetaData);
         this.regType = regType;
     }
 

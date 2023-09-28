@@ -14,7 +14,7 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -38,7 +39,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class PeriodsToDateFunDef extends FunDefBase {
+class PeriodsToDateFunDef extends AbstractFunctionDefinition {
   static final ReflectiveMultiResolver Resolver =
       new ReflectiveMultiResolver( "PeriodsToDate", "PeriodsToDate([<Level>[, <Member>]])",
           "Returns a set of periods (members) from a specified level starting with the first period and ending with a specified member.",
@@ -46,8 +47,8 @@ class PeriodsToDateFunDef extends FunDefBase {
 
   private static final String TIMING_NAME = PeriodsToDateFunDef.class.getSimpleName();
 
-  public PeriodsToDateFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public PeriodsToDateFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override
@@ -56,7 +57,7 @@ public Type getResultType( Validator validator, Expression[] args ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
       RolapHierarchy defaultTimeHierarchy =
-          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getName() );
+          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().name() );
       return new SetType( MemberType.forHierarchy( defaultTimeHierarchy ) );
     }
 
@@ -80,7 +81,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final LevelCalc levelCalc = call.getArgCount() > 0 ? compiler.compileLevel( call.getArg( 0 ) ) : null;
     final MemberCalc memberCalc = call.getArgCount() > 1 ? compiler.compileMember( call.getArg( 1 ) ) : null;
     final RolapHierarchy timeHierarchy =
-        levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getName() ) : null;
+        levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getFunctionMetaData().name() ) : null;
 
     return new AbstractListCalc( call.getType(), new Calc[] { levelCalc, memberCalc } ) {
       @Override

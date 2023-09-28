@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -47,9 +48,12 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.IdentifierParser.Builder;
@@ -115,9 +119,8 @@ public class FunUtil extends Util {
    * @return Exception that can be used as a cell result
    */
   public static RuntimeException newEvalException(
-    FunctionDefinition funDef,
+		  FunctionMetaData functionMetaData ,
     String message ) {
-    XOMUtil.discard( funDef ); // TODO: use this
     return new MondrianEvaluationException( message );
   }
 
@@ -172,15 +175,16 @@ public class FunUtil extends Util {
   /**
    * Returns an argument whose value is a literal.
    */
+
   static String getLiteralArg(
     ResolvedFunCall call,
     int i,
     String defaultValue,
-    String[] allowedValues ) {
+    List<String> allowedValues ) {
     if ( i >= call.getArgCount() ) {
       if ( defaultValue == null ) {
         throw FunUtil.newEvalException(
-          call.getFunDef(),
+          call.getFunDef().getFunctionMetaData(),
           "Required argument is missing" );
       } else {
         return defaultValue;
@@ -190,23 +194,24 @@ public class FunUtil extends Util {
     if ( !( arg instanceof Literal)
       || arg.getCategory() != DataType.SYMBOL) {
       throw FunUtil.newEvalException(
-        call.getFunDef(),
+        call.getFunDef().getFunctionMetaData(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
     }
     String s = (String) ( (Literal) arg ).getValue();
     StringBuilder sb = new StringBuilder( 64 );
-    for ( int j = 0; j < allowedValues.length; j++ ) {
-      String allowedValue = allowedValues[ j ];
+    int j=0;
+    for ( String allowedValue: allowedValues ) {
       if ( allowedValue.equalsIgnoreCase( s ) ) {
         return allowedValue;
       }
       if ( j > 0 ) {
         sb.append( ", " );
       }
+      j++;
       sb.append( allowedValue );
     }
     throw FunUtil.newEvalException(
-      call.getFunDef(),
+      call.getFunDef().getFunctionMetaData(),
       new StringBuilder("Allowed values are: {").append(sb).append("}").toString() );
   }
 
@@ -222,7 +227,7 @@ public class FunUtil extends Util {
     if ( i >= call.getArgCount() ) {
       if ( defaultValue == null ) {
         throw FunUtil.newEvalException(
-          call.getFunDef(),
+          call.getFunDef().getFunctionMetaData(),
           "Required argument is missing" );
       } else {
         return defaultValue;
@@ -232,7 +237,7 @@ public class FunUtil extends Util {
     if ( !( arg instanceof Literal )
       || arg.getCategory() != DataType.SYMBOL) {
       throw FunUtil.newEvalException(
-        call.getFunDef(),
+        call.getFunDef().getFunctionMetaData(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
     }
     String s = (String) ( (Literal) arg ).getValue();
@@ -250,7 +255,7 @@ public class FunUtil extends Util {
       buf.append( e.name() );
     }
     throw FunUtil.newEvalException(
-      call.getFunDef(),
+      call.getFunDef().getFunctionMetaData(),
       new StringBuilder("Allowed values are: {").append(buf).append("}").toString() );
   }
 
@@ -264,7 +269,7 @@ public class FunUtil extends Util {
     final Type rightType = TypeUtil.stripSetType( right.getType() );
     if ( !TypeUtil.isUnionCompatible( leftType, rightType ) ) {
       throw FunUtil.newEvalException(
-        funDef, "Expressions must have the same hierarchy" );
+        funDef.getFunctionMetaData(), "Expressions must have the same hierarchy" );
     }
   }
 
@@ -503,7 +508,7 @@ public class FunUtil extends Util {
    * Decodes the syntactic type of an operator.
    *
    * @param flags A encoded string which represents an operator signature, as used by the {@code flags} parameter used
-   *              to construct a {@link FunDefBase}.
+   *              to construct a {@link AbstractFunctionDefinition}.
    * @return A {@link Syntax}
    */
   public static Syntax decodeSyntacticType( String flags ) {
@@ -538,7 +543,7 @@ public class FunUtil extends Util {
    * numeric return value.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
-   *              FunDefBase}.
+   *              AbstractFunctionDefinition}.
    * @return An array {@link DataType} codes.
    */
   public static DataType decodeReturnCategory( String flags ) {
@@ -642,7 +647,7 @@ public class FunUtil extends Util {
    * <code>{{@link DataType#NUMERIC}, {@link DataType#SET}}</code>.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
-   *              FunDefBase}.
+   *              AbstractFunctionDefinition}.
    * @return An array {@link DataType} codes.
    */
   public static DataType[] decodeParameterCategories( String flags ) {
@@ -1503,7 +1508,7 @@ public class FunUtil extends Util {
       && !( funDef instanceof ParenthesesFunDef )
       && query != null
       && query.nativeCrossJoinVirtualCube() ) {
-    	DataType[] paramCategories = funDef.getParameterCategories();
+    	DataType[] paramCategories = funDef.getFunctionMetaData().parameterCategories();
       if ( paramCategories.length > 0 ) {
         final DataType cat0 = paramCategories[ 0 ];
         final Expression arg0 = args[ 0 ];
@@ -1518,7 +1523,7 @@ public class FunUtil extends Util {
           case MEMBER:
             if ( arg0 instanceof MemberExpression memberExpr
               && memberExpr.getMember().isMeasure()
-              && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
+              && FunUtil.isMemberOrSet( funDef.getFunctionMetaData().returnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
@@ -1576,15 +1581,6 @@ public class FunUtil extends Util {
       return false;
     }
     return true;
-  }
-
-  static FunctionDefinition createDummyFunDef(
-    FunctionResolver resolver,
-    DataType returnCategory,
-    Expression[] args ) {
-    final DataType[] argCategories = Expressions.categoriesOf( args );
-    return new FunDefBase( resolver, returnCategory, argCategories ) {
-    };
   }
 
   public static List<Member> getNonEmptyMemberChildren(

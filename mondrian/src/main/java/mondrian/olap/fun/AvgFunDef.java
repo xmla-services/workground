@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -36,8 +36,8 @@ class AvgFunDef extends AbstractAggregateFunDef {
 
   private static final String TIMING_NAME = AvgFunDef.class.getSimpleName();
 
-  public AvgFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public AvgFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override

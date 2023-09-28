@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
@@ -49,7 +50,7 @@ import mondrian.util.CancellationChecker;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class FilterFunDef extends FunDefBase {
+class FilterFunDef extends AbstractFunctionDefinition {
 
     private static final String TIMING_NAME =
         FilterFunDef.class.getSimpleName();
@@ -69,7 +70,7 @@ class FilterFunDef extends FunDefBase {
         // it makes NamedSet.CurrentOrdinal work.
         List<ResultStyle> styles = compiler.getAcceptableResultStyles();
         if (call.getArg(0) instanceof ResolvedFunCall resolvedFunCall
-            && resolvedFunCall.getFunDef().getName().equals("AS"))
+            && resolvedFunCall.getFunDef().getFunctionMetaData().name().equals("AS"))
         {
             styles = ResultStyle.ITERABLE_ONLY;
         }

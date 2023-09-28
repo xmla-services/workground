@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -23,6 +24,7 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -36,6 +38,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.impl.AbstractListCalc;
@@ -46,7 +50,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.fun.sort.SortKeySpec;
 import mondrian.olap.fun.sort.Sorter;
-import mondrian.olap.fun.sort.Sorter.Flag;
+import mondrian.olap.fun.sort.Sorter.SorterFlag;
 
 /**
  * Definition of the <code>Order</code> MDX function.
@@ -54,14 +58,14 @@ import mondrian.olap.fun.sort.Sorter.Flag;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class OrderFunDef extends FunDefBase {
+class OrderFunDef extends AbstractFunctionDefinition {
 
     static final ResolverImpl Resolver = new ResolverImpl();
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
     public static final String CALC_IMPL = "CurrentMemberCalc";
 
-    public OrderFunDef( ResolverBase resolverBase, DataType type, DataType[] types ) {
-    super( resolverBase, type, types );
+    public OrderFunDef(  FunctionMetaData functionMetaData ) {
+    super( functionMetaData);
   }
 
   @Override
@@ -118,16 +122,16 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final int argCount = call.getArgs().length;
     int j = 1; // args[0] is the input set
     Calc key;
-    Flag dir;
+    SorterFlag dir;
     Expression arg;
     while ( j < argCount ) {
       arg = call.getArg( j );
       key = compiler.compileScalar( arg, true );
       j++;
       if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != DataType.SYMBOL) ) {
-        dir = Flag.ASC;
+        dir = SorterFlag.ASC;
       } else {
-        dir = FunUtil.getLiteralArg( call, j, Flag.ASC, Flag.class );
+        dir = FunUtil.getLiteralArg( call, j, SorterFlag.ASC, SorterFlag.class );
         j++;
       }
       keySpecList.add( new SortKeySpec( key, dir ) );
@@ -207,7 +211,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     private TupleList handleSortWithOneKeySpec( Evaluator evaluator, TupleIterable iterable, TupleList list ) {
-      Flag sortKeyDir = keySpecList.get( 0 ).getDirection();
+      SorterFlag sortKeyDir = keySpecList.get( 0 ).getDirection();
       final TupleList tupleList;
       final int savepoint = evaluator.savepoint();
       try {
@@ -237,7 +241,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 				result.append(",");
 			}
 
-			Flag sortKeyDir = spec.getDirection();
+			SorterFlag sortKeyDir = spec.getDirection();
 			result.append(sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk));
 		}
 		properties.put("direction", result.toString());
@@ -251,12 +255,12 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
-    private Flag getDesc(boolean brk) {
-        return brk ? Flag.BDESC : Flag.DESC;
+    private SorterFlag getDesc(boolean brk) {
+        return brk ? SorterFlag.BDESC : SorterFlag.DESC;
     }
 
-    private Flag getAsc(boolean brk) {
-        return brk ? Flag.BASC : Flag.ASC;
+    private SorterFlag getAsc(boolean brk) {
+        return brk ? SorterFlag.BASC : SorterFlag.ASC;
     }
 
       private void purgeKeySpecList( List<SortKeySpec> keySpecList, TupleList list ) {
@@ -347,13 +351,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
   }
 
   private static class ResolverImpl extends ResolverBase {
-    private final String[] reservedWords;
+    private final List<String> reservedWords;
     static DataType[] argTypes;
 
     private ResolverImpl() {
       super( "Order", "Order(<Set> {, <Key Specification>}...)",
           "Arranges members of a set, optionally preserving or breaking the hierarchy.", Syntax.Function );
-      this.reservedWords = Flag.getNames();
+      this.reservedWords = SorterFlag.asReservedWords();
     }
 
     @Override
@@ -389,11 +393,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
           }
         }
       }
-      return new OrderFunDef( this, DataType.SET, ResolverImpl.argTypes );
+      FunctionMetaData functionMetaData=    new FunctionMetaDataR(getName(), getDescription(), getSignature(), getSyntax(), DataType.SET, ResolverImpl.argTypes);
+
+      return new OrderFunDef( functionMetaData );
     }
 
     @Override
-	public String[] getReservedWords() {
+	public List<String> getReservedWords() {
       if ( reservedWords != null ) {
         return reservedWords;
       }

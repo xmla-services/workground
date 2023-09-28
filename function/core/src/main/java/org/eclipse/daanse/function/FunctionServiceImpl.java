@@ -13,9 +13,14 @@
 */
 package org.eclipse.daanse.function;
 
-import mondrian.util.Pair;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -26,13 +31,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
+import mondrian.util.Pair;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(service = FunctionServiceImpl.class, scope = ServiceScope.SINGLETON)

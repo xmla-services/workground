@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.FunctionCall;
@@ -26,7 +27,11 @@ import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ParameterExpressionImpl;
@@ -45,14 +50,14 @@ import mondrian.olap.type.StringType;
  * @author jhyde
  * @since Feb 14, 2003
  */
-public class ParameterFunDef extends FunDefBase {
+public class ParameterFunDef extends AbstractFunctionDefinition {
     public final String parameterName;
     private final Type type;
     public final Expression exp;
     public final String parameterDescription;
 
     ParameterFunDef(
-        FunctionDefinition funDef,
+    		FunctionMetaData functionMetaData ,
         String parameterName,
         Type type,
         DataType returnCategory,
@@ -60,15 +65,10 @@ public class ParameterFunDef extends FunDefBase {
         String description)
     {
         super(
-            funDef.getName(),
-            funDef.getSignature(),
-            funDef.getDescription(),
-            funDef.getSyntax(),
-            returnCategory,
-            funDef.getParameterCategories());
+            functionMetaData);
         Util.assertPrecondition(
-            getName().equals("Parameter")
-            || getName().equals("ParamRef"));
+        		getFunctionMetaData().name().equals("Parameter")
+            || getFunctionMetaData().name().equals("ParamRef"));
         this.parameterName = parameterName;
         this.type = type;
         this.exp = exp;
@@ -78,7 +78,7 @@ public class ParameterFunDef extends FunDefBase {
     @Override
 	public Expression createCall(Validator validator, Expression[] args) {
         Parameter parameter = validator.createOrLookupParam(
-            this.getName().equals("Parameter"),
+            this.getFunctionMetaData().name().equals("Parameter"),
             parameterName, type, exp, parameterDescription);
         return new ParameterExpressionImpl(parameter);
     }
@@ -161,7 +161,8 @@ public class ParameterFunDef extends FunDefBase {
      * Resolves calls to the <code>Parameter</code> MDX function.
      */
     public static class ParameterResolver extends MultiResolver {
-        private static final String[] SIGNATURES = {
+        private static final List<String> RESERVED_WORDS = List.of("NUMERIC", "STRING");
+		private static final String[] SIGNATURES = {
             // Parameter(string const, symbol, string[, string const]): string
             "fS#yS#", "fS#yS",
             // Parameter(string const, symbol, numeric[, string const]): numeric
@@ -183,12 +184,12 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		public String[] getReservedWords() {
-            return new String[]{"NUMERIC", "STRING"};
+		public List<String> getReservedWords() {
+            return RESERVED_WORDS;
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
             String parameterName = ParameterFunDef.getParameterName(args);
             Expression typeArg = args[1];
             DataType category;
@@ -200,14 +201,14 @@ public class ParameterFunDef extends FunDefBase {
                 Dimension dimension = type.getDimension();
                 if (!ParameterFunDef.isConstant(typeArg)) {
                     throw FunUtil.newEvalException(
-                        dummyFunDef,
+                        functionMetaData,
                         new StringBuilder("Invalid parameter '").append(parameterName)
                         .append("'. Type must be a NUMERIC, STRING, or a dimension, ")
                         .append("hierarchy or level").toString());
                 }
                 if (dimension == null) {
                     throw FunUtil.newEvalException(
-                        dummyFunDef,
+                        functionMetaData,
                         new StringBuilder("Invalid dimension for parameter '")
                         .append(parameterName).append("'").toString());
                 }
@@ -236,7 +237,7 @@ public class ParameterFunDef extends FunDefBase {
                 // Error is internal because the function call has already been
                 // type-checked.
                 throw FunUtil.newEvalException(
-                    dummyFunDef,
+                    functionMetaData,
                     new StringBuilder("Invalid type for parameter '").append(parameterName)
                     .append("'; expecting NUMERIC, STRING or a hierarchy").toString());
             }
@@ -249,7 +250,7 @@ public class ParameterFunDef extends FunDefBase {
             String typeName = category.getName().toUpperCase();
             if (!validator.canConvert(2, exp, category, conversionList)) {
                 throw FunUtil.newEvalException(
-                    dummyFunDef,
+                    functionMetaData,
                     new StringBuilder("Default value of parameter '").append(parameterName)
                     .append("' is inconsistent with its type, ").append(typeName).toString());
             }
@@ -270,7 +271,7 @@ public class ParameterFunDef extends FunDefBase {
                     || ParameterResolver.distinctFrom(type.getLevel(), expType.getLevel()))
                 {
                     throw FunUtil.newEvalException(
-                        dummyFunDef,
+                        functionMetaData,
                         new StringBuilder("Default value of parameter '").append(parameterName)
                         .append("' is not consistent with the parameter type '")
                         .append(type).toString());
@@ -286,14 +287,14 @@ public class ParameterFunDef extends FunDefBase {
                         (String) ((Literal) args[3]).getValue();
                 } else {
                     throw FunUtil.newEvalException(
-                        dummyFunDef,
+                        functionMetaData,
                         new StringBuilder("Description of parameter '").append(parameterName)
                         .append("' must be a string constant").toString());
                 }
             }
 
             return new ParameterFunDef(
-                dummyFunDef, parameterName, type, category,
+                functionMetaData, parameterName, type, category,
                 exp, parameterDescription);
         }
 
@@ -317,11 +318,16 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
-                dummyFunDef, parameterName, null, DataType.UNKNOWN, null,
+                functionMetaData, parameterName, null, DataType.UNKNOWN, null,
                 null);
         }
     }
+
+	@Override
+	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
+		throw new UnsupportedOperationException();
+	}
 }

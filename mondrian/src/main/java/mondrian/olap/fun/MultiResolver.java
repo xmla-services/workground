@@ -17,8 +17,11 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
 
@@ -90,19 +93,11 @@ public abstract class MultiResolver implements FunctionResolver {
         return syntax;
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return FunUtil.emptyStringArray;
-    }
 
     public String[] getSignatures() {
         return signatures;
     }
 
-    @Override
-	public FunctionDefinition getRepresentativeFunDef() {
-        return null;
-    }
 
     @Override
 	public FunctionDefinition resolve(
@@ -125,8 +120,10 @@ outer:
                 }
             }
             DataType returnType = FunUtil.decodeReturnCategory(signature);
-            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
-            return createFunDef(args, dummy);
+            
+        	FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+					getSyntax(), returnType, Expressions.categoriesOf(args));
+            return createFunDef(args, functionMetaData);
         }
         return null;
     }
@@ -144,5 +141,5 @@ outer:
         return true;
     }
 
-    protected abstract FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef);
+    protected abstract FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData);
 }

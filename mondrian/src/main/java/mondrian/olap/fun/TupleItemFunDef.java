@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
@@ -36,7 +37,7 @@ import mondrian.olap.type.TupleType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class TupleItemFunDef extends FunDefBase {
+class TupleItemFunDef extends AbstractFunctionDefinition {
     static final TupleItemFunDef instance = new TupleItemFunDef();
 
     private TupleItemFunDef() {

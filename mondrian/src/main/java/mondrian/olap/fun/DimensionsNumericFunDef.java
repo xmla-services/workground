@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.HierarchyType;
 import mondrian.rolap.RolapCube;
@@ -36,8 +37,8 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Jul 20, 2009
  */
-class DimensionsNumericFunDef extends FunDefBase {
-    public static final FunDefBase INSTANCE = new DimensionsNumericFunDef();
+class DimensionsNumericFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition INSTANCE = new DimensionsNumericFunDef();
     public static final String DIMENSIONS_NUMERIC_FUN_DESCRIPTION = "Returns the hierarchy whose zero-based position within the cube is specified by a numeric expression.";
 
     private DimensionsNumericFunDef() {
@@ -72,7 +73,7 @@ class DimensionsNumericFunDef extends FunDefBase {
         List<RolapHierarchy> hierarchies = cube.getHierarchies();
         if (n >= hierarchies.size() || n < 0) {
             throw FunUtil.newEvalException(
-                this, new StringBuilder("Index '").append(n).append("' out of bounds").toString());
+                this.getFunctionMetaData(), new StringBuilder("Index '").append(n).append("' out of bounds").toString());
         }
         return hierarchies.get(n);
     }

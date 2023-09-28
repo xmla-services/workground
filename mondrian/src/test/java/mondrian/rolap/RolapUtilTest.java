@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
 import org.eigenbase.xom.DOMWrapper;
@@ -128,7 +129,7 @@ class RolapUtilTest {
   }
 
   private static MappingRelation getFactRelationMock() throws Exception {
-    MappingRelation factMock = mock(MappingRelation.class);
+    MappingRelation factMock = mock(MappingInlineTable.class);
     when(factMock.alias()).thenReturn(RELATION_ALIAS);
     return factMock;
   }

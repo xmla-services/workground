@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.Locale;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.util.Format;
 
@@ -29,7 +30,7 @@ import mondrian.util.Format;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class FormatFunDef extends FunDefBase {
+class FormatFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "Format",
@@ -38,8 +39,8 @@ class FormatFunDef extends FunDefBase {
             new String[] { "fSmS", "fSnS", "fSDS" },
             FormatFunDef.class);
 
-    public FormatFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public FormatFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

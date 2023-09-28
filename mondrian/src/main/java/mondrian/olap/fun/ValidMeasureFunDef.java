@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.type.TypeUtil;
@@ -47,7 +48,7 @@ import mondrian.rolap.RolapVirtualCubeMeasure;
  *
  * @author kwalker, mpflug
  */
-public class ValidMeasureFunDef extends FunDefBase
+public class ValidMeasureFunDef extends AbstractFunctionDefinition
 {
     static final ValidMeasureFunDef instance = new ValidMeasureFunDef();
 

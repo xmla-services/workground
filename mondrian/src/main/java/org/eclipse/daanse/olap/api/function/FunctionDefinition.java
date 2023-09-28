@@ -1,80 +1,30 @@
 /*
- * This software is subject to the terms of the Eclipse Public License v1.0
- * Agreement, available at the following URL:
- * http://www.eclipse.org/legal/epl-v10.html.
- * You must accept the terms of that agreement to use this software.
- *
- * Copyright (C) 1999-2005 Julian Hyde
- * Copyright (C) 2005-2017 Hitachi Vantara and others
- * All Rights Reserved.
- * 
- * For more information please visit the Project: Hitachi Vantara - Mondrian
- * 
- * ---- All changes after Fork in 2023 ------------------------
- * 
- * Project: Eclipse daanse
- * 
- * Copyright (c) 2023 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors after Fork in 2023:
- *   SmartCity Jena - initial
- *   Stefan Bischof (bipolis.org) - initial
- */
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 
 package org.eclipse.daanse.olap.api.function;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-/**
- * Definition of an MDX function. See also {@link FunctionTable}.
- *
- * @author jhyde, 21 April, 1999
- */
 public interface FunctionDefinition {
-    /**
-     * Returns the syntactic type of the function.
-     */
-    Syntax getSyntax();
-
-    /**
-     * Returns the name of this function.
-     */
-    String getName();
-
-    /**
-     * Returns the description of this function.
-     */
-    String getDescription();
-
-    /**
-     * Returns the {@link DataType} code of the value returned by this
-     * function.
-     */
-    DataType getReturnCategory();
-
-    /**
-     * Returns the types of the arguments of this function. Values are the same
-     * as those returned by {@link Expression#getCategory()}. The 0<sup>th</sup>
-     * argument of methods and properties are the object they are applied
-     * to. Infix operators have two arguments, and prefix operators have one
-     * argument.
-     */
-    DataType[] getParameterCategories();
+	
+	FunctionMetaData getFunctionMetaData();
 
     /**
      * Creates an expression which represents a call to this function with
@@ -84,31 +34,25 @@ public interface FunctionDefinition {
     Expression createCall(Validator validator, Expression[] args);
 
     /**
-     * Returns an English description of the signature of the function, for
-     * example "&lt;Numeric Expression&gt; / &lt;Numeric Expression&gt;".
+     * Returns an Signature-Description of the function.
      */
-    String getSignature();
-
-    /**
-     * Converts a function call into MDX source code.
-     */
-    void unparse(Expression[] args, PrintWriter pw);
-
-    /**
-     * Converts a call to this function into executable objects.
-     *
-     * <p>The result must implement the appropriate interface for the result
-     * type. For example, a function which returns an integer must return
-     * an object which implements {@link org.eclipse.daanse.olap.calc.api.IntegerCalc}.
-     */
-    Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler);
-    
-    /**
-     * Gives access to the Context, that holds Dialect and Context related Properties.
-     * @param context
-     */
-    default void init(Context context) {
-        //nothing
+    default String getSignature() {
+    FunctionMetaData fi=	getFunctionMetaData();
+        return fi.syntax().getSignature(
+        		fi.name(),
+        		fi.returnCategory(),
+        		fi.parameterCategories());
     }
+
+    /**
+     * Writes a function call with given {@link Expression}s into MDX.
+     */
+	default void unparse(Expression[] args, PrintWriter pw) {
+		getFunctionMetaData().syntax().unparse(getFunctionMetaData().name(), args, pw);
+    }
+ 
+    Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler);
+    
+
 
 }

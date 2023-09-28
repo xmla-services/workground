@@ -19,13 +19,14 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -36,9 +37,9 @@ import mondrian.calc.impl.TupleCollections;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class IntersectFunDef extends FunDefBase
+class IntersectFunDef extends AbstractFunctionDefinition
 {
-    private static final String[] ReservedWords = new String[] {"ALL"};
+    private static final List<String> ReservedWords = List.of("ALL");
 
     static final FunctionResolver resolver =
         new ReflectiveMultiResolver(
@@ -49,9 +50,9 @@ class IntersectFunDef extends FunDefBase
             IntersectFunDef.class,
             IntersectFunDef.ReservedWords);
 
-    public IntersectFunDef(FunctionDefinition dummyFunDef)
+    public IntersectFunDef(FunctionMetaData functionMetaData)
     {
-        super(dummyFunDef);
+        super(functionMetaData);
     }
 
     @Override

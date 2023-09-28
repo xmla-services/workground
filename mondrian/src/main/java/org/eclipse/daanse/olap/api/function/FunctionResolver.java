@@ -1,28 +1,46 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2002-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2002-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara and others
+ * All Rights Reserved.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 
 package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
- * A <code>Resolver</code> converts a function name, invocation type, and set
+ * A {@link FunctionResolver} converts a function name, invocation type, and set
  * of arguments into a {@link FunctionDefinition}.
- *
- * @author jhyde
- * @since 3 March, 2002
  */
 public interface FunctionResolver {
     /**
@@ -69,16 +87,18 @@ public interface FunctionResolver {
     boolean requiresExpression(int k);
 
     /**
-     * Returns an array of symbolic constants which can appear as arguments
+     * Returns a {@link List} of symbolic constants which can appear as arguments
      * to this function.
      *
      * <p>For example, the <code>DrilldownMember</code> may take the symbol
      * <code>RECURSIVE</code> as an argument. Most functions do not define
      * any symbolic constants.
      *
-     * @return An array of the names of the symbolic constants
+     * @return An {@link List} of the names of the symbolic constants
      */
-    String[] getReservedWords();
+	default List<String> getReservedWords() {
+		return List.of();
+	}
 
     /**
      * Returns a string describing the syntax of this function, for example
@@ -92,7 +112,9 @@ public interface FunctionResolver {
      * null if there is no representative function, or if the Resolver has
      * a way to describe itself in more detail.
      */
-    FunctionDefinition getRepresentativeFunDef();
+    default Optional<FunctionDefinition> getRepresentativeFunDef(){
+    	return Optional.empty();
+    }
 
     /**
      * Description of an implicit conversion that occurred while resolving an

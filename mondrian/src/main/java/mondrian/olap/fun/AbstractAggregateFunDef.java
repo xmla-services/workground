@@ -21,11 +21,13 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
@@ -43,13 +45,13 @@ import mondrian.rolap.RolapStoredMeasure;
  * @author jhyde
  * @since 2005/8/14
  */
-public class AbstractAggregateFunDef extends FunDefBase {
-    public AbstractAggregateFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition {
+    public AbstractAggregateFunDef(FunctionMetaData functionMetaData ) {
+        super(functionMetaData);
     }
 
     @Override
-	protected Expression validateArg(
+	protected Expression validateArgument(
         Validator validator, Expression[] args, int i, DataType category)
     {
         // If expression cache is enabled, wrap first expression (the set)
@@ -65,7 +67,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
                 return validator.validate(cacheCall, false);
             }
         }
-        return super.validateArg(validator, args, i, category);
+        return super.validateArgument(validator, args, i, category);
     }
 
     /**

@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.QueryImpl;
@@ -38,7 +39,7 @@ import mondrian.olap.QueryImpl;
  * @author jhyde
  * @since Oct 7, 2009
  */
-class AsFunDef extends FunDefBase {
+class AsFunDef extends AbstractFunctionDefinition {
     public static final FunctionResolver RESOLVER = new ResolverImpl();
     private final QueryImpl.ScopedNamedSet scopedNamedSet;
 

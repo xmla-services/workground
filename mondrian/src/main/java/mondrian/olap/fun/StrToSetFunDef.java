@@ -11,6 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -27,6 +28,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -45,7 +47,7 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class StrToSetFunDef extends FunDefBase {
+class StrToSetFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
     private StrToSetFunDef(DataType[] parameterTypes) {
@@ -96,7 +98,7 @@ class StrToSetFunDef extends FunDefBase {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getName());
+            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().name());
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -107,7 +109,7 @@ class StrToSetFunDef extends FunDefBase {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getName());
+                    i + 1, getFunctionMetaData().name());
             }
         }
         return super.createCall(validator, args);
@@ -195,8 +197,8 @@ class StrToSetFunDef extends FunDefBase {
         }
 
         @Override
-		public FunctionDefinition getRepresentativeFunDef() {
-            return new StrToSetFunDef(new DataType[] {DataType.STRING});
+		public Optional<FunctionDefinition> getRepresentativeFunDef() {
+            return Optional.of( new StrToSetFunDef(new DataType[] {DataType.STRING}));
         }
     }
 }

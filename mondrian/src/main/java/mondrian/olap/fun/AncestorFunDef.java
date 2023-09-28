@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.LevelType;
 
@@ -30,7 +31,7 @@ import mondrian.olap.type.LevelType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class AncestorFunDef extends FunDefBase {
+class AncestorFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "Ancestor",
@@ -39,8 +40,8 @@ class AncestorFunDef extends FunDefBase {
             new String[] {"fmml", "fmmn"},
             AncestorFunDef.class);
 
-    public AncestorFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public AncestorFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

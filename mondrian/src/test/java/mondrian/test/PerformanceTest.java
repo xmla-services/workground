@@ -932,10 +932,6 @@ public class PerformanceTest {
       return evaluator.evaluateCurrent();
     }
 
-    @Override
-	public String[] getReservedWords() {
-      return null;
-    }
   }
 
   private static class CountingComparator<T extends Comparable<T>>

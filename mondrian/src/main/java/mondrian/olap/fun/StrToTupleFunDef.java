@@ -11,6 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -29,6 +30,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.type.MemberType;
@@ -44,7 +46,7 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class StrToTupleFunDef extends FunDefBase {
+class StrToTupleFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
     private StrToTupleFunDef(DataType[] parameterTypes) {
@@ -93,7 +95,7 @@ class StrToTupleFunDef extends FunDefBase {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getName());
+            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().name());
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -104,7 +106,7 @@ class StrToTupleFunDef extends FunDefBase {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getName());
+                    i + 1, getFunctionMetaData().name());
             }
         }
         return super.createCall(validator, args);
@@ -188,8 +190,8 @@ class StrToTupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunctionDefinition getRepresentativeFunDef() {
-            return new StrToTupleFunDef(new DataType[] {DataType.STRING});
+		public Optional<FunctionDefinition> getRepresentativeFunDef() {
+            return Optional.of( new StrToTupleFunDef(new DataType[] {DataType.STRING}));
         }
     }
 }

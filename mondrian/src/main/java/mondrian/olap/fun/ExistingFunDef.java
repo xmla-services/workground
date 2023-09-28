@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -33,7 +34,7 @@ import mondrian.calc.impl.TupleCollections;
  * Existing keyword limits a set to what exists within the current context, ie
  * as if context members of the same dimension as the set were in the slicer.
  */
-public class ExistingFunDef extends FunDefBase {
+public class ExistingFunDef extends AbstractFunctionDefinition {
 
     static final ExistingFunDef instance = new ExistingFunDef();
 

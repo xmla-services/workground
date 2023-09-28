@@ -85,7 +85,7 @@ class SorterTest{
   // +--------------+---------------------+------------------------------+
   @Test
   void testComparatorSelectionBrkOrderByKey() {
-    setupSortKeyMocks( true, Sorter.Flag.BASC, Sorter.Flag.BDESC );
+    setupSortKeyMocks( true, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
     verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
@@ -94,7 +94,7 @@ class SorterTest{
 
   @Test
   void testComparatorSelectionBrkNotOrderByKey() {
-    setupSortKeyMocks( false, Sorter.Flag.BASC, Sorter.Flag.BDESC );
+    setupSortKeyMocks( false, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
     verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
@@ -103,7 +103,7 @@ class SorterTest{
 
   @Test
   void testComparatorSelectionNotBreakingOrderByKey() {
-    setupSortKeyMocks( true, Sorter.Flag.ASC, Sorter.Flag.DESC );
+    setupSortKeyMocks( true, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
     verify( comparatorChain ).addComparator( any( HierarchicalTupleKeyComparator.class ), eq( false ) );
@@ -112,7 +112,7 @@ class SorterTest{
 
   @Test
   void testComparatorSelectionNotBreaking() {
-    setupSortKeyMocks( false, Sorter.Flag.ASC, Sorter.Flag.DESC );
+    setupSortKeyMocks( false, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
     verify( comparatorChain, times( 2 ) ).addComparator( comparatorCaptor.capture(), eq( false ) );
@@ -123,7 +123,7 @@ class SorterTest{
   @Test
   void testSortTuplesBreakingByKey() {
     TupleList tupleList = genList();
-    setupSortKeyMocks( true, Sorter.Flag.BASC, Sorter.Flag.BDESC );
+    setupSortKeyMocks( true, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC );
 
     TupleList result =
       Sorter.sortTuples( evaluator, tupleIterable, tupleList, asList( sortKeySpec1, sortKeySpec2 ), 2 );
@@ -137,7 +137,7 @@ class SorterTest{
 
   @Test
   void testCancel() {
-    setupSortKeyMocks( true, Sorter.Flag.ASC, Sorter.Flag.DESC );
+    setupSortKeyMocks( true, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC );
     // pass in a null tupleList, and an iterable.  cancel should be checked while generating the list
     // from the iterable
     Sorter.sortTuples( evaluator, genList(), null, asList( sortKeySpec1, sortKeySpec2 ), 2 );
@@ -145,7 +145,7 @@ class SorterTest{
   }
 
 
-  private void setupSortKeyMocks( boolean isOrderKeyCalc, Sorter.Flag flag1, Sorter.Flag flag2 ) {
+  private void setupSortKeyMocks( boolean isOrderKeyCalc, Sorter.SorterFlag flag1, Sorter.SorterFlag flag2 ) {
     when( sortKeySpec1.getDirection() ).thenReturn( flag1 );
     when( sortKeySpec2.getDirection() ).thenReturn( flag2 );
     when( calc1.isWrapperFor( MemberOrderKeyFunDef.CalcImpl.class ) ).thenReturn( isOrderKeyCalc );

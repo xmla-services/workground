@@ -9,13 +9,16 @@
 
 package mondrian.olap.fun;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.olap.fun.sort.Sorter;
@@ -26,8 +29,8 @@ import mondrian.olap.fun.sort.Sorter;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class HierarchizeFunDef extends FunDefBase {
-  static final String[] prePost = { "PRE", "POST" };
+class HierarchizeFunDef extends AbstractFunctionDefinition {
+  static final List<String> prePost = List.of( "PRE", "POST" );
   static final ReflectiveMultiResolver Resolver =
     new ReflectiveMultiResolver(
       "Hierarchize",
@@ -37,8 +40,8 @@ class HierarchizeFunDef extends FunDefBase {
       HierarchizeFunDef.class,
       HierarchizeFunDef.prePost );
 
-  public HierarchizeFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public HierarchizeFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override

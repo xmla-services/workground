@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -48,8 +48,8 @@ class StdevPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             StdevPFunDef.class);
 
-    public StdevPFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public StdevPFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

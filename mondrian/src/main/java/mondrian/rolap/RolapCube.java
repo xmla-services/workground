@@ -61,6 +61,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
@@ -117,7 +118,6 @@ import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
-import mondrian.olap.fun.FunDefBase;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
 import mondrian.rolap.cache.SoftSmartCache;
@@ -3520,7 +3520,7 @@ public class RolapCube extends CubeBase {
      */
     static Expression createDummyExp(final Calc calc) {
         return new ResolvedFunCallImpl(
-            new FunDefBase("dummy", null, "fn") {
+            new AbstractFunctionDefinition("dummy", null, "fn") {
                 @Override
 				public Calc compileCall(
                     ResolvedFunCall call, ExpressionCompiler compiler)

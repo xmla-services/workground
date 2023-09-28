@@ -18,9 +18,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 
 public class SortKeySpec {
   private final Calc key;
-  private final Sorter.Flag direction;
+  private final Sorter.SorterFlag direction;
 
-  public SortKeySpec( Calc key, Sorter.Flag dir ) {
+  public SortKeySpec( Calc key, Sorter.SorterFlag dir ) {
     this.key = key;
     this.direction = dir;
   }
@@ -29,7 +29,7 @@ public class SortKeySpec {
     return this.key;
   }
 
-  public Sorter.Flag getDirection() {
+  public Sorter.SorterFlag getDirection() {
     return this.direction;
   }
 }

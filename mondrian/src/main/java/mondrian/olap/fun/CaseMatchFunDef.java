@@ -17,11 +17,15 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -40,11 +44,11 @@ import mondrian.olap.Util;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class CaseMatchFunDef extends FunDefBase {
+class CaseMatchFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private CaseMatchFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    private CaseMatchFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -137,9 +141,10 @@ class CaseMatchFunDef extends FunDefBase {
             if (mismatchingArgs != 0) {
                 return null;
             }
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+					getSyntax(), returnType, Expressions.categoriesOf(args));
 
-            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
-            return new CaseMatchFunDef(dummy);
+            return new CaseMatchFunDef(functionMetaData);
         }
 
         @Override

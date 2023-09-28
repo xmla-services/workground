@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -24,6 +25,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -41,7 +43,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class XtdFunDef extends FunDefBase {
+class XtdFunDef extends AbstractFunctionDefinition {
   private final LevelType levelType;
 
   static final ResolverImpl MtdResolver =
@@ -66,8 +68,8 @@ class XtdFunDef extends FunDefBase {
 
   private static final String TIMING_NAME = XtdFunDef.class.getSimpleName();
 
-  public XtdFunDef( FunctionDefinition dummyFunDef, LevelType levelType ) {
-    super( dummyFunDef );
+  public XtdFunDef( FunctionMetaData functionMetaData , LevelType levelType ) {
+    super( functionMetaData );
     this.levelType = levelType;
   }
 
@@ -77,12 +79,12 @@ public Type getResultType( Validator validator, Expression[] args ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
       RolapHierarchy defaultTimeHierarchy =
-          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getName() );
+          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().name() );
       return new SetType( MemberType.forHierarchy( defaultTimeHierarchy ) );
     }
     final Type type = args[0].getType();
     if ( type.getDimension().getDimensionType() != DimensionType.TIME_DIMENSION) {
-      throw MondrianResource.instance().TimeArgNeeded.ex( getName() );
+      throw MondrianResource.instance().TimeArgNeeded.ex( getFunctionMetaData().name() );
     }
     return super.getResultType( validator, args );
   }
@@ -151,8 +153,8 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-      return new XtdFunDef( dummyFunDef, levelType );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData ) {
+      return new XtdFunDef( functionMetaData, levelType );
     }
   }
 }

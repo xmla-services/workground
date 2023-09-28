@@ -15,12 +15,13 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -31,8 +32,8 @@ import mondrian.calc.impl.TupleCollections;
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class UnionFunDef extends FunDefBase {
-    static final String[] ReservedWords = new String[] {"ALL", "DISTINCT"};
+public class UnionFunDef extends AbstractFunctionDefinition {
+    static final List<String> ReservedWords = List.of("ALL", "DISTINCT");
 
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
@@ -43,8 +44,8 @@ public class UnionFunDef extends FunDefBase {
             UnionFunDef.class,
             UnionFunDef.ReservedWords);
 
-    public UnionFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public UnionFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

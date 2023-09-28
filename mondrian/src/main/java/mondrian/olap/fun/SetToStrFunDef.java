@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>SetToStr</code> MDX function.
@@ -28,8 +29,8 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCal
  * @author jhyde
  * @since Aug 3, 2006
  */
-class SetToStrFunDef extends FunDefBase {
-    public static final FunDefBase instance = new SetToStrFunDef();
+class SetToStrFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition instance = new SetToStrFunDef();
 
     private SetToStrFunDef() {
         super("SetToStr", "Constructs a string from a set.", "fSx");

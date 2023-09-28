@@ -24,10 +24,10 @@ import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.fun.FunDefBase;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
@@ -43,7 +43,7 @@ import mondrian.olap.type.TupleType;
  * @author Benny Chow
  *
  */
-public class CachedExistsFunDef extends FunDefBase {
+public class CachedExistsFunDef extends AbstractFunctionDefinition {
   public static final CachedExistsFunDef instance = new CachedExistsFunDef();
 
   private static final String TIMING_NAME = CachedExistsFunDef.class.getSimpleName();

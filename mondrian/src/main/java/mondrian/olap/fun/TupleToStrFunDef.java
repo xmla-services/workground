@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.TypeUtil;
 
@@ -31,7 +32,7 @@ import mondrian.olap.type.TypeUtil;
  * @author jhyde
  * @since Aug 3, 2006
  */
-class TupleToStrFunDef extends FunDefBase {
+class TupleToStrFunDef extends AbstractFunctionDefinition {
     static final TupleToStrFunDef instance = new TupleToStrFunDef();
 
     private TupleToStrFunDef() {

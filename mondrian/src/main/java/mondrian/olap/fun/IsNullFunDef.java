@@ -10,12 +10,13 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
@@ -26,7 +27,7 @@ import mondrian.rolap.RolapUtil;
  * @author medstat
  * @since Aug 21, 2006
  */
-class IsNullFunDef extends FunDefBase {
+class IsNullFunDef extends AbstractFunctionDefinition {
     /**
      * Resolves calls to the <code>IS NULL</code> postfix operator.
      */
@@ -38,8 +39,8 @@ class IsNullFunDef extends FunDefBase {
             new String[]{"Qbm", "Qbl", "Qbh", "Qbd"},
             IsNullFunDef.class);
 
-    public IsNullFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public IsNullFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class HierarchyCurrentMemberFunDef extends FunDefBase {
+public class HierarchyCurrentMemberFunDef extends AbstractFunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( HierarchyCurrentMemberFunDef.class );
 
   static final HierarchyCurrentMemberFunDef instance = new HierarchyCurrentMemberFunDef();

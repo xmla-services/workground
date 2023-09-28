@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
@@ -44,6 +45,7 @@ import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
+import mondrian.olap.fun.sort.Sorter.SorterFlag;
 import mondrian.olap.type.ScalarType;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy;
@@ -930,7 +932,7 @@ public class Sorter {
   /**
    * Enumeration of the flags allowed to the {@code ORDER} MDX function.
    */
-  public enum Flag {
+  public enum SorterFlag {
     ASC( false, false ),
     DESC( true, false ),
     BASC( false, true ),
@@ -939,18 +941,16 @@ public class Sorter {
     public final boolean descending;
     public final boolean brk;
 
-    Flag( boolean descending, boolean brk ) {
+    SorterFlag( boolean descending, boolean brk ) {
       this.descending = descending;
       this.brk = brk;
     }
-
-    public static String[] getNames() {
-      List<String> names = new ArrayList<>();
-      for ( Flag flags : Flag.class.getEnumConstants() ) {
-        names.add( flags.name() );
-      }
-      return names.toArray( new String[ names.size() ] );
+    private static List<String> reservedWords=Stream.of(SorterFlag.values()).map(SorterFlag::name).toList();
+    
+    public static List<String> asReservedWords() {
+    	return reservedWords;
     }
+
   }
 
   /**

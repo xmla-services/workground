@@ -3,6 +3,7 @@ package org.eclipse.daanse.function;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 
 public interface FunctionService {
 

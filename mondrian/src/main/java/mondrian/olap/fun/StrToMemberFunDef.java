@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.resource.MondrianResource;
 
@@ -27,7 +28,7 @@ import mondrian.resource.MondrianResource;
  * <blockquote><code>StrToMember(&lt;String Expression&gt;)
  * </code></blockquote>
  */
-class StrToMemberFunDef extends FunDefBase {
+class StrToMemberFunDef extends AbstractFunctionDefinition {
     public static final FunctionDefinition INSTANCE = new StrToMemberFunDef();
 
     private StrToMemberFunDef() {

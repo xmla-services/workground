@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.fun.sort.OrderKey;
 
@@ -28,7 +29,7 @@ import mondrian.olap.fun.sort.OrderKey;
  * @author kvu
  * @since Nov 10, 2008
  */
-public final class MemberOrderKeyFunDef extends FunDefBase {
+public final class MemberOrderKeyFunDef extends AbstractFunctionDefinition {
   static final MemberOrderKeyFunDef instance =
     new MemberOrderKeyFunDef();
 

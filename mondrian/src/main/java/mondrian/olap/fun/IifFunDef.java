@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
@@ -37,7 +38,7 @@ import mondrian.olap.type.TypeUtil;
  * @author jhyde
  * @since Jan 17, 2008
  */
-public class IifFunDef extends FunDefBase {
+public class IifFunDef extends AbstractFunctionDefinition {
     /**
      * Creates an IifFunDef.
      *
@@ -67,7 +68,7 @@ public class IifFunDef extends FunDefBase {
         //
         // FIXME: We should pass more info into this method, such as the list
         // of conversions computed while resolving overloadings.
-        switch (returnCategory) {
+        switch (getFunctionMetaData().returnCategory()) {
         case NUMERIC:
             return NumericType.INSTANCE;
         case STRING:
@@ -129,7 +130,7 @@ public class IifFunDef extends FunDefBase {
     }
 
     // IIf(<Logical Expression>, <String Expression>, <String Expression>)
-    static final FunDefBase STRING_INSTANCE = new FunDefBase(
+    static final AbstractFunctionDefinition STRING_INSTANCE = new AbstractFunctionDefinition(
         "IIf",
         "Returns one of two string values determined by a logical test.",
         "fSbSS")
@@ -154,7 +155,7 @@ public class IifFunDef extends FunDefBase {
     };
 
     // IIf(<Logical Expression>, <Numeric Expression>, <Numeric Expression>)
-    static final FunDefBase NUMERIC_INSTANCE =
+    static final AbstractFunctionDefinition NUMERIC_INSTANCE =
         new IifFunDef(
             "IIf",
             "Returns one of two numeric values determined by a logical test.",
@@ -185,7 +186,7 @@ public class IifFunDef extends FunDefBase {
         };
 
     // IIf(<Logical Expression>, <Tuple Expression>, <Tuple Expression>)
-    static final FunDefBase TUPLE_INSTANCE =
+    static final AbstractFunctionDefinition TUPLE_INSTANCE =
         new IifFunDef(
             "IIf",
             "Returns one of two tuples determined by a logical test.",
@@ -216,7 +217,7 @@ public class IifFunDef extends FunDefBase {
         };
 
     // IIf(<Logical Expression>, <Boolean Expression>, <Boolean Expression>)
-    static final FunDefBase BOOLEAN_INSTANCE = new FunDefBase(
+    static final AbstractFunctionDefinition BOOLEAN_INSTANCE = new AbstractFunctionDefinition(
         "IIf",
         "Returns boolean determined by a logical test.",
         "fbbbb")

@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>&lt;Level&gt;.Dimension</code>
@@ -25,8 +26,8 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimension
  * @author jhyde
  * @since Jul 20, 2009
  */
-class LevelDimensionFunDef extends FunDefBase {
-    public static final FunDefBase INSTANCE = new LevelDimensionFunDef();
+class LevelDimensionFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition INSTANCE = new LevelDimensionFunDef();
 
     public LevelDimensionFunDef() {
         super(
