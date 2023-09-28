@@ -12,6 +12,7 @@
 package mondrian.olap.fun;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -34,18 +35,18 @@ class SimpleResolver implements FunctionResolver {
     }
 
     @Override
-	public FunctionDefinition getRepresentativeFunDef() {
-        return funDef;
+	public Optional<FunctionDefinition> getRepresentativeFunDef() {
+        return  Optional.ofNullable(funDef);
     }
 
     @Override
 	public String getName() {
-        return funDef.getName();
+        return funDef.getFunctionMetaData().name();
     }
 
     @Override
 	public String getDescription() {
-        return funDef.getDescription();
+        return funDef.getFunctionMetaData().description();
     }
 
     @Override
@@ -55,13 +56,9 @@ class SimpleResolver implements FunctionResolver {
 
     @Override
 	public Syntax getSyntax() {
-        return funDef.getSyntax();
+        return funDef.getFunctionMetaData().syntax();
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return FunUtil.emptyStringArray;
-    }
 
     @Override
 	public FunctionDefinition resolve(
@@ -69,7 +66,7 @@ class SimpleResolver implements FunctionResolver {
         Validator validator,
         List<Conversion> conversions)
     {
-    	DataType[] parameterTypes = funDef.getParameterCategories();
+    	DataType[] parameterTypes = funDef.getFunctionMetaData().parameterCategories();
         if (parameterTypes.length != args.length) {
             return null;
         }
@@ -85,7 +82,7 @@ class SimpleResolver implements FunctionResolver {
 
     @Override
 	public boolean requiresExpression(int k) {
-    	DataType[] parameterTypes = funDef.getParameterCategories();
+    	DataType[] parameterTypes = funDef.getFunctionMetaData().parameterCategories();
         return (k >= parameterTypes.length)
             || (parameterTypes[k] != DataType.SET);
     }

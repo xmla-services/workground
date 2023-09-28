@@ -10,13 +10,14 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -27,7 +28,7 @@ import mondrian.calc.impl.TupleCollections;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class SubsetFunDef extends FunDefBase {
+class SubsetFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "Subset",
@@ -36,8 +37,8 @@ class SubsetFunDef extends FunDefBase {
             new String[] {"fxxn", "fxxnn"},
             SubsetFunDef.class);
 
-    public SubsetFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public SubsetFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

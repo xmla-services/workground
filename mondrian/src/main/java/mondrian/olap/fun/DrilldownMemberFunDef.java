@@ -19,11 +19,13 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -34,8 +36,8 @@ import mondrian.calc.impl.TupleCollections;
  * @author Grzegorz Lojek
  * @since 6 December, 2004
  */
-class DrilldownMemberFunDef extends FunDefBase {
-    static final String[] reservedWords = new String[] {"RECURSIVE"};
+class DrilldownMemberFunDef extends AbstractFunctionDefinition {
+    static final List<String> reservedWords =List.of("RECURSIVE");
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "DrilldownMember",
@@ -45,8 +47,8 @@ class DrilldownMemberFunDef extends FunDefBase {
             DrilldownMemberFunDef.class,
             DrilldownMemberFunDef.reservedWords);
 
-    public DrilldownMemberFunDef(FunctionDefinition funDef) {
-        super(funDef);
+    public DrilldownMemberFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

@@ -162,7 +162,7 @@ public abstract class FunTableImpl implements FunctionTable {
                 propertyWords.add(resolver.getName().toUpperCase());
             }
             resolverList.add(resolver);
-            final String[] reservedWordsInner = resolver.getReservedWords();
+            final List<String> reservedWordsInner = resolver.getReservedWords();
             for (String reservedWord : reservedWordsInner) {
                 defineReserved(reservedWord);
             }

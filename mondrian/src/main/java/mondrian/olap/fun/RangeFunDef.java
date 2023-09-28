@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -35,7 +36,7 @@ import mondrian.rolap.RolapMember;
  * @author jhyde
  * @since 3 March, 2002
  */
-class RangeFunDef extends FunDefBase {
+class RangeFunDef extends AbstractFunctionDefinition {
     static final RangeFunDef instance = new RangeFunDef();
 
     private RangeFunDef() {

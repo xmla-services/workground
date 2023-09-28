@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -32,6 +33,8 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -51,7 +54,7 @@ import mondrian.olap.type.TupleType;
  * @author jhyde
  * @since Jun 10, 2007
  */
-class ExtractFunDef extends FunDefBase {
+class ExtractFunDef extends AbstractFunctionDefinition {
     static final ResolverBase Resolver = new ResolverBase(
         "Extract",
         "Extract(<Set>, <Hierarchy>[, <Hierarchy>...])",
@@ -97,14 +100,16 @@ class ExtractFunDef extends FunDefBase {
             parameterTypes[0] = DataType.SET;
             Arrays.fill(
                 parameterTypes, 1, parameterTypes.length, DataType.HIERARCHY);
-            return new ExtractFunDef(this, DataType.SET, parameterTypes);
+            
+            FunctionMetaData functionMetaData=    new FunctionMetaDataR(getName(), getDescription(), getSignature(), getSyntax(), DataType.SET, parameterTypes);
+            return new ExtractFunDef(functionMetaData);
         }
     };
 
     private ExtractFunDef(
-        FunctionResolver resolver, DataType returnType, DataType[] parameterTypes)
+    		FunctionMetaData functionMetaData)
     {
-        super(resolver, returnType, parameterTypes);
+        super(functionMetaData);
     }
 
     @Override

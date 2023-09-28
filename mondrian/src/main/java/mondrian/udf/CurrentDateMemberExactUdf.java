@@ -60,8 +60,4 @@ public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
         };
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return null;
-    }
 }

@@ -22,13 +22,13 @@ import org.eclipse.daanse.olap.api.function.FunctionResolver;
  * @author jhyde
  * @since 3 March, 2002
  */
-abstract class ResolverBase implements FunctionResolver {
+public abstract class ResolverBase implements FunctionResolver {
     private final String name;
     private final String signature;
     private final String description;
     private final Syntax syntax;
 
-    ResolverBase(
+    public ResolverBase(
         String name,
         String signature,
         String description,
@@ -50,10 +50,6 @@ abstract class ResolverBase implements FunctionResolver {
         return signature;
     }
 
-    @Override
-	public FunctionDefinition getRepresentativeFunDef() {
-        return null;
-    }
 
     @Override
 	public String getDescription() {
@@ -70,8 +66,4 @@ abstract class ResolverBase implements FunctionResolver {
         return false;
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return FunUtil.emptyStringArray;
-    }
 }

@@ -11,7 +11,7 @@ package mondrian.olap.fun.extra;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -55,9 +55,9 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             NthQuartileFunDef.class);
 
-    public NthQuartileFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
-        this.range = dummyFunDef.getName().equals("FirstQ") ? 1 : 3;
+    public NthQuartileFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
+        this.range = functionMetaData.name().equals("FirstQ") ? 1 : 3;
     }
 
     @Override

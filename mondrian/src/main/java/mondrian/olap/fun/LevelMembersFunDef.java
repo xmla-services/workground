@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 
@@ -25,7 +26,7 @@ import mondrian.calc.impl.AbstractListCalc;
  * @author jhyde
  * @since Jan 17, 2009
  */
-public class LevelMembersFunDef extends FunDefBase {
+public class LevelMembersFunDef extends AbstractFunctionDefinition {
     public static final LevelMembersFunDef INSTANCE = new LevelMembersFunDef();
 
     private LevelMembersFunDef() {

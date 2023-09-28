@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -32,6 +33,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -54,7 +56,7 @@ import mondrian.olap.type.ScalarType;
  * @author jhyde
  * @since Oct 18, 2007
  */
-class DrilldownLevelTopBottomFunDef extends FunDefBase {
+class DrilldownLevelTopBottomFunDef extends AbstractFunctionDefinition {
   final boolean top;
 
   static final MultiResolver DrilldownLevelTopResolver =
@@ -64,8 +66,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the topmost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-        return new DrilldownLevelTopBottomFunDef( dummyFunDef, true );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData  ) {
+        return new DrilldownLevelTopBottomFunDef( functionMetaData, true );
       }
     };
 
@@ -76,15 +78,15 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the bottommost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-        return new DrilldownLevelTopBottomFunDef( dummyFunDef, false );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData  ) {
+        return new DrilldownLevelTopBottomFunDef( functionMetaData, false );
       }
     };
 
   public DrilldownLevelTopBottomFunDef(
-    FunctionDefinition dummyFunDef,
+    FunctionMetaData functionMetaData ,
     final boolean top ) {
-    super( dummyFunDef );
+    super( functionMetaData );
     this.top = top;
   }
 
@@ -140,7 +142,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
           if ( level != null && member.getLevel() != level ) {
             if ( level.getDimension() != member.getDimension() ) {
               throw FunUtil.newEvalException(
-                DrilldownLevelTopBottomFunDef.this,
+                DrilldownLevelTopBottomFunDef.this.getFunctionMetaData(),
                 new StringBuilder("Level '")
                   .append(level.getUniqueName())
                   .append("' not compatible with member '")

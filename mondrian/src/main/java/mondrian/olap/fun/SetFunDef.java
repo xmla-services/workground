@@ -41,6 +41,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.AbstractIterCalc;
@@ -64,12 +66,13 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since 3 March, 2002
  */
-public class SetFunDef extends FunDefBase {
+public class SetFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    SetFunDef(FunctionResolver resolver, DataType[] argTypes) {
-        super(resolver, DataType.SET, argTypes);
-    }
+	SetFunDef(FunctionResolver resolver, DataType[] argTypes) {
+		super(new FunctionMetaDataR(resolver.getName(), resolver.getDescription(), resolver.getSignature(),
+				resolver.getSyntax(), DataType.SET, argTypes));
+	}
 
     @Override
 	public void unparse(Expression[] args, PrintWriter pw) {
@@ -95,7 +98,7 @@ public class SetFunDef extends FunDefBase {
                 } else {
                     if (!TypeUtil.isUnionCompatible(type0, type)) {
                         throw MondrianResource.instance()
-                            .ArgsMustHaveSameHierarchy.ex(getName());
+                            .ArgsMustHaveSameHierarchy.ex(getFunctionMetaData().name());
                     }
                 }
             }

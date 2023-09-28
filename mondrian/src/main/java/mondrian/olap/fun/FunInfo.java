@@ -1,25 +1,45 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2005-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2005-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 
 package mondrian.olap.fun;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionInfo;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.Util;
 
@@ -38,9 +58,9 @@ public class FunInfo implements FunctionInfo {
     private String[] sigs;
 
     static FunInfo make(FunctionResolver resolver) {
-        FunctionDefinition funDef = resolver.getRepresentativeFunDef();
-        if (funDef != null) {
-            return new FunInfo(funDef);
+        Optional<FunctionDefinition> optionalRepresentativeFunDef = resolver.getRepresentativeFunDef();
+        if (optionalRepresentativeFunDef.isPresent()) {
+            return new FunInfo(optionalRepresentativeFunDef.get());
         } else if (resolver instanceof MultiResolver multiResolver) {
             return new FunInfo(multiResolver);
         } else {
@@ -49,19 +69,19 @@ public class FunInfo implements FunctionInfo {
     }
 
     FunInfo(FunctionDefinition funDef) {
-        this.syntax = funDef.getSyntax();
-        this.name = funDef.getName();
+        this.syntax = funDef.getFunctionMetaData().syntax();
+        this.name = funDef.getFunctionMetaData().name();
         assert name != null;
         assert syntax != null;
-        this.returnTypes = new DataType[] { funDef.getReturnCategory() };
-        this.parameterTypes = new DataType[][] { funDef.getParameterCategories() };
+        this.returnTypes = new DataType[] { funDef.getFunctionMetaData().returnCategory() };
+        this.parameterTypes = new DataType[][] { funDef.getFunctionMetaData().parameterCategories() };
 
         // use explicit signature if it has one, otherwise generate a set
-        this.sigs = funDef instanceof FunDefBase funDefBase
-            && funDefBase.signature != null
-            ? new String[] {funDefBase.signature}
+        this.sigs = funDef instanceof AbstractFunctionDefinition funDefBase
+            && funDefBase.getFunctionMetaData().signature() != null
+            ? new String[] {funDefBase.getFunctionMetaData().signature()}
             : FunInfo.makeSigs(syntax, name, returnTypes, parameterTypes);
-        this.description = funDef.getDescription();
+        this.description = funDef.getFunctionMetaData().description();
     }
 
     FunInfo(MultiResolver multiResolver) {

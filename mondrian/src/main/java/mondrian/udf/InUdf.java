@@ -65,11 +65,6 @@ public class InUdf implements UserDefinedFunction {
         };
     }
 
-    @Override
-	public String[] getReservedWords() {
-        // This function does not require any reserved words.
-        return null;
-    }
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {

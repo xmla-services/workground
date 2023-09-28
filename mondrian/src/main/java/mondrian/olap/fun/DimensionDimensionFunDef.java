@@ -15,6 +15,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>&lt;Dimension&gt;.Dimension</code>
@@ -23,8 +24,8 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
  * @author jhyde
  * @since Jul 20, 2009
  */
-class DimensionDimensionFunDef extends FunDefBase {
-    public static final FunDefBase INSTANCE = new DimensionDimensionFunDef();
+class DimensionDimensionFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition INSTANCE = new DimensionDimensionFunDef();
 
     private DimensionDimensionFunDef() {
         super(

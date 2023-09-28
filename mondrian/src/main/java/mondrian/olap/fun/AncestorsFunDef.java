@@ -12,11 +12,10 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -25,6 +24,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -37,7 +37,7 @@ import mondrian.olap.type.LevelType;
  * @author lboudreau
  * @since Nov 27 2012
  */
-class AncestorsFunDef extends FunDefBase {
+class AncestorsFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "Ancestors",
@@ -46,14 +46,14 @@ class AncestorsFunDef extends FunDefBase {
             new String[] {"fxml", "fxmn"},
             AncestorsFunDef.class);
 
-    public AncestorsFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public AncestorsFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
-    @Override
-	public DataType getReturnCategory() {
-        return DataType.SET;
-    }
+//    @Override
+//	public DataType getReturnCategory() {
+//        return DataType.SET;
+//    }
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {

@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -47,8 +47,8 @@ class PercentileFunDef extends AbstractAggregateFunDef {
             new String[] {"fnxnn"},
             PercentileFunDef.class);
 
-    public PercentileFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public PercentileFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

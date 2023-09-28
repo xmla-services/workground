@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.LevelType;
 
@@ -29,7 +30,7 @@ import mondrian.olap.type.LevelType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class MemberLevelFunDef extends FunDefBase {
+public class MemberLevelFunDef extends AbstractFunctionDefinition {
     static final MemberLevelFunDef instance = new MemberLevelFunDef();
 
     private MemberLevelFunDef() {

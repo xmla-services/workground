@@ -17,12 +17,16 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -48,11 +52,11 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Sep 3, 2006
  */
-public class CastFunDef extends FunDefBase {
+public class CastFunDef extends AbstractFunctionDefinition {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    private CastFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    private CastFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -159,9 +163,9 @@ public class CastFunDef extends FunDefBase {
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
-            final FunctionDefinition dummyFunDef =
-                FunUtil.createDummyFunDef(this, returnCategory, args);
-            return new CastFunDef(dummyFunDef);
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+					getSyntax(), returnCategory, Expressions.categoriesOf(args));
+            return new CastFunDef(functionMetaData);
         }
     }
 

@@ -1212,9 +1212,6 @@ public class RolapSchema implements Schema {
                     .append(udfName).append("': parameter type #").append(i).append(" is null").toString());
             }
         }
-        // It's OK for the reserved words to be null or empty.
-        final String[] reservedWords = udf.getReservedWords();
-        Util.discard(reservedWords);
         // Test that the function returns a sensible type when given the FORMAL
         // types. It may still fail when we give it the ACTUAL types, but it's
         // impossible to check that now.

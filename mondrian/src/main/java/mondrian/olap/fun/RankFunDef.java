@@ -21,7 +21,7 @@ import java.util.TreeMap;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ import mondrian.rolap.RolapUtil;
  * @author Richard Emberson
  * @since 17 January, 2005
  */
-public class RankFunDef extends FunDefBase {
+public class RankFunDef extends AbstractFunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger(RankFunDef.class);
   static final boolean DEBUG = false;
   static final ReflectiveMultiResolver Resolver =
@@ -59,8 +60,8 @@ public class RankFunDef extends FunDefBase {
           RankFunDef.class );
   private static final String TIMING_NAME = RankFunDef.class.getSimpleName();
 
-  public RankFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public RankFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override

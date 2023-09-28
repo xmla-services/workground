@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -28,6 +29,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -47,7 +49,7 @@ import mondrian.olap.type.SetType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class AddCalculatedMembersFunDef extends FunDefBase {
+class AddCalculatedMembersFunDef extends AbstractFunctionDefinition {
 
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();
@@ -90,7 +92,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
                 hierarchy = member.getHierarchy();
             } else if (hierarchy != member.getHierarchy()) {
                 throw FunUtil.newEvalException(
-                    this,
+                    this.getFunctionMetaData(),
                     new StringBuilder("Only members from the same hierarchy are allowed in the ")
                         .append("AddCalculatedMembers set: ")
                         .append(hierarchy)
@@ -122,14 +124,14 @@ class AddCalculatedMembersFunDef extends FunDefBase {
     private static class ResolverImpl extends MultiResolver {
         public ResolverImpl() {
             super(
-                AddCalculatedMembersFunDef.instance.getName(),
+                AddCalculatedMembersFunDef.instance.getFunctionMetaData().name(),
                 AddCalculatedMembersFunDef.instance.getSignature(),
-                AddCalculatedMembersFunDef.instance.getDescription(),
+                AddCalculatedMembersFunDef.instance.getFunctionMetaData().description(),
                 new String[] {AddCalculatedMembersFunDef.FLAG});
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
             if (args.length == 1) {
                 Expression arg = args[0];
                 final Type type1 = arg.getType();
@@ -138,7 +140,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
                         return AddCalculatedMembersFunDef.instance;
                     } else {
                         throw FunUtil.newEvalException(
-                            AddCalculatedMembersFunDef.instance,
+                            AddCalculatedMembersFunDef.instance.getFunctionMetaData(),
                             "Only single dimension members allowed in set for AddCalculatedMembers");
                     }
                 }

@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.impl.GenericCalc;
@@ -37,7 +38,7 @@ import mondrian.olap.type.SetType;
  * @author jhyde
  * @since 2005/8/14
  */
-public class CacheFunDef extends FunDefBase {
+public class CacheFunDef extends AbstractFunctionDefinition {
     static final String NAME = "Cache";
     private static final String SIGNATURE_VALUE = "Cache(<<Exp>>)";
     private static final String DESCRIPTION =

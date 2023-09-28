@@ -117,9 +117,5 @@ public class InverseNormalUdf implements UserDefinedFunction {
         }
     }
 
-    @Override
-	public String[] getReservedWords() {
-        return null;
-    }
 
 }

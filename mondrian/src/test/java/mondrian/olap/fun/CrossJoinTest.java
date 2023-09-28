@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -109,7 +110,7 @@ private PropertySaver5 propSaver;
   @BeforeEach
   protected void beforeEach() throws Exception {
     propSaver=new PropertySaver5();
-    crossJoinFunDef = new CrossJoinFunDef( new NullFunDef() );
+    crossJoinFunDef = new CrossJoinFunDef( new NullFunDef().getFunctionMetaData() );
   }
 
   @AfterEach
@@ -425,31 +426,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     TestFunDef() {
     }
 
-    @Override
-	public Syntax getSyntax() {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-	public String getName() {
-      return "SomeName";
-    }
-
-    @Override
-	public String getDescription() {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-	public DataType getReturnCategory() {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-	public DataType[] getParameterCategories() {
-      throw new UnsupportedOperationException();
-    }
-
+   
     @Override
 	public Expression createCall( Validator validator, Expression[] args ) {
       throw new UnsupportedOperationException();
@@ -469,36 +446,49 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       throw new UnsupportedOperationException();
     }
+
+	@Override
+	public FunctionMetaData getFunctionMetaData() {
+		return new FunctionMetaData() {
+			
+		    @Override
+			public String signature() {
+		      throw new UnsupportedOperationException();
+		    }
+			 @Override
+				public Syntax syntax() {
+			      throw new UnsupportedOperationException();
+			    }
+
+			    @Override
+				public String name() {
+			      return "SomeName";
+			    }
+
+			    @Override
+				public String description() {
+			      throw new UnsupportedOperationException();
+			    }
+
+			    @Override
+				public DataType returnCategory() {
+			      throw new UnsupportedOperationException();
+			    }
+
+			    @Override
+				public DataType[] parameterCategories() {
+			      throw new UnsupportedOperationException();
+			    }
+
+		};
+	}
   }
 
   public static class NullFunDef implements FunctionDefinition {
     public NullFunDef() {
     }
 
-    @Override
-	public Syntax getSyntax() {
-      return Syntax.Function;
-    }
-
-    @Override
-	public String getName() {
-      return "";
-    }
-
-    @Override
-	public String getDescription() {
-      return "";
-    }
-
-    @Override
-	public DataType getReturnCategory() {
-      return DataType.UNKNOWN;
-    }
-
-    @Override
-	public DataType[] getParameterCategories() {
-      return new DataType[ 0 ];
-    }
+ 
 
     @Override
 	public Expression createCall( Validator validator, Expression[] args ) {
@@ -519,5 +509,41 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       return null;
     }
+
+	@Override
+	public FunctionMetaData getFunctionMetaData() {
+		// TODO Auto-generated method stub
+		return new FunctionMetaData() {
+		    @Override
+			public String signature() {
+		      return "";
+		    }
+			
+			   @Override
+				public Syntax syntax() {
+			      return Syntax.Function;
+			    }
+
+			    @Override
+				public String name() {
+			      return "";
+			    }
+
+			    @Override
+				public String description() {
+			      return "";
+			    }
+
+			    @Override
+				public DataType returnCategory() {
+			      return DataType.UNKNOWN;
+			    }
+
+			    @Override
+				public DataType[] parameterCategories() {
+			      return new DataType[ 0 ];
+			    }
+		};
+	}
   }
 }

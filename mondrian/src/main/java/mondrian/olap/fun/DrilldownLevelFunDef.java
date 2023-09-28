@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -30,6 +30,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -48,9 +49,10 @@ import mondrian.calc.impl.UnaryTupleList;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class DrilldownLevelFunDef extends FunDefBase {
+class DrilldownLevelFunDef extends AbstractFunctionDefinition {
     private static final String INCLUDE_CALC_MEMBERS = "INCLUDE_CALC_MEMBERS";
-
+    private static final List<String> RESERVED_WORDS=List.of(INCLUDE_CALC_MEMBERS);
+    
     static final ReflectiveMultiResolver Resolver =
             new ReflectiveMultiResolver(
                     "DrilldownLevel",
@@ -58,10 +60,10 @@ class DrilldownLevelFunDef extends FunDefBase {
                     "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
                     new String[]{"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"},
                     DrilldownLevelFunDef.class,
-                    new String[]{DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS});
+                    RESERVED_WORDS);
 
-    public DrilldownLevelFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public DrilldownLevelFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

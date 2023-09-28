@@ -81,7 +81,9 @@ public interface UserDefinedFunction {
      * May return an empty array or null if this function does not require
      * any reserved words.
      */
-    public String[] getReservedWords();
+    default List<String> getReservedWords(){
+    	return List.of();
+    }
 
     interface Argument {
         /**

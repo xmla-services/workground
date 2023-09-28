@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
@@ -24,6 +25,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -44,11 +48,11 @@ import mondrian.olap.type.BooleanType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class CaseTestFunDef extends FunDefBase {
+class CaseTestFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    public CaseTestFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public CaseTestFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -149,8 +153,10 @@ class CaseTestFunDef extends FunDefBase {
             if (mismatchingArgs != 0) {
                 return null;
             }
-            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
-            return new CaseTestFunDef(dummy);
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+					getSyntax(), returnType, Expressions.categoriesOf(args));
+			
+			return new CaseTestFunDef(functionMetaData);
         }
 
         @Override

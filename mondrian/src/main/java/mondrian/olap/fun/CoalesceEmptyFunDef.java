@@ -18,10 +18,13 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.GenericCalc;
 
@@ -33,15 +36,16 @@ import mondrian.calc.impl.GenericCalc;
  *
  * @author gjohnson
  */
-public class CoalesceEmptyFunDef extends FunDefBase {
+public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    public CoalesceEmptyFunDef(ResolverBase resolverBase, DataType type, DataType[] types)
-    {
-        super(resolverBase,  type, types);
-    }
 
-    @Override
+
+	public CoalesceEmptyFunDef(FunctionMetaData functionMetaData) {
+		super(functionMetaData);
+	}
+
+	@Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
         final Expression[] args = call.getArgs();
         final Calc[] calcs = new Calc[args.length];
@@ -97,7 +101,9 @@ public class CoalesceEmptyFunDef extends FunDefBase {
                     argTypes[i] = type;
                 }
                 if (matchingArgs == args.length) {
-                    return new CoalesceEmptyFunDef(this, type, argTypes);
+                	
+                	FunctionMetaData functionMetaData=new FunctionMetaDataR(getName(), getDescription(), getSignature(), getSyntax(), type, argTypes);
+                    return new CoalesceEmptyFunDef(functionMetaData);
                 }
             }
             return null;

@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -75,8 +75,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
      *
      * @param dummyFunDef Dummy function
      */
-    public AggregateFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public AggregateFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     private Member getMember(Expression exp) {

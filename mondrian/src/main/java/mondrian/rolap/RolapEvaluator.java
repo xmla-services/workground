@@ -32,6 +32,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -1145,7 +1146,7 @@ public final void setNonEmpty( boolean nonEmpty ) {
 
   @Override
 public final RuntimeException newEvalException( Object context, String s ) {
-    return FunUtil.newEvalException( (FunctionDefinition) context, s );
+    return FunUtil.newEvalException( (FunctionMetaData) context, s );
   }
 
   @Override

@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -32,6 +33,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
 import mondrian.calc.impl.AbstractListCalc;
@@ -94,14 +97,14 @@ public class UdfResolver implements FunctionResolver {
     }
 
     @Override
-	public FunctionDefinition getRepresentativeFunDef() {
+	public Optional<FunctionDefinition> getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
         DataType[] parameterCategories = new DataType[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
             parameterCategories[i] = TypeUtil.typeToCategory(parameterTypes[i]);
         }
         Type returnType = udf.getReturnType(parameterTypes);
-        return new UdfFunDef(parameterCategories, returnType);
+        return Optional.of( new UdfFunDef(parameterCategories, returnType));
     }
 
     @Override
@@ -130,7 +133,7 @@ public class UdfResolver implements FunctionResolver {
             parameterCategories[i] = parameterCategory;
             if (!parameterType.equals(argType)) {
                 castArgTypes[i] =
-                    FunDefBase.castType(argType, parameterCategory);
+                    TypeUtil.castType(argType, parameterCategory);
             }
         }
         final Type returnType = udf.getReturnType(castArgTypes);
@@ -143,23 +146,20 @@ public class UdfResolver implements FunctionResolver {
     }
 
     @Override
-	public String[] getReservedWords() {
-        final String[] reservedWords = udf.getReservedWords();
-        return reservedWords == null ? UdfResolver.emptyStringArray : reservedWords;
+	public List<String> getReservedWords() {
+       return udf.getReservedWords();
     }
 
     /**
      * Adapter which converts a {@link UserDefinedFunction} into a
      * {@link FunctionDefinition}.
      */
-    private class UdfFunDef extends FunDefBase {
+    private class UdfFunDef extends AbstractFunctionDefinition {
         private Type returnType;
 
         public UdfFunDef(DataType[] parameterCategories, Type returnType) {
-            super(
-                UdfResolver.this,
-                TypeUtil.typeToCategory(returnType),
-                parameterCategories);
+            super( new FunctionMetaDataR(UdfResolver.this.getName(), UdfResolver.this.getDescription(), UdfResolver.this.getSignature(), UdfResolver.this.getSyntax(), TypeUtil.typeToCategory(returnType), parameterCategories));
+                
             this.returnType = returnType;
         }
 
@@ -178,7 +178,7 @@ public class UdfResolver implements FunctionResolver {
                 Expression arg = args[i];
                 final Calc calc = calcs[i] = compiler.compileAs(
                     arg,
-                    FunDefBase.castType(arg.getType(), parameterCategories[i]),
+                    TypeUtil.castType(arg.getType(), getFunctionMetaData().parameterCategories()[i]),
                     ResultStyle.ANY_LIST);
                 calcs[i] = calc;
                 final Calc scalarCalc = compiler.compileScalar(arg, true);

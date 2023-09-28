@@ -15,7 +15,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -24,13 +24,14 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 
-class NonEmptyFunDef extends FunDefBase {
+class NonEmptyFunDef extends AbstractFunctionDefinition {
     private static final Logger LOGGER = LoggerFactory.getLogger( NonEmptyFunDef.class );
     static final ReflectiveMultiResolver Resolver =
             new ReflectiveMultiResolver(
@@ -41,8 +42,8 @@ class NonEmptyFunDef extends FunDefBase {
                     new String[] {"fxx", "fxxx"},
                     NonEmptyFunDef.class);
 
-    public NonEmptyFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public NonEmptyFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

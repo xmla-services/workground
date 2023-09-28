@@ -52,11 +52,6 @@ public class ValUdf implements UserDefinedFunction {
     }
 
     @Override
-	public String[] getReservedWords() {
-        return null;
-    }
-
-    @Override
 	public Type getReturnType(Type[] parameterTypes) {
         return NumericType.INSTANCE;
     }

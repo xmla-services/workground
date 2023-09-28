@@ -21,6 +21,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
@@ -32,7 +33,7 @@ import mondrian.olap.Util;
  * @author jhyde
  * @since 3 March, 2002
  */
-public class ParenthesesFunDef extends FunDefBase {
+public class ParenthesesFunDef extends AbstractFunctionDefinition {
     private final DataType argType;
     public ParenthesesFunDef(DataType argType) {
         super(

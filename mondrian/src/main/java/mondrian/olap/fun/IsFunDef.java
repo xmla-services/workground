@@ -12,12 +12,13 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>IS</code> MDX function.
@@ -26,7 +27,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
  * @author jhyde
  * @since Mar 23, 2006
  */
-class IsFunDef extends FunDefBase {
+class IsFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "IS",
@@ -35,8 +36,8 @@ class IsFunDef extends FunDefBase {
             new String[] {"ibmm", "ibll", "ibhh", "ibdd", "ibtt"},
             IsFunDef.class);
 
-    public IsFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public IsFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

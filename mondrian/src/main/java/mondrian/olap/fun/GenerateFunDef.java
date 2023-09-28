@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -34,10 +34,10 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
@@ -52,7 +52,7 @@ import mondrian.util.CancellationChecker;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class GenerateFunDef extends FunDefBase {
+class GenerateFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver ListResolver =
         new ReflectiveMultiResolver(
             "Generate",
@@ -69,10 +69,10 @@ class GenerateFunDef extends FunDefBase {
             new String[] {"fSxS", "fSxSS", "fSxnS"},
             GenerateFunDef.class);
 
-    private static final String[] ReservedWords = new String[] {"ALL"};
+    private static final List<String> ReservedWords = List.of("ALL");
 
-    public GenerateFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public GenerateFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

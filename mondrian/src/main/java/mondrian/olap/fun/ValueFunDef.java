@@ -17,7 +17,11 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 /**
@@ -27,7 +31,7 @@ import org.eclipse.daanse.olap.query.base.Expressions;
  * @author jhyde
  * @since Jun 14, 2002
  */
-class ValueFunDef extends FunDefBase {
+class ValueFunDef extends AbstractFunctionDefinition {
     private final DataType[] argTypes;
 
     ValueFunDef(DataType[] argTypes) {
@@ -41,15 +45,7 @@ class ValueFunDef extends FunDefBase {
         this.argTypes = argTypes;
     }
 
-    @Override
-	public DataType getReturnCategory() {
-        return DataType.TUPLE;
-    }
 
-    @Override
-	public DataType[] getParameterCategories() {
-        return argTypes;
-    }
 
     @Override
 	public void unparse(Expression[] args, PrintWriter pw) {
@@ -60,5 +56,10 @@ class ValueFunDef extends FunDefBase {
 	public Type getResultType(Validator validator, Expression[] args) {
         return null;
     }
+
+	@Override
+	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
+		throw new UnsupportedOperationException();
+	}
 
 }

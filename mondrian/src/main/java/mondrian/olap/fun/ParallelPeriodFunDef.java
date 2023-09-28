@@ -14,7 +14,7 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.MemberType;
@@ -38,7 +39,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class ParallelPeriodFunDef extends FunDefBase {
+class ParallelPeriodFunDef extends AbstractFunctionDefinition {
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "ParallelPeriod",
@@ -47,8 +48,8 @@ class ParallelPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmln", "fmlnm"},
             ParallelPeriodFunDef.class);
 
-    public ParallelPeriodFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public ParallelPeriodFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -59,7 +60,7 @@ class ParallelPeriodFunDef extends FunDefBase {
             // dimension.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                    getName());
+                		getFunctionMetaData().name());
             return MemberType.forHierarchy(defaultTimeHierarchy);
         }
         return super.getResultType(validator, args);
@@ -103,7 +104,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         default:
             final RolapHierarchy timeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getName());
+                    .getTimeHierarchy(getFunctionMetaData().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);

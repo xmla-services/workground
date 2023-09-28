@@ -14,13 +14,14 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -31,7 +32,7 @@ import mondrian.calc.impl.TupleCollections;
  * @author kvu
  * @since Mar 23, 2008
  */
-class ExistsFunDef extends FunDefBase
+class ExistsFunDef extends AbstractFunctionDefinition
 {
     static final FunctionResolver resolver =
         new ReflectiveMultiResolver(
@@ -41,9 +42,9 @@ class ExistsFunDef extends FunDefBase
             new String[] {"fxxx"},
             ExistsFunDef.class);
 
-    public ExistsFunDef(FunctionDefinition dummyFunDef)
+    public ExistsFunDef(FunctionMetaData functionMetaData)
     {
-        super(dummyFunDef);
+        super(functionMetaData);
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -28,6 +29,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
@@ -42,7 +44,7 @@ import mondrian.olap.fun.sort.Sorter;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class TopBottomCountFunDef extends FunDefBase {
+class TopBottomCountFunDef extends AbstractFunctionDefinition {
   boolean top;
 
   static final MultiResolver TopCountResolver =
@@ -52,8 +54,8 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the top of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-        return new TopBottomCountFunDef( dummyFunDef, true );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData  ) {
+        return new TopBottomCountFunDef( functionMetaData, true );
       }
     };
 
@@ -64,13 +66,13 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the bottom of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-        return new TopBottomCountFunDef( dummyFunDef, false );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData  ) {
+        return new TopBottomCountFunDef( functionMetaData, false );
       }
     };
 
-  public TopBottomCountFunDef( FunctionDefinition dummyFunDef, final boolean top ) {
-    super( dummyFunDef );
+  public TopBottomCountFunDef( FunctionMetaData functionMetaData , final boolean top ) {
+    super( functionMetaData );
     this.top = top;
 
   }

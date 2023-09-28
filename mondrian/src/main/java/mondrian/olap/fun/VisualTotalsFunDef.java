@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -47,7 +48,7 @@ import mondrian.rolap.RolapUtil;
  * @author jhyde
  * @since Jan 16, 2006
  */
-public class VisualTotalsFunDef extends FunDefBase {
+public class VisualTotalsFunDef extends AbstractFunctionDefinition {
     static final FunctionResolver Resolver =
         new ReflectiveMultiResolver(
             "VisualTotals",
@@ -56,16 +57,16 @@ public class VisualTotalsFunDef extends FunDefBase {
             new String[] {"fxx", "fxxS"},
             VisualTotalsFunDef.class);
 
-    public VisualTotalsFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public VisualTotalsFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
-	protected Expression validateArg(
+	protected Expression validateArgument(
         Validator validator, Expression[] args, int i, DataType category)
     {
         final Expression validatedArg =
-            super.validateArg(validator, args, i, category);
+            super.validateArgument(validator, args, i, category);
         if (i == 0) {
             // The function signature guarantees that we have a set of members
             // or a set of tuples.

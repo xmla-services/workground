@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -31,7 +32,7 @@ import mondrian.olap.type.DecimalType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class HeadTailFunDef extends FunDefBase {
+class HeadTailFunDef extends AbstractFunctionDefinition {
     static final FunctionResolver TailResolver =
         new ReflectiveMultiResolver(
             "Tail",
@@ -50,9 +51,9 @@ class HeadTailFunDef extends FunDefBase {
 
     private final boolean head;
 
-    public HeadTailFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
-        head = dummyFunDef.getName().equals("Head");
+    public HeadTailFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
+        head = functionMetaData.name().equals("Head");
     }
 
     @Override

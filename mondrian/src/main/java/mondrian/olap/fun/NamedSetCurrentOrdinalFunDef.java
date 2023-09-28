@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.resource.MondrianResource;
 
@@ -27,7 +28,7 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Oct 19, 2008
  */
-public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
+public class NamedSetCurrentOrdinalFunDef extends AbstractFunctionDefinition {
     static final NamedSetCurrentOrdinalFunDef instance =
         new NamedSetCurrentOrdinalFunDef();
 

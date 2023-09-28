@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -25,9 +26,9 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
 
@@ -38,7 +39,7 @@ import mondrian.olap.fun.sort.Sorter;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class TopBottomPercentSumFunDef extends FunDefBase {
+class TopBottomPercentSumFunDef extends AbstractFunctionDefinition {
   /**
    * Whether to calculate top (as opposed to bottom).
    */
@@ -77,8 +78,8 @@ class TopBottomPercentSumFunDef extends FunDefBase {
       new String[] { "fxxnn" }, false, false );
 
   public TopBottomPercentSumFunDef(
-    FunctionDefinition dummyFunDef, boolean top, boolean percent ) {
-    super( dummyFunDef );
+    FunctionMetaData functionMetaData , boolean top, boolean percent ) {
+    super( functionMetaData );
     this.top = top;
     this.percent = percent;
   }
@@ -106,8 +107,8 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-      return new TopBottomPercentSumFunDef( dummyFunDef, top, percent );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData  ) {
+      return new TopBottomPercentSumFunDef( functionMetaData, top, percent );
     }
   }
 

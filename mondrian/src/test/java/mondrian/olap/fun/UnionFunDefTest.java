@@ -85,7 +85,7 @@ class UnionFunDefTest {
     }
 
     CrossJoinFunDef crossJoinFunDef =
-        new CrossJoinFunDef(new CrossJoinTest.NullFunDef());
+        new CrossJoinFunDef(new CrossJoinTest.NullFunDef().getFunctionMetaData());
     Expression[] expMock = new Expression[1];
     expMock[0] = mock(Expression.class);
     ResolvedFunCallImpl resolvedFunCall =

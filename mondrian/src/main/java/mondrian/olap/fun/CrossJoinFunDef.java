@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
@@ -42,6 +43,9 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +78,7 @@ import mondrian.util.CartesianProductList;
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class CrossJoinFunDef extends FunDefBase {
+public class CrossJoinFunDef extends AbstractFunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( CrossJoinFunDef.class );
 
   static final ResolverImpl Resolver = new ResolverImpl();
@@ -86,8 +90,8 @@ public class CrossJoinFunDef extends FunDefBase {
   // used to tell the difference between crossjoin expressions.
   private final int ctag = CrossJoinFunDef.counterTag++;
 
-  public CrossJoinFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public CrossJoinFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override
@@ -98,11 +102,11 @@ public Type getResultType( Validator validator, Expression[] args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getName().equals( "*" ) ) {
+      } else if ( getFunctionMetaData().name().equals( "*" ) ) {
         // The "*" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getName().equals( "()" ) ) {
+      } else if ( getFunctionMetaData().name().equals( "()" ) ) {
         // The "()" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );
@@ -1049,14 +1053,14 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
             return null;
           }
         }
-
-        FunctionDefinition dummy = FunUtil.createDummyFunDef(this, org.eclipse.daanse.olap.api.DataType.SET, args);
-        return new CrossJoinFunDef(dummy);
+		FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
+				getSyntax(), org.eclipse.daanse.olap.api.DataType.SET, Expressions.categoriesOf(args));
+        return new CrossJoinFunDef(functionMetaData);
       }
     }
 
-    protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
-      return new CrossJoinFunDef(dummyFunDef);
+    protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData) {
+      return new CrossJoinFunDef(functionMetaData);
     }
   }
 
@@ -1080,8 +1084,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     }
 
     @Override
-	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
-      return new CrossJoinFunDef( dummyFunDef );
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionMetaData functionMetaData ) {
+      return new CrossJoinFunDef( functionMetaData );
     }
   }
 }

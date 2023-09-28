@@ -5237,10 +5237,6 @@ public class BasicQueryTest {
       }
     }
 
-    @Override
-	public String[] getReservedWords() {
-      return null;
-    }
   }
 
   public static class CountConcurrentUdf implements UserDefinedFunction {
@@ -5288,10 +5284,6 @@ public class BasicQueryTest {
       return count.get();
     }
 
-    @Override
-	public String[] getReservedWords() {
-      return null;
-    }
   }
 
   /**

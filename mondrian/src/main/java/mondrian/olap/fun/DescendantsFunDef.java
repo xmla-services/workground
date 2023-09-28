@@ -16,6 +16,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -23,7 +24,7 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -33,6 +34,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -54,7 +56,7 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class DescendantsFunDef extends FunDefBase {
+class DescendantsFunDef extends AbstractFunctionDefinition {
 
     public static final String DESCENDANTS = "Descendants";
     static final ReflectiveMultiResolver Resolver =
@@ -65,7 +67,7 @@ class DescendantsFunDef extends FunDefBase {
         + " in other levels.",
       new String[] { "fxm", "fxml", "fxmly", "fxmn", "fxmny", "fxmey" },
       DescendantsFunDef.class,
-      Flag.getNames() );
+      Flag.asReservedWords() );
 
   static final ReflectiveMultiResolver Resolver2 =
     new ReflectiveMultiResolver(
@@ -75,10 +77,10 @@ class DescendantsFunDef extends FunDefBase {
         + "descendants in other levels.",
       new String[] { "fxx", "fxxl", "fxxly", "fxxn", "fxxny", "fxxey" },
       DescendantsFunDef.class,
-      Flag.getNames() );
+      Flag.asReservedWords() );
 
-  public DescendantsFunDef( FunctionDefinition dummyFunDef ) {
-    super( dummyFunDef );
+  public DescendantsFunDef( FunctionMetaData functionMetaData ) {
+    super( functionMetaData );
   }
 
   @Override
@@ -430,12 +432,10 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       this.leaves = leaves;
     }
 
-    public static String[] getNames() {
-      List<String> names = new ArrayList<>();
-      for ( Flag flags : Flag.class.getEnumConstants() ) {
-        names.add( flags.name() );
-      }
-      return names.toArray( new String[ names.size() ] );
+    private static List<String> reservedWords=Stream.of(Flag.values()).map(Flag::name).toList();
+    
+    public static List<String> asReservedWords() {
+    	return reservedWords;
     }
   }
 }

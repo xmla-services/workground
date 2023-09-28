@@ -121,12 +121,12 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
 
     @Override
 	public String getFunName() {
-        return funDef.getName();
+        return funDef.getFunctionMetaData().name();
     }
 
     @Override
 	public Syntax getSyntax() {
-        return funDef.getSyntax();
+        return funDef.getFunctionMetaData().syntax();
     }
 
     @SuppressWarnings("java:S4144")
@@ -147,7 +147,7 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
 
     @Override
 	public final DataType getCategory() {
-        return funDef.getReturnCategory();
+        return funDef.getFunctionMetaData().returnCategory();
     }
 
     @Override

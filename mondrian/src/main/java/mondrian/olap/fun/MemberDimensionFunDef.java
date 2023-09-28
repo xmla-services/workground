@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>&lt;Measure&gt;.Dimension</code>
@@ -25,8 +26,8 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimension
  * @author jhyde
  * @since Jul 20, 2009
  */
-class MemberDimensionFunDef extends FunDefBase {
-    public static final FunDefBase INSTANCE = new MemberDimensionFunDef();
+class MemberDimensionFunDef extends AbstractFunctionDefinition {
+    public static final AbstractFunctionDefinition INSTANCE = new MemberDimensionFunDef();
 
     private MemberDimensionFunDef() {
         super(

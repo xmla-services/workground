@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -30,6 +31,9 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
@@ -49,7 +53,7 @@ import mondrian.olap.type.TupleType;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class SetItemFunDef extends FunDefBase {
+class SetItemFunDef extends AbstractFunctionDefinition {
     static final FunctionResolver intResolver =
         new ReflectiveMultiResolver(
             "Item",
@@ -93,13 +97,15 @@ class SetItemFunDef extends FunDefBase {
                     "Argument count does not match set's cardinality " + arity);
             }
             final DataType category = arity == 1 ? DataType.MEMBER : DataType.TUPLE;
-            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, category, args);
-            return new SetItemFunDef(dummy);
+            
+            FunctionMetaData functionMetaData=    new FunctionMetaDataR( getName(),getDescription(),getSignature(),getSyntax(), category,Expressions.categoriesOf(args)  );
+
+            return new SetItemFunDef(functionMetaData);
         }
     };
 
-    public SetItemFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public SetItemFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 /**
  * Definition of the <code>&lt;Level&gt;.Hierarchy</code> MDX builtin function.
@@ -25,7 +26,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchy
  * @author jhyde
  * @since Mar 23, 2006
  */
-public class LevelHierarchyFunDef extends FunDefBase {
+public class LevelHierarchyFunDef extends AbstractFunctionDefinition {
     static final LevelHierarchyFunDef instance = new LevelHierarchyFunDef();
 
     private LevelHierarchyFunDef() {

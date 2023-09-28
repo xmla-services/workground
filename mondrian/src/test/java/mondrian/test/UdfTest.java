@@ -806,7 +806,7 @@ class UdfTest {
     /**
      * Tests that the inferred return type is correct for a UDF whose return
      * type is not the same as would be guessed by the default implementation
-     * of {@link mondrian.olap.fun.FunDefBase#getResultType}, which simply
+     * of {@link org.eclipse.daanse.olap.function.AbstractFunctionDefinition#getResultType}, which simply
      * guesses based on the type of the first argument.
      */
     @ParameterizedTest
@@ -1564,10 +1564,7 @@ class UdfTest {
             }
         }
 
-        @Override
-		public String[] getReservedWords() {
-            return null;
-        }
+
     }
 
     /**
@@ -1630,10 +1627,7 @@ class UdfTest {
             return NumericType.INSTANCE;
         }
 
-        @Override
-		public String[] getReservedWords() {
-            return null;
-        }
+
 
         @Override
 		public Type[] getParameterTypes() {
@@ -1717,10 +1711,7 @@ class UdfTest {
             return buf.toString();
         }
 
-        @Override
-		public String[] getReservedWords() {
-            return null;
-        }
+
     }
 
     /**
@@ -1771,10 +1762,7 @@ class UdfTest {
             return hierarchy.getDefaultMember();
         }
 
-        @Override
-		public String[] getReservedWords() {
-            return null;
-        }
+
     }
 
     /**
@@ -1808,10 +1796,7 @@ class UdfTest {
             return new Type[] {new SetType(MemberType.Unknown)};
         }
 
-        @Override
-		public String[] getReservedWords() {
-            return null;
-        }
+
 
         @Override
 		public Type getReturnType(Type[] arg0) {
@@ -1872,11 +1857,6 @@ class UdfTest {
         @Override
 		public Type[] getParameterTypes() {
             return new Type[] {MemberType.Unknown};
-        }
-
-        @Override
-		public String[] getReservedWords() {
-            return null;
         }
 
         @Override

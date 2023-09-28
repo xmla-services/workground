@@ -36,6 +36,7 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -47,7 +48,7 @@ import mondrian.olap.Util;
  * @author wgorman, jhyde
  * @since Jan 5, 2008
 */
-public class JavaFunDef extends FunDefBase {
+public class JavaFunDef extends AbstractFunctionDefinition {
     private static final Map<Class, DataType> mapClazzToCategory =
         new HashMap<>();
     private static final String CLASS_NAME = JavaFunDef.class.getName();
@@ -97,7 +98,7 @@ public class JavaFunDef extends FunDefBase {
         ResolvedFunCall call,
         ExpressionCompiler compiler)
     {
-        final Calc[] calcs = new Calc[parameterCategories.length];
+        final Calc[] calcs = new Calc[getFunctionMetaData().parameterCategories().length];
         final Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0; i < calcs.length;i++) {
             calcs[i] =

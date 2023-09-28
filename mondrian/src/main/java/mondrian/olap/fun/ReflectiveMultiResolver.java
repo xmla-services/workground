@@ -13,8 +13,10 @@ package mondrian.olap.fun;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 import mondrian.olap.Util;
@@ -28,7 +30,7 @@ import mondrian.olap.Util;
  */
 public class ReflectiveMultiResolver extends MultiResolver {
     private final Constructor constructor;
-    private final String[] reservedWords;
+    private final List<String> reservedWords;
 
     public ReflectiveMultiResolver(
         String name,
@@ -37,7 +39,7 @@ public class ReflectiveMultiResolver extends MultiResolver {
         String[] signatures,
         Class clazz)
     {
-        this(name, signature, description, signatures, clazz, null);
+        this(name, signature, description, signatures, clazz, List.of());
     }
 
     public ReflectiveMultiResolver(
@@ -46,22 +48,22 @@ public class ReflectiveMultiResolver extends MultiResolver {
         String description,
         String[] signatures,
         Class clazz,
-        String[] reservedWords)
+        List<String> reservedWords)
     {
         super(name, signature, description, signatures);
         try {
-            this.constructor = clazz.getConstructor(new Class[] {FunctionDefinition.class});
+            this.constructor = clazz.getConstructor(new Class[] {FunctionMetaData.class});
         } catch (NoSuchMethodException e) {
             throw Util.newInternal(
                 e, new StringBuilder("Error while registering resolver class ").append(clazz).toString());
         }
-        this.reservedWords = reservedWords;
+        this.reservedWords = reservedWords==null?List.of():reservedWords;
     }
 
     @Override
-	protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
+	protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
         try {
-            return (FunctionDefinition) constructor.newInstance(new Object[] {dummyFunDef});
+            return (FunctionDefinition) constructor.newInstance(new Object[] {functionMetaData});
         } catch (InstantiationException e) {
             throw Util.newInternal(
                 e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
@@ -75,10 +77,8 @@ public class ReflectiveMultiResolver extends MultiResolver {
     }
 
     @Override
-	public String[] getReservedWords() {
-        if (reservedWords != null) {
-            return reservedWords;
-        }
-        return super.getReservedWords();
+	public List<String> getReservedWords() {
+
+        return reservedWords;
     }
 }

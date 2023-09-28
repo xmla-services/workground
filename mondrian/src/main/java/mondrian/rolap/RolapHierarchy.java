@@ -56,6 +56,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -86,7 +87,6 @@ import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
-import mondrian.olap.fun.FunDefBase;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
@@ -987,7 +987,7 @@ public class RolapHierarchy extends HierarchyBase {
 
                 final Expression partialExp =
                     new ResolvedFunCallImpl(
-                        new FunDefBase("$x", "x", "In") {
+                        new AbstractFunctionDefinition("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
 								ResolvedFunCall call,
@@ -1009,7 +1009,7 @@ public class RolapHierarchy extends HierarchyBase {
             case HIDDEN:
                 Expression hiddenExp =
                     new ResolvedFunCallImpl(
-                        new FunDefBase("$x", "x", "In") {
+                        new AbstractFunctionDefinition("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
 									ResolvedFunCall call, ExpressionCompiler compiler)

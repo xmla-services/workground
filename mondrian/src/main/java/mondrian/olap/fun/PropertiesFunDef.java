@@ -28,6 +28,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.MondrianProperties;
@@ -40,7 +41,7 @@ import mondrian.olap.Util;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class PropertiesFunDef extends FunDefBase {
+class PropertiesFunDef extends AbstractFunctionDefinition {
     static final ResolverImpl Resolver = new ResolverImpl();
 
     public PropertiesFunDef(

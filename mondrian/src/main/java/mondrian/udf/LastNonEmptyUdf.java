@@ -124,9 +124,5 @@ public class LastNonEmptyUdf implements UserDefinedFunction {
             : hierarchy.getNullMember();
     }
 
-    @Override
-	public String[] getReservedWords() {
-        // This function does not require any reserved words.
-        return null;
-    }
+
 }

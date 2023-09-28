@@ -17,12 +17,13 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.resource.MondrianResource;
@@ -33,8 +34,8 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class ToggleDrillStateFunDef extends FunDefBase {
-    static final String[] ReservedWords = new String[] {"RECURSIVE"};
+class ToggleDrillStateFunDef extends AbstractFunctionDefinition {
+    static final List<String> ReservedWords = List.of("RECURSIVE");
     static final ReflectiveMultiResolver Resolver =
         new ReflectiveMultiResolver(
             "ToggleDrillState",
@@ -44,8 +45,8 @@ class ToggleDrillStateFunDef extends FunDefBase {
             ToggleDrillStateFunDef.class,
             ToggleDrillStateFunDef.ReservedWords);
 
-    public ToggleDrillStateFunDef(FunctionDefinition dummyFunDef) {
-        super(dummyFunDef);
+    public ToggleDrillStateFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override

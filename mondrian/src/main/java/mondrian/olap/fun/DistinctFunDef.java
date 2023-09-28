@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
@@ -33,7 +34,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
  * @author jhyde
  * @since Jun 10, 2007
 */
-class DistinctFunDef extends FunDefBase {
+class DistinctFunDef extends AbstractFunctionDefinition {
     public static final DistinctFunDef instance = new DistinctFunDef();
 
     private DistinctFunDef() {
