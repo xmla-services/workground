@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.CatalogLocator;
-import mondrian.spi.impl.CatalogLocatorImpl;
+import mondrian.spi.impl.IdentityCatalogLocator;
 import mondrian.test.DiffRepository;
 import mondrian.xmla.DataSourcesConfig;
 
@@ -55,7 +55,7 @@ public class XmlaTestContext {
             "datasource", DATASOURCE_NAME);
     private static DataSourcesConfig.DataSources DATASOURCES;
     public static final CatalogLocator CATALOG_LOCATOR =
-        new CatalogLocatorImpl();
+        new IdentityCatalogLocator();
 
 
     public static String getConnectString(TestingContext context) {

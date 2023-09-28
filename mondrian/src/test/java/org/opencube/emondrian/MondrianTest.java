@@ -37,6 +37,7 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.CatalogLocator;
+import mondrian.spi.impl.IdentityCatalogLocator;
 
 //@ExtendWith(MondrianRuntimeExtension.class)
 
@@ -59,13 +60,7 @@ class MondrianTest {
 		propertyList.put(RolapConnectionProperties.Catalog.name(),
 				Constants.TESTFILES_DIR + "Mensch.xml");
 
-		CatalogLocator catalogLocator = new CatalogLocator() {
-
-			@Override
-			public String locate(String arg0) {
-				return arg0;
-			}
-		};
+		CatalogLocator catalogLocator = new IdentityCatalogLocator();
 
 		SQLiteDataSource ds = new SQLiteDataSource();
 		ds.setUrl("jdbc:sqlite:" + Constants.TESTFILES_DIR + "sqlite.db");
@@ -96,13 +91,7 @@ class MondrianTest {
 				Constants.TESTFILES_DIR + "Mensch.xml");
 		propertyList.put("JdbcDrivers", "org.sqlite.JDBC");
 
-		CatalogLocator catalogLocator = new CatalogLocator() {
-
-			@Override
-			public String locate(String arg0) {
-				return arg0;
-			}
-		};
+		CatalogLocator catalogLocator = new IdentityCatalogLocator();
 
 		Connection c = DriverManager.getConnection(propertyList, catalogLocator);
 
