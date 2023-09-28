@@ -44,7 +44,7 @@ import mondrian.olap.Util.ByteMatcher;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.server.StringRepositoryContentFinder;
 import mondrian.spi.CatalogLocator;
-import mondrian.spi.impl.CatalogLocatorImpl;
+import mondrian.spi.impl.IdentityCatalogLocator;
 import mondrian.util.LockBox;
 import mondrian.xmla.DataSourcesConfig;
 import mondrian.xmla.Enumeration;
@@ -295,7 +295,7 @@ public class XmlaSupport {
     /////////////////////////////////////////////////////////////////////////
     public static CatalogLocator getCatalogLocator() {
         if (CATALOG_LOCATOR == null) {
-            CATALOG_LOCATOR = new CatalogLocatorImpl();
+            CATALOG_LOCATOR = new IdentityCatalogLocator();
         }
         return CATALOG_LOCATOR;
     }
