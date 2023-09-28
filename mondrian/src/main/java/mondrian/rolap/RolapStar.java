@@ -18,7 +18,6 @@ import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
 import static org.apache.commons.collections.ReferenceMap.WEAK;
-import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -77,7 +76,6 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.server.Locus;
-import mondrian.spi.DataSourceChangeListener;
 import mondrian.util.Bug;
 
 /**
@@ -123,7 +121,6 @@ public class RolapStar {
      */
     private final List<AggStar> aggStars = new LinkedList<>();
 
-    private DataSourceChangeListener changeListener;
 
     // temporary model, should eventually use RolapStar.Table and
     // RolapStar.Column
@@ -152,7 +149,6 @@ public class RolapStar {
         this.factNode =
             new StarNetworkNode(null, null, null, null);
 
-        this.changeListener = schema.getDataSourceChangeListener();
         this.statisticsCache = new RolapStatisticsCache(this);
     }
 
@@ -607,15 +603,7 @@ public class RolapStar {
         localBars.get().aggregations.put(
             aggregationKey, aggregation);
 
-        // Let the change listener get the opportunity to register the
-        // first time the aggregation is used
-        if (this.cacheAggregations
-            && !isCacheDisabled()
-            && changeListener != null)
-        {
-            discard(
-                changeListener.isAggregationChanged(aggregationKey));
-        }
+
         return aggregation;
     }
 
@@ -819,23 +807,6 @@ public class RolapStar {
         }
     }
 
-    /**
-     * Returns the listener for changes to this star's underlying database.
-     *
-     * @return Returns the Data source change listener.
-     */
-    public DataSourceChangeListener getChangeListener() {
-        return changeListener;
-    }
-
-    /**
-     * Sets the listener for changes to this star's underlying database.
-     *
-     * @param changeListener The Data source change listener to set
-     */
-    public void setChangeListener(DataSourceChangeListener changeListener) {
-        this.changeListener = changeListener;
-    }
 
     // -- Inner classes --------------------------------------------------------
 

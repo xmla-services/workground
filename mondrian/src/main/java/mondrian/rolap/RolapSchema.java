@@ -1,13 +1,32 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2001-2005 Julian Hyde
-// Copyright (C) 2005-2019 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2001-2005 Julian Hyde
+ * Copyright (C) 2005-2019 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+
 package mondrian.rolap;
 
 import static mondrian.rolap.util.NamedSetUtil.getFormula;
@@ -34,8 +53,8 @@ import java.util.Set;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
-import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -90,7 +109,6 @@ import mondrian.olap.type.NumericType;
 import mondrian.olap.type.StringType;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.AggTableManager;
-import mondrian.spi.DataSourceChangeListener;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.spi.impl.Scripts;
 import mondrian.util.ByteString;
@@ -198,7 +216,6 @@ public class RolapSchema implements Schema {
 
     private Date schemaLoadDate;
 
-    private DataSourceChangeListener dataSourceChangeListener;
 
     /**
      * List of warnings. Populated when a schema is created by a connection
@@ -254,8 +271,6 @@ public class RolapSchema implements Schema {
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
-        this.dataSourceChangeListener =
-            createDataSourceChangeListener(connectInfo);
     }
 
     /**
@@ -648,8 +663,7 @@ public class RolapSchema implements Schema {
             Role role = lookupRole(xmlSchema.defaultRole());
             if (role == null) {
                 error(
-                    new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString(),
-                    locate(xmlSchema, "defaultRole"));
+                    new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString());
             } else {
                 // At this stage, the only roles in mapNameToRole are
                 // RoleImpl roles so it is safe to case.
@@ -671,18 +685,6 @@ public class RolapSchema implements Schema {
         return new Scripts.ScriptDefinition(script.cdata(), language);
     }
 
-    /**
-     * Returns the location of an element or attribute in an XML document.
-     *
-     * <p>TODO: modify eigenbase-xom parser to return position info
-     *
-     * @param node Node
-     * @param attributeName Attribute name, or null
-     * @return Location of node or attribute in an XML document
-     */
-    XmlLocation locate(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema node, String attributeName) {
-        return null;
-    }
 
     /**
      * Reports an error. If we are tolerant of errors
@@ -695,8 +697,7 @@ public class RolapSchema implements Schema {
      * the error, or null
      */
     void error(
-        String message,
-        XmlLocation xmlLocation)
+        String message)
     {
         final RuntimeException ex = new RuntimeException(message);
         if (internalConnection != null
@@ -1358,42 +1359,6 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     }
 
     /**
-     * Creates a {@link DataSourceChangeListener} with which to detect changes
-     * to datasources.
-     */
-    private DataSourceChangeListener createDataSourceChangeListener(
-        Util.PropertyList connectInfo)
-    {
-        DataSourceChangeListener changeListener = null;
-
-        // If CatalogContent is specified in the connect string, ignore
-        // everything else. In particular, ignore the dynamic schema
-        // processor.
-        String dataSourceChangeListenerStr = connectInfo.get(
-            RolapConnectionProperties.DataSourceChangeListener.name());
-
-        if (!Util.isEmpty(dataSourceChangeListenerStr)) {
-            try {
-                changeListener =
-                    ClassResolver.INSTANCE.instantiateSafe(
-                        dataSourceChangeListenerStr);
-            } catch (Exception e) {
-                throw Util.newError(
-                    e,
-                    "loading DataSourceChangeListener "
-                    + dataSourceChangeListenerStr);
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                    "RolapSchema.createDataSourceChangeListener: create datasource change listener {}\"",
-                    dataSourceChangeListenerStr);
-            }
-        }
-        return changeListener;
-    }
-
-    /**
      * Returns the checksum of this schema. Returns
      * <code>null</code> if {@link RolapConnectionProperties#UseContentChecksum}
      * is set to false.
@@ -1508,25 +1473,5 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         return nativeRegistry;
     }
 
-    /**
-     * @return Returns the dataSourceChangeListener.
-     */
-    public DataSourceChangeListener getDataSourceChangeListener() {
-        return dataSourceChangeListener;
-    }
-
-    /**
-     * @param dataSourceChangeListener The dataSourceChangeListener to set.
-     */
-    public void setDataSourceChangeListener(
-        DataSourceChangeListener dataSourceChangeListener)
-    {
-        this.dataSourceChangeListener = dataSourceChangeListener;
-    }
-
-    /**
-     * Location of a node in an XML document.
-     */
-    private interface XmlLocation {
-    }
+   
 }
