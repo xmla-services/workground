@@ -14,14 +14,25 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
@@ -33,26 +44,51 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ActionR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggForeignKeyR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggMeasureR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggNameR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AnnotationR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CalculatedMemberPropertyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CalculatedMemberR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CellFormatterR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnDefR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionGrantR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.FormulaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.InlineTableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberReaderParameterR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.NamedSetR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ParameterR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RoleR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RoleUsageR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RowR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ScriptR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.UnionR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ValueR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.VirtualCubeDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.VirtualCubeMeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.VirtualCubeR;
@@ -138,7 +174,25 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 		return new RoleR(annotations, schemaGrants, union, name);
 	}
 
-	@Override
+    @Override
+    protected MappingFormula new_Formula(String cdata) {
+        return new FormulaR(cdata);
+    }
+
+    @Override
+    protected MappingCellFormatter new_CellFormatter(
+        String className,
+        MappingScript script
+    ) {
+        return new CellFormatterR(className, script);
+    }
+
+    @Override
+    protected MappingScript new_Script(String language, String cdata) {
+        return new ScriptR(language, cdata);
+    }
+
+    @Override
     protected MappingCalculatedMember new_CalculatedMember(
         String name,
         String formatString,
@@ -242,4 +296,152 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             namedSets,
             visible);
     }
+
+    @Override
+    protected MappingCalculatedMemberProperty new_CalculatedMemberProperty(
+        String name,
+        String caption,
+        String description,
+        String expression,
+        String value
+    ) {
+        return new CalculatedMemberPropertyR(
+            name,
+            caption,
+            description,
+            expression,
+            value
+        );
+    }
+
+    @Override
+    protected MappingNamedSet new_NamedSet(String name,
+                                           String caption,
+                                           String description,
+                                           String formula,
+                                           List<MappingAnnotation> annotations,
+                                           String displayFolder,
+                                           MappingFormula formulaElement) {
+        return new NamedSetR(
+            name,
+            caption,
+            description,
+            formula,
+            annotations,
+            displayFolder,
+            formulaElement
+        );
+    }
+
+    @Override
+    protected MappingUnion new_Union(List<MappingRoleUsage> roleUsages) {
+        return new UnionR(roleUsages);
+    }
+
+    @Override
+    protected MappingRoleUsage new_RoleUsage(String roleName) {
+        return new RoleUsageR(roleName);
+    }
+
+    @Override
+    protected MappingSchemaGrant new_SchemaGrant(List<MappingCubeGrant> schemaGrantCubeGrants, AccessEnum access) {
+        return new SchemaGrantR(schemaGrantCubeGrants, access);
+    }
+
+    @Override
+    protected MappingDimensionGrant new_DimensionGrant(AccessEnum access, String dimension) {
+        return new DimensionGrantR(access, dimension);
+    }
+
+    @Override
+    protected MappingRelation new_InlineTable(
+        List<MappingColumnDef> columnDefs,
+        List<MappingRow> rows, String alias
+    ) {
+        return new InlineTableR(columnDefs, rows, alias);
+    }
+
+    @Override
+    protected MappingSQL new_SQL(String content,
+                                 String dialect) {
+        return new SQLR(content, dialect);
+    }
+
+    @Override
+    protected MappingAggTable new_AggName(String name,
+                                          MappingAggColumnName aggFactCount,
+                                          List<MappingAggMeasure> aggMeasures,
+                                          List<MappingAggColumnName> aggIgnoreColumns,
+                                          List<MappingAggForeignKey> aggForeignKeys,
+                                          List<MappingAggLevel> aggLevels,
+                                          boolean ignorecase,
+                                          List<MappingAggMeasureFactCount> measuresFactCounts,
+                                          String approxRowCount) {
+        return new AggNameR(
+            name,
+            aggFactCount,
+            aggMeasures,
+            aggIgnoreColumns,
+            aggForeignKeys,
+            aggLevels,
+            ignorecase,
+            measuresFactCounts,
+            approxRowCount
+        );
+    }
+
+    @Override
+    protected MappingAggLevel new_AggLevel(String column,
+                                           String name,
+                                           String ordinalColumn,
+                                           String nameColumn,
+                                           String captionColumn,
+                                           Boolean collapsed,
+                                           List<MappingAggLevelProperty> properties) {
+        return new AggLevelR(
+            column,
+            name,
+            ordinalColumn,
+            nameColumn,
+            captionColumn,
+            collapsed,
+            properties
+        );
+    }
+
+    @Override
+    protected MappingAggMeasure new_AggMeasure(String column,
+                                               String name,
+                                               String rollupType) {
+        return new AggMeasureR(column, name, rollupType);
+    }
+
+    @Override
+    protected MappingAggForeignKey new_AggForeignKey(String factColumn,
+                                                     String aggColumn) {
+        return new AggForeignKeyR(factColumn, aggColumn);
+    }
+
+    @Override
+    protected MappingRow new_Row(List<MappingValue> values) {
+        return new RowR(values);
+    }
+
+    @Override
+    protected MappingValue new_Value(String column,
+                                     String content) {
+        return new ValueR(column, content);
+    }
+
+    @Override
+    protected MappingColumnDef new_ColumnDef(String name,
+                                             TypeEnum type) {
+        return new ColumnDefR(name, type);
+    }
+
+    @Override
+    protected MappingElementFormatter new_ElementFormatter(String className, MappingScript script) {
+        return new CellFormatterR(className, script);
+    }
+
 }

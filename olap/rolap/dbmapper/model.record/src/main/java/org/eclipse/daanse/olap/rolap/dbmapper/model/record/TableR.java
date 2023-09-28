@@ -48,6 +48,18 @@ public class TableR implements MappingTable {
         this.hints = hints;
     }
 
+    public TableR(String schema, String name, String alias,
+                  List<MappingHint> hints, MappingSQL sql,
+                  List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {
+        this.name = name;
+        this.schema = schema;
+        this.alias = alias;
+        this.hints = hints;
+        this.sql = sql;
+        this.aggExcludes = aggExcludes;
+        this.aggTables = aggTables;
+    }
+
     public TableR(MappingTable tbl, String possibleName) {
         this(tbl.schema(), tbl.name(), possibleName, tbl.hints());
 

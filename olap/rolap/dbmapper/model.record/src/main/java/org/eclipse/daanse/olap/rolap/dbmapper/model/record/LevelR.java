@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
@@ -47,7 +48,7 @@ public record LevelR(String name,
                      MappingExpressionView captionExpression,
                      MappingExpressionView ordinalExpression,
                      MappingExpressionView parentExpression,
-                     ClosureR closure,
+                     MappingClosure closure,
                      List<MappingProperty> properties,
                      boolean visible,
                      InternalTypeEnum internalType,
