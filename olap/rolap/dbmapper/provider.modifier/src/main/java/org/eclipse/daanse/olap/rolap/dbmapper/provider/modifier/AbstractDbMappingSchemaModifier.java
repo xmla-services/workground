@@ -36,14 +36,17 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
@@ -69,50 +72,27 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggColumnNameR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggExcludeR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggForeignKeyR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelPropertyR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggMeasureFactCountR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggMeasureR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggNameR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggPatternR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CellFormatterR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ClosureR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnDefR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeGrantR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionGrantR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyGrantR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HintR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.InlineTableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberGrantR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PropertyR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RoleUsageR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RowR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaGrantR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.UnionR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ValueR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ViewR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-// TODO: implement that all elemnts are copied that other could extend this class and override some methods to
-//  manipulate the data
 public abstract class AbstractDbMappingSchemaModifier implements DatabaseMappingSchemaProvider {
 
     protected MappingSchema mappingSchema;
@@ -442,7 +422,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         List<MappingCalculatedMember> calculatedMembers = cubeCalculatedMembers(cube);
         List<MappingNamedSet> namedSets = cubeNamedSets(cube);
         List<MappingDrillThroughAction> drillThroughActions = cubeDrillThroughActions(cube);
-        List<MappingWritebackTable> writebackTables = cubewritebackTables(cube);
+        List<MappingWritebackTable> writebackTables = cubeWritebackTables(cube);
         boolean enabled = cubeEnabled(cube);
         boolean cache = cubeCache(cube);
         boolean visible = cubeVisible(cube);
@@ -600,7 +580,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return annotations(role.annotations());
     }
 
-    ////////////////// TODO
     protected MappingVirtualCube virtualCube(MappingVirtualCube virtualCube) {
         List<MappingAnnotation> annotations = virtualCubeAnnotations(virtualCube);
         List<MappingCubeUsage> cubeUsages = virtualCubeCubeUsage(virtualCube);
@@ -649,8 +628,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected String virtualCubeName(MappingVirtualCube virtualCube) {
         return virtualCube.name();
     }
-
-    ;
 
     protected boolean virtualCubeEnabled(MappingVirtualCube virtualCube) {
         return virtualCube.enabled();
@@ -1119,7 +1096,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCubeGrant> schemaGrantCubeGrants(MappingSchemaGrant schemaGrant) {
-           return cubeGrants(schemaGrant.cubeGrants());
+        return cubeGrants(schemaGrant.cubeGrants());
     }
 
     protected List<MappingCubeGrant> cubeGrants(List<MappingCubeGrant> cubeGrants) {
@@ -1214,24 +1191,16 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return memberGrant.member();
     }
 
-    protected MappingMemberGrant new_MemberGrant(String member, MemberGrantAccessEnum access) {
-        return new MemberGrantR(member, access);
-    }
+    protected abstract MappingMemberGrant new_MemberGrant(String member, MemberGrantAccessEnum access);
 
-    protected MappingHierarchyGrant new_HierarchyGrant(String hierarchy,
-                                                       AccessEnum access,
-                                                       String topLevel,
-                                                       String bottomLevel,
-                                                       String rollupPolicy,
-                                                       List<MappingMemberGrant> memberGrants) {
-        return new HierarchyGrantR(
-            hierarchy,
-            access,
-            topLevel,
-            bottomLevel,
-            rollupPolicy,
-            memberGrants);
-    }
+    protected abstract MappingHierarchyGrant new_HierarchyGrant(
+        String hierarchy,
+        AccessEnum access,
+        String topLevel,
+        String bottomLevel,
+        String rollupPolicy,
+        List<MappingMemberGrant> memberGrants
+    );
 
     protected List<MappingDimensionGrant> cubeGrantDimensionGrants(MappingCubeGrant cubeGrant) {
         return dimensionGrants(cubeGrant.dimensionGrants());
@@ -1257,23 +1226,18 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected abstract MappingDimensionGrant new_DimensionGrant(AccessEnum access, String dimension);
 
-    protected MappingCubeGrant new_CubeGrant(
+    protected abstract MappingCubeGrant new_CubeGrant(
         String cube,
         String access,
         List<MappingDimensionGrant> dimensionGrants,
         List<MappingHierarchyGrant> hierarchyGrants
-    ) {
-        return new CubeGrantR(
-            cube,
-            access,
-            dimensionGrants,
-            hierarchyGrants
-        );
+    );
+
+    protected AccessEnum schemaGrantAccess(MappingSchemaGrant schemaGrant) {
+        return schemaGrant.access();
     }
 
-    protected AccessEnum schemaGrantAccess(MappingSchemaGrant schemaGrant){
-        return schemaGrant.access();
-    };
+    ;
 
     protected abstract MappingSchemaGrant new_SchemaGrant(
         List<MappingCubeGrant> schemaGrantCubeGrants,
@@ -1292,6 +1256,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
             return new_InlineTable(columnDefs, rows, alias);
         }
         if (relation instanceof MappingTable table) {
+
             MappingSQL sql = tableSql(table);
             List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
             List<MappingAggTable> aggTables = tableAggTables(table);
@@ -1311,7 +1276,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return sqls(view.sqls());
     }
 
-    protected List<MappingSQL> sqls(List<MappingSQL> sqls){
+    protected List<MappingSQL> sqls(List<MappingSQL> sqls) {
         return sqls.stream().map(this::sql).toList();
     }
 
@@ -1345,10 +1310,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return hint.content();
     }
 
-    protected MappingHint new_Hint(String content,
-                                   String type) {
-        return new HintR(content, type);
-    };
+    protected abstract MappingHint new_Hint(String content, String type);
 
     protected List<MappingAggTable> tableAggTables(MappingTable table) {
         return aggTables(table.aggTables());
@@ -1403,7 +1365,9 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String aggNameName(MappingAggName aggName) {
         return aggName.name();
-    };
+    }
+
+    ;
 
     protected List<MappingAggMeasureFactCount> aggTableMeasuresFactCounts(MappingAggTable aggTable) {
         return measuresFactCounts(aggTable.measuresFactCounts());
@@ -1419,9 +1383,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return new_AggMeasureFactCount(factColumn, column);
     }
 
-    protected MappingAggMeasureFactCount new_AggMeasureFactCount(String factColumn, String column) {
-        return new AggMeasureFactCountR(factColumn, column);
-    }
+    protected abstract MappingAggMeasureFactCount new_AggMeasureFactCount(String factColumn, String column);
 
     protected String mappingAggMeasureFactCountFactColumn(MappingAggMeasureFactCount mappingAggMeasureFactCount) {
         return mappingAggMeasureFactCount.factColumn();
@@ -1480,9 +1442,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return aggLevelProperty.name();
     }
 
-    protected MappingAggLevelProperty new_AggLevelProperty(String name, String column) {
-        return new AggLevelPropertyR(name, column);
-    }
+    protected abstract MappingAggLevelProperty new_AggLevelProperty(String name, String column);
 
     protected Boolean aggLevelCollapsed(MappingAggLevel aggLevel) {
         return aggLevel.collapsed();
@@ -1502,21 +1462,25 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String aggLevelName(MappingAggLevel aggLevel) {
         return aggLevel.name();
-    };
+    }
+
+    ;
 
     protected String aggLevelColumn(MappingAggLevel aggLevel) {
         return aggLevel.column();
     }
 
-    protected abstract MappingAggLevel new_AggLevel(String column,
-                                           String name,
-                                           String ordinalColumn,
-                                           String nameColumn,
-                                           String captionColumn,
-                                           Boolean collapsed,
-                                           List<MappingAggLevelProperty> properties);
+    protected abstract MappingAggLevel new_AggLevel(
+        String column,
+        String name,
+        String ordinalColumn,
+        String nameColumn,
+        String captionColumn,
+        Boolean collapsed,
+        List<MappingAggLevelProperty> properties
+    );
 
-    protected List<MappingAggMeasure> aggTableAggMeasures(MappingAggTable aggTable){
+    protected List<MappingAggMeasure> aggTableAggMeasures(MappingAggTable aggTable) {
         return aggMeasures(aggTable.aggMeasures());
     }
 
@@ -1531,9 +1495,11 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return new_AggMeasure(column, name, rollupType);
     }
 
-    protected abstract MappingAggMeasure new_AggMeasure(String column,
-                                               String name,
-                                               String rollupType);
+    protected abstract MappingAggMeasure new_AggMeasure(
+        String column,
+        String name,
+        String rollupType
+    );
 
     protected String aggMeasureRollupType(MappingAggMeasure aggMeasure) {
         return aggMeasure.rollupType();
@@ -1541,7 +1507,9 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String aggMeasureName(MappingAggMeasure aggMeasure) {
         return aggMeasure.name();
-    };
+    }
+
+    ;
 
     protected String aggMeasureColumn(MappingAggMeasure aggMeasure) {
         return aggMeasure.column();
@@ -1596,11 +1564,9 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return aggColumnName.column();
     }
 
-    protected MappingAggColumnName new_AggColumnName(String column) {
-        return new AggColumnNameR(column);
-    }
+    protected abstract MappingAggColumnName new_AggColumnName(String column);
 
-    protected MappingAggTable new_AggPattern(
+    protected abstract MappingAggTable new_AggPattern(
         String pattern,
         MappingAggColumnName aggFactCount,
         List<MappingAggColumnName> aggIgnoreColumns,
@@ -1610,32 +1576,31 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         List<MappingAggExclude> aggExcludes,
         boolean ignorecase,
         List<MappingAggMeasureFactCount> measuresFactCounts
-    ){
-        return new AggPatternR(
-            pattern,
-            aggFactCount,
-            aggIgnoreColumns,
-            aggForeignKeys,
-            aggMeasures,
-            aggLevels,
-            aggExcludes,
-            ignorecase,
-            measuresFactCounts);
-    }
+    );
 
-    protected abstract MappingAggTable new_AggName(String name,
-                                          MappingAggColumnName aggFactCount,
-                                          List<MappingAggMeasure> aggMeasures,
-                                          List<MappingAggColumnName> aggIgnoreColumns,
-                                          List<MappingAggForeignKey> aggForeignKeys,
-                                          List<MappingAggLevel> aggLevels,
-                                          boolean ignorecase,
-                                          List<MappingAggMeasureFactCount> measuresFactCounts,
-                                          String approxRowCount);
+    protected abstract MappingAggTable new_AggName(
+        String name,
+        MappingAggColumnName aggFactCount,
+        List<MappingAggMeasure> aggMeasures,
+        List<MappingAggColumnName> aggIgnoreColumns,
+        List<MappingAggForeignKey> aggForeignKeys,
+        List<MappingAggLevel> aggLevels,
+        boolean ignorecase,
+        List<MappingAggMeasureFactCount> measuresFactCounts,
+        String approxRowCount
+    );
 
     protected MappingAggColumnName aggTableAggFactCount(MappingAggTable aggTable) {
-     //TODO
-     return  aggTable.aggFactCount();
+        return aggFactCount(aggTable.aggFactCount());
+    }
+
+    protected MappingAggColumnName aggFactCount(MappingAggColumnName aggFactCount) {
+        String column = aggFactCountColumn(aggFactCount);
+        return new_AggColumnName(column);
+    }
+
+    protected String aggFactCountColumn(MappingAggColumnName aggFactCount) {
+        return aggFactCount.column();
     }
 
     protected List<MappingAggExclude> tableAggExcludes(MappingTable table) {
@@ -1663,23 +1628,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String aggExcludeName(MappingAggExclude aggExclude) {
         return aggExclude.name();
-    };
+    }
+
+    ;
 
     protected String aggExcludePattern(MappingAggExclude aggExclude) {
         return aggExclude.pattern();
     }
 
-    protected MappingAggExclude new_AggExclude(
+    protected abstract MappingAggExclude new_AggExclude(
         String pattern,
         String name,
         boolean ignorecase
-    ) {
-        return new AggExcludeR(
-            pattern,
-            name,
-            ignorecase
-        );
-    }
+    );
 
     protected MappingSQL tableSql(MappingTable table) {
         return sql(table.sql());
@@ -1736,15 +1697,17 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String valueContent(MappingValue value) {
         return value.content();
-    };
+    }
+
+    ;
 
     protected abstract MappingRow new_Row(List<MappingValue> values);
 
-    protected MappingRelation new_Table(String schema, String name, String alias,
-                                        List<MappingHint> hints, MappingSQL sql,
-                                        List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {
-        return new TableR(schema, name, alias, hints, sql, aggExcludes, aggTables);
-    }
+    protected abstract MappingTable new_Table(
+        String schema, String name, String alias,
+        List<MappingHint> hints, MappingSQL sql,
+        List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables
+    );
 
     protected List<MappingColumnDef> inlineTableColumnDefs(MappingInlineTable inlineTable) {
         return columnDefs(inlineTable.columnDefs());
@@ -1770,38 +1733,411 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return columnDef.name();
     }
 
-    protected MappingRelation new_View(String alias,
-                                       List<MappingSQL> sqls) {
-        return new ViewR(alias, sqls);
-    }
+    protected abstract MappingRelation new_View(String alias, List<MappingSQL> sqls);
 
     protected abstract MappingRelation new_InlineTable(
         List<MappingColumnDef> columnDefs,
-        List<MappingRow> rows, String alias);
+        List<MappingRow> rows, String alias
+    );
 
     protected String relationAlias(MappingRelation relation) {
         return relation.alias();
     }
 
-    protected List<MappingWritebackTable> cubewritebackTables(MappingCube cube) {
-        return cube.writebackTables();
+    protected List<MappingWritebackTable> cubeWritebackTables(MappingCube cube) {
+        return writebackTables(cube.writebackTables());
     }
 
+    protected List<MappingWritebackTable> writebackTables(List<MappingWritebackTable> writebackTables) {
+        return writebackTables.stream().map(this::writebackTable).toList();
+    }
+
+    private MappingWritebackTable writebackTable(MappingWritebackTable writebackTable) {
+        String schema = writebackTableSchema(writebackTable);
+        String name = writebackTableName(writebackTable);
+        List<MappingWritebackColumn> columns = writebackTableColumns(writebackTable);;
+
+        return new_WritebackTable(schema, name, columns);
+    }
+
+    protected List<MappingWritebackColumn> writebackTableColumns(MappingWritebackTable writebackTable) {
+        return writebackColumns(writebackTable.columns());
+    }
+
+    protected List<MappingWritebackColumn> writebackColumns(Iterable<MappingWritebackColumn> columns) {
+        Iterator<MappingWritebackColumn> iterator = columns.iterator();
+        List<MappingWritebackColumn> result  = new ArrayList<>();
+        while (iterator.hasNext())
+        {
+            result.add(writebackColumn(iterator.next()));
+        }
+        return result;
+    }
+
+    protected MappingWritebackColumn writebackColumn(MappingWritebackColumn writebackColumn) {
+        if (writebackColumn instanceof MappingWritebackAttribute mappingWritebackAttribute) {
+            return mappingWritebackAttribute(mappingWritebackAttribute);
+        }
+        if (writebackColumn instanceof MappingWritebackMeasure mappingWritebackMeasure) {
+            return mappingWritebackMeasure(mappingWritebackMeasure);
+        }
+        return null;
+    }
+
+    protected MappingWritebackColumn mappingWritebackMeasure(MappingWritebackMeasure writebackMeasure) {
+        String name = writebackMeasureName(writebackMeasure);
+        String column = writebackMeasureColumn(writebackMeasure);
+        return new_WritebackMeasure(name, column);
+    }
+
+    protected String writebackMeasureColumn(MappingWritebackMeasure writebackMeasure) {
+        return writebackMeasure.column();
+    }
+
+    protected String writebackMeasureName(MappingWritebackMeasure writebackMeasure) {
+        return writebackMeasure.name();
+    }
+
+    protected abstract MappingWritebackColumn new_WritebackMeasure(String name, String column);
+
+    protected MappingWritebackColumn mappingWritebackAttribute(MappingWritebackAttribute writebackAttribute) {
+        String dimension = writebackAttributeDimension(writebackAttribute);
+        String column = writebackAttributeColumn(writebackAttribute);
+        return new_WritebackAttribute(dimension, column);
+    }
+
+    protected String writebackAttributeColumn(MappingWritebackAttribute writebackAttribute) {
+        return writebackAttribute.column();
+    };
+
+    protected String writebackAttributeDimension(MappingWritebackAttribute writebackAttribute) {
+        return writebackAttribute.dimension();
+    }
+
+    protected abstract MappingWritebackColumn new_WritebackAttribute(String dimension, String column);
+
+    protected String writebackTableName(MappingWritebackTable writebackTable) {
+        return writebackTable.name();
+    }
+
+    protected String writebackTableSchema(MappingWritebackTable writebackTable) {
+        return writebackTable.schema();
+    };
+
+    protected abstract MappingWritebackTable new_WritebackTable(
+        String schema, String name, List<MappingWritebackColumn> columns);
+
     protected List<MappingDrillThroughAction> cubeDrillThroughActions(MappingCube cube) {
-        return cube.drillThroughActions();
+        return drillThroughActions(cube.drillThroughActions());
+    }
+
+    protected List<MappingDrillThroughAction> drillThroughActions(List<MappingDrillThroughAction> drillThroughActions){
+        return drillThroughActions.stream().map(this::drillThroughAction).toList();
+    }
+
+    private MappingDrillThroughAction drillThroughAction(MappingDrillThroughAction drillThroughAction) {
+        List<MappingAnnotation> annotations = drillThroughActionAnnotations(drillThroughAction);
+        List<MappingDrillThroughElement> drillThroughElements = drillThroughActionDrillThroughElements(drillThroughAction);
+        String name = drillThroughActionName(drillThroughAction);
+        Boolean defaultt = drillThroughActionDefault(drillThroughAction);
+        String caption = drillThroughActionCaption(drillThroughAction);
+        String description = drillThroughActionDescription(drillThroughAction);
+        return new_DrillThroughAction(name,
+            caption,
+            description,
+            defaultt,
+            annotations,
+            drillThroughElements);
+    }
+
+    protected String drillThroughActionDescription(MappingDrillThroughAction drillThroughAction) {
+        return drillThroughAction.description();
+    }
+
+    protected String drillThroughActionCaption(MappingDrillThroughAction drillThroughAction) {
+        return drillThroughAction.caption();
+    }
+
+    protected Boolean drillThroughActionDefault(MappingDrillThroughAction drillThroughAction) {
+        return drillThroughAction.defaultt();
+    }
+
+    protected String drillThroughActionName(MappingDrillThroughAction drillThroughAction) {
+        return drillThroughAction.name();
+    }
+
+    protected List<MappingDrillThroughElement> drillThroughActionDrillThroughElements(MappingDrillThroughAction drillThroughAction) {
+        return drillThroughElements(drillThroughAction.drillThroughElements());
+    }
+
+    protected List<MappingDrillThroughElement> drillThroughElements(List<MappingDrillThroughElement> drillThroughElements) {
+        return drillThroughElements.stream().map(this::drillThroughElement).toList();
+    }
+
+    private MappingDrillThroughElement drillThroughElement(MappingDrillThroughElement mappingDrillThroughElement) {
+        if (mappingDrillThroughElement instanceof MappingDrillThroughMeasure mappingDrillThroughMeasure) {
+            return mappingDrillThroughMeasure(mappingDrillThroughMeasure);
+        }
+        if (mappingDrillThroughElement instanceof MappingDrillThroughAttribute mappingDrillThroughAttribute) {
+            return mappingDrillThroughAttribute(mappingDrillThroughAttribute);
+        }
+        return null;
+    }
+
+    protected MappingDrillThroughElement mappingDrillThroughAttribute(
+        MappingDrillThroughAttribute drillThroughAttribute) {
+        String dimension = drillThroughAttributeDimension(drillThroughAttribute);
+        String hierarchy = drillThroughAttributeHierarchy(drillThroughAttribute);
+        String level = drillThroughAttributeLevel(drillThroughAttribute);
+
+        return new_MappingDrillThroughAttribute(dimension, level, hierarchy);
+    }
+
+    protected String drillThroughAttributeLevel(MappingDrillThroughAttribute drillThroughAttribute) {
+        return drillThroughAttribute.level();
+    }
+
+    protected String drillThroughAttributeHierarchy(MappingDrillThroughAttribute drillThroughAttribute) {
+        return drillThroughAttribute.hierarchy();
+    }
+
+    protected String drillThroughAttributeDimension(MappingDrillThroughAttribute drillThroughAttribute) {
+        return drillThroughAttribute.dimension();
+    }
+
+    protected abstract MappingDrillThroughElement new_MappingDrillThroughAttribute(
+        String dimension, String level, String hierarchy);
+
+    protected MappingDrillThroughElement mappingDrillThroughMeasure(MappingDrillThroughMeasure drillThroughMeasure) {
+        String name = drillThroughMeasureName(drillThroughMeasure);
+        return new_DrillThroughMeasure(name);
+    }
+
+    protected String drillThroughMeasureName(MappingDrillThroughMeasure drillThroughMeasure) {
+        return drillThroughMeasure.name();
+    }
+
+    protected abstract MappingDrillThroughElement new_DrillThroughMeasure(String name);
+
+    protected abstract MappingDrillThroughAction new_DrillThroughAction(
+        String name,
+        String caption,
+        String description,
+        Boolean defaultt,
+        List<MappingAnnotation> annotations,
+        List<MappingDrillThroughElement> drillThroughElements
+    );
+
+    protected List<MappingAnnotation> drillThroughActionAnnotations(
+        MappingDrillThroughAction drillThroughAction) {
+        return annotations(drillThroughAction.annotations());
     }
 
     protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
-        return cube.calculatedMembers();
+        return calculatedMembers(cube.calculatedMembers());
     }
 
     protected List<MappingMeasure> cubeMeasures(MappingCube cube) {
-        return cube.measures();
+        return measures(cube.measures());
     }
 
-    protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
-        return cube.dimensionUsageOrDimensions();
+    protected List<MappingMeasure> measures(List<MappingMeasure> measures) {
+        return measures.stream().map(this::measure).toList();
     }
+
+    private MappingMeasure measure(MappingMeasure measure) {
+        List<MappingAnnotation> annotations = measureAnnotations(measure);
+        MappingExpressionView measureExpression = measureMeasureExpression(measure);
+        List<MappingCalculatedMemberProperty> calculatedMemberProperties = measureCalculatedMemberProperties(measure);
+        String name = measureName(measure);
+        String column = measureColumn(measure);
+        MeasureDataTypeEnum datatype = measureDatatype(measure);
+        String formatString = measureFormatString(measure);
+        String aggregator = measureAggregator(measure);
+        String formatter = measureFormatter(measure);
+        String caption = measureCaption(measure);
+        String description = measureDescription(measure);
+        boolean visible = measureVisible(measure);
+        String displayFolder = measureDisplayFolder(measure);
+        MappingElementFormatter cellFormatter = measureCellFormatter(measure);
+        String backColor = measureBackColor(measure);
+
+        return new_Measure(name,
+            column,
+            datatype,
+            formatString,
+            aggregator,
+            formatter,
+            caption,
+            description,
+            visible,
+            displayFolder,
+            annotations,
+            measureExpression,
+            calculatedMemberProperties,
+            cellFormatter,
+            backColor);
+    }
+
+    protected List<MappingCalculatedMemberProperty> measureCalculatedMemberProperties(MappingMeasure measure) {
+        return calculatedMemberProperties(measure.calculatedMemberProperties());
+    }
+
+    protected String measureBackColor(MappingMeasure measure) {
+        return measure.backColor();
+    };
+
+    protected MappingElementFormatter measureCellFormatter(MappingMeasure measure) {
+        return elementFormatter(measure.cellFormatter());
+    }
+
+    protected String measureDisplayFolder(MappingMeasure measure) {
+        return measure.displayFolder();
+    }
+
+    protected boolean measureVisible(MappingMeasure measure) {
+        return measure.visible();
+    }
+
+    protected String measureDescription(MappingMeasure measure) {
+        return measure.description();
+    }
+
+    protected String measureCaption(MappingMeasure measure) {
+        return measure.caption();
+    }
+
+    protected String measureFormatter(MappingMeasure measure) {
+        return measure.formatter();
+    }
+
+    protected String measureAggregator(MappingMeasure measure) {
+        return measure.aggregator();
+    }
+
+    protected String measureFormatString(MappingMeasure measure) {
+        return measure.formatString();
+    }
+
+    protected MeasureDataTypeEnum measureDatatype(MappingMeasure measure) {
+        return measure.datatype();
+    }
+
+    protected String measureColumn(MappingMeasure measure) {
+        return measure.column();
+    }
+
+    protected String measureName(MappingMeasure measure) {
+        return measure.name();
+    }
+
+    protected MappingExpressionView measureMeasureExpression(MappingMeasure measure){
+        return expressionView(measure.measureExpression());
+    };
+
+    protected List<MappingAnnotation> measureAnnotations(MappingMeasure measure) {
+        return annotations(measure.annotations());
+    }
+
+    protected MappingMeasure new_Measure(
+        String name,
+        String column,
+        MeasureDataTypeEnum datatype,
+        String formatString,
+        String aggregator,
+        String formatter,
+        String caption,
+        String description,
+        boolean visible,
+        String displayFolder,
+        List<MappingAnnotation> annotations,
+        MappingExpressionView measureExpression,
+        List<MappingCalculatedMemberProperty> calculatedMemberProperties,
+        MappingElementFormatter cellFormatter,
+        String backColor
+    ) {
+        return new MeasureR(name,
+            column,
+            datatype,
+            formatString,
+            aggregator,
+            formatter,
+            caption,
+            description,
+            visible,
+            displayFolder,
+            annotations,
+            measureExpression,
+            calculatedMemberProperties,
+            cellFormatter,
+            backColor);
+    }
+
+    ;
+
+    protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+        return cubeDimensions(cube.dimensionUsageOrDimensions());
+    }
+
+    protected List<MappingCubeDimension> cubeDimensions(List<MappingCubeDimension> cubeDimensions) {
+        return cubeDimensions.stream().map(this::cubeDimension).toList();
+    }
+
+    private MappingCubeDimension cubeDimension(MappingCubeDimension cubeDimension) {
+        List<MappingAnnotation> annotations = cubeDimensionAnnotations(cubeDimension);
+        String name = cubeDimensionName(cubeDimension);
+        String foreignKey = cubeDimensionForeignKey(cubeDimension);
+        boolean highCardinality = cubeDimensionHighCardinality(cubeDimension);
+        String caption = cubeDimensionCaption(cubeDimension);
+        boolean visible = cubeDimensionVisible(cubeDimension);
+        String description = cubeDimensionDescription(cubeDimension);
+
+        return new_CubeDimension(annotations,
+            name,
+            foreignKey,
+            highCardinality,
+            caption,
+            visible,
+            description);
+    }
+
+    protected String cubeDimensionDescription(MappingCubeDimension cubeDimension) {
+        return cubeDimension.description();
+    }
+
+    protected boolean cubeDimensionVisible(MappingCubeDimension cubeDimension) {
+        return cubeDimension.visible();
+    }
+
+    protected String cubeDimensionCaption(MappingCubeDimension cubeDimension) {
+        return cubeDimension.caption();
+    }
+
+    protected boolean cubeDimensionHighCardinality(MappingCubeDimension cubeDimension) {
+        return cubeDimension.highCardinality();
+    }
+
+    protected String cubeDimensionForeignKey(MappingCubeDimension cubeDimension) {
+        return cubeDimension.foreignKey();
+    }
+
+    protected String cubeDimensionName(MappingCubeDimension cubeDimension) {
+        return cubeDimension.name();
+    }
+
+    protected List<MappingAnnotation> cubeDimensionAnnotations(MappingCubeDimension cubeDimension) {
+        return annotations(cubeDimension.annotations());
+    }
+
+    protected abstract MappingCubeDimension new_CubeDimension(
+        List<MappingAnnotation> annotations,
+        String name,
+        String foreignKey,
+        boolean highCardinality,
+        String caption,
+        boolean visible,
+        String description
+    );
 
     protected MappingLevel level(MappingLevel level) {
         List<MappingAnnotation> annotations = levelAnnotations(level);
@@ -1829,7 +2165,8 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String description = levelDescription(level);
         String captionColumn = levelCaptionColumn(level);
         boolean visible = levelVisible(level);
-        InternalTypeEnum internalType = levelInternalType(level);;
+        InternalTypeEnum internalType = levelInternalType(level);
+        ;
         MappingElementFormatter memberFormatter = levelMemberFormatter(level);
         return new_Level(
             name,
@@ -1861,7 +2198,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
             memberFormatter);
     }
 
-    protected MappingElementFormatter levelMemberFormatter(MappingLevel level){
+    protected MappingElementFormatter levelMemberFormatter(MappingLevel level) {
         return memberFormatter(level.memberFormatter());
     }
 
@@ -1881,79 +2218,79 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected abstract MappingElementFormatter new_ElementFormatter(String className, MappingScript script);
 
-    protected InternalTypeEnum levelInternalType(MappingLevel level){
+    protected InternalTypeEnum levelInternalType(MappingLevel level) {
         return level.internalType();
     }
 
-    protected boolean levelVisible(MappingLevel level){
+    protected boolean levelVisible(MappingLevel level) {
         return level.visible();
     }
 
-    protected String levelCaptionColumn(MappingLevel level){
+    protected String levelCaptionColumn(MappingLevel level) {
         return level.column();
     }
 
-    protected String levelDescription(MappingLevel level){
+    protected String levelDescription(MappingLevel level) {
         return level.description();
     }
 
-    protected String levelCaption(MappingLevel level){
+    protected String levelCaption(MappingLevel level) {
         return level.caption();
     }
 
-    protected String levelFormatter(MappingLevel level){
+    protected String levelFormatter(MappingLevel level) {
         return level.formatter();
     }
 
-    protected HideMemberIfEnum levelHideMemberIf(MappingLevel level){
+    protected HideMemberIfEnum levelHideMemberIf(MappingLevel level) {
         return level.hideMemberIf();
     }
 
-    protected LevelTypeEnum levelLevelType(MappingLevel level){
+    protected LevelTypeEnum levelLevelType(MappingLevel level) {
         return level.levelType();
     }
 
-    protected boolean levelUniqueMembers(MappingLevel level){
+    protected boolean levelUniqueMembers(MappingLevel level) {
         return level.uniqueMembers();
     }
 
-    protected TypeEnum levelType(MappingLevel level){
+    protected TypeEnum levelType(MappingLevel level) {
         return level.type();
     }
 
-    protected String levelNullParentValue(MappingLevel level){
+    protected String levelNullParentValue(MappingLevel level) {
         return level.nullParentValue();
     }
 
-    protected String levelParentColumn(MappingLevel level){
+    protected String levelParentColumn(MappingLevel level) {
         return level.parentColumn();
     }
 
-    protected String levelOrdinalColumn(MappingLevel level){
+    protected String levelOrdinalColumn(MappingLevel level) {
         return level.ordinalColumn();
     }
 
-    protected String levelNameColumn(MappingLevel level){
+    protected String levelNameColumn(MappingLevel level) {
         return level.nameColumn();
     }
 
-    protected String levelColumn(MappingLevel level){
+    protected String levelColumn(MappingLevel level) {
         return level.column();
     }
 
-    protected String levelTable(MappingLevel level){
+    protected String levelTable(MappingLevel level) {
         return level.table();
     }
 
-    protected String levelName(MappingLevel level){
+    protected String levelName(MappingLevel level) {
         return level.name();
     }
 
-    protected String levelApproxRowCount(MappingLevel level){
+    protected String levelApproxRowCount(MappingLevel level) {
         return level.approxRowCount();
     }
 
-    protected List<MappingProperty> levelProperties(MappingLevel level){
+    protected List<MappingProperty> levelProperties(MappingLevel level) {
         return properties(level.properties());
     }
 
@@ -2007,7 +2344,9 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected String propertyDescription(MappingProperty property) {
         return property.description();
-    };
+    }
+
+    ;
 
     protected String propertyCaption(MappingProperty property) {
         return property.caption();
@@ -2029,7 +2368,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return property.name();
     }
 
-    protected MappingProperty new_Property(
+    protected abstract MappingProperty new_Property(
         String name,
         String column,
         PropertyTypeEnum type,
@@ -2038,50 +2377,79 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String description,
         boolean dependsOnLevelValue,
         MappingElementFormatter propertyFormatter
-    ) {
-        return new PropertyR(
-            name,
-            column,
-            type,
-            formatter,
-            caption,
-            description,
-            dependsOnLevelValue,
-            propertyFormatter
-        );
-    };
+    );
 
-    protected MappingClosure levelClosure(MappingLevel level){
+    protected MappingClosure levelClosure(MappingLevel level) {
         return closure(level.closure());
     }
 
     protected MappingClosure closure(MappingClosure closure) {
-        //TODO
-        return closure;
+        MappingTable table = closureTable(closure);
+        String parentColumn = closureParentColumn(closure);
+        String childColumn = closureChildColumn(closure);
+        return new_Closure(table, parentColumn, childColumn);
     }
 
-    protected MappingExpressionView levelParentExpression(MappingLevel level){
+    protected String closureChildColumn(MappingClosure closure) {
+        return closure.childColumn();
+    }
+
+    ;
+
+    protected String closureParentColumn(MappingClosure closure) {
+        return closure.parentColumn();
+    }
+
+    ;
+
+    private MappingTable closureTable(MappingClosure closure) {
+        return table(closure.table());
+    }
+
+    protected MappingTable table(MappingTable table) {
+        MappingSQL sql = tableSql(table);
+        List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
+        List<MappingAggTable> aggTables = tableAggTables(table);
+        List<MappingHint> hints = tableHints(table);
+        String name = tableName(table);
+        String schema = tableSchema(table);
+        String alias = tableAlias(table);
+        return new_Table(schema, name, alias, hints, sql, aggExcludes, aggTables);
+    }
+
+    protected String tableAlias(MappingTable table) {
+        return table.alias();
+    }
+
+    protected abstract MappingClosure new_Closure(
+        MappingTable table,
+        String parentColumn,
+        String childColumn
+    );
+
+    protected MappingExpressionView levelParentExpression(MappingLevel level) {
         return expressionView(level.parentExpression());
     }
 
-    protected MappingExpressionView expressionView(MappingExpression expression) {
-        //TODO
-        return (MappingExpressionView)expression;
-    };
+    protected MappingExpressionView expressionView(MappingExpressionView expression) {
+        return expression;
+    }
 
-    protected MappingExpressionView levelOrdinalExpression(MappingLevel level){
+    ;
+
+    protected MappingExpressionView levelOrdinalExpression(MappingLevel level) {
         return expressionView(level.ordinalExpression());
     }
 
-    protected MappingExpressionView levelCaptionExpression(MappingLevel level){
+    protected MappingExpressionView levelCaptionExpression(MappingLevel level) {
         return expressionView(level.captionExpression());
     }
 
-    protected MappingExpressionView levelNameExpression(MappingLevel level){
+    protected MappingExpressionView levelNameExpression(MappingLevel level) {
         return expressionView(level.nameExpression());
     }
 
-    protected MappingExpressionView levelKeyExpression(MappingLevel level){
+    protected MappingExpressionView levelKeyExpression(MappingLevel level) {
         return expressionView(level.keyExpression());
     }
 
@@ -2089,7 +2457,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return annotations(level.annotations());
     }
 
-    protected MappingLevel new_Level(
+    protected abstract MappingLevel new_Level(
         String name,
         String table,
         String column,
@@ -2117,45 +2485,97 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         boolean visible,
         InternalTypeEnum internalType,
         MappingElementFormatter memberFormatter
-    ) {
-        return new LevelR(
-            name,
-            table,
-            column,
-            nameColumn,
-            ordinalColumn,
-            parentColumn,
-            nullParentValue,
-            type,
-            approxRowCount,
-            uniqueMembers,
-            levelType,
-            hideMemberIf,
-            formatter,
-            caption,
-            description,
-            captionColumn,
-            annotations,
-            keyExpression,
-            nameExpression,
-            captionExpression,
-            ordinalExpression,
-            parentExpression,
-            closure,
-            properties,
-            visible,
-            internalType,
-            memberFormatter
-        );
-    }
+    );
 
     protected MappingRelationOrJoin hierarchyRelation(MappingHierarchy hierarchy) {
-        // TOTO
-        return hierarchy.relation();
+        return relationOrJoin(hierarchy.relation());
     }
 
-    protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema mappingSchemaOriginal) {
-        return mappingSchemaOriginal.userDefinedFunctions();
+    protected MappingRelationOrJoin relationOrJoin(MappingRelationOrJoin relationOrJoin) {
+        if (relationOrJoin instanceof MappingRelation relation) {
+            return relation(relation);
+        }
+        if (relationOrJoin instanceof MappingJoin join) {
+            return join(join);
+        }
+        return null;
     }
 
+    protected MappingJoin join(MappingJoin join) {
+        List<MappingRelationOrJoin> relations = joinRelations(join);
+        String leftAlias = joinLeftAlias(join);
+        String leftKey = joinLeftKey(join);
+        String rightAlias = joinRightAlias(join);
+        String rightKey = joinRightKey(join);
+        return new_Join(relations,
+            leftAlias,
+            leftKey,
+            rightAlias,
+            rightKey);
+    }
+
+    protected String joinRightKey(MappingJoin join) {
+        return join.rightKey();
+    }
+
+    protected String joinRightAlias(MappingJoin join) {
+        return join.rightAlias();
+    }
+
+    protected String joinLeftKey(MappingJoin join) {
+        return join.leftKey();
+    }
+
+    ;
+
+    protected String joinLeftAlias(MappingJoin join) {
+        return join.leftAlias();
+    }
+
+    protected List<MappingRelationOrJoin> joinRelations(MappingJoin join) {
+        return relationOrJoins(join.relations());
+    }
+
+    protected List<MappingRelationOrJoin> relationOrJoins(List<MappingRelationOrJoin> relations) {
+        return relations.stream().map(this::relationOrJoin).toList();
+    }
+
+    protected abstract MappingJoin new_Join(
+        List<MappingRelationOrJoin> relations,
+        String leftAlias,
+        String leftKey,
+        String rightAlias,
+        String rightKey
+    );
+
+    protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+        return userDefinedFunctions(schema.userDefinedFunctions());
+    }
+
+    protected List<MappingUserDefinedFunction> userDefinedFunctions(List<MappingUserDefinedFunction> userDefinedFunctions) {
+        return userDefinedFunctions.stream().map(this::userDefinedFunction).toList();
+    }
+
+    private MappingUserDefinedFunction userDefinedFunction(MappingUserDefinedFunction userDefinedFunction) {
+        String name = userDefinedFunctionName(userDefinedFunction);
+        String className = userDefinedFunctionClassName(userDefinedFunction);
+        MappingScript script = userDefinedFunctionScript(userDefinedFunction);
+        return new_UserDefinedFunction(name, className, script);
+    }
+
+    protected MappingScript userDefinedFunctionScript(MappingUserDefinedFunction userDefinedFunction) {
+        return script(userDefinedFunction.script());
+    }
+
+    protected String userDefinedFunctionClassName(MappingUserDefinedFunction userDefinedFunction) {
+        return userDefinedFunction.className();
+    }
+
+    protected String userDefinedFunctionName(MappingUserDefinedFunction userDefinedFunction) {
+        return userDefinedFunction.name();
+    }
+
+    protected abstract MappingUserDefinedFunction new_UserDefinedFunction(
+        String name, String className, MappingScript script
+    );
 }
