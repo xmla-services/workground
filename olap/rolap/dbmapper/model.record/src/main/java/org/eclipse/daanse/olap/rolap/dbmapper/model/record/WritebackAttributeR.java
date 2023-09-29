@@ -13,12 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
 
-public record ClosureR(MappingTable table,
-                       String parentColumn,
-                       String childColumn)
-        implements MappingClosure {
+public record WritebackAttributeR(String dimension, String column) implements MappingWritebackAttribute {
 
 }

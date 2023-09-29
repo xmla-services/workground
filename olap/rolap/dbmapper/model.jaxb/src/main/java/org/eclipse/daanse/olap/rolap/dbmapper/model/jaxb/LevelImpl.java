@@ -115,7 +115,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public MappingExpression keyExpression() {
+    public MappingExpressionView keyExpression() {
         return keyExpression;
     }
 
@@ -124,7 +124,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public MappingExpression nameExpression() {
+    public MappingExpressionView nameExpression() {
         return nameExpression;
     }
 
@@ -133,7 +133,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public MappingExpression captionExpression() {
+    public MappingExpressionView captionExpression() {
         return captionExpression;
     }
 
@@ -142,7 +142,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public MappingExpression ordinalExpression() {
+    public MappingExpressionView ordinalExpression() {
         return ordinalExpression;
     }
 
@@ -151,7 +151,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public MappingExpression parentExpression() {
+    public MappingExpressionView parentExpression() {
         return  parentExpression;
     }
 
