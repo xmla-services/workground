@@ -79,12 +79,12 @@ public Type getResultType( Validator validator, Expression[] args ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
       RolapHierarchy defaultTimeHierarchy =
-          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().name() );
+          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().functionAtom().name() );
       return new SetType( MemberType.forHierarchy( defaultTimeHierarchy ) );
     }
     final Type type = args[0].getType();
     if ( type.getDimension().getDimensionType() != DimensionType.TIME_DIMENSION) {
-      throw MondrianResource.instance().TimeArgNeeded.ex( getFunctionMetaData().name() );
+      throw MondrianResource.instance().TimeArgNeeded.ex( getFunctionMetaData().functionAtom().name() );
     }
     return super.getResultType( validator, args );
   }

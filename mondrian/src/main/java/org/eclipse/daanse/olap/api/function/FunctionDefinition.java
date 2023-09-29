@@ -38,17 +38,17 @@ public interface FunctionDefinition {
      */
     default String getSignature() {
     FunctionMetaData fi=	getFunctionMetaData();
-        return fi.syntax().getSignature(
-        		fi.name(),
+        return fi.functionAtom().syntax().getSignature(
+        		fi.functionAtom().name(),
         		fi.returnCategory(),
-        		fi.parameterCategories());
+        		fi.parameterDataTypes());
     }
 
     /**
      * Writes a function call with given {@link Expression}s into MDX.
      */
 	default void unparse(Expression[] args, PrintWriter pw) {
-		getFunctionMetaData().syntax().unparse(getFunctionMetaData().name(), args, pw);
+		getFunctionMetaData().functionAtom().syntax().unparse(getFunctionMetaData().functionAtom().name(), args, pw);
     }
  
     Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler);

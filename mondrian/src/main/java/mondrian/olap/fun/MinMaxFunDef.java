@@ -44,7 +44,7 @@ class MinMaxFunDef extends AbstractAggregateFunDef {
 
   public MinMaxFunDef( FunctionMetaData functionMetaData ) {
     super( functionMetaData );
-    this.max = functionMetaData.name().equals( "Max" );
+    this.max = functionMetaData.functionAtom().name().equals( "Max" );
   }
 
   @Override

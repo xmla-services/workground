@@ -24,8 +24,9 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
-import org.eclipse.daanse.olap.api.function.FunctionResolver;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -42,7 +43,9 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.AbstractIterCalc;
@@ -67,11 +70,17 @@ import mondrian.resource.MondrianResource;
  * @since 3 March, 2002
  */
 public class SetFunDef extends AbstractFunctionDefinition {
-    static final ResolverImpl Resolver = new ResolverImpl();
+	
+    
+	public static final String NAME = "{}";
+	public static final Syntax SYNTAX = Syntax.Braces;
+	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+	public static final String SIGNATURE = "{<Member> [, <Member>...]}";
+	public static final String DESCRIPTION = "Brace operator constructs a set.";
+	static final ResolverImpl Resolver = new ResolverImpl();
 
-	SetFunDef(FunctionResolver resolver, DataType[] argTypes) {
-		super(new FunctionMetaDataR(resolver.getName(), resolver.getDescription(), resolver.getSignature(),
-				resolver.getSyntax(), DataType.SET, argTypes));
+	SetFunDef(FunctionMetaData functionMetaData) {
+		super(functionMetaData);
 	}
 
     @Override
@@ -98,7 +107,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 } else {
                     if (!TypeUtil.isUnionCompatible(type0, type)) {
                         throw MondrianResource.instance()
-                            .ArgsMustHaveSameHierarchy.ex(getFunctionMetaData().name());
+                            .ArgsMustHaveSameHierarchy.ex(getFunctionMetaData().functionAtom().name());
                     }
                 }
             }
@@ -385,8 +394,13 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 type = argType;
             }
         }
+        
+
+
+        FunctionMetaData functionMetaData=       new FunctionMetaDataR(functionAtom, DESCRIPTION, SIGNATURE,
+				 DataType.SET, categories);
         return new ResolvedFunCallImpl(
-            new SetFunDef(SetFunDef.Resolver, categories),
+            new SetFunDef(functionMetaData),
             args,
             new SetType(type));
     }
@@ -473,14 +487,8 @@ public class SetFunDef extends AbstractFunctionDefinition {
         }
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        public ResolverImpl() {
-            super(
-                "{}",
-                "{<Member> [, <Member>...]}",
-                "Brace operator constructs a set.",
-                Syntax.Braces);
-        }
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
+  
 
         @Override
 		public FunctionDefinition resolve(
@@ -510,8 +518,16 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 }
                 return null;
             }
-            return new SetFunDef(this, parameterTypes);
+            
+            FunctionMetaData functionMetaData=       new FunctionMetaDataR(functionAtom, DESCRIPTION, SIGNATURE,
+    				 DataType.SET, parameterTypes);
+            return new SetFunDef(functionMetaData);
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     }
 
     /**

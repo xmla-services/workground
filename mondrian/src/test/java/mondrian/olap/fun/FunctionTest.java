@@ -41,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
@@ -49,7 +48,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -80,9 +79,6 @@ import mondrian.resource.MondrianResource;
 //import mondrian.spi.DialectManager;
 import mondrian.test.BasicQueryTest;
 import mondrian.test.PropertySaver5;
-import mondrian.udf.CurrentDateMemberExactUdf;
-import mondrian.udf.CurrentDateMemberUdf;
-import mondrian.udf.CurrentDateStringUdf;
 import mondrian.util.Bug;
 
 
@@ -12625,29 +12621,29 @@ Intel platforms):
    */
   @Test
   void testDumpFunctions() throws IOException {
-    final List<FunctionInfo> funInfoList = new ArrayList<>(BuiltinFunTable.instance().getFunctionInfos());
-    assertEquals( NUM_EXPECTED_FUNCTIONS, funInfoList.size() );
+    final List<FunctionMetaData> functionMetaDatas = new ArrayList<>(BuiltinFunTable.instance().getFunctionMetaDatas());
+    assertEquals( NUM_EXPECTED_FUNCTIONS, functionMetaDatas.size() );
 
     // Add some UDFs.
-    funInfoList.add(
-      new FunInfo(
-        new UdfResolver(
-          new UdfResolver.ClassUdfFactory(
-            CurrentDateMemberExactUdf.class,
-            null ) ) ) );
-    funInfoList.add(
-      new FunInfo(
-        new UdfResolver(
-          new UdfResolver.ClassUdfFactory(
-            CurrentDateMemberUdf.class,
-            null ) ) ) );
-    funInfoList.add(
-      new FunInfo(
-        new UdfResolver(
-          new UdfResolver.ClassUdfFactory(
-            CurrentDateStringUdf.class,
-            null ) ) ) );
-    Collections.sort( funInfoList );
+//    functionMetaDatas.add(
+//      new FunInfo(
+//        new UdfResolver(
+//          new UdfResolver.ClassUdfFactory(
+//            CurrentDateMemberExactUdf.class,
+//            null ) ) ) );
+//    functionMetaDatas.add(
+//      new FunInfo(
+//        new UdfResolver(
+//          new UdfResolver.ClassUdfFactory(
+//            CurrentDateMemberUdf.class,
+//            null ) ) ) );
+//    functionMetaDatas.add(
+//      new FunInfo(
+//        new UdfResolver(
+//          new UdfResolver.ClassUdfFactory(
+//            CurrentDateStringUdf.class,
+//            null ) ) ) );
+//    Collections.sort( functionMetaDatas );
 
     final File file = new File( "functions.html" );
     final FileOutputStream os = new FileOutputStream( file );
@@ -12657,28 +12653,23 @@ Intel platforms):
     pw.println( "<td><b>Name</b></td>" );
     pw.println( "<td><b>Description</b></td>" );
     pw.println( "</tr>" );
-    for ( FunctionInfo funInfo : funInfoList ) {
+    for ( FunctionMetaData funInfo : functionMetaDatas ) {
       pw.println( "<tr>" );
       pw.print( "  <td valign=top><code>" );
-      printHtml( pw, funInfo.getName() );
+      printHtml( pw, funInfo.functionAtom().name() );
       pw.println( "</code></td>" );
       pw.print( "  <td>" );
-      if ( funInfo.getDescription() != null ) {
-        printHtml( pw, funInfo.getDescription() );
+      if ( funInfo.description() != null ) {
+        printHtml( pw, funInfo.description() );
       }
       pw.println();
-      final String[] signatures = funInfo.getSignatures();
-      if ( signatures != null ) {
-        pw.println( "    <h1>Syntax</h1>" );
-        for ( int j = 0; j < signatures.length; j++ ) {
-          if ( j > 0 ) {
-            pw.println( "<br/>" );
-          }
-          String signature = signatures[ j ];
-          pw.print( "    " );
-          printHtml( pw, signature );
-        }
-        pw.println();
+      final String signature = funInfo.signature();
+      if ( signature != null ) {
+			pw.println("    <h1>Syntax</h1>");
+
+			pw.print("    ");
+			printHtml(pw, signature);
+			pw.println();
       }
       pw.println( "  </td>" );
       pw.println( "</tr>" );

@@ -11,7 +11,6 @@
 */
 package mondrian.olap.fun;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,11 +28,11 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.api.rolap.agg.Aggregator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -54,13 +53,13 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.extra.CachedExistsFunDef;
 import mondrian.olap.fun.extra.CalculatedChildFunDef;
@@ -99,24 +98,21 @@ public class BuiltinFunTable extends FunTableImpl {
 	public void defineFunctions(FunctionTableCollector builder) {
         builder.defineReserved("NULL");
 
-        // Empty expression
-        builder.define(
-            new AbstractFunctionDefinition(
-                "",
-                "",
-                "Dummy function representing the empty expression",
-                Syntax.Empty,
-                DataType.EMPTY,
-                new DataType[0])
-            {
+        FunctionAtom functionAtom = new FunctionAtomR("",Syntax.Empty);
+        FunctionMetaData functionMetaDataEmpty = new FunctionMetaDataR(functionAtom,
+        		"Dummy function representing the empty expression", "", DataType.EMPTY,
+    			new DataType[] { });
+    		
+        
+		FunctionDefinition functionDefinitionEmpty = new AbstractFunctionDefinition(functionMetaDataEmpty) {
 
-				@Override
-				public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-            }
-        );
+			@Override
+			public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
+				return null;
+			}
+		};
+		// Empty expression
+		builder.define(functionDefinitionEmpty);
 
         // first char: p=Property, m=Method, i=Infix, P=Prefix
         // 2nd:
@@ -124,18 +120,18 @@ public class BuiltinFunTable extends FunTableImpl {
         // ARRAY FUNCTIONS
 
         // "SetToArray(<Set>[, <Set>]...[, <Numeric Expression>])"
-        if (false) builder.define(new AbstractFunctionDefinition(
-                "SetToArray",
-                "SetToArray(<Set>[, <Set>]...[, <Numeric Expression>])",
-                "Converts one or more sets to an array for use in a user-defined function.",
-                "fa*")
-        {
-            @Override
-			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
+//        if (false) builder.define(new AbstractFunctionDefinition(
+//                "SetToArray",
+//                "SetToArray(<Set>[, <Set>]...[, <Numeric Expression>])",
+//                "Converts one or more sets to an array for use in a user-defined function.",
+//                "fa*")
+//        {
+//            @Override
+//			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
+//            {
+//                throw new UnsupportedOperationException();
+//            }
+//        });
 
         //
         // DIMENSION FUNCTIONS
@@ -315,12 +311,16 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AncestorFunDef.Resolver);
         builder.define(AncestorsFunDef.Resolver);
 
+        
+        FunctionAtom functionAtomCousin = new FunctionAtomR("Cousin",Syntax.Function);
+        FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtomCousin,
+        		"Returns the member with the same relative position under <ancestor member> as the member specified.", "<Member> Cousin(<Member>, <Ancestor Member>)",  DataType.MEMBER,
+    			new DataType[] { DataType.MEMBER,DataType.MEMBER});
+    		
+    					
+    			
         builder.define(
-            new AbstractFunctionDefinition(
-                "Cousin",
-                "<Member> Cousin(<Member>, <Ancestor Member>)",
-                "Returns the member with the same relative position under <ancestor member> as the member specified.",
-                "fmmm")
+            new AbstractFunctionDefinition(functionMetaData)
         {
             @Override
 			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
@@ -375,18 +375,20 @@ public class BuiltinFunTable extends FunTableImpl {
         // "<Dimension>.DefaultMember". The function is implemented using an
         // implicit cast to hierarchy, and we create a FunInfo for
         // documentation & backwards compatibility.
-        builder.define(
-            new FunInfo(
-                "DefaultMember",
-                "Returns the default member of a dimension.",
-                "pmd"));
+        FunctionAtom functionAtomDefaultMember = new FunctionAtomR("DefaultMember",Syntax.Property);
+
+		builder.define(new FunctionMetaDataR(functionAtomDefaultMember, "Returns the default member of a dimension.", "",
+				 DataType.MEMBER, new DataType[] { DataType.DIMENSION }));
 
         // "<Hierarchy>.DefaultMember"
+		
         builder.define(
             new AbstractFunctionDefinition(
-                "DefaultMember",
-                "Returns the default member of a hierarchy.",
-                "pmh")
+            		new FunctionMetaDataR(
+            				functionAtomDefaultMember,
+                            "Returns the default member of a hierarchy.",
+                            "",
+                             DataType.MEMBER, new DataType[] { DataType.HIERARCHY }))
         {
             @Override
 			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
@@ -653,88 +655,10 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AggregateFunDef.resolver);
 
         // Obsolete??
+             
         builder.define(
-            new MultiResolver(
-                "$AggregateChildren",
-                "$AggregateChildren(<Hierarchy>)",
-                "Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
-                new String[] {"Inh"}) {
-            @Override
-			protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
-                return new AbstractFunctionDefinition(functionMetaData) {
-                    @Override
-					public void unparse(Expression[] args, PrintWriter pw) {
-                        pw.print(getName());
-                        pw.print("(");
-                        args[0].unparse(pw);
-                        pw.print(")");
-                    }
-
-                    @Override
-					public Calc compileCall(
-							ResolvedFunCall call, ExpressionCompiler compiler)
-                    {
-                        final HierarchyCalc hierarchyCalc =
-                            compiler.compileHierarchy(call.getArg(0));
-                        final Calc valueCalc = new ValueCalc(call.getType());
-                        return new GenericCalc(call.getType()) {
-                            @Override
-							public Object evaluate(Evaluator evaluator) {
-                                Hierarchy hierarchy =
-                                    hierarchyCalc.evaluate(evaluator);
-                                return aggregateChildren(
-                                    evaluator, hierarchy, valueCalc);
-                            }
-
-                            @Override
-							public Calc[] getChildCalcs() {
-                                return new Calc[] {hierarchyCalc, valueCalc};
-                            }
-                        };
-                    }
-
-                    Object aggregateChildren(
-                        Evaluator evaluator,
-                        Hierarchy hierarchy,
-                        final Calc valueFunCall)
-                    {
-                        Member member =
-                            evaluator.getPreviousContext(hierarchy);
-                        List<Member> members = new ArrayList<>();
-                        evaluator.getSchemaReader()
-                            .getParentChildContributingChildren(
-                                member.getDataMember(),
-                                hierarchy,
-                                members);
-                        Aggregator aggregator =
-                            (Aggregator) evaluator.getProperty(
-                                Property.AGGREGATION_TYPE.name, null);
-                        if (aggregator == null) {
-                            throw FunUtil.newEvalException(
-                                null,
-                                new StringBuilder("Could not find an aggregator in the current ")
-                                .append("evaluation context").toString());
-                        }
-                        Aggregator rollup = aggregator.getRollup();
-                        if (rollup == null) {
-                            throw FunUtil.newEvalException(
-                                null,
-                                new StringBuilder("Don't know how to rollup aggregator '")
-                                .append(aggregator).append("'").toString());
-                        }
-                        final int savepoint = evaluator.savepoint();
-                        try {
-                            return rollup.aggregate(
-                                evaluator,
-                                new UnaryTupleList(members),
-                                valueFunCall);
-                        } finally {
-                            evaluator.restore(savepoint);
-                        }
-                    }
-                };
-            }
-        });
+        		 new AggregateChildrenFunbDef()
+        );
 
         builder.define(AvgFunDef.Resolver);
 
@@ -958,65 +882,65 @@ public class BuiltinFunTable extends FunTableImpl {
             DrilldownLevelTopBottomFunDef.DrilldownLevelBottomResolver);
         builder.define(DrilldownMemberFunDef.Resolver);
 
-        if (false)
-        builder.define(
-            new AbstractFunctionDefinition(
-                "DrilldownMemberBottom",
-                "DrilldownMemberBottom(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
-                "Like DrilldownMember except that it includes only the bottom N children.",
-                "fx*")
-        {
-            @Override
-			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
-
-        if (false)
-        builder.define(
-            new AbstractFunctionDefinition(
-                "DrilldownMemberTop",
-                "DrilldownMemberTop(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
-                "Like DrilldownMember except that it includes only the top N children.",
-                "fx*")
-        {
-            @Override
-			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
-
-        if (false)
-        builder.define(
-            new AbstractFunctionDefinition(
-                "DrillupLevel",
-                "DrillupLevel(<Set>[, <Level>])",
-                "Drills up the members of a set that are below a specified level.",
-                "fx*")
-        {
-            @Override
-			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
-
-        if (false)
-        builder.define(
-            new AbstractFunctionDefinition(
-                "DrillupMember",
-                "DrillupMember(<Set1>, <Set2>)",
-                "Drills up the members in a set that are present in a second specified set.",
-                "fx*")
-        {
-            @Override
-			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
+//        if (false)
+//        builder.define(
+//            new AbstractFunctionDefinition(
+//                "DrilldownMemberBottom",
+//                "DrilldownMemberBottom(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
+//                "Like DrilldownMember except that it includes only the bottom N children.",
+//                "fx*")
+//        {
+//            @Override
+//			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
+//            {
+//                throw new UnsupportedOperationException();
+//            }
+//        });
+//
+//        if (false)
+//        builder.define(
+//            new AbstractFunctionDefinition(
+//                "DrilldownMemberTop",
+//                "DrilldownMemberTop(<Set1>, <Set2>, <Count>[, [<Numeric Expression>][, RECURSIVE]])",
+//                "Like DrilldownMember except that it includes only the top N children.",
+//                "fx*")
+//        {
+//            @Override
+//			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
+//            {
+//                throw new UnsupportedOperationException();
+//            }
+//        });
+//
+//        if (false)
+//        builder.define(
+//            new AbstractFunctionDefinition(
+//                "DrillupLevel",
+//                "DrillupLevel(<Set>[, <Level>])",
+//                "Drills up the members of a set that are below a specified level.",
+//                "fx*")
+//        {
+//            @Override
+//			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
+//            {
+//                throw new UnsupportedOperationException();
+//            }
+//        });
+//
+//        if (false)
+//        builder.define(
+//            new AbstractFunctionDefinition(
+//                "DrillupMember",
+//                "DrillupMember(<Set1>, <Set2>)",
+//                "Drills up the members in a set that are present in a second specified set.",
+//                "fx*")
+//        {
+//            @Override
+//			public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler)
+//            {
+//                throw new UnsupportedOperationException();
+//            }
+//        });
 
         builder.define(ExceptFunDef.Resolver);
         builder.define(ExistsFunDef.resolver);
@@ -1033,11 +957,10 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(LastPeriodsFunDef.Resolver);
 
         // <Dimension>.Members is really just shorthand for <Hierarchy>.Members
-        builder.define(
-            new FunInfo(
-                MEMBERS,
-                "Returns the set of members in a dimension.",
-                "pxd"));
+    	 FunctionAtom functionAtomMembers =new FunctionAtomR(MEMBERS, Syntax.Property);
+		builder.define(	new FunctionMetaDataR(functionAtomMembers, "Returns the set of members in a dimension.", "", 
+						DataType.SET, new DataType[] { DataType.DIMENSION }));
+  
 
         // <Hierarchy>.Members
         builder.define(
@@ -2380,5 +2303,7 @@ public class BuiltinFunTable extends FunTableImpl {
         }
         return BuiltinFunTable.instance;
     }
+
+
 
 }

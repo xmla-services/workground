@@ -13,10 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -26,6 +30,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -36,14 +42,16 @@ import mondrian.calc.impl.TupleCollections;
  */
 public class ExistingFunDef extends AbstractFunctionDefinition {
 
-    static final ExistingFunDef instance = new ExistingFunDef();
+	static FunctionAtom functionAtom = new FunctionAtomR("Existing", Syntax.Prefix);
 
-    protected ExistingFunDef() {
-      super(
-          "Existing",
-          "Existing <Set>",
-          "Forces the set to be evaluated within the current context.",
-          "Pxx");
+	 static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
+			"Forces the set to be evaluated within the current context.", "Existing <Set>",  DataType.SET,
+			new DataType[] { DataType.SET });
+
+	static final ExistingFunDef instance = new ExistingFunDef(functionMetaData);
+	
+    protected ExistingFunDef(FunctionMetaData functionMetaData) {
+      super(functionMetaData);
     }
 
     @Override

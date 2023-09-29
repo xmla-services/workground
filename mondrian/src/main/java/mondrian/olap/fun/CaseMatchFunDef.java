@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -24,7 +25,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
@@ -45,6 +48,14 @@ import mondrian.olap.Util;
  * @since Mar 23, 2006
  */
 class CaseMatchFunDef extends AbstractFunctionDefinition {
+	
+	
+	static final String NAME = "_CaseMatch";
+	static final Syntax SYNTAX = Syntax.Case;
+	static final FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+
+	static final String DESCRIPTION = "Evaluates various expressions, and returns the corresponding expression for the first which matches a particular value.";
+	static final String SIGNATURE = "Case <Expression> When <Expression> Then <Expression> [...] [Else <Expression>] End";
     static final ResolverImpl Resolver = new ResolverImpl();
 
     private CaseMatchFunDef(FunctionMetaData functionMetaData) {
@@ -94,13 +105,9 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
         };
     }
 
-    private static class ResolverImpl extends ResolverBase {
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
         private ResolverImpl() {
-            super(
-                "_CaseMatch",
-                "Case <Expression> When <Expression> Then <Expression> [...] [Else <Expression>] End",
-                "Evaluates various expressions, and returns the corresponding expression for the first which matches a particular value.",
-                Syntax.Case);
+     
         }
 
         @Override
@@ -141,8 +148,10 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
             if (mismatchingArgs != 0) {
                 return null;
             }
-			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
-					getSyntax(), returnType, Expressions.categoriesOf(args));
+            
+
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, DESCRIPTION, SIGNATURE,
+					 returnType, Expressions.categoriesOf(args));
 
             return new CaseMatchFunDef(functionMetaData);
         }
@@ -151,5 +160,10 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
 		public boolean requiresExpression(int k) {
             return true;
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     }
 }

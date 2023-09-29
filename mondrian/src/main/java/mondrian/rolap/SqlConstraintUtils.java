@@ -706,7 +706,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         return true;
       }
 
-      if ( fun.getFunDef().getFunctionMetaData().name().equals( "+" ) ) {
+      if ( fun.getFunDef().getFunctionMetaData().functionAtom().name().equals( "+" ) ) {
         for ( Expression argsExp : fun.getArgs() ) {
           if ( !isSupportedExpressionForCalculatedMember( argsExp ) ) {
             return false;

@@ -46,6 +46,9 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	private FunctionMetaData functionMetaData;
 
 	public AbstractFunctionDefinition(FunctionMetaData functionMetaData) {
+		if(functionMetaData==null) {
+			System.out.println();
+		}
 		this.functionMetaData = functionMetaData;
 	}
 
@@ -58,7 +61,7 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	public AbstractFunctionDefinition(String name, String signature, String description, Syntax syntax,
 			DataType returnCategory, DataType[] parameterCategories) {
 
-		this(new FunctionMetaDataR(name, description, signature, syntax, returnCategory, parameterCategories));
+		this(new FunctionMetaDataR(new FunctionAtomR(name,syntax), description, signature,  returnCategory, parameterCategories));
 	}
 
 	@Deprecated
@@ -67,15 +70,11 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 				FunUtil.decodeParameterCategories(flags));
 	}
 
-	@Deprecated
-	protected AbstractFunctionDefinition(String name, String signature, String description, String flags) {
-		this(name, signature, description, FunUtil.decodeSyntacticType(flags), FunUtil.decodeReturnCategory(flags),
-				FunUtil.decodeParameterCategories(flags));
-	}
+
 
 	@Override
 	public Expression createCall(Validator validator, Expression[] args) {
-		DataType[] categories = functionMetaData.parameterCategories();
+		DataType[] categories = functionMetaData.parameterDataTypes();
 
 		if (categories.length != args.length) {
 			throw new IllegalArgumentException("Categories does not match arguments count");
@@ -140,7 +139,7 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 			return type;
 		}
 		throw new IllegalArgumentException(new StringBuilder("Cannot deduce type of call to function '")
-				.append(this.functionMetaData.name()).append("'").toString());
+				.append(this.functionMetaData.functionAtom().name()).append("'").toString());
 	}
 
 }

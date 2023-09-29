@@ -26,7 +26,9 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -37,6 +39,8 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -81,24 +85,17 @@ public class JavaFunDef extends AbstractFunctionDefinition {
      * @param paramCategories Parameter types
      * @param method Java method which implements this function
      */
-    public JavaFunDef(
-        String name,
-        String desc,
-        Syntax syntax,
-        DataType returnCategory,
-        DataType[] paramCategories,
-        Method method)
-    {
-        super(name, null, desc, syntax, returnCategory, paramCategories);
-        this.method = method;
-    }
+	public JavaFunDef(FunctionMetaData functionMetaDataEmpty, Method method) {
+		super(functionMetaDataEmpty);
+		this.method = method;
+	}
 
     @Override
 	public Calc compileCall(
         ResolvedFunCall call,
         ExpressionCompiler compiler)
     {
-        final Calc[] calcs = new Calc[getFunctionMetaData().parameterCategories().length];
+        final Calc[] calcs = new Calc[getFunctionMetaData().parameterDataTypes().length];
         final Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0; i < calcs.length;i++) {
             calcs[i] =
@@ -139,8 +136,12 @@ public class JavaFunDef extends AbstractFunctionDefinition {
 
         DataType[] paramCategories = JavaFunDef.getParameterCategories(method);
 
-        return new JavaFunDef(
-            name, desc, syntax, returnCategory, paramCategories, method);
+    	FunctionAtom functionAtom = new FunctionAtomR(name, syntax);
+
+        FunctionMetaData functionMetaDataEmpty = new FunctionMetaDataR(functionAtom,
+        		desc, "", returnCategory, paramCategories
+    			);
+        return new JavaFunDef(functionMetaDataEmpty, method);
     }
 
     /**

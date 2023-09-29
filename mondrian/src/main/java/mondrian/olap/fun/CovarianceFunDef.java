@@ -10,7 +10,9 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -20,6 +22,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 
 import mondrian.calc.impl.ValueCalc;
 
@@ -31,6 +34,8 @@ import mondrian.calc.impl.ValueCalc;
  * @since Mar 23, 2006
  */
 class CovarianceFunDef extends AbstractFunctionDefinition {
+	static final FunctionAtom functionAtom = new FunctionAtomR("Covariance", Syntax.Function);
+
     static final ReflectiveMultiResolver CovarianceResolver =
         new ReflectiveMultiResolver(
             "Covariance",
@@ -51,7 +56,7 @@ class CovarianceFunDef extends AbstractFunctionDefinition {
 
     public CovarianceFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
-        this.biased = functionMetaData.name().equals("Covariance");
+        this.biased = functionMetaData.functionAtom().name().equals("Covariance");
     }
 
     @Override

@@ -53,7 +53,7 @@ class LeadLagFunDef extends AbstractFunctionDefinition {
                 compiler.compileMember(call.getArg(0));
         final IntegerCalc integerCalc =
                 compiler.compileInteger(call.getArg(1));
-        final boolean lag = call.getFunDef().getFunctionMetaData().name().equals("Lag");
+        final boolean lag = call.getFunDef().getFunctionMetaData().functionAtom().name().equals("Lag");
         return new AbstractProfilingNestedMemberCalc(
         		call.getType(),
             new Calc[] {memberCalc, integerCalc})

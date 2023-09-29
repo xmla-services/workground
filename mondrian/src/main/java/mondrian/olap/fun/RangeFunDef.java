@@ -11,8 +11,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -21,6 +25,8 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -37,14 +43,14 @@ import mondrian.rolap.RolapMember;
  * @since 3 March, 2002
  */
 class RangeFunDef extends AbstractFunctionDefinition {
-    static final RangeFunDef instance = new RangeFunDef();
 
+    
+	static FunctionAtom functionAtom = new FunctionAtomR(":", Syntax.Infix);
+	static final RangeFunDef instance = new RangeFunDef();
     private RangeFunDef() {
-        super(
-            ":",
-            "<Member> : <Member>",
-            "Infix colon operator returns the set of members between a given pair of members.",
-            "ixmm");
+        super(new FunctionMetaDataR(functionAtom,
+    			"Infix colon operator returns the set of members between a given pair of members.", "<Member> : <Member>",  DataType.SET,
+    			new DataType[] { DataType.MEMBER,DataType.MEMBER }));
     }
 
 

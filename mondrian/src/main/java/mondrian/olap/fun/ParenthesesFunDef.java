@@ -16,12 +16,15 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
@@ -34,17 +37,15 @@ import mondrian.olap.Util;
  * @since 3 March, 2002
  */
 public class ParenthesesFunDef extends AbstractFunctionDefinition {
-    private final DataType argType;
-    public ParenthesesFunDef(DataType argType) {
-        super(
-            "()",
-            "(<Expression>)",
-            "Parenthesis enclose an expression and indicate precedence.",
-            Syntax.Parentheses,
-            argType,
-            new DataType[] {argType});
-        this.argType = argType;
-    }
+    
+	static FunctionAtom functionAtom = new FunctionAtomR("()", Syntax.Parentheses);
+
+	public ParenthesesFunDef(DataType argType) {
+		super(new FunctionMetaDataR(functionAtom, "Parenthesis enclose an expression and indicate precedence.",
+				"(<Expression>)",  argType, new DataType[] { argType }));
+
+	}
+	
     @Override
 	public void unparse(Expression[] args, PrintWriter pw) {
         if (args.length != 1) {

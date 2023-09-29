@@ -300,7 +300,7 @@ abstract class ValidatorImpl implements Validator {
         if (parent instanceof Formula formula) {
             return formula.isMember();
         } else if (parent instanceof ResolvedFunCallImpl funCall) {
-            if (funCall.getFunDef().getFunctionMetaData().syntax() == Syntax.Parentheses) {
+            if (funCall.getFunDef().getFunctionMetaData().functionAtom().syntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);
             } else {
                 int k = whichArg(funCall, (Expression) stack.get(n));
@@ -312,7 +312,7 @@ abstract class ValidatorImpl implements Validator {
                     return false;
                 }
                 final FunctionDefinition funDef = funCall.getFunDef();
-                final DataType[] parameterTypes = funDef.getFunctionMetaData().parameterCategories();
+                final DataType[] parameterTypes = funDef.getFunctionMetaData().parameterDataTypes();
                 return parameterTypes[k] != DataType.SET;
             }
         } else if (parent instanceof UnresolvedFunCallImpl funCall) {

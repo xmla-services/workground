@@ -1508,7 +1508,7 @@ public class FunUtil extends Util {
       && !( funDef instanceof ParenthesesFunDef )
       && query != null
       && query.nativeCrossJoinVirtualCube() ) {
-    	DataType[] paramCategories = funDef.getFunctionMetaData().parameterCategories();
+    	DataType[] paramCategories = funDef.getFunctionMetaData().parameterDataTypes();
       if ( paramCategories.length > 0 ) {
         final DataType cat0 = paramCategories[ 0 ];
         final Expression arg0 = args[ 0 ];

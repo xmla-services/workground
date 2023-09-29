@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -30,7 +31,9 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.type.MemberType;
@@ -46,19 +49,15 @@ import mondrian.olap.type.TypeUtil;
  * @since 3 March, 2002
  */
 public class TupleFunDef extends AbstractFunctionDefinition {
-    private final DataType[] argTypes;
+	
+	private static final String NAME = "()";
+	private static final Syntax SYNTAX = Syntax.Parentheses;
+	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private TupleFunDef(DataType[] argTypes) {
-        super(
-            "()",
-            "(<Member> [, <Member>]...)",
-            "Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
-            Syntax.Parentheses,
-            DataType.TUPLE,
-            argTypes);
-        this.argTypes = argTypes;
-    }
+	private TupleFunDef(FunctionMetaData functionMetaData) {
+		super(functionMetaData);
+	}
 
 
 
@@ -124,11 +123,12 @@ public class TupleFunDef extends AbstractFunctionDefinition {
         }
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        public ResolverImpl() {
-            super("()", null, null, Syntax.Parentheses);
-        }
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
 
+    	@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
         @Override
 		public FunctionDefinition resolve(
             Expression[] args,
@@ -165,15 +165,20 @@ public class TupleFunDef extends AbstractFunctionDefinition {
                     }
                 }
                 if(hasSet){
-                	
-        			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
-        					getSyntax(), DataType.SET, Expressions.categoriesOf(args));
+
+        			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,"Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.", "(<Member> [, <Member>]...)",
+        					  DataType.SET, Expressions.categoriesOf(args));
         			
         
                     return new CrossJoinFunDef(functionMetaData);
                 }
                 else {
-                    return new TupleFunDef(argTypes);
+                	
+
+        			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,"Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.", "(<Member> [, <Member>]...)",
+        					  DataType.TUPLE, argTypes);
+        			
+                    return new TupleFunDef(functionMetaData);
                 }
             }
         }

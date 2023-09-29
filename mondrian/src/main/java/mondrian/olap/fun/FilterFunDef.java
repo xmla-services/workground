@@ -70,7 +70,7 @@ class FilterFunDef extends AbstractFunctionDefinition {
         // it makes NamedSet.CurrentOrdinal work.
         List<ResultStyle> styles = compiler.getAcceptableResultStyles();
         if (call.getArg(0) instanceof ResolvedFunCall resolvedFunCall
-            && resolvedFunCall.getFunDef().getFunctionMetaData().name().equals("AS"))
+            && resolvedFunCall.getFunDef().getFunctionMetaData().functionAtom().name().equals("AS"))
         {
             styles = ResultStyle.ITERABLE_ONLY;
         }
