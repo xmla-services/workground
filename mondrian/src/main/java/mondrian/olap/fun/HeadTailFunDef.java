@@ -53,7 +53,7 @@ class HeadTailFunDef extends AbstractFunctionDefinition {
 
     public HeadTailFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
-        head = functionMetaData.name().equals("Head");
+        head = functionMetaData.functionAtom().name().equals("Head");
     }
 
     @Override

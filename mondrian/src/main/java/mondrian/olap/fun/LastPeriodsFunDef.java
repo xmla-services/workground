@@ -61,7 +61,7 @@ class LastPeriodsFunDef extends AbstractFunctionDefinition {
             // it is Time.CurrentMember.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                		getFunctionMetaData().name());
+                		getFunctionMetaData().functionAtom().name());
             return new SetType(MemberType.forHierarchy(defaultTimeHierarchy));
         } else {
             Type type = args[1].getType();
@@ -79,7 +79,7 @@ class LastPeriodsFunDef extends AbstractFunctionDefinition {
         if (args.length == 1) {
             final RolapHierarchy timeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getFunctionMetaData().name());
+                    .getTimeHierarchy(getFunctionMetaData().functionAtom().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);

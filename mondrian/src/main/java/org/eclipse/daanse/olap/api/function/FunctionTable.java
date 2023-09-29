@@ -44,6 +44,9 @@ import org.eclipse.daanse.olap.api.Syntax;
  * @author jhyde, 3 March, 2002
  */
 public interface FunctionTable {
+	
+	List<FunctionMetaData> getFunctionMetaDatas();
+	
     /**
      * Returns whether a string is a reserved word.
      */
@@ -79,10 +82,6 @@ public interface FunctionTable {
         String name,
         Syntax syntax);
 
-    /**
-     * Returns a list of {@link mondrian.olap.fun.FunInfo} objects.
-     */
-    List<FunctionInfo> getFunctionInfos();
 
     /**
      * This method is called from the constructor, to define the set of
@@ -108,7 +107,10 @@ public interface FunctionTable {
      * method.
      */
     public interface FunctionTableCollector {
-        /**
+
+    	void define(FunctionMetaData functionMetaData);
+        
+    	/**
          * Defines a function.
          *
          * @param funDef Function definition
@@ -123,14 +125,7 @@ public interface FunctionTable {
          */
         void define(FunctionResolver resolver);
 
-        /**
-         * Defines a function info that is not matchd by an actual function.
-         * The function will be implemented via implicit conversions, but
-         * we still want the function info to appear in the metadata.
-         *
-         * @param funInfo Function info
-         */
-        void define(FunctionInfo funInfo);
+
 
         /**
          * Defines a reserved word.

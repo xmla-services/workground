@@ -35,15 +35,20 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.DataType;
+import javax.servlet.ServletException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathException;
+
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
@@ -53,23 +58,17 @@ import org.olap4j.OlapConnection;
 import org.olap4j.OlapStatement;
 import org.olap4j.OlapWrapper;
 import org.olap4j.layout.RectangularCellSetFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
-import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-
-import javax.servlet.ServletException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathException;
 
 /**
  * Command line utility which reads and executes MDX commands.
@@ -1825,12 +1824,12 @@ public class CmdRunner {
         final FunctionTable funTable = getConnection().getSchema().getFunTable();
         if (tokens.length == 1) {
             // prints names only once
-            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
-            Iterator<FunctionInfo> it = funInfoList.iterator();
+            List<FunctionMetaData> functionMetaDatas = funTable.getFunctionMetaDatas();
+            Iterator<FunctionMetaData> it = functionMetaDatas.iterator();
             String prevName = null;
             while (it.hasNext()) {
-                FunctionInfo fi = it.next();
-                String name = fi.getName();
+            	FunctionMetaData fmd = it.next();
+                String name = fmd.functionAtom().name();
                 if (prevName == null || ! prevName.equals(name)) {
                     buf.append(name);
                     buf.append(NL);
@@ -1840,12 +1839,12 @@ public class CmdRunner {
 
         } else if (tokens.length == 2) {
             String funcname = tokens[1];
-            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
-            List<FunctionInfo> matches = new ArrayList<>();
+            List<FunctionMetaData> functionMetaDatas = funTable.getFunctionMetaDatas();
+            List<FunctionMetaData> matches = new ArrayList<>();
 
-            for (FunctionInfo fi : funInfoList) {
-                if (fi.getName().equalsIgnoreCase(funcname)) {
-                    matches.add(fi);
+            for (FunctionMetaData fmd : functionMetaDatas) {
+                if (fmd.functionAtom().name().equalsIgnoreCase(funcname)) {
+                    matches.add(fmd);
                 }
             }
 
@@ -1856,33 +1855,33 @@ public class CmdRunner {
                 buf.append(NL);
                 appendList(buf);
             } else {
-                Iterator<FunctionInfo> it = matches.iterator();
+                Iterator<FunctionMetaData> it = matches.iterator();
                 boolean doname = true;
                 while (it.hasNext()) {
-                    FunctionInfo fi = it.next();
+                	FunctionMetaData fi = it.next();
                     if (doname) {
-                        buf.append(fi.getName());
+                        buf.append(fi.functionAtom().name());
                         buf.append(NL);
                         doname = false;
                     }
 
                     appendIndent(buf, 1);
-                    buf.append(fi.getDescription());
+                    buf.append(fi.description());
                     buf.append(NL);
 
-                    String[] sigs = fi.getSignatures();
-                    if (sigs == null) {
+                    String sig = fi.signature();
+                    if (sig == null) {
                         appendIndent(buf, 2);
                         buf.append("Signature: ");
                         buf.append("NONE");
                         buf.append(NL);
-                    } else {
-                        for (String sig : sigs) {
-                            appendIndent(buf, 2);
-                            buf.append(sig);
-                            buf.append(NL);
-                        }
-                    }
+					} else {
+
+						appendIndent(buf, 2);
+						buf.append(sig);
+						buf.append(NL);
+
+					}
 /*
                     appendIndent(buf, 1);
                     buf.append("Return Type: ");

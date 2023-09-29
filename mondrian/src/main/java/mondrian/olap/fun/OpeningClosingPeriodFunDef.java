@@ -91,7 +91,7 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
             // dimension.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                		getFunctionMetaData().name());
+                		getFunctionMetaData().functionAtom().name());
             return MemberType.forHierarchy(defaultTimeHierarchy);
         }
         return super.getResultType(validator, args);
@@ -107,7 +107,7 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
         case 0:
             defaultTimeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getFunctionMetaData().name());
+                    .getTimeHierarchy(getFunctionMetaData().functionAtom().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                         MemberType.forHierarchy(defaultTimeHierarchy),
@@ -117,7 +117,7 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
         case 1:
             defaultTimeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getFunctionMetaData().name());
+                    .getTimeHierarchy(getFunctionMetaData().functionAtom().name());
             levelCalc = compiler.compileLevel(call.getArg(0));
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(

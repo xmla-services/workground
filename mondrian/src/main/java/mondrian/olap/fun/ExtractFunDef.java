@@ -22,9 +22,9 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
-import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -34,7 +34,9 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -55,11 +57,10 @@ import mondrian.olap.type.TupleType;
  * @since Jun 10, 2007
  */
 class ExtractFunDef extends AbstractFunctionDefinition {
-    static final ResolverBase Resolver = new ResolverBase(
-        "Extract",
-        "Extract(<Set>, <Hierarchy>[, <Hierarchy>...])",
-        "Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.",
-        Syntax.Function)
+	
+	static FunctionAtom functionAtom = new FunctionAtomR("Extract", Syntax.Function);
+
+    static final NoExpressionRequiredFunctionResolver Resolver = new NoExpressionRequiredFunctionResolver()
     {
         @Override
 		public FunctionDefinition resolve(
@@ -101,9 +102,17 @@ class ExtractFunDef extends AbstractFunctionDefinition {
             Arrays.fill(
                 parameterTypes, 1, parameterTypes.length, DataType.HIERARCHY);
             
-            FunctionMetaData functionMetaData=    new FunctionMetaDataR(getName(), getDescription(), getSignature(), getSyntax(), DataType.SET, parameterTypes);
+
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
+					"Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.",
+					"Extract(<Set>, <Hierarchy>[, <Hierarchy>...])",  DataType.SET, parameterTypes);
             return new ExtractFunDef(functionMetaData);
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     };
 
     private ExtractFunDef(

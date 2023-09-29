@@ -66,13 +66,13 @@ public class ReflectiveMultiResolver extends MultiResolver {
             return (FunctionDefinition) constructor.newInstance(new Object[] {functionMetaData});
         } catch (InstantiationException e) {
             throw Util.newInternal(
-                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
+                e, new StringBuilder("Error while instantiating FunDef '").append(functionMetaData).append("'").toString());
         } catch (IllegalAccessException e) {
             throw Util.newInternal(
-                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
+                e, new StringBuilder("Error while instantiating FunDef '").append(functionMetaData).append("'").toString());
         } catch (InvocationTargetException e) {
             throw Util.newInternal(
-                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
+                e, new StringBuilder("Error while instantiating FunDef '").append(functionMetaData).append("'").toString());
         }
     }
 

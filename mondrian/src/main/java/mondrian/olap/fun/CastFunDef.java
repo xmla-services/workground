@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -25,7 +26,9 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
@@ -53,7 +56,9 @@ import mondrian.resource.MondrianResource;
  * @since Sep 3, 2006
  */
 public class CastFunDef extends AbstractFunctionDefinition {
-    static final ResolverBase Resolver = new ResolverImpl();
+
+	static final FunctionAtom functionAtom = new FunctionAtomR("Cast", Syntax.Cast);
+	static final NoExpressionRequiredFunctionResolver Resolver = new ResolverImpl();
 
     private CastFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
@@ -132,13 +137,9 @@ public class CastFunDef extends AbstractFunctionDefinition {
     /**
      * Resolves calls to the CAST operator.
      */
-    private static class ResolverImpl extends ResolverBase {
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
 
-        public ResolverImpl() {
-            super(
-                "Cast", "Cast(<Expression> AS <Type>)",
-                "Converts values to another type.", Syntax.Cast);
-        }
+
 
         @Override
 		public FunctionDefinition resolve(
@@ -163,10 +164,17 @@ public class CastFunDef extends AbstractFunctionDefinition {
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
-			FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
-					getSyntax(), returnCategory, Expressions.categoriesOf(args));
-            return new CastFunDef(functionMetaData);
+            
+
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Converts values to another type.",
+					"Cast(<Expression> AS <Type>)", returnCategory, Expressions.categoriesOf(args));
+			return new CastFunDef(functionMetaData);
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     }
 
     private static class CastCalcImpl extends GenericCalc {

@@ -15,7 +15,9 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
@@ -24,6 +26,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.QueryImpl;
@@ -43,17 +48,14 @@ class AsFunDef extends AbstractFunctionDefinition {
     public static final FunctionResolver RESOLVER = new ResolverImpl();
     private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
-    /**
-     * Creates an AsFunDef.
-     *
-     * @param scopedNamedSet Named set definition
-     */
+    static FunctionAtom functionAtom=new FunctionAtomR("AS", Syntax.Infix);
+    static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
+    		"Assigns an alias to an expression", "<Expression> AS <Name>",  DataType.SET,
+			new DataType[] { DataType.SET,DataType.NUMERIC });
+
+
     private AsFunDef(QueryImpl.ScopedNamedSet scopedNamedSet) {
-        super(
-            "AS",
-            "<Expression> AS <Name>",
-            "Assigns an alias to an expression",
-            "ixxn");
+        super(functionMetaData);
         this.scopedNamedSet = scopedNamedSet;
     }
 
@@ -76,10 +78,8 @@ class AsFunDef extends AbstractFunctionDefinition {
         };
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        public ResolverImpl() {
-            super("AS", null, null, Syntax.Infix);
-        }
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
+
 
         @Override
 		public FunctionDefinition resolve(
@@ -103,5 +103,10 @@ class AsFunDef extends AbstractFunctionDefinition {
                 (QueryImpl.ScopedNamedSet) ((NamedSetExpression) args[1]).getNamedSet();
             return new AsFunDef(scopedNamedSet);
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     }
 }

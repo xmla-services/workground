@@ -18,14 +18,23 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 public class CaseTestFunctionResolver implements FunctionResolver {
+
+	private static final String NAME = "_CaseTest";
+	private static final Syntax SYNTAX = Syntax.Case;
+	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+
+	private static final String SIGNATURE = "Case When <Logical Expression> Then <Expression> [...] [Else <Expression>] End";
+	private static final String DESCRIPTION = "Evaluates various conditions, and returns the corresponding expression for the first which evaluates to true.";
 
 	@Override
 	public FunctionDefinition resolve(Expression[] argumentExpressions, Validator validator,
@@ -59,8 +68,10 @@ public class CaseTestFunctionResolver implements FunctionResolver {
 		if (mismatchingArgs != 0) {
 			return null;
 		}
-		FunctionMetaData functionInformation = new FunctionMetaDataR(getName(), getSignature(), getDescription(),
-				getSyntax(), returnType, Expressions.categoriesOf(argumentExpressions));
+		FunctionMetaData functionInformation = new FunctionMetaDataR(functionAtom,
+				DESCRIPTION,
+				SIGNATURE, 
+				returnType, Expressions.categoriesOf(argumentExpressions));
 		return new CaseTestFunctionDefinition(functionInformation);
 	}
 
@@ -70,22 +81,8 @@ public class CaseTestFunctionResolver implements FunctionResolver {
 	}
 
 	@Override
-	public String getName() {
-		return "_CaseTest";
+	public FunctionAtom getFunctionAtom() {
+		return functionAtom;
 	}
 
-	@Override
-	public String getDescription() {
-		return "Evaluates various conditions, and returns the corresponding expression for the first which evaluates to true.";
-	}
-
-	@Override
-	public Syntax getSyntax() {
-		return Syntax.Case;
-	}
-
-	@Override
-	public String getSignature() {
-		return "Case When <Logical Expression> Then <Expression> [...] [Else <Expression>] End";
-	}
 }

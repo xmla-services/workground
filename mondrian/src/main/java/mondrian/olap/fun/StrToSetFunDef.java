@@ -11,7 +11,6 @@ package mondrian.olap.fun;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -19,7 +18,9 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -29,6 +30,9 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -48,14 +52,14 @@ import mondrian.resource.MondrianResource;
  * @since Mar 23, 2006
  */
 class StrToSetFunDef extends AbstractFunctionDefinition {
+	
+	private static final String NAME = "StrToSet";
+	private static final Syntax SYNTAX = Syntax.Function;
+	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private StrToSetFunDef(DataType[] parameterTypes) {
-        super(
-            "StrToSet",
-            "<Set> StrToSet(<String>[, <Hierarchy>...])",
-            "Constructs a set from a string expression.",
-            Syntax.Function, DataType.SET, parameterTypes);
+    private StrToSetFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData         );
     }
 
     @Override
@@ -98,7 +102,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().name());
+            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().functionAtom().name());
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -109,7 +113,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getFunctionMetaData().name());
+                    i + 1, getFunctionMetaData().functionAtom().name());
             }
         }
         return super.createCall(validator, args);
@@ -156,16 +160,9 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
         }
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        ResolverImpl() {
-            super(
-                "StrToSet",
-                "StrToSet(<String Expression>)",
-                "Constructs a set from a string expression.",
-                Syntax.Function);
-        }
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
 
-        @Override
+    	@Override
 		public FunctionDefinition resolve(
             Expression[] args,
             Validator validator,
@@ -193,12 +190,30 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
             for (int i = 1; i < argTypes.length; i++) {
                 argTypes[i] = DataType.HIERARCHY;
             }
-            return new StrToSetFunDef(argTypes);
+
+			FunctionMetaData functionMetaData = functionMetaDataFor(argTypes);
+            return new StrToSetFunDef(functionMetaData);
         }
 
-        @Override
-		public Optional<FunctionDefinition> getRepresentativeFunDef() {
-            return Optional.of( new StrToSetFunDef(new DataType[] {DataType.STRING}));
-        }
+
+		private FunctionMetaData functionMetaDataFor(DataType[] argTypes) {
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
+					"Constructs a set from a string expression.", "<Set> StrToSet(<String>[, <Hierarchy>...])",
+					 DataType.SET, argTypes);
+			return functionMetaData;
+		}
+
+        
+		@Override
+		public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+			return List.of(functionMetaDataFor(new DataType[] { DataType.STRING }));
+		}
+
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
+
     }
 }

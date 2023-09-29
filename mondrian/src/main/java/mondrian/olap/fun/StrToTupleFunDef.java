@@ -20,7 +20,9 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -31,6 +33,9 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.type.MemberType;
@@ -47,14 +52,14 @@ import mondrian.resource.MondrianResource;
  * @since Mar 23, 2006
  */
 class StrToTupleFunDef extends AbstractFunctionDefinition {
+	
+	private static final String NAME = "StrToTuple";
+	private static final Syntax SYNTAX = Syntax.Function;
+	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private StrToTupleFunDef(DataType[] parameterTypes) {
-        super(
-            "StrToTuple",
-            null,
-            "Constructs a tuple from a string.",
-            Syntax.Function, DataType.TUPLE, parameterTypes);
+    private StrToTupleFunDef(FunctionMetaData functionMetaData) {
+        super(functionMetaData);
     }
 
     @Override
@@ -95,7 +100,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().name());
+            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().functionAtom().name());
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -106,7 +111,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getFunctionMetaData().name());
+                    i + 1, getFunctionMetaData().functionAtom().name());
             }
         }
         return super.createCall(validator, args);
@@ -149,14 +154,8 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
         }
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        ResolverImpl() {
-            super(
-                "StrToTuple",
-                "StrToTuple(<String Expression>)",
-                "Constructs a tuple from a string.",
-                Syntax.Function);
-        }
+    private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
+
 
         @Override
 		public FunctionDefinition resolve(
@@ -186,12 +185,27 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
             for (int i = 1; i < argTypes.length; i++) {
                 argTypes[i] = DataType.HIERARCHY;
             }
-            return new StrToTupleFunDef(argTypes);
+            return new StrToTupleFunDef(functionMetaDataFor(argTypes));
         }
 
+        
         @Override
-		public Optional<FunctionDefinition> getRepresentativeFunDef() {
-            return Optional.of( new StrToTupleFunDef(new DataType[] {DataType.STRING}));
+        public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        	return List.of( functionMetaDataFor(new DataType[] {DataType.STRING}));
         }
+        
+		private FunctionMetaData functionMetaDataFor(DataType[] argTypes) {
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
+					"Constructs a tuple from a string.", "StrToTuple(<String Expression>)",
+					 DataType.TUPLE, argTypes);
+			return functionMetaData;
+		}
+
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
+ 
     }
 }

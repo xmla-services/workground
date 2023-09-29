@@ -20,7 +20,10 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
+import org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -29,6 +32,8 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.MondrianProperties;
@@ -42,17 +47,15 @@ import mondrian.olap.Util;
  * @since Mar 23, 2006
  */
 class PropertiesFunDef extends AbstractFunctionDefinition {
+	static FunctionAtom functionAtom = new FunctionAtomR("Properties", Syntax.Method);
+
     static final ResolverImpl Resolver = new ResolverImpl();
 
+
     public PropertiesFunDef(
-        String name,
-        String signature,
-        String description,
-        Syntax syntax,
-        DataType returnType,
-        DataType[] parameterTypes)
+        DataType returnType)
     {
-        super(name, signature, description, syntax, returnType, parameterTypes);
+        super(new FunctionMetaDataR(functionAtom, "Returns the value of a member property.", "<Member>.Properties(<String Expression>)",  returnType, ResolverImpl.PARAMETER_TYPES));
     }
 
     @Override
@@ -90,19 +93,12 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
     /**
      * Resolves calls to the <code>PROPERTIES</code> MDX function.
      */
-    private static class ResolverImpl extends ResolverBase {
-        private static final DataType[] PARAMETER_TYPES = {
+    private static class ResolverImpl implements FunctionResolver {
+        public static final DataType[] PARAMETER_TYPES = {
             DataType.MEMBER, DataType.STRING
         };
 
-        private ResolverImpl() {
-            super(
-                "Properties",
-                "<Member>.Properties(<String Expression>)",
-                "Returns the value of a member property.",
-                Syntax.Method);
-        }
-
+ 
         private boolean matches(
             Expression[] args,
             DataType[] parameterTypes,
@@ -132,9 +128,10 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
                 return null;
             }
             DataType returnType = deducePropertyCategory(args[0], args[1]);
+            
+            
             return new PropertiesFunDef(
-                getName(), getSignature(), getDescription(), getSyntax(),
-                returnType, ResolverImpl.PARAMETER_TYPES);
+                returnType);
         }
 
         /**
@@ -189,5 +186,12 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
 		public boolean requiresExpression(int k) {
             return true;
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
+
+		
     }
 }

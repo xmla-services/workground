@@ -14,12 +14,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -30,6 +32,9 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.ParametersCheckingFunctionDefinitionResolver;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -51,18 +56,17 @@ import mondrian.olap.type.SetType;
  */
 class AddCalculatedMembersFunDef extends AbstractFunctionDefinition {
 
-    private static final AddCalculatedMembersFunDef instance =
-        new AddCalculatedMembersFunDef();
+	static FunctionAtom functionAtom = new FunctionAtomR("AddCalculatedMembers", Syntax.Function);
 
-    public static final FunctionResolver resolver = new ResolverImpl();
-    private static final String FLAG = "fxx";
+	static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Adds calculated members to a set.",
+			"", DataType.SET, new DataType[] { DataType.SET });
+	
 
-    private AddCalculatedMembersFunDef() {
-        super(
-            "AddCalculatedMembers",
-            "Adds calculated members to a set.",
-            AddCalculatedMembersFunDef.FLAG);
-    }
+    public static final FunctionResolver resolver = new AddCalculatedMembersFunctionResolver();
+
+	private AddCalculatedMembersFunDef() {
+		super(functionMetaData);
+	}
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
@@ -78,30 +82,22 @@ class AddCalculatedMembersFunDef extends AbstractFunctionDefinition {
         };
     }
 
-    private List<Member> addCalculatedMembers(
-        List<Member> memberList,
-        Evaluator evaluator)
-    {
-        // Determine unique levels in the set
-        final Set<Level> levels = new LinkedHashSet<>();
-        Hierarchy hierarchy = null;
+	private List<Member> addCalculatedMembers(List<Member> memberList, Evaluator evaluator) {
+		// Determine unique levels in the set
+		final Set<Level> levels = new LinkedHashSet<>();
+		Hierarchy hierarchy = null;
 
-
-        for (Member member : memberList) {
-            if (hierarchy == null) {
-                hierarchy = member.getHierarchy();
-            } else if (hierarchy != member.getHierarchy()) {
-                throw FunUtil.newEvalException(
-                    this.getFunctionMetaData(),
-                    new StringBuilder("Only members from the same hierarchy are allowed in the ")
-                        .append("AddCalculatedMembers set: ")
-                        .append(hierarchy)
-                        .append(" vs ")
-                        .append(member.getHierarchy())
-                        .toString());
-            }
-            levels.add(member.getLevel());
-        }
+		for (Member member : memberList) {
+			if (hierarchy == null) {
+				hierarchy = member.getHierarchy();
+			} else if (hierarchy != member.getHierarchy()) {
+				throw new MondrianEvaluationException(
+						new StringBuilder("Only members from the same hierarchy are allowed in the ")
+								.append("AddCalculatedMembers set: ").append(hierarchy).append(" vs ")
+								.append(member.getHierarchy()).toString());
+			}
+			levels.add(member.getLevel());
+		}
 
         // For each level, add the calculated members from both
         // the schema and the query
@@ -121,31 +117,26 @@ class AddCalculatedMembersFunDef extends AbstractFunctionDefinition {
         return workingList;
     }
 
-    private static class ResolverImpl extends MultiResolver {
-        public ResolverImpl() {
-            super(
-                AddCalculatedMembersFunDef.instance.getFunctionMetaData().name(),
-                AddCalculatedMembersFunDef.instance.getSignature(),
-                AddCalculatedMembersFunDef.instance.getFunctionMetaData().description(),
-                new String[] {AddCalculatedMembersFunDef.FLAG});
-        }
+	private static class AddCalculatedMembersFunctionResolver extends ParametersCheckingFunctionDefinitionResolver {
+		public AddCalculatedMembersFunctionResolver() {
+			super(new AddCalculatedMembersFunDef());
+		}
 
-        @Override
-		protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData ) {
-            if (args.length == 1) {
-                Expression arg = args[0];
-                final Type type1 = arg.getType();
-                if (type1 instanceof SetType type) {
-                    if (type.getElementType() instanceof MemberType) {
-                        return AddCalculatedMembersFunDef.instance;
-                    } else {
-                        throw FunUtil.newEvalException(
-                            AddCalculatedMembersFunDef.instance.getFunctionMetaData(),
-                            "Only single dimension members allowed in set for AddCalculatedMembers");
-                    }
-                }
-            }
-            return null;
-        }
-    }
+		@Override
+		protected boolean checkExpressions(Expression[] expressions) {
+			if (expressions.length == 1) {
+				Expression firstExpression = expressions[0];
+				final Type expressionType = firstExpression.getType();
+				if (expressionType instanceof SetType setType) {
+					if (setType.getElementType() instanceof MemberType) {
+						return true;
+					} else {
+						throw new IllegalArgumentException(
+								"Only single dimension members allowed in Set for AddCalculatedMembers");
+					}
+				}
+			}
+			return false;
+		}
+	}
 }

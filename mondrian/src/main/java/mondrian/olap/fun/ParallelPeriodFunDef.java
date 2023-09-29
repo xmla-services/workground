@@ -60,7 +60,7 @@ class ParallelPeriodFunDef extends AbstractFunctionDefinition {
             // dimension.
             RolapHierarchy defaultTimeHierarchy =
                 ((RolapCube) validator.getQuery().getCube()).getTimeHierarchy(
-                		getFunctionMetaData().name());
+                		getFunctionMetaData().functionAtom().name());
             return MemberType.forHierarchy(defaultTimeHierarchy);
         }
         return super.getResultType(validator, args);
@@ -104,7 +104,7 @@ class ParallelPeriodFunDef extends AbstractFunctionDefinition {
         default:
             final RolapHierarchy timeHierarchy =
                 ((RolapCube) compiler.getEvaluator().getCube())
-                    .getTimeHierarchy(getFunctionMetaData().name());
+                    .getTimeHierarchy(getFunctionMetaData().functionAtom().name());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);

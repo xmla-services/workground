@@ -16,23 +16,18 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
 
-/**
- * A <code>MultiResolver</code> considers several overloadings of the same
- * function. If one of these overloadings matches the actual arguments, it
- * calls the factory method {@link #createFunDef}.
- *
- * @author jhyde
- * @since Feb 12, 2003
- */
+
 public abstract class MultiResolver implements FunctionResolver {
     private final String name;
     private final String signature;
@@ -40,22 +35,7 @@ public abstract class MultiResolver implements FunctionResolver {
     private final String[] signatures;
     private final Syntax syntax;
 
-    /**
-     * Creates a <code>MultiResolver</code>.
-     *
-     * @param name Name of function or operator
-     * @param signature Signature of function or operator
-     * @param description Description of function or operator
-     * @param signatures Array of possible signatures, each of which is an
-     *     encoding of the syntactic type, return type, and parameter
-     *     types of this operator. The "Members" operator has a syntactic
-     *     type "pxd" which means "an operator with
-     *     {@link Syntax#Property property} syntax (p) which returns a set
-     *     (x) and takes a dimension (d) as its argument".
-     *     See {@link FunUtil#decodeSyntacticType(String)},
-     *     {@link FunUtil#decodeReturnCategory(String)},
-     *     {@link FunUtil#decodeParameterCategories(String)}.
-     */
+
     protected MultiResolver(
         String name,
         String signature,
@@ -72,32 +52,6 @@ public abstract class MultiResolver implements FunctionResolver {
             Util.assertTrue(FunUtil.decodeSyntacticType(signatures[i]) == syntax);
         }
     }
-
-    @Override
-	public String getName() {
-        return name;
-    }
-
-    @Override
-	public String getDescription() {
-        return description;
-    }
-
-    @Override
-	public String getSignature() {
-        return signature;
-    }
-
-    @Override
-	public Syntax getSyntax() {
-        return syntax;
-    }
-
-
-    public String[] getSignatures() {
-        return signatures;
-    }
-
 
     @Override
 	public FunctionDefinition resolve(
@@ -120,9 +74,9 @@ outer:
                 }
             }
             DataType returnType = FunUtil.decodeReturnCategory(signature);
-            
-        	FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
-					getSyntax(), returnType, Expressions.categoriesOf(args));
+            FunctionAtom functionAtom=new FunctionAtomR(name,syntax);
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, description, signature,  returnType,
+					Expressions.categoriesOf(args));
             return createFunDef(args, functionMetaData);
         }
         return null;
@@ -141,5 +95,10 @@ outer:
         return true;
     }
 
+	@Override
+	public FunctionAtom getFunctionAtom() {
+
+		return new FunctionAtomR(name, syntax);
+	}
     protected abstract FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData);
 }

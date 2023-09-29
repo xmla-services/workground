@@ -38,6 +38,7 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Evaluator.SetEvaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -220,10 +221,14 @@ class SqlConstraintUtilsTest {
         Member aggregatedMember0 = Mockito.mock(Member.class);
         Expression aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
 
-        FunctionMetaData functionInformation= Mockito.mock(FunctionMetaData.class);
+        FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
+        FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
+        
+
+        Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
+        Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
+        Mockito.doReturn("dummy").when(functionAtom).name();
        
-        Mockito.doReturn(Syntax.Function).when(functionInformation).syntax();
-        Mockito.doReturn("dummy").when(functionInformation).name();
 
         FunctionDefinition funDef = new AggregateFunDef(functionInformation);
         Expression[] args = new Expression[]{aggregateArg0};
@@ -338,10 +343,11 @@ class SqlConstraintUtilsTest {
                 parenthesesExpr), "ResolvedFunCall-Parentheses(N,Y)");
 
         FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
-        
+        FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
 
-        Mockito.doReturn(Syntax.Function).when(functionInformation).syntax();
-        Mockito.doReturn("dummy").when(functionInformation).name();
+        Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
+        Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
+        Mockito.doReturn("dummy").when(functionInformation).functionAtom().name();
         FunctionDefinition aggregateFunDef = new AggregateFunDef(functionInformation);
         Type aggregateReturnType = new DecimalType(1, 1);
 

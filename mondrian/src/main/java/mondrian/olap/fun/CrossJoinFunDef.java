@@ -22,10 +22,12 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -44,7 +46,9 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +84,8 @@ import mondrian.util.CartesianProductList;
  */
 public class CrossJoinFunDef extends AbstractFunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( CrossJoinFunDef.class );
+	static FunctionAtom functionAtom = new FunctionAtomR("Crossjoin", Syntax.Function);
+
 
   static final ResolverImpl Resolver = new ResolverImpl();
 
@@ -102,11 +108,11 @@ public Type getResultType( Validator validator, Expression[] args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getFunctionMetaData().name().equals( "*" ) ) {
+      } else if ( getFunctionMetaData().functionAtom().name().equals( "*" ) ) {
         // The "*" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getFunctionMetaData().name().equals( "()" ) ) {
+      } else if ( getFunctionMetaData().functionAtom().name().equals( "()" ) ) {
         // The "()" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );
@@ -1032,11 +1038,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     return false;
   }
 
-  private static class ResolverImpl extends ResolverBase {
-    public ResolverImpl() {
-      super("Crossjoin", "Crossjoin(<Set1>, <Set2>[, <Set3>...])", "Returns the cross product of two sets.",
-              org.eclipse.daanse.olap.api.Syntax.Function);
-    }
+  private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
+
 
     @Override
 	public FunctionDefinition resolve(
@@ -1053,8 +1056,10 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
             return null;
           }
         }
-		FunctionMetaData functionMetaData = new FunctionMetaDataR(getName(), getDescription(), getSignature(),
-				getSyntax(), org.eclipse.daanse.olap.api.DataType.SET, Expressions.categoriesOf(args));
+        
+
+		FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Returns the cross product of two sets.", "Crossjoin(<Set1>, <Set2>[, <Set3>...])",
+				org.eclipse.daanse.olap.api.DataType.SET, Expressions.categoriesOf(args));
         return new CrossJoinFunDef(functionMetaData);
       }
     }
@@ -1062,6 +1067,11 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData) {
       return new CrossJoinFunDef(functionMetaData);
     }
+
+	@Override
+	public FunctionAtom getFunctionAtom() {
+		return functionAtom;
+	}
   }
 
 

@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
-import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
-
-import mondrian.util.Pair;
+import org.eclipse.daanse.olap.function.resolver.ParametersCheckingFunctionDefinitionResolver;
 
 /**
  * Abstract implementation of {@link FunctionTable}.
@@ -38,16 +38,16 @@ import mondrian.util.Pair;
  * from the constructor, after which point, no further functions can be added.
  */
 public abstract class FunTableImpl implements FunctionTable {
+	private List<FunctionMetaData> functionMetaDatas;
     /**
      * Maps the upper-case name of a function plus its
      * {@link org.eclipse.daanse.olap.api.Syntax} to an array of
      * {@link FunctionResolver} objects for that name.
      */
-    private Map<Pair<String, Syntax>, List<FunctionResolver>> mapNameToResolvers;
+    private Map<FunctionAtomCompareKey, List<FunctionResolver>> mapNameToResolvers;
     private Set<String> reservedWordSet;
     private List<String> reservedWordList;
     private Set<String> propertyWords;
-    private List<FunctionInfo> functionInfos;
 
     /**
      * Creates a FunTableImpl.
@@ -69,7 +69,7 @@ public abstract class FunTableImpl implements FunctionTable {
         builder.organizeFunctions();
 
         // Copy information out of builder into this.
-        this.functionInfos = Collections.unmodifiableList(builder.funInfoList);
+        this.functionMetaDatas = Collections.unmodifiableList(builder.functionMetaDatas);
         this.mapNameToResolvers =
             Collections.unmodifiableMap(builder.mapNameToResolvers);
         this.reservedWordSet = builder.reservedWords;
@@ -82,20 +82,7 @@ public abstract class FunTableImpl implements FunctionTable {
         this.propertyWords = Collections.unmodifiableSet(builder.propertyWords);
     }
 
-    /**
-     * Creates a key to look up an operator in the resolver map. The key
-     * consists of the uppercase function name and the syntax.
-     *
-     * @param name Function/operator name
-     * @param syntax Syntax
-     * @return Key
-     */
-    private static Pair<String, Syntax> makeResolverKey(
-        String name,
-        Syntax syntax)
-    {
-        return new Pair<>(name.toUpperCase(), syntax);
-    }
+
 
     @Override
 	public List<String> getReservedWords() {
@@ -122,19 +109,31 @@ public abstract class FunTableImpl implements FunctionTable {
     }
 
     @Override
-	public List<FunctionInfo> getFunctionInfos() {
-        return functionInfos;
+	public List<FunctionMetaData> getFunctionMetaDatas() {
+        return functionMetaDatas;
     }
 
     @Override
 	public List<FunctionResolver> getResolvers(String name, Syntax syntax) {
-        Pair<String, Syntax> key = FunTableImpl.makeResolverKey(name, syntax);
+    	FunctionAtomCompareKey key = new FunctionAtomCompareKey(name,syntax);
         List<FunctionResolver> resolvers = mapNameToResolvers.get(key);
         if (resolvers == null) {
             resolvers = Collections.emptyList();
         }
         return resolvers;
     }
+    record FunctionAtomCompareKey(String name, Syntax syntax) {
+    
+		FunctionAtomCompareKey(String name, Syntax syntax) {
+			this.name = name.toUpperCase();
+			this.syntax = syntax;
+		}
+
+		FunctionAtomCompareKey(FunctionAtom functionAtom) {
+			this(functionAtom.name(), functionAtom.syntax());
+		}
+    	
+    };
 
     /**
      * Implementation of {@link org.eclipse.daanse.olap.api.function.FunctionTable.FunctionTableCollector}.
@@ -142,9 +141,9 @@ public abstract class FunTableImpl implements FunctionTable {
      * called, then {@link #organizeFunctions()} sorts and indexes the map.
      */
     private class BuilderImpl implements FunctionTableCollector {
+    	private final List<FunctionMetaData> functionMetaDatas = new ArrayList<>();
         private final List<FunctionResolver> resolverList = new ArrayList<>();
-        private final List<FunctionInfo> funInfoList = new ArrayList<>();
-        private final Map<Pair<String, Syntax>, List<FunctionResolver>>
+        private final Map<FunctionAtomCompareKey, List<FunctionResolver>>
             mapNameToResolvers =
             new HashMap<>();
         private final Set<String> reservedWords = new HashSet<>();
@@ -152,25 +151,30 @@ public abstract class FunTableImpl implements FunctionTable {
 
         @Override
 		public void define(FunctionDefinition funDef) {
-            define(new SimpleResolver(funDef));
+            define(new ParametersCheckingFunctionDefinitionResolver(funDef));
         }
 
-        @Override
+		@Override
 		public void define(FunctionResolver resolver) {
-            funInfoList.add(FunInfo.make(resolver));
-            if (resolver.getSyntax() == Syntax.Property) {
-                propertyWords.add(resolver.getName().toUpperCase());
-            }
-            resolverList.add(resolver);
-            final List<String> reservedWordsInner = resolver.getReservedWords();
-            for (String reservedWord : reservedWordsInner) {
-                defineReserved(reservedWord);
-            }
-        }
+
+			functionMetaDatas.addAll(resolver.getRepresentativeFunctionMetaDatas());
+			
+			FunctionAtom functionAtom= resolver.getFunctionAtom();
+			
+			if (functionAtom.syntax() == Syntax.Property) {
+				propertyWords.add(functionAtom.name().toUpperCase());
+			}
+			
+			resolverList.add(resolver);
+			final List<String> reservedWordsInner = resolver.getReservedWords();
+			for (String reservedWord : reservedWordsInner) {
+				defineReserved(reservedWord);
+			}
+		}
 
         @Override
-		public void define(FunctionInfo funInfo) {
-            funInfoList.add(funInfo);
+		public void define(FunctionMetaData functionMetaData) {
+           functionMetaDatas.add(functionMetaData);
         }
 
         @Override
@@ -182,16 +186,24 @@ public abstract class FunTableImpl implements FunctionTable {
          * Indexes the collection of functions.
          */
         protected void organizeFunctions() {
-            Collections.sort(funInfoList);
+        	
+        	Comparator<FunctionMetaData> comparatorFMD=new Comparator<FunctionMetaData>() {
+				
+				@Override
+				public int compare(FunctionMetaData o1, FunctionMetaData o2) {
+					//TODO:
+					return 0;
+				}
+			};
+            Collections.sort(functionMetaDatas,comparatorFMD);
 
             // Map upper-case function names to resolvers.
             final List<List<FunctionResolver>> nonSingletonResolverLists =
                 new ArrayList<>();
             for (FunctionResolver resolver : resolverList) {
-                Pair<String, Syntax> key =
-                    FunTableImpl.makeResolverKey(
-                        resolver.getName(),
-                        resolver.getSyntax());
+            	FunctionAtomCompareKey key=	 new FunctionAtomCompareKey(resolver.getFunctionAtom());
+            
+            	
                 List<FunctionResolver> list = mapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
                 list.add(resolver);
                 if (list.size() == 2) {
@@ -204,7 +216,7 @@ public abstract class FunTableImpl implements FunctionTable {
                 new Comparator<>() {
                     @Override
 					public int compare(FunctionResolver o1, FunctionResolver o2) {
-                        return o1.getSignature().compareTo(o2.getSignature());
+                        return o1.getFunctionAtom().syntax().compareTo(o2.getFunctionAtom().syntax());
                     }
                 };
             for (List<FunctionResolver> resolverListInner : nonSingletonResolverLists) {

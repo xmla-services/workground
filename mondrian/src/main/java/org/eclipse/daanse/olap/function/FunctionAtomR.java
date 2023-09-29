@@ -11,21 +11,11 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
+package org.eclipse.daanse.olap.function;
 
-package org.eclipse.daanse.olap.api.function;
+import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 
-import org.eclipse.daanse.olap.api.DataType;
-
-public interface FunctionMetaData {
-
-	FunctionAtom functionAtom();
-
-	String description();
-
-	String signature();
-
-	DataType returnCategory();
-
-	DataType[] parameterDataTypes();
+public record FunctionAtomR(String name, Syntax syntax) implements FunctionAtom {
 
 }

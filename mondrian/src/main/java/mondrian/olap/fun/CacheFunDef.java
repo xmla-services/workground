@@ -16,7 +16,9 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -24,6 +26,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
 import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.impl.GenericCalc;
@@ -46,21 +51,11 @@ public class CacheFunDef extends AbstractFunctionDefinition {
     private static final Syntax SYNTAX = Syntax.Function;
     static final CacheFunResolver Resolver = new CacheFunResolver();
 
-    CacheFunDef(
-        String name,
-        String signature,
-        String description,
-        Syntax syntax,
-        DataType category,
-        Type type)
-    {
-        super(
-            name, signature, description, syntax,
-            category, new DataType[] {category});
-        XOMUtil.discard(type);
-    }
+	public CacheFunDef(FunctionMetaData functionMetaData) {
+		super(functionMetaData);
+	}
 
-    @Override
+	@Override
 	public void unparse(Expression[] args, PrintWriter pw) {
         args[0].unparse(pw);
     }
@@ -108,10 +103,9 @@ public class CacheFunDef extends AbstractFunctionDefinition {
         }
     }
 
-    public static class CacheFunResolver extends ResolverBase {
-        CacheFunResolver() {
-            super(CacheFunDef.NAME, CacheFunDef.SIGNATURE_VALUE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX);
-        }
+    public static class CacheFunResolver extends NoExpressionRequiredFunctionResolver {
+  
+    	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
 
         @Override
 		public FunctionDefinition resolve(
@@ -125,14 +119,16 @@ public class CacheFunDef extends AbstractFunctionDefinition {
             final Expression exp = args[0];
             final DataType category = exp.getCategory();
             final Type type = exp.getType();
-            return new CacheFunDef(
-                CacheFunDef.NAME, CacheFunDef.SIGNATURE_VALUE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX,
-                category, type);
+            
+            FunctionMetaData functionMetaData=   new FunctionMetaDataR(functionAtom,DESCRIPTION, SIGNATURE_VALUE,  category, new DataType[] {category});
+            return new CacheFunDef(functionMetaData);
         }
 
-        @Override
-		public boolean requiresExpression(int k) {
-            return false;
-        }
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
+
+
     }
 }

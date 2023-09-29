@@ -21,7 +21,9 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -34,6 +36,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
@@ -66,17 +69,16 @@ public class UdfResolver implements FunctionResolver {
         this.udf = factory.create();
     }
 
-    @Override
+    
 	public String getName() {
         return udf.getName();
     }
 
-    @Override
+    
 	public String getDescription() {
         return udf.getDescription();
     }
-
-    @Override
+    
 	public String getSignature() {
         Type[] parameterTypes = udf.getParameterTypes();
         DataType[] parameterCategories = new DataType[parameterTypes.length];
@@ -91,20 +93,20 @@ public class UdfResolver implements FunctionResolver {
             parameterCategories);
     }
 
-    @Override
+    
 	public Syntax getSyntax() {
         return udf.getSyntax();
     }
 
     @Override
-	public Optional<FunctionDefinition> getRepresentativeFunDef() {
+	public List<FunctionMetaData> getRepresentativeFunctionMetaDatas()  {
         Type[] parameterTypes = udf.getParameterTypes();
         DataType[] parameterCategories = new DataType[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
             parameterCategories[i] = TypeUtil.typeToCategory(parameterTypes[i]);
         }
         Type returnType = udf.getReturnType(parameterTypes);
-        return Optional.of( new UdfFunDef(parameterCategories, returnType));
+        return List.of( new UdfFunDef(parameterCategories, returnType).getFunctionMetaData());
     }
 
     @Override
@@ -158,7 +160,9 @@ public class UdfResolver implements FunctionResolver {
         private Type returnType;
 
         public UdfFunDef(DataType[] parameterCategories, Type returnType) {
-            super( new FunctionMetaDataR(UdfResolver.this.getName(), UdfResolver.this.getDescription(), UdfResolver.this.getSignature(), UdfResolver.this.getSyntax(), TypeUtil.typeToCategory(returnType), parameterCategories));
+        	
+
+            super(new FunctionMetaDataR(new FunctionAtomR(UdfResolver.this.getName(), UdfResolver.this.getSyntax()), UdfResolver.this.getDescription(), UdfResolver.this.getSignature(),  TypeUtil.typeToCategory(returnType), parameterCategories));
                 
             this.returnType = returnType;
         }
@@ -178,7 +182,7 @@ public class UdfResolver implements FunctionResolver {
                 Expression arg = args[i];
                 final Calc calc = calcs[i] = compiler.compileAs(
                     arg,
-                    TypeUtil.castType(arg.getType(), getFunctionMetaData().parameterCategories()[i]),
+                    TypeUtil.castType(arg.getType(), getFunctionMetaData().parameterDataTypes()[i]),
                     ResultStyle.ANY_LIST);
                 calcs[i] = calc;
                 final Calc scalarCalc = compiler.compileScalar(arg, true);
@@ -461,4 +465,9 @@ public class UdfResolver implements FunctionResolver {
             return Util.createUdf(clazz, name);
         }
     }
+
+	@Override
+	public FunctionAtom getFunctionAtom() {
+		return new FunctionAtomR(getName(), getSyntax());
+	}
 }

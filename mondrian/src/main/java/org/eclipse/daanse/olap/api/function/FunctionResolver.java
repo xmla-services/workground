@@ -32,9 +32,7 @@
 package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
@@ -43,21 +41,7 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
  * of arguments into a {@link FunctionDefinition}.
  */
 public interface FunctionResolver {
-    /**
-     * Returns the name of the function or operator.
-     */
-    String getName();
-
-    /**
-     * Returns the description of the function or operator.
-     */
-    String getDescription();
-
-    /**
-     * Returns the syntax with which the function or operator was invoked.
-     */
-    Syntax getSyntax();
-
+  
     /**
      * Given a particular set of arguments the function is applied to, returns
      * the correct overloaded form of the function.
@@ -99,21 +83,12 @@ public interface FunctionResolver {
 	default List<String> getReservedWords() {
 		return List.of();
 	}
+	
 
-    /**
-     * Returns a string describing the syntax of this function, for example
-     * <pre><code>StrToSet(<String Expression>)</code></pre>
-     */
-    String getSignature();
+	public FunctionAtom getFunctionAtom();
 
-    /**
-     * Returns a representative example of the function which this Resolver
-     * can produce, for purposes of describing the function set. May return
-     * null if there is no representative function, or if the Resolver has
-     * a way to describe itself in more detail.
-     */
-    default Optional<FunctionDefinition> getRepresentativeFunDef(){
-    	return Optional.empty();
+    default List<FunctionMetaData> getRepresentativeFunctionMetaDatas(){
+    	return List.of();
     }
 
     /**

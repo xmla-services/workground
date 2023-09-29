@@ -761,7 +761,7 @@ public class RolapCell implements Cell {
 		public Object visitResolvedFunCall(ResolvedFunCall call) {
             final FunctionDefinition def = call.getFunDef();
             final Expression[] args = call.getArgs();
-            final String name = def.getFunctionMetaData().name();
+            final String name = def.getFunctionMetaData().functionAtom().name();
             if (name.equals("+")
                 || name.equals("-")
                 || name.equals("/")

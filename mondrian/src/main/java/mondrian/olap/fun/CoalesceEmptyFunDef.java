@@ -17,13 +17,16 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.GenericCalc;
@@ -37,7 +40,8 @@ import mondrian.calc.impl.GenericCalc;
  * @author gjohnson
  */
 public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
-    static final ResolverBase Resolver = new ResolverImpl();
+	static final FunctionAtom functionAtom = new FunctionAtomR("CoalesceEmpty", Syntax.Function);
+    static final FunctionResolver Resolver = new ResolverImpl();
 
 
 
@@ -71,14 +75,7 @@ public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
         };
     }
 
-    private static class ResolverImpl extends ResolverBase {
-        public ResolverImpl() {
-            super(
-                "CoalesceEmpty",
-                    "CoalesceEmpty(<Value Expression>[, <Value Expression>...])",
-                    "Coalesces an empty cell value to a different value. All of the expressions must be of the same type (number or string).",
-                    Syntax.Function);
-        }
+    private static class ResolverImpl implements FunctionResolver {
 
         @Override
 		public FunctionDefinition resolve(
@@ -101,8 +98,8 @@ public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
                     argTypes[i] = type;
                 }
                 if (matchingArgs == args.length) {
-                	
-                	FunctionMetaData functionMetaData=new FunctionMetaDataR(getName(), getDescription(), getSignature(), getSyntax(), type, argTypes);
+
+                	FunctionMetaData functionMetaData=new FunctionMetaDataR( functionAtom, "Coalesces an empty cell value to a different value. All of the expressions must be of the same type (number or string).", "CoalesceEmpty(<Value Expression>[, <Value Expression>...])",  type, argTypes);
                     return new CoalesceEmptyFunDef(functionMetaData);
                 }
             }
@@ -113,5 +110,10 @@ public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
 		public boolean requiresExpression(int k) {
             return true;
         }
+
+		@Override
+		public FunctionAtom getFunctionAtom() {
+			return functionAtom;
+		}
     }
 }

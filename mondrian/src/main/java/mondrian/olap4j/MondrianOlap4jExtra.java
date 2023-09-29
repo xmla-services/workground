@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.MetaElement;
-import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.Cell;
@@ -110,24 +110,24 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         final FunctionTable funTable =
             ((MondrianOlap4jSchema) schema).schema.getFunTable();
         StringBuilder buf = new StringBuilder(50);
-        for (FunctionInfo fi : funTable.getFunctionInfos()) {
-            if (Syntax.Empty.equals(fi.getSyntax())
-                || Syntax.Internal.equals(fi.getSyntax())
-                || Syntax.Parentheses.equals(fi.getSyntax())) {
+        for (FunctionMetaData fm : funTable.getFunctionMetaDatas()) {
+            if (Syntax.Empty.equals(fm.functionAtom().syntax())
+                || Syntax.Internal.equals(fm.functionAtom().syntax())
+                || Syntax.Parentheses.equals(fm.functionAtom().syntax())) {
                 continue;
             }
-            final Boolean passes = functionFilter.test(fi.getName());
+            final Boolean passes = functionFilter.test(fm.functionAtom().name());
             if (passes == null || !passes) {
                 continue;
             }
 
-            DataType[][] paramCategories = fi.getParameterCategories();
-            DataType[] returnCategories = fi.getReturnCategories();
+            DataType[] paramCategories = fm.parameterDataTypes();
+            DataType returnCategory = fm.returnCategory();
 
             // Convert Windows newlines in 'description' to UNIX format.
-            String description = fi.getDescription();
+            String description = fm.description();
             if (description != null) {
-                description = fi.getDescription().replace(
+                description = fm.description().replace(
                     "\r",
                     "");
             }
@@ -136,22 +136,20 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             {
                 funDefs.add(
                     new FunctionDefinition(
-                        fi.getName(),
+                        fm.functionAtom().name(),
                         description,
                         "(none)",
                         1,
                         1,
                         // TODO WHAT VALUE should this have
                         "",
-                        fi.getName()));
+                        fm.functionAtom().name()));
             } else {
-                for (int i = 0; i < paramCategories.length; i++) {
-                	DataType[] pc = paramCategories[i];
-                	DataType returnCategory = returnCategories[i];
+
 
                     buf.setLength(0);
-                    for (int j = 0; j < pc.length; j++) {
-                    	DataType v = pc[j];
+                    for (int j = 0; j < paramCategories.length; j++) {
+                    	DataType v = paramCategories[j];
                         if (j > 0) {
                             buf.append(", ");
                         }
@@ -163,7 +161,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                             .forCategory(returnCategory);
                     funDefs.add(
                         new FunctionDefinition(
-                            fi.getName(),
+                            fm.functionAtom().name(),
                             description,
                             buf.toString(),
                             // TODO: currently FunInfo can not tell us which
@@ -174,8 +172,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                             // name for the MDX functions.
                             // TODO WHAT VALUE should this have
                             "",
-                            fi.getName()));
-                }
+                            fm.functionAtom().name()));
+                
             }
         }
     }

@@ -26,6 +26,7 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -455,15 +456,24 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 			public String signature() {
 		      throw new UnsupportedOperationException();
 		    }
-			 @Override
-				public Syntax syntax() {
-			      throw new UnsupportedOperationException();
-			    }
+			
 
-			    @Override
-				public String name() {
-			      return "SomeName";
-			    }
+			@Override
+			public FunctionAtom functionAtom() {
+
+				return new FunctionAtom() {
+
+					@Override
+					public Syntax syntax() {
+						throw new UnsupportedOperationException();
+					}
+
+					@Override
+					public String name() {
+						return "SomeName";
+					}
+				};
+			}
 
 			    @Override
 				public String description() {
@@ -476,7 +486,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 			    }
 
 			    @Override
-				public DataType[] parameterCategories() {
+				public DataType[] parameterDataTypes() {
 			      throw new UnsupportedOperationException();
 			    }
 
@@ -519,15 +529,21 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 		      return "";
 		    }
 			
-			   @Override
-				public Syntax syntax() {
-			      return Syntax.Function;
-			    }
+			@Override
+			public FunctionAtom functionAtom() {
+				return new FunctionAtom() {
 
-			    @Override
-				public String name() {
-			      return "";
-			    }
+					@Override
+					public Syntax syntax() {
+						return Syntax.Function;
+					}
+
+					@Override
+					public String name() {
+						return "";
+					}
+				};
+			}
 
 			    @Override
 				public String description() {
@@ -540,7 +556,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 			    }
 
 			    @Override
-				public DataType[] parameterCategories() {
+				public DataType[] parameterDataTypes() {
 			      return new DataType[ 0 ];
 			    }
 		};
