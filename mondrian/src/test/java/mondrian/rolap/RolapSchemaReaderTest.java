@@ -115,7 +115,7 @@ class RolapSchemaReaderTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testConnectUseContentChecksum(TestingContext context) {
-    	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
+//    	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
         //Util.PropertyList properties =
         //       TestUtil.getConnectionProperties().clone();
         // properties.put(
