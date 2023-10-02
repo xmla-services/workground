@@ -185,21 +185,6 @@ public class IdImpl
         public abstract List<NameSegment> getKeyParts();
 
         /**
-         * Converts an array of names to a list of segments.
-         *
-         * @param nameParts Array of names
-         * @return List of segments
-         */
-        public static List<AbstractSegment> toList(String... nameParts) {
-            final List<AbstractSegment> segments =
-                new ArrayList<>(nameParts.length);
-            for (String namePart : nameParts) {
-                segments.add(new NameSegmentImpl(namePart));
-            }
-            return segments;
-        }
-
-        /**
          * Returns whether this segment matches a given name according to
          * the rules of case-sensitivity and quoting.
          *

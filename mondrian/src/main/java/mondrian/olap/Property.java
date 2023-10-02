@@ -878,13 +878,6 @@ public class Property extends EnumeratedValues.BasicValue {
         }
     }
 
-    /**
-     * Looks up a Property with a given ordinal.
-     * Returns null if not found.
-     */
-    public static Property lookup(int ordinal) {
-        return enumeration.getValue(ordinal);
-    }
 
     /**
      * Looks up a Property with a given name.

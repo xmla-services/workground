@@ -19,8 +19,6 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.olap.fun.FunUtil;
-
 /**
  * Adapter which computes a scalar or tuple expression and converts it to any
  * required type.
@@ -87,12 +85,6 @@ extends AbstractProfilingNestedCalc<Object,Calc<?>>
     }
 
 
-
-    public static double numberToDouble(Number number) {
-        return number == null
-                ? FunUtil.DOUBLE_NULL
-                        : number.doubleValue();
-    }
 
 
 

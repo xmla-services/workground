@@ -123,26 +123,4 @@ public class MdxVisitorImpl implements QueryComponentVisitor {
         return null;
     }
 
-    /**
-     * Visits an array of expressions. Returns the same array if none of the
-     * expressions are changed, otherwise a new array.
-     *
-     * @param args Array of expressions
-     * @return Array of visited expressions; same as {@code args} iff none of
-     * the expressions are changed.
-     */
-    protected Expression[] visitArray(Expression[] args) {
-        Expression[] newArgs = args;
-        for (int i = 0; i < args.length; i++) {
-            Expression arg = args[i];
-            Expression newArg = (Expression) arg.accept(this);
-            if (newArg != arg) {
-                if (newArgs == args) {
-                    newArgs = args.clone();
-                }
-                newArgs[i] = newArg;
-            }
-        }
-        return newArgs;
-    }
 }

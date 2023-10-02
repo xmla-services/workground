@@ -15,11 +15,7 @@ package mondrian.rolap;
 
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
-import java.io.FilterWriter;
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -57,7 +53,6 @@ import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
@@ -590,81 +585,6 @@ public class RolapUtil {
     public static ExpressionCompiler createProfilingCompiler(ExpressionCompiler compiler) {
         return new RolapProfilingEvaluator.ProfilingEvaluatorCompiler(
             compiler);
-    }
-
-    /**
-     * Writes to a string and also to an underlying writer.
-     */
-    public static class TeeWriter extends FilterWriter {
-        StringWriter buf = new StringWriter();
-        public TeeWriter(Writer out) {
-            super(out);
-        }
-
-        /**
-         * Returns everything which has been written so far.
-         */
-        @Override
-		public String toString() {
-            return buf.toString();
-        }
-
-        /**
-         * Returns the underlying writer.
-         */
-        public Writer getWriter() {
-            return out;
-        }
-
-        @Override
-		public void write(int c) throws IOException {
-            super.write(c);
-            buf.write(c);
-        }
-
-        @Override
-		public void write(char[] cbuf) throws IOException {
-            super.write(cbuf);
-            buf.write(cbuf);
-        }
-
-        @Override
-		public void write(char[] cbuf, int off, int len) throws IOException {
-            super.write(cbuf, off, len);
-            buf.write(cbuf, off, len);
-        }
-
-        @Override
-		public void write(String str) throws IOException {
-            super.write(str);
-            buf.write(str);
-        }
-
-        @Override
-		public void write(String str, int off, int len) throws IOException {
-            super.write(str, off, len);
-            buf.write(str, off, len);
-        }
-    }
-
-    /**
-     * Writer which throws away all input.
-     */
-    private static class NullWriter extends Writer {
-        @Override
-		public void write(char[] cbuf, int off, int len) throws IOException {
-            //empty
-        }
-
-        @Override
-		public void flush() throws IOException {
-            //empty
-        }
-
-        @Override
-		public void close() throws IOException {
-            //empty
-        }
     }
 
     /**

@@ -306,19 +306,8 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                         new LevelExpressionImpl(level)})});
     }
 
-    void setSubtotalVisibility(boolean bShowSubtotals) {
-        subtotalVisibility =
-            bShowSubtotals
-            ? SubtotalVisibility.Show
-            : SubtotalVisibility.Hide;
-    }
-
     public SubtotalVisibility getSubtotalVisibility() {
         return subtotalVisibility;
-    }
-
-    public void resetSubtotalVisibility() {
-        this.subtotalVisibility = SubtotalVisibility.Undefined;
     }
 
     @Override

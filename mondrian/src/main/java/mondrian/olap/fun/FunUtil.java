@@ -36,7 +36,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
-import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
@@ -48,14 +47,10 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionMetaDataR;
-import org.eclipse.daanse.olap.query.base.Expressions;
-import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.IdentifierParser.Builder;
 
 import mondrian.calc.impl.UnaryTupleList;
@@ -85,7 +80,6 @@ import mondrian.util.IdentifierParser;
  */
 public class FunUtil extends Util {
 
-  static final String[] emptyStringArray = new String[ 0 ];
   public static final NullMember NullMember = new NullMember();
 
   /**
@@ -657,24 +651,6 @@ public class FunUtil extends Util {
     }
     return parameterCategories;
   }
-
-  /**
-   * Converts a double (primitive) value to a Double. {@link #DOUBLE_NULL} becomes null.
-   */
-  public static Double box( double d ) {
-    return d == FunUtil.DOUBLE_NULL
-      ? null
-      : d;
-  }
-
-//  /**
-//   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
-//   */
-//  public static Integer box( int n ) {
-//    return n == FunUtil.INTEGER_NULL
-//      ? null
-//      : n;
-//  }
 
   static double percentile(
     Evaluator evaluator,
@@ -1302,67 +1278,7 @@ public class FunUtil extends Util {
     return result;
   }
 
-  /**
-   * Compares a pair of members according to their positions in a prefix-order (or postfix-order, if {@code post} is
-   * true) walk over a hierarchy.
-   *
-   * @param m1   First member
-   * @param m2   Second member
-   * @param post Whether to sortMembers in postfix order. If true, a parent will sortMembers immediately after its last
-   *             child. If false, a parent will sortMembers immediately before its first child.
-   * @return -1 if m1 collates before m2, 0 if m1 equals m2, 1 if m1 collates after m2
-   */
-  public static int compareHierarchically(
-    Member m1,
-    Member m2,
-    boolean post ) {
-    // Strip away the LimitedRollupMember wrapper, if it exists. The
-    // wrapper does not implement equals and comparisons correctly. This
-    // is safe this method has no side-effects: it just returns an int.
-    m1 = FunUtil.unwrapLimitedRollupMember( m1 );
-    m2 = FunUtil.unwrapLimitedRollupMember( m2 );
-
-    if ( Objects.equals( m1, m2 ) ) {
-      return 0;
-    }
-
-    while ( true ) {
-      int depth1 = m1.getDepth();
-      int depth2 = m2.getDepth();
-      if ( depth1 < depth2 ) {
-        m2 = m2.getParentMember();
-        if ( Objects.equals( m1, m2 ) ) {
-          return post ? 1 : -1;
-        }
-      } else if ( depth1 > depth2 ) {
-        m1 = m1.getParentMember();
-        if ( Objects.equals( m1, m2 ) ) {
-          return post ? -1 : 1;
-        }
-      } else {
-        Member prev1 = m1;
-        Member prev2 = m2;
-        m1 = FunUtil.unwrapLimitedRollupMember( m1.getParentMember() );
-        m2 = FunUtil.unwrapLimitedRollupMember( m2.getParentMember() );
-        if ( Objects.equals( m1, m2 ) ) {
-          final int c = FunUtil.compareSiblingMembers( prev1, prev2 );
-          // compareHierarchically needs to impose a total order;
-          // cannot return 0 for non-equal members
-          assert c != 0
-            : new StringBuilder("Members ").append(prev1).append(", ").append(prev2)
-            .append(" are not equal, but compare returned 0.").toString();
-          return c;
-        }
-      }
-    }
-  }
-
-  private static Member unwrapLimitedRollupMember( Member m ) {
-    if ( m instanceof RolapHierarchy.LimitedRollupMember limitedRollupMember) {
-      return limitedRollupMember.member;
-    }
-    return m;
-  }
+  
 
   /**
    * Compares two members which are known to have the same parent.

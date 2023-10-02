@@ -610,18 +610,6 @@ public class TypeUtil {
 		}
 	}
 
-    static <T> T neq(T t1, T t2) {
-        if (t1 == null) {
-            return t2;
-        } else {
-            if (t2 == null) {
-                return t1;
-            } else {
-                return t1.equals(t2) ? t1 : null;
-            }
-        }
-    }
-
     /**
      * Returns the hierarchies in a set, member, or tuple type.
      *

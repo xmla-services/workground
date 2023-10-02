@@ -84,19 +84,6 @@ public abstract class MondrianServer {
         return MondrianServerRegistry.INSTANCE.serverForId(instanceId);
     }
 
-    /**
-     * Disposes of a server and cleans up everything.
-     *
-     * @param instanceId The instance ID of the server
-     * to shutdown gracefully.
-     */
-    public static void dispose(String instanceId) {
-        final MondrianServer server =
-            forId(instanceId);
-        if (server != null) {
-            server.shutdown();
-        }
-    }
 
     /**
      * Returns an integer uniquely identifying this server within its JVM.
