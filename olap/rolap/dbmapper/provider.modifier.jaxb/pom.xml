@@ -5,7 +5,8 @@
     <artifactId>org.eclipse.daanse.olap.rolap.dbmapper</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier</artifactId>
+  <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.jaxb</artifactId>
+  
     <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
@@ -14,7 +15,12 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.record</artifactId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.base</artifactId>
+      <version>${revision}</version>
+    </dependency>
+        <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
       <version>${revision}</version>
     </dependency>
   </dependencies>

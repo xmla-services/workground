@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
@@ -86,12 +90,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessE
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public abstract class AbstractDbMappingSchemaModifier implements DatabaseMappingSchemaProvider {
 
@@ -2039,7 +2038,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return annotations(measure.annotations());
     }
 
-    protected MappingMeasure new_Measure(
+    protected abstract MappingMeasure new_Measure(
         String name,
         String column,
         MeasureDataTypeEnum datatype,
@@ -2055,24 +2054,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         List<MappingCalculatedMemberProperty> calculatedMemberProperties,
         MappingElementFormatter cellFormatter,
         String backColor
-    ) {
-        return new MeasureR(name,
-            column,
-            datatype,
-            formatString,
-            aggregator,
-            formatter,
-            caption,
-            description,
-            visible,
-            displayFolder,
-            annotations,
-            measureExpression,
-            calculatedMemberProperties,
-            cellFormatter,
-            backColor);
-    }
-
+    )
     ;
 
     protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {

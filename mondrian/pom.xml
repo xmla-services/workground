@@ -378,12 +378,13 @@
 			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>
+				org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
   </dependencies>
 	<build>
 		<!--

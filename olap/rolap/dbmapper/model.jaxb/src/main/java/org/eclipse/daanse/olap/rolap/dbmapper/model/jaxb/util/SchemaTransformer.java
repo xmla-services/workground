@@ -48,7 +48,7 @@ public class SchemaTransformer {
         sch.setName(s.name());
         sch.setDescription(s.description());
         sch.setMeasuresCaption(s.measuresCaption());
-        sch.setDefaultRole(s.defaultRole());
+//        sch.setDefaultRole(s.defaultRole());
         //TODO
         sch.setAnnotations(null);
         sch.setParameters(List.of());
