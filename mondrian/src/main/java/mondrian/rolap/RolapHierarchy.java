@@ -62,8 +62,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
@@ -124,7 +126,7 @@ public class RolapHierarchy extends HierarchyBase {
      * {@link #createMemberReader(Role)}.
      */
     private MemberReader memberReader;
-    protected org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy xmlHierarchy;
+    protected MappingHierarchy xmlHierarchy;
     private String memberReaderClass;
     protected MappingRelationOrJoin relation;
     private Member defaultMember;
@@ -250,8 +252,8 @@ public class RolapHierarchy extends HierarchyBase {
     RolapHierarchy(
         RolapCube cube,
         RolapDimension dimension,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy xmlHierarchy,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension xmlCubeDimension)
+        MappingHierarchy xmlHierarchy,
+        MappingCubeDimension xmlCubeDimension)
     {
         this(
             dimension,
@@ -344,7 +346,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
 
         Set<String> levelNameSet = new HashSet<>();
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level : xmlHierarchy.levels()) {
+        for (MappingLevel level : xmlHierarchy.levels()) {
             if (!levelNameSet.add(level.name())) {
                 throw MondrianResource.instance().HierarchyLevelNamesNotUnique
                     .ex(
@@ -357,7 +359,7 @@ public class RolapHierarchy extends HierarchyBase {
             this.levels = new RolapLevel[xmlHierarchy.levels().size() + 1];
             this.levels[0] = allLevel;
             for (int i = 0; i < xmlHierarchy.levels().size(); i++) {
-                final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel xmlLevel = xmlHierarchy.levels().get(i);
+                final MappingLevel xmlLevel = xmlHierarchy.levels().get(i);
                 if (getKeyExp(xmlLevel) == null
                     && xmlHierarchy.memberReaderClass() == null)
                 {
@@ -601,7 +603,7 @@ public class RolapHierarchy extends HierarchyBase {
         return relation;
     }
 
-    public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy getXmlHierarchy() {
+    public MappingHierarchy getXmlHierarchy() {
         return xmlHierarchy;
     }
 
