@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -259,7 +260,7 @@ public class RolapSchema implements Schema {
      * @param sha512Bytes MD5 hash
      * @param useContentChecksum Whether to use content checksum
      */
-    private RolapSchema(
+    public RolapSchema(
         final SchemaKey key,
         final Util.PropertyList connectInfo,
         final Context context)
@@ -268,7 +269,7 @@ public class RolapSchema implements Schema {
         this.key = key;
 
 
-        this.context=context;
+        
         DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
         this.defaultRole = Util.createRootRole(this);
@@ -280,27 +281,9 @@ public class RolapSchema implements Schema {
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
-    }
-
-    /**
-     * Create RolapSchema given the MD5 hash, catalog name and string (content)
-     * and the connectInfo object.
-     *
-     * @param md5Bytes may be null
-     * @param catalogUrl URL of catalog
-     * @param catalogStr may be null
-     * @param connectInfo Connection properties
-     */
-    public RolapSchema(
-        SchemaKey key,
-        String catalogUrl,
-        String catalogStr,
-        Util.PropertyList connectInfo,
-        Context context)
-    {
-        this(key, connectInfo, context);
-        load(catalogUrl, catalogStr, connectInfo);
-        assert this.sha512Bytes != null;
+        
+        
+        load(context, connectInfo);
     }
 
     /**
@@ -389,101 +372,21 @@ public class RolapSchema implements Schema {
      * @param catalogStr Text of catalog, or null
      * @param connectInfo Mondrian connection properties
      */
-    protected void load(
-        String catalogUrl,
-        String catalogStr,
-        PropertyList connectInfo)
-    {
-        try {
-            final Parser xmlParser = XOMUtil.createDefaultParser();
+	protected void load(Context context, PropertyList connectInfo) {
 
-            final DOMWrapper def;
-            if (catalogStr == null) {
-                InputStream in = null;
-                try {
-                    in = Util.readVirtualFile(catalogUrl);
-                    def = xmlParser.parse(in);
-                } finally {
-                    if (in != null) {
-                        in.close();
-                    }
-                }
+		this.context = context;
+		// TODO: get from schema var
+		xmlSchema = context.getDatabaseMappingSchemaProviders().get(0).get();
 
-                // Compute catalog string, if needed for debug or for computing
-                // Md5 hash.
-                if (getLogger().isDebugEnabled() || sha512Bytes == null) {
-                    try {
-                        catalogStr = Util.readVirtualFileAsString(catalogUrl);
-                    } catch (java.io.IOException ex) {
-                        getLogger().debug("RolapSchema.load: ex=" + ex);
-                        catalogStr = "?";
-                    }
-                }
+		sha512Bytes = new ByteString(Objects.toIdentityString(xmlSchema).getBytes());
 
-                if (getLogger().isDebugEnabled()) {
-                    getLogger().debug(
-                        "RolapSchema.load: content: \n" + catalogStr);
-                }
-            } else {
-                if (getLogger().isDebugEnabled()) {
-                    getLogger().debug(
-                        "RolapSchema.load: catalogStr: \n" + catalogStr);
-                }
+		load(xmlSchema);
 
-                def = xmlParser.parse(catalogStr);
-            }
+		aggTableManager.initialize(connectInfo);
+		setSchemaLoadDate();
+	}
 
-
-            sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
-
-
-            // throw error if we have an incompatible schema
-            checkSchemaVersion(def);
-            //TODO remove def
-            JAXBContext jaxbContext =
-                JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            xmlSchema =
-                (MappingSchema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
-
-
-            load(xmlSchema);
-        } catch (FileSystemException e) {
-            throw Util.newError(e, WHILE_PARSING_CATALOG + catalogUrl);
-        } catch (XOMException | IOException | JAXBException e) {
-            throw Util.newError(e, WHILE_PARSING_CATALOG + catalogUrl);
-        }
-
-
-        aggTableManager.initialize(connectInfo);
-        setSchemaLoadDate();
-    }
-
-    private void checkSchemaVersion(final DOMWrapper schemaDom) {
-        String schemaVersion = schemaDom.getAttribute("metamodelVersion");
-        if (schemaVersion == null) {
-            if (hasMondrian4Elements(schemaDom)) {
-                schemaVersion = "4.x";
-            } else {
-                schemaVersion = "3.x";
-            }
-        }
-
-        String[] versionParts = schemaVersion.split("\\.");
-        final String schemaMajor =
-            versionParts.length > 0 ? versionParts[0] : "";
-
-        String serverSchemaVersion =
-            Integer.toString(MondrianServer.forId(null).getSchemaVersion());
-
-        if (serverSchemaVersion.compareTo(schemaMajor) < 0) {
-            String errorMsg =
-                new StringBuilder("Schema version '").append(schemaVersion)
-                    .append("' is later than schema version ")
-                    .append("'3.x' supported by this version of Mondrian").toString();
-            throw Util.newError(errorMsg);
-        }
-    }
+  
 
     private boolean hasMondrian4Elements(final DOMWrapper schemaDom) {
         // check for Mondrian 4 schema elements:

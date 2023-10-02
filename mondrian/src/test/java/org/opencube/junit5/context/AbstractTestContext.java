@@ -13,6 +13,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
 
 public abstract class AbstractTestContext implements Context {
 
@@ -74,7 +75,8 @@ public abstract class AbstractTestContext implements Context {
 
 	@Override
 	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
-		return null;
+		DatabaseMappingSchemaProvider dbp = new FoodMartRecordDbMappingSchemaProvider();
+		return List.of(dbp);
 	}
 
 	@Override

@@ -127,7 +127,7 @@ public class RolapSchemaPool {
         // Use the schema pool unless "UseSchemaPool" is explicitly false.
         if (!useSchemaPool) {
             RolapSchema schema = createRolapSchema(
-                catalogUrl, context, connectInfo, catalogStr, key);
+                 context, connectInfo,  key);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                     "create (no pool): schema-name={}, schema-id={}",
@@ -199,7 +199,7 @@ public class RolapSchemaPool {
             }
 
             schema = createRolapSchema(
-                catalogUrl, context, connectInfo, catalogStr, key);
+                 context, connectInfo,  key);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("create: " + schema);
             }
@@ -213,16 +213,12 @@ public class RolapSchemaPool {
 
     // is extracted and made package-local for testing purposes
     RolapSchema createRolapSchema(
-        String catalogUrl,
         Context context,
         Util.PropertyList connectInfo,
-        String catalogStr,
         SchemaKey key)
     {
         return new RolapSchema(
             key,
-            catalogUrl,
-            catalogStr,
             connectInfo,
             context);
     }
