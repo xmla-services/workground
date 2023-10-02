@@ -2292,7 +2292,7 @@ public class XmlaHandler {
             final mondrian.server.Statement statement =
                     (mondrian.server.Statement) cellSet.getStatement();
             for(QueryComponent queryPart: statement.getQuery().getCellProperties()){
-                CellProperty cellProperty = (CellProperty)queryPart;
+                org.eclipse.daanse.olap.api.query.component.CellProperty cellProperty = (org.eclipse.daanse.olap.api.query.component.CellProperty)queryPart;
                 mondrian.olap.Property property = mondrian.olap.Property.lookup(cellProperty.toString(), matchCase);
                 String propertyName = ((NameSegment)
                         mondrian.olap.Util.parseIdentifier(cellProperty.toString()).get(0)).getName();
