@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ * Copyright (c) 0 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * available under the terms of the Eclipse Public License .0
+ * which is available at https://www.eclipse.org/legal/epl-.0/
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-.0
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
@@ -23,7 +23,9 @@ public record ExpressionViewR(List<MappingSQL> sqls,
                               String table,
                               String name) implements MappingExpressionView {
 
-    @Override
+
+
+	@Override
 	public boolean equals(Object obj) {
         if (!(obj instanceof MappingExpressionView that)) {
             return false;
@@ -38,4 +40,16 @@ public record ExpressionViewR(List<MappingSQL> sqls,
         }
         return true;
     }
+    
+    public  ExpressionViewR(List<MappingSQL> sqls,
+            String gnericExpression,
+            String table,
+            String name)  {
+				this.sqls = sqls;
+				this.gnericExpression = gnericExpression;
+				this.table = table;
+				this.name = name;
+    	
+    }
+    
 }

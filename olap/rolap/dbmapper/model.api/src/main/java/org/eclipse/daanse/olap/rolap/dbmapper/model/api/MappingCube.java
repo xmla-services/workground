@@ -40,11 +40,11 @@ public interface MappingCube {
 
     String defaultMeasure();
 
-    boolean cache();
+    Boolean cache();
 
-    boolean enabled();
+    Boolean enabled();
 
-    boolean visible();
+    Boolean visible();
 
     MappingRelation fact();
 

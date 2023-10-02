@@ -19,5 +19,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
 public record RowR(List<MappingValue> values) implements MappingRow {
+	public  RowR(List<MappingValue> values)  {
+		this.values = values == null ? List.of() : values;
 
+	}
 }

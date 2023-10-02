@@ -30,7 +30,7 @@ public record CubeR(String name,
                     String description,
                     List<MappingAnnotation> annotations,
                     String caption,
-                    boolean visible,
+                    Boolean visible,
                     String defaultMeasure,
                     List<MappingCubeDimension> dimensionUsageOrDimensions,
                     List<MappingMeasure> measures,
@@ -38,11 +38,53 @@ public record CubeR(String name,
                     List<MappingNamedSet> namedSets,
                     List<MappingDrillThroughAction> drillThroughActions,
                     List<MappingWritebackTable> writebackTables,
-                    boolean enabled,
-                    boolean cache,
+                    Boolean enabled,
+                    Boolean cache,
                     MappingRelation fact,
                     List<MappingAction> actions
                     )
         implements MappingCube {
+	
+	
+
+
+	public  CubeR(String name,
+            String description,
+            List<MappingAnnotation> annotations,
+            String caption,
+            Boolean visible,
+            String defaultMeasure,
+            List<MappingCubeDimension> dimensionUsageOrDimensions,
+            List<MappingMeasure> measures,
+            List<MappingCalculatedMember> calculatedMembers,
+            List<MappingNamedSet> namedSets,
+            List<MappingDrillThroughAction> drillThroughActions,
+            List<MappingWritebackTable> writebackTables,
+            Boolean enabled,
+            Boolean cache,
+            MappingRelation fact,
+            List<MappingAction> actions
+            ) {
+				this.name = name;
+				this.description = description;
+				this.annotations = annotations == null ? List.of() : annotations;
+				this.caption = caption;
+				this.visible = visible== null ? true : visible;
+				this.defaultMeasure = defaultMeasure;
+				this.dimensionUsageOrDimensions = dimensionUsageOrDimensions == null ? List.of() : dimensionUsageOrDimensions;
+				this.measures = measures == null ? List.of() : measures;
+				this.calculatedMembers = calculatedMembers == null ? List.of() : calculatedMembers;
+				this.namedSets = namedSets == null ? List.of() : namedSets;
+				this.drillThroughActions = drillThroughActions == null ? List.of() : drillThroughActions;
+				this.writebackTables = writebackTables == null ? List.of() : writebackTables;
+				this.enabled = enabled == null ? true : enabled;
+				this.cache = cache == null ? true : cache;
+				this.fact = fact;
+				this.actions = actions == null ? List.of() : actions;
+		
+		
+		
+		
+	}
 
 }

@@ -20,8 +20,17 @@ public record AggExcludeR(String pattern,
                           boolean ignorecase)
         implements MappingAggExclude {
 
-    public AggExcludeR(String pattern, String name) {
+	public AggExcludeR(String pattern, String name, boolean ignorecase) {
+		this.pattern = pattern;
+		this.name = name;
+		this.ignorecase = ignorecase;
+	}
+
+	public AggExcludeR(String pattern, String name) {
         this(pattern, name, true);
     }
+    
+    
+
 
 }

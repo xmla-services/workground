@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ * Copyright (c) 0 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * available under the terms of the Eclipse Public License .0
+ * which is available at https://www.eclipse.org/legal/epl-.0/
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-.0
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
@@ -38,6 +38,36 @@ public record SchemaR(String name,
                       List<MappingRole> roles,
                       List<MappingUserDefinedFunction> userDefinedFunctions)
         implements MappingSchema {
+	
+
+
+	public  SchemaR(String name,
+            String description,
+            List<MappingAnnotation> annotations,
+            String measuresCaption,
+            String defaultRole,
+            List<MappingParameter> parameters,
+            List<MappingPrivateDimension> dimensions,
+            List<MappingCube> cubes,
+            List<MappingVirtualCube> virtualCubes,
+            List<MappingNamedSet> namedSets,
+            List<MappingRole> roles,
+            List<MappingUserDefinedFunction> userDefinedFunctions)
+{
+	this.name = name;
+	this.description = description;
+	this.annotations = annotations == null ? List.of() : annotations;
+	this.measuresCaption = measuresCaption;
+	this.defaultRole = defaultRole ;
+	this.parameters = parameters == null ? List.of() : parameters;
+	this.dimensions = dimensions == null ? List.of() : dimensions;
+	this.cubes = cubes == null ? List.of() : cubes;
+	this.virtualCubes = virtualCubes == null ? List.of() : virtualCubes;
+	this.namedSets = namedSets == null ? List.of() : namedSets;
+	this.roles = roles == null ? List.of() : roles;
+	this.userDefinedFunctions = userDefinedFunctions == null ? List.of() : userDefinedFunctions;
+		
+	}
 
 
 }

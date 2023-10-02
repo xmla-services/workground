@@ -20,4 +20,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
 public record UnionR(List<MappingRoleUsage> roleUsages) implements MappingUnion {
 
+	public  UnionR(List<MappingRoleUsage> roleUsages)   {
+		this.roleUsages = roleUsages == null ? List.of() : roleUsages;
+		
+	}
 }

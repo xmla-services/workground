@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ * Copyright (c) 0 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * available under the terms of the Eclipse Public License .0
+ * which is available at https://www.eclipse.org/legal/epl-.0/
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-.0
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
@@ -22,10 +22,30 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
 public record SharedDimensionR(String name,
 		String description,
 		List<MappingAnnotation> annotations,
-                               String caption,
-                               String type,
-                               List<MappingHierarchy> hierarchies,
-                               String foreignKey)
+        String caption,
+        String type,
+        List<MappingHierarchy> hierarchies,
+        String foreignKey)
         implements MappingSharedDimension {
 
+	
+
+
+	public  SharedDimensionR(String name,
+			String description,
+			List<MappingAnnotation> annotations,
+	        String caption,
+	        String type,
+	        List<MappingHierarchy> hierarchies,
+	        String foreignKey)
+	{
+		this.name = name;
+		this.description = description;
+		this.annotations = annotations == null ? List.of() : annotations;
+		this.caption = caption;
+		this.type = type;
+		this.hierarchies = hierarchies == null ? List.of() : hierarchies;
+		this.foreignKey = foreignKey; 
+		
+	}
 }
