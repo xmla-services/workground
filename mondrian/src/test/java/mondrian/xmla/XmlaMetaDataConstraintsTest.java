@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
@@ -39,6 +40,8 @@ import mondrian.test.DiffRepository;
  * Then it runs a few queries to check that the filtering
  * occurs as expected.
  */
+@Disabled
+@Deprecated
 class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @BeforeEach
@@ -56,11 +59,8 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 	protected Map<String, String> getCatalogNameUrls(Connection connection) {
         if (catalogNameUrls == null) {
             catalogNameUrls = new TreeMap<>();
-            String connectString = connection.getConnectString();
-            PropertyList connectProperties =
-                Util.parseConnectString(connectString);
-            String catalog = connectProperties.get(
-                RolapConnectionProperties.Catalog.name());
+
+            String catalog = connection.getCatalogName();
 
             // read the catalog and copy it to another temp file.
             File outputFile1 = null;

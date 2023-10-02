@@ -27,26 +27,6 @@ import java.lang.ref.SoftReference;
 public enum RolapConnectionProperties {
 
   /**
-   * The "Jdbc" property is the URL of the JDBC database where the data is
-   * stored. You must specify either {@link #DataSource} or {@code #Jdbc}.
-   */
-  Jdbc,
-
-  /**
-   * The "JdbcUser" property is the name of the user to log on to the JDBC
-   * database. (You don't need to specify this parameter if it is already
-   * specified in the JDBC URL.)
-   */
-  JdbcUser,
-
-  /**
-   * The "JdbcPassword" property is the password to log on to the JDBC
-   * database. (You don't need to specify this parameter if it is already
-   * specified in the JDBC URL.)
-   */
-  JdbcPassword,
-
-  /**
    * The "Catalog" property is the URL of the catalog, an XML file which
    * describes the schema: cubes, hierarchies, and so forth.
    * Catalogs are described in <a target="_top"

@@ -19,11 +19,8 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
-import java.util.Map.Entry;
 
 import org.eclipse.daanse.olap.api.Context;
-
-import mondrian.olap.Util.PropertyList;
 
 public class EmptyDBProvider implements DatabaseProvider {
 
@@ -33,12 +30,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public String getJdbcUrl() {
-		return "";
-	}
-
-	@Override
-	public Entry<PropertyList, Context> activate() {
+	public Context activate() {
 		return null;
 	}
 

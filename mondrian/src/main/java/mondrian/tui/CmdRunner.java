@@ -705,17 +705,7 @@ public class CmdRunner {
             connectProperties = Util.parseConnectString(connectStringInner);
         }
 
-        // override jdbc url
-        String jdbcURL = CmdRunner.getJdbcURLProperty();
 
-        debug("CmdRunner.makeConnectString: jdbcURL=" + jdbcURL);
-
-        if (jdbcURL != null) {
-            // add jdbc url to connect string
-            connectProperties.put(
-                RolapConnectionProperties.Jdbc.name(),
-                jdbcURL);
-        }
 
         // override catalog url
         String catalogURL = CmdRunner.getCatalogURLProperty();
@@ -734,24 +724,7 @@ public class CmdRunner {
 
         debug("CmdRunner.makeConnectString: jdbcUser=" + jdbcUser);
 
-        if (jdbcUser != null) {
-            // add user to connect string
-            connectProperties.put(
-                RolapConnectionProperties.JdbcUser.name(),
-                jdbcUser);
-        }
 
-        // override JDBC password
-        String jdbcPassword = CmdRunner.getJdbcPasswordProperty();
-
-        debug("CmdRunner.makeConnectString: jdbcPassword=" + jdbcPassword);
-
-        if (jdbcPassword != null) {
-            // add password to connect string
-            connectProperties.put(
-                RolapConnectionProperties.JdbcPassword.name(),
-                jdbcPassword);
-        }
 
         if (options.roleName != null) {
             connectProperties.put(

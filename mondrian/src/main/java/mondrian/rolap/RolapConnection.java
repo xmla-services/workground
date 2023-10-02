@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -82,7 +81,6 @@ import mondrian.util.FilteredIterableList;
 import mondrian.util.LockBox;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.MemoryMonitorFactory;
-import mondrian.util.Pair;
 
 
 public class RolapConnection extends ConnectionBase {
@@ -95,7 +93,7 @@ public class RolapConnection extends ConnectionBase {
   private final Util.PropertyList connectInfo;
 
   private Context context = null;
-  private final String catalogUrl;
+  private final String catalogName;
   private final RolapSchema schema;
   private SchemaReader schemaReader;
   protected Role role;
@@ -151,11 +149,8 @@ public class RolapConnection extends ConnectionBase {
     assert connectInfo != null;
 
     this.connectInfo = connectInfo;
-    this.catalogUrl =
-      connectInfo.get( RolapConnectionProperties.Catalog.name() );
-    final String jdbcUser =
-      connectInfo.get( RolapConnectionProperties.JdbcUser.name() );
-    final String jdbcConnectString = getJdbcConnectionString( connectInfo );
+	this.catalogName = connectInfo.get(RolapConnectionProperties.Catalog.name());
+
     Role roleInner = null;
 
     // Register this connection before we register its internal statement.
@@ -172,25 +167,12 @@ public class RolapConnection extends ConnectionBase {
           "Initializing connection" );
       Locus.push( locus );
       try {
-        if ( context == null ) {
-          // If there is no external data source is passed in, we
-          // expect the properties Jdbc, JdbcUser, DataSource to be
-          // set, as they are used to generate the schema cache key.
-          final String connectionKey =
-            jdbcConnectString
-              + getJdbcProperties( connectInfo ).toString();
 
           schema = RolapSchemaPool.instance().get(
-            catalogUrl,
-            connectionKey,
-            jdbcUser,
-            connectInfo );
-        } else {
-          schema = RolapSchemaPool.instance().get(
-            catalogUrl,
+            catalogName,
             context,
             connectInfo );
-        }
+        
       } finally {
         Locus.pop( locus );
         bootstrapStatement.close();
@@ -271,29 +253,6 @@ protected Logger getLogger() {
     return LOGGER;
   }
 
- 
-
-  /**
-   * Creates a {@link Properties} object containing all of the JDBC
-   * connection properties present in the
-   * {@link mondrian.olap.Util.PropertyList connectInfo}.
-   *
-   * @param connectInfo Connection properties
-   * @return The JDBC connection properties.
-   */
-  private static Properties getJdbcProperties( Util.PropertyList connectInfo ) {
-    Properties jdbcProperties = new Properties();
-    for ( Pair<String, String> entry : connectInfo ) {
-      if ( entry.left.startsWith(
-        RolapConnectionProperties.JdbcPropertyPrefix ) ) {
-        jdbcProperties.put(
-          entry.left.substring(
-            RolapConnectionProperties.JdbcPropertyPrefix.length() ),
-          entry.right );
-      }
-    }
-    return jdbcProperties;
-  }
 
   public Util.PropertyList getConnectInfo() {
     return connectInfo;
@@ -315,16 +274,11 @@ public RolapSchema getSchema() {
     return schema;
   }
 
-  @Override
-public String getConnectString() {
-    final Util.PropertyList connectInfoClone = Util.PropertyList.newInstance(connectInfo);
-    connectInfoClone.remove( RolapConnectionProperties.JdbcPassword.name() );
-    return connectInfoClone.toString();
-  }
+
 
   @Override
 public String getCatalogName() {
-    return catalogUrl;
+    return catalogName;
   }
 
   @Override
@@ -347,8 +301,8 @@ public SchemaReader getSchemaReader() {
   @Override
 public Object getProperty( String name ) {
     // Mask out the values of certain properties.
-    if ( name.equals( RolapConnectionProperties.JdbcPassword.name() )
-      || name.equals( RolapConnectionProperties.CatalogContent.name() ) ) {
+    if (  
+       name.equals( RolapConnectionProperties.CatalogContent.name() ) ) {
       return "";
     }
     return connectInfo.get( name );
@@ -752,23 +706,6 @@ public Context getContext() {
 	public void close() {
       underlying.close();
     }
-  }
-
- 
-  private static String getJdbcConnectionString( Util.PropertyList connectInfo ) {
-
-    String jdbc = connectInfo.get( RolapConnectionProperties.Jdbc.name() );
-
-    if (  jdbc==null||jdbc.length()==0 ) {
-      return null;
-    }
-    String s=connectInfo.get( "databaseName" ) ;
-    String database = (  s==null||s.length()==0 )
-      ? "" : ";databaseName=" + connectInfo.get( "databaseName" );
-    String integratedSecurity = Boolean.parseBoolean( connectInfo.get( "integratedSecurity" ) )
-      ? ";integratedSecurity=true" : "";
-
-    return jdbc + database + integratedSecurity;
   }
 
 

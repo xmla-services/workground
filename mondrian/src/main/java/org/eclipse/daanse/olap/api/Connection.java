@@ -53,12 +53,7 @@ import mondrian.olap.QueryImpl;
  */
 public interface Connection {
 
-    /**
-     * Get the Connect String associated with this Connection.
-     *
-     * @return the Connect String (never null).
-     */
-    String getConnectString();
+
 
     /**
      * Get the name of the Catalog associated with this Connection.

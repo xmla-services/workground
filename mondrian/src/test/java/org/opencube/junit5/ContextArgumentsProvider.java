@@ -62,7 +62,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
     private static final Logger LOGGER = LoggerFactory.getLogger(ContextArgumentsProvider.class);
 	private ContextSource contextSource;
 
-	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, Context>>> store = new HashMap<>();
+	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>,  Context>> store = new HashMap<>();
 	public static boolean dockerWasChanged = true;
 
 	@Override
@@ -165,7 +165,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		}
 		List<TestingContext> args = providers.parallel().map(dbp -> {
 
-			Entry<PropertyList, Context> dataSource = null;
+			 Context context = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
 
 			if (!store.containsKey(clazzProvider)) {
@@ -174,7 +174,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 			}
 
-			List<TestingContext> aaa = new ArrayList<>();
+			List<TestingContext> testingContexts = new ArrayList<>();
 
 			Optional<AnnotatedElement> oElement = extensionContext.getElement();
 			if (oElement.isPresent()) {
@@ -188,17 +188,17 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Class<? extends DataLoader> dataLoaderClass = contextSource.dataloader();
 
-								Map<Class<? extends DataLoader>, Entry<PropertyList, Context>> storedLoaders = store
+								Map<Class<? extends DataLoader>, Context> storedLoaders = store
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass) && !dockerWasChanged) {
-									dataSource = storedLoaders.get(dataLoaderClass);
-									dataSource.getKey().put(RolapConnectionProperties.Jdbc.name(), dbp.getJdbcUrl());
+									context = storedLoaders.get(dataLoaderClass);
+//									dataSource.getKey().put(RolapConnectionProperties.Jdbc.name(), dbp.getJdbcUrl());
 								} else {
-									dataSource = dbp.activate();
+									context = dbp.activate();
 									DataLoader dataLoader = dataLoaderClass.getConstructor().newInstance();
-									dataLoader.loadData(dataSource.getValue());
+									dataLoader.loadData(context);
 									storedLoaders.clear();
-									storedLoaders.put(dataLoaderClass, dataSource);
+									storedLoaders.put(dataLoaderClass, context);
 									dockerWasChanged = false;
 								}
 
@@ -208,8 +208,8 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								throw new RuntimeException(e);
 							}
 
-							BaseTestContext context=new BaseTestContext();
-							context.init(dataSource);
+							BaseTestContext btcontext=new BaseTestContext();
+							btcontext.init(context);
 
 							Stream.of(contextSource.propertyUpdater()).map(c -> {
 								try {
@@ -218,14 +218,14 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
                                     LOGGER.error("prepareContexts error", e);
 									throw new RuntimeException(e);
 								}
-							}).forEachOrdered(u->context.update(u));
+							}).forEachOrdered(u->btcontext.update(u));
 
-							aaa.add(context);
+							testingContexts.add(btcontext);
 						}
 					}
 				}
 			}
-			return aaa;
+			return testingContexts;
 		}).flatMap(Collection::stream).toList();
 		return args;
 	}

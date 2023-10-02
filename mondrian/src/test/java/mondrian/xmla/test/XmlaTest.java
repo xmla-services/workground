@@ -115,9 +115,7 @@ class XmlaTest{
         Properties props = new Properties();
         String con = XmlaTestContext.getConnectString(context).replaceAll("&amp;","&");
         PropertyList pl = Util.parseConnectString(con);
-        pl.remove(RolapConnectionProperties.Jdbc.name());
-        pl.remove(RolapConnectionProperties.JdbcUser.name());
-        pl.remove(RolapConnectionProperties.JdbcPassword.name());
+
         props.setProperty(DATA_SOURCE_INFO_RESPONSE_PROP, pl.toString());
         expectedResponse =
             Util.replaceProperties(

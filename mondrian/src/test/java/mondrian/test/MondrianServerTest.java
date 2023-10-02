@@ -99,10 +99,8 @@ class MondrianServerTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRepositoryWithBadCatalog(TestingContext context) throws Exception {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext() {
-            Util.PropertyList connectProperties =
-                Util.parseConnectString(context.createConnection().getConnectString());
-            String catalogUrl = connectProperties.get(
-                RolapConnectionProperties.Catalog.name());
+
+            String catalogName = context.createConnection().getCatalogName();
             public String getDataSourcesString() {
                 return super.getDataSourcesString(context)
                     .replace(
@@ -110,7 +108,7 @@ class MondrianServerTest {
                         "</Catalog>\n"
                         + "<Catalog name='__1'>\n"
                         + "<DataSourceInfo>Provider=mondrian;Jdbc='jdbc:derby:non-existing-db'</DataSourceInfo>\n"
-                        + "<Definition>" + catalogUrl + "</Definition>\n"
+                        + "<Definition>" + catalogName + "</Definition>\n"
                         + "</Catalog>\n");
             }
         };

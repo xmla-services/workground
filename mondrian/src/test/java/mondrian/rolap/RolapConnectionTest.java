@@ -300,7 +300,6 @@ class RolapConnectionTest {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);
-        properties.remove(RolapConnectionProperties.Jdbc.name());
         try {
             //TODO Commented by reason context implementation
             DataSource dataSource = null;
