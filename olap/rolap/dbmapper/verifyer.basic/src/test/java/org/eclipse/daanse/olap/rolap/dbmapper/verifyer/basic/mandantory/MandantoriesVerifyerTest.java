@@ -584,7 +584,7 @@ class MandantoriesVerifyerTest {
                             String nullParentValue,
                             TypeEnum type,
                             String approxRowCount,
-                            boolean uniqueMembers,
+                            Boolean uniqueMembers,
                             LevelTypeEnum levelType,
                             HideMemberIfEnum hideMemberIf,
                             String formatter,
@@ -599,7 +599,7 @@ class MandantoriesVerifyerTest {
                             MappingExpressionView parentExpression,
                             MappingClosure closure,
                             List<MappingProperty> properties,
-                            boolean visible,
+                            Boolean visible,
                             InternalTypeEnum internalType,
                             MappingElementFormatter memberFormatter
     )
