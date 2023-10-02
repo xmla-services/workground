@@ -105,7 +105,7 @@ class RolapSchemaTest {
         when(rolapConnectionMock.getServer()).thenReturn(mServerMock);
         when(mServerMock.getAggregationManager()).thenReturn(aggManagerMock);
         when(aggManagerMock.getCacheMgr(rolapConnectionMock)).thenReturn(scManagerMock);
-        return new RolapSchema(key, md5, rolapConnectionMock);
+        return new RolapSchema(key,  rolapConnectionMock);
     }
 
     private SchemaReader mockSchemaReader(DataType category, OlapElement element) {

@@ -67,8 +67,7 @@ class RolapSchemaPoolConcurrencyTest
                     any(Context.class),
                     any(Util.PropertyList.class),
                     anyString(),
-                    any(SchemaKey.class),
-                    any(ByteString.class));
+                    any(SchemaKey.class));
     }
 
     @AfterEach
@@ -88,7 +87,7 @@ class RolapSchemaPoolConcurrencyTest
         ByteString md5 = (ByteString) invocation.getArguments()[5];
         RolapConnection connection = mock(RolapConnection.class);
         //noinspection deprecation
-        return new RolapSchema(key, md5, connection);
+        return new RolapSchema(key,  connection);
     }
 
     }
