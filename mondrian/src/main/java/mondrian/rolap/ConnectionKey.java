@@ -21,7 +21,6 @@ import mondrian.util.StringKey;
  * <p>Two connections should have the same connection key if and only if their
  * databases have the same content.</p>
  *
- * @see RolapConnectionProperties#JdbcConnectionUuid
  *
  * @author jhyde
  */
@@ -31,7 +30,6 @@ public class ConnectionKey extends StringKey {
     }
 
     static ConnectionKey create(
-        final String connectionUuidStr,
         final DataSource dataSource,
         final String catalogUrl,
         final String connectionKey,
@@ -39,31 +37,25 @@ public class ConnectionKey extends StringKey {
         final String dataSourceStr,
         final String sessionId)
     {
-        String s;
-        if (connectionUuidStr != null
-            && connectionUuidStr.length() != 0)
-        {
-            s = connectionUuidStr;
-        } else {
-            final StringBuilder buf = new StringBuilder(100);
-            attributeValue(buf, "sessiomId", sessionId);
-            if (dataSource != null) {
-                attributeValue(buf, "jvm", Util.JVM_INSTANCE_UUID);
-                attributeValue(
-                    buf, "dataSource", System.identityHashCode(dataSource));
-            } else {
-                attributeValue(buf, "connectionKey", connectionKey);
-                attributeValue(buf, "catalogUrl", catalogUrl);
-                attributeValue(buf, "jdbcUser", jdbcUser);
-                attributeValue(buf, "dataSourceStr", dataSourceStr);
-            }
-            s = new ByteString(Util.digestSHA(buf.toString())).toString();
-        }
-        return new ConnectionKey(s);
+		String s;
+
+		final StringBuilder buf = new StringBuilder(100);
+		attributeValue(buf, "sessiomId", sessionId);
+		if (dataSource != null) {
+			attributeValue(buf, "jvm", Util.JVM_INSTANCE_UUID);
+			attributeValue(buf, "dataSource", System.identityHashCode(dataSource));
+		} else {
+			attributeValue(buf, "connectionKey", connectionKey);
+			attributeValue(buf, "catalogUrl", catalogUrl);
+			attributeValue(buf, "jdbcUser", jdbcUser);
+			attributeValue(buf, "dataSourceStr", dataSourceStr);
+		}
+		s = new ByteString(Util.digestSHA(buf.toString())).toString();
+
+		return new ConnectionKey(s);
     }
 
     static ConnectionKey create(
-            final String connectionUuidStr,
             final DataSource dataSource,
             final String catalogUrl,
             final String connectionKey,
@@ -71,7 +63,6 @@ public class ConnectionKey extends StringKey {
             final String dataSourceStr)
     {
         return create(
-                connectionUuidStr,
                 dataSource,
                 catalogUrl,
                 connectionKey,

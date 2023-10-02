@@ -347,7 +347,7 @@ class SqlConstraintUtilsTest {
 
         Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
         Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
-        Mockito.doReturn("dummy").when(functionInformation).functionAtom().name();
+        Mockito.doReturn("dummy").when(functionAtom).name();
         FunctionDefinition aggregateFunDef = new AggregateFunDef(functionInformation);
         Type aggregateReturnType = new DecimalType(1, 1);
 
