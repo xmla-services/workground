@@ -33,7 +33,6 @@ public class ConnectionKey extends StringKey {
         final DataSource dataSource,
         final String catalogUrl,
         final String connectionKey,
-        final String jdbcUser,
         final String dataSourceStr,
         final String sessionId)
     {
@@ -47,7 +46,6 @@ public class ConnectionKey extends StringKey {
 		} else {
 			attributeValue(buf, "connectionKey", connectionKey);
 			attributeValue(buf, "catalogUrl", catalogUrl);
-			attributeValue(buf, "jdbcUser", jdbcUser);
 			attributeValue(buf, "dataSourceStr", dataSourceStr);
 		}
 		s = new ByteString(Util.digestSHA(buf.toString())).toString();
@@ -59,14 +57,12 @@ public class ConnectionKey extends StringKey {
             final DataSource dataSource,
             final String catalogUrl,
             final String connectionKey,
-            final String jdbcUser,
             final String dataSourceStr)
     {
         return create(
                 dataSource,
                 catalogUrl,
                 connectionKey,
-                jdbcUser,
                 dataSourceStr,
                 null);
     }
