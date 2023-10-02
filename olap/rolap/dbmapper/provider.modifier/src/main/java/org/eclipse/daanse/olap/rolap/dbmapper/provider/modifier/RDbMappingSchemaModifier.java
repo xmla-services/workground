@@ -132,7 +132,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackAttributeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackMeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackTableR;
 
-import javax.management.Query;
 import java.util.List;
 
 import static org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeUsageRBuilder.CubeUsageR;
