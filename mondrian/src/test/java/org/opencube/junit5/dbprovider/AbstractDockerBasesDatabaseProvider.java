@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -73,7 +72,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	    }
 
 	  @Override
-	public Entry<PropertyList, Context> activate() {
+	public  Context activate() {
 
             port = freePort();
             RolapSchemaPool.instance().clear();
@@ -141,7 +140,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
         });
     }
 
-    protected abstract SimpleEntry<PropertyList, Context> createConnection();
+    protected abstract  Context createConnection();
 
 	protected abstract List<String> env();
 

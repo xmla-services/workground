@@ -167,9 +167,7 @@ public class FileRepository implements Repository {
                         Util.parseConnectString(
                             (String) infos.properties.get("DataSourceInfo"));
 
-                    pl.remove(RolapConnectionProperties.Jdbc.name());
-                    pl.remove(RolapConnectionProperties.JdbcUser.name());
-                    pl.remove(RolapConnectionProperties.JdbcPassword.name());
+
 
                     if (pl.toString().equals(databaseName)) {
                         datasourceInfo = infos;

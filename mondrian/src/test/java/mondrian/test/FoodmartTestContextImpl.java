@@ -152,83 +152,7 @@ public class FoodmartTestContextImpl implements TestContext {
     this.pw = new PrintWriter( System.out, true );
   }
 
-  /**
-   * Returns the connect string by which the unit tests can talk to the FoodMart database.
-   *
-   * <p>In the base class, the result is the same as the static method
-   * {@link #getDefaultConnectString}. If a derived class overrides {@link #getConnectionProperties()}, the result of
-   * this method will change also.
-   */
-  @Override
-public final String getConnectString() {
-    return getConnectionProperties().toString();
-  }
 
-  /**
-   * Constructs a connect string by which the unit tests can talk to the FoodMart database.
-   * <p>
-   * The algorithm is as follows:<ul>
-   * <li>Starts with {@link MondrianProperties#TestConnectString}, if it is
-   * set.</li>
-   * <li>If {@link MondrianProperties#FoodmartJdbcURL} is set, this
-   * overrides the <code>Jdbc</code> property.</li>
-   * <li>If the <code>catalog</code> URL is unset or invalid, it assumes that
-   * we are at the root of the source tree, and references
-   * <code>demo/FoodMart.xml</code></li>.
-   * </ul>
-   */
-  public static String getDefaultConnectString() {
-    String connectString =
-      MondrianProperties.instance().TestConnectString.get();
-    final Util.PropertyList connectProperties;
-    if ( connectString == null || connectString.equals( "" ) ) {
-      connectProperties = new Util.PropertyList();
-      connectProperties.put( "Provider", "mondrian" );
-    } else {
-      connectProperties = Util.parseConnectString( connectString );
-    }
-    String jdbcURL = MondrianProperties.instance().FoodmartJdbcURL.get();
-    if ( jdbcURL != null ) {
-      connectProperties.put( "Jdbc", jdbcURL );
-    }
-    String jdbcUser = MondrianProperties.instance().TestJdbcUser.get();
-    if ( jdbcUser != null ) {
-      connectProperties.put( "JdbcUser", jdbcUser );
-    }
-    String jdbcPassword =
-      MondrianProperties.instance().TestJdbcPassword.get();
-    if ( jdbcPassword != null ) {
-      connectProperties.put( "JdbcPassword", jdbcPassword );
-    }
-
-    // Find the catalog. Use the URL specified in the connect string, if
-    // it is specified and is valid. Otherwise, reference FoodMart.xml
-    // assuming we are at the root of the source tree.
-    URL catalogURL = null;
-    String catalog = connectProperties.get( "catalog" );
-    if ( catalog != null ) {
-      try {
-        catalogURL = new URL( catalog );
-      } catch ( MalformedURLException e ) {
-        // ignore
-      }
-    }
-    if ( catalogURL == null ) {
-      // Works if we are running in root directory of source tree
-      File file = new File( "demo/FoodMart.xml" );
-      if ( !file.exists() ) {
-        // Works if we are running in bin directory of runtime env
-        file = new File( "../demo/FoodMart.xml" );
-      }
-      try {
-        catalogURL = Util.toURL( file );
-      } catch ( MalformedURLException e ) {
-        throw new Error( e.getMessage() );
-      }
-    }
-    connectProperties.put( "catalog", catalogURL.toString() );
-    return connectProperties.toString();
-  }
 
   @Override
 public synchronized void flushSchemaCache() {
@@ -297,8 +221,7 @@ public synchronized Connection getConnection() {
 
   @Override
 public Util.PropertyList getConnectionProperties() {
-    final Util.PropertyList propertyList =
-      Util.parseConnectString( getDefaultConnectString() );
+    final Util.PropertyList propertyList =getConnectionProperties();
     if ( MondrianProperties.instance().TestHighCardinalityDimensionList
       .get() != null
       && propertyList.get(
@@ -528,32 +451,8 @@ public Result executeQuery( String queryString ) {
     return result;
   }
 
-  @Override
-public ResultSet executeStatement( String queryString ) throws SQLException {
-    OlapConnection connection = getOlap4jConnection();
-    queryString = upgradeQuery( queryString );
-    OlapStatement stmt = connection.createStatement();
-    return stmt.executeQuery( queryString );
-  }
 
-  /**
-   * Executes a query using olap4j.
-   */
-  @Override
-public CellSet executeOlap4jQuery( String queryString ) throws SQLException {
-    OlapConnection connection = getOlap4jConnection();
-    queryString = upgradeQuery( queryString );
-    OlapStatement stmt = connection.createStatement();
-    final CellSet cellSet = stmt.executeOlapQuery( queryString );
 
-    // If we're deep testing, check that we never return the dummy null
-    // value when cells are null. TestExpDependencies isn't the perfect
-    // switch to enable this, but it will do for now.
-    if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
-      assertCellSetValid( cellSet );
-    }
-    return cellSet;
-  }
 
   @Override
 public CellSet executeOlap4jXmlaQuery( String queryString )
@@ -567,8 +466,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
     // Util.parseValue does not appear to allow escaping them.
     schema = schema.replace( "&quot;", "" ).replace( ";", "" );
 
-    String Jdbc = getConnectionProperties()
-      .get( RolapConnectionProperties.Jdbc.name() );
+
 
     String cookie = XmlaOlap4jDriver.nextCookie();
     Map<String, String> catalogs = new HashMap<>();
@@ -577,7 +475,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
       cookie, new MondrianInprocProxy(
         catalogs,
         "jdbc:mondrian:Server=http://whatever;"
-          + "Jdbc=" + Jdbc + ";TestProxyCookie="
+          + "Jdbc=" + "NOT ACCESSIBLE" + ";TestProxyCookie="
           + cookie
           + ";CatalogContent=" + schema ) );
     try {
@@ -1358,27 +1256,6 @@ public void assertMatchesVerbose(
     return sw.toString();
   }
 
-  /**
-   * Returns a test context whose {@link #getOlap4jConnection()} method always returns the same connection object, and
-   * which has an active {@link org.olap4j.Scenario}, thus enabling writeback.
-   *
-   * @return Test context with active scenario
-   */
-  public final TestContext withScenario() {
-    return new DelegatingTestContext( this ) {
-      OlapConnection connection;
-
-      @Override
-	public OlapConnection getOlap4jConnection() throws SQLException {
-        if ( connection == null ) {
-          connection = super.getOlap4jConnection();
-          connection.setScenario(
-            connection.createScenario() );
-        }
-        return connection;
-      }
-    };
-  }
 
   /**
    * Converts a set of positions into a string. Useful if you want to check that an axis has the results you expected.
@@ -1514,27 +1391,6 @@ public synchronized Dialect getDialect() {
     return dialect;
   }
 
-  /**
-   * Checks that expected SQL equals actual SQL. Performs some normalization on the actual SQL to compensate for
-   * differences between dialects.
-   */
-  @Override
-public void assertSqlEquals(
-    String expectedSql,
-    String actualSql,
-    int expectedRows ) {
-    // if the actual SQL isn't in the current dialect we have some
-    // problems... probably with the dialectize method
-    assertEqualsVerbose( actualSql, dialectize( actualSql ) );
-
-    String transformedExpectedSql = removeQuotes( dialectize( expectedSql ) )
-      .replaceAll( "\r\n", "\n" );
-    String transformedActualSql = removeQuotes( actualSql )
-      .replaceAll( "\r\n", "\n" );
-    assertEquals( transformedExpectedSql, transformedActualSql );
-
-    checkSqlAgainstDatasource( actualSql, expectedRows );
-  }
 
   private static String removeQuotes( String actualSql ) {
     String transformedActualSql = actualSql.replaceAll( "`", "" );
@@ -1600,85 +1456,6 @@ public void assertSqlEquals(
     return sql;
   }
 
-  private void checkSqlAgainstDatasource(
-    String actualSql,
-    int expectedRows ) {
-    Util.PropertyList connectProperties = getConnectionProperties();
-
-    java.sql.Connection jdbcConn = null;
-    Statement stmt = null;
-    ResultSet rs = null;
-
-    try {
-
-      final String jdbcDriversProp =
-        MondrianProperties.instance().JdbcDrivers.get();
-      RolapUtil.loadDrivers( jdbcDriversProp );
-
-      jdbcConn = java.sql.DriverManager.getConnection(
-        connectProperties.get( RolapConnectionProperties.Jdbc.name() ),
-        connectProperties.get(
-          RolapConnectionProperties.JdbcUser.name() ),
-        connectProperties.get(
-          RolapConnectionProperties.JdbcPassword.name() ) );
-      stmt = jdbcConn.createStatement();
-
-      if ( RolapUtil.SQL_LOGGER.isDebugEnabled() ) {
-        StringBuffer sqllog = new StringBuffer();
-        sqllog.append( "mondrian.test.TestContext: executing sql [" );
-        if ( actualSql.indexOf( '\n' ) >= 0 ) {
-          // SQL appears to be formatted as multiple lines. Make it
-          // start on its own line.
-          sqllog.append( "\n" );
-        }
-        sqllog.append( actualSql );
-        sqllog.append( ']' );
-        RolapUtil.SQL_LOGGER.debug( sqllog.toString() );
-      }
-
-      long startTime = System.currentTimeMillis();
-      rs = stmt.executeQuery( actualSql );
-      long time = System.currentTimeMillis();
-      final long execMs = time - startTime;
-
-      RolapUtil.SQL_LOGGER.debug( ", exec " + execMs + " ms" );
-
-      int rows = 0;
-      while ( rs.next() ) {
-        rows++;
-      }
-
-      assertEquals(  expectedRows, rows ,"row count");
-    } catch ( SQLException e ) {
-      throw new RuntimeException(
-        "ERROR in SQL - invalid for database: "
-          + connectProperties.get( RolapConnectionProperties.Jdbc.name() )
-          + "\n" + actualSql,
-        e );
-    } finally {
-      try {
-        if ( rs != null ) {
-          rs.close();
-        }
-      } catch ( Exception e1 ) {
-        // ignore
-      }
-      try {
-        if ( stmt != null ) {
-          stmt.close();
-        }
-      } catch ( Exception e1 ) {
-        // ignore
-      }
-      try {
-        if ( jdbcConn != null ) {
-          jdbcConn.close();
-        }
-      } catch ( Exception e1 ) {
-        // ignore
-      }
-    }
-  }
 
   /**
    * Asserts that an MDX set-valued expression depends upon a given list of dimensions.
@@ -1998,23 +1775,7 @@ public List<Exception> getSchemaWarnings() {
     return connection.getSchema().getWarnings();
   }
 
-  @Override
-public OlapConnection getOlap4jConnection() throws SQLException {
-    try {
-      Class.forName( "mondrian.olap4j.MondrianOlap4jDriver" );
-    } catch ( ClassNotFoundException e ) {
-      throw new RuntimeException( "Driver not found" );
-    }
-    String connectString = getConnectString();
-    if ( connectString.startsWith( "Provider=mondrian; " ) ) {
-      connectString =
-        connectString.substring( "Provider=mondrian; ".length() );
-    }
-    final java.sql.Connection connection =
-      java.sql.DriverManager.getConnection(
-        "jdbc:mondrian:" + connectString );
-    return ( (OlapWrapper) connection ).unwrap( OlapConnection.class );
-  }
+
 
   /**
    * Tests whether the database is valid. Allows tests that depend on optional databases to figure out whether to
@@ -2242,5 +2003,9 @@ public boolean databaseIsValid() {
     }
     return str1;
   }
+
+
+
+
 
 }

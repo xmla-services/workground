@@ -397,13 +397,8 @@ System.out.println("password=" + password);
 
     protected Map<String, String> getCatalogNameUrls(TestContext testContext) {
         if (catalogNameUrls == null) {
-            String connectString = testContext.getConnectString();
-            Util.PropertyList connectProperties =
-                        Util.parseConnectString(connectString);
-            String catalog = connectProperties.get(
-                RolapConnectionProperties.Catalog.name());
-            catalogNameUrls = new TreeMap<>();
-            catalogNameUrls.put("FoodMart", catalog);
+
+            catalogNameUrls.put("FoodMart", "FoodMart,xml");
         }
         return catalogNameUrls;
     }

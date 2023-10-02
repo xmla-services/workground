@@ -36,23 +36,7 @@ public abstract class ConnectionBase implements Connection {
     protected abstract Logger getLogger();
 
 
-    public String getFullConnectString() {
-        String s = getConnectString();
-        String catalogName = getCatalogName();
-        if (catalogName != null) {
-            int len = s.length() + catalogName.length() + 32;
-            StringBuilder buf = new StringBuilder(len);
-            buf.append(s);
-            if (!s.endsWith(";")) {
-                buf.append(';');
-            }
-            buf.append("Initial Catalog=");
-            buf.append(catalogName);
-            buf.append(';');
-            s = buf.toString();
-        }
-        return s;
-    }
+
 
     public abstract Statement getInternalStatement();
 

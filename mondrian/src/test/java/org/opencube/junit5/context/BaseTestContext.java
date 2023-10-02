@@ -19,7 +19,6 @@
 package org.opencube.junit5.context;
 
 import java.sql.SQLException;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.eclipse.daanse.olap.api.Connection;
@@ -30,9 +29,7 @@ import org.opencube.junit5.propupdator.PropertyUpdater;
 
 import mondrian.olap.DriverManager;
 import mondrian.olap.Util;
-import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnectionProperties;
 
 public class BaseTestContext implements TestingContext {
 
@@ -40,9 +37,8 @@ public class BaseTestContext implements TestingContext {
 	private Util.PropertyList properties = new Util.PropertyList();
 
 	@Override
-	public void init(Entry<PropertyList, Context> contextEntry) {
-		this.context = contextEntry.getValue();
-		this.properties = Util.PropertyList.newInstance(contextEntry.getKey());
+	public void init(Context context) {
+		this.context = context;
 
 
 	}
@@ -55,9 +51,6 @@ public class BaseTestContext implements TestingContext {
 	@Override
 	public Connection createConnection() {
 
-		if (context == null) {
-			return DriverManager.getConnection(getJDBCConnectString(), null);
-		}
 		return DriverManager.getConnection(properties, null, context);
 
 	}
@@ -94,13 +87,7 @@ public class BaseTestContext implements TestingContext {
 		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
 	}
 
-	@Override
-	public String getJDBCConnectString() {
 
-		// may exist better ways
-		return properties.get(RolapConnectionProperties.Jdbc.name());
-
-	}
 
 	@Override
 	public String getOlapConnectString() {
@@ -108,22 +95,6 @@ public class BaseTestContext implements TestingContext {
 		return properties.toString();
 	}
 
-	@Override
-	public String toString() {
 
-		return getJDBCConnectString();
-
-//
-//		Connection con = createConnection();
-//		if (con == null||dataSource==null) {
-//			return super.toString();
-//		}
-//		try {
-//			return jdbcURL().orElse(		dataSource.getConnection().getMetaData().getDriverName());
-//		} catch (SQLException e) {
-//		return	super.toString();
-//		}
-
-	}
 
 }

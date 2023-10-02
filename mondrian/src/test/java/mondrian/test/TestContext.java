@@ -42,15 +42,6 @@ import mondrian.olap.Util;
  */
 public interface TestContext {
 
-    /**
-       * Returns the connect string by which the unit tests can talk to the database.
-       *
-       * <p>In the base class, the result is the same as the static method
-       * {@link #getDefaultConnectString}. If a derived class overrides {@link #getConnectionProperties()}, the result of
-       * this method will change also.
-       */
-    String getConnectString();
-
     void flushSchemaCache();
 
     /**
@@ -77,12 +68,8 @@ public interface TestContext {
        */
     Result executeQuery(String queryString);
 
-    ResultSet executeStatement(String queryString) throws SQLException;
 
-    /**
-       * Executes a query using olap4j.
-       */
-    CellSet executeOlap4jQuery(String queryString) throws SQLException;
+
 
     CellSet executeOlap4jXmlaQuery(String queryString) throws SQLException;
 
@@ -242,12 +229,6 @@ public interface TestContext {
     Dialect getDialect();
 
     /**
-       * Checks that expected SQL equals actual SQL. Performs some normalization on the actual SQL to compensate for
-       * differences between dialects.
-       */
-    void assertSqlEquals(String expectedSql, String actualSql, int expectedRows);
-
-    /**
        * Asserts that an MDX set-valued expression depends upon a given list of dimensions.
        */
     void assertSetExprDependsOn(String expr, String dimList);
@@ -269,7 +250,6 @@ public interface TestContext {
        */
     List<Exception> getSchemaWarnings();
 
-    OlapConnection getOlap4jConnection() throws SQLException;
 
     /**
        * Tests whether the database is valid. Allows tests that depend on optional databases to figure out whether to

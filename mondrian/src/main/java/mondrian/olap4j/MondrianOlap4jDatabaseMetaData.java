@@ -153,7 +153,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
 
     @Override
 	public String getURL() throws SQLException {
-        return olap4jConnection.getMondrianConnection().getConnectString();
+        return "not://allowed";
     }
 
     @Override

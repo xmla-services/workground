@@ -19,16 +19,12 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.Closeable;
-import java.util.Map.Entry;
 
 import org.eclipse.daanse.olap.api.Context;
 
-import mondrian.olap.Util.PropertyList;
-
 public interface DatabaseProvider extends Closeable {
 
-	public Entry<PropertyList, Context> activate();
+	public Context activate();
 
-	public String getJdbcUrl();
 
 }

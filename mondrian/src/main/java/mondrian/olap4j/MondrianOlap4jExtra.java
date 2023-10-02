@@ -328,26 +328,6 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         final List<Map<String, Object>> databases =
             server.getDatabases(olap4jConnection.getMondrianConnection());
 
-        // We can't let JdbcPassword leak out of the public API, so we remove
-        // it here. This is only called by the XMLA servlets.
-        for (Map<String, Object> db : databases) {
-            String dsi = (String) db.get("DataSourceInfo");
-
-            if (dsi == null) {
-                break;
-            }
-
-            PropertyList pl = Util.parseConnectString(dsi);
-
-            boolean removed =
-                pl.remove(RolapConnectionProperties.Jdbc.name());
-            removed |= pl.remove(RolapConnectionProperties.JdbcUser.name());
-            removed |= pl.remove(RolapConnectionProperties.JdbcPassword.name());
-
-            if (removed) {
-                db.put("DataSourceInfo", pl.toString());
-            }
-        }
         return databases;
     }
 
