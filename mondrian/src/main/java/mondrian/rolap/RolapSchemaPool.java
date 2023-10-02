@@ -51,13 +51,6 @@ public class RolapSchemaPool {
         mapKeyToSchema =
             new HashMap<>();
 
-    // REVIEW: This map is now considered unsafe. If two schemas have identical
-    // metadata but a different underlying database connection, we should not
-    // share a cache. Since SchemaContentKey is now a hash of the schema
-    // definition, this field can probably be removed.
-    private final Map<ByteString, ExpiringReference<RolapSchema>>
-        mapMd5ToSchema =
-            new HashMap<>();
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -71,13 +64,11 @@ public class RolapSchemaPool {
     RolapSchema get(
         final String catalogUrl,
         final String connectionKey,
-        final String jdbcUser,
         final Util.PropertyList connectInfo)
     {
         return get(
             catalogUrl,
             connectionKey,
-            jdbcUser,
             null,
             connectInfo);
     }
@@ -90,7 +81,6 @@ public class RolapSchemaPool {
         return get(
             catalogUrl,
             null,
-            null,
             context,
             connectInfo);
     }
@@ -98,7 +88,6 @@ public class RolapSchemaPool {
     public RolapSchema get(
         final String catalogUrl,
         final String connectionKey,
-        final String jdbcUser,
         final Context context,
         final Util.PropertyList connectInfo)
     {
@@ -115,18 +104,16 @@ public class RolapSchemaPool {
             LOGGER.debug(
                 new StringBuilder("get: catalog=").append(catalogUrl)
                     .append(", connectionKey=").append(connectionKey)
-                    .append(", jdbcUser=").append(jdbcUser)
                     .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
                     .append(", useSchemaPool=").append(useSchemaPool)
                     .append(", map-size=").append(mapKeyToSchema.size())
-                    .append(", md5-map-size=").append(mapMd5ToSchema.size()).toString());
+                   .toString());
         }
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
                 context == null ? null : context.getDataSource(),
                 catalogUrl,
                 connectionKey,
-                jdbcUser,
                 sessionId);
 
         final String catalogStr = getSchemaContent(connectInfo, catalogUrl);
@@ -257,19 +244,16 @@ public class RolapSchemaPool {
         final ExpiringReference<RolapSchema> reference =
             new ExpiringReference<>(
                 schema, pinTimeout);
-        if (md5Bytes != null) {
-            mapMd5ToSchema.put(md5Bytes, reference);
-        }
+
         mapKeyToSchema.put(schema.key, reference);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "put: schema={}, key={}, checksum={}, map-size={}, md5-map-size={}",
+                "put: schema={}, key={}, checksum={}, map-size={}",
                 schema,
                 schema.key,
                 md5Bytes,
-                mapKeyToSchema.size(),
-                mapMd5ToSchema.size());
+                mapKeyToSchema.size());
         }
     }
 
@@ -364,7 +348,6 @@ public class RolapSchemaPool {
                 null,
                 catalogUrl,
                 connectionKey,
-                jdbcUser,
                 dataSourceStr);
         final SchemaKey key =
             new SchemaKey(schemaContentKey, connectionUuid);
@@ -420,9 +403,6 @@ public class RolapSchemaPool {
             Reference<RolapSchema> ref = mapKeyToSchema.get(key);
             if (ref != null) {
                 schema = ref.get();
-                if (schema != null) {
-                    mapMd5ToSchema.remove(schema.getChecksum());
-                }
             }
             mapKeyToSchema.remove(key);
         } finally {
@@ -452,7 +432,6 @@ public class RolapSchemaPool {
                 }
             }
             mapKeyToSchema.clear();
-            mapMd5ToSchema.clear();
         } finally {
             lock.writeLock().unlock();
         }

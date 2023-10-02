@@ -47,14 +47,12 @@ class RolapSchemaPoolTest {
             schemaPool.get(
                 catalogUrl,
                 "connectionKeyA",
-                "joeTheUser",
                 context.getContext(),
                 connectInfo);
         RolapSchema schemaA =
             schemaPool.get(
                 catalogUrl,
                 "connectionKeyA",
-                "joeTheUser",
                 context.getContext(),
                 connectInfo);
         //same arguments, same object
