@@ -33,6 +33,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
@@ -352,7 +354,7 @@ public class RolapLevel extends LevelBase {
     RolapLevel(
         RolapHierarchy hierarchy,
         int depth,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel xmlLevel)
+        MappingLevel xmlLevel)
     {
 
         this(
@@ -396,7 +398,7 @@ public class RolapLevel extends LevelBase {
     }
 
     // helper for constructor
-    private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel xmlLevel)
+    private static RolapProperty[] createProperties(MappingLevel xmlLevel)
     {
         List<RolapProperty> list = new ArrayList<>();
         final MappingExpression nameExp = LevelUtil.getNameExp(xmlLevel);
@@ -409,7 +411,7 @@ public class RolapLevel extends LevelBase {
                     Property.NAME_PROPERTY.description));
         }
         for (int i = 0; i < xmlLevel.properties().size(); i++) {
-            org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty xmlProperty = xmlLevel.properties().get(i);
+            MappingProperty xmlProperty = xmlLevel.properties().get(i);
 
             FormatterCreateContext formatterContext =
                     new FormatterCreateContext.Builder(xmlProperty.name())
