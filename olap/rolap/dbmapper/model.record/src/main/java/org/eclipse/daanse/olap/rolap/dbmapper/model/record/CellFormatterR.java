@@ -14,7 +14,8 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
-public record  CellFormatterR(String className, ScriptR script) implements MappingCellFormatter {
+public record  CellFormatterR(String className, MappingScript script) implements MappingCellFormatter {
 
 }

@@ -36,8 +36,7 @@ public record MeasureR(String name,
                        MappingExpressionView measureExpression,
                        List<MappingCalculatedMemberProperty> calculatedMemberProperties,
                        MappingElementFormatter cellFormatter,
-                       String backColor,
-                       List<MappingCalculatedMemberProperty> memberProperties
+                       String backColor
                        )
         implements MappingMeasure {
 

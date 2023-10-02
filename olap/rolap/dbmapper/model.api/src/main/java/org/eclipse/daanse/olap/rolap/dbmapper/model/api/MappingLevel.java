@@ -24,15 +24,15 @@ public interface MappingLevel {
 
     List<MappingAnnotation> annotations();
 
-    MappingExpression keyExpression();
+    MappingExpressionView keyExpression();
 
-    MappingExpression nameExpression();
+    MappingExpressionView nameExpression();
 
-    MappingExpression captionExpression();
+    MappingExpressionView captionExpression();
 
-    MappingExpression ordinalExpression();
+    MappingExpressionView ordinalExpression();
 
-    MappingExpression parentExpression();
+    MappingExpressionView parentExpression();
 
     MappingClosure closure();
 

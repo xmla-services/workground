@@ -570,8 +570,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                         null,
                         List.of(),
                         null,
-                        null,
-                        List.of())
+                        null)
                     );
                 }
             }
