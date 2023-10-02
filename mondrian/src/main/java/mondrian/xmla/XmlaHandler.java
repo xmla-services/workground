@@ -925,7 +925,6 @@ public class XmlaHandler {
                             try {
                                 mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
                                         prevSchema.getKey(),
-                                        null,
                                         catalogUrl,
                                         objectDefinition,
                                         rolapConnection1.getConnectInfo(),
@@ -939,7 +938,6 @@ public class XmlaHandler {
                         } else {
                             mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
                                     prevSchema.getKey(),
-                                    null,
                                     catalogUrl,
                                     objectDefinition,
                                     rolapConnection1.getConnectInfo(),

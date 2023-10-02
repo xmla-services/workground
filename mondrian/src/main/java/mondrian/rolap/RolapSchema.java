@@ -262,16 +262,11 @@ public class RolapSchema implements Schema {
     private RolapSchema(
         final SchemaKey key,
         final Util.PropertyList connectInfo,
-        final Context context,
-        final ByteString sha512Bytes,
-        boolean useContentChecksum)
+        final Context context)
     {
         this.id = Util.generateUuidString();
         this.key = key;
-        this.sha512Bytes = sha512Bytes;
-        if (useContentChecksum && sha512Bytes == null) {
-            throw new AssertionError();
-        }
+
 
         this.context=context;
         DriverManager.drivers().forEach(System.out::println);
@@ -298,13 +293,12 @@ public class RolapSchema implements Schema {
      */
     public RolapSchema(
         SchemaKey key,
-        ByteString md5Bytes,
         String catalogUrl,
         String catalogStr,
         Util.PropertyList connectInfo,
         Context context)
     {
-        this(key, connectInfo, context, md5Bytes, md5Bytes != null);
+        this(key, connectInfo, context);
         load(catalogUrl, catalogStr, connectInfo);
         assert this.sha512Bytes != null;
     }
@@ -315,12 +309,10 @@ public class RolapSchema implements Schema {
     @Deprecated
     RolapSchema(
         SchemaKey key,
-        ByteString md5Bytes,
         RolapConnection internalConnection)
     {
         this.id = Util.generateUuidString();
         this.key = key;
-        this.sha512Bytes = md5Bytes;
         this.defaultRole = Util.createRootRole(this);
         this.internalConnection = internalConnection;
     }
@@ -441,12 +433,9 @@ public class RolapSchema implements Schema {
                 def = xmlParser.parse(catalogStr);
             }
 
-            if (sha512Bytes == null) {
-                // If a null catalogStr was passed in, we should have
-                // computed it above by re-reading the catalog URL.
-                assert catalogStr != null;
-                sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
-            }
+
+            sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
+
 
             // throw error if we have an incompatible schema
             checkSchemaVersion(def);

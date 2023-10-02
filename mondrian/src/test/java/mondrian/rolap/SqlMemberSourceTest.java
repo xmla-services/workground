@@ -129,7 +129,7 @@ class SqlMemberSourceTest {
 
     SchemaKey sKeyMock = mock( SchemaKey.class );
     RolapConnection rlConnectionMock = mock( RolapConnection.class );
-    RolapSchema rlSchema = new RolapSchema( sKeyMock, MD5_BYTE_STRING, rlConnectionMock );
+    RolapSchema rlSchema = new RolapSchema( sKeyMock,  rlConnectionMock );
     RolapHierarchy rlHierarchyStoreMock = mock( RolapHierarchy.class );
 
     when( rlConnectionMock.getDataSource() ).thenReturn( dataSourceMock );
