@@ -29,7 +29,7 @@ public interface MappingProperty {
 
     String description();
 
-    boolean dependsOnLevelValue();
+    Boolean dependsOnLevelValue();
 
     MappingElementFormatter propertyFormatter();
 }

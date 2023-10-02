@@ -22,5 +22,6 @@ public record ActionR(String name,
                       String caption,
                       String description,
                       List<MappingAnnotation> annotations) implements MappingAction {
-
+	
+	
 }

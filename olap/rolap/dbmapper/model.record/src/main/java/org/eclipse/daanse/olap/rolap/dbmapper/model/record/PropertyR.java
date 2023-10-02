@@ -23,7 +23,7 @@ public record PropertyR(String name,
                         String formatter,
                         String caption,
                         String description,
-                        boolean dependsOnLevelValue,
+                        Boolean dependsOnLevelValue,
                         MappingElementFormatter propertyFormatter)
         implements MappingProperty {
 

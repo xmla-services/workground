@@ -925,10 +925,7 @@ public class XmlaHandler {
                             try {
                                 mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
                                         prevSchema.getKey(),
-                                        catalogUrl,
-                                        objectDefinition,
-                                        rolapConnection1.getConnectInfo(),
-                                        null
+                                        rolapConnection1.getConnectInfo(),null // no context from here
                                 );
                             } catch (RuntimeException e) {
                                 rows.add(new Object[]{e.getMessage()});
@@ -938,10 +935,7 @@ public class XmlaHandler {
                         } else {
                             mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
                                     prevSchema.getKey(),
-                                    catalogUrl,
-                                    objectDefinition,
-                                    rolapConnection1.getConnectInfo(),
-                                    null
+                                    rolapConnection1.getConnectInfo(),null // no context from here
                             );
 
                             String filePath = java.net.URI.create(catalogUrl).getPath();

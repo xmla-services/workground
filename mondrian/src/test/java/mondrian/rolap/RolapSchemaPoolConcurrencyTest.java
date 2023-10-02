@@ -63,10 +63,8 @@ class RolapSchemaPoolConcurrencyTest
         poolSpy = spy(RolapSchemaPool.instance());
         doAnswer(new RolapAnswer()).when(poolSpy)
                 .createRolapSchema(
-                    anyString(),
                     any(Context.class),
                     any(Util.PropertyList.class),
-                    anyString(),
                     any(SchemaKey.class));
     }
 

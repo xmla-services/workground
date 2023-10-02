@@ -106,7 +106,7 @@ public class PropertyImpl implements MappingProperty {
     }
 
     @Override
-    public boolean dependsOnLevelValue() {
+    public Boolean dependsOnLevelValue() {
         if (dependsOnLevelValue == null) {
             return false;
         } else {
