@@ -102,14 +102,6 @@ public enum RolapConnectionProperties {
   Locale,
 
   /**
-   * The name of a class implementing the
-   * {@link mondrian.spi.DataSourceChangeListener} interface.
-   * A data source change listener is used to flush the cache of
-   * mondrian every time the datasource is changed.
-   */
-  DataSourceChangeListener,
-
-  /**
    * The "Ignore" property is a boolean value. If true, mondrian ignores
    * warnings and non-fatal errors while loading the schema. The resulting
    * errors can be obtained by calling
@@ -123,8 +115,6 @@ public enum RolapConnectionProperties {
    * ensures that the connection belongs to the correct one.
    */
   Instance,
-
-
 
   /**
    * The "PinSchemaTimeout" defines how much time must Mondrian
@@ -175,11 +165,5 @@ public enum RolapConnectionProperties {
    */
   AggregateScanCatalog;
 
-  /**
-   * Any property beginning with this value will be added to the
-   * JDBC connection properties, after removing this prefix. This
-   * allows you to specify connection properties without a URL.
-   */
-  public static final String JdbcPropertyPrefix = "jdbc.";
 
 }
