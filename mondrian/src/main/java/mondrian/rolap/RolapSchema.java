@@ -443,14 +443,6 @@ public class RolapSchema implements Schema {
             xmlSchema =
                 (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
 
-            if (getLogger().isDebugEnabled()) {
-                StringWriter sw = new StringWriter(4096);
-                PrintWriter pw = new PrintWriter(sw);
-                pw.println("RolapSchema.load: dump xmlschema");
-                xmlSchema.display(pw, 2);
-                pw.flush();
-                getLogger().debug(sw.toString());
-            }
 
             load(xmlSchema);
         } catch (FileSystemException e) {
