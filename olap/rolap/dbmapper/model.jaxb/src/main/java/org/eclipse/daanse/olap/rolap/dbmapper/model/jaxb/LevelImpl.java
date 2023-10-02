@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
@@ -258,7 +257,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public boolean uniqueMembers() {
+    public Boolean uniqueMembers() {
         if (uniqueMembers == null) {
             return false;
         } else {
@@ -329,7 +328,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 

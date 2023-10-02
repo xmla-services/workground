@@ -30,7 +30,7 @@ public record LevelR(String name,
 		String description,
 		List<MappingAnnotation> annotations,
         String caption,
-        boolean visible,
+        Boolean visible,
         String table,
         String column,
         String nameColumn,
@@ -39,7 +39,7 @@ public record LevelR(String name,
         String nullParentValue,
         TypeEnum type,
         String approxRowCount,
-        boolean uniqueMembers,
+        Boolean uniqueMembers,
         LevelTypeEnum levelType,
         HideMemberIfEnum hideMemberIf,
         String formatter,
@@ -60,7 +60,7 @@ public record LevelR(String name,
 			String description,
 			List<MappingAnnotation> annotations,
 	        String caption,
-	        boolean visible,
+	        Boolean visible,
 	        String table,
 	        String column,
 	        String nameColumn,
@@ -69,7 +69,7 @@ public record LevelR(String name,
 	        String nullParentValue,
 	        TypeEnum type,
 	        String approxRowCount,
-	        boolean uniqueMembers,
+	        Boolean uniqueMembers,
 	        LevelTypeEnum levelType,
 	        HideMemberIfEnum hideMemberIf,
 	        String formatter,
@@ -88,7 +88,7 @@ public record LevelR(String name,
 								this.description = description;
 								this.annotations = annotations == null ? List.of() : annotations;
 								this.caption = caption;
-								this.visible = visible;
+								this.visible = visible == null ? false : visible;
 								this.table = table;
 								this.column = column;
 								this.nameColumn = nameColumn;
@@ -97,9 +97,9 @@ public record LevelR(String name,
 								this.nullParentValue = nullParentValue;
 								this.type = type == null ? TypeEnum.STRING : type;
 								this.approxRowCount = approxRowCount;
-								this.uniqueMembers = uniqueMembers;
+								this.uniqueMembers = uniqueMembers == null ? false : uniqueMembers;
 								this.levelType = levelType;
-								this.hideMemberIf = hideMemberIf;
+								this.hideMemberIf = hideMemberIf== null ? HideMemberIfEnum.NEVER : hideMemberIf;
 								this.formatter = formatter;
 								this.captionColumn = captionColumn;
 								this.keyExpression = keyExpression;

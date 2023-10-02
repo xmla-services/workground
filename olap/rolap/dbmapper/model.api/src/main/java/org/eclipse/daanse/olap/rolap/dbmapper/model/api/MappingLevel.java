@@ -56,7 +56,7 @@ public interface MappingLevel {
 
     TypeEnum type();
 
-    boolean uniqueMembers();
+    Boolean uniqueMembers();
 
     LevelTypeEnum levelType();
 
@@ -70,7 +70,7 @@ public interface MappingLevel {
 
     String captionColumn();
 
-    boolean visible();
+    Boolean visible();
 
     InternalTypeEnum internalType();
 
