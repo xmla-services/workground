@@ -151,13 +151,7 @@ public enum RolapConnectionProperties {
    */
   Instance,
 
-  /**
-   * The "JdbcConnectionUuid" property is the unique identifier for the
-   * underlying JDBC connection. If defined, Mondrian will assume that two
-   * connections bearing the same JdbcConnectionUuid point to identical
-   * databases without looking at any other properties.
-   */
-  JdbcConnectionUuid,
+
 
   /**
    * The "PinSchemaTimeout" defines how much time must Mondrian

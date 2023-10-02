@@ -10,7 +10,6 @@
 */
 package mondrian.rolap;
 
-import static mondrian.rolap.RolapConnectionProperties.JdbcConnectionUuid;
 import static mondrian.rolap.RolapConnectionProperties.PinSchemaTimeout;
 import static mondrian.rolap.RolapConnectionProperties.UseSchemaPool;
 
@@ -103,8 +102,7 @@ public class RolapSchemaPool {
         final Context context,
         final Util.PropertyList connectInfo)
     {
-        final String connectionUuidStr = connectInfo.get(
-            JdbcConnectionUuid.name());
+
         final boolean useSchemaPool =
             Boolean.parseBoolean(
                 connectInfo.get(UseSchemaPool.name(), "true"));
@@ -122,7 +120,6 @@ public class RolapSchemaPool {
                     .append(", connectionKey=").append(connectionKey)
                     .append(", jdbcUser=").append(jdbcUser)
                     .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
-                    .append(", jdbcConnectionUuid=").append(connectionUuidStr)
                     .append(", useSchemaPool=").append(useSchemaPool)
                     .append(", useContentChecksum=").append(useContentChecksum)
                     .append(", map-size=").append(mapKeyToSchema.size())
@@ -130,7 +127,6 @@ public class RolapSchemaPool {
         }
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
-                connectionUuidStr,
                 context == null ? null : context.getDataSource(),
                 catalogUrl,
                 connectionKey,
@@ -450,7 +446,6 @@ public class RolapSchemaPool {
                 null);
         final ConnectionKey connectionKey =
             ConnectionKey.create(
-                null,
                 dataSource,
                 catalogUrl,
                 null,
