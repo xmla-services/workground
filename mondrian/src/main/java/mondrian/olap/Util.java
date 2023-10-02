@@ -182,17 +182,7 @@ public class Util extends XOMUtil {
      */
     public static final Object EmptyValue = Double.valueOf(DOUBLE_EMPTY);
 
-    /**
-     * Cumulative time spent accessing the database.
-     */
-    private static long databaseMillis = 0;
 
-    /**
-     * Random number generator to provide seed for other random number
-     * generators.
-     */
-    private static final Random metaRandom =
-            createRandom(MondrianProperties.instance().TestSeed.get());
 
     /** Unique id for this JVM instance. Part of a key that ensures that if
      * two JVMs in the same cluster have a data-source with the same
@@ -235,12 +225,6 @@ public class Util extends XOMUtil {
 
     private static final UtilCompatible compatible;
 
-    /**
-     * Flag to control expensive debugging. (More expensive than merely
-     * enabling assertions: as we know, a lot of people run with assertions
-     * enabled.)
-     */
-    public static final boolean DEBUG = false;
 
     private static final SecureRandom random = new SecureRandom();
 
@@ -451,24 +435,6 @@ public class Util extends XOMUtil {
                 .replaceAll("\\\"", "\\\\\""))
             .append("\"").toString();
     }
-
-    /**
-     * Returns true if two objects are equal, or are both null.
-     *
-     * @param s First object
-     * @param t Second object
-     * @return Whether objects are equal or both null
-     */
-    public static boolean equals(Object s, Object t) {
-        if (s == t) {
-            return true;
-        }
-        if (s == null || t == null) {
-            return false;
-        }
-        return s.equals(t);
-    }
-
 
     /**
      * Returns whether two names are equal.
@@ -1014,12 +980,7 @@ public class Util extends XOMUtil {
         }
     }
 
-    public static Member lookupHierarchyRootMember(
-        SchemaReader reader, Hierarchy hierarchy, org.eclipse.daanse.olap.api.NameSegment memberName)
-    {
-        return lookupHierarchyRootMember(
-            reader, hierarchy, memberName, MatchType.EXACT);
-    }
+
 
     /**
      * Finds a root member of a hierarchy with a given name.
@@ -1502,46 +1463,7 @@ public class Util extends XOMUtil {
         return buf.toString();
     }
 
-    /**
-     * Makes a name distinct from other names which have already been used
-     * and shorter than a length limit, adds it to the list, and returns it.
-     *
-     * @param name Suggested name, may not be unique
-     * @param maxLength Maximum length of generated name
-     * @param nameList Collection of names already used
-     *
-     * @return Unique name
-     */
-    public static String uniquify(
-        String name,
-        int maxLength,
-        Collection<String> nameList)
-    {
-        if (name == null) {
-            throw new IllegalArgumentException("name should be not null");
-        }
-        if (name.length() > maxLength) {
-            name = name.substring(0, maxLength);
-        }
-        if (nameList.contains(name)) {
-            String aliasBase = name;
-            int j = 0;
-            while (true) {
-                name = aliasBase + j;
-                if (name.length() > maxLength) {
-                    aliasBase = aliasBase.substring(0, aliasBase.length() - 1);
-                    continue;
-                }
-                if (!nameList.contains(name)) {
-                    break;
-                }
-                j++;
-            }
-        }
-        nameList.add(name);
-        return name;
-    }
-
+ 
     /**
      * Returns whether a collection contains precisely one distinct element.
      * Returns false if the collection is empty, or if it contains elements
@@ -2254,12 +2176,6 @@ public class Util extends XOMUtil {
         return bitSet;
     }
 
-    public static class ErrorCellValue {
-        @Override
-		public String toString() {
-            return "#ERR";
-        }
-    }
 
     @SuppressWarnings({"unchecked"})
     public static <T> T[] genericArray(Class<T> clazz, int size) {
@@ -2356,15 +2272,7 @@ public class Util extends XOMUtil {
         assertTrue(b, condition);
     }
 
-    /**
-     * Checks that a postcondition (declared using the javadoc
-     * <code>@post</code> tag) is satisfied.
-     *
-     * @param b The value of executing the condition
-     */
-    public static void assertPostcondition(boolean b) {
-        assertTrue(b);
-    }
+
 
     /**
      * Checks that a postcondition (declared using the javadoc
@@ -3131,16 +3039,7 @@ public class Util extends XOMUtil {
         }
     }
 
-    /**
-     * Returns the contents of a URL.
-     *
-     * @param url URL
-     * @return Contents of URL
-     * @throws IOException on I/O error
-     */
-    public static String readURL(final URL url) throws IOException {
-        return readURL(url, null);
-    }
+ 
 
     /**
      * Returns the contents of a URL, substituting tokens.
@@ -3385,38 +3284,7 @@ public class Util extends XOMUtil {
         return true;
     }
 
-    /**
-     * Casts a collection to iterable.
-     *
-     * Under JDK 1.4, {@link Collection} objects do not implement
-     * {@link Iterable}, so this method inserts a casting wrapper. (Since
-     * Iterable does not exist under JDK 1.4, they will have been compiled
-     * under JDK 1.5 or later, then retrowoven to 1.4 class format. References
-     * to Iterable will have been replaced with references to
-     * <code>com.rc.retroweaver.runtime.Retroweaver_</code>.
-     *
-     * <p>Under later JDKs this method is trivial. This method can be deleted
-     * when we discontinue support for JDK 1.4.
-     *
-     * @param iterable Object which ought to be iterable
-     * @param <T> Element type
-     * @return Object cast to Iterable
-     */
-    public static <T> Iterable<T> castToIterable(
-        final Object iterable)
-    {
-        if (Util.RETROWOVEN
-            && !(iterable instanceof Iterable))
-        {
-            return new Iterable<>() {
-                @Override
-				public Iterator<T> iterator() {
-                    return ((Collection<T>) iterable).iterator();
-                }
-            };
-        }
-        return (Iterable<T>) iterable;
-    }
+ 
 
     /**
      * Looks up an enumeration by name, returning null if null or not valid.
@@ -3518,16 +3386,6 @@ public class Util extends XOMUtil {
         compatible.threadLocalRemove(threadLocal);
     }
 
-    /**
-     * Creates a hash set that, like {@link java.util.IdentityHashMap},
-     * compares keys using identity.
-     *
-     * @param <T> Element type
-     * @return Set
-     */
-    public static <T> Set<T> newIdentityHashSet() {
-        return compatible.newIdentityHashSet();
-    }
 
     /**
      * Creates a new udf instance from the given udf class.
@@ -3708,76 +3566,9 @@ public class Util extends XOMUtil {
         return role;
     }
 
-    /**
-     * Tries to find the cube from which a dimension is taken.
-     * It considers private dimensions, shared dimensions and virtual
-     * dimensions. If it can't determine with certitude the origin
-     * of the dimension, it returns null.
-     */
-    public static Cube getDimensionCube(Dimension dimension) {
-        final Cube[] cubes = dimension.getSchema().getCubes();
-        for (Cube cube : cubes) {
-            for (Dimension dimension1 : cube.getDimensions()) {
-                // If the dimensions have the same identity,
-                // we found an access rule.
-                if (dimension == dimension1) {
-                    return cube;
-                }
-                // If the passed dimension argument is of class
-                // RolapCubeDimension, we must validate the cube
-                // assignment and make sure the cubes are the same.
-                // If not, skip to the next grant.
-                if (dimension instanceof RolapCubeDimension
-                    && dimension.equals(dimension1)
-                    && !((RolapCubeDimension)dimension1)
-                    .getCube()
-                    .equalsOlapElement(cube))
-                {
-                    continue;
-                }
-                // Last thing is to allow for equality correspondences
-                // to work with virtual cubes.
-                if (cube instanceof RolapCube rolapCube
-                    && rolapCube.isVirtual()
-                    && dimension.equals(dimension1))
-                {
-                    return cube;
-                }
-            }
-        }
-        return null;
-    }
+  
 
-    /**
-     * Similar to {@link ClassLoader#getResource(String)}, except the lookup
-     *  is in reverse order.<br>
-     *  i.e. returns the resource from the supplied classLoader or the
-     *  one closest to it in the hierarchy, instead of the closest to the root
-     *  class loader
-     * @param classLoader The class loader to fetch from
-     * @param name The resource name
-     * @return A URL object for reading the resource, or null if the resource
-     * could not be found or the invoker doesn't have adequate privileges to get
-     * the resource.
-     * @see ClassLoader#getResource(String)
-     * @see ClassLoader#getResources(String)
-     */
-    public static URL getClosestResource(ClassLoader classLoader, String name) {
-        URL resource = null;
-        try {
-            // The last resource will be from the nearest ClassLoader.
-            Enumeration<URL> resourceCandidates =
-                classLoader.getResources(name);
-            while (resourceCandidates.hasMoreElements()) {
-                resource = resourceCandidates.nextElement();
-            }
-        } catch (IOException ioe) {
-            // ignore exception - it's OK if file is not found
-            // just keep getResource contract and return null
-            discard(ioe);
-        }
-        return resource;
-    }
+   
 
     public abstract static class AbstractFlatList<T>
         implements List<T>, RandomAccess

@@ -65,43 +65,6 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         makeImmutable();
     }
 
-    /**
-     * Creates an enumeration, initialize it with an array of strings, and
-     * freezes it.
-     */
-    public EnumeratedValues(String[] names) {
-        for (int i = 0; i < names.length; i++) {
-            register((V) new BasicValue(names[i], i, names[i]));
-        }
-        makeImmutable();
-    }
-
-    /**
-     * Create an enumeration, initializes it with arrays of code/name pairs,
-     * and freezes it.
-     */
-    public EnumeratedValues(String[] names, int[] codes) {
-        for (int i = 0; i < names.length; i++) {
-            register((V) new BasicValue(names[i], codes[i], names[i]));
-        }
-        makeImmutable();
-    }
-
-    /**
-     * Create an enumeration, initializes it with arrays of code/name pairs,
-     * and freezes it.
-     */
-    public EnumeratedValues(String[] names, int[] codes, String[] descriptions)
-    {
-        for (int i = 0; i < names.length; i++) {
-            register((V) new BasicValue(names[i], codes[i], descriptions[i]));
-        }
-        makeImmutable();
-    }
-
-    public EnumeratedValues(Class<? extends Enum> clazz) {
-        throw new UnsupportedOperationException();
-    }
 
     public EnumeratedValues(EnumeratedValues enumeratedValues) {
 
@@ -177,72 +140,12 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         return max;
     }
 
-    /**
-     * Returns whether <code>ordinal</code> is valid for this enumeration.
-     * This method is particularly useful in pre- and post-conditions, for
-     * example
-     * <blockquote>
-     * <pre>&#64;param axisCode Axis code, must be a {&#64;link AxisCode} value
-     * &#64;pre AxisCode.instance.isValid(axisCode)</pre>
-     * </blockquote>
-     *
-     * @param ordinal Suspected ordinal from this enumeration.
-     * @return Whether <code>ordinal</code> is valid.
-     */
-    public final boolean isValid(int ordinal) {
-        if ((ordinal < min) || (ordinal > max)) {
-            return false;
-        }
-        return (getName(ordinal) != null);
-    }
+ 
 
-    /**
-     * Returns the name associated with an ordinal; the return value
-     * is null if the ordinal is not a member of the enumeration.
-     *
-     * @pre isImmutable()
-     */
-    public final V getValue(int ordinal) {
-        Util.assertPrecondition(isImmutable());
 
-        return (V) ordinalToValueMap[ordinal - min];
-    }
 
-    /**
-     * Returns the name associated with an ordinal; the return value
-     * is null if the ordinal is not a member of the enumeration.
-     *
-     * @pre isImmutable()
-     */
-    public final String getName(int ordinal) {
-        Util.assertPrecondition(isImmutable());
 
-        final Value value = ordinalToValueMap[ordinal - min];
-        return (value == null) ? null : value.getName();
-    }
 
-    /**
-     * Returns the description associated with an ordinal; the return value
-     * is null if the ordinal is not a member of the enumeration.
-     *
-     * @pre isImmutable()
-     */
-    public final String getDescription(int ordinal)
-    {
-        Util.assertPrecondition(isImmutable());
-
-        final Value value = ordinalToValueMap[ordinal - min];
-        return (value == null) ? null : value.getDescription();
-    }
-
-    /**
-     * Returns the ordinal associated with a name
-     *
-     * @throws Error if the name is not a member of the enumeration
-     */
-    public final int getOrdinal(String name) {
-        return getValue(name, true).getOrdinal();
-    }
 
     /**
      * Returns the value associated with a name.
@@ -280,27 +183,8 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         return list;
     }
 
-    /**
-     * Returns an error indicating that the value is illegal. (The client needs
-     * to throw the error.)
-     */
-    public RuntimeException badValue(int ordinal) {
-        return Util.newInternal(
-            new StringBuilder("bad value ").append(ordinal).append("(")
-                .append(getName(ordinal)).append(") for enumeration '")
-                .append(getClass().getName()).append("'").toString());
-    }
 
-    /**
-     * Returns an exception indicating that we didn't expect to find this value
-     * here.
-     */
-    public RuntimeException unexpected(V value) {
-        return Util.newInternal(
-            new StringBuilder("Was not expecting value '").append(value)
-                .append("' for enumeration '").append(getClass().getName())
-                .append("' in this context").toString());
-    }
+
 
     /**
      * A <code>Value</code> represents a member of an enumerated type. If an
@@ -355,26 +239,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
             return name;
         }
 
-        /**
-         * Returns an error indicating that we did not expect to find this
-         * value in this context. Typical use is in a <code>switch</code>
-         * statement:
-         *
-         * <blockquote><pre>
-         * switch (fruit) {
-         * case Fruit.AppleORDINAL:
-         *     return 1;
-         * case Fruir.OrangeORDINAL:
-         *     return 2;
-         * default:
-         *     throw fruit.unexpected();
-         * }</pre></blockquote>
-         */
-        public RuntimeException unexpected() {
-            return Util.newInternal(
-                new StringBuilder("Value ").append(name).append(" of class ")
-                    .append(getClass()).append(" unexpected here").toString());
-        }
+
     }
 
 }

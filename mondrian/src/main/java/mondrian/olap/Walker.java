@@ -116,22 +116,6 @@ public class Walker implements Enumeration {
 		return currentFrame.node;
 	}
 
-    /** returns the current object.  Not valid until nextElement() has been
-        called. */
-	public Object currentElement() {
-		return currentFrame.node;
-	}
-
-    /** returns level in the tree of the current element (that is, last element
-     * returned from nextElement()).  The level of the root element is 0. */
-	public int level() {
-		int i = 0;
-		for (Frame f = currentFrame; f != null; f = f.parent) {
-			i++;
-		}
-		return i;
-	}
-
 	public final Object getParent() {
 		return getAncestor(1);
 	}

@@ -35,28 +35,6 @@ import mondrian.resource.MondrianResource;
  */
 public abstract class CubeBase extends OlapElementBase implements Cube {
 
-    /** constraints indexes for adSchemaMembers
-     *
-     * http://msdn.microsoft.com/library/psdk/dasdk/mdx8h4k.htm
-     * check "Restrictions in the MEMBER Rowset" under MEMBER Rowset section
-     */
-    public static final int CATALOG_NAME = 0;
-    public static final int SCHEMA_NAME = 1;
-    public static final int CUBE_NAME = 2;
-    public static final int DIMENSION_UNIQUE_NAME = 3;
-    public static final int HIERARCHY_UNIQUE_NAME = 4;
-    public static final int LEVEL_UNIQUE_NAME = 5;
-    public static final int LEVEL_NUMBER = 6;
-    public static final int MEMBER_NAME = 7;
-    public static final int MEMBER_UNIQUE_NAME = 8;
-    public static final int MEMBER_CAPTION = 9;
-    public static final int MEMBER_TYPE = 10;
-    public static final int TREE_OPERATOR = 11;
-    public static final int MAX_NOF_CONSTRAINTS_FOR_AD_SCHEMA_MEMBER = 12;
-    public static final int MDTREEOP_SELF = 0;
-    public static final int MDTREEOP_CHILDREN = 1;
-    public static final int MDPROP_USERDEFINED0 = 19;
-
     protected final String name;
     private final String uniqueName;
     private final String description;
