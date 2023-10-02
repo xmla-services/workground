@@ -24,17 +24,17 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 public record VirtualCubeR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
                            String caption,
-                           String description,
+                           boolean visible,
                            String defaultMeasure,
                            boolean enabled,
-                           List<MappingAnnotation> annotations,
                            List<MappingCubeUsage> cubeUsages,
                            List<MappingVirtualCubeDimension> virtualCubeDimensions,
                            List<MappingVirtualCubeMeasure> virtualCubeMeasures,
                            List<MappingCalculatedMember> calculatedMembers,
-                           List<MappingNamedSet> namedSets,
-                           boolean visible
+                           List<MappingNamedSet> namedSets
 ) implements MappingVirtualCube {
 
 }

@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 
 public record CalculatedMemberPropertyR(String name,
+										String description,
                                         String caption,
-                                        String description,
                                         String expression,
                                         String value)
         implements MappingCalculatedMemberProperty {

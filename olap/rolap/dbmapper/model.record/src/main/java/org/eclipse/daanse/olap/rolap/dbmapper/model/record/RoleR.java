@@ -20,10 +20,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
-public record RoleR(List<MappingAnnotation> annotations,
-                    List<MappingSchemaGrant> schemaGrants,
-                    MappingUnion union,
-                    String name)
+public record RoleR(
+		String name, 
+		String description,
+		List<MappingAnnotation> annotations,
+		List<MappingSchemaGrant> schemaGrants,
+        MappingUnion union
+                    )
         implements MappingRole {
 
 }

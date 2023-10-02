@@ -27,9 +27,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 
 public record SchemaR(String name,
                       String description,
+                      List<MappingAnnotation> annotations,
                       String measuresCaption,
                       String defaultRole,
-                      List<MappingAnnotation> annotations,
                       List<MappingParameter> parameters,
                       List<MappingPrivateDimension> dimensions,
                       List<MappingCube> cubes,

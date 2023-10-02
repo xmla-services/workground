@@ -19,13 +19,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 public record VirtualCubeDimensionR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
+		String caption,
+		boolean visible,
                                     String cubeName,
-                                    List<MappingAnnotation> annotations,
                                     String foreignKey,
-                                    boolean highCardinality,
-                                    String caption,
-                                    boolean visible,
-                                    String description
+                                    boolean highCardinality
                                     )
         implements MappingVirtualCubeDimension {
 }

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
-
 import java.util.List;
 import java.util.Objects;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 public record ViewR(String alias,
                     List<MappingSQL> sqls)

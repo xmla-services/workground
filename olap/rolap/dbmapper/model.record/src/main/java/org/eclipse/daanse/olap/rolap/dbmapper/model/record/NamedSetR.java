@@ -20,10 +20,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
 public record NamedSetR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
                         String caption,
-                        String description,
                         String formula,
-                        List<MappingAnnotation> annotations,
                         String displayFolder,
                         MappingFormula formulaElement)
         implements MappingNamedSet {

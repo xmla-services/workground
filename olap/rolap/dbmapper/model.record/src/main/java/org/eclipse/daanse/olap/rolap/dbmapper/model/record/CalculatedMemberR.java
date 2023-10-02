@@ -22,13 +22,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 public record CalculatedMemberR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
+		String caption,
+		boolean visible,
                                 String formatString,
-                                String caption,
-                                String description,
                                 String dimension,
-                                boolean visible,
                                 String displayFolder,
-                                List<MappingAnnotation> annotations,
                                 String formula,
                                 List<MappingCalculatedMemberProperty> calculatedMemberProperties,
                                 String hierarchy,
