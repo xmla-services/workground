@@ -151,7 +151,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 			List<MappingPrivateDimension> dimensions, List<MappingCube> cubes, List<MappingVirtualCube> virtualCubes,
 			List<MappingNamedSet> namedSets, List<MappingRole> roles,
 			List<MappingUserDefinedFunction> userDefinedFunctions) {
-		MappingSchema mappingSchemaNew = new SchemaR(name, description, measuresCaption, defaultRole, annotations,
+		MappingSchema mappingSchemaNew = new SchemaR(name, description,annotations, measuresCaption, defaultRole, 
 				parameters, dimensions, cubes, virtualCubes, namedSets, roles, userDefinedFunctions);
 		return mappingSchemaNew;
 	}
@@ -171,8 +171,8 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 	protected PrivateDimensionR new_PrivateDimension(String name, DimensionTypeEnum type, String caption,
 			String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
 			List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix) {
-		return new PrivateDimensionR(name, type, caption, description, foreignKey, highCardinality, annotations,
-				hierarchies, visible, usagePrefix);
+		return new PrivateDimensionR(name,description,annotations,caption,visible, type,   foreignKey, highCardinality, 
+				hierarchies,  usagePrefix);
 	}
 
     @Override
@@ -182,9 +182,9 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 			String allMemberCaption, String allLevelName, String primaryKey, String primaryKeyTable,
 			String defaultMember, String memberReaderClass, String uniqueKeyLevelName, boolean visible,
 			String displayFolder, MappingRelationOrJoin relation, String origin) {
-		return new HierarchyR(name, caption, description, annotations, levels, memberReaderParameters, hasAll,
+		return new HierarchyR(name,  description, annotations,caption, visible,levels, memberReaderParameters, hasAll,
 				allMemberName, allMemberCaption, allLevelName, primaryKey, primaryKeyTable, defaultMember,
-				memberReaderClass, uniqueKeyLevelName, visible, displayFolder, relation, origin);
+				memberReaderClass, uniqueKeyLevelName,  displayFolder, relation, origin);
 	}
 
     @Override
@@ -199,21 +199,21 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 			List<MappingNamedSet> namedSets, List<MappingDrillThroughAction> drillThroughActions,
 			List<MappingWritebackTable> writebackTables, boolean enabled, boolean cache, boolean visible,
 			MappingRelation fact, List<MappingAction> actions) {
-		return new CubeR(name, caption, description, defaultMeasure, annotations, dimensionUsageOrDimensions, measures,
-				calculatedMembers, namedSets, drillThroughActions, writebackTables, enabled, cache, visible, fact,
+		return new CubeR(name,  description, annotations,caption, visible,defaultMeasure,  dimensionUsageOrDimensions, measures,
+				calculatedMembers, namedSets, drillThroughActions, writebackTables, enabled, cache,  fact,
 				actions);
 	}
 
     @Override
 	protected MappingAction new_MappingAction(String name, String caption, String description,
 			List<MappingAnnotation> annotations) {
-		return new ActionR(name, caption, description, annotations);
+		return new ActionR(name,  description, annotations,caption);
 	}
 
     @Override
 	protected MappingRole new_MappingRole(List<MappingAnnotation> annotations, List<MappingSchemaGrant> schemaGrants,
 			MappingUnion union, String name) {
-		return new RoleR(annotations, schemaGrants, union, name);
+		return new RoleR(name,null,annotations, schemaGrants, union);
 	}
 
     @Override
@@ -252,13 +252,13 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         MappingFormula formulaElement
     ) {
         return new CalculatedMemberR(name,
+        		description,
+        		annotations,
+        		caption,
+        		visible,
             formatString,
-            caption,
-            description,
             dimension,
-            visible,
             displayFolder,
-            annotations,
             formula,
             calculatedMemberProperties,
             hierarchy,
@@ -276,9 +276,10 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     ) {
         return new VirtualCubeMeasureR(
             name,
-            cubeName,
+            null,
+            annotations,
             visible,
-            annotations
+            cubeName
         );
     }
 
@@ -295,13 +296,14 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     ) {
         return new VirtualCubeDimensionR(
             name,
-            cubeName,
+            description,
             annotations,
-            foreignKey,
-            highCardinality,
             caption,
             visible,
-            description);
+            cubeName,
+            foreignKey,
+            highCardinality
+            );
     }
 
     @Override
@@ -326,17 +328,18 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     ) {
         return new VirtualCubeR(
             name,
-            caption,
             description,
+            annotations,
+            caption,
+            visible,
             defaultMeasure,
             enabled,
-            annotations,
             cubeUsages,
             virtualCubeDimensions,
             virtualCubeMeasures,
             calculatedMembers,
-            namedSets,
-            visible);
+            namedSets
+            );
     }
 
     @Override
@@ -366,10 +369,10 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
                                            MappingFormula formulaElement) {
         return new NamedSetR(
             name,
-            caption,
             description,
-            formula,
             annotations,
+            caption,
+            formula,
             displayFolder,
             formulaElement
         );
@@ -605,11 +608,11 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     ) {
         return new PropertyR(
             name,
+            description,
+            caption,
             column,
             type,
             formatter,
-            caption,
-            description,
             dependsOnLevelValue,
             propertyFormatter
         );
@@ -653,6 +656,10 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     ) {
         return new LevelR(
             name,
+            description,
+            annotations,
+            caption,
+            visible,
             table,
             column,
             nameColumn,
@@ -665,10 +672,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             levelType,
             hideMemberIf,
             formatter,
-            caption,
-            description,
             captionColumn,
-            annotations,
             keyExpression,
             nameExpression,
             captionExpression,
@@ -676,7 +680,6 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             parentExpression,
             closure,
             properties,
-            visible,
             internalType,
             memberFormatter
         );
@@ -714,13 +717,14 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         String description
     ) {
         return new CubeDimensionR(
+        		name,
+        		description,
             annotations,
-            name,
-            foreignKey,
-            highCardinality,
             caption,
             visible,
-            description);
+            foreignKey,
+            highCardinality
+            );
     }
 
     @Override
@@ -733,10 +737,10 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         List<MappingDrillThroughElement> drillThroughElements
     ) {
         return new DrillThroughActionR(name,
+        		description,
+        		annotations,
             caption,
-            description,
             defaultt,
-            annotations,
             drillThroughElements);
     }
 
@@ -773,16 +777,16 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             String backColor
         ) {
             return new MeasureR(name,
+            		description,
+            		annotations,
+            		caption,
+            		visible,
                 column,
                 datatype,
                 formatString,
                 aggregator,
                 formatter,
-                caption,
-                description,
-                visible,
                 displayFolder,
-                annotations,
                 measureExpression,
                 calculatedMemberProperties,
                 cellFormatter,

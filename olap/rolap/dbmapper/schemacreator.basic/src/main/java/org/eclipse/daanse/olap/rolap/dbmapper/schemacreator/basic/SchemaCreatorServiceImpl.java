@@ -112,9 +112,9 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
             return new SchemaR(schemaName,
                 description,
+                annotations,
                 measuresCaption,
                 defaultRole,
-                annotations,
                 parameters,
                 sharedDimensions,
                 cubes,
@@ -174,14 +174,18 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     ) {
         List<MappingHierarchy> hierarchies = getHierarchies(schemaName, fk, jmds, ignoreTables);
         String description = new StringBuilder("Dimension for ").append(fk.getFkColumnName()).toString();
-        return new PrivateDimensionR(getDimensionName(fk), getDimensionType(schemaName, fk.getPkTableName(), fk.getPkColumnName(), jmds),
-            getDimensionCaption(fk),
-            description,
+        return new PrivateDimensionR(
+        		getDimensionName(fk),
+        		description,
+        		List.of(),
+        		getDimensionCaption(fk),
+        		true,
+        		getDimensionType(schemaName, 
+        				fk.getPkTableName(),
+        				fk.getPkColumnName(), jmds),
             null, //key is null for share dimension PkColumnName
             true,
-            List.of(),
             hierarchies,
-            true,
             null);
     }
 
@@ -288,7 +292,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     ) {
         List<MappingLevel> result = new ArrayList<>();
         if (relation instanceof MappingTable table) {
-            MappingLevel l = new LevelR(getLevelName(tableName),
+            MappingLevel l = new LevelR(
+            		getLevelName(tableName),
+            		getLevelDescription(table.name()),
+            		List.of(),
+            		getLevelCaption(),
+            		true,
                 tableName,
                 columnName,
                 getColumnNameByPostfix(schemaName, table.name(), columnName, "name", jmds),
@@ -301,10 +310,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 getLevelType(schemaName, table.name(), columnName, jmds),
                 null,
                 null,
-                getLevelCaption(),
-                getLevelDescription(table.name()),
                 getLevelCaptionColumn(),
-                List.of(),
                 null,
                 null,
                 null,
@@ -312,7 +318,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 null,
                 null,
                 List.of(),
-                true,
                 null,
                 null);
             result.add(l);
@@ -516,17 +521,17 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         List<MappingMeasure> measures = getMeasures(schemaName, tableName, jmds);
         MappingRelation fact = new TableR(tableName);
         return new CubeR(name,
+        		description,
+        		List.of(),
             caption,
-            description,
+            true,
             defaultMeasure,
-            List.of(),
             dimensionUsageOrDimensions,
             measures,
             List.of(),
             List.of(),
+    		List.of(),
             List.of(),
-            List.of(),
-            true,
             true,
             true,
             fact,
@@ -556,17 +561,18 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     && (foreignKeyList == null ||
                     foreignKeyList.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
                     //<Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard"/>
-                    result.add(new MeasureR(getMeasureName(column.getName()),
+                    result.add(new MeasureR(
+                    	getMeasureName(column.getName()),
+                    	getMeasureDescription(column.getName()),
+                    	List.of(),
+                    	"Standard",
+                    	true,
                         column.getName(),
                         getMeasureDataType(column.getType()),
-                        "Standard",
+                        null,
                         "sum",
-                        null,
                         column.getName(),
-                        getMeasureDescription(column.getName()),
-                        true,
                         null,
-                        List.of(),
                         null,
                         List.of(),
                         null,
@@ -630,15 +636,16 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     foreignKeyList.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
                     List<MappingHierarchy> hierarchyList = List.of(getHierarchy(schemaName, tableName,
                         column.getName(), new TableR(tableName), hierarchyNamesMap, jmds));
-                    result.add(new PrivateDimensionR(column.getName(),
+                    result.add(new PrivateDimensionR(
+                    		column.getName(),
+                    		null,
+                    		List.of(),
+                    		column.getName(),
+                    		true,
                         getDimensionType(schemaName, tableName, column.getName(), jmds),
                         column.getName(),
-                        column.getName(),
-                        column.getName(),
                         true,
-                        List.of(),
                         hierarchyList,
-                        true,
                         null));
                 }
             }
@@ -650,10 +657,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                                    String columnName, MappingRelationOrJoin relation,
                                    Map<String, Integer> hierarchyNamesMap, JdbcMetaDataService jmds) {
 
-        return new HierarchyR(getHierarchyName(tableName, columnName, hierarchyNamesMap),
-            getHierarchyCaption(tableName, columnName),
-            getHierarchyDescription(tableName, columnName),
-            List.of(),
+        return new HierarchyR(
+        		getHierarchyName(tableName, columnName, hierarchyNamesMap),
+        		getHierarchyDescription(tableName, columnName),
+        		List.of(),
+        		getHierarchyCaption(tableName, columnName),
+        		true,
             getHierarchyLevels(schemaName, relation, tableName, columnName, jmds),
             List.of(),
             true,
@@ -665,7 +674,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             null,
             null,
             null,
-            true,
             null,
             relation,
             null);
@@ -679,16 +687,17 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         for (ForeignKey foreignKey : foreignKeyList) {
             if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
                 MappingPrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
-                result.add(new DimensionUsageR(getDimensionName(foreignKey),
+                result.add(new DimensionUsageR(
+                		getDimensionName(foreignKey),
+                		privateDimension.description(),
+                		privateDimension.annotations(),
+                		privateDimension.caption(),
+                        privateDimension.visible(),
                     privateDimension.name(),
                     null,
                     privateDimension.usagePrefix(),
                     foreignKey.getFkColumnName(),
-                    privateDimension.highCardinality(),
-                    privateDimension.annotations(),
-                    privateDimension.caption(),
-                    privateDimension.visible(),
-                    privateDimension.description()));
+                    privateDimension.highCardinality()));
             }
         }
         return result;

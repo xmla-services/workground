@@ -214,44 +214,44 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 
     private static final TableR TABLE_CLOSURE_4_7 = new TableR("employee_closure");
 
-	private static final PropertyR PROPERTY_1_A = new PropertyR(STORE_TYPE, STORE_TYPE_COLUMN, null, null, null, null, null, null);
-	private static final PropertyR PROPERTY_1_B =new PropertyR(STORE_MANAGER, STORE_MANAGER_COLUMN, null, null, null, null, null, null);
-	private static final PropertyR PROPERTY_1_C = new PropertyR(STORE_SQFT,STORE_SQFT_COLUMN , PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_1_D = new PropertyR(GROCERY_SQFT,GROCERY_SQFT_COLUMN  ,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_1_E = new PropertyR(FROZEN_SQFT,FROZEN_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_1_F = new PropertyR(MEAT_SQFT,MEAT_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_1_G = new PropertyR(HAS_COFFEE_BAR,COFFEE_BAR,  PropertyTypeEnum.BOOLEAN,null,null,null,null,null);
-	private static final PropertyR PROPERTY_1_H = new PropertyR("Street Address",STORE_STREET_ADDRESS,  PropertyTypeEnum.STRING,null,null,null,null,null);
-	private static final PropertyR PROPERTY_3_4_1 = new PropertyR(GENDER, GENDER2, null, null, null, null, null, null);
-	private static final PropertyR PROPERTY_3_4_2 = new PropertyR("Material Status", "material_status", null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_3_4_3 = new PropertyR("Education", EDUCATION, null, null, null, null, null,			null);
-	private static final PropertyR PROPERTY_3_4_4 = new PropertyR(YEARLY_INCOME, YEARLY_INCOME_COLUMN, null, null, null,			null, null, null);
-	private static final PropertyR PROPERTY_4_2_D_a = new PropertyR(STORE_TYPE, STORE_TYPE_COLUMN, null, null, null,			null, null, null);
-	private static final PropertyR PROPERTY_4_2_D_b = new PropertyR(STORE_MANAGER, STORE_MANAGER_COLUMN, null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_4_2_D_c = new PropertyR(STORE_SQFT,"stoe_sqft",PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_2_D_d = new PropertyR(GROCERY_SQFT,GROCERY_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_2_D_e = new PropertyR(FROZEN_SQFT,FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_2_D_f = new PropertyR(MEAT_SQFT,MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_2_D_g = new PropertyR(HAS_COFFEE_BAR,COFFEE_BAR,PropertyTypeEnum.BOOLEAN,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_2_D_h = new PropertyR("Street address",STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null,null,null);
-	private static final PropertyR PROPERTY_4_7_A = new PropertyR(MARITAL_STATUS, MARITAL_STATUS_COLUMN, null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_4_7_B = new PropertyR("Position Title", "position_title", null, null, null,			null, null, null);
-	private static final PropertyR PROPERTY_4_7_C = new PropertyR(GENDER, GENDER2, null, null, null, null, null, null);
-	private static final PropertyR PROPERTY_4_7_D = new PropertyR("Salary", "salary", null, null, null, null, null,			null);
-	private static final PropertyR PROPERTY_4_7_E = new PropertyR(EDUCATION_LEVEL, "education_level", null, null, null,			null, null, null);
-	private static final PropertyR PROPERTY_4_7_F = new PropertyR("Management Role", "management_role", null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_5_1_D_1 = new PropertyR(STORE_TYPE, STORE_TYPE_COLUMN, null, null, null,			null, null, null);
-	private static final PropertyR PROPERTY_5_1_D_2 = new PropertyR(STORE_MANAGER, STORE_MANAGER_COLUMN, null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_5_1_D_3 = new PropertyR(STORE_SQFT,STORE_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_4 = new PropertyR(GROCERY_SQFT,GROCERY_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_5 = new PropertyR(FROZEN_SQFT,FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_6 = new PropertyR(MEAT_SQFT,MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_7 = new PropertyR(HAS_COFFEE_BAR,COFFEE_BAR,PropertyTypeEnum.BOOLEAN,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_8 = new PropertyR("Street Address",STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null,null,null);
-	private static final PropertyR PROPERTY_5_5_D_1 = new PropertyR(GENDER, GENDER2, null, null, null, null, null,			null);
-	private static final PropertyR PROPERTY_5_5_D_2 = new PropertyR(MARITAL_STATUS, MARITAL_STATUS_COLUMN, null, null,			null, null, null, null);
-	private static final PropertyR PROPERTY_5_5_D_3 = new PropertyR("Education", EDUCATION, null, null, null, null,			null, null);
-	private static final PropertyR PROPERTY_5_5_D_4 = new PropertyR(YEARLY_INCOME, YEARLY_INCOME_COLUMN, null, null,			null, null, null, null);
+	private static final PropertyR PROPERTY_1_A = new PropertyR(STORE_TYPE, null, null, STORE_TYPE_COLUMN, null, null, null, null);
+	private static final PropertyR PROPERTY_1_B =new PropertyR(STORE_MANAGER, null, null, STORE_MANAGER_COLUMN, null, null, null, null);
+	private static final PropertyR PROPERTY_1_C = new PropertyR(STORE_SQFT,null, null, STORE_SQFT_COLUMN , PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_1_D = new PropertyR(GROCERY_SQFT,null, null, GROCERY_SQFT_COLUMN  ,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_1_E = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_1_F = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_1_G = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,  PropertyTypeEnum.BOOLEAN,null,null,null);
+	private static final PropertyR PROPERTY_1_H = new PropertyR("Street Address",null, null, STORE_STREET_ADDRESS,  PropertyTypeEnum.STRING,null,null,null);
+	private static final PropertyR PROPERTY_3_4_1 = new PropertyR(GENDER, null, null, GENDER2, null,null,null, null);
+	private static final PropertyR PROPERTY_3_4_2 = new PropertyR("Material Status", null, null, "material_status", null, null,			null, null);
+	private static final PropertyR PROPERTY_3_4_3 = new PropertyR("Education",null, null,  EDUCATION, null, null, null,			null);
+	private static final PropertyR PROPERTY_3_4_4 = new PropertyR(YEARLY_INCOME, null, null, YEARLY_INCOME_COLUMN, null,null,null,			null);
+	private static final PropertyR PROPERTY_4_2_D_a = new PropertyR(STORE_TYPE, null, null, STORE_TYPE_COLUMN, null,	null,null,		null);
+	private static final PropertyR PROPERTY_4_2_D_b = new PropertyR(STORE_MANAGER, null, null, STORE_MANAGER_COLUMN, null, null,			null, null);
+	private static final PropertyR PROPERTY_4_2_D_c = new PropertyR(STORE_SQFT,null, null, "stoe_sqft",PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_d = new PropertyR(GROCERY_SQFT,null, null, GROCERY_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_e = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_f = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_g = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,PropertyTypeEnum.BOOLEAN,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_h = new PropertyR("Street address",null, null, STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null);
+	private static final PropertyR PROPERTY_4_7_A = new PropertyR(MARITAL_STATUS,null, null,  MARITAL_STATUS_COLUMN, null, null,			null, null);
+	private static final PropertyR PROPERTY_4_7_B = new PropertyR("Position Title", null, null, "position_title", null,	null,null,		null);
+	private static final PropertyR PROPERTY_4_7_C = new PropertyR(GENDER, null, null, GENDER2, null,null,null, null);
+	private static final PropertyR PROPERTY_4_7_D = new PropertyR("Salary", null, null, "salary", null, null, null,			null);
+	private static final PropertyR PROPERTY_4_7_E = new PropertyR(EDUCATION_LEVEL,null, null,  "education_level", null,		null,null,	null);
+	private static final PropertyR PROPERTY_4_7_F = new PropertyR("Management Role",null, null,  "management_role", null, null,			null, null);
+	private static final PropertyR PROPERTY_5_1_D_1 = new PropertyR(STORE_TYPE,null, null,  STORE_TYPE_COLUMN, null,null,null,			null);
+	private static final PropertyR PROPERTY_5_1_D_2 = new PropertyR(STORE_MANAGER, null, null, STORE_MANAGER_COLUMN, null, null,			null, null);
+	private static final PropertyR PROPERTY_5_1_D_3 = new PropertyR(STORE_SQFT,null, null, STORE_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_4 = new PropertyR(GROCERY_SQFT,null, null, GROCERY_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_5 = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_6 = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_7 = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,PropertyTypeEnum.BOOLEAN,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_8 = new PropertyR("Street Address",null, null, STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null);
+	private static final PropertyR PROPERTY_5_5_D_1 = new PropertyR(GENDER,null, null, GENDER2, null, null, null,			null);
+	private static final PropertyR PROPERTY_5_5_D_2 = new PropertyR(MARITAL_STATUS, null, null, MARITAL_STATUS_COLUMN, null, null,			null, null);
+	private static final PropertyR PROPERTY_5_5_D_3 = new PropertyR("Education",null, null, EDUCATION, null, null,			null, null);
+	private static final PropertyR PROPERTY_5_5_D_4 = new PropertyR(YEARLY_INCOME, null, null, YEARLY_INCOME_COLUMN, null, null,			null, null);
     private static final ExpressionViewR NAMEEXPRESSION_1 = ExpressionViewRBuilder
         .builder()
         .sqls(List.of(
@@ -2186,9 +2186,9 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         SCHEMA = new SchemaR(
         SCHEMA_NAME,
         null,
-        null,
-        null,
         List.of(),
+        null,
+        null,
         List.of(),
         List.of(
             DIMENSION_SCHEMA_1,

@@ -5,12 +5,14 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 
-public record CubeDimensionR(List<MappingAnnotation> annotations,
+public record CubeDimensionR(
                              String name,
-                             String foreignKey,
-                             boolean highCardinality,
+                             String description,
+                             List<MappingAnnotation> annotations,
                              String caption,
                              boolean visible,
-                             String description) implements MappingCubeDimension {
+                             String foreignKey,
+                             boolean highCardinality
+                            ) implements MappingCubeDimension {
 
 }

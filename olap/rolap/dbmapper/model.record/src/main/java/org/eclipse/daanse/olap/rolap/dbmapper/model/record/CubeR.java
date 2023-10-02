@@ -27,10 +27,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 public record CubeR(String name,
-                    String caption,
                     String description,
-                    String defaultMeasure,
                     List<MappingAnnotation> annotations,
+                    String caption,
+                    boolean visible,
+                    String defaultMeasure,
                     List<MappingCubeDimension> dimensionUsageOrDimensions,
                     List<MappingMeasure> measures,
                     List<MappingCalculatedMember> calculatedMembers,
@@ -39,7 +40,6 @@ public record CubeR(String name,
                     List<MappingWritebackTable> writebackTables,
                     boolean enabled,
                     boolean cache,
-                    boolean visible,
                     MappingRelation fact,
                     List<MappingAction> actions
                     )

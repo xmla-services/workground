@@ -18,11 +18,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 
 public record PropertyR(String name,
+		String description,
+		String caption,
                         String column,
                         PropertyTypeEnum type,
                         String formatter,
-                        String caption,
-                        String description,
                         Boolean dependsOnLevelValue,
                         MappingElementFormatter propertyFormatter)
         implements MappingProperty {

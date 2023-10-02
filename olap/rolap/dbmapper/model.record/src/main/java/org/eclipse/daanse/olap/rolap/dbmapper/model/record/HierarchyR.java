@@ -22,9 +22,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParam
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 public record HierarchyR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
                          String caption,
-                         String description,
-                         List<MappingAnnotation> annotations,
+                         boolean visible,
                          List<MappingLevel> levels,
                          List<MappingMemberReaderParameter> memberReaderParameters,
                          boolean hasAll,
@@ -36,7 +37,6 @@ public record HierarchyR(String name,
                          String defaultMember,
                          String memberReaderClass,
                          String uniqueKeyLevelName,
-                         boolean visible,
                          String displayFolder,
                          MappingRelationOrJoin relation,
                          String origin

@@ -19,9 +19,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 
 public record ActionR(String name,
-                      String caption,
                       String description,
-                      List<MappingAnnotation> annotations) implements MappingAction {
+                      List<MappingAnnotation> annotations,
+                      String caption
+   ) implements MappingAction {
 	
 	
 }

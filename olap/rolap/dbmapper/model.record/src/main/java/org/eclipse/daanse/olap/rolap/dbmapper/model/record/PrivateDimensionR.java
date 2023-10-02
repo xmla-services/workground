@@ -21,14 +21,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 
 public record PrivateDimensionR(String name,
+		String description,
+		List<MappingAnnotation> annotations,
+		String caption,
+		boolean visible,
                                 DimensionTypeEnum type,
-                                String caption,
-                                String description,
                                 String foreignKey,
                                 boolean highCardinality,
-                                List<MappingAnnotation> annotations,
                                 List<MappingHierarchy> hierarchies,
-                                boolean visible,
                                 String usagePrefix
                                 )
         implements MappingPrivateDimension {

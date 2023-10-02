@@ -20,10 +20,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughActio
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
 
 public record DrillThroughActionR(String name,
-                                  String caption,
                                   String description,
-                                  Boolean defaultt,
                                   List<MappingAnnotation> annotations,
+                                  String caption,
+                                  Boolean defaultt,
                                   List<MappingDrillThroughElement> drillThroughElements)
         implements MappingDrillThroughAction {
 

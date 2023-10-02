@@ -19,14 +19,15 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 
 public record DimensionUsageR(String name,
+						String description,
+							List<MappingAnnotation> annotations,
+							String caption,
+							boolean visible,
                               String source,
                               String level,
                               String usagePrefix,
                               String foreignKey,
-                              boolean highCardinality,
-                              List<MappingAnnotation> annotations,
-                              String caption,
-                              boolean visible,
-                              String description)
+                              boolean highCardinality
+                              )
         implements MappingDimensionUsage {
 }
