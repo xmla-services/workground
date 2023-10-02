@@ -14,7 +14,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +24,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -33,8 +34,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 
 /**
  * A schema is a collection of cubes and virtual cubes. It can also contain
@@ -181,14 +180,6 @@ public class SchemaImpl implements MappingSchema {
         return defaultRole;
     }
 
-    @Override
-    public void display(PrintWriter pw, int i) {
-        //TODO
-    }
-
-    public void setDefaultRole(String value) {
-        this.defaultRole = value;
-    }
 
     public void setNamedSets(List<MappingNamedSet> namedSets) {
         this.namedSets = namedSets;

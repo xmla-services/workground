@@ -52,5 +52,5 @@ public interface MappingSchema {
 
     String defaultRole();
 
-    void display(PrintWriter pw, int i);
+
 }
