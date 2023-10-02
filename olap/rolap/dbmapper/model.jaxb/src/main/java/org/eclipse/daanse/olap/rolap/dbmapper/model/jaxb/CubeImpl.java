@@ -71,7 +71,7 @@ public class CubeImpl implements MappingCube {
     @XmlAttribute(name = "enabled")
     protected Boolean enabled;
     @XmlAttribute(name = "visible")
-    protected boolean visible = true;
+    protected Boolean visible = true;
     @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
         @XmlElement(name = "Table", type = TableImpl.class), @XmlElement(name = "View", type = ViewImpl.class)})
     protected MappingRelation fact;
@@ -164,7 +164,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public boolean cache() {
+    public Boolean cache() {
         if (cache == null) {
             return true;
         } else {
@@ -177,7 +177,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public boolean enabled() {
+    public Boolean enabled() {
         if (enabled == null) {
             return true;
         } else {
@@ -198,7 +198,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 

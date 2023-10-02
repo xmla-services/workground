@@ -25,4 +25,14 @@ public record ActionR(String name,
    ) implements MappingAction {
 	
 	
+
+		public ActionR(String name, String description, List<MappingAnnotation> annotations, String caption) {
+			this.name = name;
+			this.description = description;
+			this.annotations = annotations == null ? List.of() : annotations;
+			this.caption = caption;
+
+		}
+	
+	
 }

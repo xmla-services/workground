@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ * Copyright (c) 0 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * available under the terms of the Eclipse Public License .0
+ * which is available at https://www.eclipse.org/legal/epl-.0/
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-.0
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
@@ -33,5 +33,29 @@ public record AggPatternR(String pattern,
                           boolean ignorecase,
                           List<MappingAggMeasureFactCount> measuresFactCounts)
         implements MappingAggPattern {
+	
+
+
+	public  AggPatternR(String pattern,
+            MappingAggColumnName aggFactCount,
+            List<MappingAggColumnName> aggIgnoreColumns,
+            List<MappingAggForeignKey> aggForeignKeys,
+			List<MappingAggMeasure> aggMeasures,
+            List<MappingAggLevel> aggLevels,
+            List<MappingAggExclude> aggExcludes,
+            boolean ignorecase,
+            List<MappingAggMeasureFactCount> measuresFactCounts)
+ {
+	this.pattern = pattern;
+	this.aggFactCount = aggFactCount;
+	this.aggIgnoreColumns = aggIgnoreColumns == null ? List.of() : aggIgnoreColumns;
+	this.aggForeignKeys = aggForeignKeys == null ? List.of() : aggForeignKeys;
+	this.aggMeasures = aggMeasures == null ? List.of() : aggMeasures;
+	this.aggLevels = aggLevels == null ? List.of() : aggLevels;
+	this.aggExcludes = aggExcludes == null ? List.of() : aggExcludes;
+	this.ignorecase = ignorecase;
+	this.measuresFactCounts = measuresFactCounts == null ? List.of() : measuresFactCounts;
+		
+	}
 
 }

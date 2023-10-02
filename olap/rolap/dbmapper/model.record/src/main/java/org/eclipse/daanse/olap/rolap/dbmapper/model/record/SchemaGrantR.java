@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ * Copyright (c) 0 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * available under the terms of the Eclipse Public License .0
+ * which is available at https://www.eclipse.org/legal/epl-.0/
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-.0
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
@@ -23,4 +23,12 @@ public record SchemaGrantR(List<MappingCubeGrant> cubeGrants,
                            AccessEnum access)
         implements MappingSchemaGrant {
 
+
+	public  SchemaGrantR(List<MappingCubeGrant> cubeGrants,
+            AccessEnum access)
+  {
+	this.cubeGrants = cubeGrants == null ? List.of() : cubeGrants;
+	this.access = access;
+		
+  }
 }
