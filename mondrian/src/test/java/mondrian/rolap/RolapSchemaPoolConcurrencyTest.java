@@ -10,7 +10,6 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.RolapConnectionProperties.CatalogContent;
-import static mondrian.rolap.RolapConnectionProperties.UseContentChecksum;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -287,7 +286,7 @@ class RolapSchemaPoolConcurrencyTest
                 Util.PropertyList list = new Util.PropertyList();
                 list.put(CatalogContent.name(), UUID.randomUUID().toString());
                 if (needsCheckSum) {
-                    list.put(UseContentChecksum.name(), "true");
+//                    list.put(UseContentChecksum.name(), "true");
                 }
 
                 RolapSchema schema = pool.get(catalogUrl, context, list);

@@ -108,10 +108,7 @@ public class RolapSchemaPool {
                 connectInfo.get(UseSchemaPool.name(), "true"));
         final String pinSchemaTimeout =
             connectInfo.get(PinSchemaTimeout.name(), "-1s");
-        final boolean useContentChecksum =
-            Boolean.parseBoolean(
-                connectInfo.get(
-                    RolapConnectionProperties.UseContentChecksum.name()));
+
         final String sessionId = connectInfo.get(
                 "sessionId");
         if (LOGGER.isDebugEnabled()) {
@@ -121,7 +118,6 @@ public class RolapSchemaPool {
                     .append(", jdbcUser=").append(jdbcUser)
                     .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
                     .append(", useSchemaPool=").append(useSchemaPool)
-                    .append(", useContentChecksum=").append(useContentChecksum)
                     .append(", map-size=").append(mapKeyToSchema.size())
                     .append(", md5-map-size=").append(mapMd5ToSchema.size()).toString());
         }
@@ -153,15 +149,7 @@ public class RolapSchemaPool {
             return schema;
         }
 
-        if (useContentChecksum) {
-            return getByChecksum(
-                catalogUrl,
-                context,
-                connectInfo,
-                pinSchemaTimeout,
-                catalogStr,
-                key);
-        }
+
         return getByKey(
             catalogUrl, context, connectInfo, pinSchemaTimeout,
             catalogStr, key);
@@ -235,51 +223,6 @@ public class RolapSchemaPool {
         }
     }
 
-    private RolapSchema getByChecksum(
-        String catalogUrl,
-        Context context,
-        Util.PropertyList connectInfo,
-        String pinSchemaTimeout,
-        String catalogStr,
-        SchemaKey key)
-    {
-        final ByteString sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
-        RolapSchema schema = lookUp(mapMd5ToSchema, sha512Bytes, pinSchemaTimeout);
-        if (schema != null) {
-            return schema;
-        }
-
-        lock.writeLock().lock();
-        try {
-            // The motivation for repeating lookup attempt is the same
-            // as described in getByKey()
-            ExpiringReference<RolapSchema> ref = mapMd5ToSchema.get(sha512Bytes);
-            if (ref != null) {
-                schema = ref.get(pinSchemaTimeout);
-                if (schema == null) {
-                    // clear out the reference since schema is null
-                    mapKeyToSchema.remove(key);
-                    mapMd5ToSchema.remove(sha512Bytes);
-                } else {
-                    // someone has updated the schema for us
-                    return schema;
-                }
-            }
-
-            schema = createRolapSchema(
-                catalogUrl, context, connectInfo, catalogStr,
-                key, sha512Bytes);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                    "create: schema-name={}, schema-id={}",
-                    schema.getName(), System.identityHashCode(schema));
-            }
-            putSchema(schema, sha512Bytes, pinSchemaTimeout);
-            return schema;
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
 
     // is extracted and made package-local for testing purposes
     RolapSchema createRolapSchema(

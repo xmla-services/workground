@@ -77,13 +77,6 @@ public enum RolapConnectionProperties {
    */
   Role,
 
-  /**
-   * Allows to work with dynamically changing schema. If this property is set
-   * to <code>true</code> and schema content has changed (previous checksum
-   * doesn't equal with current), schema would be reloaded. Could be used in
-   * combination with <code>DynamicSchemaProcessor</code> property
-   */
-  UseContentChecksum,
 
   /**
    * The "UseSchemaPool" property disables the schema cache. If false, the
