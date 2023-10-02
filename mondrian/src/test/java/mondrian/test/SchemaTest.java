@@ -73,7 +73,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PropertyRBuil
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RowRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ValueRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.RDbMappingSchemaModifier;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

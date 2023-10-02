@@ -34,7 +34,7 @@ public class CopyUtil {
     public static SchemaImpl copy(MappingSchema schemaApi) {
         SchemaImpl schemaImpl = new SchemaImpl();
         schemaImpl.setAnnotations(copyAnnotation(schemaApi.annotations()));
-        schemaImpl.setDefaultRole(schemaApi.defaultRole());
+//        schemaImpl.setDefaultRole(schemaApi.defaultRole());
         schemaImpl.setDescription(schemaApi.description());
         schemaImpl.setMeasuresCaption(schemaApi.measuresCaption());
         schemaImpl.setName(schemaApi.name());

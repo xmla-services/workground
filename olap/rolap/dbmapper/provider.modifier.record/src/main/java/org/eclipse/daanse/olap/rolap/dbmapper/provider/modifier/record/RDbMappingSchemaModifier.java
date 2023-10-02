@@ -11,7 +11,11 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier;
+package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record;
+
+import static org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeUsageRBuilder.CubeUsageR;
+
+import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
@@ -73,6 +77,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
@@ -107,6 +112,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HintR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.InlineTableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberReaderParameterR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.NamedSetR;
@@ -131,10 +137,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.VirtualCubeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackAttributeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackMeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.WritebackTableR;
-
-import java.util.List;
-
-import static org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeUsageRBuilder.CubeUsageR;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.AbstractDbMappingSchemaModifier;
 
 public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 
@@ -751,6 +754,40 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             level,
             hierarchy);
     }
+    
+    protected MappingMeasure new_Measure(
+            String name,
+            String column,
+            MeasureDataTypeEnum datatype,
+            String formatString,
+            String aggregator,
+            String formatter,
+            String caption,
+            String description,
+            boolean visible,
+            String displayFolder,
+            List<MappingAnnotation> annotations,
+            MappingExpressionView measureExpression,
+            List<MappingCalculatedMemberProperty> calculatedMemberProperties,
+            MappingElementFormatter cellFormatter,
+            String backColor
+        ) {
+            return new MeasureR(name,
+                column,
+                datatype,
+                formatString,
+                aggregator,
+                formatter,
+                caption,
+                description,
+                visible,
+                displayFolder,
+                annotations,
+                measureExpression,
+                calculatedMemberProperties,
+                cellFormatter,
+                backColor);
+        }
 
     @Override
     protected MappingWritebackTable new_WritebackTable(
