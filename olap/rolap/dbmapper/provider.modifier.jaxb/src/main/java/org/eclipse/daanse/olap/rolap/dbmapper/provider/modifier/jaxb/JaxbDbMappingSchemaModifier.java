@@ -68,6 +68,15 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ActionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggColumnNameImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggExcludeImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggForeignKeyImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggLevelImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggLevelPropertyImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggMeasureFactCountImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggMeasureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggNameImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AggPatternImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AnnotationImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberPropertyImpl;
@@ -87,10 +96,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ParameterImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleUsageImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RowImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SQLImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ScriptImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.UnionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ValueImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeDimensionImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeMeasureImpl;
@@ -480,14 +492,18 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
 
     @Override
     protected MappingAggMeasureFactCount new_AggMeasureFactCount(String factColumn, String column) {
-        // TODO Auto-generated method stub
-        return null;
+        AggMeasureFactCountImpl aggMeasureFactCount = new AggMeasureFactCountImpl();
+        aggMeasureFactCount.setFactColumn(factColumn);
+        aggMeasureFactCount.setColumn(column);
+        return aggMeasureFactCount;
     }
 
     @Override
     protected MappingAggLevelProperty new_AggLevelProperty(String name, String column) {
-        // TODO Auto-generated method stub
-        return null;
+        AggLevelPropertyImpl aggLevelProperty = new AggLevelPropertyImpl();
+        aggLevelProperty.setName(name);
+        aggLevelProperty.setColumn(column);
+        return aggLevelProperty;
     }
 
     @Override
@@ -495,26 +511,39 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         String column, String name, String ordinalColumn, String nameColumn,
         String captionColumn, Boolean collapsed, List<MappingAggLevelProperty> properties
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        AggLevelImpl aggLevel = new AggLevelImpl();
+        aggLevel.setColumn(column);
+        aggLevel.setName(name);
+        aggLevel.setOrdinalColumn(ordinalColumn);
+        aggLevel.setNameColumn(nameColumn);
+        aggLevel.setCaptionColumn(captionColumn);
+        aggLevel.setCollapsed(collapsed);
+        aggLevel.setProperties(properties);
+        return aggLevel;
     }
 
     @Override
     protected MappingAggMeasure new_AggMeasure(String column, String name, String rollupType) {
-        // TODO Auto-generated method stub
-        return null;
+        AggMeasureImpl aggMeasure = new AggMeasureImpl();
+        aggMeasure.setColumn(column);
+        aggMeasure.setName(name);
+        aggMeasure.setRollupType(rollupType);
+        return aggMeasure;
     }
 
     @Override
     protected MappingAggForeignKey new_AggForeignKey(String factColumn, String aggColumn) {
-        // TODO Auto-generated method stub
-        return null;
+        AggForeignKeyImpl aggForeignKey = new AggForeignKeyImpl();
+        aggForeignKey.setFactColumn(factColumn);
+        aggForeignKey.setAggColumn(aggColumn);
+        return aggForeignKey;
     }
 
     @Override
     protected MappingAggColumnName new_AggColumnName(String column) {
-        // TODO Auto-generated method stub
-        return null;
+        AggColumnNameImpl aggColumnName = new AggColumnNameImpl();
+        aggColumnName.setColumn(column);
+        return aggColumnName;
     }
 
     @Override
@@ -524,8 +553,17 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         List<MappingAggMeasure> aggMeasures, List<MappingAggLevel> aggLevels, List<MappingAggExclude> aggExcludes,
         boolean ignorecase, List<MappingAggMeasureFactCount> measuresFactCounts
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        AggPatternImpl aggPattern = new AggPatternImpl();
+        aggPattern.setPattern(pattern);
+        aggPattern.setAggFactCount(aggFactCount);
+        aggPattern.setAggIgnoreColumns(aggIgnoreColumns);
+        aggPattern.setAggForeignKeys(aggForeignKeys);
+        aggPattern.setAggMeasures(aggMeasures);
+        aggPattern.setAggLevels(aggLevels);
+        aggPattern.setAggExcludes(aggExcludes);
+        aggPattern.setIgnorecase(ignorecase);
+        aggPattern.setMeasuresFactCounts(measuresFactCounts);
+        return aggPattern;
     }
 
     @Override
@@ -535,32 +573,49 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         List<MappingAggForeignKey> aggForeignKeys, List<MappingAggLevel> aggLevels, boolean ignorecase,
         List<MappingAggMeasureFactCount> measuresFactCounts, String approxRowCount
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        AggNameImpl aggName = new AggNameImpl();
+        aggName.setName(name);
+        aggName.setAggFactCount(aggFactCount);
+        aggName.setAggMeasures(aggMeasures);
+        aggName.setAggIgnoreColumns(aggIgnoreColumns);
+        aggName.setAggForeignKeys(aggForeignKeys);
+        aggName.setAggLevels(aggLevels);
+        aggName.setIgnorecase(ignorecase);
+        aggName.setMeasuresFactCounts(measuresFactCounts);
+        aggName.setApproxRowCount(approxRowCount);
+        return aggName;
     }
 
     @Override
     protected MappingAggExclude new_AggExclude(String pattern, String name, boolean ignorecase) {
-        // TODO Auto-generated method stub
-        return null;
+        AggExcludeImpl aggExclude = new AggExcludeImpl();
+        aggExclude.setPattern(pattern);
+        aggExclude.setName(name);
+        aggExclude.setIgnorecase(ignorecase);
+        return aggExclude;
     }
 
     @Override
     protected MappingSQL new_SQL(String content, String dialect) {
-        // TODO Auto-generated method stub
-        return null;
+        SQLImpl sql = new SQLImpl();
+        sql.setContent(content);
+        sql.setDialect(dialect);
+        return sql;
     }
 
     @Override
     protected MappingValue new_Value(String column, String content) {
-        // TODO Auto-generated method stub
-        return null;
+        ValueImpl value = new ValueImpl();
+        value.setColumn(column);
+        value.setContent(content);
+        return value;
     }
 
     @Override
     protected MappingRow new_Row(List<MappingValue> values) {
-        // TODO Auto-generated method stub
-        return null;
+        RowImpl row = new RowImpl();
+        row.setValues(values);
+        return row;
     }
 
     @Override

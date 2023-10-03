@@ -90,4 +90,23 @@ public class AggLevelImpl implements MappingAggLevel {
         this.name = value;
     }
 
+    public void setOrdinalColumn(String ordinalColumn) {
+        this.ordinalColumn = ordinalColumn;
+    }
+
+    public void setNameColumn(String nameColumn) {
+        this.nameColumn = nameColumn;
+    }
+
+    public void setCaptionColumn(String captionColumn) {
+        this.captionColumn = captionColumn;
+    }
+
+    public void setCollapsed(Boolean collapsed) {
+        this.collapsed = collapsed;
+    }
+
+    public void setProperties(List<MappingAggLevelProperty> properties) {
+        this.properties = properties;
+    }
 }

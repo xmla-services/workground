@@ -59,7 +59,7 @@ public class AggPatternImpl implements MappingAggPattern {
         return aggFactCount;
     }
 
-    public void setAggFactCount(AggColumnNameImpl value) {
+    public void setAggFactCount(MappingAggColumnName value) {
         this.aggFactCount = value;
     }
 
@@ -130,4 +130,27 @@ public class AggPatternImpl implements MappingAggPattern {
         this.ignorecase = value;
     }
 
+    public void setAggIgnoreColumns(List<MappingAggColumnName> aggIgnoreColumns) {
+        this.aggIgnoreColumns = aggIgnoreColumns;
+    }
+
+    public void setAggForeignKeys(List<MappingAggForeignKey> aggForeignKeys) {
+        this.aggForeignKeys = aggForeignKeys;
+    }
+
+    public void setAggMeasures(List<MappingAggMeasure> aggMeasures) {
+        this.aggMeasures = aggMeasures;
+    }
+
+    public void setAggLevels(List<MappingAggLevel> aggLevels) {
+        this.aggLevels = aggLevels;
+    }
+
+    public void setAggExcludes(List<MappingAggExclude> aggExcludes) {
+        this.aggExcludes = aggExcludes;
+    }
+
+    public void setMeasuresFactCounts(List<MappingAggMeasureFactCount> measuresFactCounts) {
+        this.measureFactCounts = measuresFactCounts;
+    }
 }
