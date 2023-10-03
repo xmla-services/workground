@@ -43,7 +43,7 @@ public record PropertyR(String name,
 				this.column = column;
 				this.type = type == null ? PropertyTypeEnum.STRING : type;
 				this.formatter = formatter;
-				this.dependsOnLevelValue = dependsOnLevelValue;
+				this.dependsOnLevelValue = dependsOnLevelValue == null ? Boolean.FALSE : dependsOnLevelValue;
 				this.propertyFormatter = propertyFormatter;
 
 	}

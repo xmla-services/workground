@@ -53,7 +53,7 @@ public record AggPatternR(String pattern,
 	this.aggMeasures = aggMeasures == null ? List.of() : aggMeasures;
 	this.aggLevels = aggLevels == null ? List.of() : aggLevels;
 	this.aggExcludes = aggExcludes == null ? List.of() : aggExcludes;
-	this.ignorecase = ignorecase;
+	this.ignorecase = ignorecase == null ? Boolean.FALSE : ignorecase;
 	this.measuresFactCounts = measuresFactCounts == null ? List.of() : measuresFactCounts;
 
 	}

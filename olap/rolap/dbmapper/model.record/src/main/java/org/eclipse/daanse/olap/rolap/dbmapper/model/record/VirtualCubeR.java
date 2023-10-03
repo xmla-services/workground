@@ -55,9 +55,9 @@ public record VirtualCubeR(String name,
         this.description = description;
         this.annotations = annotations == null ? List.of() : annotations;
         this.caption = caption;
-        this.visible = visible;
+        this.visible = visible == null ? Boolean.FALSE : visible;
         this.defaultMeasure = defaultMeasure;
-        this.enabled = enabled;
+        this.enabled = enabled == null ? Boolean.FALSE : enabled;
         this.cubeUsages = cubeUsages == null ? List.of() : cubeUsages;
         this.virtualCubeDimensions = virtualCubeDimensions == null ? List.of() : virtualCubeDimensions;
         this.virtualCubeMeasures = virtualCubeMeasures == null ? List.of() : virtualCubeMeasures;

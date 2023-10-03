@@ -136,7 +136,7 @@ public class PrivateDimensionImpl implements MappingPrivateDimension {
 
     @Override
     public Boolean visible() {
-        return visible;
+        return visible == null ? Boolean.FALSE : visible;
     }
 
     @Override

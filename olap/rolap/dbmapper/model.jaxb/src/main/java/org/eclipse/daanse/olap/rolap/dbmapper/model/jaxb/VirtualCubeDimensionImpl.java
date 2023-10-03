@@ -71,7 +71,7 @@ public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
 
     @Override
     public Boolean highCardinality() {
-        return highCardinality;
+        return highCardinality == null ? Boolean.FALSE : highCardinality;
     }
 
     @Override

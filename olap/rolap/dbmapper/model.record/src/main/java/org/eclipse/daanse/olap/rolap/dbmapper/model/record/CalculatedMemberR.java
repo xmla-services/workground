@@ -57,7 +57,7 @@ public record CalculatedMemberR(String name,
         this.description = description;
         this.annotations = annotations;
         this.caption = caption;
-        this.visible = visible;
+        this.visible = visible == null ? Boolean.FALSE : visible;
         this.formatString = formatString;
         this.dimension = dimension;
         this.displayFolder = displayFolder;
