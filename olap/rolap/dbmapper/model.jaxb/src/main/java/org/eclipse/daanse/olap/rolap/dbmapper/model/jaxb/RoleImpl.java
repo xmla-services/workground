@@ -64,7 +64,7 @@ public class RoleImpl implements MappingRole {
         return union;
     }
 
-    public void setUnion(UnionImpl value) {
+    public void setUnion(MappingUnion value) {
         this.union = value;
     }
 

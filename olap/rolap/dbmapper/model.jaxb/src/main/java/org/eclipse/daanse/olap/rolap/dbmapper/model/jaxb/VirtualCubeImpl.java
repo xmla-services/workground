@@ -167,4 +167,23 @@ public class VirtualCubeImpl implements MappingVirtualCube {
         this.description = value;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setVirtualCubeDimensions(List<MappingVirtualCubeDimension> virtualCubeDimensions) {
+        this.virtualCubeDimensions = virtualCubeDimensions;
+    }
+
+    public void setVirtualCubeMeasures(List<MappingVirtualCubeMeasure> virtualCubeMeasures) {
+        this.virtualCubeMeasures = virtualCubeMeasures;
+    }
+
+    public void setCalculatedMembers(List<MappingCalculatedMember> calculatedMembers) {
+        this.calculatedMembers = calculatedMembers;
+    }
+
+    public void setNamedSets(List<MappingNamedSet> namedSets) {
+        this.namedSets = namedSets;
+    }
 }
