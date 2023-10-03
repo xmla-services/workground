@@ -223,7 +223,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 	private static final PropertyR PROPERTY_1_G = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,  PropertyTypeEnum.BOOLEAN,null,null,null);
 	private static final PropertyR PROPERTY_1_H = new PropertyR("Street Address",null, null, STORE_STREET_ADDRESS,  PropertyTypeEnum.STRING,null,null,null);
 	private static final PropertyR PROPERTY_3_4_1 = new PropertyR(GENDER, null, null, GENDER2, null,null,null, null);
-	private static final PropertyR PROPERTY_3_4_2 = new PropertyR("Material Status", null, null, "material_status", null, null,			null, null);
+	private static final PropertyR PROPERTY_3_4_2 = new PropertyR("Marital Status", null, null, "marital_status", null, null,			null, null);
 	private static final PropertyR PROPERTY_3_4_3 = new PropertyR("Education",null, null,  EDUCATION, null, null, null,			null);
 	private static final PropertyR PROPERTY_3_4_4 = new PropertyR(YEARLY_INCOME, null, null, YEARLY_INCOME_COLUMN, null,null,null,			null);
 	private static final PropertyR PROPERTY_4_2_D_a = new PropertyR(STORE_TYPE, null, null, STORE_TYPE_COLUMN, null,	null,null,		null);
@@ -1166,8 +1166,8 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_3 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .allMemberName("All Customors")
-        .primaryKey("customor_id")
+        .allMemberName("All Customers")
+        .primaryKey("customer_id")
         .relation(TABLE_3)
         .levels(List.of(LEVEL_1_3_A,
             LEVEL_1_3_B,
@@ -1398,6 +1398,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_SCHEMA_4_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
+        .name("Weekly")
         .primaryKey(TIME_ID_KEY)
         .relation(TABLE_SHARED_4_B)
         .levels(List.of(LEVEL_SHARED_4_B_1,
@@ -1407,6 +1408,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_5 = HierarchyRBuilder
         .builder()
+        .hasAll(true)
         .levels(List.of(LEVEL_SHARED_5_1,
             LEVEL_SHARED_5_2,
             LEVEL_SHARED_5_3,
