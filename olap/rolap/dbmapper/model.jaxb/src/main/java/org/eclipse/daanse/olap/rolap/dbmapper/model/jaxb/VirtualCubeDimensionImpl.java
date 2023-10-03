@@ -70,7 +70,7 @@ public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
     }
 
     @Override
-    public boolean highCardinality() {
+    public Boolean highCardinality() {
         return highCardinality;
     }
 
@@ -80,7 +80,7 @@ public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 

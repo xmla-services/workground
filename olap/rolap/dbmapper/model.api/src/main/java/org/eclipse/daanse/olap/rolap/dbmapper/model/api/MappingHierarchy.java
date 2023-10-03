@@ -25,7 +25,7 @@ public interface MappingHierarchy {
 
     String name();
 
-    boolean hasAll();
+    Boolean hasAll();
 
     String allMemberName();
 
@@ -47,7 +47,7 @@ public interface MappingHierarchy {
 
     String uniqueKeyLevelName();
 
-    boolean visible();
+    Boolean visible();
 
     String displayFolder();
 

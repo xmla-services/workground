@@ -23,7 +23,7 @@ public interface MappingParameter {
 
     ParameterTypeEnum type();
 
-    boolean modifiable();
+    Boolean modifiable();
 
     String defaultValue();
 

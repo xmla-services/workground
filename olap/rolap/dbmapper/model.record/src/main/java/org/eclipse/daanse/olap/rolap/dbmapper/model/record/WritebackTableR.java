@@ -19,19 +19,19 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 public record WritebackTableR(String schema,
-        String name,
-        List<MappingWritebackColumn> columns)
-implements MappingWritebackTable {
-	
+                              String name,
+                              List<MappingWritebackColumn> columns)
+    implements MappingWritebackTable {
 
-	public  WritebackTableR(String schema,
-            String name,
-            List<MappingWritebackColumn> columns)
-  {
-	this.schema = schema;
-	this.name = name;
-	this.columns = columns == null ? List.of() : columns;
-		
-	}
+    public WritebackTableR(
+        String schema,
+        String name,
+        List<MappingWritebackColumn> columns
+    ) {
+        this.schema = schema;
+        this.name = name;
+        this.columns = columns == null ? List.of() : columns;
+
+    }
 
 }

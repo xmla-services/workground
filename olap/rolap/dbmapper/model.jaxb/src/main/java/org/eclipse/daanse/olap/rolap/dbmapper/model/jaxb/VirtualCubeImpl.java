@@ -114,7 +114,7 @@ public class VirtualCubeImpl implements MappingVirtualCube {
     }
 
     @Override
-    public boolean enabled() {
+    public Boolean enabled() {
         if (enabled == null) {
             return true;
         } else {
@@ -159,7 +159,7 @@ public class VirtualCubeImpl implements MappingVirtualCube {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 

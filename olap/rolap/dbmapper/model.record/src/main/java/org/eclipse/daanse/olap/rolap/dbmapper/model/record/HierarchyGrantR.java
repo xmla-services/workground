@@ -20,33 +20,30 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public record HierarchyGrantR(
-                              String hierarchy,
-                              AccessEnum access,
-                              String topLevel,
-                              String bottomLevel,
-                              String rollupPolicy,
-                              List<MappingMemberGrant> memberGrants
+    String hierarchy,
+    AccessEnum access,
+    String topLevel,
+    String bottomLevel,
+    String rollupPolicy,
+    List<MappingMemberGrant> memberGrants
 
 ) implements MappingHierarchyGrant {
-	
 
+    public HierarchyGrantR(
+        String hierarchy,
+        AccessEnum access,
+        String topLevel,
+        String bottomLevel,
+        String rollupPolicy,
+        List<MappingMemberGrant> memberGrants
 
-	public  HierarchyGrantR(
-            String hierarchy,
-            AccessEnum access,
-            String topLevel,
-            String bottomLevel,
-            String rollupPolicy,
-            List<MappingMemberGrant> memberGrants
-
-)  {
-	this.hierarchy = hierarchy;
-	this.access = access;
-	this.topLevel = topLevel;
-	this.bottomLevel = bottomLevel;
-	this.rollupPolicy = rollupPolicy;
-	this.memberGrants = memberGrants == null ? List.of() : memberGrants;
-		
-	}
+    ) {
+        this.hierarchy = hierarchy;
+        this.access = access == null ? AccessEnum.NONE : access;
+        this.topLevel = topLevel;
+        this.bottomLevel = bottomLevel;
+        this.rollupPolicy = rollupPolicy;
+        this.memberGrants = memberGrants == null ? List.of() : memberGrants;
+    }
 
 }

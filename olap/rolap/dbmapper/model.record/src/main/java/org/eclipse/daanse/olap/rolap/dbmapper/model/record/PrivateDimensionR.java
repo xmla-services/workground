@@ -24,25 +24,25 @@ public record PrivateDimensionR(String name,
 		String description,
 		List<MappingAnnotation> annotations,
 		String caption,
-		boolean visible,
+		Boolean visible,
         DimensionTypeEnum type,
         String foreignKey,
-        boolean highCardinality,
+        Boolean highCardinality,
         List<MappingHierarchy> hierarchies,
         String usagePrefix
         )
         implements MappingPrivateDimension {
-	
+
 
 
 	public  PrivateDimensionR(String name,
 			String description,
 			List<MappingAnnotation> annotations,
 			String caption,
-			boolean visible,
+			Boolean visible,
 	        DimensionTypeEnum type,
 	        String foreignKey,
-	        boolean highCardinality,
+	        Boolean highCardinality,
 	        List<MappingHierarchy> hierarchies,
 	        String usagePrefix
 	        ) {
@@ -56,6 +56,5 @@ public record PrivateDimensionR(String name,
 			this.highCardinality = highCardinality;
 			this.hierarchies = hierarchies == null ? List.of() : hierarchies;
 			this.usagePrefix = usagePrefix;
-		
 	}
 }

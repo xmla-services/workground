@@ -19,43 +19,40 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 
 public record DimensionUsageR(String name,
-						String description,
-							List<MappingAnnotation> annotations,
-							String caption,
-							boolean visible,
+                              String description,
+                              List<MappingAnnotation> annotations,
+                              String caption,
+                              Boolean visible,
                               String source,
                               String level,
                               String usagePrefix,
                               String foreignKey,
-                              boolean highCardinality
-                              )
-        implements MappingDimensionUsage {
-	
-	
+                              Boolean highCardinality
+)
+    implements MappingDimensionUsage {
 
+    public DimensionUsageR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String source,
+        String level,
+        String usagePrefix,
+        String foreignKey,
+        Boolean highCardinality
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations == null ? List.of() : annotations;
+        this.caption = caption;
+        this.visible = visible;
+        this.source = source;
+        this.level = level;
+        this.usagePrefix = usagePrefix;
+        this.foreignKey = foreignKey;
+        this.highCardinality = highCardinality;
 
-	public  DimensionUsageR(String name,
-			String description,
-				List<MappingAnnotation> annotations,
-				String caption,
-				boolean visible,
-                  String source,
-                  String level,
-                  String usagePrefix,
-                  String foreignKey,
-                  boolean highCardinality
-                  )
-{
-	this.name = name;
-	this.description = description;
-	this.annotations = annotations == null ? List.of() : annotations;
-	this.caption = caption;
-	this.visible = visible;
-	this.source = source;
-	this.level = level;
-	this.usagePrefix = usagePrefix;
-	this.foreignKey = foreignKey;
-	this.highCardinality = highCardinality;
-		
-	}
+    }
 }

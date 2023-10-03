@@ -24,49 +24,45 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 public record VirtualCubeR(String name,
-		String description,
-		List<MappingAnnotation> annotations,
+                           String description,
+                           List<MappingAnnotation> annotations,
+                           String caption,
+                           Boolean visible,
+                           String defaultMeasure,
+                           Boolean enabled,
+                           List<MappingCubeUsage> cubeUsages,
+                           List<MappingVirtualCubeDimension> virtualCubeDimensions,
+                           List<MappingVirtualCubeMeasure> virtualCubeMeasures,
+                           List<MappingCalculatedMember> calculatedMembers,
+                           List<MappingNamedSet> namedSets
+) implements MappingVirtualCube {
+
+    public VirtualCubeR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
         String caption,
-        boolean visible,
+        Boolean visible,
         String defaultMeasure,
-        boolean enabled,
+        Boolean enabled,
         List<MappingCubeUsage> cubeUsages,
         List<MappingVirtualCubeDimension> virtualCubeDimensions,
         List<MappingVirtualCubeMeasure> virtualCubeMeasures,
         List<MappingCalculatedMember> calculatedMembers,
         List<MappingNamedSet> namedSets
-) implements MappingVirtualCube {
-	
-	
-
-
-	public  VirtualCubeR(String name,
-			String description,
-			List<MappingAnnotation> annotations,
-	        String caption,
-	        boolean visible,
-	        String defaultMeasure,
-	        boolean enabled,
-	        List<MappingCubeUsage> cubeUsages,
-	        List<MappingVirtualCubeDimension> virtualCubeDimensions,
-	        List<MappingVirtualCubeMeasure> virtualCubeMeasures,
-	        List<MappingCalculatedMember> calculatedMembers,
-	        List<MappingNamedSet> namedSets
-	)   {
-		this.name = name;
-		this.description = description;
-		this.annotations = annotations == null ? List.of() : annotations;
-		this.caption = caption;
-		this.visible = visible;
-		this.defaultMeasure = defaultMeasure;
-		this.enabled = enabled;
-		this.cubeUsages = cubeUsages == null ? List.of() : cubeUsages;
-		this.virtualCubeDimensions = virtualCubeDimensions == null ? List.of() : virtualCubeDimensions;
-		this.virtualCubeMeasures = virtualCubeMeasures == null ? List.of() : virtualCubeMeasures;
-		this.calculatedMembers = calculatedMembers == null ? List.of() : calculatedMembers;
-		this.namedSets = namedSets == null ? List.of() : namedSets;
-		
-		
-	}
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations == null ? List.of() : annotations;
+        this.caption = caption;
+        this.visible = visible;
+        this.defaultMeasure = defaultMeasure;
+        this.enabled = enabled;
+        this.cubeUsages = cubeUsages == null ? List.of() : cubeUsages;
+        this.virtualCubeDimensions = virtualCubeDimensions == null ? List.of() : virtualCubeDimensions;
+        this.virtualCubeMeasures = virtualCubeMeasures == null ? List.of() : virtualCubeMeasures;
+        this.calculatedMembers = calculatedMembers == null ? List.of() : calculatedMembers;
+        this.namedSets = namedSets == null ? List.of() : namedSets;
+    }
 
 }

@@ -28,9 +28,6 @@ public record SharedDimensionR(String name,
         String foreignKey)
         implements MappingSharedDimension {
 
-	
-
-
 	public  SharedDimensionR(String name,
 			String description,
 			List<MappingAnnotation> annotations,
@@ -45,7 +42,7 @@ public record SharedDimensionR(String name,
 		this.caption = caption;
 		this.type = type;
 		this.hierarchies = hierarchies == null ? List.of() : hierarchies;
-		this.foreignKey = foreignKey; 
-		
+		this.foreignKey = foreignKey;
+
 	}
 }

@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -39,7 +39,7 @@ public class CubeUsageImpl implements MappingCubeUsage {
     }
 
     @Override
-    public boolean ignoreUnrelatedDimensions() {
+    public Boolean ignoreUnrelatedDimensions() {
         if (ignoreUnrelatedDimensions == null) {
             return false;
         } else {

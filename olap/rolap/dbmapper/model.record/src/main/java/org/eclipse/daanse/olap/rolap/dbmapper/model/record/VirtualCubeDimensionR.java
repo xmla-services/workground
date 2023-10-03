@@ -19,34 +19,33 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 public record VirtualCubeDimensionR(String name,
-		String description,
-		List<MappingAnnotation> annotations,
-		String caption,
-		boolean visible,
+                                    String description,
+                                    List<MappingAnnotation> annotations,
+                                    String caption,
+                                    Boolean visible,
+                                    String cubeName,
+                                    String foreignKey,
+                                    Boolean highCardinality
+)
+    implements MappingVirtualCubeDimension {
+
+    public VirtualCubeDimensionR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
         String cubeName,
         String foreignKey,
-        boolean highCardinality
-                                    )
-        implements MappingVirtualCubeDimension {
-	
-
-
-	public  VirtualCubeDimensionR(String name,
-			String description,
-			List<MappingAnnotation> annotations,
-			String caption,
-			boolean visible,
-	        String cubeName,
-	        String foreignKey,
-	        boolean highCardinality
-	                                    )
-	          {
-				this.name = name;
-				this.description = description;
-				this.annotations = annotations == null ? List.of() : annotations;
-				this.caption = caption;
-				this.visible = visible;
-				this.cubeName = cubeName;
-				this.foreignKey = foreignKey;
-				this.highCardinality = highCardinality;}
+        Boolean highCardinality
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations == null ? List.of() : annotations;
+        this.caption = caption;
+        this.visible = visible;
+        this.cubeName = cubeName;
+        this.foreignKey = foreignKey;
+        this.highCardinality = highCardinality;
+    }
 }

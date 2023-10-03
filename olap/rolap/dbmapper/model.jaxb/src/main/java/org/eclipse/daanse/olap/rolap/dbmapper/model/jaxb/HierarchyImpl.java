@@ -113,11 +113,11 @@ public class HierarchyImpl implements MappingHierarchy {
     }
 
     @Override
-    public boolean hasAll() {
+    public Boolean hasAll() {
         return hasAll;
     }
 
-    public void setHasAll(boolean value) {
+    public void setHasAll(Boolean value) {
         this.hasAll = value;
     }
 
@@ -208,7 +208,7 @@ public class HierarchyImpl implements MappingHierarchy {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 
@@ -227,7 +227,7 @@ public class HierarchyImpl implements MappingHierarchy {
         return origin;
     }
 
-    public void setVisible(boolean visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
     }
 
