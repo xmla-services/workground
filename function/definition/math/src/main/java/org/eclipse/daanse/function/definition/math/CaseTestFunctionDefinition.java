@@ -59,7 +59,7 @@ class CaseTestFunctionDefinition extends AbstractFunctionDefinition {
 		int calcPairsCount = argumentsCount / 2;
 		boolean hasDefaultCalc = argumentsCount % 2 == 1;
 
-		HashMap<BooleanCalc, Calc<?>> calcPairs = LinkedHashMap.newLinkedHashMap(calcPairsCount);
+		HashMap<BooleanCalc, Calc<?>> calcPairs = new LinkedHashMap<>(calcPairsCount);
 
 		final List<Calc<?>> allCalcs = new ArrayList<>();
 
