@@ -46,9 +46,6 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	private FunctionMetaData functionMetaData;
 
 	public AbstractFunctionDefinition(FunctionMetaData functionMetaData) {
-		if(functionMetaData==null) {
-			System.out.println();
-		}
 		this.functionMetaData = functionMetaData;
 	}
 

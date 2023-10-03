@@ -50,14 +50,14 @@ public interface FunctionTable {
     /**
      * Returns whether a string is a reserved word.
      */
-    boolean isReserved(String s);
+    boolean isReservedWord(String word);
 
     /**
      * Returns whether a string is a property-style (postfix)
      * operator. This is used during parsing to disambiguate
      * functions from unquoted member names.
      */
-    boolean isProperty(String s);
+    boolean isProperty(String name);
 
     /**
      * Returns a list of words ({@link String}) which may not be used as
