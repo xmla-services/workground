@@ -217,4 +217,7 @@ public class SchemaImpl implements MappingSchema {
         this.cubes = cubes;
     }
 
+    public void setDefaultRole(String defaultRole) {
+        this.defaultRole = defaultRole;
+    }
 }

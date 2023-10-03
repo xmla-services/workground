@@ -60,4 +60,20 @@ public class ActionImpl implements MappingAction {
         }
         return this.annotations;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAnnotations(List<MappingAnnotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
 }

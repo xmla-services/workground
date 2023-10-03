@@ -93,4 +93,27 @@ public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
         this.name = value;
     }
 
+    public void setAnnotations(List<MappingAnnotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void setForeignKey(String foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
+    public void setHighCardinality(boolean highCardinality) {
+        this.highCardinality = highCardinality;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
