@@ -1704,7 +1704,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .name(AGG_C_SPECIAL_SALES_FACT_1997)
         .aggFactCount(
-            AggColumnNameRBuilder.builder().column(AGG_C_SPECIAL_SALES_FACT_1997).build())
+            AggColumnNameRBuilder.builder().column("FACT_COUNT").build())
         .aggIgnoreColumns(List.of(
             AggColumnNameRBuilder.builder().column("foo").build(),
             AggColumnNameRBuilder.builder().column("bar").build()
