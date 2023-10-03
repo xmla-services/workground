@@ -68,10 +68,10 @@ public record HierarchyR(String name,
         this.description = description;
         this.annotations = annotations;
         this.caption = caption;
-        this.visible = visible == null ? Boolean.FALSE : visible;
+        this.visible = visible == null ? Boolean.TRUE : visible;
         this.levels = levels == null ? List.of() : levels;
         this.memberReaderParameters = memberReaderParameters == null ? List.of() : memberReaderParameters;
-        this.hasAll = hasAll == null ? Boolean.FALSE : hasAll;
+        this.hasAll = hasAll == null ? Boolean.FALSE : hasAll;//TODO: docs sais none default -null
         this.allMemberName = allMemberName;
         this.allMemberCaption = allMemberCaption;
         this.allLevelName = allLevelName;

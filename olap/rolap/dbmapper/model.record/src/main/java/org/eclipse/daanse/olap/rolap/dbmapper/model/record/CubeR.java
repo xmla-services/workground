@@ -69,7 +69,7 @@ public record CubeR(String name,
 				this.description = description;
 				this.annotations = annotations == null ? List.of() : annotations;
 				this.caption = caption;
-				this.visible = visible== null ? true : visible;
+				this.visible = visible== null ? Boolean.TRUE : visible;
 				this.defaultMeasure = defaultMeasure;
 				this.dimensionUsageOrDimensions = dimensionUsageOrDimensions == null ? List.of() : dimensionUsageOrDimensions;
 				this.measures = measures == null ? List.of() : measures;

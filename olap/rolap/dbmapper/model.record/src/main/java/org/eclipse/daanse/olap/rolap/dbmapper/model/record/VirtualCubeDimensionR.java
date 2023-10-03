@@ -43,7 +43,7 @@ public record VirtualCubeDimensionR(String name,
         this.description = description;
         this.annotations = annotations == null ? List.of() : annotations;
         this.caption = caption;
-        this.visible = visible == null ? Boolean.FALSE : visible;
+        this.visible = visible == null ? Boolean.TRUE : visible;
         this.cubeName = cubeName;
         this.foreignKey = foreignKey;
         this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
