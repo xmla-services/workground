@@ -1502,7 +1502,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .build();
     private static final PrivateDimensionR DIMENSION_6 = PrivateDimensionRBuilder
         .builder()
-        .name("Material Status")
+        .name("Marital Status")
         .foreignKey(CUSTOMER_ID)
         .hierarchies(List.of(HIERARCHY_6))
         .build();
