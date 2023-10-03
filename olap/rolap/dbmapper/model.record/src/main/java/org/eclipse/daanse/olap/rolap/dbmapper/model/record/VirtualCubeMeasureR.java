@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasur
 public record VirtualCubeMeasureR(String name,
                                   String description,
                                   List<MappingAnnotation> annotations,
-                                  boolean visible,
+                                  Boolean visible,
                                   String cubeName
 )
     implements MappingVirtualCubeMeasure {
@@ -30,7 +30,7 @@ public record VirtualCubeMeasureR(String name,
         String name,
         String description,
         List<MappingAnnotation> annotations,
-        boolean visible,
+        Boolean visible,
         String cubeName
     ) {
         this.name = name;

@@ -23,6 +23,6 @@ public interface MappingVirtualCubeMeasure {
 
     String name();
 
-    boolean visible();
+    Boolean visible();
 
 }

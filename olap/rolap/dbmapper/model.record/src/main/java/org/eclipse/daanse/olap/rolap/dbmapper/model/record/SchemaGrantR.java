@@ -28,7 +28,7 @@ public record SchemaGrantR(List<MappingCubeGrant> cubeGrants,
         AccessEnum access
     ) {
         this.cubeGrants = cubeGrants == null ? List.of() : cubeGrants;
-        this.access = access;
+        this.access = access == null ? AccessEnum.NONE : access;
 
     }
 }

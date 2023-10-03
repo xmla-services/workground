@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -50,7 +50,7 @@ public class AggExcludeImpl implements MappingAggExclude {
     }
 
     @Override
-    public boolean ignorecase() {
+    public Boolean ignorecase() {
         if (ignorecase == null) {
             return true;
         } else {

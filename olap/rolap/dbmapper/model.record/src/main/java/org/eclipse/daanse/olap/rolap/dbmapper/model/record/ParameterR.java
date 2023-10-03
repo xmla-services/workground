@@ -32,7 +32,7 @@ public record ParameterR(String name,
     ) {
         this.name = name;
         this.description = description;
-        this.type = type;
+        this.type = type == null ? ParameterTypeEnum.STRING : type;
         this.modifiable = modifiable;
         this.defaultValue = defaultValue;
     }

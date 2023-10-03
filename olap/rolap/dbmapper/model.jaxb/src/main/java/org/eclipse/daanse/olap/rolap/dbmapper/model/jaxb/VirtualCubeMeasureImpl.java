@@ -67,9 +67,9 @@ public class VirtualCubeMeasureImpl implements MappingVirtualCubeMeasure {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         if (visible == null) {
-            return true;
+            return Boolean.TRUE;
         } else {
             return visible;
         }
