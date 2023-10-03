@@ -39,7 +39,7 @@ public record HierarchyGrantR(
 
     ) {
         this.hierarchy = hierarchy;
-        this.access = access == null ? AccessEnum.NONE : access;
+        this.access = access ;//== null ? AccessEnum.NONE : access;
         this.topLevel = topLevel;
         this.bottomLevel = bottomLevel;
         this.rollupPolicy = rollupPolicy;

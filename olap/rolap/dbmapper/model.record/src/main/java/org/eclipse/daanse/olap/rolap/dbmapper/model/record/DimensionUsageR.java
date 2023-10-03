@@ -47,7 +47,7 @@ public record DimensionUsageR(String name,
         this.description = description;
         this.annotations = annotations == null ? List.of() : annotations;
         this.caption = caption;
-        this.visible = visible == null ? Boolean.FALSE : visible;
+        this.visible = visible == null ? Boolean.TRUE : visible;
         this.source = source;
         this.level = level;
         this.usagePrefix = usagePrefix;

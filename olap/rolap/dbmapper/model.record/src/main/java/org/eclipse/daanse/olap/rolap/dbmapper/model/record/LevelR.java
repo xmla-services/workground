@@ -110,7 +110,7 @@ public record LevelR(String name,
         this.parentExpression = parentExpression;
         this.closure = closure;
         this.properties = properties == null ? List.of() : properties;
-        this.internalType = internalType == null ? InternalTypeEnum.STRING : internalType;
+        this.internalType = internalType;// == null ? InternalTypeEnum.STRING : internalType;
         this.memberFormatter = memberFormatter;
     }
 }
