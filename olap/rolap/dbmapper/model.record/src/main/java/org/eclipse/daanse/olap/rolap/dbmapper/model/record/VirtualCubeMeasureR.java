@@ -36,7 +36,7 @@ public record VirtualCubeMeasureR(String name,
         this.name = name;
         this.description = description;
         this.annotations = annotations == null ? List.of() : annotations;
-        this.visible = visible;
+        this.visible = visible == null ? Boolean.FALSE : visible;
         this.cubeName = cubeName;
     }
 

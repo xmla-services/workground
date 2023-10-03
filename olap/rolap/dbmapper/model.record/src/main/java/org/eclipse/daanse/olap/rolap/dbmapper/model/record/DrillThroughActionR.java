@@ -40,7 +40,7 @@ implements MappingDrillThroughAction {
 	this.description = description;
 	this.annotations = annotations == null ? List.of() : annotations;
 	this.caption = caption;
-	this.defaultt = defaultt;
+	this.defaultt = defaultt == null ? Boolean.FALSE : defaultt;
 	this.drillThroughElements = drillThroughElements == null ? List.of() : drillThroughElements;
 
  }

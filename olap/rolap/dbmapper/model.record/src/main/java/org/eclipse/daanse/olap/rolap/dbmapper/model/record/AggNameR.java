@@ -52,7 +52,7 @@ public record AggNameR(String name,
 	this.aggIgnoreColumns = aggIgnoreColumns == null ? List.of() : aggIgnoreColumns;
 	this.aggForeignKeys = aggForeignKeys == null ? List.of() : aggForeignKeys;
 	this.aggLevels = aggLevels == null ? List.of() : aggLevels;
-	this.ignorecase = ignorecase;
+	this.ignorecase = ignorecase == null ? Boolean.FALSE : ignorecase;
 	this.measuresFactCounts = measuresFactCounts == null ? List.of() : measuresFactCounts;
 	this.approxRowCount = approxRowCount;
 
