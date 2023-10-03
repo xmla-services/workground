@@ -168,7 +168,7 @@ public class MeasureImpl implements MappingMeasure {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         if (visible == null) {
             return true;
         } else {

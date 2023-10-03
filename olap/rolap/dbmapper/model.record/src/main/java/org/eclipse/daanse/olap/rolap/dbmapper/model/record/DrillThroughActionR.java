@@ -26,8 +26,8 @@ public record DrillThroughActionR(String name,
         Boolean defaultt,
         List<MappingDrillThroughElement> drillThroughElements)
 implements MappingDrillThroughAction {
-	
-	
+
+
 
 	public  DrillThroughActionR(String name,
             String description,
@@ -42,8 +42,7 @@ implements MappingDrillThroughAction {
 	this.caption = caption;
 	this.defaultt = defaultt;
 	this.drillThroughElements = drillThroughElements == null ? List.of() : drillThroughElements;
-		
-		
+
  }
 
 }

@@ -21,14 +21,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public record SchemaGrantR(List<MappingCubeGrant> cubeGrants,
                            AccessEnum access)
-        implements MappingSchemaGrant {
+    implements MappingSchemaGrant {
 
+    public SchemaGrantR(
+        List<MappingCubeGrant> cubeGrants,
+        AccessEnum access
+    ) {
+        this.cubeGrants = cubeGrants == null ? List.of() : cubeGrants;
+        this.access = access;
 
-	public  SchemaGrantR(List<MappingCubeGrant> cubeGrants,
-            AccessEnum access)
-  {
-	this.cubeGrants = cubeGrants == null ? List.of() : cubeGrants;
-	this.access = access;
-		
-  }
+    }
 }

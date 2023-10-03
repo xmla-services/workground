@@ -38,14 +38,17 @@ public class TableR implements MappingTable {
 
     public TableR(String name, List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {
         this.name = name;
-        this.aggExcludes = aggExcludes;
-        this.aggTables = aggTables;
+        this.aggExcludes = aggExcludes == null ? List.of() : aggExcludes;
+        this.aggTables = aggTables == null ? List.of() : aggTables;
+        this.hints =List.of();
     }
     public TableR(String schema, String name, String alias, List<MappingHint> hints) {
         this.name = name;
         this.schema = schema;
         this.alias = alias;
-        this.hints = hints;
+        this.hints = hints == null ? List.of() : hints;
+        this.aggTables = List.of();
+        this.aggExcludes = List.of();
     }
 
     public TableR(String schema, String name, String alias,
@@ -54,10 +57,10 @@ public class TableR implements MappingTable {
         this.name = name;
         this.schema = schema;
         this.alias = alias;
-        this.hints = hints;
+        this.hints = hints == null ? List.of() : hints;
         this.sql = sql;
-        this.aggExcludes = aggExcludes;
-        this.aggTables = aggTables;
+        this.aggExcludes = aggExcludes == null ? List.of() : aggExcludes;
+        this.aggTables = aggTables == null ? List.of() : aggTables;
     }
 
     public TableR(MappingTable tbl, String possibleName) {
@@ -76,6 +79,8 @@ public class TableR implements MappingTable {
     	this.schema = null;
     	this.alias = null;
     	this.hints = List.of();
+    	this.aggExcludes = List.of();
+    	this.aggTables = List.of();
     }
 
     @Override

@@ -26,7 +26,7 @@ public record AggLevelR(String column,
                         Boolean collapsed,
                         List<MappingAggLevelProperty> properties)
         implements MappingAggLevel {
-	
+
 
 	public  AggLevelR(String column,
             String name,
@@ -43,7 +43,5 @@ public record AggLevelR(String column,
 		this.captionColumn = captionColumn;
 		this.collapsed = collapsed;
 		this.properties = properties == null ? List.of() : properties;
-
 	}
-
 }

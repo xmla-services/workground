@@ -26,7 +26,7 @@ public sealed interface MappingAggTable permits MappingAggName, MappingAggPatter
 
     List<MappingAggLevel> aggLevels();
 
-    boolean ignorecase();
+    Boolean ignorecase();
 
     List<MappingAggMeasureFactCount> measuresFactCounts();
 }

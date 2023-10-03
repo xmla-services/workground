@@ -19,27 +19,25 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 public record VirtualCubeMeasureR(String name,
-		String description,
-		List<MappingAnnotation> annotations,
-		boolean visible,
+                                  String description,
+                                  List<MappingAnnotation> annotations,
+                                  boolean visible,
                                   String cubeName
-                                  )
-        implements MappingVirtualCubeMeasure {
-	
+)
+    implements MappingVirtualCubeMeasure {
 
-	public  VirtualCubeMeasureR(String name,
-			String description,
-			List<MappingAnnotation> annotations,
-			boolean visible,
-	                                  String cubeName
-	                                  )
-	          {
-				this.name = name;
-				this.description = description;
-				this.annotations = annotations == null ? List.of() : annotations;
-				this.visible = visible;
-				this.cubeName = cubeName;
-		
-			          }
+    public VirtualCubeMeasureR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        boolean visible,
+        String cubeName
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations == null ? List.of() : annotations;
+        this.visible = visible;
+        this.cubeName = cubeName;
+    }
 
 }

@@ -28,12 +28,12 @@ public record AggNameR(String name,
                        List<MappingAggColumnName> aggIgnoreColumns,
                        List<MappingAggForeignKey> aggForeignKeys,
                        List<MappingAggLevel> aggLevels,
-                       boolean ignorecase,
+                       Boolean ignorecase,
                        List<MappingAggMeasureFactCount> measuresFactCounts,
                        String approxRowCount)
         implements MappingAggName {
-	
-	
+
+
 
 
 	public  AggNameR(String name,
@@ -42,7 +42,7 @@ public record AggNameR(String name,
             List<MappingAggColumnName> aggIgnoreColumns,
             List<MappingAggForeignKey> aggForeignKeys,
             List<MappingAggLevel> aggLevels,
-            boolean ignorecase,
+            Boolean ignorecase,
             List<MappingAggMeasureFactCount> measuresFactCounts,
             String approxRowCount)
  {
@@ -55,7 +55,7 @@ public record AggNameR(String name,
 	this.ignorecase = ignorecase;
 	this.measuresFactCounts = measuresFactCounts == null ? List.of() : measuresFactCounts;
 	this.approxRowCount = approxRowCount;
-		
+
  }
 
 }

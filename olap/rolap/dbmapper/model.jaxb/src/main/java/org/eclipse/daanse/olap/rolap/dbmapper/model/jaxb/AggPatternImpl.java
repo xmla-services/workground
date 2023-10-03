@@ -113,7 +113,7 @@ public class AggPatternImpl implements MappingAggPattern {
     }
 
     @Override
-    public boolean ignorecase() {
+    public Boolean ignorecase() {
         if (ignorecase == null) {
             return true;
         } else {

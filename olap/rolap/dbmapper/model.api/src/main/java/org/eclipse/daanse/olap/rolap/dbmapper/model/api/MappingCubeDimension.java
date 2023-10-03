@@ -23,11 +23,11 @@ public interface MappingCubeDimension {
 
     String foreignKey();
 
-    boolean highCardinality();
+    Boolean highCardinality();
 
     String caption();
 
-    boolean visible();
+    Boolean visible();
 
     String description();
 }

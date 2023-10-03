@@ -41,7 +41,7 @@ public interface MappingMeasure {
 
     String description();
 
-    boolean visible();
+    Boolean visible();
 
     String displayFolder();
 

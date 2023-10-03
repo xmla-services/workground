@@ -9,14 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
 
 public record CubeUsageR(String cubeName,
-                         boolean ignoreUnrelatedDimensions)
+                         Boolean ignoreUnrelatedDimensions)
         implements MappingCubeUsage {
 
 }
