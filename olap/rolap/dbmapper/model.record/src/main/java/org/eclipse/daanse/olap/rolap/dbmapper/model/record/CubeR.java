@@ -77,8 +77,8 @@ public record CubeR(String name,
 				this.namedSets = namedSets == null ? List.of() : namedSets;
 				this.drillThroughActions = drillThroughActions == null ? List.of() : drillThroughActions;
 				this.writebackTables = writebackTables == null ? List.of() : writebackTables;
-				this.enabled = enabled == null ? true : enabled;
-				this.cache = cache == null ? true : cache;
+				this.enabled = enabled == null ? Boolean.TRUE : enabled;
+				this.cache = cache == null ? Boolean.TRUE : cache;
 				this.fact = fact;
 				this.actions = actions == null ? List.of() : actions;
 		
