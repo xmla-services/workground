@@ -795,6 +795,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .column("day_of_month")
         .uniqueMembers(false)
         .type(TypeEnum.NUMERIC)
+        .levelType(LevelTypeEnum.TIME_DAYS)
         .build();
     private static final LevelR LEVEL_SHARED_5_1 = LevelRBuilder
         .builder()
