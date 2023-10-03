@@ -1817,7 +1817,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .dimension(MEASURES)
         .formulaElement(FormulaRBuilder
             .builder()
-            .cdata("[Measures].[Profit] / [Measures].[Units Shipped]</Formula")
+            .cdata("[Measures].[Profit] / [Measures].[Units Shipped]")
             .build())
         .build();
 
