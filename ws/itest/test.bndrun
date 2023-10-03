@@ -32,7 +32,7 @@
 	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard'	
 
 	
--runee: JavaSE-17
+-runee: JavaSE-20
 #-runfw: org.apache.felix.framework
 -runfw: org.eclipse.osgi
 

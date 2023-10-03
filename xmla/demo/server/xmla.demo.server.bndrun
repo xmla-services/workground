@@ -7,7 +7,7 @@
 	org.osgi.service.http.port=8090
 	
 	
--runee: JavaSE-17
+-runee: JavaSE-20
 #-runfw: org.apache.felix.framework
 -runfw: org.eclipse.osgi
 
