@@ -24,11 +24,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 public class TableR implements MappingTable {
 
-    private MappingSQL sql;
-    private String alias;
+    private MappingSQL sql=null;
+    private String alias=null;
     private List<MappingAggExclude> aggExcludes;
     private String name;
-    private String schema;
+    private String schema=null;
     private List<MappingHint> hints;
     private List<MappingAggTable> aggTables;
 
