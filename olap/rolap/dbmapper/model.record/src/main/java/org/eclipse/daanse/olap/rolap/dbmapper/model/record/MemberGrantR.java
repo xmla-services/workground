@@ -20,4 +20,8 @@ public record MemberGrantR(String member,
                            MemberGrantAccessEnum access)
         implements MappingMemberGrant {
 
+    public MemberGrantR(String member, MemberGrantAccessEnum access) {
+        this.member = member;
+        this.access = access == null ? MemberGrantAccessEnum.NONE : access;
+    }
 }

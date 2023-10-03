@@ -26,7 +26,7 @@ public record PropertyR(String name,
         Boolean dependsOnLevelValue,
         MappingElementFormatter propertyFormatter)
         implements MappingProperty {
-	
+
 
 	public  PropertyR(String name,
 			String description,
@@ -41,11 +41,11 @@ public record PropertyR(String name,
 				this.description = description;
 				this.caption = caption;
 				this.column = column;
-				this.type = type;
+				this.type = type == null ? PropertyTypeEnum.STRING : type;
 				this.formatter = formatter;
 				this.dependsOnLevelValue = dependsOnLevelValue;
 				this.propertyFormatter = propertyFormatter;
-		
+
 	}
 
 }

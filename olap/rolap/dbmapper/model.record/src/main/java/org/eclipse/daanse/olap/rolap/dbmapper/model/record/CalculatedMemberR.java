@@ -22,10 +22,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 public record CalculatedMemberR(String name,
-		String description,
-		List<MappingAnnotation> annotations,
-		String caption,
-		boolean visible,
+                                String description,
+                                List<MappingAnnotation> annotations,
+                                String caption,
+                                Boolean visible,
                                 String formatString,
                                 String dimension,
                                 String displayFolder,
@@ -35,41 +35,39 @@ public record CalculatedMemberR(String name,
                                 String parent,
                                 MappingCellFormatter cellFormatter,
                                 MappingFormula formulaElement)
-        implements MappingCalculatedMember {
-	
-	
+    implements MappingCalculatedMember {
 
+    public CalculatedMemberR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String formatString,
+        String dimension,
+        String displayFolder,
+        String formula,
+        List<MappingCalculatedMemberProperty> calculatedMemberProperties,
+        String hierarchy,
+        String parent,
+        MappingCellFormatter cellFormatter,
+        MappingFormula formulaElement
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations;
+        this.caption = caption;
+        this.visible = visible;
+        this.formatString = formatString;
+        this.dimension = dimension;
+        this.displayFolder = displayFolder;
+        this.formula = formula;
+        this.calculatedMemberProperties = calculatedMemberProperties == null ? List.of() : calculatedMemberProperties;
+        this.hierarchy = hierarchy;
+        this.parent = parent;
+        this.cellFormatter = cellFormatter;
+        this.formulaElement = formulaElement;
 
-	public  CalculatedMemberR(String name,
-			String description,
-			List<MappingAnnotation> annotations,
-			String caption,
-			boolean visible,
-	                                String formatString,
-	                                String dimension,
-	                                String displayFolder,
-	                                String formula,
-	                                List<MappingCalculatedMemberProperty> calculatedMemberProperties,
-	                                String hierarchy,
-	                                String parent,
-	                                MappingCellFormatter cellFormatter,
-	                                MappingFormula formulaElement)
-	        {
-				this.name = name;
-				this.description = description;
-				this.annotations = annotations;
-				this.caption = caption;
-				this.visible = visible;
-				this.formatString = formatString;
-				this.dimension = dimension;
-				this.displayFolder = displayFolder;
-				this.formula = formula;
-				this.calculatedMemberProperties = calculatedMemberProperties == null ? List.of() : calculatedMemberProperties;
-				this.hierarchy = hierarchy;
-				this.parent = parent;
-				this.cellFormatter = cellFormatter;
-				this.formulaElement = formulaElement;
-		
-	        }
+    }
 
 }

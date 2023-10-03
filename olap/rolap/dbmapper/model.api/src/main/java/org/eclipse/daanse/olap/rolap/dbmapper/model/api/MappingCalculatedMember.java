@@ -34,7 +34,7 @@ public interface MappingCalculatedMember {
 
     String dimension();
 
-    boolean visible();
+    Boolean visible();
 
     String displayFolder();
 

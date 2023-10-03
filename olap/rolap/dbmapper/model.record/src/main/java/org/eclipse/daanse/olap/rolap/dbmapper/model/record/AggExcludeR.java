@@ -17,10 +17,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 
 public record AggExcludeR(String pattern,
                           String name,
-                          boolean ignorecase)
+                          Boolean ignorecase)
         implements MappingAggExclude {
 
-	public AggExcludeR(String pattern, String name, boolean ignorecase) {
+	public AggExcludeR(String pattern, String name, Boolean ignorecase) {
 		this.pattern = pattern;
 		this.name = name;
 		this.ignorecase = ignorecase;
