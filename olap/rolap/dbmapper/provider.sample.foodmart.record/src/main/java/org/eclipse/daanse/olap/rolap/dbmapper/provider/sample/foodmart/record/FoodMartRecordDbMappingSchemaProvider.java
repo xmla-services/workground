@@ -958,7 +958,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final MeasureR MEASURE_1_2 = MeasureRBuilder
         .builder()
         .name(STORE_COST)
-        .column("sotre_cost")
+        .column("store_cost")
         .aggregator("sum")
         .formatString(FORMAT_STRING_00)
         .build();
@@ -1184,7 +1184,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_5 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .allMemberName("All Genders")
+        .allMemberName("All Gender")
         .primaryKey(CUSTOMER_ID)
         .relation(TABLE_5)
         .levels(List.of(LEVEL_1_5))
