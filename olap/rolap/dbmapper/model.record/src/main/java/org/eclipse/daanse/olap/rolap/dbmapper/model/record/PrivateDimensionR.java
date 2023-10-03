@@ -50,10 +50,10 @@ public record PrivateDimensionR(String name,
 			this.description = description;
 			this.annotations = annotations == null ? List.of() : annotations;
 			this.caption = caption;
-			this.visible = visible;
+			this.visible = visible == null ? Boolean.FALSE : visible;
 			this.type = type == null ? DimensionTypeEnum.STANDARD_DIMENSION : type;
 			this.foreignKey = foreignKey;
-			this.highCardinality = highCardinality;
+			this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
 			this.hierarchies = hierarchies == null ? List.of() : hierarchies;
 			this.usagePrefix = usagePrefix;
 	}

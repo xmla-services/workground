@@ -111,7 +111,7 @@ public class DimensionUsageImpl implements MappingDimensionUsage {
     @Override
     public Boolean highCardinality() {
         if (highCardinality == null) {
-            return false;
+            return Boolean.FALSE;
         } else {
             return highCardinality;
         }
@@ -124,7 +124,7 @@ public class DimensionUsageImpl implements MappingDimensionUsage {
 
     @Override
     public Boolean visible() {
-        return visible;
+        return visible == null ? Boolean.FALSE : visible;
     }
 
     @Override

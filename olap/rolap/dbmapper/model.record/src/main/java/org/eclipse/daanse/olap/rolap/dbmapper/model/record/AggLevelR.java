@@ -41,7 +41,7 @@ public record AggLevelR(String column,
 		this.ordinalColumn = ordinalColumn;
 		this.nameColumn = nameColumn;
 		this.captionColumn = captionColumn;
-		this.collapsed = collapsed;
+		this.collapsed = collapsed == null ? Boolean.FALSE : collapsed;
 		this.properties = properties == null ? List.of() : properties;
 	}
 }
