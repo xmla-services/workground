@@ -108,7 +108,7 @@ public class AggNameImpl implements MappingAggName {
     }
 
     @Override
-    public boolean ignorecase() {
+    public Boolean ignorecase() {
         if (ignorecase == null) {
             return true;
         } else {

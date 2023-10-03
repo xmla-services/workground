@@ -32,7 +32,7 @@ public class JoinR implements MappingJoin {
                     String rightAlias,
                     String rightKey)
     {
-        this.relations = relations;
+        this.relations = relations == null ? List.of() : relations;
         this.leftAlias = leftAlias;
         this.leftKey = leftKey;
         this.rightAlias = rightAlias;

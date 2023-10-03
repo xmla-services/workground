@@ -22,13 +22,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParam
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 public record HierarchyR(String name,
-		String description,
-		List<MappingAnnotation> annotations,
+                         String description,
+                         List<MappingAnnotation> annotations,
                          String caption,
-                         boolean visible,
+                         Boolean visible,
                          List<MappingLevel> levels,
                          List<MappingMemberReaderParameter> memberReaderParameters,
-                         boolean hasAll,
+                         Boolean hasAll,
                          String allMemberName,
                          String allMemberCaption,
                          String allLevelName,
@@ -40,51 +40,50 @@ public record HierarchyR(String name,
                          String displayFolder,
                          MappingRelationOrJoin relation,
                          String origin
-                         )
-        implements MappingHierarchy {
-	
-	
-	public  HierarchyR(String name,
-			String description,
-			List<MappingAnnotation> annotations,
-	                         String caption,
-	                         boolean visible,
-	                         List<MappingLevel> levels,
-	                         List<MappingMemberReaderParameter> memberReaderParameters,
-	                         boolean hasAll,
-	                         String allMemberName,
-	                         String allMemberCaption,
-	                         String allLevelName,
-	                         String primaryKey,
-	                         String primaryKeyTable,
-	                         String defaultMember,
-	                         String memberReaderClass,
-	                         String uniqueKeyLevelName,
-	                         String displayFolder,
-	                         MappingRelationOrJoin relation,
-	                         String origin
-	                         )
-	         {
-			this.name = name;
-			this.description = description;
-			this.annotations = annotations;
-			this.caption = caption;
-			this.visible = visible;
-			this.levels = levels == null ? List.of() : levels;
-			this.memberReaderParameters = memberReaderParameters == null ? List.of() : memberReaderParameters;
-			this.hasAll = hasAll;
-			this.allMemberName = allMemberName;
-			this.allMemberCaption = allMemberCaption;
-			this.allLevelName = allLevelName;
-			this.primaryKey = primaryKey;
-			this.primaryKeyTable = primaryKeyTable;
-			this.defaultMember = defaultMember;
-			this.memberReaderClass = memberReaderClass;
-			this.uniqueKeyLevelName = uniqueKeyLevelName;
-			this.displayFolder = displayFolder;
-			this.relation = relation;
-			this.origin = origin;
-		
-	         }
+)
+    implements MappingHierarchy {
+
+    public HierarchyR(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        List<MappingLevel> levels,
+        List<MappingMemberReaderParameter> memberReaderParameters,
+        Boolean hasAll,
+        String allMemberName,
+        String allMemberCaption,
+        String allLevelName,
+        String primaryKey,
+        String primaryKeyTable,
+        String defaultMember,
+        String memberReaderClass,
+        String uniqueKeyLevelName,
+        String displayFolder,
+        MappingRelationOrJoin relation,
+        String origin
+    ) {
+        this.name = name;
+        this.description = description;
+        this.annotations = annotations;
+        this.caption = caption;
+        this.visible = visible;
+        this.levels = levels == null ? List.of() : levels;
+        this.memberReaderParameters = memberReaderParameters == null ? List.of() : memberReaderParameters;
+        this.hasAll = hasAll;
+        this.allMemberName = allMemberName;
+        this.allMemberCaption = allMemberCaption;
+        this.allLevelName = allLevelName;
+        this.primaryKey = primaryKey;
+        this.primaryKeyTable = primaryKeyTable;
+        this.defaultMember = defaultMember;
+        this.memberReaderClass = memberReaderClass;
+        this.uniqueKeyLevelName = uniqueKeyLevelName;
+        this.displayFolder = displayFolder;
+        this.relation = relation;
+        this.origin = origin;
+
+    }
 
 }

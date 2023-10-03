@@ -19,25 +19,22 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 public record ParameterR(String name,
                          String description,
                          ParameterTypeEnum type,
-                         boolean modifiable,
+                         Boolean modifiable,
                          String defaultValue)
-        implements MappingParameter {
-	
+    implements MappingParameter {
 
-
-	public  ParameterR(String name,
-            String description,
-            ParameterTypeEnum type,
-            boolean modifiable,
-            String defaultValue)
-  {
-	this.name = name;
-	this.description = description;
-	this.type = type;
-	this.modifiable = modifiable;
-	this.defaultValue = defaultValue;
-		
-		
-	}
+    public ParameterR(
+        String name,
+        String description,
+        ParameterTypeEnum type,
+        Boolean modifiable,
+        String defaultValue
+    ) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.modifiable = modifiable;
+        this.defaultValue = defaultValue;
+    }
 
 }

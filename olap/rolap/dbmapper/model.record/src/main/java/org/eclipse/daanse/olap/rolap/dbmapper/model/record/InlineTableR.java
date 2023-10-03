@@ -32,6 +32,12 @@ public record InlineTableR(List<MappingColumnDef> columnDefs,
         this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), alias);
     }
 
+    public InlineTableR(List<MappingColumnDef> columnDefs, List<MappingRow> rows, String alias) {
+        this.columnDefs = columnDefs == null ? List.of() : columnDefs;
+        this.rows = rows == null ? List.of() : rows;
+        this.alias = alias;
+    }
+
     @Override
 	public boolean equals(Object o) {
         if (o instanceof MappingInlineTable that) {

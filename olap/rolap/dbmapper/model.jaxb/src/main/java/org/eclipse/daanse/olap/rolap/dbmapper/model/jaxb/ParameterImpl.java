@@ -67,7 +67,7 @@ public class ParameterImpl implements MappingParameter {
     }
 
     @Override
-    public boolean modifiable() {
+    public Boolean modifiable() {
         if (modifiable == null) {
             return true;
         } else {

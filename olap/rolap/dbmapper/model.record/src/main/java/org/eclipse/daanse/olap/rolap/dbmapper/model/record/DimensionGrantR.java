@@ -20,4 +20,8 @@ public record DimensionGrantR(AccessEnum access,
                               String dimension)
         implements MappingDimensionGrant {
 
+    public DimensionGrantR(AccessEnum access, String dimension) {
+        this.access = access == null ? AccessEnum.NONE : access;
+        this.dimension = dimension;
+    }
 }

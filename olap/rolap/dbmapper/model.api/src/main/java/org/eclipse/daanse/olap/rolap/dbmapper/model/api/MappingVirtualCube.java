@@ -30,7 +30,7 @@ public interface MappingVirtualCube {
 
     List<MappingNamedSet> namedSets();
 
-    boolean enabled();
+    Boolean enabled();
 
     String name();
 
@@ -40,5 +40,5 @@ public interface MappingVirtualCube {
 
     String description();
 
-    boolean visible();
+    Boolean visible();
 }

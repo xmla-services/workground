@@ -109,7 +109,7 @@ public class DimensionUsageImpl implements MappingDimensionUsage {
     }
 
     @Override
-    public boolean highCardinality() {
+    public Boolean highCardinality() {
         if (highCardinality == null) {
             return false;
         } else {
@@ -123,7 +123,7 @@ public class DimensionUsageImpl implements MappingDimensionUsage {
     }
 
     @Override
-    public boolean visible() {
+    public Boolean visible() {
         return visible;
     }
 

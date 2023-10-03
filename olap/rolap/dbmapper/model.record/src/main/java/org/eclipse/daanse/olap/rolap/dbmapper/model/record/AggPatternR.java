@@ -30,10 +30,10 @@ public record AggPatternR(String pattern,
                           List<MappingAggMeasure> aggMeasures,
                           List<MappingAggLevel> aggLevels,
                           List<MappingAggExclude> aggExcludes,
-                          boolean ignorecase,
+                          Boolean ignorecase,
                           List<MappingAggMeasureFactCount> measuresFactCounts)
         implements MappingAggPattern {
-	
+
 
 
 	public  AggPatternR(String pattern,
@@ -43,7 +43,7 @@ public record AggPatternR(String pattern,
 			List<MappingAggMeasure> aggMeasures,
             List<MappingAggLevel> aggLevels,
             List<MappingAggExclude> aggExcludes,
-            boolean ignorecase,
+            Boolean ignorecase,
             List<MappingAggMeasureFactCount> measuresFactCounts)
  {
 	this.pattern = pattern;
@@ -55,7 +55,7 @@ public record AggPatternR(String pattern,
 	this.aggExcludes = aggExcludes == null ? List.of() : aggExcludes;
 	this.ignorecase = ignorecase;
 	this.measuresFactCounts = measuresFactCounts == null ? List.of() : measuresFactCounts;
-		
+
 	}
 
 }
