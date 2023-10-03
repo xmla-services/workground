@@ -22,6 +22,6 @@ public record ColumnDefR(String name,
 
     public ColumnDefR(String name, TypeEnum type) {
         this.name = name;
-        this.type = type == null ? TypeEnum.STRING : type;
+        this.type = type;// == null ? TypeEnum.STRING : type;
     }
 }

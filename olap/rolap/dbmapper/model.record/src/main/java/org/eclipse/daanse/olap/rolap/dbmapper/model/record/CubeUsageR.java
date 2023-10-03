@@ -18,5 +18,12 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
 public record CubeUsageR(String cubeName,
                          Boolean ignoreUnrelatedDimensions)
         implements MappingCubeUsage {
+	
+	public  CubeUsageR(String cubeName,
+            Boolean ignoreUnrelatedDimensions)
+  {
+		this.cubeName=cubeName;
+		this.ignoreUnrelatedDimensions = ignoreUnrelatedDimensions == null ? Boolean.FALSE : ignoreUnrelatedDimensions;
+	  }
 
 }

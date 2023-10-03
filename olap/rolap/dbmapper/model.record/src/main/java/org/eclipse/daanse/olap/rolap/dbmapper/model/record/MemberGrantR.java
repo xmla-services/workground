@@ -22,6 +22,6 @@ public record MemberGrantR(String member,
 
     public MemberGrantR(String member, MemberGrantAccessEnum access) {
         this.member = member;
-        this.access = access == null ? MemberGrantAccessEnum.NONE : access;
+        this.access = access ;//== null ? MemberGrantAccessEnum.NONE : access;
     }
 }
