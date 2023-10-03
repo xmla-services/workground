@@ -378,7 +378,11 @@ public class RolapSchema implements Schema {
 		// TODO: get from schema var
 		xmlSchema = context.getDatabaseMappingSchemaProviders().get(0).get();
 
-		sha512Bytes = new ByteString(Objects.toIdentityString(xmlSchema).getBytes());
+
+		sha512Bytes = new ByteString((""+xmlSchema.hashCode()).getBytes());
+		
+		//todo: use this >jdk19
+//		sha512Bytes = new ByteString(Objects.toIdentityString(xmlSchema).getBytes());
 
 		load(xmlSchema);
 
