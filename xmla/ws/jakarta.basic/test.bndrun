@@ -33,7 +33,7 @@
 	
 
 	
--runee: JavaSE-20
+-runee: JavaSE-17
 #-runfw: org.apache.felix.framework
 -runfw: org.eclipse.osgi
 
