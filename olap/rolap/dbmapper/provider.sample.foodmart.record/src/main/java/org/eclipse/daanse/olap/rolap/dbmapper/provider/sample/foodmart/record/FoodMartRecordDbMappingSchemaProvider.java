@@ -1757,7 +1757,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .name("Profit last Period")
         .dimension(MEASURES)
-        .formula("COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit]")
+        .formula("COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit])")
         .visible(false)
         .calculatedMemberProperties(List.of(
             CALCULATEDMEMBER_PROPERTY_2_1,
