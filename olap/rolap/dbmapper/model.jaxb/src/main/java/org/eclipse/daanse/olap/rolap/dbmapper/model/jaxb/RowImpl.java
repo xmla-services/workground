@@ -39,4 +39,7 @@ public class RowImpl implements MappingRow {
         return this.value;
     }
 
+    public void setValues(List<MappingValue> values) {
+        this.value = values;
+    }
 }

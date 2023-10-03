@@ -28,8 +28,8 @@ public class CellFormatterImpl implements MappingCellFormatter {
 
     @XmlAttribute(name = "className")
     protected  String className;
-    @XmlElement(name = "Script")
-    protected  ScriptImpl script;
+    @XmlElement(name = "Script", type = ScriptImpl.class)
+    protected  MappingScript script;
 
     @Override
     public String className() {
@@ -39,5 +39,13 @@ public class CellFormatterImpl implements MappingCellFormatter {
     @Override
     public MappingScript script() {
         return script;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public void setScript(MappingScript script) {
+        this.script = script;
     }
 }

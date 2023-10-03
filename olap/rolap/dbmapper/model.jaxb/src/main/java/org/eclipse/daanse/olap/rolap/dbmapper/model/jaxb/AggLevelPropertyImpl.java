@@ -38,4 +38,12 @@ public class AggLevelPropertyImpl implements MappingAggLevelProperty {
     public String column() {
         return column;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
+    }
 }

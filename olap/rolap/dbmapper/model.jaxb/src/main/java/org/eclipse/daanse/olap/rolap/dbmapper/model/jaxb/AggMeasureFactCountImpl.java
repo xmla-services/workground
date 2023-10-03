@@ -39,4 +39,12 @@ public class AggMeasureFactCountImpl implements MappingAggMeasureFactCount {
     public String factColumn() {
         return factColumn;
     }
+
+    public void setFactColumn(String factColumn) {
+        this.factColumn = factColumn;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
+    }
 }

@@ -40,4 +40,12 @@ public class ScriptImpl implements MappingScript {
     public String cdata() {
         return cdata;
     }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setCdata(String cdata) {
+        this.cdata = cdata;
+    }
 }

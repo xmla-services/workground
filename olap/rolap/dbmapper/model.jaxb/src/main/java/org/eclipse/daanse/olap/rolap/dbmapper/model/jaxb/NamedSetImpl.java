@@ -44,8 +44,8 @@ public class NamedSetImpl implements MappingNamedSet {
     private String displayFolder;
     @XmlAttribute(name = "formula")
     protected String formula;
-    @XmlElement(name = "Formula")
-    protected FormulaImpl formulaElement;
+    @XmlElement(name = "Formula", type = FormulaImpl.class)
+    protected MappingFormula formulaElement;
 
     /**
      * Gets the value of the annotations property.
@@ -111,7 +111,7 @@ public class NamedSetImpl implements MappingNamedSet {
         this.displayFolder = displayFolder;
     }
 
-    public void setFormulaElement(FormulaImpl formulaElement) {
+    public void setFormulaElement(MappingFormula formulaElement) {
         this.formulaElement = formulaElement;
     }
 

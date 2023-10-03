@@ -151,4 +151,12 @@ public class PrivateDimensionImpl implements MappingPrivateDimension {
     public void setHierarchies(List<MappingHierarchy> hierarchies) {
         this.hierarchies = hierarchies;
     }
+
+    public void setAnnotations(List<MappingAnnotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void setUsagePrefix(String usagePrefix) {
+        this.usagePrefix = usagePrefix;
+    }
 }

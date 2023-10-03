@@ -61,10 +61,10 @@ public class CalculatedMemberImpl implements MappingCalculatedMember {
     protected  String hierarchy;
     @XmlAttribute(name = "parent")
     protected String parent;
-    @XmlElement(name = "CellFormatter")
-    protected CellFormatterImpl cellFormatter;
-    @XmlElement(name = "Formula")
-    protected FormulaImpl formulaElement;
+    @XmlElement(name = "CellFormatter", type = CellFormatterImpl.class)
+    protected MappingCellFormatter cellFormatter;
+    @XmlElement(name = "Formula", type = FormulaImpl.class)
+    protected MappingFormula formulaElement;
 
 
 
@@ -308,5 +308,21 @@ public class CalculatedMemberImpl implements MappingCalculatedMember {
     @Override
     public MappingFormula formulaElement() {
         return formulaElement;
+    }
+
+    public void setCalculatedMemberProperties(List<MappingCalculatedMemberProperty> calculatedMemberProperties) {
+        this.calculatedMemberProperties = calculatedMemberProperties;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public void setCellFormatter(MappingCellFormatter cellFormatter) {
+        this.cellFormatter = cellFormatter;
+    }
+
+    public void setFormulaElement(MappingFormula formulaElement) {
+        this.formulaElement = formulaElement;
     }
 }
