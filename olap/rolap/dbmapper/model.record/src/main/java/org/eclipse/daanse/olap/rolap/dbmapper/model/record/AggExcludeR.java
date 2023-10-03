@@ -23,11 +23,11 @@ public record AggExcludeR(String pattern,
 	public AggExcludeR(String pattern, String name, Boolean ignorecase) {
 		this.pattern = pattern;
 		this.name = name;
-		this.ignorecase = ignorecase == null ? Boolean.FALSE : ignorecase;
+		this.ignorecase = ignorecase == null ? Boolean.TRUE : ignorecase;
 	}
 
 	public AggExcludeR(String pattern, String name) {
-        this(pattern, name, true);
+        this(pattern, name, Boolean.TRUE );
     }
 
 }
