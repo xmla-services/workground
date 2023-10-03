@@ -90,7 +90,7 @@ public abstract class FunTableImpl implements FunctionTable {
     }
 
     @Override
-	public boolean isReserved(String s) {
+	public boolean isReservedWord(String s) {
         return reservedWordSet.contains(s.toUpperCase());
     }
 
@@ -122,14 +122,14 @@ public abstract class FunTableImpl implements FunctionTable {
         }
         return resolvers;
     }
-    record FunctionAtomCompareKey(String name, Syntax syntax) {
+    public record FunctionAtomCompareKey(String name, Syntax syntax) {
     
-		FunctionAtomCompareKey(String name, Syntax syntax) {
+		public FunctionAtomCompareKey(String name, Syntax syntax) {
 			this.name = name.toUpperCase();
 			this.syntax = syntax;
 		}
 
-		FunctionAtomCompareKey(FunctionAtom functionAtom) {
+		public FunctionAtomCompareKey(FunctionAtom functionAtom) {
 			this(functionAtom.name(), functionAtom.syntax());
 		}
     	
