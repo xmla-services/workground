@@ -33,8 +33,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumns", "aggForeignKeys", "aggMeasures", "aggLevels", "measuresFactCounts" })
 public class AggNameImpl implements MappingAggName {
 
-    @XmlElement(name = "AggFactCount", required = true)
-    protected AggColumnNameImpl aggFactCount;
+    @XmlElement(name = "AggFactCount", required = true, type = AggColumnNameImpl.class)
+    protected MappingAggColumnName aggFactCount;
     @XmlElement(name = "AggIgnoreColumn", type = AggColumnNameImpl.class)
     protected List<MappingAggColumnName> aggIgnoreColumns;
     @XmlElement(name = "AggForeignKey", type = AggForeignKeyImpl.class)
@@ -53,11 +53,11 @@ public class AggNameImpl implements MappingAggName {
     private List<MappingAggMeasureFactCount> measuresFactCounts;
 
     @Override
-    public AggColumnNameImpl aggFactCount() {
+    public MappingAggColumnName aggFactCount() {
         return aggFactCount;
     }
 
-    public void setAggFactCount(AggColumnNameImpl value) {
+    public void setAggFactCount(MappingAggColumnName value) {
         this.aggFactCount = value;
     }
 
@@ -128,4 +128,27 @@ public class AggNameImpl implements MappingAggName {
         this.ignorecase = value;
     }
 
+    public void setAggMeasures(List<MappingAggMeasure> aggMeasures) {
+        this.aggMeasures = aggMeasures;
+    }
+
+    public void setAggIgnoreColumns(List<MappingAggColumnName> aggIgnoreColumns) {
+        this.aggIgnoreColumns = aggIgnoreColumns;
+    }
+
+    public void setAggForeignKeys(List<MappingAggForeignKey> aggForeignKeys) {
+        this.aggForeignKeys = aggForeignKeys;
+    }
+
+    public void setAggLevels(List<MappingAggLevel> aggLevels) {
+        this.aggLevels = aggLevels;
+    }
+
+    public void setMeasuresFactCounts(List<MappingAggMeasureFactCount> measuresFactCounts) {
+        this.measuresFactCounts = measuresFactCounts;
+    }
+
+    public void setApproxRowCount(String approxRowCount) {
+        this.approxRowCount = approxRowCount;
+    }
 }

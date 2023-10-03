@@ -54,4 +54,7 @@ public class AggMeasureImpl implements MappingAggMeasure {
         this.name = value;
     }
 
+    public void setRollupType(String rollupType) {
+        this.rollupType = rollupType;
+    }
 }
