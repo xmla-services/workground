@@ -89,7 +89,7 @@ public record LevelR(String name,
         this.description = description;
         this.annotations = annotations == null ? List.of() : annotations;
         this.caption = caption;
-        this.visible = visible == null ? false : visible;
+        this.visible = visible == null ? Boolean.TRUE : visible;
         this.table = table;
         this.column = column;
         this.nameColumn = nameColumn;
@@ -98,7 +98,7 @@ public record LevelR(String name,
         this.nullParentValue = nullParentValue;
         this.type = type == null ? TypeEnum.STRING : type;
         this.approxRowCount = approxRowCount;
-        this.uniqueMembers = uniqueMembers == null ? false : uniqueMembers;
+        this.uniqueMembers = uniqueMembers == null ? Boolean.FALSE : uniqueMembers;
         this.levelType = levelType == null ? LevelTypeEnum.REGULAR : levelType;
         this.hideMemberIf = hideMemberIf == null ? HideMemberIfEnum.NEVER : hideMemberIf;
         this.formatter = formatter;
