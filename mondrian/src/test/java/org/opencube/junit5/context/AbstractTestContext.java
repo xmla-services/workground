@@ -1,5 +1,10 @@
 package org.opencube.junit5.context;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,8 +17,15 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
+import org.opencube.junit5.Constants;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 public abstract class AbstractTestContext implements Context {
 
@@ -76,9 +88,34 @@ public abstract class AbstractTestContext implements Context {
 	@Override
 	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
 		DatabaseMappingSchemaProvider dbp = new FoodMartRecordDbMappingSchemaProvider();
+		try {
+			SchemaImpl	 s=read(Files.newInputStream( Path.of( Constants.DEMO_DIR+"FoodMart.xml")));
+			 dbp= new DatabaseMappingSchemaProvider() {
+				 
+				 @Override
+				 public MappingSchema get() {
+					 return s;
+				 }
+			 }; 
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return List.of(dbp);
 	}
+    public SchemaImpl read(InputStream inputStream) throws JAXBException {
 
+        JAXBContext jaxbContext = JAXBContext.newInstance(SchemaImpl.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        return (SchemaImpl) jaxbUnmarshaller.unmarshal(inputStream);
+
+    }
 	@Override
 	public ExpressionCompilerFactory getExpressionCompilerFactory() {
 		return expressionCompilerFactory;
