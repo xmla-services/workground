@@ -112,24 +112,24 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
      */
     protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
 
-        String name = schemaName(mappingSchemaOriginal);
-        String description = schemaDescription(mappingSchemaOriginal);
-        String measuresCaption = schemaMeasuresCaption(mappingSchemaOriginal);
-        String defaultRole = schemaDefaultRole(mappingSchemaOriginal);
+        if (mappingSchemaOriginal != null) {
+            String name = schemaName(mappingSchemaOriginal);
+            String description = schemaDescription(mappingSchemaOriginal);
+            String measuresCaption = schemaMeasuresCaption(mappingSchemaOriginal);
+            String defaultRole = schemaDefaultRole(mappingSchemaOriginal);
+            List<MappingAnnotation> annotations = schemaAnnotations(mappingSchemaOriginal);
+            List<MappingParameter> parameters = schemaParameters(mappingSchemaOriginal);
+            List<MappingPrivateDimension> dimensions = schemaDimensions(mappingSchemaOriginal);
+            List<MappingCube> cubes = schemaCubes(mappingSchemaOriginal);
+            List<MappingVirtualCube> virtualCubes = schemaVirtualCubes(mappingSchemaOriginal);
+            List<MappingNamedSet> namedSets = schemaNamedSets(mappingSchemaOriginal);
+            List<MappingRole> roles = schemaRoles(mappingSchemaOriginal);
+            List<MappingUserDefinedFunction> userDefinedFunctions = schemaUserDefinedFunctions(mappingSchemaOriginal);
 
-        List<MappingAnnotation> annotations = schemaAnnotations(mappingSchemaOriginal);
-        List<MappingParameter> parameters = schemaParameters(mappingSchemaOriginal);
-        List<MappingPrivateDimension> dimensions = schemaDimensions(mappingSchemaOriginal);
-        List<MappingCube> cubes = schemaCubes(mappingSchemaOriginal);
-        List<MappingVirtualCube> virtualCubes = schemaVirtualCubes(mappingSchemaOriginal);
-        List<MappingNamedSet> namedSets = schemaNamedSets(mappingSchemaOriginal);
-        List<MappingRole> roles = schemaRoles(mappingSchemaOriginal);
-        List<MappingUserDefinedFunction> userDefinedFunctions = schemaUserDefinedFunctions(mappingSchemaOriginal);
-
-        MappingSchema mappingSchemaNew = new_Schema(name, description, measuresCaption, defaultRole, annotations,
-            parameters, dimensions, cubes, virtualCubes, namedSets, roles, userDefinedFunctions);
-
-        return mappingSchemaNew;
+            return new_Schema(name, description, measuresCaption, defaultRole, annotations,
+                parameters, dimensions, cubes, virtualCubes, namedSets, roles, userDefinedFunctions);
+        }
+        return null;
     }
 
     protected abstract MappingSchema new_Schema(
@@ -169,24 +169,33 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAnnotation> annotations(List<MappingAnnotation> annotations) {
-        return annotations.stream().map(this::annotation).toList();
+        if (annotations != null) {
+            return annotations.stream().map(this::annotation).toList();
+        }
+        return null;
     }
 
     protected MappingAnnotation annotation(MappingAnnotation annotation) {
-        String name = annotation.name();
-        String content = annotation.content();
-        return new_Annotation(name, content);
+        if (annotation != null) {
+            String name = annotation.name();
+            String content = annotation.content();
+            return new_Annotation(name, content);
+        }
+        return null;
     }
 
     protected abstract MappingAnnotation new_Annotation(String name, String content);
 
     protected MappingParameter parameter(MappingParameter parameterOriginal) {
-        String name = parameterOriginal.name();
-        String description = parameterOriginal.description();
-        ParameterTypeEnum type = parameterOriginal.type();
-        boolean modifiable = parameterOriginal.modifiable();
-        String defaultValue = parameterOriginal.defaultValue();
-        return new_parameter(name, description, type, modifiable, defaultValue);
+        if (parameterOriginal != null) {
+            String name = parameterOriginal.name();
+            String description = parameterOriginal.description();
+            ParameterTypeEnum type = parameterOriginal.type();
+            boolean modifiable = parameterOriginal.modifiable();
+            String defaultValue = parameterOriginal.defaultValue();
+            return new_parameter(name, description, type, modifiable, defaultValue);
+        }
+        return null;
     }
 
     protected abstract MappingParameter new_parameter(
@@ -203,20 +212,22 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingPrivateDimension dimension(MappingPrivateDimension dimension) {
+        if (dimension != null) {
+            String name = dimensionName(dimension);
+            DimensionTypeEnum type = dimensionType(dimension);
+            String caption = dimensionCaption(dimension);
+            String description = dimensionDescription(dimension);
+            String foreignKey = dimensionForeignKey(dimension);
+            boolean highCardinality = dimensionCardinality(dimension);
+            List<MappingAnnotation> annotations = dimensionAnnotations(dimension);
+            List<MappingHierarchy> hierarchies = dimensionHieraries(dimension);
+            boolean visible = dimensionVisible(dimension);
+            String usagePrefix = dimensionUsagePrefix(dimension);
 
-        String name = dimensionName(dimension);
-        DimensionTypeEnum type = dimensionType(dimension);
-        String caption = dimensionCaption(dimension);
-        String description = dimensionDescription(dimension);
-        String foreignKey = dimensionForeignKey(dimension);
-        boolean highCardinality = dimensionCardinality(dimension);
-        List<MappingAnnotation> annotations = dimensionAnnotations(dimension);
-        List<MappingHierarchy> hierarchies = dimensionHieraries(dimension);
-        boolean visible = dimensionVisible(dimension);
-        String usagePrefix = dimensionUsagePrefix(dimension);
-
-        return new_PrivateDimension(name, type, caption, description, foreignKey, highCardinality, annotations,
-            hierarchies, visible, usagePrefix);
+            return new_PrivateDimension(name, type, caption, description, foreignKey, highCardinality, annotations,
+                hierarchies, visible, usagePrefix);
+        }
+        return null;
 
     }
 
@@ -271,31 +282,32 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingHierarchy hierarchy(MappingHierarchy hierarchy) {
+        if (hierarchy != null) {
+            String name = hierarchyName(hierarchy);
+            String caption = hierarchyCaption(hierarchy);
+            String description = hierarchyDescription(hierarchy);
+            List<MappingAnnotation> annotations = hierarchyAnnotations(hierarchy);
+            List<MappingLevel> levels = hierarchyLevels(hierarchy);
+            List<MappingMemberReaderParameter> memberReaderParameters = hierarchyMemberReaderParameters(hierarchy);
+            boolean hasAll = hierarchyHasAll(hierarchy);
+            String allMemberName = hierarchyAllMemerName(hierarchy);
+            String allMemberCaption = hierarchyAllMemberCaption(hierarchy);
+            String allLevelName = hierarchyAllLevelName(hierarchy);
+            String primaryKey = hierarchyPrimaryKey(hierarchy);
+            String primaryKeyTable = hierarchyPrimaryKeyTable(hierarchy);
+            String defaultMember = hierarchyDefaultMember(hierarchy);
+            String memberReaderClass = hierarchyMemberReaderClass(hierarchy);
+            String uniqueKeyLevelName = hierarchyUniqueKeyLevelName(hierarchy);
+            boolean visible = hierarchyVisible(hierarchy);
+            String displayFolder = hierarchyDisplayFolder(hierarchy);
+            MappingRelationOrJoin relation = hierarchyRelation(hierarchy);
+            String origin = hierarchyOrigin(hierarchy);
 
-        String name = hierarchyName(hierarchy);
-        String caption = hierarchyCaption(hierarchy);
-        String description = hierarchyDescription(hierarchy);
-        List<MappingAnnotation> annotations = hierarchyAnnotations(hierarchy);
-        List<MappingLevel> levels = hierarchyLevels(hierarchy);
-        List<MappingMemberReaderParameter> memberReaderParameters = hierarchyMemberReaderParameters(hierarchy);
-        boolean hasAll = hierarchyHasAll(hierarchy);
-        String allMemberName = hierarchyAllMemerName(hierarchy);
-        String allMemberCaption = hierarchyAllMemberCaption(hierarchy);
-        String allLevelName = hierarchyAllLevelName(hierarchy);
-        String primaryKey = hierarchyPrimaryKey(hierarchy);
-        String primaryKeyTable = hierarchyPrimaryKeyTable(hierarchy);
-        String defaultMember = hierarchyDefaultMember(hierarchy);
-        String memberReaderClass = hierarchyMemberReaderClass(hierarchy);
-        String uniqueKeyLevelName = hierarchyUniqueKeyLevelName(hierarchy);
-        boolean visible = hierarchyVisible(hierarchy);
-        String displayFolder = hierarchyDisplayFolder(hierarchy);
-        MappingRelationOrJoin relation = hierarchyRelation(hierarchy);
-        String origin = hierarchyOrigin(hierarchy);
-
-        return new_Hierarchy(name, caption, description, annotations, levels, memberReaderParameters, hasAll,
-            allMemberName, allMemberCaption, allLevelName, primaryKey, primaryKeyTable, defaultMember,
-            memberReaderClass, uniqueKeyLevelName, visible, displayFolder, relation, origin);
-
+            return new_Hierarchy(name, caption, description, annotations, levels, memberReaderParameters, hasAll,
+                allMemberName, allMemberCaption, allLevelName, primaryKey, primaryKeyTable, defaultMember,
+                memberReaderClass, uniqueKeyLevelName, visible, displayFolder, relation, origin);
+        }
+        return null;
     }
 
     protected abstract MappingHierarchy new_Hierarchy(
@@ -368,11 +380,13 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected MappingMemberReaderParameter memberReaderParameter(
         MappingMemberReaderParameter mappingMemberReaderParameter
     ) {
+        if (mappingMemberReaderParameter  != null) {
+            String name = mappingMemberReaderParameter.name();
+            String value = mappingMemberReaderParameter.value();
 
-        String name = mappingMemberReaderParameter.name();
-        String value = mappingMemberReaderParameter.value();
-
-        return new_MemberReaderParameter(name, value);
+            return new_MemberReaderParameter(name, value);
+        }
+        return null;
     }
 
     protected abstract MappingMemberReaderParameter new_MemberReaderParameter(String name, String value);
@@ -382,7 +396,10 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingLevel> levels(List<MappingLevel> levels) {
-        return levels.stream().map(this::level).toList();
+        if ( levels != null ) {
+            return levels.stream().map(this::level).toList();
+        }
+        return null;
     }
 
     protected List<MappingAnnotation> hierarchyAnnotations(MappingHierarchy hierarchy) {
@@ -407,32 +424,36 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCube> cubes(List<MappingCube> cubes) {
-        return cubes.stream().map(this::cube).toList();
-
+        if (cubes != null) {
+            return cubes.stream().map(this::cube).toList();
+        }
+        return null;
     }
 
     protected MappingCube cube(MappingCube cube) {
-        String name = cubeName(cube);
-        String caption = cubeCaption(cube);
-        String description = cubeDescription(cube);
-        String defaultMeasure = cubeDefaultMeasures(cube);
-        List<MappingAnnotation> annotations = cubeAnnotations(cube);
-        List<MappingCubeDimension> dimensionUsageOrDimensions = cubeDimensionUsageOrDimensions(cube);
-        List<MappingMeasure> measures = cubeMeasures(cube);
-        List<MappingCalculatedMember> calculatedMembers = cubeCalculatedMembers(cube);
-        List<MappingNamedSet> namedSets = cubeNamedSets(cube);
-        List<MappingDrillThroughAction> drillThroughActions = cubeDrillThroughActions(cube);
-        List<MappingWritebackTable> writebackTables = cubeWritebackTables(cube);
-        boolean enabled = cubeEnabled(cube);
-        boolean cache = cubeCache(cube);
-        boolean visible = cubeVisible(cube);
-        MappingRelation fact = cubeFact(cube);
-        List<MappingAction> actions = cubeActions(cube);
+        if (cube != null) {
+            String name = cubeName(cube);
+            String caption = cubeCaption(cube);
+            String description = cubeDescription(cube);
+            String defaultMeasure = cubeDefaultMeasures(cube);
+            List<MappingAnnotation> annotations = cubeAnnotations(cube);
+            List<MappingCubeDimension> dimensionUsageOrDimensions = cubeDimensionUsageOrDimensions(cube);
+            List<MappingMeasure> measures = cubeMeasures(cube);
+            List<MappingCalculatedMember> calculatedMembers = cubeCalculatedMembers(cube);
+            List<MappingNamedSet> namedSets = cubeNamedSets(cube);
+            List<MappingDrillThroughAction> drillThroughActions = cubeDrillThroughActions(cube);
+            List<MappingWritebackTable> writebackTables = cubeWritebackTables(cube);
+            boolean enabled = cubeEnabled(cube);
+            boolean cache = cubeCache(cube);
+            boolean visible = cubeVisible(cube);
+            MappingRelation fact = cubeFact(cube);
+            List<MappingAction> actions = cubeActions(cube);
 
-        return new_Cube(name, caption, description, defaultMeasure, annotations, dimensionUsageOrDimensions, measures,
-            calculatedMembers, namedSets, drillThroughActions, writebackTables, enabled, cache, visible, fact,
-            actions);
-
+            return new_Cube(name, caption, description, defaultMeasure, annotations, dimensionUsageOrDimensions, measures,
+                calculatedMembers, namedSets, drillThroughActions, writebackTables, enabled, cache, visible, fact,
+                actions);
+        }
+        return null;
     }
 
     protected abstract MappingCube new_Cube(
@@ -453,12 +474,14 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingAction action(MappingAction action) {
-
-        String name = actionName(action);
-        String caption = actionCaption(action);
-        String description = actionDescription(action);
-        List<MappingAnnotation> annotations = actionAnnotations(action);
-        return new_MappingAction(name, caption, description, annotations);
+        if (action != null) {
+            String name = actionName(action);
+            String caption = actionCaption(action);
+            String description = actionDescription(action);
+            List<MappingAnnotation> annotations = actionAnnotations(action);
+            return new_MappingAction(name, caption, description, annotations);
+        }
+        return null;
     }
 
     protected abstract MappingAction new_MappingAction(
@@ -524,17 +547,21 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingVirtualCube> virtualCubes(List<MappingVirtualCube> virtualCubes) {
-        return virtualCubes.stream().map(this::virtualCube).toList();
-
+        if (virtualCubes != null) {
+            return virtualCubes.stream().map(this::virtualCube).toList();
+        }
+        return null;
     }
 
     protected List<MappingNamedSet> schemaNamedSets(MappingSchema mappingSchemaOriginal) {
-
         return namedSets(mappingSchemaOriginal.namedSets());
     }
 
     protected List<MappingNamedSet> namedSets(List<MappingNamedSet> mappingNamedSets) {
-        return mappingNamedSets.stream().map(this::namedSets).toList();
+        if (mappingNamedSets != null) {
+            return mappingNamedSets.stream().map(this::namedSets).toList();
+        }
+        return null;
 
     }
 
@@ -543,16 +570,23 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingRole> roles(List<MappingRole> roles) {
-        return roles.stream().map(this::role).toList();
+        if (roles != null) {
+            return roles.stream().map(this::role).toList();
+        }
+        return null;
+
     }
 
     protected MappingRole role(MappingRole role) {
-        List<MappingAnnotation> annotations = roleAnnotations(role);
-        List<MappingSchemaGrant> schemaGrants = roleSchemaGrants(role);
-        MappingUnion union = roleUnion(role);
-        String name = roleName(role);
+        if (role != null) {
+            List<MappingAnnotation> annotations = roleAnnotations(role);
+            List<MappingSchemaGrant> schemaGrants = roleSchemaGrants(role);
+            MappingUnion union = roleUnion(role);
+            String name = roleName(role);
 
-        return new_MappingRole(annotations, schemaGrants, union, name);
+            return new_MappingRole(annotations, schemaGrants, union, name);
+        }
+        return null;
     }
 
     protected abstract MappingRole new_MappingRole(
@@ -573,7 +607,10 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingSchemaGrant> schemaGrants(List<MappingSchemaGrant> grants) {
-        return grants.stream().map(this::grant).toList();
+        if (grants != null) {
+            return grants.stream().map(this::grant).toList();
+        }
+        return null;
     }
 
     protected List<MappingAnnotation> roleAnnotations(MappingRole role) {
@@ -581,32 +618,35 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingVirtualCube virtualCube(MappingVirtualCube virtualCube) {
-        List<MappingAnnotation> annotations = virtualCubeAnnotations(virtualCube);
-        List<MappingCubeUsage> cubeUsages = virtualCubeCubeUsage(virtualCube);
-        List<MappingVirtualCubeDimension> virtualCubeDimensions = virtualCubeVirtualCubeDimension(virtualCube);
-        List<MappingVirtualCubeMeasure> virtualCubeMeasures = virtualCubeVirtualCubeMeasure(virtualCube);
-        List<MappingCalculatedMember> calculatedMembers = virtualCubeCalculatedMember(virtualCube);
-        List<MappingNamedSet> namedSets = virtualCubeNamedSet(virtualCube);
-        boolean enabled = virtualCubeEnabled(virtualCube);
-        String name = virtualCubeName(virtualCube);
-        String defaultMeasure = virtualCubeDefaultMeasure(virtualCube);
-        String caption = virtualCubeCaption(virtualCube);
-        String description = virtualCubeDescription(virtualCube);
-        boolean visible = virtualCubeVisible(virtualCube);
+        if (virtualCube != null) {
+            List<MappingAnnotation> annotations = virtualCubeAnnotations(virtualCube);
+            List<MappingCubeUsage> cubeUsages = virtualCubeCubeUsage(virtualCube);
+            List<MappingVirtualCubeDimension> virtualCubeDimensions = virtualCubeVirtualCubeDimension(virtualCube);
+            List<MappingVirtualCubeMeasure> virtualCubeMeasures = virtualCubeVirtualCubeMeasure(virtualCube);
+            List<MappingCalculatedMember> calculatedMembers = virtualCubeCalculatedMember(virtualCube);
+            List<MappingNamedSet> namedSets = virtualCubeNamedSet(virtualCube);
+            boolean enabled = virtualCubeEnabled(virtualCube);
+            String name = virtualCubeName(virtualCube);
+            String defaultMeasure = virtualCubeDefaultMeasure(virtualCube);
+            String caption = virtualCubeCaption(virtualCube);
+            String description = virtualCubeDescription(virtualCube);
+            boolean visible = virtualCubeVisible(virtualCube);
 
-        return new_VirtualCube(
-            name,
-            caption,
-            description,
-            defaultMeasure,
-            enabled,
-            annotations,
-            cubeUsages,
-            virtualCubeDimensions,
-            virtualCubeMeasures,
-            calculatedMembers,
-            namedSets,
-            visible);
+            return new_VirtualCube(
+                name,
+                caption,
+                description,
+                defaultMeasure,
+                enabled,
+                annotations,
+                cubeUsages,
+                virtualCubeDimensions,
+                virtualCubeMeasures,
+                calculatedMembers,
+                namedSets,
+                visible);
+        }
+        return null;
     }
 
     protected boolean virtualCubeVisible(MappingVirtualCube virtualCube) {
@@ -642,42 +682,48 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     private List<MappingCalculatedMember> calculatedMembers(List<MappingCalculatedMember> calculatedMembers) {
-        return calculatedMembers.stream().map(this::calculatedMember).toList();
+        if (calculatedMembers != null) {
+            return calculatedMembers.stream().map(this::calculatedMember).toList();
+        }
+        return null;
     }
 
     private MappingCalculatedMember calculatedMember(MappingCalculatedMember calculatedMember) {
-        String name = calculatedMemberName(calculatedMember);
-        String formatString = calculatedMemberFormatString(calculatedMember);
-        String caption = calculatedMemberCaption(calculatedMember);
-        String description = calculatedMemberDescription(calculatedMember);
-        String dimension = calculatedMemberDimension(calculatedMember);
-        boolean visible = calculatedMemberVisible(calculatedMember);
-        String displayFolder = calculatedMemberDisplayFolder(calculatedMember);
-        List<MappingAnnotation> annotations = calculatedMemberAnnotations(calculatedMember);
-        String formula = calculatedMemberFormula(calculatedMember);
-        List<MappingCalculatedMemberProperty> calculatedMemberProperties =
-            calculatedMemberCalculatedMemberProperties(calculatedMember);
-        String hierarchy = calculatedMemberHierarchy(calculatedMember);
-        String parent = calculatedMemberParent(calculatedMember);
-        MappingCellFormatter cellFormatter = calculatedMemberCellFormatter(calculatedMember);
-        MappingFormula formulaElement = calculatedMemberFormulaElement(calculatedMember);
+        if (calculatedMember != null) {
+            String name = calculatedMemberName(calculatedMember);
+            String formatString = calculatedMemberFormatString(calculatedMember);
+            String caption = calculatedMemberCaption(calculatedMember);
+            String description = calculatedMemberDescription(calculatedMember);
+            String dimension = calculatedMemberDimension(calculatedMember);
+            boolean visible = calculatedMemberVisible(calculatedMember);
+            String displayFolder = calculatedMemberDisplayFolder(calculatedMember);
+            List<MappingAnnotation> annotations = calculatedMemberAnnotations(calculatedMember);
+            String formula = calculatedMemberFormula(calculatedMember);
+            List<MappingCalculatedMemberProperty> calculatedMemberProperties =
+                calculatedMemberCalculatedMemberProperties(calculatedMember);
+            String hierarchy = calculatedMemberHierarchy(calculatedMember);
+            String parent = calculatedMemberParent(calculatedMember);
+            MappingCellFormatter cellFormatter = calculatedMemberCellFormatter(calculatedMember);
+            MappingFormula formulaElement = calculatedMemberFormulaElement(calculatedMember);
 
-        return new_CalculatedMember(
-            name,
-            formatString,
-            caption,
-            description,
-            dimension,
-            visible,
-            displayFolder,
-            annotations,
-            formula,
-            calculatedMemberProperties,
-            hierarchy,
-            parent,
-            cellFormatter,
-            formulaElement
-        );
+            return new_CalculatedMember(
+                name,
+                formatString,
+                caption,
+                description,
+                dimension,
+                visible,
+                displayFolder,
+                annotations,
+                formula,
+                calculatedMemberProperties,
+                hierarchy,
+                parent,
+                cellFormatter,
+                formulaElement
+            );
+        }
+        return null;
     }
 
     protected MappingFormula calculatedMemberFormulaElement(MappingCalculatedMember calculatedMember) {
@@ -695,10 +741,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingCellFormatter cellFormatter(MappingCellFormatter cellFormatter) {
-        String className = cellFormatterClassName(cellFormatter);
-        MappingScript script = cellFormatterScript(cellFormatter);
-
-        return new_CellFormatter(className, script);
+    	if (cellFormatter != null) {
+    		String className = cellFormatterClassName(cellFormatter);
+    		MappingScript script = cellFormatterScript(cellFormatter);
+    		return new_CellFormatter(className, script);
+    	}
+    	return null;
     }
 
     protected abstract MappingCellFormatter new_CellFormatter(String className, MappingScript script);
@@ -708,9 +756,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingScript script(MappingScript script) {
-        String language = scriptLanguage(script);
-        String cdata = scriptCdata(script);
-        return new_Script(language, cdata);
+    	if (script != null) {
+    		String language = scriptLanguage(script);
+    		String cdata = scriptCdata(script);
+    		return new_Script(language, cdata);
+    	}
+    	return null;
     }
 
     protected abstract MappingScript new_Script(String language, String cdata);
@@ -742,22 +793,28 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCalculatedMemberProperty> calculatedMemberProperties(List<MappingCalculatedMemberProperty> calculatedMemberProperties) {
-        return calculatedMemberProperties.stream().map(this::calculatedMemberProperty).toList();
+        if (calculatedMemberProperties != null) {
+            return calculatedMemberProperties.stream().map(this::calculatedMemberProperty).toList();
+        }
+        return null;
     }
 
     private MappingCalculatedMemberProperty calculatedMemberProperty(MappingCalculatedMemberProperty calculatedMemberProperty) {
-        String name = calculatedMemberPropertyName(calculatedMemberProperty);
-        String caption = calculatedMemberPropertyCaption(calculatedMemberProperty);
-        String description = calculatedMemberPropertyDescription(calculatedMemberProperty);
-        String expression = calculatedMemberPropertyExpression(calculatedMemberProperty);
-        String value = calculatedMemberPropertyValue(calculatedMemberProperty);
-        return new_CalculatedMemberProperty(
-            name,
-            caption,
-            description,
-            expression,
-            value
-        );
+        if (calculatedMemberProperty != null) {
+            String name = calculatedMemberPropertyName(calculatedMemberProperty);
+            String caption = calculatedMemberPropertyCaption(calculatedMemberProperty);
+            String description = calculatedMemberPropertyDescription(calculatedMemberProperty);
+            String expression = calculatedMemberPropertyExpression(calculatedMemberProperty);
+            String value = calculatedMemberPropertyValue(calculatedMemberProperty);
+            return new_CalculatedMemberProperty(
+                name,
+                caption,
+                description,
+                expression,
+                value
+            );
+        }
+        return null;
     }
 
     protected String calculatedMemberPropertyValue(MappingCalculatedMemberProperty calculatedMemberProperty) {
@@ -846,16 +903,22 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingVirtualCubeMeasure> virtualCubeMeasures(List<MappingVirtualCubeMeasure> virtualCubeMeasures) {
-        return virtualCubeMeasures.stream().map(this::virtualCubeMeasure).toList();
+        if (virtualCubeMeasures != null) {
+            return virtualCubeMeasures.stream().map(this::virtualCubeMeasure).toList();
+        }
+        return null;
     }
 
     private MappingVirtualCubeMeasure virtualCubeMeasure(MappingVirtualCubeMeasure virtualCubeMeasure) {
-        String name = virtualCubeMeasureName(virtualCubeMeasure);
-        String cubeName = virtualCubeMeasureCubeName(virtualCubeMeasure);
-        boolean visible = virtualCubeMeasureVisible(virtualCubeMeasure);
-        List<MappingAnnotation> annotations = virtualCubeMeasureAnnotation(virtualCubeMeasure);
+        if (virtualCubeMeasure != null) {
+            String name = virtualCubeMeasureName(virtualCubeMeasure);
+            String cubeName = virtualCubeMeasureCubeName(virtualCubeMeasure);
+            boolean visible = virtualCubeMeasureVisible(virtualCubeMeasure);
+            List<MappingAnnotation> annotations = virtualCubeMeasureAnnotation(virtualCubeMeasure);
 
-        return new_VirtualCubeMeasure(name, cubeName, visible, annotations);
+            return new_VirtualCubeMeasure(name, cubeName, visible, annotations);
+        }
+        return null;
     }
 
     protected List<MappingAnnotation> virtualCubeMeasureAnnotation(MappingVirtualCubeMeasure virtualCubeMeasure) {
@@ -874,8 +937,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return virtualCubeMeasure.name();
     }
 
-    ;
-
     protected abstract MappingVirtualCubeMeasure new_VirtualCubeMeasure(
         String name,
         String cubeName,
@@ -888,28 +949,34 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingVirtualCubeDimension> virtualCubeDimensions(List<MappingVirtualCubeDimension> virtualCubeDimensions) {
-        return virtualCubeDimensions.stream().map(this::cubeDimension).toList();
+        if (virtualCubeDimensions != null) {
+            return virtualCubeDimensions.stream().map(this::cubeDimension).toList();
+        }
+        return null;
     }
 
     private MappingVirtualCubeDimension cubeDimension(MappingVirtualCubeDimension mappingVirtualCubeDimension) {
-        List<MappingAnnotation> annotations = virtualCubeDimensionAnnotations(mappingVirtualCubeDimension);
-        String name = virtualCubeDimensionName(mappingVirtualCubeDimension);
-        String foreignKey = virtualCubeDimensionForeignKey(mappingVirtualCubeDimension);
-        boolean highCardinality = virtualCubeDimensionHighCardinality(mappingVirtualCubeDimension);
-        String caption = virtualCubeDimensionCaption(mappingVirtualCubeDimension);
-        boolean visible = virtualCubeDimensionVisible(mappingVirtualCubeDimension);
-        String description = virtualCubeDimensionDescription(mappingVirtualCubeDimension);
-        String cubeName = virtualCubeDimensionCubeName(mappingVirtualCubeDimension);
+        if (mappingVirtualCubeDimension != null) {
+            List<MappingAnnotation> annotations = virtualCubeDimensionAnnotations(mappingVirtualCubeDimension);
+            String name = virtualCubeDimensionName(mappingVirtualCubeDimension);
+            String foreignKey = virtualCubeDimensionForeignKey(mappingVirtualCubeDimension);
+            boolean highCardinality = virtualCubeDimensionHighCardinality(mappingVirtualCubeDimension);
+            String caption = virtualCubeDimensionCaption(mappingVirtualCubeDimension);
+            boolean visible = virtualCubeDimensionVisible(mappingVirtualCubeDimension);
+            String description = virtualCubeDimensionDescription(mappingVirtualCubeDimension);
+            String cubeName = virtualCubeDimensionCubeName(mappingVirtualCubeDimension);
 
-        return new_VirtualCubeDimension(
-            name,
-            cubeName,
-            annotations,
-            foreignKey,
-            highCardinality,
-            caption,
-            visible,
-            description);
+            return new_VirtualCubeDimension(
+                name,
+                cubeName,
+                annotations,
+                foreignKey,
+                highCardinality,
+                caption,
+                visible,
+                description);
+        }
+        return null;
     }
 
     protected String virtualCubeDimensionCubeName(MappingVirtualCubeDimension mappingVirtualCubeDimension) {
@@ -960,13 +1027,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCubeUsage> cubeUsages(List<MappingCubeUsage> cubeUsages) {
-        return cubeUsages.stream().map(this::cubeUsage).toList();
+        if (cubeUsages != null) {
+            return cubeUsages.stream().map(this::cubeUsage).toList();
+        }
+        return null;
     }
 
     private MappingCubeUsage cubeUsage(MappingCubeUsage mappingCubeUsage) {
-        String cubeName = cubeUsageCubeName(mappingCubeUsage);
-        boolean ignoreUnrelatedDimensions = cubeUsageIgnoreUnrelatedDimensions(mappingCubeUsage);
-        return new_CubeUsage(cubeName, ignoreUnrelatedDimensions);
+        if (mappingCubeUsage != null) {
+            String cubeName = cubeUsageCubeName(mappingCubeUsage);
+            boolean ignoreUnrelatedDimensions = cubeUsageIgnoreUnrelatedDimensions(mappingCubeUsage);
+            return new_CubeUsage(cubeName, ignoreUnrelatedDimensions);
+        }
+        return null;
     }
 
     protected abstract MappingCubeUsage new_CubeUsage(String cubeName, boolean ignoreUnrelatedDimensions);
@@ -999,23 +1072,26 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     );
 
     protected MappingNamedSet namedSets(MappingNamedSet namedSet) {
-        List<MappingAnnotation> annotations = namedSetAnnotations(namedSet);
-        String formula = namedSetFormula(namedSet);
-        String name = namedSetName(namedSet);
-        String caption = namedSetCaption(namedSet);
-        String description = namedSetDescription(namedSet);
-        String displayFolder = namedSetDisplayFolder(namedSet);
-        MappingFormula formulaElement = namedSetFormulaElement(namedSet);
+        if (namedSet != null) {
+            List<MappingAnnotation> annotations = namedSetAnnotations(namedSet);
+            String formula = namedSetFormula(namedSet);
+            String name = namedSetName(namedSet);
+            String caption = namedSetCaption(namedSet);
+            String description = namedSetDescription(namedSet);
+            String displayFolder = namedSetDisplayFolder(namedSet);
+            MappingFormula formulaElement = namedSetFormulaElement(namedSet);
 
-        return new_NamedSet(
-            name,
-            caption,
-            description,
-            formula,
-            annotations,
-            displayFolder,
-            formulaElement
-        );
+            return new_NamedSet(
+                name,
+                caption,
+                description,
+                formula,
+                annotations,
+                displayFolder,
+                formulaElement
+            );
+        }
+        return null;
 
     }
 
@@ -1028,8 +1104,11 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingFormula formula(MappingFormula formula) {
-        String cdata = formulaCdata(formula);
-        return new_Formula(cdata);
+    	if (formula != null) {
+    		String cdata = formulaCdata(formula);
+    		return new_Formula(cdata);
+    	}
+    	return null;
     }
 
     protected String namedSetDisplayFolder(MappingNamedSet namedSet) {
@@ -1063,9 +1142,11 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     );
 
     protected MappingUnion union(MappingUnion union) {
-        List<MappingRoleUsage> roleUsages = unionRoleUsages(union);
-
-        return new_Union(roleUsages);
+    	if (union != null) {
+    		List<MappingRoleUsage> roleUsages = unionRoleUsages(union);
+    		return new_Union(roleUsages);
+    	}
+    	return null;
     }
 
     protected abstract MappingUnion new_Union(List<MappingRoleUsage> roleUsages);
@@ -1075,12 +1156,18 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingRoleUsage> roleUsages(List<MappingRoleUsage> roleUsages) {
-        return roleUsages.stream().map(this::roleUsage).toList();
+        if (roleUsages != null) {
+            return roleUsages.stream().map(this::roleUsage).toList();
+        }
+        return null;
     }
 
     private MappingRoleUsage roleUsage(MappingRoleUsage roleUsage) {
-        String roleName = roleUsageRoleName(roleUsage);
-        return new_RoleUsage(roleName);
+        if (roleUsage != null) {
+            String roleName = roleUsageRoleName(roleUsage);
+            return new_RoleUsage(roleName);
+        }
+        return null;
     }
 
     protected String roleUsageRoleName(MappingRoleUsage roleUsage) {
@@ -1090,9 +1177,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected abstract MappingRoleUsage new_RoleUsage(String roleName);
 
     protected MappingSchemaGrant grant(MappingSchemaGrant schemaGrant) {
-        List<MappingCubeGrant> schemaGrantCubeGrants = schemaGrantCubeGrants(schemaGrant);
-        AccessEnum access = schemaGrantAccess(schemaGrant);
-        return new_SchemaGrant(schemaGrantCubeGrants, access);
+        if (schemaGrant != null) {
+            List<MappingCubeGrant> schemaGrantCubeGrants = schemaGrantCubeGrants(schemaGrant);
+            AccessEnum access = schemaGrantAccess(schemaGrant);
+            return new_SchemaGrant(schemaGrantCubeGrants, access);
+        }
+        return null;
     }
 
     protected List<MappingCubeGrant> schemaGrantCubeGrants(MappingSchemaGrant schemaGrant) {
@@ -1100,21 +1190,27 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCubeGrant> cubeGrants(List<MappingCubeGrant> cubeGrants) {
-        return cubeGrants.stream().map(this::cubeGrant).toList();
+        if (cubeGrants != null) {
+            return cubeGrants.stream().map(this::cubeGrant).toList();
+        }
+        return null;
     }
 
     private MappingCubeGrant cubeGrant(MappingCubeGrant cubeGrant) {
-        List<MappingDimensionGrant> dimensionGrants = cubeGrantDimensionGrants(cubeGrant);
-        List<MappingHierarchyGrant> hierarchyGrants = cubeGrantHierarchyGrants(cubeGrant);
-        String cube = cubeGrantCube(cubeGrant);
-        String access = cubeGrantAccess(cubeGrant);
+        if (cubeGrant != null) {
+            List<MappingDimensionGrant> dimensionGrants = cubeGrantDimensionGrants(cubeGrant);
+            List<MappingHierarchyGrant> hierarchyGrants = cubeGrantHierarchyGrants(cubeGrant);
+            String cube = cubeGrantCube(cubeGrant);
+            String access = cubeGrantAccess(cubeGrant);
 
-        return new_CubeGrant(
-            cube,
-            access,
-            dimensionGrants,
-            hierarchyGrants
-        );
+            return new_CubeGrant(
+                cube,
+                access,
+                dimensionGrants,
+                hierarchyGrants
+            );
+        }
+        return null;
     }
 
     protected String cubeGrantAccess(MappingCubeGrant cubeGrant) {
@@ -1130,23 +1226,29 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingHierarchyGrant> hierarchyGrants(List<MappingHierarchyGrant> hierarchyGrants) {
-        return hierarchyGrants.stream().map(this::hierarchyGrant).toList();
+        if (hierarchyGrants != null) {
+            return hierarchyGrants.stream().map(this::hierarchyGrant).toList();
+        }
+        return null;
     }
 
     private MappingHierarchyGrant hierarchyGrant(MappingHierarchyGrant hierarchyGrant) {
-        List<MappingMemberGrant> memberGrants = hierarchyGrantMemberGrants(hierarchyGrant);
-        String hierarchy = hierarchyGrantHierarchy(hierarchyGrant);
-        AccessEnum access = hierarchyGrantAccess(hierarchyGrant);
-        String topLevel = hierarchyGrantTopLevel(hierarchyGrant);
-        String bottomLevel = hierarchyGrantBottomLevel(hierarchyGrant);
-        String rollupPolicy = hierarchyGrantRollupPolicy(hierarchyGrant);
+        if (hierarchyGrant != null) {
+            List<MappingMemberGrant> memberGrants = hierarchyGrantMemberGrants(hierarchyGrant);
+            String hierarchy = hierarchyGrantHierarchy(hierarchyGrant);
+            AccessEnum access = hierarchyGrantAccess(hierarchyGrant);
+            String topLevel = hierarchyGrantTopLevel(hierarchyGrant);
+            String bottomLevel = hierarchyGrantBottomLevel(hierarchyGrant);
+            String rollupPolicy = hierarchyGrantRollupPolicy(hierarchyGrant);
 
-        return new_HierarchyGrant(hierarchy,
-            access,
-            topLevel,
-            bottomLevel,
-            rollupPolicy,
-            memberGrants);
+            return new_HierarchyGrant(hierarchy,
+                access,
+                topLevel,
+                bottomLevel,
+                rollupPolicy,
+                memberGrants);
+        }
+        return null;
     }
 
     protected String hierarchyGrantRollupPolicy(MappingHierarchyGrant hierarchyGrant) {
@@ -1174,13 +1276,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingMemberGrant> memberGrants(List<MappingMemberGrant> memberGrants) {
-        return memberGrants.stream().map(this::memberGrant).toList();
+        if (memberGrants != null) {
+            return memberGrants.stream().map(this::memberGrant).toList();
+        }
+        return null;
     }
 
     private MappingMemberGrant memberGrant(MappingMemberGrant memberGrant) {
-        String member = memberGrantMember(memberGrant);
-        MemberGrantAccessEnum access = memberGrantAccess(memberGrant);
-        return new_MemberGrant(member, access);
+        if (memberGrant != null) {
+            String member = memberGrantMember(memberGrant);
+            MemberGrantAccessEnum access = memberGrantAccess(memberGrant);
+            return new_MemberGrant(member, access);
+        }
+        return null;
     }
 
     protected MemberGrantAccessEnum memberGrantAccess(MappingMemberGrant memberGrant) {
@@ -1207,13 +1315,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingDimensionGrant> dimensionGrants(List<MappingDimensionGrant> dimensionGrants) {
-        return dimensionGrants.stream().map(this::dimensionGrant).toList();
+        if (dimensionGrants != null) {
+            return dimensionGrants.stream().map(this::dimensionGrant).toList();
+        }
+        return null;
     }
 
     private MappingDimensionGrant dimensionGrant(MappingDimensionGrant dimensionGrant) {
-        AccessEnum access = dimensionGrantAccess(dimensionGrant);
-        String dimension = dimensionGrantDimension(dimensionGrant);
-        return new_DimensionGrant(access, dimension);
+        if (dimensionGrant != null) {
+            AccessEnum access = dimensionGrantAccess(dimensionGrant);
+            String dimension = dimensionGrantDimension(dimensionGrant);
+            return new_DimensionGrant(access, dimension);
+        }
+        return null;
     }
 
     protected String dimensionGrantDimension(MappingDimensionGrant dimensionGrant) {
@@ -1237,8 +1351,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return schemaGrant.access();
     }
 
-    ;
-
     protected abstract MappingSchemaGrant new_SchemaGrant(
         List<MappingCubeGrant> schemaGrantCubeGrants,
         AccessEnum access
@@ -1249,25 +1361,27 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingRelation relation(MappingRelation relation) {
-        String alias = relationAlias(relation);
-        if (relation instanceof MappingInlineTable inlineTable) {
-            List<MappingColumnDef> columnDefs = inlineTableColumnDefs(inlineTable);
-            List<MappingRow> rows = inlineTableRows(inlineTable);
-            return new_InlineTable(columnDefs, rows, alias);
-        }
-        if (relation instanceof MappingTable table) {
+        if (relation != null) {
+            String alias = relationAlias(relation);
+            if (relation instanceof MappingInlineTable inlineTable) {
+                List<MappingColumnDef> columnDefs = inlineTableColumnDefs(inlineTable);
+                List<MappingRow> rows = inlineTableRows(inlineTable);
+                return new_InlineTable(columnDefs, rows, alias);
+            }
+            if (relation instanceof MappingTable table) {
 
-            MappingSQL sql = tableSql(table);
-            List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
-            List<MappingAggTable> aggTables = tableAggTables(table);
-            List<MappingHint> hints = tableHints(table);
-            String name = tableName(table);
-            String schema = tableSchema(table);
-            return new_Table(schema, name, alias, hints, sql, aggExcludes, aggTables);
-        }
-        if (relation instanceof MappingView view) {
-            List<MappingSQL> sqls = viewSqls(view);
-            return new_View(alias, sqls);
+                MappingSQL sql = tableSql(table);
+                List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
+                List<MappingAggTable> aggTables = tableAggTables(table);
+                List<MappingHint> hints = tableHints(table);
+                String name = tableName(table);
+                String schema = tableSchema(table);
+                return new_Table(schema, name, alias, hints, sql, aggExcludes, aggTables);
+            }
+            if (relation instanceof MappingView view) {
+                List<MappingSQL> sqls = viewSqls(view);
+                return new_View(alias, sqls);
+            }
         }
         return null;
     }
@@ -1277,7 +1391,10 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingSQL> sqls(List<MappingSQL> sqls) {
-        return sqls.stream().map(this::sql).toList();
+        if (sqls != null) {
+            return sqls.stream().map(this::sql).toList();
+        }
+        return null;
     }
 
     protected String tableSchema(MappingTable table) {
@@ -1293,13 +1410,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingHint> hints(List<MappingHint> hints) {
-        return hints.stream().map(this::hint).toList();
+        if (hints != null) {
+            return hints.stream().map(this::hint).toList();
+        }
+        return null;
     }
 
     private MappingHint hint(MappingHint hint) {
-        String content = hintContent(hint);
-        String type = hintType(hint);
-        return new_Hint(content, type);
+        if (hint != null) {
+            String content = hintContent(hint);
+            String type = hintType(hint);
+            return new_Hint(content, type);
+        }
+        return null;
     }
 
     protected String hintType(MappingHint hint) {
@@ -1317,44 +1440,49 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggTable> aggTables(List<MappingAggTable> aggTables) {
-        return aggTables.stream().map(this::aggTable).toList();
+        if (aggTables != null) {
+            return aggTables.stream().map(this::aggTable).toList();
+        }
+        return null;
     }
 
     private MappingAggTable aggTable(MappingAggTable aggTable) {
-        MappingAggColumnName aggFactCount = aggTableAggFactCount(aggTable);
-        List<MappingAggColumnName> aggIgnoreColumns = aggTableAggIgnoreColumns(aggTable);
-        List<MappingAggForeignKey> aggForeignKeys = aggTableAggForeignKeys(aggTable);
-        List<MappingAggMeasure> aggMeasures = aggTableAggMeasures(aggTable);
-        List<MappingAggLevel> aggLevels = aggTableAggLevels(aggTable);
-        boolean ignorecase = aggTableIgnorecase(aggTable);
-        List<MappingAggMeasureFactCount> measuresFactCounts = aggTableMeasuresFactCounts(aggTable);
-        if (aggTable instanceof MappingAggName aggName) {
-            String name = aggNameName(aggName);
-            String approxRowCount = aggNameApproxRowCount(aggName);
-            return new_AggName(
-                name,
-                aggFactCount,
-                aggMeasures,
-                aggIgnoreColumns,
-                aggForeignKeys,
-                aggLevels,
-                ignorecase,
-                measuresFactCounts,
-                approxRowCount
-            );
-        }
-        if (aggTable instanceof MappingAggPattern aggPattern) {
-            List<MappingAggExclude> aggExcludes = aggPatternAggExcludes(aggPattern);
-            String pattern = aggPatternPattern(aggPattern);
-            return new_AggPattern(pattern,
-                aggFactCount,
-                aggIgnoreColumns,
-                aggForeignKeys,
-                aggMeasures,
-                aggLevels,
-                aggExcludes,
-                ignorecase,
-                measuresFactCounts);
+        if (aggTable != null) {
+            MappingAggColumnName aggFactCount = aggTableAggFactCount(aggTable);
+            List<MappingAggColumnName> aggIgnoreColumns = aggTableAggIgnoreColumns(aggTable);
+            List<MappingAggForeignKey> aggForeignKeys = aggTableAggForeignKeys(aggTable);
+            List<MappingAggMeasure> aggMeasures = aggTableAggMeasures(aggTable);
+            List<MappingAggLevel> aggLevels = aggTableAggLevels(aggTable);
+            boolean ignorecase = aggTableIgnorecase(aggTable);
+            List<MappingAggMeasureFactCount> measuresFactCounts = aggTableMeasuresFactCounts(aggTable);
+            if (aggTable instanceof MappingAggName aggName) {
+                String name = aggNameName(aggName);
+                String approxRowCount = aggNameApproxRowCount(aggName);
+                return new_AggName(
+                    name,
+                    aggFactCount,
+                    aggMeasures,
+                    aggIgnoreColumns,
+                    aggForeignKeys,
+                    aggLevels,
+                    ignorecase,
+                    measuresFactCounts,
+                    approxRowCount
+                );
+            }
+            if (aggTable instanceof MappingAggPattern aggPattern) {
+                List<MappingAggExclude> aggExcludes = aggPatternAggExcludes(aggPattern);
+                String pattern = aggPatternPattern(aggPattern);
+                return new_AggPattern(pattern,
+                    aggFactCount,
+                    aggIgnoreColumns,
+                    aggForeignKeys,
+                    aggMeasures,
+                    aggLevels,
+                    aggExcludes,
+                    ignorecase,
+                    measuresFactCounts);
+            }
         }
         return null;
     }
@@ -1374,13 +1502,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggMeasureFactCount> measuresFactCounts(List<MappingAggMeasureFactCount> aggMeasuresFactCounts) {
-        return aggMeasuresFactCounts.stream().map(this::aggMeasuresFactCount).toList();
+        if (aggMeasuresFactCounts != null) {
+            return aggMeasuresFactCounts.stream().map(this::aggMeasuresFactCount).toList();
+        }
+        return null;
     }
 
     private MappingAggMeasureFactCount aggMeasuresFactCount(MappingAggMeasureFactCount mappingAggMeasureFactCount) {
-        String factColumn = mappingAggMeasureFactCountFactColumn(mappingAggMeasureFactCount);
-        String column = mappingAggMeasureFactCount.column();
-        return new_AggMeasureFactCount(factColumn, column);
+        if (mappingAggMeasureFactCount != null) {
+            String factColumn = mappingAggMeasureFactCountFactColumn(mappingAggMeasureFactCount);
+            String column = mappingAggMeasureFactCount.column();
+            return new_AggMeasureFactCount(factColumn, column);
+        }
+        return null;
     }
 
     protected abstract MappingAggMeasureFactCount new_AggMeasureFactCount(String factColumn, String column);
@@ -1398,26 +1532,32 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggLevel> aggLevels(List<MappingAggLevel> aggLevels) {
-        return aggLevels.stream().map(this::aggLevel).toList();
+        if (aggLevels != null) {
+            return aggLevels.stream().map(this::aggLevel).toList();
+        }
+        return null;
     }
 
     private MappingAggLevel aggLevel(MappingAggLevel aggLevel) {
-        String column = aggLevelColumn(aggLevel);
-        String name = aggLevelName(aggLevel);
-        String ordinalColumn = aggLevelOrdinalColumn(aggLevel);
-        String captionColumn = aggLevelCaptionColumn(aggLevel);
-        String nameColumn = aggLevelNameColumn(aggLevel);
-        Boolean collapsed = aggLevelCollapsed(aggLevel);
-        List<MappingAggLevelProperty> properties = aggLevelProperties(aggLevel);
-        return new_AggLevel(
-            column,
-            name,
-            ordinalColumn,
-            nameColumn,
-            captionColumn,
-            collapsed,
-            properties
-        );
+        if (aggLevel != null) {
+            String column = aggLevelColumn(aggLevel);
+            String name = aggLevelName(aggLevel);
+            String ordinalColumn = aggLevelOrdinalColumn(aggLevel);
+            String captionColumn = aggLevelCaptionColumn(aggLevel);
+            String nameColumn = aggLevelNameColumn(aggLevel);
+            Boolean collapsed = aggLevelCollapsed(aggLevel);
+            List<MappingAggLevelProperty> properties = aggLevelProperties(aggLevel);
+            return new_AggLevel(
+                column,
+                name,
+                ordinalColumn,
+                nameColumn,
+                captionColumn,
+                collapsed,
+                properties
+            );
+        }
+        return null;
     }
 
     protected List<MappingAggLevelProperty> aggLevelProperties(MappingAggLevel aggLevel) {
@@ -1425,13 +1565,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggLevelProperty> aggLevelProperties(List<MappingAggLevelProperty> properties) {
-        return properties.stream().map(this::aggLevelProperty).toList();
+        if (properties != null) {
+            return properties.stream().map(this::aggLevelProperty).toList();
+        }
+        return null;
     }
 
     private MappingAggLevelProperty aggLevelProperty(MappingAggLevelProperty aggLevelProperty) {
-        String name = aggLevelPropertyName(aggLevelProperty);
-        String column = aggLevelPropertyColumn(aggLevelProperty);
-        return new_AggLevelProperty(name, column);
+        if (aggLevelProperty != null) {
+            String name = aggLevelPropertyName(aggLevelProperty);
+            String column = aggLevelPropertyColumn(aggLevelProperty);
+            return new_AggLevelProperty(name, column);
+        }
+        return null;
     }
 
     protected String aggLevelPropertyColumn(MappingAggLevelProperty aggLevelProperty) {
@@ -1464,8 +1610,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return aggLevel.name();
     }
 
-    ;
-
     protected String aggLevelColumn(MappingAggLevel aggLevel) {
         return aggLevel.column();
     }
@@ -1489,10 +1633,13 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     private MappingAggMeasure aggMeasure(MappingAggMeasure aggMeasure) {
-        String column = aggMeasureColumn(aggMeasure);
-        String name = aggMeasureName(aggMeasure);
-        String rollupType = aggMeasureRollupType(aggMeasure);
-        return new_AggMeasure(column, name, rollupType);
+        if (aggMeasure != null) {
+            String column = aggMeasureColumn(aggMeasure);
+            String name = aggMeasureName(aggMeasure);
+            String rollupType = aggMeasureRollupType(aggMeasure);
+            return new_AggMeasure(column, name, rollupType);
+        }
+        return null;
     }
 
     protected abstract MappingAggMeasure new_AggMeasure(
@@ -1520,13 +1667,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggForeignKey> aggForeignKeys(List<MappingAggForeignKey> aggForeignKeys) {
-        return aggForeignKeys.stream().map(this::aggForeignKey).toList();
+        if (aggForeignKeys != null) {
+            return aggForeignKeys.stream().map(this::aggForeignKey).toList();
+        }
+        return null;
     }
 
     private MappingAggForeignKey aggForeignKey(MappingAggForeignKey aggForeignKey) {
-        String factColumn = aggForeignKeyFactColumn(aggForeignKey);
-        String aggColumn = aggForeignKeyAggColumn(aggForeignKey);
-        return new_AggForeignKey(factColumn, aggColumn);
+        if (aggForeignKey != null) {
+            String factColumn = aggForeignKeyFactColumn(aggForeignKey);
+            String aggColumn = aggForeignKeyAggColumn(aggForeignKey);
+            return new_AggForeignKey(factColumn, aggColumn);
+        }
+        return null;
     }
 
     protected String aggForeignKeyAggColumn(MappingAggForeignKey aggForeignKey) {
@@ -1552,12 +1705,18 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggColumnName> aggColumnNames(List<MappingAggColumnName> aggColumnNames) {
-        return aggColumnNames.stream().map(this::aggColumnName).toList();
+        if (aggColumnNames != null) {
+            return aggColumnNames.stream().map(this::aggColumnName).toList();
+        }
+        return null;
     }
 
     private MappingAggColumnName aggColumnName(MappingAggColumnName aggColumnName) {
-        String column = aggColumnNameColumn(aggColumnName);
-        return new_AggColumnName(column);
+        if (aggColumnName != null) {
+            String column = aggColumnNameColumn(aggColumnName);
+            return new_AggColumnName(column);
+        }
+        return null;
     }
 
     protected String aggColumnNameColumn(MappingAggColumnName aggColumnName) {
@@ -1595,8 +1754,11 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingAggColumnName aggFactCount(MappingAggColumnName aggFactCount) {
-        String column = aggFactCountColumn(aggFactCount);
-        return new_AggColumnName(column);
+        if (aggFactCount != null) {
+            String column = aggFactCountColumn(aggFactCount);
+            return new_AggColumnName(column);
+        }
+        return null;
     }
 
     protected String aggFactCountColumn(MappingAggColumnName aggFactCount) {
@@ -1608,18 +1770,24 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingAggExclude> aggExcludes(List<MappingAggExclude> aggExcludes) {
-        return aggExcludes.stream().map(this::aggExclude).toList();
+        if (aggExcludes != null) {
+            return aggExcludes.stream().map(this::aggExclude).toList();
+        }
+        return null;
     }
 
     private MappingAggExclude aggExclude(MappingAggExclude aggExclude) {
-        String pattern = aggExcludePattern(aggExclude);
-        String name = aggExcludeName(aggExclude);
-        boolean ignorecase = aggExcludeIgnorecase(aggExclude);
-        return new_AggExclude(
-            pattern,
-            name,
-            ignorecase
-        );
+        if (aggExclude != null) {
+            String pattern = aggExcludePattern(aggExclude);
+            String name = aggExcludeName(aggExclude);
+            boolean ignorecase = aggExcludeIgnorecase(aggExclude);
+            return new_AggExclude(
+                pattern,
+                name,
+                ignorecase
+            );
+        }
+        return null;
     }
 
     protected boolean aggExcludeIgnorecase(MappingAggExclude aggExclude) {
@@ -1629,8 +1797,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected String aggExcludeName(MappingAggExclude aggExclude) {
         return aggExclude.name();
     }
-
-    ;
 
     protected String aggExcludePattern(MappingAggExclude aggExclude) {
         return aggExclude.pattern();
@@ -1647,9 +1813,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingSQL sql(MappingSQL sql) {
-        String content = sqlContent(sql);
-        String dialect = sqlDialect(sql);
-        return new_SQL(content, dialect);
+    	if (sql != null) {
+    		String content = sqlContent(sql);
+    		String dialect = sqlDialect(sql);
+    		return new_SQL(content, dialect);
+    	}
+    	return null;
     }
 
     protected String sqlDialect(MappingSQL sql) {
@@ -1667,12 +1836,18 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingRow> rows(List<MappingRow> rows) {
-        return rows.stream().map(this::row).toList();
+        if (rows != null) {
+            return rows.stream().map(this::row).toList();
+        }
+        return null;
     }
 
     private MappingRow row(MappingRow row) {
-        List<MappingValue> values = rowValues(row);
-        return new_Row(values);
+        if (row != null) {
+            List<MappingValue> values = rowValues(row);
+            return new_Row(values);
+        }
+        return null;
     }
 
     protected List<MappingValue> rowValues(MappingRow row) {
@@ -1680,13 +1855,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingValue> values(List<MappingValue> values) {
-        return values.stream().map(this::value).toList();
+        if (values != null) {
+            return values.stream().map(this::value).toList();
+        }
+        return null;
     }
 
     private MappingValue value(MappingValue value) {
-        String content = valueContent(value);
-        String column = valueColumn(value);
-        return new_Value(column, content);
+        if (value != null) {
+            String content = valueContent(value);
+            String column = valueColumn(value);
+            return new_Value(column, content);
+        }
+        return null;
     }
 
     protected abstract MappingValue new_Value(String column, String content);
@@ -1714,13 +1895,19 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingColumnDef> columnDefs(List<MappingColumnDef> columnDefs) {
-        return columnDefs.stream().map(this::columnDef).toList();
+        if (columnDefs != null) {
+            return columnDefs.stream().map(this::columnDef).toList();
+        }
+        return null;
     }
 
     private MappingColumnDef columnDef(MappingColumnDef columnDef) {
-        String name = columnDefName(columnDef);
-        TypeEnum type = columnDefType(columnDef);
-        return new_ColumnDef(name, type);
+        if (columnDef != null) {
+            String name = columnDefName(columnDef);
+            TypeEnum type = columnDefType(columnDef);
+            return new_ColumnDef(name, type);
+        }
+        return null;
     }
 
     protected abstract MappingColumnDef new_ColumnDef(String name, TypeEnum type);
@@ -1749,15 +1936,22 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingWritebackTable> writebackTables(List<MappingWritebackTable> writebackTables) {
-        return writebackTables.stream().map(this::writebackTable).toList();
+        if (writebackTables != null) {
+            return writebackTables.stream().map(this::writebackTable).toList();
+        }
+        return null;
     }
 
     private MappingWritebackTable writebackTable(MappingWritebackTable writebackTable) {
-        String schema = writebackTableSchema(writebackTable);
-        String name = writebackTableName(writebackTable);
-        List<MappingWritebackColumn> columns = writebackTableColumns(writebackTable);;
+        if (writebackTable != null) {
+            String schema = writebackTableSchema(writebackTable);
+            String name = writebackTableName(writebackTable);
+            List<MappingWritebackColumn> columns = writebackTableColumns(writebackTable);
+            ;
 
-        return new_WritebackTable(schema, name, columns);
+            return new_WritebackTable(schema, name, columns);
+        }
+        return null;
     }
 
     protected List<MappingWritebackColumn> writebackTableColumns(MappingWritebackTable writebackTable) {
@@ -1765,29 +1959,36 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingWritebackColumn> writebackColumns(Iterable<MappingWritebackColumn> columns) {
-        Iterator<MappingWritebackColumn> iterator = columns.iterator();
-        List<MappingWritebackColumn> result  = new ArrayList<>();
-        while (iterator.hasNext())
-        {
-            result.add(writebackColumn(iterator.next()));
+        if (columns != null) {
+            Iterator<MappingWritebackColumn> iterator = columns.iterator();
+            List<MappingWritebackColumn> result = new ArrayList<>();
+            while (iterator.hasNext()) {
+                result.add(writebackColumn(iterator.next()));
+            }
+            return result;
         }
-        return result;
+        return null;
     }
 
     protected MappingWritebackColumn writebackColumn(MappingWritebackColumn writebackColumn) {
-        if (writebackColumn instanceof MappingWritebackAttribute mappingWritebackAttribute) {
-            return mappingWritebackAttribute(mappingWritebackAttribute);
-        }
-        if (writebackColumn instanceof MappingWritebackMeasure mappingWritebackMeasure) {
-            return mappingWritebackMeasure(mappingWritebackMeasure);
+        if (writebackColumn != null) {
+            if (writebackColumn instanceof MappingWritebackAttribute mappingWritebackAttribute) {
+                return mappingWritebackAttribute(mappingWritebackAttribute);
+            }
+            if (writebackColumn instanceof MappingWritebackMeasure mappingWritebackMeasure) {
+                return mappingWritebackMeasure(mappingWritebackMeasure);
+            }
         }
         return null;
     }
 
     protected MappingWritebackColumn mappingWritebackMeasure(MappingWritebackMeasure writebackMeasure) {
-        String name = writebackMeasureName(writebackMeasure);
-        String column = writebackMeasureColumn(writebackMeasure);
-        return new_WritebackMeasure(name, column);
+        if (writebackMeasure != null) {
+            String name = writebackMeasureName(writebackMeasure);
+            String column = writebackMeasureColumn(writebackMeasure);
+            return new_WritebackMeasure(name, column);
+        }
+        return null;
     }
 
     protected String writebackMeasureColumn(MappingWritebackMeasure writebackMeasure) {
@@ -1801,9 +2002,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected abstract MappingWritebackColumn new_WritebackMeasure(String name, String column);
 
     protected MappingWritebackColumn mappingWritebackAttribute(MappingWritebackAttribute writebackAttribute) {
-        String dimension = writebackAttributeDimension(writebackAttribute);
-        String column = writebackAttributeColumn(writebackAttribute);
-        return new_WritebackAttribute(dimension, column);
+        if (writebackAttribute != null) {
+            String dimension = writebackAttributeDimension(writebackAttribute);
+            String column = writebackAttributeColumn(writebackAttribute);
+            return new_WritebackAttribute(dimension, column);
+        }
+        return null;
     }
 
     protected String writebackAttributeColumn(MappingWritebackAttribute writebackAttribute) {
@@ -1832,22 +2036,28 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingDrillThroughAction> drillThroughActions(List<MappingDrillThroughAction> drillThroughActions){
-        return drillThroughActions.stream().map(this::drillThroughAction).toList();
+        if (drillThroughActions != null) {
+            return drillThroughActions.stream().map(this::drillThroughAction).toList();
+        }
+        return null;
     }
 
     private MappingDrillThroughAction drillThroughAction(MappingDrillThroughAction drillThroughAction) {
-        List<MappingAnnotation> annotations = drillThroughActionAnnotations(drillThroughAction);
-        List<MappingDrillThroughElement> drillThroughElements = drillThroughActionDrillThroughElements(drillThroughAction);
-        String name = drillThroughActionName(drillThroughAction);
-        Boolean defaultt = drillThroughActionDefault(drillThroughAction);
-        String caption = drillThroughActionCaption(drillThroughAction);
-        String description = drillThroughActionDescription(drillThroughAction);
-        return new_DrillThroughAction(name,
-            caption,
-            description,
-            defaultt,
-            annotations,
-            drillThroughElements);
+        if (drillThroughAction != null) {
+            List<MappingAnnotation> annotations = drillThroughActionAnnotations(drillThroughAction);
+            List<MappingDrillThroughElement> drillThroughElements = drillThroughActionDrillThroughElements(drillThroughAction);
+            String name = drillThroughActionName(drillThroughAction);
+            Boolean defaultt = drillThroughActionDefault(drillThroughAction);
+            String caption = drillThroughActionCaption(drillThroughAction);
+            String description = drillThroughActionDescription(drillThroughAction);
+            return new_DrillThroughAction(name,
+                caption,
+                description,
+                defaultt,
+                annotations,
+                drillThroughElements);
+        }
+        return null;
     }
 
     protected String drillThroughActionDescription(MappingDrillThroughAction drillThroughAction) {
@@ -1871,26 +2081,34 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingDrillThroughElement> drillThroughElements(List<MappingDrillThroughElement> drillThroughElements) {
-        return drillThroughElements.stream().map(this::drillThroughElement).toList();
+        if (drillThroughElements != null) {
+            return drillThroughElements.stream().map(this::drillThroughElement).toList();
+        }
+        return null;
     }
 
     private MappingDrillThroughElement drillThroughElement(MappingDrillThroughElement mappingDrillThroughElement) {
-        if (mappingDrillThroughElement instanceof MappingDrillThroughMeasure mappingDrillThroughMeasure) {
-            return mappingDrillThroughMeasure(mappingDrillThroughMeasure);
-        }
-        if (mappingDrillThroughElement instanceof MappingDrillThroughAttribute mappingDrillThroughAttribute) {
-            return mappingDrillThroughAttribute(mappingDrillThroughAttribute);
+        if (mappingDrillThroughElement != null) {
+            if (mappingDrillThroughElement instanceof MappingDrillThroughMeasure mappingDrillThroughMeasure) {
+                return mappingDrillThroughMeasure(mappingDrillThroughMeasure);
+            }
+            if (mappingDrillThroughElement instanceof MappingDrillThroughAttribute mappingDrillThroughAttribute) {
+                return mappingDrillThroughAttribute(mappingDrillThroughAttribute);
+            }
         }
         return null;
     }
 
     protected MappingDrillThroughElement mappingDrillThroughAttribute(
         MappingDrillThroughAttribute drillThroughAttribute) {
-        String dimension = drillThroughAttributeDimension(drillThroughAttribute);
-        String hierarchy = drillThroughAttributeHierarchy(drillThroughAttribute);
-        String level = drillThroughAttributeLevel(drillThroughAttribute);
+        if (drillThroughAttribute != null) {
+            String dimension = drillThroughAttributeDimension(drillThroughAttribute);
+            String hierarchy = drillThroughAttributeHierarchy(drillThroughAttribute);
+            String level = drillThroughAttributeLevel(drillThroughAttribute);
 
-        return new_DrillThroughAttribute(dimension, level, hierarchy);
+            return new_DrillThroughAttribute(dimension, level, hierarchy);
+        }
+        return null;
     }
 
     protected String drillThroughAttributeLevel(MappingDrillThroughAttribute drillThroughAttribute) {
@@ -1909,8 +2127,11 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String dimension, String level, String hierarchy);
 
     protected MappingDrillThroughElement mappingDrillThroughMeasure(MappingDrillThroughMeasure drillThroughMeasure) {
-        String name = drillThroughMeasureName(drillThroughMeasure);
-        return new_DrillThroughMeasure(name);
+        if (drillThroughMeasure != null) {
+            String name = drillThroughMeasureName(drillThroughMeasure);
+            return new_DrillThroughMeasure(name);
+        }
+        return null;
     }
 
     protected String drillThroughMeasureName(MappingDrillThroughMeasure drillThroughMeasure) {
@@ -1942,41 +2163,47 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingMeasure> measures(List<MappingMeasure> measures) {
-        return measures.stream().map(this::measure).toList();
+        if (measures != null) {
+            return measures.stream().map(this::measure).toList();
+        }
+        return null;
     }
 
     private MappingMeasure measure(MappingMeasure measure) {
-        List<MappingAnnotation> annotations = measureAnnotations(measure);
-        MappingExpressionView measureExpression = measureMeasureExpression(measure);
-        List<MappingCalculatedMemberProperty> calculatedMemberProperties = measureCalculatedMemberProperties(measure);
-        String name = measureName(measure);
-        String column = measureColumn(measure);
-        MeasureDataTypeEnum datatype = measureDatatype(measure);
-        String formatString = measureFormatString(measure);
-        String aggregator = measureAggregator(measure);
-        String formatter = measureFormatter(measure);
-        String caption = measureCaption(measure);
-        String description = measureDescription(measure);
-        boolean visible = measureVisible(measure);
-        String displayFolder = measureDisplayFolder(measure);
-        MappingElementFormatter cellFormatter = measureCellFormatter(measure);
-        String backColor = measureBackColor(measure);
+        if (measure != null) {
+            List<MappingAnnotation> annotations = measureAnnotations(measure);
+            MappingExpressionView measureExpression = measureMeasureExpression(measure);
+            List<MappingCalculatedMemberProperty> calculatedMemberProperties = measureCalculatedMemberProperties(measure);
+            String name = measureName(measure);
+            String column = measureColumn(measure);
+            MeasureDataTypeEnum datatype = measureDatatype(measure);
+            String formatString = measureFormatString(measure);
+            String aggregator = measureAggregator(measure);
+            String formatter = measureFormatter(measure);
+            String caption = measureCaption(measure);
+            String description = measureDescription(measure);
+            boolean visible = measureVisible(measure);
+            String displayFolder = measureDisplayFolder(measure);
+            MappingElementFormatter cellFormatter = measureCellFormatter(measure);
+            String backColor = measureBackColor(measure);
 
-        return new_Measure(name,
-            column,
-            datatype,
-            formatString,
-            aggregator,
-            formatter,
-            caption,
-            description,
-            visible,
-            displayFolder,
-            annotations,
-            measureExpression,
-            calculatedMemberProperties,
-            cellFormatter,
-            backColor);
+            return new_Measure(name,
+                column,
+                datatype,
+                formatString,
+                aggregator,
+                formatter,
+                caption,
+                description,
+                visible,
+                displayFolder,
+                annotations,
+                measureExpression,
+                calculatedMemberProperties,
+                cellFormatter,
+                backColor);
+        }
+        return null;
     }
 
     protected List<MappingCalculatedMemberProperty> measureCalculatedMemberProperties(MappingMeasure measure) {
@@ -2063,44 +2290,50 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingCubeDimension> cubeDimensions(List<MappingCubeDimension> cubeDimensions) {
-        return cubeDimensions.stream().map(this::cubeDimension).toList();
+        if (cubeDimensions != null) {
+            return cubeDimensions.stream().map(this::cubeDimension).toList();
+        }
+        return null;
     }
 
     private MappingCubeDimension cubeDimension(MappingCubeDimension cubeDimension) {
-        List<MappingAnnotation> annotations = cubeDimensionAnnotations(cubeDimension);
-        String name = cubeDimensionName(cubeDimension);
-        String foreignKey = cubeDimensionForeignKey(cubeDimension);
-        boolean highCardinality = cubeDimensionHighCardinality(cubeDimension);
-        String caption = cubeDimensionCaption(cubeDimension);
-        boolean visible = cubeDimensionVisible(cubeDimension);
-        String description = cubeDimensionDescription(cubeDimension);
-        if (cubeDimension instanceof MappingDimensionUsage dimensionUsage) {
-            String source =  cubeDimensionSource(dimensionUsage);
-            String level =  cubeDimensionLevel(dimensionUsage);
-            String usagePrefix =  cubeDimensionUsagePrefix(dimensionUsage);
-            return new_DimensionUsage(
-                name,
-                description,
-                annotations,
-                caption,
-                visible,
-                source,
-                level,
-                usagePrefix,
-                foreignKey,
-                highCardinality
-            );
-        } else {
-            return new_CubeDimension(
-                name,
-                description,
-                annotations,
-                caption,
-                visible,
-                foreignKey,
-                highCardinality
-            );
+        if (cubeDimension != null){
+            List<MappingAnnotation> annotations = cubeDimensionAnnotations(cubeDimension);
+            String name = cubeDimensionName(cubeDimension);
+            String foreignKey = cubeDimensionForeignKey(cubeDimension);
+            boolean highCardinality = cubeDimensionHighCardinality(cubeDimension);
+            String caption = cubeDimensionCaption(cubeDimension);
+            boolean visible = cubeDimensionVisible(cubeDimension);
+            String description = cubeDimensionDescription(cubeDimension);
+            if (cubeDimension instanceof MappingDimensionUsage dimensionUsage) {
+                String source = cubeDimensionSource(dimensionUsage);
+                String level = cubeDimensionLevel(dimensionUsage);
+                String usagePrefix = cubeDimensionUsagePrefix(dimensionUsage);
+                return new_DimensionUsage(
+                    name,
+                    description,
+                    annotations,
+                    caption,
+                    visible,
+                    source,
+                    level,
+                    usagePrefix,
+                    foreignKey,
+                    highCardinality
+                );
+            } else {
+                return new_CubeDimension(
+                    name,
+                    description,
+                    annotations,
+                    caption,
+                    visible,
+                    foreignKey,
+                    highCardinality
+                );
+            }
         }
+        return null;
     }
 
     protected abstract MappingCubeDimension new_CubeDimension(
@@ -2167,61 +2400,64 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     );
 
     protected MappingLevel level(MappingLevel level) {
-        List<MappingAnnotation> annotations = levelAnnotations(level);
-        MappingExpressionView keyExpression = levelKeyExpression(level);
-        MappingExpressionView nameExpression = levelNameExpression(level);
-        MappingExpressionView captionExpression = levelCaptionExpression(level);
-        MappingExpressionView ordinalExpression = levelOrdinalExpression(level);
-        MappingExpressionView parentExpression = levelParentExpression(level);
-        MappingClosure closure = levelClosure(level);
-        List<MappingProperty> properties = levelProperties(level);
-        String approxRowCount = levelApproxRowCount(level);
-        String name = levelName(level);
-        String table = levelTable(level);
-        String column = levelColumn(level);
-        String nameColumn = levelNameColumn(level);
-        String ordinalColumn = levelOrdinalColumn(level);
-        String parentColumn = levelParentColumn(level);
-        String nullParentValue = levelNullParentValue(level);
-        TypeEnum type = levelType(level);
-        boolean uniqueMembers = levelUniqueMembers(level);
-        LevelTypeEnum levelType = levelLevelType(level);
-        HideMemberIfEnum hideMemberIf = levelHideMemberIf(level);
-        String formatter = levelFormatter(level);
-        String caption = levelCaption(level);
-        String description = levelDescription(level);
-        String captionColumn = levelCaptionColumn(level);
-        boolean visible = levelVisible(level);
-        InternalTypeEnum internalType = levelInternalType(level);
-        MappingElementFormatter memberFormatter = levelMemberFormatter(level);
-        return new_Level(
-            name,
-            table,
-            column,
-            nameColumn,
-            ordinalColumn,
-            parentColumn,
-            nullParentValue,
-            type,
-            approxRowCount,
-            uniqueMembers,
-            levelType,
-            hideMemberIf,
-            formatter,
-            caption,
-            description,
-            captionColumn,
-            annotations,
-            keyExpression,
-            nameExpression,
-            captionExpression,
-            ordinalExpression,
-            parentExpression,
-            closure,
-            properties,
-            visible,
-            internalType,
-            memberFormatter);
+        if (level != null) {
+            List<MappingAnnotation> annotations = levelAnnotations(level);
+            MappingExpressionView keyExpression = levelKeyExpression(level);
+            MappingExpressionView nameExpression = levelNameExpression(level);
+            MappingExpressionView captionExpression = levelCaptionExpression(level);
+            MappingExpressionView ordinalExpression = levelOrdinalExpression(level);
+            MappingExpressionView parentExpression = levelParentExpression(level);
+            MappingClosure closure = levelClosure(level);
+            List<MappingProperty> properties = levelProperties(level);
+            String approxRowCount = levelApproxRowCount(level);
+            String name = levelName(level);
+            String table = levelTable(level);
+            String column = levelColumn(level);
+            String nameColumn = levelNameColumn(level);
+            String ordinalColumn = levelOrdinalColumn(level);
+            String parentColumn = levelParentColumn(level);
+            String nullParentValue = levelNullParentValue(level);
+            TypeEnum type = levelType(level);
+            boolean uniqueMembers = levelUniqueMembers(level);
+            LevelTypeEnum levelType = levelLevelType(level);
+            HideMemberIfEnum hideMemberIf = levelHideMemberIf(level);
+            String formatter = levelFormatter(level);
+            String caption = levelCaption(level);
+            String description = levelDescription(level);
+            String captionColumn = levelCaptionColumn(level);
+            boolean visible = levelVisible(level);
+            InternalTypeEnum internalType = levelInternalType(level);
+            MappingElementFormatter memberFormatter = levelMemberFormatter(level);
+            return new_Level(
+                name,
+                table,
+                column,
+                nameColumn,
+                ordinalColumn,
+                parentColumn,
+                nullParentValue,
+                type,
+                approxRowCount,
+                uniqueMembers,
+                levelType,
+                hideMemberIf,
+                formatter,
+                caption,
+                description,
+                captionColumn,
+                annotations,
+                keyExpression,
+                nameExpression,
+                captionExpression,
+                ordinalExpression,
+                parentExpression,
+                closure,
+                properties,
+                visible,
+                internalType,
+                memberFormatter);
+        }
+        return null;
     }
 
     protected MappingElementFormatter levelMemberFormatter(MappingLevel level) {
@@ -2229,9 +2465,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingElementFormatter memberFormatter(MappingElementFormatter formatter) {
-        String className = formatterClassName(formatter);
-        MappingScript script = formatterScript(formatter);
-        return new_ElementFormatter(className, script);
+    	if (formatter != null) {
+    		String className = formatterClassName(formatter);
+    		MappingScript script = formatterScript(formatter);
+    		return new_ElementFormatter(className, script);
+    	}
+    	return null;
     }
 
     protected MappingScript formatterScript(MappingElementFormatter formatter) {
@@ -2321,29 +2560,35 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingProperty> properties(List<MappingProperty> properties) {
-        return properties.stream().map(this::property).toList();
+        if (properties != null) {
+            return properties.stream().map(this::property).toList();
+        }
+        return null;
     }
 
     private MappingProperty property(MappingProperty property) {
-        String name = propertyName(property);
-        String column = propertyColumn(property);
-        PropertyTypeEnum type = propertyType(property);
-        String formatter = propertyFormatter(property);
-        String caption = propertyCaption(property);
-        String description = propertyDescription(property);
-        boolean dependsOnLevelValue = propertyDependsOnLevelValue(property);
-        MappingElementFormatter propertyFormatter = propertyPropertyFormatter(property);
+        if (property != null) {
+            String name = propertyName(property);
+            String column = propertyColumn(property);
+            PropertyTypeEnum type = propertyType(property);
+            String formatter = propertyFormatter(property);
+            String caption = propertyCaption(property);
+            String description = propertyDescription(property);
+            boolean dependsOnLevelValue = propertyDependsOnLevelValue(property);
+            MappingElementFormatter propertyFormatter = propertyPropertyFormatter(property);
 
-        return new_Property(
-            name,
-            column,
-            type,
-            formatter,
-            caption,
-            description,
-            dependsOnLevelValue,
-            propertyFormatter
-        );
+            return new_Property(
+                name,
+                column,
+                type,
+                formatter,
+                caption,
+                description,
+                dependsOnLevelValue,
+                propertyFormatter
+            );
+        }
+        return null;
     }
 
     protected MappingElementFormatter propertyPropertyFormatter(MappingProperty property) {
@@ -2351,9 +2596,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingElementFormatter elementFormatter(MappingElementFormatter elementFormatter) {
-        String className = elementFormatterClassName(elementFormatter);
-        MappingScript script = elementFormatterScript(elementFormatter);
-        return new_ElementFormatter(className, script);
+    	if (elementFormatter != null) {
+    		String className = elementFormatterClassName(elementFormatter);
+    		MappingScript script = elementFormatterScript(elementFormatter);
+    		return new_ElementFormatter(className, script);
+    	}
+    	return null;
     }
 
     protected MappingScript elementFormatterScript(MappingElementFormatter elementFormatter) {
@@ -2371,8 +2619,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     protected String propertyDescription(MappingProperty property) {
         return property.description();
     }
-
-    ;
 
     protected String propertyCaption(MappingProperty property) {
         return property.caption();
@@ -2410,37 +2656,39 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingClosure closure(MappingClosure closure) {
-        MappingTable table = closureTable(closure);
-        String parentColumn = closureParentColumn(closure);
-        String childColumn = closureChildColumn(closure);
-        return new_Closure(table, parentColumn, childColumn);
+    	if (closure != null) {
+    		MappingTable table = closureTable(closure);
+    		String parentColumn = closureParentColumn(closure);
+    		String childColumn = closureChildColumn(closure);
+    		return new_Closure(table, parentColumn, childColumn);
+    	}
+    	return null;
     }
 
     protected String closureChildColumn(MappingClosure closure) {
         return closure.childColumn();
     }
 
-    ;
-
     protected String closureParentColumn(MappingClosure closure) {
         return closure.parentColumn();
     }
-
-    ;
 
     private MappingTable closureTable(MappingClosure closure) {
         return table(closure.table());
     }
 
     protected MappingTable table(MappingTable table) {
-        MappingSQL sql = tableSql(table);
-        List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
-        List<MappingAggTable> aggTables = tableAggTables(table);
-        List<MappingHint> hints = tableHints(table);
-        String name = tableName(table);
-        String schema = tableSchema(table);
-        String alias = tableAlias(table);
-        return new_Table(schema, name, alias, hints, sql, aggExcludes, aggTables);
+        if (table != null) {
+            MappingSQL sql = tableSql(table);
+            List<MappingAggExclude> aggExcludes = tableAggExcludes(table);
+            List<MappingAggTable> aggTables = tableAggTables(table);
+            List<MappingHint> hints = tableHints(table);
+            String name = tableName(table);
+            String schema = tableSchema(table);
+            String alias = tableAlias(table);
+            return new_Table(schema, name, alias, hints, sql, aggExcludes, aggTables);
+        }
+        return null;
     }
 
     protected String tableAlias(MappingTable table) {
@@ -2458,10 +2706,29 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingExpressionView expressionView(MappingExpressionView expression) {
-        return expression;
+    	if (expression != null) {
+    		List<MappingSQL> sqls = expressionSqls(expression);
+    		String table = expressionTable(expression);
+    		String name = expressionName(expression);
+    		return new_ExpressionView(sqls, table, name);
+    	}
+    	return null;
     }
 
-    ;
+    protected String expressionName(MappingExpressionView expression) {
+        return expression.name();
+    }
+
+    protected String expressionTable(MappingExpressionView expression) {
+        return expression.table();
+    }
+
+    protected List<MappingSQL> expressionSqls(MappingExpressionView expression){
+        return sqls(expression.sqls());
+    }
+
+    protected abstract MappingExpressionView new_ExpressionView(
+        List<MappingSQL> sqls, String table, String name);
 
     protected MappingExpressionView levelOrdinalExpression(MappingLevel level) {
         return expressionView(level.ordinalExpression());
@@ -2518,26 +2785,31 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected MappingRelationOrJoin relationOrJoin(MappingRelationOrJoin relationOrJoin) {
-        if (relationOrJoin instanceof MappingRelation relation) {
-            return relation(relation);
-        }
-        if (relationOrJoin instanceof MappingJoin join) {
-            return join(join);
+        if (relationOrJoin != null) {
+            if (relationOrJoin instanceof MappingRelation relation) {
+                return relation(relation);
+            }
+            if (relationOrJoin instanceof MappingJoin join) {
+                return join(join);
+            }
         }
         return null;
     }
 
     protected MappingJoin join(MappingJoin join) {
-        List<MappingRelationOrJoin> relations = joinRelations(join);
-        String leftAlias = joinLeftAlias(join);
-        String leftKey = joinLeftKey(join);
-        String rightAlias = joinRightAlias(join);
-        String rightKey = joinRightKey(join);
-        return new_Join(relations,
-            leftAlias,
-            leftKey,
-            rightAlias,
-            rightKey);
+        if (join != null) {
+            List<MappingRelationOrJoin> relations = joinRelations(join);
+            String leftAlias = joinLeftAlias(join);
+            String leftKey = joinLeftKey(join);
+            String rightAlias = joinRightAlias(join);
+            String rightKey = joinRightKey(join);
+            return new_Join(relations,
+                leftAlias,
+                leftKey,
+                rightAlias,
+                rightKey);
+        }
+        return null;
     }
 
     protected String joinRightKey(MappingJoin join) {
@@ -2579,14 +2851,21 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected List<MappingUserDefinedFunction> userDefinedFunctions(List<MappingUserDefinedFunction> userDefinedFunctions) {
-        return userDefinedFunctions.stream().map(this::userDefinedFunction).toList();
+        if (userDefinedFunctions != null) {
+            return userDefinedFunctions.stream().map(this::userDefinedFunction).toList();
+        }
+        return null;
     }
 
     private MappingUserDefinedFunction userDefinedFunction(MappingUserDefinedFunction userDefinedFunction) {
-        String name = userDefinedFunctionName(userDefinedFunction);
-        String className = userDefinedFunctionClassName(userDefinedFunction);
-        MappingScript script = userDefinedFunctionScript(userDefinedFunction);
-        return new_UserDefinedFunction(name, className, script);
+        if (userDefinedFunction != null) {
+            String name = userDefinedFunctionName(userDefinedFunction);
+            String className = userDefinedFunctionClassName(userDefinedFunction);
+            MappingScript script = userDefinedFunctionScript(userDefinedFunction);
+            return new_UserDefinedFunction(name, className, script);
+        }
+        return null;
+
     }
 
     protected MappingScript userDefinedFunctionScript(MappingUserDefinedFunction userDefinedFunction) {

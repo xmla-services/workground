@@ -92,6 +92,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughActionImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughAttributeImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughMeasureImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ElementFormatterImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ExpressionViewImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.FormulaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyImpl;
@@ -128,7 +129,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.AbstractDbMappin
 
 public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 
-    protected JaxbDbMappingSchemaModifier(MappingSchema mappingSchema) {
+    public JaxbDbMappingSchemaModifier(MappingSchema mappingSchema) {
         super(mappingSchema);
     }
 
@@ -225,7 +226,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         hierarchy.setDisplayFolder(displayFolder);
         hierarchy.setRelation(relation);
         hierarchy.setOrigin(origin);
-        return null;
+        return hierarchy;
     }
 
     @Override
@@ -643,6 +644,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
     ) {
         TableImpl table = new TableImpl();
         table.setSchema(schema);
+        table.setName(name);
         table.setAlias(alias);
         table.setHints(hints);
         table.setSql(sql);
@@ -846,6 +848,19 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         closure.setParentColumn(parentColumn);
         closure.setChildColumn(childColumn);
         return closure;
+    }
+
+    @Override
+    protected MappingExpressionView new_ExpressionView(
+        List<MappingSQL> sqls,
+        String table,
+        String name
+    ) {
+        ExpressionViewImpl expressionView = new ExpressionViewImpl();
+        expressionView.setSqls(sqls);
+        expressionView.setTable(table);
+        expressionView.setName(name);
+        return null;
     }
 
     @Override

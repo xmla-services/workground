@@ -19,7 +19,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
 public record ExpressionViewR(List<MappingSQL> sqls,
-                              String gnericExpression,
                               String table,
                               String name) implements MappingExpressionView {
 
@@ -40,16 +39,14 @@ public record ExpressionViewR(List<MappingSQL> sqls,
         }
         return true;
     }
-    
+
     public  ExpressionViewR(List<MappingSQL> sqls,
-            String gnericExpression,
             String table,
             String name)  {
 				this.sqls = sqls;
-				this.gnericExpression = gnericExpression;
 				this.table = table;
 				this.name = name;
-    	
+
     }
-    
+
 }

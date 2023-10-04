@@ -1,14 +1,19 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.jaxb;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
+import org.junit.jupiter.api.Test;
 
-public class Test {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	
-	@org.junit.jupiter.api.Test
+public class SerializerTest {
+
+
+	@Test
 	void testName() throws Exception {
 		FoodMartRecordDbMappingSchemaProvider provider=new FoodMartRecordDbMappingSchemaProvider();
 		SerializerModifier sm=new SerializerModifier(provider.get());
-		System.out.println(sm.getXML());
+        String xml = sm.getXML();
+        assertThat(xml).isNotNull();
+		System.out.println(xml);
 	}
 }
