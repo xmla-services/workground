@@ -55,7 +55,7 @@ public record CalculatedMemberR(String name,
     ) {
         this.name = name;
         this.description = description;
-        this.annotations = annotations;
+        this.annotations = annotations == null ? List.of() : annotations;
         this.caption = caption;
         this.visible = visible == null ? Boolean.TRUE : visible;
         this.formatString = formatString;
