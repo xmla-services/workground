@@ -102,6 +102,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionGrantR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughActionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughAttributeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughMeasureR;
@@ -151,7 +152,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 			List<MappingPrivateDimension> dimensions, List<MappingCube> cubes, List<MappingVirtualCube> virtualCubes,
 			List<MappingNamedSet> namedSets, List<MappingRole> roles,
 			List<MappingUserDefinedFunction> userDefinedFunctions) {
-		MappingSchema mappingSchemaNew = new SchemaR(name, description,annotations, measuresCaption, defaultRole, 
+		MappingSchema mappingSchemaNew = new SchemaR(name, description,annotations, measuresCaption, defaultRole,
 				parameters, dimensions, cubes, virtualCubes, namedSets, roles, userDefinedFunctions);
 		return mappingSchemaNew;
 	}
@@ -169,9 +170,9 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 
     @Override
 	protected PrivateDimensionR new_PrivateDimension(String name, DimensionTypeEnum type, String caption,
-			String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
-			List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix) {
-		return new PrivateDimensionR(name,description,annotations,caption,visible, type,   foreignKey, highCardinality, 
+                                                     String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
+                                                     List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix) {
+		return new PrivateDimensionR(name,description,annotations,caption,visible, type,   foreignKey, highCardinality,
 				hierarchies,  usagePrefix);
 	}
 
@@ -706,25 +707,30 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         return new UserDefinedFunctionR(name, className, script);
     }
 
-    @Override
-    protected MappingCubeDimension new_CubeDimension(
-        List<MappingAnnotation> annotations,
+    protected MappingCubeDimension new_DimensionUsage(
         String name,
-        String foreignKey,
-        boolean highCardinality,
+        String description,
+        List<MappingAnnotation> annotations,
         String caption,
-        boolean visible,
-        String description
+        Boolean visible,
+        String source,
+        String level,
+        String usagePrefix,
+        String foreignKey,
+        Boolean highCardinality
     ) {
-        return new CubeDimensionR(
-        		name,
-        		description,
+        return new DimensionUsageR(
+            name,
+            description,
             annotations,
             caption,
             visible,
+            source,
+            level,
+            usagePrefix,
             foreignKey,
             highCardinality
-            );
+        );
     }
 
     @Override
@@ -750,7 +756,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     }
 
     @Override
-    protected MappingDrillThroughElement new_MappingDrillThroughAttribute(
+    protected MappingDrillThroughElement new_DrillThroughAttribute(
         String dimension,
         String level,
         String hierarchy) {
@@ -758,7 +764,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             level,
             hierarchy);
     }
-    
+
     protected MappingMeasure new_Measure(
             String name,
             String column,
@@ -810,5 +816,24 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
     @Override
     protected MappingWritebackColumn new_WritebackMeasure(String name, String column) {
         return new WritebackMeasureR(name, column);
+    }
+
+    protected MappingCubeDimension new_CubeDimension(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String foreignKey,
+        Boolean highCardinality
+    ) {
+        return new CubeDimensionR(
+            name,
+            description,
+            annotations,
+            caption,
+            visible,
+            foreignKey,
+            highCardinality);
     }
 }

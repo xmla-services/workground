@@ -13,10 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
@@ -39,6 +35,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
@@ -91,6 +88,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractDbMappingSchemaModifier implements DatabaseMappingSchemaProvider {
 
@@ -1889,7 +1890,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String hierarchy = drillThroughAttributeHierarchy(drillThroughAttribute);
         String level = drillThroughAttributeLevel(drillThroughAttribute);
 
-        return new_MappingDrillThroughAttribute(dimension, level, hierarchy);
+        return new_DrillThroughAttribute(dimension, level, hierarchy);
     }
 
     protected String drillThroughAttributeLevel(MappingDrillThroughAttribute drillThroughAttribute) {
@@ -1904,7 +1905,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return drillThroughAttribute.dimension();
     }
 
-    protected abstract MappingDrillThroughElement new_MappingDrillThroughAttribute(
+    protected abstract MappingDrillThroughElement new_DrillThroughAttribute(
         String dimension, String level, String hierarchy);
 
     protected MappingDrillThroughElement mappingDrillThroughMeasure(MappingDrillThroughMeasure drillThroughMeasure) {
@@ -2073,15 +2074,56 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String caption = cubeDimensionCaption(cubeDimension);
         boolean visible = cubeDimensionVisible(cubeDimension);
         String description = cubeDimensionDescription(cubeDimension);
-
-        return new_CubeDimension(annotations,
-            name,
-            foreignKey,
-            highCardinality,
-            caption,
-            visible,
-            description);
+        if (cubeDimension instanceof MappingDimensionUsage dimensionUsage) {
+            String source =  cubeDimensionSource(dimensionUsage);
+            String level =  cubeDimensionLevel(dimensionUsage);
+            String usagePrefix =  cubeDimensionUsagePrefix(dimensionUsage);
+            return new_DimensionUsage(
+                name,
+                description,
+                annotations,
+                caption,
+                visible,
+                source,
+                level,
+                usagePrefix,
+                foreignKey,
+                highCardinality
+            );
+        } else {
+            return new_CubeDimension(
+                name,
+                description,
+                annotations,
+                caption,
+                visible,
+                foreignKey,
+                highCardinality
+            );
+        }
     }
+
+    protected abstract MappingCubeDimension new_CubeDimension(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String foreignKey,
+        Boolean highCardinality);
+
+    protected String cubeDimensionUsagePrefix(MappingDimensionUsage dimensionUsage) {
+        return dimensionUsage.usagePrefix();
+    }
+
+    protected String cubeDimensionLevel(MappingDimensionUsage dimensionUsage) {
+        return dimensionUsage.level();
+    }
+
+    protected String cubeDimensionSource(MappingDimensionUsage cubeDimension) {
+        return cubeDimension.source();
+    }
+
 
     protected String cubeDimensionDescription(MappingCubeDimension cubeDimension) {
         return cubeDimension.description();
@@ -2111,14 +2153,17 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return annotations(cubeDimension.annotations());
     }
 
-    protected abstract MappingCubeDimension new_CubeDimension(
-        List<MappingAnnotation> annotations,
+    protected abstract MappingCubeDimension new_DimensionUsage(
         String name,
-        String foreignKey,
-        boolean highCardinality,
+        String description,
+        List<MappingAnnotation> annotations,
         String caption,
-        boolean visible,
-        String description
+        Boolean visible,
+        String source,
+        String level,
+        String usagePrefix,
+        String foreignKey,
+        Boolean highCardinality
     );
 
     protected MappingLevel level(MappingLevel level) {
@@ -2148,7 +2193,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String captionColumn = levelCaptionColumn(level);
         boolean visible = levelVisible(level);
         InternalTypeEnum internalType = levelInternalType(level);
-        ;
         MappingElementFormatter memberFormatter = levelMemberFormatter(level);
         return new_Level(
             name,

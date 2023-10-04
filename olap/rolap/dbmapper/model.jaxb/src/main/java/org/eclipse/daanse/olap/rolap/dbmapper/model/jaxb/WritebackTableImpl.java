@@ -60,4 +60,7 @@ public class WritebackTableImpl implements MappingWritebackTable {
         this.schema = value;
     }
 
+    public void setColumns(List<MappingWritebackColumn> columns) {
+        this.columns = columns;
+    }
 }

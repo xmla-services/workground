@@ -57,8 +57,8 @@ public class LevelImpl implements MappingLevel {
     protected MappingExpressionView ordinalExpression;
     @XmlElement(name = "ParentExpression", type = ExpressionViewImpl.class)
     protected MappingExpressionView parentExpression;
-    @XmlElement(name = "Closure")
-    protected ClosureImpl closure;
+    @XmlElement(name = "Closure", type = ClosureImpl.class)
+    protected MappingClosure closure;
     @XmlElement(name = "Property", type = PropertyImpl.class)
     protected List<MappingProperty> properties;
     @XmlAttribute(name = "approxRowCount")
@@ -101,8 +101,8 @@ public class LevelImpl implements MappingLevel {
     @XmlAttribute(name = "internalType")
     @XmlJavaTypeAdapter(InternalTypeAdaptor.class)
     protected InternalTypeEnum internalType;
-    @XmlElement(name = "MemberFormatter")
-    ElementFormatterImpl memberFormatter;
+    @XmlElement(name = "MemberFormatter", type = ElementFormatterImpl.class)
+    MappingElementFormatter memberFormatter;
 
     @Override
     public List<MappingAnnotation> annotations() {
@@ -118,7 +118,7 @@ public class LevelImpl implements MappingLevel {
         return keyExpression;
     }
 
-    public void setKeyExpression(ExpressionViewImpl value) {
+    public void setKeyExpression(MappingExpressionView value) {
         this.keyExpression = value;
     }
 
@@ -127,7 +127,7 @@ public class LevelImpl implements MappingLevel {
         return nameExpression;
     }
 
-    public void setNameExpression(ExpressionViewImpl value) {
+    public void setNameExpression(MappingExpressionView value) {
         this.nameExpression = value;
     }
 
@@ -136,7 +136,7 @@ public class LevelImpl implements MappingLevel {
         return captionExpression;
     }
 
-    public void setCaptionExpression(ExpressionViewImpl value) {
+    public void setCaptionExpression(MappingExpressionView value) {
         this.captionExpression = value;
     }
 
@@ -145,7 +145,7 @@ public class LevelImpl implements MappingLevel {
         return ordinalExpression;
     }
 
-    public void setOrdinalExpression(ExpressionViewImpl value) {
+    public void setOrdinalExpression(MappingExpressionView value) {
         this.ordinalExpression = value;
     }
 
@@ -154,7 +154,7 @@ public class LevelImpl implements MappingLevel {
         return  parentExpression;
     }
 
-    public void setParentExpression(ExpressionViewImpl value) {
+    public void setParentExpression(MappingExpressionView value) {
         this.parentExpression = value;
     }
 
@@ -163,7 +163,7 @@ public class LevelImpl implements MappingLevel {
         return closure;
     }
 
-    public void setClosure(ClosureImpl value) {
+    public void setClosure(MappingClosure value) {
         this.closure = value;
     }
 
@@ -358,7 +358,7 @@ public class LevelImpl implements MappingLevel {
         this.internalType = internalType;
     }
 
-    public void setMemberFormatter(ElementFormatterImpl memberFormatter) {
+    public void setMemberFormatter(MappingElementFormatter memberFormatter) {
         this.memberFormatter = memberFormatter;
     }
 }

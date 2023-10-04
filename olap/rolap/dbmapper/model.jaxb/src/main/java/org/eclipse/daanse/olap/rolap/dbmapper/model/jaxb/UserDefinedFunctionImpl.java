@@ -34,8 +34,8 @@ public class UserDefinedFunctionImpl implements MappingUserDefinedFunction {
     protected String name;
     @XmlAttribute(name = "className", required = true)
     protected String className;
-    @XmlElement(name = "Script")
-    protected ScriptImpl script;
+    @XmlElement(name = "Script", type = ScriptImpl.class)
+    protected MappingScript script;
 
     @Override
     public String name() {
@@ -60,4 +60,7 @@ public class UserDefinedFunctionImpl implements MappingUserDefinedFunction {
         this.className = value;
     }
 
+    public void setScript(MappingScript script) {
+        this.script = script;
+    }
 }

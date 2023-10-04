@@ -28,8 +28,8 @@ public class ElementFormatterImpl implements MappingElementFormatter {
 
     @XmlAttribute(name = "className")
     protected String className;
-    @XmlElement(name = "Script")
-    protected ScriptImpl script;
+    @XmlElement(name = "Script", type = ScriptImpl.class)
+    protected MappingScript script;
 
     @Override
     public String className() {
@@ -43,5 +43,9 @@ public class ElementFormatterImpl implements MappingElementFormatter {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public void setScript(MappingScript script) {
+        this.script = script;
     }
 }
