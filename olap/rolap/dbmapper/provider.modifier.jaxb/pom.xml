@@ -18,10 +18,16 @@
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.base</artifactId>
       <version>${revision}</version>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
       <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record</artifactId>
+      <version>${revision}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
