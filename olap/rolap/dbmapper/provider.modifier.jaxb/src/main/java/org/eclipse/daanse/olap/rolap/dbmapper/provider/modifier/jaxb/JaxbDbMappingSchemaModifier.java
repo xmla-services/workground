@@ -81,19 +81,31 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AnnotationImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberPropertyImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CellFormatterImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ClosureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ColumnDefImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeUsageImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionGrantImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionUsageImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughActionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughAttributeImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DrillThroughMeasureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ElementFormatterImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.FormulaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HintImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.InlineTableImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.JoinImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.LevelImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.MeasureImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.MemberGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.MemberReaderParameterImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.NamedSetImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ParameterImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PropertyImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleUsageImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RowImpl;
@@ -101,11 +113,17 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SQLImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaGrantImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ScriptImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.UnionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.UserDefinedFunctionImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ValueImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ViewImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeDimensionImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeMeasureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.WritebackAttributeImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.WritebackMeasureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.WritebackTableImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.AbstractDbMappingSchemaModifier;
 
 public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
@@ -623,38 +641,55 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         String schema, String name, String alias, List<MappingHint> hints, MappingSQL sql,
         List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        TableImpl table = new TableImpl();
+        table.setSchema(schema);
+        table.setAlias(alias);
+        table.setHints(hints);
+        table.setSql(sql);
+        table.setAggExcludes(aggExcludes);
+        table.setAggTables(aggTables);
+        return table;
     }
 
     @Override
     protected MappingColumnDef new_ColumnDef(String name, TypeEnum type) {
-        // TODO Auto-generated method stub
-        return null;
+        ColumnDefImpl columnDef = new ColumnDefImpl();
+        columnDef.setName(name);
+        columnDef.setType(type);
+        return columnDef;
     }
 
     @Override
     protected MappingRelation new_View(String alias, List<MappingSQL> sqls) {
-        // TODO Auto-generated method stub
-        return null;
+        ViewImpl view = new ViewImpl();
+        view.setAlias(alias);
+        view.setSqls(sqls);
+        return view;
     }
 
     @Override
     protected MappingRelation new_InlineTable(List<MappingColumnDef> columnDefs, List<MappingRow> rows, String alias) {
-        // TODO Auto-generated method stub
-        return null;
+        InlineTableImpl inlineTable = new InlineTableImpl();
+        inlineTable.setColumnDefs(columnDefs);
+        inlineTable.setRows(rows);
+        inlineTable.setAlias(alias);
+        return inlineTable;
     }
 
     @Override
     protected MappingWritebackColumn new_WritebackMeasure(String name, String column) {
-        // TODO Auto-generated method stub
-        return null;
+        WritebackMeasureImpl writebackMeasure = new WritebackMeasureImpl();
+        writebackMeasure.setName(name);
+        writebackMeasure.setColumn(column);
+        return writebackMeasure;
     }
 
     @Override
     protected MappingWritebackColumn new_WritebackAttribute(String dimension, String column) {
-        // TODO Auto-generated method stub
-        return null;
+        WritebackAttributeImpl writebackAttribute = new WritebackAttributeImpl();
+        writebackAttribute.setDimension(dimension);
+        writebackAttribute.setColumn(column);
+        return writebackAttribute;
     }
 
     @Override
@@ -662,23 +697,30 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         String schema, String name,
         List<MappingWritebackColumn> columns
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        WritebackTableImpl writebackTable = new WritebackTableImpl();
+        writebackTable.setSchema(schema);
+        writebackTable.setName(name);
+        writebackTable.setColumns(columns);
+        return writebackTable;
     }
 
     @Override
-    protected MappingDrillThroughElement new_MappingDrillThroughAttribute(
+    protected MappingDrillThroughElement new_DrillThroughAttribute(
         String dimension, String level,
         String hierarchy
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        DrillThroughAttributeImpl drillThroughAttribute = new DrillThroughAttributeImpl();
+        drillThroughAttribute.setDimension(dimension);
+        drillThroughAttribute.setLevel(level);
+        drillThroughAttribute.setHierarchy(hierarchy);
+        return drillThroughAttribute;
     }
 
     @Override
     protected MappingDrillThroughElement new_DrillThroughMeasure(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        DrillThroughMeasureImpl drillThroughMeasure = new DrillThroughMeasureImpl();
+        drillThroughMeasure.setName(name);
+        return drillThroughMeasure;
     }
 
     @Override
@@ -687,8 +729,14 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         Boolean defaultt, List<MappingAnnotation> annotations,
         List<MappingDrillThroughElement> drillThroughElements
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        DrillThroughActionImpl drillThroughAction = new DrillThroughActionImpl();
+        drillThroughAction.setName(name);
+        drillThroughAction.setCaption(caption);
+        drillThroughAction.setDescription(description);
+        drillThroughAction.setDefaultt(defaultt);
+        drillThroughAction.setAnnotations(annotations);
+        drillThroughAction.setDrillThroughElements(drillThroughElements);
+        return drillThroughAction;
     }
 
     @Override
@@ -699,23 +747,78 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         List<MappingCalculatedMemberProperty> calculatedMemberProperties, MappingElementFormatter cellFormatter,
         String backColor
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        MeasureImpl measure = new MeasureImpl();
+        measure.setName(name);
+        measure.setDescription(description);
+        measure.setAnnotations(annotations);
+        measure.setCaption(caption);
+        measure.setVisible(visible);
+        measure.setColumn(column);
+        measure.setDatatype(datatype);
+        measure.setFormatString(formatString);
+        measure.setAggregator(aggregator);
+        measure.setFormatter(formatter);
+        measure.setDisplayFolder(displayFolder);
+        measure.setMeasureExpression(measureExpression);
+        measure.setCalculatedMemberProperties(calculatedMemberProperties);
+        measure.setCellFormatter(cellFormatter);
+        measure.setBackColor(backColor);
+        return measure;
     }
 
     @Override
     protected MappingCubeDimension new_CubeDimension(
-        List<MappingAnnotation> annotations, String name,
-        String foreignKey, boolean highCardinality, String caption, boolean visible, String description
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String foreignKey,
+        Boolean highCardinality
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        DimensionUsageImpl dimensionUsage = new DimensionUsageImpl();
+        dimensionUsage.setName(name);
+        dimensionUsage.setDescription(description);
+        dimensionUsage.setAnnotations(annotations);
+        dimensionUsage.setCaption(caption);
+        dimensionUsage.setVisible(visible);
+        dimensionUsage.setForeignKey(foreignKey);
+        dimensionUsage.setHighCardinality(highCardinality);
+        return dimensionUsage;
+    }
+
+    protected MappingCubeDimension new_DimensionUsage(
+        String name,
+        String description,
+        List<MappingAnnotation> annotations,
+        String caption,
+        Boolean visible,
+        String source,
+        String level,
+        String usagePrefix,
+        String foreignKey,
+        Boolean highCardinality
+    ) {
+        DimensionUsageImpl privateDimension = new DimensionUsageImpl();
+        privateDimension.setName(name);
+        privateDimension.setDescription(description);
+        privateDimension.setAnnotations(annotations);
+        privateDimension.setCaption(caption);
+        privateDimension.setVisible(visible);
+        privateDimension.setSource(source);
+        privateDimension.setLevel(level);
+        privateDimension.setUsagePrefix(usagePrefix);
+        privateDimension.setForeignKey(foreignKey);
+        privateDimension.setHighCardinality(highCardinality);
+        return privateDimension;
     }
 
     @Override
     protected MappingElementFormatter new_ElementFormatter(String className, MappingScript script) {
-        // TODO Auto-generated method stub
-        return null;
+        ElementFormatterImpl elementFormatter = new ElementFormatterImpl();
+        elementFormatter.setClassName(className);
+        elementFormatter.setScript(script);
+        return elementFormatter;
     }
 
     @Override
@@ -724,14 +827,25 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         String caption, String description, boolean dependsOnLevelValue,
         MappingElementFormatter propertyFormatter
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        PropertyImpl property = new PropertyImpl();
+        property.setName(name);
+        property.setColumn(column);
+        property.setType(type);
+        property.setFormatter(formatter);
+        property.setCaption(caption);
+        property.setDescription(description);
+        property.setDependsOnLevelValue(dependsOnLevelValue);
+        property.setPropertyFormatter(propertyFormatter);
+        return property;
     }
 
     @Override
     protected MappingClosure new_Closure(MappingTable table, String parentColumn, String childColumn) {
-        // TODO Auto-generated method stub
-        return null;
+        ClosureImpl closure = new ClosureImpl();
+        closure.setTable(table);
+        closure.setParentColumn(parentColumn);
+        closure.setChildColumn(childColumn);
+        return closure;
     }
 
     @Override
@@ -745,8 +859,35 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         MappingExpressionView parentExpression, MappingClosure closure, List<MappingProperty> properties,
         boolean visible, InternalTypeEnum internalType, MappingElementFormatter memberFormatter
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        LevelImpl level = new LevelImpl();
+        level.setName(name);
+        level.setDescription(description);
+        level.setAnnotations(annotations);
+        level.setCaption(caption);
+        level.setVisible(visible);
+        level.setTable(table);
+        level.setColumn(column);
+        level.setNameColumn(nameColumn);
+        level.setOrdinalColumn(ordinalColumn);
+        level.setParentColumn(parentColumn);
+        level.setNullParentValue(nullParentValue);
+        level.setType(type);
+        level.setApproxRowCount(approxRowCount);
+        level.setUniqueMembers(uniqueMembers);
+        level.setLevelType(levelType);
+        level.setHideMemberIf(hideMemberIf);
+        level.setFormatter(formatter);
+        level.setCaptionColumn(captionColumn);
+        level.setKeyExpression(keyExpression);
+        level.setNameExpression(nameExpression);
+        level.setCaptionExpression(captionExpression);
+        level.setOrdinalExpression(ordinalExpression);
+        level.setParentExpression(parentExpression);
+        level.setClosure(closure);
+        level.setProperties(properties);
+        level.setInternalType(internalType);
+        level.setMemberFormatter(memberFormatter);
+        return level;
     }
 
     @Override
@@ -754,14 +895,22 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         List<MappingRelationOrJoin> relations, String leftAlias, String leftKey,
         String rightAlias, String rightKey
     ) {
-        // TODO Auto-generated method stub
-        return null;
+        JoinImpl join = new JoinImpl();
+        join.setRelations(relations);
+        join.setLeftAlias(leftAlias);
+        join.setLeftKey(leftKey);
+        join.setRightAlias(rightAlias);
+        join.setRightKey(rightKey);
+        return join;
     }
 
     @Override
     protected MappingUserDefinedFunction new_UserDefinedFunction(String name, String className, MappingScript script) {
-        // TODO Auto-generated method stub
-        return null;
+        UserDefinedFunctionImpl userDefinedFunction = new UserDefinedFunctionImpl();
+        userDefinedFunction.setName(name);
+        userDefinedFunction.setClassName(className);
+        userDefinedFunction.setScript(script);
+        return userDefinedFunction;
     }
 
 }

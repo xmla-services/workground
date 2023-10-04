@@ -44,8 +44,8 @@ public class PropertyImpl implements MappingProperty {
     protected String description;
     @XmlAttribute(name = "dependsOnLevelValue")
     protected Boolean dependsOnLevelValue;
-    @XmlElement(name = "PropertyFormatter")
-    protected ElementFormatterImpl propertyFormatter;
+    @XmlElement(name = "PropertyFormatter", type = ElementFormatterImpl.class)
+    protected MappingElementFormatter propertyFormatter;
 
     @Override
     public String name() {
@@ -123,4 +123,7 @@ public class PropertyImpl implements MappingProperty {
         this.dependsOnLevelValue = value;
     }
 
+    public void setPropertyFormatter(MappingElementFormatter propertyFormatter) {
+        this.propertyFormatter = propertyFormatter;
+    }
 }
