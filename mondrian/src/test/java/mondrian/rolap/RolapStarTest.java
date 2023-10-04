@@ -9,19 +9,15 @@
 
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import mondrian.rolap.RolapStar.Column;
+import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SQLImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -29,8 +25,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.rolap.RolapStar.Column;
-import mondrian.rolap.util.RelationUtil;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link RolapStar}.
@@ -83,9 +82,7 @@ class RolapStarTest {
       original.setName("TestTable");
       original.setAlias("Alias");
       original.setSchema("Sechema");
-      original.setSql(new SQLImpl());
-      original.sql().setDialect("generic");
-      original.sql().setContent("Alias.clicked = 'true'");
+      original.setSql(new SQLR("Alias.clicked = 'true'", "generic"));
 
       MappingTable cloned = (MappingTable)rs.cloneRelationForTests(
           original,

@@ -20,6 +20,7 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -35,8 +36,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "Table")
 public class TableImpl implements MappingTable {
 
-    @XmlElement(name = "SQL")
-    protected SQLImpl sql;
+    @XmlElement(name = "SQL", type = SQLImpl.class)
+    protected MappingSQL sql;
     @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
     protected List<MappingAggExclude> aggExcludes;
     @XmlElements({ @XmlElement(name = "AggName", type = AggNameImpl.class),
@@ -52,11 +53,11 @@ public class TableImpl implements MappingTable {
     protected String alias;
 
     @Override
-    public SQLImpl sql() {
+    public MappingSQL sql() {
         return sql;
     }
 
-    public void setSql(SQLImpl value) {
+    public void setSql(MappingSQL value) {
         this.sql = value;
     }
 
@@ -131,5 +132,17 @@ public class TableImpl implements MappingTable {
     @Override
 	public int hashCode() {
         return toString().hashCode();
+    }
+
+    public void setHints(List<MappingHint> hints) {
+        this.hints = hints;
+    }
+
+    public void setAggExcludes(List<MappingAggExclude> aggExcludes) {
+        this.aggExcludes = aggExcludes;
+    }
+
+    public void setAggTables(List<MappingAggTable> aggTables) {
+        this.aggTables = aggTables;
     }
 }

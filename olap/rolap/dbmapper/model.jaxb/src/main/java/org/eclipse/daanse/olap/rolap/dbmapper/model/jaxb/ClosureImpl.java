@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -20,24 +20,25 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "table" })
 public class ClosureImpl implements MappingClosure {
 
-    @XmlElement(name = "Table", required = true)
-    protected TableImpl table;
+    @XmlElement(name = "Table", required = true, type = TableImpl.class)
+    protected MappingTable table;
     @XmlAttribute(name = "parentColumn", required = true)
     protected String parentColumn;
     @XmlAttribute(name = "childColumn", required = true)
     protected String childColumn;
 
     @Override
-    public TableImpl table() {
+    public MappingTable table() {
         return table;
     }
 
-    public void setTable(TableImpl value) {
+    public void setTable(MappingTable value) {
         this.table = value;
     }
 

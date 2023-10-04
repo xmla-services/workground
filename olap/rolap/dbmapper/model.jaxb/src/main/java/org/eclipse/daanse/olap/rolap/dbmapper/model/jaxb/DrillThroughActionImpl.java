@@ -100,4 +100,7 @@ public class DrillThroughActionImpl implements MappingDrillThroughAction {
         this.description = value;
     }
 
+    public void setDrillThroughElements(List<MappingDrillThroughElement> drillThroughElements) {
+        this.drillThroughElements = drillThroughElements;
+    }
 }

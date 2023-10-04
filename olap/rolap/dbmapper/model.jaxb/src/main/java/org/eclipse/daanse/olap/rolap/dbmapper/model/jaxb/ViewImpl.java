@@ -95,4 +95,8 @@ public class ViewImpl implements MappingView {
 	public String toString() {
         return sqls.get(0).content();
     }
+
+    public void setSqls(List<MappingSQL> sqls) {
+        this.sqls = sqls;
+    }
 }

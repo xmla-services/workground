@@ -13,9 +13,13 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
@@ -24,13 +28,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.MeasureDataTypeAdaptor;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "measureExpression", "calculatedMemberProperties", "cellFormatter" })
@@ -64,8 +63,8 @@ public class MeasureImpl implements MappingMeasure {
     protected Boolean visible;
     @XmlAttribute(name = "displayFolder")
     protected String displayFolder;
-    @XmlElement(name = "CellFormatter")
-    CellFormatterImpl cellFormatter;
+    @XmlElement(name = "CellFormatter", type = CellFormatterImpl.class)
+    MappingElementFormatter cellFormatter;
     @XmlAttribute(name = "backColor")
     protected String backColor;
 
@@ -203,7 +202,7 @@ public class MeasureImpl implements MappingMeasure {
         this.calculatedMemberProperties = calculatedMemberProperties;
     }
 
-    public void setCellFormatter(CellFormatterImpl cellFormatter) {
+    public void setCellFormatter(MappingElementFormatter cellFormatter) {
         this.cellFormatter = cellFormatter;
     }
 
