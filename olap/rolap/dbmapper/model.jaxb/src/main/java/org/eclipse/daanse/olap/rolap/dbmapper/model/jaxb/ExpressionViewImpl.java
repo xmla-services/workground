@@ -85,4 +85,16 @@ public class ExpressionViewImpl implements MappingExpressionView {
     public int hashCode() {
         return Objects.hash(sqls, table, name);
     }
+
+    public void setSqls(List<MappingSQL> sqls) {
+        this.sqls = sqls;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

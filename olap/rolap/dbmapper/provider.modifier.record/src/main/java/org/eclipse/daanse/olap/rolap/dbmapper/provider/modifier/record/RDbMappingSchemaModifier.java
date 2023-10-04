@@ -106,6 +106,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughActionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughAttributeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughMeasureR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ExpressionViewR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.FormulaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
@@ -835,5 +836,16 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             visible,
             foreignKey,
             highCardinality);
+    }
+
+    protected MappingExpressionView new_ExpressionView(
+        List<MappingSQL> sqls,
+        String table,
+        String name) {
+        return new ExpressionViewR(
+            sqls,
+            table,
+            name
+        );
     }
 }
