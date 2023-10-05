@@ -860,7 +860,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         expressionView.setSqls(sqls);
         expressionView.setTable(table);
         expressionView.setName(name);
-        return null;
+        return expressionView;
     }
 
     @Override
