@@ -1252,7 +1252,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected String hierarchyGrantRollupPolicy(MappingHierarchyGrant hierarchyGrant) {
-        return hierarchyGrant.rollupPolicy();
+        return hierarchyGrant.rollupPolicy() == null ? "full" : hierarchyGrant.rollupPolicy();
     }
 
     protected String hierarchyGrantBottomLevel(MappingHierarchyGrant hierarchyGrant) {
@@ -2321,15 +2321,15 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
                     foreignKey,
                     highCardinality
                 );
-            } else {
-                return new_CubeDimension(
-                    name,
-                    description,
-                    annotations,
-                    caption,
-                    visible,
-                    foreignKey,
-                    highCardinality
+            }
+            if (cubeDimension instanceof MappingPrivateDimension privateDimension) {
+                DimensionTypeEnum type = dimensionType(privateDimension);
+                List<MappingHierarchy> hierarchies = dimensionHieraries(privateDimension);
+                String usagePrefix = dimensionUsagePrefix(privateDimension);
+                return new_PrivateDimension(
+                    name, type, caption,
+                    description, foreignKey, highCardinality, annotations,
+                    hierarchies, visible, usagePrefix
                 );
             }
         }
@@ -2492,7 +2492,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
     }
 
     protected String levelCaptionColumn(MappingLevel level) {
-        return level.column();
+        return level.captionColumn();
     }
 
     protected String levelDescription(MappingLevel level) {
