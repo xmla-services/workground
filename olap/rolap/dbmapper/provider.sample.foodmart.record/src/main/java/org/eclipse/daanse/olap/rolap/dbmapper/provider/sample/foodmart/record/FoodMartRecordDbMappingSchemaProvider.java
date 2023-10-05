@@ -1783,7 +1783,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .name("Average Warehouse Sale")
         .dimension(MEASURES)
-        .formula("[Measures].[Warehouse Sales] / [Measures].[Warehouse Cost]")
+        .formulaElement(FormulaRBuilder.builder().cdata("[Measures].[Warehouse Sales] / [Measures].[Warehouse Cost]").build())
         .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_2_1))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_4_1 = CalculatedMemberRBuilder
