@@ -1409,6 +1409,8 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_SCHEMA_5 = HierarchyRBuilder
         .builder()
         .hasAll(true)
+        .primaryKey("product_id")
+        .primaryKeyTable("product")
         .levels(List.of(LEVEL_SHARED_5_1,
             LEVEL_SHARED_5_2,
             LEVEL_SHARED_5_3,
@@ -1752,7 +1754,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .name("Profit")
         .dimension(MEASURES)
-        .formula("[Measures].[Store Sales] - [Measures].[Store Cost]")
+        .formulaElement(FormulaRBuilder.builder().cdata("[Measures].[Store Sales] - [Measures].[Store Cost]").build())
         .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_1))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_2 = CalculatedMemberRBuilder
