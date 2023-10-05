@@ -228,7 +228,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 	private static final PropertyR PROPERTY_3_4_4 = new PropertyR(YEARLY_INCOME, null, null, YEARLY_INCOME_COLUMN, null,null,null,			null);
 	private static final PropertyR PROPERTY_4_2_D_a = new PropertyR(STORE_TYPE, null, null, STORE_TYPE_COLUMN, null,	null,null,		null);
 	private static final PropertyR PROPERTY_4_2_D_b = new PropertyR(STORE_MANAGER, null, null, STORE_MANAGER_COLUMN, null, null,			null, null);
-	private static final PropertyR PROPERTY_4_2_D_c = new PropertyR(STORE_SQFT,null, null, "stoe_sqft",PropertyTypeEnum.NUMERIC,null,null,null);
+	private static final PropertyR PROPERTY_4_2_D_c = new PropertyR(STORE_SQFT,null, null, "store_sqft",PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_4_2_D_d = new PropertyR(GROCERY_SQFT,null, null, GROCERY_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_4_2_D_e = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_4_2_D_f = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
@@ -327,6 +327,9 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
                 .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
             SQLRBuilder.builder().dialect(DB2)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
+                .build(),
+            SQLRBuilder.builder().dialect("nuodb")
                 .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
             SQLRBuilder.builder().dialect(SNOWFLAKE)
@@ -1192,7 +1195,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_6 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .allMemberName("All Merital Status")
+        .allMemberName("All Marital Status")
         .primaryKey(CUSTOMER_ID)
         .relation(TABLE_6)
         .levels(List.of(LEVEL_1_6))
