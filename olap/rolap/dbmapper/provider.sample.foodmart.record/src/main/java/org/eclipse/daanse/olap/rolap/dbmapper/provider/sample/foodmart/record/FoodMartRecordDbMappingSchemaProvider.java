@@ -607,7 +607,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .name("State")
         .column(STORE_STATE_COLUMN)
         .uniqueMembers(true)
-        .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
+        .hideMemberIf(HideMemberIfEnum.IF_PARENTS_NAME)
         .build();
     private static final LevelR LEVEL_5_2_C = LevelRBuilder
         .builder()
