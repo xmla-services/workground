@@ -221,7 +221,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 	private static final PropertyR PROPERTY_1_E = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_1_F = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,  PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_1_G = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,  PropertyTypeEnum.BOOLEAN,null,null,null);
-	private static final PropertyR PROPERTY_1_H = new PropertyR("Street Address",null, null, STORE_STREET_ADDRESS,  PropertyTypeEnum.STRING,null,null,null);
+	private static final PropertyR PROPERTY_1_H = new PropertyR("Street address",null, null, STORE_STREET_ADDRESS,  PropertyTypeEnum.STRING,null,null,null);
 	private static final PropertyR PROPERTY_3_4_1 = new PropertyR(GENDER, null, null, GENDER2, null,null,null, null);
 	private static final PropertyR PROPERTY_3_4_2 = new PropertyR("Marital Status", null, null, "marital_status", null, null,			null, null);
 	private static final PropertyR PROPERTY_3_4_3 = new PropertyR("Education",null, null,  EDUCATION, null, null, null,			null);
@@ -247,7 +247,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 	private static final PropertyR PROPERTY_5_1_D_5 = new PropertyR(FROZEN_SQFT,null, null, FROZEN_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_5_1_D_6 = new PropertyR(MEAT_SQFT,null, null, MEAT_SQFT_COLUMN,PropertyTypeEnum.NUMERIC,null,null,null);
 	private static final PropertyR PROPERTY_5_1_D_7 = new PropertyR(HAS_COFFEE_BAR,null, null, COFFEE_BAR,PropertyTypeEnum.BOOLEAN,null,null,null);
-	private static final PropertyR PROPERTY_5_1_D_8 = new PropertyR("Street Address",null, null, STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null);
+	private static final PropertyR PROPERTY_5_1_D_8 = new PropertyR("Street address",null, null, STORE_STREET_ADDRESS,PropertyTypeEnum.STRING,null,null,null);
 	private static final PropertyR PROPERTY_5_5_D_1 = new PropertyR(GENDER,null, null, GENDER2, null, null, null,			null);
 	private static final PropertyR PROPERTY_5_5_D_2 = new PropertyR(MARITAL_STATUS, null, null, MARITAL_STATUS_COLUMN, null, null,			null, null);
 	private static final PropertyR PROPERTY_5_5_D_3 = new PropertyR("Education",null, null, EDUCATION, null, null,			null, null);
@@ -1274,7 +1274,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final HierarchyR HIERARCHY_4_7 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .allMemberCaption("All Employees")
+        .allMemberName("All Employees")
         .primaryKey(EMPLOYEE_ID)
         .relation(TABLE_4_7)
         .levels(List.of(LEVEL_4_7))
