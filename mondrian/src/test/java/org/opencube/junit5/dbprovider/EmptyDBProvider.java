@@ -20,7 +20,7 @@ package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
 
-import org.eclipse.daanse.olap.api.Context;
+import org.opencube.junit5.context.TestContext;
 
 public class EmptyDBProvider implements DatabaseProvider {
 
@@ -30,7 +30,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public Context activate() {
+	public TestContext activate() {
 		return null;
 	}
 

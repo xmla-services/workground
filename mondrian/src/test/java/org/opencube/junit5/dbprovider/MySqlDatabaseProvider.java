@@ -20,12 +20,11 @@ package org.opencube.junit5.dbprovider;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Context;
 import org.opencube.junit5.context.MysqlContext;
+import org.opencube.junit5.context.TestContext;
 
 import com.github.dockerjava.api.model.PortBinding;
 import com.mysql.cj.jdbc.MysqlDataSource;
@@ -60,7 +59,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected  Context createConnection() {
+	protected  TestContext createConnection() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
 		dataSource.setPort(port);

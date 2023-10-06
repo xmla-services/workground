@@ -13,28 +13,28 @@
  */
 package org.opencube.junit5.context;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 
 public class SQLLiteContext extends AbstractTestContext {
-	
+
 	public SQLLiteContext(DataSource dataSource) {
-		super(dataSource);
+
+		setDataSource(dataSource);
+		try {
+			setDialect(new MySqlDialect(dataSource.getConnection()));
+		} catch (SQLException e) {
+			new RuntimeException(e);
+
+		}
 	}
 
 	@Override
 	public String getName() {
 		return "sqliteBaseContext";
-	}
-
-	@Override
-	Dialect createDialect(Connection connection) {
-		return new MySqlDialect(connection);
-
 	}
 
 }
