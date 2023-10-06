@@ -31,7 +31,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.w3c.dom.CharacterData;
@@ -43,7 +43,7 @@ import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.DiffRepository;
-import mondrian.test.TestContext;
+import mondrian.test.NotUseOldTestContext;
 import mondrian.tui.MockHttpServletRequest;
 import mondrian.tui.MockHttpServletResponse;
 import mondrian.tui.XmlaSupport;
@@ -395,7 +395,7 @@ System.out.println("password=" + password);
         return Callback.class;
     }
 
-    protected Map<String, String> getCatalogNameUrls(TestContext testContext) {
+    protected Map<String, String> getCatalogNameUrls(NotUseOldTestContext testContext) {
         if (catalogNameUrls == null) {
 
             catalogNameUrls.put("FoodMart", "FoodMart,xml");
@@ -414,7 +414,7 @@ System.out.println("password=" + password);
     // junk rather than xml
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testJunk(TestingContext context) throws Exception {
+    void testJunk(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -432,7 +432,7 @@ System.out.println("password=" + password);
     // bad soap envolope element tag
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadXml01(TestingContext context) throws Exception {
+    void testBadXml01(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -450,7 +450,7 @@ System.out.println("password=" + password);
     // bad soap namespace
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadXml02(TestingContext context) throws Exception {
+    void testBadXml02(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -470,7 +470,7 @@ System.out.println("password=" + password);
     /////////////////////////////////////////////////////////////////////////
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadAction01(TestingContext context) throws Exception {
+    void testBadAction01(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -487,7 +487,7 @@ System.out.println("password=" + password);
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadAction02(TestingContext context) throws Exception {
+    void testBadAction02(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -504,7 +504,7 @@ System.out.println("password=" + password);
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadAction03(TestingContext context) throws Exception {
+    void testBadAction03(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -524,7 +524,7 @@ System.out.println("password=" + password);
     /////////////////////////////////////////////////////////////////////////
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadSoap01(TestingContext context) throws Exception {
+    void testBadSoap01(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -539,7 +539,7 @@ System.out.println("password=" + password);
         doTest(expectedFault, context.createConnection());
     }
 
-    void testBadSoap02(TestingContext context) throws Exception {
+    void testBadSoap02(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -560,7 +560,7 @@ System.out.println("password=" + password);
     // no authorization field in header
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAuth01(TestingContext context) throws Exception {
+    void testAuth01(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -582,7 +582,7 @@ System.out.println("password=" + password);
     // the user/password is not base64 encode and no ':' character
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAuth02(TestingContext context) throws Exception {
+    void testAuth02(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -618,7 +618,7 @@ System.out.println("password=" + password);
     // this should work
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAuth03(TestingContext context) throws Exception {
+    void testAuth03(TestContextWrapper context) throws Exception {
         Fault expectedFault = null;
 
         doAuthorization = true;
@@ -662,7 +662,7 @@ System.out.println("DO IT AGAIN");
     // fail: bad user name
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAuth04(TestingContext context) throws Exception {
+    void testAuth04(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -708,7 +708,7 @@ System.out.println("DO IT AGAIN");
     // fail: bad password
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAuth05(TestingContext context) throws Exception {
+    void testAuth05(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -754,7 +754,7 @@ System.out.println("DO IT AGAIN");
     // bad header
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadHeader01(TestingContext context) throws Exception {
+    void testBadHeader01(TestContextWrapper context) throws Exception {
         // remember, errors in headers do not have detail sections
         Fault expectedFault =
             new Fault(
@@ -773,7 +773,7 @@ System.out.println("DO IT AGAIN");
     // bad body
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody01(TestingContext context) throws Exception {
+    void testBadBody01(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -790,7 +790,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody02(TestingContext context) throws Exception {
+    void testBadBody02(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -807,7 +807,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody03(TestingContext context) throws Exception {
+    void testBadBody03(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -824,7 +824,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody04(TestingContext context) throws Exception {
+    void testBadBody04(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -841,7 +841,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody05(TestingContext context) throws Exception {
+    void testBadBody05(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -858,7 +858,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody06(TestingContext context) throws Exception {
+    void testBadBody06(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -875,7 +875,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody07(TestingContext context) throws Exception {
+    void testBadBody07(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -892,7 +892,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody08(TestingContext context) throws Exception {
+    void testBadBody08(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -909,7 +909,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody09(TestingContext context) throws Exception {
+    void testBadBody09(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -926,7 +926,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody10(TestingContext context) throws Exception {
+    void testBadBody10(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -943,7 +943,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody11(TestingContext context) throws Exception {
+    void testBadBody11(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -960,7 +960,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody12(TestingContext context) throws Exception {
+    void testBadBody12(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -977,7 +977,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody13(TestingContext context) throws Exception {
+    void testBadBody13(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -994,7 +994,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody14(TestingContext context) throws Exception {
+    void testBadBody14(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -1011,7 +1011,7 @@ System.out.println("DO IT AGAIN");
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadBody15(TestingContext context) throws Exception {
+    void testBadBody15(TestContextWrapper context) throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(

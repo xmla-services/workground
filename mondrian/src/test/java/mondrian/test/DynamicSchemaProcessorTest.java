@@ -16,7 +16,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -85,7 +85,7 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testFoodmartDsp(TestingContext context) {
+    void testFoodmartDsp(TestContextWrapper context) {
         withSchemaProcessor(context, BaseDsp.class);
         final Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "REPLACEME");
@@ -124,7 +124,7 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testProviderTestDSP(TestingContext context) {
+    void testProviderTestDSP(TestContextWrapper context) {
         withSchemaProcessor(context, ProviderTestDSP.class);
         Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "mondrian");
@@ -154,7 +154,7 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDBInfoDSP(TestingContext context) {
+    void testDBInfoDSP(TestContextWrapper context) {
         withSchemaProcessor(context, FoodMartCatalogDsp.class);
         final Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "FoodmartFoundInCatalogProperty");
@@ -189,7 +189,7 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCheckJdbcPropertyDsp(TestingContext context) {
+    void testCheckJdbcPropertyDsp(TestContextWrapper context) {
         withSchemaProcessor(context, CheckJdbcPropertyDsp.class);
         Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), CheckJdbcPropertyDsp.RETURNTRUESTRING);

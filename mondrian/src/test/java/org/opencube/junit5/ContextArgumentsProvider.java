@@ -27,11 +27,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 import java.util.stream.Stream;
 
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.glassfish.jaxb.runtime.v2.JAXBContextFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -40,7 +44,8 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextImpl;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.xmltests.ResourceTestCase;
@@ -60,14 +65,14 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
     private static final Logger LOGGER = LoggerFactory.getLogger(ContextArgumentsProvider.class);
 	private ContextSource contextSource;
 
-	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>,  TestContext>> store = new HashMap<>();
+	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>,  Entry<DataSource, Dialect>>> store = new HashMap<>();
 	public static boolean dockerWasChanged = true;
 
 	@Override
 	public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
 
 		// TODO: parallel
-		List<TestingContext> contexts = prepareContexts(extensionContext);
+		List<TestContextWrapper> contexts = prepareContexts(extensionContext);
 		List<XmlResourceTestCase> xmlTestCases = readTestcases(extensionContext);
 
 		List<Arguments> argumentss = new ArrayList<>();
@@ -81,14 +86,14 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			}
 		} else {
-			for (TestingContext context : contexts) {
+			for (TestContextWrapper context : contexts) {
 
 				if (xmlTestCases == null || xmlTestCases.isEmpty()) {
-					argumentss.add(Arguments.of(context));
+					argumentss.add(Arguments.of(contextOrWrapper(extensionContext,context)));
 
 				} else {
 					for (XmlResourceTestCase xmlTestCase : xmlTestCases) {
-						argumentss.add(Arguments.of(context, xmlTestCase));
+						argumentss.add(Arguments.of(contextOrWrapper(extensionContext,context), xmlTestCase));
 					}
 
 				}
@@ -97,6 +102,22 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		}
 		return argumentss.stream();
 
+	}
+	
+	Object contextOrWrapper(ExtensionContext extensionContext, TestContextWrapper testContextWrapper) {
+
+		Optional<AnnotatedElement> oElement = extensionContext.getElement();
+		if (oElement.isPresent()) {
+			if (oElement.get() instanceof Method) {
+				Method method = (Method) oElement.get();
+				for (Parameter param : method.getParameters()) {
+					if (TestContext.class.equals(param.getType())||Context.class.equals(param.getType())) {
+						return testContextWrapper.getContext();
+					}
+				}
+			}
+		}
+		return testContextWrapper;
 	}
 
 	private List<XmlResourceTestCase> readTestcases(ExtensionContext extensionContext) {
@@ -144,7 +165,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		return null;
 	}
 
-	private List<TestingContext> prepareContexts(ExtensionContext extensionContext) {
+	private List<TestContextWrapper> prepareContexts(ExtensionContext extensionContext) {
 		Stream<DatabaseProvider> providers;
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
@@ -161,9 +182,9 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			});
 		}
-		List<TestingContext> args = providers.parallel().map(dbp -> {
+		List<TestContextWrapper> args = providers.parallel().map(dbp -> {
 
-			TestContext context = null;
+			Entry<DataSource, Dialect> dataBaseInfo = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
 
 			if (!store.containsKey(clazzProvider)) {
@@ -172,31 +193,33 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 			}
 
-			List<TestingContext> testingContexts = new ArrayList<>();
+			List<TestContextWrapper> testingContexts = new ArrayList<>();
 
 			Optional<AnnotatedElement> oElement = extensionContext.getElement();
 			if (oElement.isPresent()) {
 				if (oElement.get() instanceof Method) {
 					Method method = (Method) oElement.get();
 					for (Parameter param : method.getParameters()) {
-						if (TestingContext.class.isAssignableFrom(param.getType())) {
+						if (TestContextWrapper.class.isAssignableFrom(param.getType())||
+								TestContext.class.isAssignableFrom(param.getType())||
+								Context.class.isAssignableFrom(param.getType())) {
 							ContextSource contextSource=method.getAnnotation(ContextSource.class);
 
 							try {
 
 								Class<? extends DataLoader> dataLoaderClass = contextSource.dataloader();
 
-								Map<Class<? extends DataLoader>, TestContext> storedLoaders = store
+								Map<Class<? extends DataLoader>, Entry<DataSource, Dialect>> storedLoaders = store
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass) && !dockerWasChanged) {
-									context = storedLoaders.get(dataLoaderClass);
+									dataBaseInfo = storedLoaders.get(dataLoaderClass);
 //									dataSource.getKey().put(RolapConnectionProperties.Jdbc.name(), dbp.getJdbcUrl());
 								} else {
-									context = dbp.activate();
+									dataBaseInfo = dbp.activate();
 									DataLoader dataLoader = dataLoaderClass.getConstructor().newInstance();
-									dataLoader.loadData(context);
+									dataLoader.loadData(dataBaseInfo);
 									storedLoaders.clear();
-									storedLoaders.put(dataLoaderClass, context);
+									storedLoaders.put(dataLoaderClass, dataBaseInfo);
 									dockerWasChanged = false;
 								}
 
@@ -206,8 +229,12 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								throw new RuntimeException(e);
 							}
 
-							BaseTestContext btcontext=new BaseTestContext();
-							btcontext.init(context);
+							TestContextImpl testContextImpl=new TestContextImpl();
+							testContextImpl.setDataSource(dataBaseInfo.getKey());
+							testContextImpl.setDialect(dataBaseInfo.getValue());
+
+							BaseTestContext btcontext=new BaseTestContext(testContextImpl);
+
 
 							Stream.of(contextSource.propertyUpdater()).map(c -> {
 								try {
@@ -236,13 +263,13 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 	class NamedArguments implements Arguments {
 
-		public NamedArguments(TestingContext context, ResourceTestCase res) {
+		public NamedArguments(TestContextWrapper context, ResourceTestCase res) {
 			super();
 			this.context = context;
 			this.res = res;
 		}
 
-		TestingContext context;
+		TestContextWrapper context;
 		ResourceTestCase res;
 
 		@Override

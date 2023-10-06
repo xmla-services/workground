@@ -21,9 +21,15 @@ package org.opencube.junit5.dbprovider;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
-import org.opencube.junit5.context.SQLLiteContext;
-import org.opencube.junit5.context.TestContext;
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
@@ -52,14 +58,18 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public TestContext activate() {
+	public Entry<DataSource, Dialect> activate() {
 		SQLiteConfig cfg = new SQLiteConfig();
-		SQLiteDataSource ds = new SQLiteDataSource(cfg);
-		ds.setUrl(JDBC_SQLITE_MEMORY);
-		TestContext context = new SQLLiteContext(ds);
-		return context;
+		SQLiteDataSource dataSource = new SQLiteDataSource(cfg);
+		dataSource.setUrl(JDBC_SQLITE_MEMORY);
+		try {
+			Connection connection = dataSource.getConnection();
+			Dialect dialect = new MySqlDialect(connection);
+			connection.close();
+			return new SimpleEntry<>(dataSource, dialect);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
-
-
 
 }

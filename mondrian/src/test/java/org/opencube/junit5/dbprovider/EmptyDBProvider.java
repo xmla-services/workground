@@ -19,8 +19,11 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 
-import org.opencube.junit5.context.TestContext;
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public class EmptyDBProvider implements DatabaseProvider {
 
@@ -30,7 +33,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public TestContext activate() {
+	public Entry<DataSource, Dialect> activate() {
 		return null;
 	}
 

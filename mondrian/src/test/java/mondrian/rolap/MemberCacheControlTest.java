@@ -47,7 +47,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -111,7 +111,7 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void prepareTestContext(TestingContext context) {
+    public void prepareTestContext(TestContextWrapper context) {
         final RolapConnection conn = (RolapConnection) context.createConnection();
         final Statement statement = conn.getInternalStatement();
         final Execution execution = new Execution(statement, 0);
@@ -303,7 +303,7 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFilter(TestingContext context) {
+    void testFilter(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final DiffRepository dr = getDiffRepos();
@@ -322,7 +322,7 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberOpsFailIfCacheEnabled(TestingContext context) {
+    void testMemberOpsFailIfCacheEnabled(TestContextWrapper context) {
         propSaver.set(
             MondrianProperties.instance().EnableRolapCubeMemberCache,
             true);
@@ -348,7 +348,7 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetPropertyCommandOnLeafMember(TestingContext context) {
+    void testSetPropertyCommandOnLeafMember(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final DiffRepository dr = getDiffRepos();
@@ -405,7 +405,7 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetPropertyCommandOnNonLeafMember(TestingContext context) {
+    void testSetPropertyCommandOnNonLeafMember(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final DiffRepository dr = getDiffRepos();
@@ -471,7 +471,7 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAddCommand(TestingContext context) {
+    void testAddCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -687,7 +687,7 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDeleteCommand(TestingContext context) {
+    void testDeleteCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -760,7 +760,7 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMoveCommand(TestingContext context) {
+    void testMoveCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -846,7 +846,7 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMoveFailBadLevel(TestingContext context) {
+    void testMoveFailBadLevel(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -928,7 +928,7 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAddCommandNegative(TestingContext context) {
+    void testAddCommandNegative(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -1040,7 +1040,7 @@ class MemberCacheControlTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFlushHierarchy(TestingContext context) {
+    void testFlushHierarchy(TestContextWrapper context) {
         prepareTestContext(context);
         flushCache(context.createConnection());
         final CacheControl cacheControl =

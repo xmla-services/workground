@@ -14,7 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -40,43 +40,43 @@ class XmlaTabularTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularOneByOne(TestingContext context) throws Exception {
+    void testTabularOneByOne(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularOneByTwo(TestingContext context) throws Exception {
+    void testTabularOneByTwo(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularTwoByOne(TestingContext context) throws Exception {
+    void testTabularTwoByOne(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularTwoByTwo(TestingContext context) throws Exception {
+    void testTabularTwoByTwo(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularZeroByZero(TestingContext context) throws Exception {
+    void testTabularZeroByZero(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularVoid(TestingContext context) throws Exception {
+    void testTabularVoid(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTabularThreeAxes(TestingContext context) throws Exception {
+    void testTabularThreeAxes(TestContextWrapper context) throws Exception {
         executeMDX(context.createConnection());
     }
 

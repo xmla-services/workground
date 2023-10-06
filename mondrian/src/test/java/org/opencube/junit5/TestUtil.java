@@ -71,7 +71,7 @@ import org.olap4j.OlapStatement;
 import org.olap4j.OlapWrapper;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
@@ -95,7 +95,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.test.FoodmartTestContextImpl;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
-import mondrian.test.TestContext;
+import mondrian.test.NotUseOldTestContext;
 import mondrian.util.DelegatingInvocationHandler;
 
 public class TestUtil {
@@ -227,7 +227,7 @@ public class TestUtil {
 	 * @param queryString Query string
 	 * @param pattern     Pattern which exception must match
 	 */
-	public static void assertQueryThrows(TestingContext context, String queryString, String pattern) {
+	public static void assertQueryThrows(TestContextWrapper context, String queryString, String pattern) {
 		Throwable throwable;
 		try {
 			Result result = executeQuery(context.createConnection(), queryString);
@@ -267,7 +267,7 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
-	public static void assertExprThrows(TestingContext context, String cubeName, String expression, String pattern) {
+	public static void assertExprThrows(TestContextWrapper context, String cubeName, String expression, String pattern) {
 		Throwable throwable = null;
 		try {
 			if (cubeName.indexOf(' ') >= 0) {
@@ -301,7 +301,7 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
-	public static void assertExprThrows(TestingContext context, String expression, String pattern) {
+	public static void assertExprThrows(TestContextWrapper context, String expression, String pattern) {
 		String cubeName = getDefaultCubeName();
 		assertExprThrows(context, cubeName, expression, pattern);
 	}
@@ -514,7 +514,7 @@ public class TestUtil {
 	 * Returns a connection to the FoodMart database with a dynamic schema processor and disables use of RolapSchema
 	 * Pool.
 	 */
-	public static void withSchemaProcessor(TestingContext context,
+	public static void withSchemaProcessor(TestContextWrapper context,
 			Class<? extends DynamicSchemaProcessor> dynProcClass ) {
 		final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
 		context.setProperty(RolapConnectionProperties.DynamicSchemaProcessor.name(), dynProcClass.getName());
@@ -567,7 +567,7 @@ public class TestUtil {
 	 *
 	 * @return Warnings encountered while loading schema
 	 */
-	public static List<Exception> getSchemaWarnings(TestingContext context) {
+	public static List<Exception> getSchemaWarnings(TestContextWrapper context) {
 		//final Util.PropertyList propertyList =
 		//		getConnectionProperties().clone();
 		//propertyList.put(
@@ -589,12 +589,12 @@ public class TestUtil {
 	public static Dialect getFakeDialect( DatabaseProduct product ) {
 		final DatabaseMetaData metaData =
 				(DatabaseMetaData) Proxy.newProxyInstance(
-						TestContext.class.getClassLoader(),
+						NotUseOldTestContext.class.getClassLoader(),
 						new Class<?>[] { DatabaseMetaData.class },
 						new DatabaseMetaDataInvocationHandler( product ) );
 		final java.sql.Connection connection =
 				(java.sql.Connection) Proxy.newProxyInstance(
-						TestContext.class.getClassLoader(),
+						NotUseOldTestContext.class.getClassLoader(),
 						new Class<?>[] { java.sql.Connection.class },
 						new ConnectionInvocationHandler( metaData ) );
         //TODO Commented by reason context implementation
@@ -720,7 +720,7 @@ public class TestUtil {
 		 * Wrapper around a string that indicates that all line endings have been
 		 * converted to platform-specific line endings.
 		 *
-		 * @see TestContext#fold
+		 * @see NotUseOldTestContext#fold
 		 */
 		public static class SafeString {
 			public final String s;
@@ -1233,7 +1233,7 @@ public class TestUtil {
 
 		static String rawSchema = null;
 
-		public static String getRawSchema(TestingContext context) {
+		public static String getRawSchema(TestContextWrapper context) {
 			if(rawSchema == null) {
 				try {
 					OlapConnection connection = context.createOlap4jConnection();
@@ -1251,11 +1251,11 @@ public class TestUtil {
 			return rawSchema;
 		}
 
-		public static void withSchema(TestingContext context, String schema) {
+		public static void withSchema(TestContextWrapper context, String schema) {
 			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
 		}
 
-		public static void withRole(TestingContext context, String roleName) {
+		public static void withRole(TestContextWrapper context, String roleName) {
 			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
 		}
 
@@ -1882,7 +1882,7 @@ public class TestUtil {
 		return genderDimension.getHierarchy().getAllMember();
 	}
 
-	public static CellSet executeOlap4jXmlaQuery(TestingContext context, String queryString )
+	public static CellSet executeOlap4jXmlaQuery(TestContextWrapper context, String queryString )
 			throws SQLException {
 		/*
 		Connection connection = context.createConnection();

@@ -96,7 +96,7 @@ import mondrian.util.DelegatingInvocationHandler;
  * @author jhyde
  * @since 29 March, 2002
  */
-public class FoodmartTestContextImpl implements TestContext {
+public class FoodmartTestContextImpl implements NotUseOldTestContext {
   private static FoodmartTestContextImpl instance; // the singleton
   private PrintWriter pw;
 
@@ -188,7 +188,7 @@ public synchronized Connection getConnection() {
    * Returns a connection to the FoodMart database with a dynamic schema processor and disables use of RolapSchema
    * Pool.
    */
-  public TestContext withSchemaProcessor(
+  public NotUseOldTestContext withSchemaProcessor(
     Class<? extends DynamicSchemaProcessor> dynProcClass ) {
     final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
@@ -206,12 +206,12 @@ public synchronized Connection getConnection() {
    * @return Test context which uses the a fresh connection
    * @see #withSchemaPool(boolean)
    */
-  public final TestContext withFreshConnection() {
+  public final NotUseOldTestContext withFreshConnection() {
     final Connection connection = withSchemaPool( false ).getConnection();
     return withConnection( connection );
   }
 
-  public TestContext withSchemaPool( boolean usePool ) {
+  public NotUseOldTestContext withSchemaPool( boolean usePool ) {
     final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.UseSchemaPool.name(),
@@ -1550,7 +1550,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param roleDefs        Definitions of roles
    * @return TestContext which reads from a slightly different hymnbook
    */
-  public final TestContext create(
+  public final NotUseOldTestContext create(
     final String parameterDefs,
     final String cubeDefs,
     final String virtualCubeDefs,
@@ -1569,7 +1569,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param schema XML schema content
    * @return TestContext which contains the given schema
    */
-  public final TestContext withSchema( final String schema ) {
+  public final NotUseOldTestContext withSchema( final String schema ) {
     final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.CatalogContent.name(),
@@ -1583,7 +1583,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param properties Connection properties
    * @return TestContext which contains the given properties
    */
-  public TestContext withProperties( final Util.PropertyList properties ) {
+  public NotUseOldTestContext withProperties( final Util.PropertyList properties ) {
     return new DelegatingTestContext( this ) {
       @Override
 	public Util.PropertyList getConnectionProperties() {
@@ -1599,7 +1599,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param dimensionDefs String defining dimensions, or null
    * @return TestContext with modified cube defn
    */
-  public final TestContext createSubstitutingCube(
+  public final NotUseOldTestContext createSubstitutingCube(
     final String cubeName,
     final String dimensionDefs ) {
     return createSubstitutingCube( cubeName, dimensionDefs, null );
@@ -1613,7 +1613,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param memberDefs    String defining calculated members, or null
    * @return TestContext with modified cube defn
    */
-  public final TestContext createSubstitutingCube(
+  public final NotUseOldTestContext createSubstitutingCube(
     final String cubeName,
     final String dimensionDefs,
     final String memberDefs ) {
@@ -1632,7 +1632,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param namedSetDefs  String defining named set definitions, or null
    * @return TestContext with modified cube defn
    */
-  public final TestContext createSubstitutingCube(
+  public final NotUseOldTestContext createSubstitutingCube(
     final String cubeName,
     final String dimensionDefs,
     final String measureDefs,
@@ -1649,7 +1649,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
   /**
    * Overload that allows swapping the defaultMeasure.
    */
-  public final TestContext createSubstitutingCube(
+  public final NotUseOldTestContext createSubstitutingCube(
     final String cubeName,
     final String dimensionDefs,
     final String measureDefs,
@@ -1672,7 +1672,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param roleName Role name
    * @return Test context with the given role
    */
-  public final TestContext withRole( final String roleName ) {
+  public final NotUseOldTestContext withRole( final String roleName ) {
     final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.Role.name(),
@@ -1692,7 +1692,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param cubeName Cube name
    * @return Test context with the given default cube
    */
-  public final TestContext withCube( final String cubeName ) {
+  public final NotUseOldTestContext withCube( final String cubeName ) {
     return new DelegatingTestContext( this ) {
       @Override
 	public String getDefaultCubeName() {
@@ -1707,7 +1707,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @param connection Connection
    * @return Test context which uses the given connection
    */
-  public final TestContext withConnection( final Connection connection ) {
+  public final NotUseOldTestContext withConnection( final Connection connection ) {
     return new DelegatingTestContext( this ) {
       @Override
 	public Connection getConnection() {

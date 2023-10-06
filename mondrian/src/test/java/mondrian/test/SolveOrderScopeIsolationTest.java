@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -109,14 +109,14 @@ class SolveOrderScopeIsolationTest {
         MondrianProperties.instance().SolveOrderMode.set(mode.toString());
     }
 
-    public void prepareContext(TestingContext context) {
+    public void prepareContext(TestContextWrapper context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales", null, memberDefs));
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllSolveOrderModesHandled(TestingContext context)    
+    void testAllSolveOrderModesHandled(TestContextWrapper context)    
     {
         for (SolveOrderMode mode : SolveOrderMode.values()) {
             switch (mode) {
@@ -142,7 +142,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberDoesNotHappenAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -175,7 +175,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberDoesNotHappenScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -213,7 +213,7 @@ class SolveOrderScopeIsolationTest {
     @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestingContext context) { 
+    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContextWrapper context) { 
     	prepareContext(context);
         setSolveOrderMode(SCOPED);
         assertQueryReturns(context.createConnection(),
@@ -248,7 +248,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubeMemberEvalBeforeQueryMemberAbsolute(TestingContext context) {
+    void testCubeMemberEvalBeforeQueryMemberAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -283,7 +283,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubeMemberEvalBeforeQueryMemberScoped(TestingContext context) {
+    void testCubeMemberEvalBeforeQueryMemberScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -308,7 +308,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -341,7 +341,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -374,7 +374,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestingContext context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -408,7 +408,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestingContext context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -442,7 +442,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestContextWrapper context) {
         prepareContext(context);
         final String mdx =
             "with\n"
@@ -476,7 +476,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -517,7 +517,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testAggregateMemberEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -562,7 +562,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
+    void testAggregateMemberEvalAfterOtherMembersScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -614,7 +614,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -658,7 +658,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -709,7 +709,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -750,7 +750,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestingContext context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -791,7 +791,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"
@@ -834,7 +834,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestContextWrapper context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"

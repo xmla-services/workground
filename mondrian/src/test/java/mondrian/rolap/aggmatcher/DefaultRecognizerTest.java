@@ -20,7 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -55,7 +55,7 @@ class DefaultRecognizerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDefaultRecognizerWithFactAlias(TestingContext context) {
+    void testDefaultRecognizerWithFactAlias(TestContextWrapper context) {
         Connection connection = context.createConnection();
         flushSchemaCache(connection);
         final String cube =
@@ -117,7 +117,7 @@ class DefaultRecognizerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testTupleReaderWithDistinctCountMeasureInContext(TestingContext context) {
+    void testTupleReaderWithDistinctCountMeasureInContext(TestContextWrapper context) {
         Connection connection = context.createConnection();
         flushSchemaCache(connection);        
         // Validates that if a distinct count measure is in context

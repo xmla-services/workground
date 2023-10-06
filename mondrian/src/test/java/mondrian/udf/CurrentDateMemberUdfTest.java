@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -26,7 +26,7 @@ class CurrentDateMemberUdfTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCurrentDateMemberUdf(TestingContext context) {
+    void testCurrentDateMemberUdf(TestContextWrapper context) {
 		Connection connection=context.createConnection();
 		//TODO: context redesign
 		//Assertions.fail("Handle comment , Context redesign nedded");
@@ -61,7 +61,7 @@ class CurrentDateMemberUdfTest {
     */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetReturnType(TestingContext context) {
+    void testGetReturnType(TestContextWrapper context) {
 		Connection connection=context.createConnection();
         String query = "WITH MEMBER [Time].[YTD] AS SUM( YTD(CurrentDateMember"
              + "([Time], '[\"Time\"]\\.[yyyy]\\.[Qq].[m]', EXACT)), Measures.[Unit Sales]) SELECT Time.YTD on 0 FROM sales";

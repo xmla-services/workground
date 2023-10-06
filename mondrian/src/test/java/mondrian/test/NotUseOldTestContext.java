@@ -40,7 +40,7 @@ import mondrian.olap.Util;
  * <code>TestContext</code> is a class which contains the information
  * necessary to run mondrian tests.
  */
-public interface TestContext {
+public interface NotUseOldTestContext {
 
     void flushSchemaCache();
 

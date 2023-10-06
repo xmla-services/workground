@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -117,7 +117,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDBSchemataFiltered(TestingContext context) throws Exception {
+    void testDBSchemataFiltered(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart2", connection);
@@ -127,7 +127,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDBSchemataFilteredByRestraints(TestingContext context) throws Exception {
+    void testDBSchemataFilteredByRestraints(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart2", connection);
@@ -137,7 +137,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCatalogsFiltered(TestingContext context) throws Exception {
+    void testCatalogsFiltered(TestContextWrapper context) throws Exception {
         //Catalog in the properties has not filter DBSCHEMA_CATALOGS. Only if is set in restrictions.
         Connection connection = context.createConnection();
         doTest(
@@ -148,7 +148,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCatalogsFilteredByRestraints(TestingContext context) throws Exception {
+    void testCatalogsFilteredByRestraints(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         doTest(
             RowsetDefinition.DBSCHEMA_CATALOGS.name(), "FoodMart2", connection);
@@ -158,7 +158,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubesFiltered(TestingContext context) throws Exception {
+    void testCubesFiltered(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         doTest(
             RowsetDefinition.MDSCHEMA_CUBES.name(), "FoodMart2", connection);
@@ -168,7 +168,7 @@ class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubesFilteredByRestraints(TestingContext context) throws Exception {
+    void testCubesFilteredByRestraints(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         doTest(
             RowsetDefinition.MDSCHEMA_CUBES.name(), "FoodMart2", connection);

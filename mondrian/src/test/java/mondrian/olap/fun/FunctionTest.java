@@ -63,7 +63,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -180,7 +180,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriodMinValue(TestingContext context) {
+  void testParallelPeriodMinValue(TestContextWrapper context) {
     // By running the query and getting a result without an exception, we should assert the return value which will
     // have empty rows, because the parallel period value is too large, so rows will be empty
     // data, but it will still return a result.
@@ -213,7 +213,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLagMinValue(TestingContext context) {
+  void testLagMinValue(TestContextWrapper context) {
     // By running the query and getting a result without an exception, we should assert the return value which will
     // have empty rows, because the lag value is too large for the traversal it needs to make, so rows will be empty
     // data, but it will still return a result.
@@ -245,7 +245,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriodWithSlicer(TestingContext context) {
+  void testParallelPeriodWithSlicer(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "With "
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Time],[*BASE_MEMBERS_Product])' "
@@ -278,7 +278,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelperiodOnLevelsString(TestingContext context) {
+  void testParallelperiodOnLevelsString(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "with member Measures.[Prev Unit Sales] as 'parallelperiod(Levels(\"[Time].[Month]\"))'\n"
         + "select {[Measures].[Unit Sales], Measures.[Prev Unit Sales]} ON COLUMNS,\n"
@@ -304,7 +304,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelperiodOnStrToMember(TestingContext context) {
+  void testParallelperiodOnStrToMember(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member Measures.[Prev Unit Sales] as 'parallelperiod(strToMember(\"[Time].[1997].[Q2]\"))'\n"
         + "select {[Measures].[Unit Sales], Measures.[Prev Unit Sales]} ON COLUMNS,\n"
@@ -338,7 +338,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNumericLiteral(TestingContext context) {
+  void testNumericLiteral(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(), "2", "2" );
     if ( false ) {
       // The test is currently broken because the value 2.5 is formatted
@@ -351,7 +351,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringLiteral(TestingContext context) {
+  void testStringLiteral(TestContextWrapper context) {
     // single-quoted string
     if ( false ) {
       // TODO: enhance parser so that you can include a quoted string
@@ -366,25 +366,25 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionHierarchy(TestingContext context) {
+  void testDimensionHierarchy(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(), "[Time].Dimension.Name", "Time" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelDimension(TestingContext context) {
+  void testLevelDimension(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(), "[Time].[Year].Dimension.UniqueName", "[Time]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberDimension(TestingContext context) {
+  void testMemberDimension(TestContextWrapper context) {
      TestUtil.assertExprReturns(context.createConnection(), "[Time].[1997].[Q2].Dimension.UniqueName", "[Time]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionsNumeric(TestingContext context) {
+  void testDimensionsNumeric(TestContextWrapper context) {
     TestUtil.assertExprDependsOn(context.createConnection(), "Dimensions(2).Name", "{}" );
     TestUtil.assertMemberExprDependsOn(context.createConnection(),
             "Dimensions(3).CurrentMember",
@@ -402,7 +402,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionsString(TestingContext context) {
+  void testDimensionsString(TestContextWrapper context) {
     TestUtil.assertExprDependsOn(context.createConnection(),
       "Dimensions(\"foo\").UniqueName",
       "{}" );
@@ -419,7 +419,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionsDepends(TestingContext context) {
+  void testDimensionsDepends(TestContextWrapper context) {
     final String expression =
       "Crossjoin("
         + "{Dimensions(\"Measures\").CurrentMember.Hierarchy.CurrentMember}, "
@@ -432,21 +432,21 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTime(TestingContext context) {
+  void testTime(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Time].[1997].[Q1].[1].Hierarchy.UniqueName", "[Time]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBasic9(TestingContext context) {
+  void testBasic9(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Gender].[All Gender].[F].Hierarchy.UniqueName", "[Gender]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstInLevel9(TestingContext context) {
+  void testFirstInLevel9(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Education Level].[All Education Levels].[Bachelors Degree].Hierarchy.UniqueName",
       "[Education Level]" );
@@ -454,14 +454,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyAll(TestingContext context) {
+  void testHierarchyAll(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Gender].[All Gender].Hierarchy.UniqueName", "[Gender]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullMember(TestingContext context) {
+  void testNullMember(TestContextWrapper context) {
     // MSAS fails here, but Mondrian doesn't.
     TestUtil.assertExprReturns(context.createConnection(),
       "[Gender].[All Gender].Parent.Level.UniqueName",
@@ -495,7 +495,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullValue(TestingContext context) {
+  void testNullValue(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "with member [Measures].[X] as 'IIF([Measures].[Store Sales]>10000,[Measures].[Store Sales],Null)'\n"
         + "select\n"
@@ -557,7 +557,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullInMultiplication(TestingContext context) {
+  void testNullInMultiplication(TestContextWrapper context) {
     Connection connection = context.createConnection();
     TestUtil.assertExprReturns(connection, "NULL*1", "" );
     TestUtil.assertExprReturns(connection, "1*NULL", "" );
@@ -566,7 +566,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullInAddition(TestingContext context) {
+  void testNullInAddition(TestContextWrapper context) {
     Connection connection = context.createConnection();
     TestUtil.assertExprReturns(connection, "1+NULL", "1" );
     TestUtil.assertExprReturns(connection, "NULL+1", "1" );
@@ -574,7 +574,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullInSubtraction(TestingContext context) {
+  void testNullInSubtraction(TestContextWrapper context) {
     Connection connection = context.createConnection();
     TestUtil.assertExprReturns(connection, "1-NULL", "1" );
     TestUtil.assertExprReturns(connection, "NULL-1", "-1" );
@@ -583,7 +583,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberLevel(TestingContext context) {
+  void testMemberLevel(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Time].[1997].[Q1].[1].Level.UniqueName",
       "[Time].[Month]" );
@@ -591,7 +591,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelsNumeric(TestingContext context) {
+  void testLevelsNumeric(TestContextWrapper context) {
     Connection connection = context.createConnection();
     TestUtil.assertExprReturns(connection, "[Time].[Time].Levels(2).Name", "Month" );
     TestUtil.assertExprReturns(connection, "[Time].[Time].Levels(0).Name", "Year" );
@@ -600,28 +600,28 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelsTooSmall(TestingContext context) {
+  void testLevelsTooSmall(TestContextWrapper context) {
     TestUtil.assertExprThrows(context.createConnection(),
       "[Time].[Time].Levels(-1).Name", "Index '-1' out of bounds" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelsTooLarge(TestingContext context) {
+  void testLevelsTooLarge(TestContextWrapper context) {
     TestUtil.assertExprThrows(context.createConnection(),
       "[Time].[Time].Levels(8).Name", "Index '8' out of bounds" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyLevelsString(TestingContext context) {
+  void testHierarchyLevelsString(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "[Time].[Time].Levels(\"Year\").UniqueName", "[Time].[Year]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyLevelsStringFail(TestingContext context) {
+  void testHierarchyLevelsStringFail(TestContextWrapper context) {
     TestUtil.assertExprThrows(context.createConnection(),
       "[Time].[Time].Levels(\"nonexistent\").UniqueName",
       "Level 'nonexistent' not found in hierarchy '[Time]'" );
@@ -629,7 +629,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelsString(TestingContext context) {
+  void testLevelsString(TestContextWrapper context) {
     TestUtil.assertExprReturns(context.createConnection(),
       "Levels(\"[Time].[Year]\").UniqueName",
       "[Time].[Year]" );
@@ -637,7 +637,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelsStringFail(TestingContext context) {
+  void testLevelsStringFail(TestContextWrapper context) {
     TestUtil.assertExprThrows(context.createConnection(),
       "Levels(\"nonexistent\").UniqueName",
       "Level 'nonexistent' not found" );
@@ -645,7 +645,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsEmptyQuery(TestingContext context) {
+  void testIsEmptyQuery(TestContextWrapper context) {
     String desiredResult =
       "Axis #0:\n"
         + "{[Time].[1997].[Q4].[12], [Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Portsmouth]"
@@ -703,7 +703,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsEmptyWithAggregate(TestingContext context) {
+  void testIsEmptyWithAggregate(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "WITH MEMBER [gender].[foo] AS 'isEmpty(Aggregate({[Gender].m}))' "
         + "SELECT {Gender.foo} on 0 from sales",
@@ -716,7 +716,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsEmpty(TestingContext context) {
+  void testIsEmpty(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertBooleanExprReturns(connection, "[Gender].[All Gender].Parent IS NULL", true );
 
@@ -823,7 +823,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testQueryWithoutValidMeasure(TestingContext context) {
+  void testQueryWithoutValidMeasure(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "with\n"
         + "member measures.[without VM] as ' [measures].[unit sales] '\n"
@@ -847,7 +847,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasure(TestingContext context) {
+  void testValidMeasure(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "with\n"
         + "member measures.[with VM] as 'validmeasure([measures].[unit sales])'\n"
@@ -868,7 +868,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testValidMeasureNonEmpty(TestingContext context) {
+  void _testValidMeasureNonEmpty(TestContextWrapper context) {
     // Note that [with VM2] is NULL where it needs to be - and therefore
     // does not prevent NON EMPTY from eliminating empty rows.
     TestUtil.assertQueryReturns(context.createConnection(),
@@ -917,7 +917,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureTupleHasAnotherMember(TestingContext context) {
+  void testValidMeasureTupleHasAnotherMember(TestContextWrapper context) {
     TestUtil.assertQueryReturns(context.createConnection(),
       "with\n"
         + "member measures.[with VM] as 'validmeasure(([measures].[unit sales],[customers].[all customers]))'\n"
@@ -938,7 +938,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureDepends(TestingContext context) {
+  void testValidMeasureDepends(TestContextWrapper context) {
     Connection connection = context.createConnection();
     String s12 = allHiersExcept( "[Measures]" );
     TestUtil.assertExprDependsOn(connection,
@@ -957,7 +957,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureNonVirtualCube(TestingContext context) {
+  void testValidMeasureNonVirtualCube(TestContextWrapper context) {
     // verify ValidMeasure used outside of a virtual cube
     // is effectively a no-op.
     Connection connection = context.createConnection();
@@ -988,7 +988,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureCalculatedMemberMeasure(TestingContext context) {
+  void testValidMeasureCalculatedMemberMeasure(TestContextWrapper context) {
     // Check for failure.
      TestUtil.assertQueryThrows(context,
       "with member measures.calc as 'measures.[Warehouse sales]' \n"
@@ -1009,7 +1009,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestor(TestingContext context) {
+  void testAncestor(TestContextWrapper context) {
     Connection connection = context.createConnection();
     Member member =
             TestUtil.executeSingletonAxis(connection,
@@ -1024,7 +1024,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   //
-  void testAncestorNumeric(TestingContext context) {
+  void testAncestorNumeric(TestContextWrapper context) {
     Connection connection = context.createConnection();
     Member member =
       executeSingletonAxis(connection,
@@ -1065,7 +1065,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorHigher(TestingContext context) {
+  void testAncestorHigher(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "Ancestor([Store].[USA],[Store].[Store City])" );
@@ -1074,7 +1074,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorSameLevel(TestingContext context) {
+  void testAncestorSameLevel(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "Ancestor([Store].[Canada],[Store].[Store Country])" );
@@ -1083,7 +1083,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorWrongHierarchy(TestingContext context) {
+  void testAncestorWrongHierarchy(TestContextWrapper context) {
     // MSOLAP gives error "Formula error - dimensions are not
     // valid (they do not match) - in the Ancestor function"
     assertAxisThrows(context.createConnection(),
@@ -1093,7 +1093,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorAllLevel(TestingContext context) {
+  void testAncestorAllLevel(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "Ancestor([Store].[USA].[CA],[Store].Levels(0))" );
@@ -1102,7 +1102,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorWithHiddenParent(TestingContext context) {
+  void testAncestorWithHiddenParent(TestContextWrapper context) {
     //final TestContext testContext =
     //  getTestContext().withCube( "[Sales Ragged]" );
     Member member =
@@ -1116,7 +1116,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestorDepends(TestingContext context) {
+  void testAncestorDepends(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertExprDependsOn(connection,
       "Ancestor([Store].CurrentMember, [Store].[Store Country]).Name",
@@ -1138,7 +1138,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAncestors(TestingContext context) {
+  void testAncestors(TestContextWrapper context) {
     // Test that we can execute Ancestors by passing a level as
     // the depth argument (PC hierarchy)
     Connection connection = context.createConnection();
@@ -1242,7 +1242,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrdinal(TestingContext context) {
+  void testOrdinal(TestContextWrapper context) {
     //final TestContext testContext =
     //  getTestContext().withCube( "Sales Ragged" );
     Connection connection = context.createConnection();
@@ -1262,7 +1262,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodNoArgs(TestingContext context) {
+  void testClosingPeriodNoArgs(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "ClosingPeriod()", "{[Time]}" );
@@ -1274,7 +1274,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodLevel(TestingContext context) {
+  void testClosingPeriodLevel(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "ClosingPeriod([Time].[Year])", "{[Time]}" );
@@ -1371,7 +1371,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodLevelNotInTimeFails(TestingContext context) {
+  void testClosingPeriodLevelNotInTimeFails(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "ClosingPeriod([Store].[Store City])",
       "The <level> and <member> arguments to ClosingPeriod must be from "
@@ -1381,7 +1381,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodMember(TestingContext context) {
+  void testClosingPeriodMember(TestContextWrapper context) {
     if ( false ) {
       // This test is mistaken. Valid forms are ClosingPeriod(<level>)
       // and ClosingPeriod(<level>, <member>), but not
@@ -1393,7 +1393,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodMemberLeaf(TestingContext context) {
+  void testClosingPeriodMemberLeaf(TestContextWrapper context) {
     Member member;
     if ( false ) {
       // This test is mistaken. Valid forms are ClosingPeriod(<level>)
@@ -1428,7 +1428,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriod(TestingContext context) {
+  void testClosingPeriod(TestContextWrapper context) {
 	Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "ClosingPeriod([Time].[Month], [Time].[Time].CurrentMember)",
@@ -1521,7 +1521,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testClosingPeriodBelow(TestingContext context) {
+  void testClosingPeriodBelow(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(),
       "ClosingPeriod([Quarter],[1997].[Q3].[8])" );
     assertNull( member );
@@ -1530,14 +1530,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousin1(TestingContext context) {
+  void testCousin1(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "Cousin([1997].[Q4],[1998])" );
     assertEquals( "[Time].[1998].[Q4]", member.getUniqueName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousin2(TestingContext context) {
+  void testCousin2(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(),
       "Cousin([1997].[Q4].[12],[1998].[Q1])" );
     assertEquals( "[Time].[1998].[Q1].[3]", member.getUniqueName() );
@@ -1545,7 +1545,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousinOverrun(TestingContext context) {
+  void testCousinOverrun(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(),
       "Cousin([Customers].[USA].[CA].[San Jose],"
         + " [Customers].[USA].[OR])" );
@@ -1555,7 +1555,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousinThreeDown(TestingContext context) {
+  void testCousinThreeDown(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "Cousin([Customers].[USA].[CA].[Berkeley].[Barbara Combs],"
@@ -1575,7 +1575,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousinSameLevel(TestingContext context) {
+  void testCousinSameLevel(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "Cousin([Gender].[M], [Gender].[F])" );
     assertEquals( "F", member.getName() );
@@ -1583,7 +1583,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousinHigherLevel(TestingContext context) {
+  void testCousinHigherLevel(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "Cousin([Time].[1997], [Time].[1998].[Q1])" );
     assertNull( member );
@@ -1591,7 +1591,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCousinWrongHierarchy(TestingContext context) {
+  void testCousinWrongHierarchy(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "Cousin([Time].[1997], [Gender].[M])",
       MondrianResource.instance().CousinHierarchyMismatch.str(
@@ -1601,7 +1601,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParent(TestingContext context) {
+  void testParent(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "[Gender].Parent",
@@ -1617,7 +1617,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParentPC(TestingContext context) {
+  void testParentPC(TestContextWrapper context) {
     //final TestContext testContext = getTestContext().withCube( "HR" );
     Connection connection = context.createConnection();
     assertAxisReturns(connection, "HR",
@@ -1657,7 +1657,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMembers(TestingContext context) {
+  void testMembers(TestContextWrapper context) {
     Connection connection = context.createConnection();
     // <Level>.members
     assertAxisReturns(connection,
@@ -1750,7 +1750,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyMembers(TestingContext context) {
+  void testHierarchyMembers(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertAxisReturns(connection,
       "Head({[Time.Weekly].Members}, 10)",
@@ -1775,7 +1775,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAllMembers(TestingContext context) {
+  void testAllMembers(TestContextWrapper context) {
     Connection connection = context.createConnection();
     // <Level>.allmembers
     assertAxisReturns(connection,
@@ -2070,7 +2070,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAddCalculatedMembers(TestingContext context) {
+  void testAddCalculatedMembers(TestContextWrapper context) {
     //----------------------------------------------------
     // AddCalculatedMembers: Calc member in dimension based on level
     // included
@@ -2178,7 +2178,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStripCalculatedMembers(TestingContext context) {
+  void testStripCalculatedMembers(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertAxisReturns(connection,
       "StripCalculatedMembers({[Measures].AllMembers})",
@@ -2228,7 +2228,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMember(TestingContext context) {
+  void testCurrentMember(TestContextWrapper context) {
     // <Dimension>.CurrentMember
     Connection connection = context.createConnection();
     assertAxisReturns(connection, "[Gender].CurrentMember", "[Gender].[All Gender]" );
@@ -2245,7 +2245,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberDepends(TestingContext context) {
+  void testCurrentMemberDepends(TestContextWrapper context) {
     Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "[Gender].CurrentMember",
@@ -2272,7 +2272,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberFromSlicer(TestingContext context) {
+  void testCurrentMemberFromSlicer(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with member [Measures].[Foo] as '[Gender].CurrentMember.Name'\n"
         + "select {[Measures].[Foo]} on columns\n"
@@ -2282,7 +2282,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberFromDefaultMember(TestingContext context) {
+  void testCurrentMemberFromDefaultMember(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with member [Measures].[Foo] as"
         + " '[Time].[Time].CurrentMember.Name'\n"
@@ -2293,7 +2293,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberMultiHierarchy(TestingContext context) {
+  void testCurrentMemberMultiHierarchy(TestContextWrapper context) {
     final String hierarchyName =
       MondrianProperties.instance().SsasCompatibleNaming.get()
         ? "Weekly"
@@ -2356,7 +2356,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDefaultMember(TestingContext context) {
+  void testDefaultMember(TestContextWrapper context) {
     // [Time] has no default member and no all, so the default member is
     // the first member of the first level.
     Result result =
@@ -2421,7 +2421,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberFromAxis(TestingContext context) {
+  void testCurrentMemberFromAxis(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with member [Measures].[Foo] as"
         + " '[Gender].CurrentMember.Name"
@@ -2440,7 +2440,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCurrentMemberInCalcMember(TestingContext context) {
+  void testCurrentMemberInCalcMember(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with member [Measures].[Foo] as '[Measures].CurrentMember.Name'\n"
         + "select {[Measures].[Foo]} on columns\n"
@@ -2454,7 +2454,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNamedSetCurrentOrdinalWithOrder(TestingContext context) {
+  void testNamedSetCurrentOrdinalWithOrder(TestContextWrapper context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
     if ( Util.RETROWOVEN) {
@@ -2544,7 +2544,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNamedSetCurrentOrdinalWithGenerate(TestingContext context) {
+  void testNamedSetCurrentOrdinalWithGenerate(TestContextWrapper context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
     if ( Util.RETROWOVEN) {
@@ -2600,7 +2600,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNamedSetCurrentOrdinalWithFilter(TestingContext context) {
+  void testNamedSetCurrentOrdinalWithFilter(TestContextWrapper context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
     if ( Util.RETROWOVEN) {
@@ -2624,13 +2624,13 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNamedSetCurrentOrdinalWithCrossjoin(TestingContext context) {
+  void testNamedSetCurrentOrdinalWithCrossjoin(TestContextWrapper context) {
     // TODO:
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNamedSetCurrentOrdinalWithNonNamedSetFails(TestingContext context) {
+  void testNamedSetCurrentOrdinalWithNonNamedSetFails(TestContextWrapper context) {
     // a named set wrapped in {...} is not a named set, so CurrentOrdinal
     // fails
     assertQueryThrows(context,
@@ -2671,14 +2671,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionDefaultMember(TestingContext context) {
+  void testDimensionDefaultMember(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Measures].DefaultMember" );
     assertEquals( "Unit Sales", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDrilldownLevel(TestingContext context) {
+  void testDrilldownLevel(TestContextWrapper context) {
     // Expect all children of USA
     assertAxisReturns(context.createConnection(),
       "DrilldownLevel({[Store].[USA]}, [Store].[Store Country])",
@@ -2765,7 +2765,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDrilldownLevelTop(TestingContext context) {
+  void testDrilldownLevelTop(TestContextWrapper context) {
     // <set>, <n>, <level>
     assertAxisReturns(context.createConnection(),
       "DrilldownLevelTop({[Store].[USA]}, 2, [Store].[Store Country])",
@@ -2852,7 +2852,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDrilldownMemberEmptyExpr(TestingContext context) {
+  void testDrilldownMemberEmptyExpr(TestContextWrapper context) {
     // no level, with expression
     assertAxisReturns(context.createConnection(),
       "DrilldownLevelTop({[Store].[USA]}, 2, , [Measures].[Unit Sales])",
@@ -2871,7 +2871,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDrilldownMember(TestingContext context) {
+  void testDrilldownMember(TestContextWrapper context) {
     // Expect all children of USA
     assertAxisReturns(context.createConnection(),
       "DrilldownMember({[Store].[USA]}, {[Store].[USA]})",
@@ -2942,14 +2942,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstChildFirstInLevel(TestingContext context) {
+  void testFirstChildFirstInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q4].FirstChild" );
     assertEquals( "10", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstChildAll(TestingContext context) {
+  void testFirstChildAll(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[All Gender].FirstChild" );
     assertEquals( "F", member.getName() );
@@ -2957,7 +2957,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstChildOfChildless(TestingContext context) {
+  void testFirstChildOfChildless(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[All Gender].[F].FirstChild" );
     assertNull( member );
@@ -2965,14 +2965,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstSiblingFirstInLevel(TestingContext context) {
+  void testFirstSiblingFirstInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[F].FirstSibling" );
     assertEquals( "F", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstSiblingLastInLevel(TestingContext context) {
+  void testFirstSiblingLastInLevel(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q4].FirstSibling" );
     assertEquals( "Q1", member.getName() );
@@ -2980,7 +2980,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstSiblingAll(TestingContext context) {
+  void testFirstSiblingAll(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[All Gender].FirstSibling" );
     assertTrue( member.isAll() );
@@ -2988,7 +2988,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstSiblingRoot(TestingContext context) {
+  void testFirstSiblingRoot(TestContextWrapper context) {
     // The [Measures] hierarchy does not have an 'all' member, so
     // [Unit Sales] does not have a parent.
     Member member =
@@ -2998,7 +2998,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstSiblingNull(TestingContext context) {
+  void testFirstSiblingNull(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[F].FirstChild.FirstSibling" );
     assertNull( member );
@@ -3006,84 +3006,84 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLag(TestingContext context) {
+  void testLag(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q4].[12].Lag(4)" );
     assertEquals( "8", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLagFirstInLevel(TestingContext context) {
+  void testLagFirstInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[F].Lag(1)" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLagAll(TestingContext context) {
+  void testLagAll(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].DefaultMember.Lag(2)" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLagRoot(TestingContext context) {
+  void testLagRoot(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1998].Lag(1)" );
     assertEquals( "1997", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLagRootTooFar(TestingContext context) {
+  void testLagRootTooFar(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1998].Lag(2)" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastChild(TestingContext context) {
+  void testLastChild(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].LastChild" );
     assertEquals( "M", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastChildLastInLevel(TestingContext context) {
+  void testLastChildLastInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q4].LastChild" );
     assertEquals( "12", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastChildAll(TestingContext context) {
+  void testLastChildAll(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[All Gender].LastChild" );
     assertEquals( "M", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastChildOfChildless(TestingContext context) {
+  void testLastChildOfChildless(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[M].LastChild" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastSibling(TestingContext context) {
+  void testLastSibling(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[F].LastSibling" );
     assertEquals( "M", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastSiblingFirstInLevel(TestingContext context) {
+  void testLastSiblingFirstInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q1].LastSibling" );
     assertEquals( "Q4", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastSiblingAll(TestingContext context) {
+  void testLastSiblingAll(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[All Gender].LastSibling" );
     assertTrue( member.isAll() );
@@ -3091,7 +3091,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastSiblingRoot(TestingContext context) {
+  void testLastSiblingRoot(TestContextWrapper context) {
     // The [Time] hierarchy does not have an 'all' member, so
     // [1997], [1998] do not have parents.
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1998].LastSibling" );
@@ -3100,7 +3100,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastSiblingNull(TestingContext context) {
+  void testLastSiblingNull(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(), "[Gender].[F].FirstChild.LastSibling" );
     assertNull( member );
@@ -3109,42 +3109,42 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLead(TestingContext context) {
+  void testLead(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Time].[1997].[Q2].[4].Lead(4)" );
     assertEquals( "8", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeadNegative(TestingContext context) {
+  void testLeadNegative(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[M].Lead(-1)" );
     assertEquals( "F", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeadLastInLevel(TestingContext context) {
+  void testLeadLastInLevel(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[M].Lead(3)" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeadNull(TestingContext context) {
+  void testLeadNull(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].Parent.Lead(1)" );
     assertNull( member );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeadZero(TestingContext context) {
+  void testLeadZero(TestContextWrapper context) {
     Member member = executeSingletonAxis(context.createConnection(), "[Gender].[F].Lead(0)" );
     assertEquals( "F", member.getName() );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBasic2(TestingContext context) {
+  void testBasic2(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Gender].[F].NextMember} ON COLUMNS from Sales" );
@@ -3155,7 +3155,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstInLevel2(TestingContext context) {
+  void testFirstInLevel2(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Gender].[M].NextMember} ON COLUMNS from Sales" );
@@ -3164,7 +3164,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAll2(TestingContext context) {
+  void testAll2(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(), "select {[Gender].PrevMember} ON COLUMNS from Sales" );
     // previous to [Gender].[All] is null, so no members are returned
@@ -3174,7 +3174,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBasic5(TestingContext context) {
+  void testBasic5(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select{ [Product].[All Products].[Drink].Parent} on columns "
@@ -3186,7 +3186,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstInLevel5(TestingContext context) {
+  void testFirstInLevel5(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Time].[1997].[Q2].[4].Parent} on columns,"
@@ -3198,7 +3198,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAll5(TestingContext context) {
+  void testAll5(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Time].[1997].[Q2].Parent} on columns,"
@@ -3211,7 +3211,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBasic(TestingContext context) {
+  void testBasic(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Gender].[M].PrevMember} ON COLUMNS from Sales" );
@@ -3222,7 +3222,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFirstInLevel(TestingContext context) {
+  void testFirstInLevel(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(),
         "select {[Gender].[F].PrevMember} ON COLUMNS from Sales" );
@@ -3231,7 +3231,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAll(TestingContext context) {
+  void testAll(TestContextWrapper context) {
     Result result =
       executeQuery(context.createConnection(), "select {[Gender].PrevMember} ON COLUMNS from Sales" );
     // previous to [Gender].[All] is null, so no members are returned
@@ -3240,7 +3240,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDepends(TestingContext context) {
+  void testAggregateDepends(TestContextWrapper context) {
     // Depends on everything except Measures, Gender
     String s12 = allHiersExcept("[Measures]", "[Gender]" );
     assertExprDependsOn(context.createConnection(),
@@ -3266,7 +3266,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregate(TestingContext context) {
+  void testAggregate(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Store].[CA plus OR] AS 'AGGREGATE({[Store].[USA].[CA], [Store].[USA].[OR]})'\n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS,\n"
@@ -3292,7 +3292,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregate2(TestingContext context) {
+  void testAggregate2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "  Member [Time].[Time].[1st Half Sales] AS 'Aggregate({Time.[1997].[Q1], Time.[1997].[Q2]})'\n"
@@ -3354,7 +3354,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateWithIIF(TestingContext context) {
+  void testAggregateWithIIF(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member store.foo as 'iif(3>1,"
         + "aggregate({[Store].[All Stores].[USA].[OR]}),"
@@ -3370,7 +3370,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregate2AllMembers(TestingContext context) {
+  void testAggregate2AllMembers(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "  Member [Time].[Time].[1st Half Sales] AS 'Aggregate({Time.[1997].[Q1], Time.[1997].[Q2]})'\n"
@@ -3433,7 +3433,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateToSimulateCompoundSlicer(TestingContext context) {
+  void testAggregateToSimulateCompoundSlicer(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Time].[Time].[1997 H1] as 'Aggregate({[Time].[1997].[Q1], [Time].[1997].[Q2]})'\n"
         + "  MEMBER [Education Level].[College or higher] as 'Aggregate({[Education Level].[Bachelors Degree], "
@@ -3473,7 +3473,7 @@ class FunctionTest {//extends FoodMartTestCase {
   //* @see mondrian.rolap.FastBatchingCellReaderTest#testAggregateDistinctCount()
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiselectCalculations(TestingContext context) {
+  void testMultiselectCalculations(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "MEMBER [Measures].[Declining Stores Count] AS\n"
@@ -3501,7 +3501,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAvg(TestingContext context) {
+  void testAvg(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "AVG({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "188,412.71" );
@@ -3511,7 +3511,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCorrelation(TestingContext context) {
+  void testCorrelation(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Correlation({[Store].[All Stores].[USA].children}, [Measures].[Unit Sales], [Measures].[Store Sales]) * 1000000",
       "999,906" );
@@ -3519,7 +3519,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCount(TestingContext context) {
+  void testCount(TestContextWrapper context) {
     assertExprDependsOn(context.createConnection(),
       "count(Crossjoin([Store].[All Stores].[USA].Children, {[Gender].children}), INCLUDEEMPTY)",
       "{[Gender]}" );
@@ -3539,7 +3539,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCountExcludeEmpty(TestingContext context) {
+  void testCountExcludeEmpty(TestContextWrapper context) {
     String s1 = allHiersExcept( "[Store]" );
     assertExprDependsOn(context.createConnection(),
       "count(Crossjoin([Store].[USA].Children, {[Gender].children}), EXCLUDEEMPTY)",
@@ -3587,7 +3587,7 @@ class FunctionTest {//extends FoodMartTestCase {
   // {@link mondrian.xmla.XmlaCognosTest#testCognosMDXSuiteConvertedAdventureWorksToFoodMart_015()}
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCountExcludeEmptyNull(TestingContext context) {
+  void testCountExcludeEmptyNull(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Measures].[Foo] AS\n"
         + "    Iif("
@@ -3651,7 +3651,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCountExcludeEmptyOnCubeWithNoCountFacts(TestingContext context) {
+  void testCountExcludeEmptyOnCubeWithNoCountFacts(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH "
         + "  MEMBER [Measures].[count] AS '"
@@ -3668,7 +3668,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCountExcludeEmptyOnVirtualCubeWithNoCountFacts(TestingContext context) {
+  void testCountExcludeEmptyOnVirtualCubeWithNoCountFacts(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH "
         + "  MEMBER [Measures].[count] AS '"
@@ -3687,7 +3687,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCovariance(TestingContext context) {
+  void testCovariance(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Covariance({[Store].[All Stores].[USA].children}, [Measures].[Unit Sales], [Measures].[Store Sales])",
       "1,355,761,899" );
@@ -3695,7 +3695,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCovarianceN(TestingContext context) {
+  void testCovarianceN(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CovarianceN({[Store].[All Stores].[USA].children}, [Measures].[Unit Sales], [Measures].[Store Sales])",
       "2,033,642,849" );
@@ -3703,7 +3703,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfNumeric(TestingContext context) {
+  void testIIfNumeric(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(([Measures].[Unit Sales],[Product].[Drink].[Alcoholic Beverages].[Beer and Wine]) > 100, 45, 32)",
       "45" );
@@ -3718,7 +3718,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMax(TestingContext context) {
+  void testMax(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "MAX({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "263,793.22" );
@@ -3726,7 +3726,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMaxNegative(TestingContext context) {
+  void testMaxNegative(TestContextWrapper context) {
     // Bug 1771928, "Max() works incorrectly with negative values"
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -3748,7 +3748,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMedian(TestingContext context) {
+  void testMedian(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "MEDIAN({[Store].[All Stores].[USA].children},"
         + "[Measures].[Store Sales])",
@@ -3761,7 +3761,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMedian2(TestingContext context) {
+  void testMedian2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "   Member [Time].[Time].[1st Half Sales] AS 'Sum({[Time].[1997].[Q1], [Time].[1997].[Q2]})'\n"
@@ -3836,7 +3836,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPercentile(TestingContext context) {
+  void testPercentile(TestContextWrapper context) {
     // same result as median
     assertExprReturns(context.createConnection(),
       "Percentile({[Store].[All Stores].[USA].children}, [Measures].[Store Sales], 50)",
@@ -3870,7 +3870,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPercentileBugMondrian1045(TestingContext context) {
+  void testPercentileBugMondrian1045(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Percentile({[Store].[All Stores].[USA]}, [Measures].[Store Sales], 50)",
       "565,238.13" );
@@ -3884,7 +3884,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMin(TestingContext context) {
+  void testMin(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "MIN({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "142,277.07" );
@@ -3892,7 +3892,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMinTuple(TestingContext context) {
+  void testMinTuple(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Min([Customers].[All Customers].[USA].Children, ([Measures].[Unit Sales], [Gender].[All Gender].[F]))",
       "33,036" );
@@ -3900,7 +3900,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStdev(TestingContext context) {
+  void testStdev(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "STDEV({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "65,825.45" );
@@ -3908,7 +3908,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStdevP(TestingContext context) {
+  void testStdevP(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "STDEVP({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "53,746.26" );
@@ -3916,14 +3916,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSumNoExp(TestingContext context) {
+  void testSumNoExp(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "SUM({[Promotion Media].[Media Type].members})", "266,773" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValue(TestingContext context) {
+  void testValue(TestContextWrapper context) {
     // VALUE is usually a cell property, not a member property.
     // We allow it because MS documents it as a function, <Member>.VALUE.
     assertExprReturns(context.createConnection(), "[Measures].[Store Sales].VALUE", "565,238.13" );
@@ -3962,7 +3962,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVar(TestingContext context) {
+  void testVar(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "VAR({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "4,332,990,493.69" );
@@ -3970,7 +3970,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVarP(TestingContext context) {
+  void testVarP(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "VARP({[Store].[All Stores].[USA].children},[Measures].[Store Sales])",
       "2,888,660,329.13" );
@@ -3981,7 +3981,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAs(TestingContext context) {
+  void testAs(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Filter([Customers].Children as t,\n"
         + "t.Current.Name = 'USA')",
@@ -4111,7 +4111,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAs2(TestingContext context) {
+  void testAs2(TestContextWrapper context) {
     // Named set and alias with same name (t) and a second alias (t2).
     // Reference to t from within descendants resolves to alias, of type
     // [Time], because it is nearer.
@@ -4370,7 +4370,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAscendants(TestingContext context) {
+  void testAscendants(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Ascendants([Store].[USA].[CA])",
       "[Store].[USA].[CA]\n"
@@ -4380,21 +4380,21 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAscendantsAll(TestingContext context) {
+  void testAscendantsAll(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Ascendants([Store].DefaultMember)", "[Store].[All Stores]" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAscendantsNull(TestingContext context) {
+  void testAscendantsNull(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Ascendants([Gender].[F].PrevMember)", "" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBottomCount(TestingContext context) {
+  void testBottomCount(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "BottomCount({[Promotion Media].[Media Type].members}, 2, [Measures].[Unit Sales])",
       "[Promotion Media].[Radio]\n"
@@ -4403,7 +4403,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBottomCountUnordered(TestingContext context) {
+  void testBottomCountUnordered(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "BottomCount({[Promotion Media].[Media Type].members}, 2)",
       "[Promotion Media].[Sunday Paper, Radio, TV]\n"
@@ -4412,7 +4412,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBottomPercent(TestingContext context) {
+  void testBottomPercent(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "BottomPercent(Filter({[Store].[All Stores].[USA].[CA].Children, [Store].[All Stores].[USA].[OR].Children, "
         + "[Store].[All Stores].[USA].[WA].Children}, ([Measures].[Unit Sales] > 0.0)), 100.0, [Measures].[Store "
@@ -4441,7 +4441,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBottomSum(TestingContext context) {
+  void testBottomSum(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "BottomSum({[Promotion Media].[Media Type].members}, 5000, [Measures].[Unit Sales])",
       "[Promotion Media].[Radio]\n"
@@ -4450,7 +4450,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExceptEmpty(TestingContext context) {
+  void testExceptEmpty(TestContextWrapper context) {
     // If left is empty, result is empty.
     assertAxisReturns(context.createConnection(),
       "Except(Filter([Gender].Members, 1=0), {[Gender].[M]})", "" );
@@ -4467,7 +4467,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExceptCrossjoin(TestingContext context) {
+  void testExceptCrossjoin(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Except(CROSSJOIN({[Promotion Media].[All Media]},\n"
         + "                  [Product].[All Products].Children),\n"
@@ -4479,7 +4479,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExtract(TestingContext context) {
+  void testExtract(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Extract(\n"
         + "Crossjoin({[Gender].[F], [Gender].[M]},\n"
@@ -4569,7 +4569,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopPercentCrossjoin(TestingContext context) {
+  void testTopPercentCrossjoin(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{TopPercent(Crossjoin([Product].[Product Department].members,\n"
         + "[Time].[1997].children),10,[Measures].[Store Sales])}",
@@ -4580,7 +4580,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinNested(TestingContext context) {
+  void testCrossjoinNested(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "  CrossJoin(\n"
         + "    CrossJoin(\n"
@@ -4628,7 +4628,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinSingletonTuples(TestingContext context) {
+  void testCrossjoinSingletonTuples(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "CrossJoin({([Gender].[M])}, {([Marital Status].[S])})",
       "{[Gender].[M], [Marital Status].[S]}" );
@@ -4636,7 +4636,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinSingletonTuplesNested(TestingContext context) {
+  void testCrossjoinSingletonTuplesNested(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "CrossJoin({([Gender].[M])}, CrossJoin({([Marital Status].[S])}, [Store].children))",
       "{[Gender].[M], [Marital Status].[S], [Store].[Canada]}\n"
@@ -4646,7 +4646,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinAsterisk(TestingContext context) {
+  void testCrossjoinAsterisk(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Gender].[M]} * {[Marital Status].[S]}",
       "{[Gender].[M], [Marital Status].[S]}" );
@@ -4654,7 +4654,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinAsteriskTuple(TestingContext context) {
+  void testCrossjoinAsteriskTuple(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
         + "NON EMPTY [Store].[All Stores] "
@@ -4672,7 +4672,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinAsteriskAssoc(TestingContext context) {
+  void testCrossjoinAsteriskAssoc(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Order({[Gender].Children} * {[Marital Status].Children} * {[Time].[1997].[Q2].Children},"
         + "[Measures].[Unit Sales])",
@@ -4692,7 +4692,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinAsteriskInsideBraces(TestingContext context) {
+  void testCrossjoinAsteriskInsideBraces(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Gender].[M] * [Marital Status].[S] * [Time].[1997].[Q2].Children}",
       "{[Gender].[M], [Marital Status].[S], [Time].[1997].[Q2].[4]}\n"
@@ -4702,7 +4702,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinAsteriskQuery(TestingContext context) {
+  void testCrossJoinAsteriskQuery(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT {[Measures].members * [1997].children} ON COLUMNS,\n"
         + " {[Store].[USA].children * [Position].[All Position].children} DIMENSION PROPERTIES [Store].[Store SQFT] "
@@ -4927,7 +4927,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinResolve(TestingContext context) {
+  void testCrossjoinResolve(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with\n"
         + "member [Measures].[Filtered Unit Sales] as\n"
@@ -4960,7 +4960,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinOrder(TestingContext context) {
+  void testCrossjoinOrder(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "\n"
@@ -4980,7 +4980,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinDupHierarchyFails(TestingContext context) {
+  void testCrossjoinDupHierarchyFails(TestContextWrapper context) {
     assertQueryThrows(context.createConnection(),
       "select [Measures].[Unit Sales] ON COLUMNS,\n"
         + " CrossJoin({[Time].[Quarter].[Q1]}, {[Time].[Month].[5]}) ON ROWS\n"
@@ -5009,7 +5009,7 @@ class FunctionTest {//extends FoodMartTestCase {
   //* Tests cases of different hierarchies in the same dimension. (Compare to {@link #testCrossjoinDupHierarchyFails()}).
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinDupDimensionOk(TestingContext context) {
+  void testCrossjoinDupDimensionOk(TestContextWrapper context) {
     final String expectedResult =
       "Axis #0:\n"
         + "{}\n"
@@ -5045,7 +5045,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsM(TestingContext context) {
+  void testDescendantsM(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997].[Q1])",
       "[Time].[1997].[Q1]\n"
@@ -5056,7 +5056,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsDepends(TestingContext context) {
+  void testDescendantsDepends(TestContextWrapper context) {
     assertSetExprDependsOn(context.createConnection(),
       "Descendants([Time].[Time].CurrentMember)",
       "{[Time]}" );
@@ -5064,7 +5064,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsML(TestingContext context) {
+  void testDescendantsML(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Month])",
       months );
@@ -5072,7 +5072,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLSelf(TestingContext context) {
+  void testDescendantsMLSelf(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], SELF)",
       quarters );
@@ -5080,7 +5080,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLLeaves(TestingContext context) {
+  void testDescendantsMLLeaves(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Year], LEAVES)",
       "[Time].[1997]" );
@@ -5098,7 +5098,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLLeavesRagged(TestingContext context) {
+  void testDescendantsMLLeavesRagged(TestContextWrapper context) {
     // no cities are at leaf level
     //final TestContext raggedContext =
     //  getTestContext().withCube( "[Sales Ragged]" );
@@ -5133,7 +5133,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMNLeaves(TestingContext context) {
+  void testDescendantsMNLeaves(TestContextWrapper context) {
     // leaves at depth 0 returns the member itself
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997].[Q2].[4], 0, Leaves)",
@@ -5167,7 +5167,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLSelfBefore(TestingContext context) {
+  void testDescendantsMLSelfBefore(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], SELF_AND_BEFORE)",
       year1997 + "\n" + quarters );
@@ -5175,7 +5175,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLSelfBeforeAfter(TestingContext context) {
+  void testDescendantsMLSelfBeforeAfter(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], SELF_BEFORE_AFTER)",
       hierarchized1997 );
@@ -5183,14 +5183,14 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLBefore(TestingContext context) {
+  void testDescendantsMLBefore(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], BEFORE)", year1997 );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLBeforeAfter(TestingContext context) {
+  void testDescendantsMLBeforeAfter(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], BEFORE_AND_AFTER)",
       year1997 + "\n" + months );
@@ -5198,56 +5198,56 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLAfter(TestingContext context) {
+  void testDescendantsMLAfter(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Quarter], AFTER)", months );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMLAfterEnd(TestingContext context) {
+  void testDescendantsMLAfterEnd(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Month], AFTER)", "" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsM0(TestingContext context) {
+  void testDescendantsM0(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 0)", year1997 );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsM2(TestingContext context) {
+  void testDescendantsM2(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 2)", months );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsM2Self(TestingContext context) {
+  void testDescendantsM2Self(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 2, Self)", months );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsM2Leaves(TestingContext context) {
+  void testDescendantsM2Leaves(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 2, Leaves)", months );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMFarLeaves(TestingContext context) {
+  void testDescendantsMFarLeaves(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 10000, Leaves)", months );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMEmptyLeaves(TestingContext context) {
+  void testDescendantsMEmptyLeaves(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], , Leaves)",
       months );
@@ -5255,7 +5255,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMEmptyLeavesFail(TestingContext context) {
+  void testDescendantsMEmptyLeavesFail(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "Descendants([Time].[1997],)",
       "No function matches signature 'Descendants(<Member>, <Empty>)" );
@@ -5263,7 +5263,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMEmptyLeavesFail2(TestingContext context) {
+  void testDescendantsMEmptyLeavesFail2(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "Descendants([Time].[1997], , AFTER)",
       "depth must be specified unless DESC_FLAG is LEAVES" );
@@ -5271,7 +5271,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMFarSelf(TestingContext context) {
+  void testDescendantsMFarSelf(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 10000, Self)",
       "" );
@@ -5279,7 +5279,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsMNY(TestingContext context) {
+  void testDescendantsMNY(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 1, BEFORE_AND_AFTER)",
       year1997 + "\n" + months );
@@ -5287,7 +5287,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendants2ndHier(TestingContext context) {
+  void testDescendants2ndHier(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time.Weekly].[1997].[10], [Time.Weekly].[Day])",
       "[Time].[Weekly].[1997].[10].[1]\n"
@@ -5301,7 +5301,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsParentChild(TestingContext context) {
+  void testDescendantsParentChild(TestContextWrapper context) {
     //getTestContext().withCube( "HR" ).
     assertAxisReturns(context.createConnection(), "HR",
       "Descendants([Employees], 2)",
@@ -5316,7 +5316,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsParentChildBefore(TestingContext context) {
+  void testDescendantsParentChildBefore(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(), "HR",
       "Descendants([Employees], 2, BEFORE)",
       "[Employees].[All Employees]\n"
@@ -5326,7 +5326,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsParentChildLeaves(TestingContext context) {
+  void testDescendantsParentChildLeaves(TestContextWrapper context) {
     //final TestContext testContext = getTestContext().withCube( "HR" );
     DataSource dataSource = context.createConnection().getDataSource();
     if (Bug.avoidSlowTestOnLucidDB( context.getContext().getDialect())) {
@@ -5572,7 +5572,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsSBA(TestingContext context) {
+  void testDescendantsSBA(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants([Time].[1997], 1, SELF_BEFORE_AFTER)",
       hierarchized1997 );
@@ -5580,7 +5580,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsSet(TestingContext context) {
+  void testDescendantsSet(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Descendants({[Time].[1997].[Q4], [Time].[1997].[Q2]}, 1)",
       "[Time].[1997].[Q4].[10]\n"
@@ -5596,7 +5596,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDescendantsSetEmpty(TestingContext context) {
+  void testDescendantsSetEmpty(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "Descendants({}, 1)",
       "Cannot deduce type of set" );
@@ -5607,7 +5607,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRange(TestingContext context) {
+  void testRange(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Time].[1997].[Q1].[2] : [Time].[1997].[Q2].[5]",
       "[Time].[1997].[Q1].[2]\n"
@@ -5638,7 +5638,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNullRange(TestingContext context) {
+  void testNullRange(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Time].[1997].[Q1].[2] : NULL", //[Time].[1997].[Q2].[5]
       "" ); // Empty Set
@@ -5649,7 +5649,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTwoNullRange(TestingContext context) {
+  void testTwoNullRange(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "NULL : NULL",
       "Mondrian Error:Failed to parse query 'select {NULL : NULL} on columns from Sales'" );
@@ -5660,7 +5660,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeLarge(TestingContext context) {
+  void testRangeLarge(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Customers].[USA].[CA].[San Francisco] : [Customers].[USA].[WA].[Bellingham]",
       "[Customers].[USA].[CA].[San Francisco]\n"
@@ -5690,7 +5690,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeStartEqualsEnd(TestingContext context) {
+  void testRangeStartEqualsEnd(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Time].[1997].[Q3].[7] : [Time].[1997].[Q3].[7]",
       "[Time].[1997].[Q3].[7]" );
@@ -5698,7 +5698,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeStartEqualsEndLarge(TestingContext context) {
+  void testRangeStartEqualsEndLarge(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Customers].[USA].[CA] : [Customers].[USA].[CA]",
       "[Customers].[USA].[CA]" );
@@ -5706,7 +5706,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeEndBeforeStart(TestingContext context) {
+  void testRangeEndBeforeStart(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Time].[1997].[Q3].[7] : [Time].[1997].[Q2].[5]",
       "[Time].[1997].[Q2].[5]\n"
@@ -5716,7 +5716,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeEndBeforeStartLarge(TestingContext context) {
+  void testRangeEndBeforeStartLarge(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Customers].[USA].[WA] : [Customers].[USA].[CA]",
       "[Customers].[USA].[CA]\n"
@@ -5726,7 +5726,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeBetweenDifferentLevelsIsError(TestingContext context) {
+  void testRangeBetweenDifferentLevelsIsError(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "[Time].[1997].[Q2] : [Time].[1997].[Q2].[5]",
       "Members must belong to the same level" );
@@ -5734,7 +5734,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeBoundedByAll(TestingContext context) {
+  void testRangeBoundedByAll(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Gender] : [Gender]",
       "[Gender].[All Gender]" );
@@ -5742,7 +5742,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeBoundedByAllLarge(TestingContext context) {
+  void testRangeBoundedByAllLarge(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Customers].DefaultMember : [Customers]",
       "[Customers].[All Customers]" );
@@ -5750,7 +5750,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeBoundedByNull(TestingContext context) {
+  void testRangeBoundedByNull(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Gender].[F] : [Gender].[M].NextMember",
       "" );
@@ -5758,7 +5758,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRangeBoundedByNullLarge(TestingContext context) {
+  void testRangeBoundedByNullLarge(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "[Customers].PrevMember : [Customers].[USA].[OR]",
       "" );
@@ -5766,7 +5766,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug715177(TestingContext context) {
+  void testBug715177(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Product].[Non-Consumable].[Other] AS\n"
         + " 'Sum(Except( [Product].[Product Department].Members,\n"
@@ -5794,7 +5794,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug714707(TestingContext context) {
+  void testBug714707(TestContextWrapper context) {
     // Same issue as bug 715177 -- "children" returns immutable
     // list, which set operator must make mutable.
     assertAxisReturns(context.createConnection(),
@@ -5809,7 +5809,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug715177c(TestingContext context) {
+  void testBug715177c(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Order(TopCount({[Store].[USA].[CA].children},"
         + " [Measures].[Unit Sales], 2), [Measures].[Unit Sales])",
@@ -5822,7 +5822,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFormatFixed(TestingContext context) {
+  void testFormatFixed(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Format(12.2, \"#,##0.00\")",
       "12.20" );
@@ -5830,7 +5830,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFormatVariable(TestingContext context) {
+  void testFormatVariable(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Format(1234.5, \"#,#\" || \"#0.00\")",
       "1,234.50" );
@@ -5838,7 +5838,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFormatMember(TestingContext context) {
+  void testFormatMember(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Format([Store].[USA].[CA], \"#,#\" || \"#0.00\")",
       "74,748.00" );
@@ -5846,7 +5846,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIf(TestingContext context) {
+  void testIIf(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(([Measures].[Unit Sales],[Product].[Drink].[Alcoholic Beverages].[Beer and Wine]) > 100, \"Yes\",\"No\")",
       "Yes" );
@@ -5854,7 +5854,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfWithNullAndNumber(TestingContext context) {
+  void testIIfWithNullAndNumber(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(([Measures].[Unit Sales],[Product].[Drink].[Alcoholic Beverages].[Beer and Wine]) > 100, null,20)",
       "" );
@@ -5865,7 +5865,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfWithStringAndNull(TestingContext context) {
+  void testIIfWithStringAndNull(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(([Measures].[Unit Sales],[Product].[Drink].[Alcoholic Beverages].[Beer and Wine]) > 100, null,\"foo\")",
       "" );
@@ -5876,7 +5876,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsEmptyWithNull(TestingContext context) {
+  void testIsEmptyWithNull(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "iif (isempty(null), \"is empty\", \"not is empty\")",
       "is empty" );
@@ -5885,7 +5885,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfMember(TestingContext context) {
+  void testIIfMember(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "IIf(1 > 2,[Store].[USA],[Store].[Canada].[BC])",
       "[Store].[Canada].[BC]" );
@@ -5893,7 +5893,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfLevel(TestingContext context) {
+  void testIIfLevel(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(1 > 2, [Store].[Store Country],[Store].[Store City]).Name",
       "Store City" );
@@ -5901,7 +5901,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfHierarchy(TestingContext context) {
+  void testIIfHierarchy(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(1 > 2, [Time], [Store]).Name",
       "Store" );
@@ -5916,7 +5916,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfDimension(TestingContext context) {
+  void testIIfDimension(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "IIf(1 > 2, [Store], [Time]).Name",
       "Time" );
@@ -5924,7 +5924,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfSet(TestingContext context) {
+  void testIIfSet(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "IIf(1 > 2, {[Store].[USA], [Store].[USA].[CA]}, {[Store].[Mexico], [Store].[USA].[OR]})",
       "[Store].[Mexico]\n"
@@ -5934,7 +5934,7 @@ class FunctionTest {//extends FoodMartTestCase {
   // MONDRIAN-2408 - Consumer wants ITERABLE or ANY in CrossJoinFunDef.compileCall(ResolvedFunCall, ExpCompiler)
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfSetType_InCrossJoin(TestingContext context) {
+  void testIIfSetType_InCrossJoin(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "CROSSJOIN([Store Type].[Deluxe Supermarket],IIf(1 = 1, {[Store].[USA], [Store].[USA].[CA]}, {[Store].[Mexico],"
         + " [Store].[USA].[OR]}))",
@@ -5945,7 +5945,7 @@ class FunctionTest {//extends FoodMartTestCase {
   // MONDRIAN-2408 - Consumer wants (immutable) LIST in CrossJoinFunDef.compileCall(ResolvedFunCall, ExpCompiler)
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIfSetType_InCrossJoinAndAvg(TestingContext context) {
+  void testIIfSetType_InCrossJoinAndAvg(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Avg(CROSSJOIN([Store Type].[Deluxe Supermarket],IIf(1 = 1, {[Store].[USA].[OR], [Store].[USA].[WA]}, {[Store]"
         + ".[Mexico], [Store].[USA].[CA]})), [Measures].[Store Sales])",
@@ -5954,49 +5954,49 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionCaption(TestingContext context) {
+  void testDimensionCaption(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Dimension.Caption", "Time" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyCaption(TestingContext context) {
+  void testHierarchyCaption(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Hierarchy.Caption", "Time" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelCaption(TestingContext context) {
+  void testLevelCaption(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Level.Caption", "Year" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberCaption(TestingContext context) {
+  void testMemberCaption(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Caption", "1997" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionName(TestingContext context) {
+  void testDimensionName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Dimension.Name", "Time" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyName(TestingContext context) {
+  void testHierarchyName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Hierarchy.Name", "Time" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelName(TestingContext context) {
+  void testLevelName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Level.Name", "Year" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberName(TestingContext context) {
+  void testMemberName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "[Time].[1997].Name", "1997" );
     // dimension name
     assertExprReturns(context.createConnection(), "[Store].Name", "Store" );
@@ -6010,7 +6010,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionUniqueName(TestingContext context) {
+  void testDimensionUniqueName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "[Gender].DefaultMember.Dimension.UniqueName",
       "[Gender]" );
@@ -6018,7 +6018,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchyUniqueName(TestingContext context) {
+  void testHierarchyUniqueName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "[Gender].DefaultMember.Hierarchy.UniqueName",
       "[Gender]" );
@@ -6026,7 +6026,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelUniqueName(TestingContext context) {
+  void testLevelUniqueName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "[Gender].DefaultMember.Level.UniqueName",
       "[Gender].[(All)]" );
@@ -6034,7 +6034,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberUniqueName(TestingContext context) {
+  void testMemberUniqueName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "[Gender].DefaultMember.UniqueName",
       "[Gender].[All Gender]" );
@@ -6042,7 +6042,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberUniqueNameOfNull(TestingContext context) {
+  void testMemberUniqueNameOfNull(TestContextWrapper context) {
     if ( isDefaultNullMemberRepresentation() ) {
       assertExprReturns(context.createConnection(),
         "[Measures].[Unit Sales].FirstChild.UniqueName",
@@ -6052,7 +6052,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCoalesceEmptyDepends(TestingContext context) {
+  void testCoalesceEmptyDepends(TestContextWrapper context) {
     assertExprDependsOn(context.createConnection(),
       "coalesceempty([Time].[1997], [Gender].[M])",
       allHiers() );
@@ -6065,7 +6065,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCoalesceEmpty(TestingContext context) {
+  void testCoalesceEmpty(TestContextWrapper context) {
     // [DF] is all null and [WA] has numbers for 1997 but not for 1998.
     Result result = executeQuery(context.createConnection(),
       "with\n"
@@ -6140,7 +6140,7 @@ class FunctionTest {//extends FoodMartTestCase {
   }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCoalesceEmpty2(TestingContext context) {
+  void testCoalesceEmpty2(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with\n"
         + "    member Measures.[Sales Per Customer] as 'Measures.[Sales Count] / Measures.[Customer Count]'\n"
@@ -6166,7 +6166,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBrokenContextBug(TestingContext context) {
+  void testBrokenContextBug(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "with\n"
         + "    member Measures.[Sales Per Customer] as 'Measures.[Sales Count] / Measures.[Customer Count]'\n"
@@ -6189,7 +6189,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSetItemInt(TestingContext context) {
+  void testSetItemInt(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Customers].[All Customers].[USA].[OR].[Lebanon].[Mary Frances Christian]}.Item(0)",
       "[Customers].[USA].[OR].[Lebanon].[Mary Frances Christian]" );
@@ -6238,7 +6238,7 @@ class FunctionTest {//extends FoodMartTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSetItemString(TestingContext context) {
+  void testSetItemString(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Gender].[M], [Gender].[F]}.Item(\"M\")",
       "[Gender].[M]" );
@@ -6270,7 +6270,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-	void testTuple(TestingContext context) {
+	void testTuple(TestContextWrapper context) {
 		assertExprReturns(context.createConnection(),
 				"([Gender].[M], " + "[Time].[Time].Children.Item(2), " + "[Measures].[Unit Sales])", "33,249");
 		// Calc calls MemberValue with 3 args -- more efficient than
@@ -6294,7 +6294,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleArgTypes(TestingContext context) {
+  void testTupleArgTypes(TestContextWrapper context) {
     // can coerce dimensions (if they have a unique hierarchy) and
     // hierarchies to members
     assertExprReturns(context.createConnection(),
@@ -6335,7 +6335,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleItem(TestingContext context) {
+  void testTupleItem(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "([Time].[1997].[Q1].[1], [Customers].[All Customers].[USA].[OR], [Gender].[All Gender].[M]).item(2)",
       "[Gender].[M]" );
@@ -6385,7 +6385,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleAppliedToUnknownHierarchy(TestingContext context) {
+  void testTupleAppliedToUnknownHierarchy(TestContextWrapper context) {
     // manifestation of bug 1735821
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -6407,7 +6407,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleDepends(TestingContext context) {
+  void testTupleDepends(TestContextWrapper context) {
     assertMemberExprDependsOn(context.createConnection(),
       "([Store].[USA], [Gender].[F])", "{}" );
 
@@ -6430,7 +6430,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testItemNull(TestingContext context) {
+  void testItemNull(TestContextWrapper context) {
     // In the following queries, MSAS returns 'Formula error - object type
     // is not valid - in an <object> base class. An error occurred during
     // attempt to get cell value'. This is because in MSAS, Item is a COM
@@ -6463,7 +6463,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleNull(TestingContext context) {
+  void testTupleNull(TestContextWrapper context) {
     // if a tuple contains any null members, it evaluates to null
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
@@ -6533,7 +6533,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelMemberExpressions(TestingContext context) {
+  void testLevelMemberExpressions(TestContextWrapper context) {
     // Should return Beverly Hills in California.
     assertAxisReturns(context.createConnection(),
       "[Store].[Store City].[Beverly Hills]",
@@ -6552,7 +6552,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTestMatch(TestingContext context) {
+  void testCaseTestMatch(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE WHEN 1=0 THEN \"first\" WHEN 1=1 THEN \"second\" WHEN 1=2 THEN \"third\" ELSE \"fourth\" END",
       "second" );
@@ -6560,7 +6560,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTestMatchElse(TestingContext context) {
+  void testCaseTestMatchElse(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE WHEN 1=0 THEN \"first\" ELSE \"fourth\" END",
       "fourth" );
@@ -6568,7 +6568,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTestMatchNoElse(TestingContext context) {
+  void testCaseTestMatchNoElse(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE WHEN 1=0 THEN \"first\" END",
       "" );
@@ -6579,7 +6579,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTestReturnsMemberBug1799391(TestingContext context) {
+  void testCaseTestReturnsMemberBug1799391(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + " MEMBER [Product].[CaseTest] AS\n"
@@ -6609,7 +6609,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseMatch(TestingContext context) {
+  void testCaseMatch(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE 2 WHEN 1 THEN \"first\" WHEN 2 THEN \"second\" WHEN 3 THEN \"third\" ELSE \"fourth\" END",
       "second" );
@@ -6617,7 +6617,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseMatchElse(TestingContext context) {
+  void testCaseMatchElse(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE 7 WHEN 1 THEN \"first\" ELSE \"fourth\" END",
       "fourth" );
@@ -6625,7 +6625,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseMatchNoElse(TestingContext context) {
+  void testCaseMatchNoElse(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CASE 8 WHEN 0 THEN \"first\" END",
       "" );
@@ -6633,7 +6633,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTypeMismatch(TestingContext context) {
+  void testCaseTypeMismatch(TestContextWrapper context) {
     // type mismatch between case and else
     assertAxisThrows(context.createConnection(),
       "CASE 1 WHEN 1 THEN 2 ELSE \"foo\" END",
@@ -6659,7 +6659,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCaseTuple(TestingContext context) {
+  void testCaseTuple(TestContextWrapper context) {
     // The case in the bug, simplified. With the bug, returns a member array
     // "[Lmondrian.olap.Member;@151b0a5". Type deduction should realize
     // that the result is a scalar, therefore a tuple (represented by a
@@ -6701,7 +6701,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPropertiesExpr(TestingContext context) {
+  void testPropertiesExpr(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "[Store].[USA].[CA].[Beverly Hills].[Store 6].Properties(\"Store Type\")",
       "Gourmet Supermarket" );
@@ -6714,7 +6714,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPropertiesOnDimension(TestingContext context) {
+  void testPropertiesOnDimension(TestContextWrapper context) {
     // [Store] is a dimension. When called with a property like FirstChild,
     // it is implicitly converted to a member.
     assertAxisReturns(context.createConnection(), "[Store].FirstChild", "[Store].[Canada]" );
@@ -6737,7 +6737,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPropertiesNonExistent(TestingContext context) {
+  void testPropertiesNonExistent(TestContextWrapper context) {
     assertExprThrows(context.createConnection(),
       "[Store].[USA].[CA].[Beverly Hills].[Store 6].Properties(\"Foo\")",
       "Property 'Foo' is not valid for" );
@@ -6745,7 +6745,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPropertiesFilter(TestingContext context) {
+  void testPropertiesFilter(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "SELECT { [Store Sales] } ON COLUMNS,\n"
         + " TOPCOUNT(Filter( [Store].[Store Name].Members,\n"
@@ -6757,7 +6757,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPropertyInCalculatedMember(TestingContext context) {
+  void testPropertyInCalculatedMember(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "WITH MEMBER [Measures].[Store Sales per Sqft]\n"
         + "AS '[Measures].[Store Sales] / "
@@ -6788,7 +6788,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOpeningPeriod(TestingContext context) {
+  void testOpeningPeriod(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "OpeningPeriod([Time].[Month], [Time].[1997].[Q3])",
       "[Time].[1997].[Q3].[7]" );
@@ -6843,7 +6843,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOpeningPeriodNull(TestingContext context) {
+  void testOpeningPeriodNull(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "OpeningPeriod([Time].[Month], NULL)",
       "Mondrian Error:Failed to parse query 'select {OpeningPeriod([Time].[Month], NULL)} on columns from Sales'" );
@@ -6851,7 +6851,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLastPeriods(TestingContext context) {
+  void testLastPeriods(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "LastPeriods(0, [Time].[1998])", "" );
     assertAxisReturns(context.createConnection(),
@@ -6950,7 +6950,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriod(TestingContext context) {
+  void testParallelPeriod(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "parallelperiod([Time].[Quarter], 1, [Time].[1998].[Q1])",
       "[Time].[1997].[Q4]" );
@@ -7035,7 +7035,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testParallelPeriodThrowsException(TestingContext context) {
+  void _testParallelPeriodThrowsException(TestContextWrapper context) {
     assertQueryThrows(context,
       "select {parallelperiod([Time].[Year], 1)} on columns "
         + "from [Sales] where ([Time].[1998].[Q1].[2])",
@@ -7044,7 +7044,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriodDepends(TestingContext context) {
+  void testParallelPeriodDepends(TestContextWrapper context) {
     assertMemberExprDependsOn(context.createConnection(),
       "ParallelPeriod([Time].[Quarter], 2.0)", "{[Time]}" );
     assertMemberExprDependsOn(context.createConnection(),
@@ -7072,7 +7072,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriodLevelLag(TestingContext context) {
+  void testParallelPeriodLevelLag(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Prev Unit Sales] as "
         + "        '([Measures].[Unit Sales], parallelperiod([Time].[Quarter], 2))' "
@@ -7099,7 +7099,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testParallelPeriodLevel(TestingContext context) {
+  void testParallelPeriodLevel(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with "
         + "    member [Measures].[Prev Unit Sales] as "
@@ -7123,7 +7123,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPlus(TestingContext context) {
+  void testPlus(TestContextWrapper context) {
     assertExprDependsOn(context.createConnection(), "1 + 2", "{}" );
     String s1 = allHiersExcept( "[Measures]", "[Gender]" );
     assertExprDependsOn(context.createConnection(),
@@ -7138,24 +7138,24 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPlus_NULL_plus_1(TestingContext context) {
+  void testPlus_NULL_plus_1(TestContextWrapper context) {
 	  assertExprReturns(context.createConnection(),  "null + 1", "1" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPlus_NULL_plus_0(TestingContext context) {
+  void testPlus_NULL_plus_0(TestContextWrapper context) {
 	  assertExprReturns(context.createConnection(),  "null + 0", "0" );
   }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPlus_NULL_plus_NULL(TestingContext context) {
+  void testPlus_NULL_plus_NULL(TestContextWrapper context) {
 	  assertExprReturns(context.createConnection(),  "null + null", "" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMinus(TestingContext context) {
+  void testMinus(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "1-3", "-2" );
     assertExprReturns(context.createConnection(), "5 - " + NullNumericExpr, "5" ); // 5 - null --> 5
     assertExprReturns(context.createConnection(), NullNumericExpr + " - - 2", "2" );
@@ -7164,7 +7164,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMinus_bug1234759(TestingContext context) {
+  void testMinus_bug1234759(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Customers].[USAMinusMexico]\n"
         + "AS '([Customers].[All Customers].[USA] - [Customers].[All Customers].[Mexico])'\n"
@@ -7189,14 +7189,14 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMinusAssociativity(TestingContext context) {
+  void testMinusAssociativity(TestContextWrapper context) {
     // right-associative would give 11-(7-5) = 9, which is wrong
     assertExprReturns(context.createConnection(), "11-7-5", "-1" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiply(TestingContext context) {
+  void testMultiply(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "4*7", "28" );
     assertExprReturns(context.createConnection(), "5 * " + NullNumericExpr, "" ); // 5 * null --> null
     assertExprReturns(context.createConnection(), NullNumericExpr + " * - 2", "" );
@@ -7205,7 +7205,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiplyPrecedence(TestingContext context) {
+  void testMultiplyPrecedence(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "3 + 4 * 5 + 6", "29" );
     assertExprReturns(context.createConnection(), "5 * 24 / 4 * 2", "60" );
     assertExprReturns(context.createConnection(), "48 / 4 / 2", "6" );
@@ -7216,7 +7216,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiplyBug774807(TestingContext context) {
+  void testMultiplyBug774807(TestContextWrapper context) {
     final String desiredResult =
       "Axis #0:\n"
         + "{}\n"
@@ -7251,7 +7251,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDivide(TestingContext context) {
+  void testDivide(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "10 / 5", "2" );
     assertExprReturns(context.createConnection(), NullNumericExpr + " / - 2", "" );
     assertExprReturns(context.createConnection(), NullNumericExpr + " / " + NullNumericExpr, "" );
@@ -7289,13 +7289,13 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDividePrecedence(TestingContext context) {
+  void testDividePrecedence(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "24 / 4 / 2 * 10 - -1", "31" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMod(TestingContext context) {
+  void testMod(TestContextWrapper context) {
     // the following tests are consistent with excel xp
 
     assertExprReturns(context.createConnection(), "mod(11, 3)", "2" );
@@ -7322,13 +7322,13 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnaryMinus(TestingContext context) {
+  void testUnaryMinus(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-3", "-3" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnaryMinusMember(TestingContext context) {
+  void testUnaryMinusMember(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "- ([Measures].[Unit Sales],[Gender].[F])",
       "-131,558" );
@@ -7336,43 +7336,43 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnaryMinusPrecedence(TestingContext context) {
+  void testUnaryMinusPrecedence(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "1 - -10.5 * 2 -3", "19" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNegativeZero(TestingContext context) {
+  void testNegativeZero(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-0.0", "0" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNegativeZero1(TestingContext context) {
+  void testNegativeZero1(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-(0.0)", "0" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNegativeZeroSubtract(TestingContext context) {
+  void testNegativeZeroSubtract(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-0.0 - 0.0", "0" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNegativeZeroMultiply(TestingContext context) {
+  void testNegativeZeroMultiply(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-1 * 0", "0" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNegativeZeroDivide(TestingContext context) {
+  void testNegativeZeroDivide(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "-0.0 / 2", "0" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testString(TestingContext context) {
+  void testString(TestContextWrapper context) {
     // The String(Integer,Char) function requires us to implicitly cast a
     // string to a char.
     assertQueryReturns(context.createConnection(),
@@ -7407,7 +7407,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringConcat(TestingContext context) {
+  void testStringConcat(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       " \"foo\" || \"bar\"  ",
       "foobar" );
@@ -7415,7 +7415,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringConcat2(TestingContext context) {
+  void testStringConcat2(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       " \"foo\" || [Gender].[M].Name || \"\" ",
       "fooM" );
@@ -7423,64 +7423,64 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAnd(TestingContext context) {
+  void testAnd(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=1 AND 2=2 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAnd2(TestingContext context) {
+  void testAnd2(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=1 AND 2=0 ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOr(TestingContext context) {
+  void testOr(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=0 OR 2=0 ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOr2(TestingContext context) {
+  void testOr2(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=0 OR 0=0 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrAssociativity1(TestingContext context) {
+  void testOrAssociativity1(TestContextWrapper context) {
     // Would give 'false' if OR were stronger than AND (wrong!)
       assertBooleanExprReturns(context.createConnection(), " 1=1 AND 1=0 OR 1=1 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrAssociativity2(TestingContext context) {
+  void testOrAssociativity2(TestContextWrapper context) {
     // Would give 'false' if OR were stronger than AND (wrong!)
       assertBooleanExprReturns(context.createConnection(), " 1=1 OR 1=0 AND 1=1 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrAssociativity3(TestingContext context) {
+  void testOrAssociativity3(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " (1=0 OR 1=1) AND 1=1 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testXor(TestingContext context) {
+  void testXor(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=1 XOR 2=2 ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testXorAssociativity(TestingContext context) {
+  void testXorAssociativity(TestContextWrapper context) {
     // Would give 'false' if XOR were stronger than AND (wrong!)
       assertBooleanExprReturns(context.createConnection(), " 1 = 1 AND 1 = 1 XOR 1 = 0 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyCrossJoin(TestingContext context) {
+  void testNonEmptyCrossJoin(TestContextWrapper context) {
     // NonEmptyCrossJoin needs to evaluate measures to find out whether
     // cells are empty, so it implicitly depends upon all dimensions.
     String s1 = allHiersExcept( "[Store]" );
@@ -7547,25 +7547,25 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNot(TestingContext context) {
+  void testNot(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " NOT 1=1 ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotNot(TestingContext context) {
+  void testNotNot(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " NOT NOT 1=1 ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotAssociativity(TestingContext context) {
+  void testNotAssociativity(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1=1 AND NOT 1=1 OR NOT 1=1 AND 1=1 ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsNull(TestingContext context) {
+  void testIsNull(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " Measures.[Profit] IS NULL ", false );
       assertBooleanExprReturns(context.createConnection(), " Store.[All Stores] IS NULL ", false );
       assertBooleanExprReturns(context.createConnection(), " Store.[All Stores].parent IS NULL ", true );
@@ -7573,7 +7573,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsMember(TestingContext context) {
+  void testIsMember(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(),
       " Store.[USA].parent IS Store.[All Stores]", true );
       assertBooleanExprReturns(context.createConnection(),
@@ -7582,7 +7582,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsString(TestingContext context) {
+  void testIsString(TestContextWrapper context) {
     assertExprThrows(context.createConnection(),
       " [Store].[USA].Name IS \"USA\" ",
       "No function matches signature '<String> IS <String>'" );
@@ -7590,7 +7590,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsNumeric(TestingContext context) {
+  void testIsNumeric(TestContextWrapper context) {
     assertExprThrows(context.createConnection(),
       " [Store].[USA].Level.Ordinal IS 25 ",
       "No function matches signature '<Numeric Expression> IS <Numeric Expression>'" );
@@ -7598,7 +7598,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsTuple(TestingContext context) {
+  void testIsTuple(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(),
       " (Store.[USA], Gender.[M]) IS (Store.[USA], Gender.[M])", true );
       assertBooleanExprReturns(context.createConnection(),
@@ -7624,7 +7624,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsLevel(TestingContext context) {
+  void testIsLevel(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(),
       " Store.[USA].level IS Store.[Store Country] ", true );
       assertBooleanExprReturns(context.createConnection(),
@@ -7633,7 +7633,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsHierarchy(TestingContext context) {
+  void testIsHierarchy(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(),
       " Store.[USA].hierarchy IS Store.[Mexico].hierarchy ", true );
       assertBooleanExprReturns(context.createConnection(),
@@ -7642,32 +7642,32 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsDimension(TestingContext context) {
+  void testIsDimension(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " Store.[USA].dimension IS Store ", true );
       assertBooleanExprReturns(context.createConnection()," Gender.[M].dimension IS Store ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringEquals(TestingContext context) {
+  void testStringEquals(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " \"foo\" = \"bar\" ", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringEqualsAssociativity(TestingContext context) {
+  void testStringEqualsAssociativity(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " \"foo\" = \"fo\" || \"o\" ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringEqualsEmpty(TestingContext context) {
+  void testStringEqualsEmpty(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " \"\" = \"\" ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testEq(TestingContext context) {
+  void testEq(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 1.0 = 1 ", true );
 
       assertBooleanExprReturns(context.createConnection(),
@@ -7677,48 +7677,48 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStringNe(TestingContext context) {
+  void testStringNe(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " \"foo\" <> \"bar\" ", true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNe(TestingContext context) {
+  void testNe(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 2 <> 1.0 + 1.0 ", false );
     checkNullOp(context.createConnection(), "<>" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNeInfinity(TestingContext context) {
+  void testNeInfinity(TestContextWrapper context) {
     // Infinity does not equal itself
       assertBooleanExprReturns(context.createConnection(), "(1 / 0) <> (1 / 0)", false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLt(TestingContext context) {
+  void testLt(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 2 < 1.0 + 1.0 ", false );
     checkNullOp(context.createConnection(), "<" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLe(TestingContext context) {
+  void testLe(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 2 <= 1.0 + 1.0 ", true );
     checkNullOp(context.createConnection(), "<=" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGt(TestingContext context) {
+  void testGt(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 2 > 1.0 + 1.0 ", false );
     checkNullOp(context.createConnection(), ">" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGe(TestingContext context) {
+  void testGe(TestContextWrapper context) {
       assertBooleanExprReturns(context.createConnection(), " 2 > 1.0 + 1.0 ", false );
     checkNullOp(context.createConnection(), ">=" );
   }
@@ -7732,7 +7732,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctTwoMembers(TestingContext context) {
+  void testDistinctTwoMembers(TestContextWrapper context) {
     //getTestContext().withCube( "HR" ).
     assertAxisReturns(context.createConnection(), "HR",
       "Distinct({[Employees].[All Employees].[Sheri Nowmer].[Donna Arnold],"
@@ -7742,7 +7742,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctThreeMembers(TestingContext context) {
+  void testDistinctThreeMembers(TestContextWrapper context) {
     //getTestContext().withCube( "HR" ).
     assertAxisReturns(context.createConnection(), "HR",
       "Distinct({[Employees].[All Employees].[Sheri Nowmer].[Donna Arnold],"
@@ -7754,7 +7754,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctFourMembers(TestingContext context) {
+  void testDistinctFourMembers(TestContextWrapper context) {
     //getTestContext().withCube( "HR" ).
     assertAxisReturns(context.createConnection(), "HR",
       "Distinct({[Employees].[All Employees].[Sheri Nowmer].[Donna Arnold],"
@@ -7767,7 +7767,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctTwoTuples(TestingContext context) {
+  void testDistinctTwoTuples(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Distinct({([Time].[1997],[Store].[All Stores].[Mexico]), "
         + "([Time].[1997], [Store].[All Stores].[Mexico])})",
@@ -7776,7 +7776,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctSomeTuples(TestingContext context) {
+  void testDistinctSomeTuples(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Distinct({([Time].[1997],[Store].[All Stores].[Mexico]), "
         + "crossjoin({[Time].[1997]},{[Store].[All Stores].children})})",
@@ -7791,7 +7791,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterWithSlicer(TestingContext context) {
+  void testFilterWithSlicer(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
         + " filter([Customers].[USA].children,\n"
@@ -7807,7 +7807,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIsNullWithCalcMem(TestingContext context) {
+  void testIsNullWithCalcMem(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member Store.foo as '1010' "
         + "member measures.bar as 'Store.currentmember IS NULL' "
@@ -7823,7 +7823,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterCompound(TestingContext context) {
+  void testFilterCompound(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
         + "  Filter(\n"
@@ -7845,7 +7845,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateDepends(TestingContext context) {
+  void testGenerateDepends(TestContextWrapper context) {
     assertSetExprDependsOn(context.createConnection(),
       "Generate([Product].CurrentMember.Children, Crossjoin({[Product].CurrentMember}, Crossjoin([Store].[Store "
         + "State].Members, [Store Type].Members)), ALL)",
@@ -7867,7 +7867,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerate(TestingContext context) {
+  void testGenerate(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Generate({[Store].[USA], [Store].[USA].[CA]}, {[Store].CurrentMember.Children})",
       "[Store].[USA].[CA]\n"
@@ -7882,7 +7882,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateNonSet(TestingContext context) {
+  void testGenerateNonSet(TestContextWrapper context) {
     // SSAS implicitly converts arg #2 to a set
     assertAxisReturns(context.createConnection(),
       "Generate({[Store].[USA], [Store].[USA].[CA]}, [Store].PrevMember, ALL)",
@@ -7897,7 +7897,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateAll(TestingContext context) {
+  void testGenerateAll(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Generate({[Store].[USA].[CA], [Store].[USA].[OR].[Portland]},"
         + " Ascendants([Store].CurrentMember),"
@@ -7913,7 +7913,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateUnique(TestingContext context) {
+  void testGenerateUnique(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Generate({[Store].[USA].[CA], [Store].[USA].[OR].[Portland]},"
         + " Ascendants([Store].CurrentMember))",
@@ -7926,7 +7926,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateUniqueTuple(TestingContext context) {
+  void testGenerateUniqueTuple(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Generate({([Store].[USA].[CA],[Product].[All Products]), "
         + "([Store].[USA].[CA],[Product].[All Products])},"
@@ -7936,7 +7936,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateCrossJoin(TestingContext context) {
+  void testGenerateCrossJoin(TestContextWrapper context) {
     // Note that the different regions have different Top 2.
     assertAxisReturns(context.createConnection(),
       "Generate({[Store].[USA].[CA], [Store].[USA].[CA].[San Francisco]},\n"
@@ -7953,7 +7953,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateString(TestingContext context) {
+  void testGenerateString(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Generate({Time.[1997], Time.[1998]},"
         + " Time.[Time].CurrentMember.Name)",
@@ -7969,7 +7969,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @Disabled
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateWillTimeout(TestingContext context) {
+  void testGenerateWillTimeout(TestContextWrapper context) {
     propSaver.set( propSaver.properties.QueryTimeout, 5 );
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
@@ -7988,7 +7988,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   // The test case for the issue: MONDRIAN-2402
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGenerateForStringMemberProperty(TestingContext context) {
+  void testGenerateForStringMemberProperty(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Store].[Lineage of Time] AS\n"
         + " Generate(Ascendants([Time].CurrentMember), [Time].CurrentMember.Properties(\"MEMBER_CAPTION\"), \",\")\n"
@@ -8013,7 +8013,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @Disabled
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterWillTimeout(TestingContext context) {
+  void testFilterWillTimeout(TestContextWrapper context) {
     propSaver.set( propSaver.properties.QueryTimeout, 3 );
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
@@ -8037,7 +8037,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHead(TestingContext context) {
+  void testHead(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Head([Store].Children, 2)",
       "[Store].[Canada]\n"
@@ -8046,7 +8046,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadNegative(TestingContext context) {
+  void testHeadNegative(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Head([Store].Children, 2 - 3)",
       "" );
@@ -8054,7 +8054,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadDefault(TestingContext context) {
+  void testHeadDefault(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Head([Store].Children)",
       "[Store].[Canada]" );
@@ -8062,7 +8062,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadOvershoot(TestingContext context) {
+  void testHeadOvershoot(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Head([Store].Children, 2 + 2)",
       "[Store].[Canada]\n"
@@ -8072,7 +8072,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadEmpty(TestingContext context) {
+  void testHeadEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Head([Gender].[F].Children, 2)",
       "" );
@@ -8087,7 +8087,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadBug(TestingContext context) {
+  void testHeadBug(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT\n"
         + "                        UNION(\n"
@@ -8167,7 +8167,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchize(TestingContext context) {
+  void testHierarchize(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Hierarchize(\n"
         + "    {[Product].[All Products], "
@@ -8187,7 +8187,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizePost(TestingContext context) {
+  void testHierarchizePost(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Hierarchize(\n"
         + "    {[Product].[All Products], "
@@ -8204,7 +8204,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizePC(TestingContext context) {
+  void testHierarchizePC(TestContextWrapper context) {
     //getTestContext().withCube( "HR" ).
     assertAxisReturns(context.createConnection(), "HR",
       "Hierarchize(\n"
@@ -8239,7 +8239,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizeCrossJoinPre(TestingContext context) {
+  void testHierarchizeCrossJoinPre(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Hierarchize(\n"
         + "  CrossJoin(\n"
@@ -8266,7 +8266,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizeCrossJoinPost(TestingContext context) {
+  void testHierarchizeCrossJoinPost(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Hierarchize(\n"
         + "  CrossJoin(\n"
@@ -8301,7 +8301,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizeOrdinal(TestingContext context) {
+  void testHierarchizeOrdinal(TestContextWrapper context) {
     //TestContext testContext = getTestContext().withCube( "[Sales_Hierarchize]" );
     final Connection connection = context.createConnection();
     connection.getSchema().createCube(
@@ -8395,7 +8395,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIntersectAll(TestingContext context) {
+  void testIntersectAll(TestContextWrapper context) {
     // Note: duplicates retained from left, not from right; and order is
     // preserved.
     assertAxisReturns(context.createConnection(),
@@ -8409,7 +8409,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIntersect(TestingContext context) {
+  void testIntersect(TestContextWrapper context) {
     // Duplicates not preserved. Output in order that first duplicate
     // occurred.
     assertAxisReturns(context.createConnection(),
@@ -8422,7 +8422,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIntersectTuples(TestingContext context) {
+  void testIntersectTuples(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Intersect(\n"
         + "  {([Time].[1997].[Q2], [Gender].[M]),\n"
@@ -8439,7 +8439,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIntersectRightEmpty(TestingContext context) {
+  void testIntersectRightEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Intersect({[Time].[1997]}, {})",
       "" );
@@ -8447,7 +8447,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIntersectLeftEmpty(TestingContext context) {
+  void testIntersectLeftEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Intersect({}, {[Store].[USA].[CA]})",
       "" );
@@ -8455,7 +8455,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderDepends(TestingContext context) {
+  void testOrderDepends(TestContextWrapper context) {
     // Order(<Set>, <Value Expression>) depends upon everything
     // <Value Expression> depends upon, except the dimensions of <Set>.
 
@@ -8510,7 +8510,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-	void testOrderCalc1(TestingContext context) {
+	void testOrderCalc1(TestContextWrapper context) {
 
 		// [Measures].[Unit Sales] is a constant member, so it is evaluated in
 		// a ContextCalc.
@@ -8530,7 +8530,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-	void testOrderCalc2(TestingContext context) {
+	void testOrderCalc2(TestContextWrapper context) {
 		Connection connection = context.createConnection();
 
 		String expr = "order([Product].children, ([Time].[1997], [Product].CurrentMember.Parent))";
@@ -8550,7 +8550,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-	void testOrderCalc3(TestingContext context) {
+	void testOrderCalc3(TestContextWrapper context) {
 		Connection connection = context.createConnection();
 		// No ContextCalc this time. All members are non-variable.
 		String expr = "order([Product].children, [Product].CurrentMember.Parent)";
@@ -8567,7 +8567,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-	void testOrderCalc4(TestingContext context) {
+	void testOrderCalc4(TestContextWrapper context) {
 		Connection connection = context.createConnection();
 
 		String expected = """
@@ -8594,7 +8594,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderWithMember(TestingContext context) {
+  void testOrderWithMember(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Product Name Length] as "
         + "'LEN([Product].CurrentMember.Name)'\n"
@@ -8620,7 +8620,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderNonEmpty(TestingContext context) {
+  void testOrderNonEmpty(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select NON EMPTY [Gender].Members ON COLUMNS,\n"
         + "NON EMPTY Order([Product].[All Products].[Drink].Children,\n"
@@ -8648,7 +8648,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrder(TestingContext context) {
+  void testOrder(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
         + " order({\n"
@@ -8685,7 +8685,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderParentsMissing(TestingContext context) {
+  void testOrderParentsMissing(TestContextWrapper context) {
     // Paradoxically, [Alcoholic Beverages] comes before
     // [Eggs] even though it has a larger value, because
     // its parent [Drink] has a smaller value than [Food].
@@ -8710,7 +8710,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderCrossJoinBreak(TestingContext context) {
+  void testOrderCrossJoinBreak(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
         + "  Order(\n"
@@ -8739,7 +8739,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderCrossJoin(TestingContext context) {
+  void testOrderCrossJoin(TestContextWrapper context) {
     // Note:
     // 1. [Alcoholic Beverages] collates before [Eggs] and
     //    [Seafood] because its parent, [Drink], is less
@@ -8800,7 +8800,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderHierarchicalDesc(TestingContext context) {
+  void testOrderHierarchicalDesc(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Order(\n"
         + "    {[Product].[All Products], "
@@ -8822,7 +8822,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderCrossJoinDesc(TestingContext context) {
+  void testOrderCrossJoinDesc(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Order(\n"
         + "  CrossJoin(\n"
@@ -8852,7 +8852,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderBug656802(TestingContext context) {
+  void testOrderBug656802(TestContextWrapper context) {
     // Note:
     // 1. [Alcoholic Beverages] collates before [Eggs] and
     //    [Seafood] because its parent, [Drink], is less
@@ -8895,7 +8895,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderBug712702_Simplified(TestingContext context) {
+  void testOrderBug712702_Simplified(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT Order({[Time].[Year].members}, [Measures].[Unit Sales]) on columns\n"
         + "from [Sales]",
@@ -8910,7 +8910,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderBug712702_Original(TestingContext context) {
+  void testOrderBug712702_Original(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Average Unit Sales] as 'Avg(Descendants([Time].[Time].CurrentMember, [Time].[Month]), \n"
         + "[Measures].[Unit Sales])' \n"
@@ -9004,7 +9004,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderEmpty(TestingContext context) {
+  void testOrderEmpty(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select \n"
         + "  Order("
@@ -9018,7 +9018,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderOne(TestingContext context) {
+  void testOrderOne(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select \n"
         + "  Order("
@@ -9034,7 +9034,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderKeyEmpty(TestingContext context) {
+  void testOrderKeyEmpty(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select \n"
         + "  Order("
@@ -9048,7 +9048,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderKeyOne(TestingContext context) {
+  void testOrderKeyOne(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select \n"
         + "  Order("
@@ -9064,7 +9064,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderDesc(TestingContext context) {
+  void testOrderDesc(TestContextWrapper context) {
     // based on olap4j's OlapTest.testSortDimension
     assertQueryReturns(context.createConnection(),
       "SELECT\n"
@@ -9092,7 +9092,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMemberValueExpNew(TestingContext context) {
+  void testOrderMemberMemberValueExpNew(TestContextWrapper context) {
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey,
       true );
@@ -9124,7 +9124,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMemberValueExpNew1(TestingContext context) {
+  void testOrderMemberMemberValueExpNew1(TestContextWrapper context) {
     // sort by default measure
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
@@ -9153,7 +9153,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberDefaultFlag1(TestingContext context) {
+  void testOrderMemberDefaultFlag1(TestContextWrapper context) {
     // flags not specified default to ASC - sort by default measure
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -9175,7 +9175,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberDefaultFlag2(TestingContext context) {
+  void testOrderMemberDefaultFlag2(TestContextWrapper context) {
     // flags not specified default to ASC
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -9197,7 +9197,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMemberValueExpHierarchy(TestingContext context) {
+  void testOrderMemberMemberValueExpHierarchy(TestContextWrapper context) {
     // Santa Monica and Woodland Hills both don't have orderkey
     // members are sorted by the order of their keys
     assertQueryReturns(context.createConnection(),
@@ -9218,7 +9218,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMultiKeysMemberValueExp1(TestingContext context) {
+  void testOrderMemberMultiKeysMemberValueExp1(TestContextWrapper context) {
     // sort by unit sales and then customer id (Adeline = 6442, Abe = 570)
     assertQueryReturns(context.createConnection(),
       "select \n"
@@ -9241,7 +9241,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMultiKeysMemberValueExp2(TestingContext context) {
+  void testOrderMemberMultiKeysMemberValueExp2(TestContextWrapper context) {
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
     // Use a fresh connection to make sure bad member ordinals haven't
@@ -9272,7 +9272,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderMemberMultiKeysMemberValueExpDepends(TestingContext context) {
+  void testOrderMemberMultiKeysMemberValueExpDepends(TestContextWrapper context) {
     // should preserve order of Abe and Adeline (note second key is [Time])
     assertQueryReturns(context.createConnection(),
       "select \n"
@@ -9295,7 +9295,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleSingleKeysNew(TestingContext context) {
+  void testOrderTupleSingleKeysNew(TestContextWrapper context) {
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
     // Use a fresh connection to make sure bad member ordinals haven't
@@ -9331,7 +9331,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleSingleKeysNew1(TestingContext context) {
+  void testOrderTupleSingleKeysNew1(TestContextWrapper context) {
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
     // Use a fresh connection to make sure bad member ordinals haven't
@@ -9367,7 +9367,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleMultiKeys1(TestingContext context) {
+  void testOrderTupleMultiKeys1(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with \n"
         + "  set [NECJ] as \n"
@@ -9393,7 +9393,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleMultiKeys2(TestingContext context) {
+  void testOrderTupleMultiKeys2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with \n"
         + "  set [NECJ] as \n"
@@ -9420,7 +9420,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleMultiKeys3(TestingContext context) {
+  void testOrderTupleMultiKeys3(TestContextWrapper context) {
     // WA unit sales is greater than CA unit sales
     // Santa Monica unit sales (2660) is greater that Woodland hills (2516)
     assertQueryReturns(context.createConnection(),
@@ -9449,7 +9449,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleMultiKeyswithVCube(TestingContext context) {
+  void testOrderTupleMultiKeyswithVCube(TestContextWrapper context) {
     // WA unit sales is greater than CA unit sales
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
@@ -9513,7 +9513,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderConstant1(TestingContext context) {
+  void testOrderConstant1(TestContextWrapper context) {
     // sort by customerId (Abel = 7851, Adeline = 6442, Abe = 570)
     assertQueryReturns(context.createConnection(),
       "select \n"
@@ -9536,7 +9536,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderDiffrentDim(TestingContext context) {
+  void testOrderDiffrentDim(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select \n"
         + "  Order("
@@ -9558,7 +9558,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnorder(TestingContext context) {
+  void testUnorder(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Unorder([Gender].members)",
       "[Gender].[All Gender]\n"
@@ -9612,7 +9612,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSiblingsA(TestingContext context) {
+  void testSiblingsA(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Time].[1997].Siblings}",
       "[Time].[1997]\n"
@@ -9621,7 +9621,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSiblingsB(TestingContext context) {
+  void testSiblingsB(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Store].Siblings}",
       "[Store].[All Stores]" );
@@ -9629,7 +9629,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSiblingsC(TestingContext context) {
+  void testSiblingsC(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "{[Store].[USA].[CA].Siblings}",
       "[Store].[USA].[CA]\n"
@@ -9639,7 +9639,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSiblingsD(TestingContext context) {
+  void testSiblingsD(TestContextWrapper context) {
     // The null member has no siblings -- not even itself
     assertAxisReturns(context.createConnection(), "{[Gender].Parent.Siblings}", "" );
 
@@ -9649,7 +9649,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubset(TestingContext context) {
+  void testSubset(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Promotion Media].Children, 7, 2)",
       "[Promotion Media].[Product Attachment]\n"
@@ -9658,7 +9658,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubsetNegativeCount(TestingContext context) {
+  void testSubsetNegativeCount(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Promotion Media].Children, 3, -1)",
       "" );
@@ -9666,7 +9666,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubsetNegativeStart(TestingContext context) {
+  void testSubsetNegativeStart(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Promotion Media].Children, -2, 4)",
       "" );
@@ -9674,7 +9674,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubsetDefault(TestingContext context) {
+  void testSubsetDefault(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Promotion Media].Children, 11)",
       "[Promotion Media].[Sunday Paper, Radio]\n"
@@ -9684,7 +9684,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubsetOvershoot(TestingContext context) {
+  void testSubsetOvershoot(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Promotion Media].Children, 15)",
       "" );
@@ -9692,7 +9692,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSubsetEmpty(TestingContext context) {
+  void testSubsetEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Subset([Gender].[F].Children, 1)",
       "" );
@@ -9704,7 +9704,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTail(TestingContext context) {
+  void testTail(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Tail([Store].Children, 2)",
       "[Store].[Mexico]\n"
@@ -9713,7 +9713,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTailNegative(TestingContext context) {
+  void testTailNegative(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Tail([Store].Children, 2 - 3)",
       "" );
@@ -9721,7 +9721,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTailDefault(TestingContext context) {
+  void testTailDefault(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Tail([Store].Children)",
       "[Store].[USA]" );
@@ -9729,7 +9729,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTailOvershoot(TestingContext context) {
+  void testTailOvershoot(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Tail([Store].Children, 2 + 2)",
       "[Store].[Canada]\n"
@@ -9739,7 +9739,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTailEmpty(TestingContext context) {
+  void testTailEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Tail([Gender].[F].Children, 2)",
       "" );
@@ -9751,7 +9751,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testToggleDrillState(TestingContext context) {
+  void testToggleDrillState(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "ToggleDrillState({[Customers].[USA],[Customers].[Canada]},"
         + "{[Customers].[USA],[Customers].[USA].[CA]})",
@@ -9764,7 +9764,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testToggleDrillState2(TestingContext context) {
+  void testToggleDrillState2(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "ToggleDrillState([Product].[Product Department].members, "
         + "{[Product].[All Products].[Food].[Snack Foods]})",
@@ -9796,7 +9796,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testToggleDrillState3(TestingContext context) {
+  void testToggleDrillState3(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "ToggleDrillState("
         + "{[Time].[1997].[Q1],"
@@ -9813,7 +9813,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   // bug 634860
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testToggleDrillStateTuple(TestingContext context) {
+  void testToggleDrillStateTuple(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "ToggleDrillState(\n"
         + "{([Store].[USA].[CA],"
@@ -9832,7 +9832,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testToggleDrillStateRecursive(TestingContext context) {
+  void testToggleDrillStateRecursive(TestContextWrapper context) {
     // We expect this to fail.
     assertQueryThrows(context,
       "Select \n"
@@ -9845,7 +9845,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCount(TestingContext context) {
+  void testTopCount(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopCount({[Promotion Media].[Media Type].members}, 2, [Measures].[Unit Sales])",
       "[Promotion Media].[No Media]\n"
@@ -9854,7 +9854,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountUnordered(TestingContext context) {
+  void testTopCountUnordered(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopCount({[Promotion Media].[Media Type].members}, 2)",
       "[Promotion Media].[Bulk Mail]\n"
@@ -9863,7 +9863,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountTuple(TestingContext context) {
+  void testTopCountTuple(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopCount([Customers].[Name].members,2,(Time.[1997].[Q1],[Measures].[Store Sales]))",
       "[Customers].[USA].[WA].[Spokane].[Grace McLaughlin]\n"
@@ -9872,7 +9872,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountEmpty(TestingContext context) {
+  void testTopCountEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopCount(Filter({[Promotion Media].[Media Type].members}, 1=0), 2, [Measures].[Unit Sales])",
       "" );
@@ -9880,7 +9880,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountDepends(TestingContext context) {
+  void testTopCountDepends(TestContextWrapper context) {
     Connection connection = context.createConnection();
     checkTopBottomCountPercentDepends(connection, "TopCount" );
     checkTopBottomCountPercentDepends(connection, "TopPercent" );
@@ -9914,7 +9914,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountHuge(TestingContext context) {
+  void testTopCountHuge(TestContextWrapper context) {
     // TODO convert printfs to trace
     final String query =
       "SELECT [Measures].[Store Sales] ON 0,\n"
@@ -9943,7 +9943,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopPercent(TestingContext context) {
+  void testTopPercent(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopPercent({[Promotion Media].[Media Type].members}, 70, [Measures].[Unit Sales])",
       "[Promotion Media].[No Media]" );
@@ -9953,7 +9953,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopSum(TestingContext context) {
+  void testTopSum(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopSum({[Promotion Media].[Media Type].members}, 200000, [Measures].[Unit Sales])",
       "[Promotion Media].[No Media]\n"
@@ -9962,7 +9962,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopSumEmpty(TestingContext context) {
+  void testTopSumEmpty(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "TopSum(Filter({[Promotion Media].[Media Type].members}, 1=0), "
         + "200000, [Measures].[Unit Sales])",
@@ -9971,7 +9971,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionAll(TestingContext context) {
+  void testUnionAll(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({[Gender].[M]}, {[Gender].[F]}, ALL)",
       "[Gender].[M]\n"
@@ -9980,7 +9980,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionAllTuple(TestingContext context) {
+  void testUnionAllTuple(TestContextWrapper context) {
     // With the bug, the last 8 rows are repeated.
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -10032,7 +10032,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnion(TestingContext context) {
+  void testUnion(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({[Store].[USA], [Store].[USA], [Store].[USA].[OR]}, "
         + "{[Store].[USA].[CA], [Store].[USA]})",
@@ -10043,7 +10043,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionEmptyBoth(TestingContext context) {
+  void testUnionEmptyBoth(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({}, {})",
       "" );
@@ -10051,7 +10051,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionEmptyRight(TestingContext context) {
+  void testUnionEmptyRight(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({[Gender].[M]}, {})",
       "[Gender].[M]" );
@@ -10059,7 +10059,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionTuple(TestingContext context) {
+  void testUnionTuple(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({"
         + " ([Gender].[M], [Marital Status].[S]),"
@@ -10076,7 +10076,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionTupleDistinct(TestingContext context) {
+  void testUnionTupleDistinct(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Union({"
         + " ([Gender].[M], [Marital Status].[S]),"
@@ -10093,7 +10093,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUnionQuery(TestingContext context) {
+  void testUnionQuery(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "select {[Measures].[Unit Sales], "
         + "[Measures].[Store Cost], "
@@ -10116,7 +10116,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testItemMember(TestingContext context) {
+  void testItemMember(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Descendants([Time].[1997], [Time].[Month]).Item(1).Item(0).UniqueName",
       "[Time].[1997].[Q1].[2]" );
@@ -10132,7 +10132,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testItemTuple(TestingContext context) {
+  void testItemTuple(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "CrossJoin([Gender].[All Gender].children, "
         + "[Time].[1997].[Q2].children).Item(0).Item(1).UniqueName",
@@ -10141,7 +10141,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToMember(TestingContext context) {
+  void testStrToMember(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "StrToMember(\"[Time].[1997].[Q2].[4]\").Name",
       "4" );
@@ -10149,7 +10149,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToMemberUniqueName(TestingContext context) {
+  void testStrToMemberUniqueName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "StrToMember(\"[Store].[USA].[CA]\").Name",
       "CA" );
@@ -10157,7 +10157,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToMemberFullyQualifiedName(TestingContext context) {
+  void testStrToMemberFullyQualifiedName(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "StrToMember(\"[Store].[All Stores].[USA].[CA]\").Name",
       "CA" );
@@ -10165,7 +10165,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToMemberNull(TestingContext context) {
+  void testStrToMemberNull(TestContextWrapper context) {
     // SSAS 2005 gives "#Error An MDX expression was expected. An empty
     // expression was specified."
     assertExprThrows(context.createConnection(),
@@ -10186,7 +10186,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToMemberIgnoreInvalidMembers(TestingContext context) {
+  void testStrToMemberIgnoreInvalidMembers(TestContextWrapper context) {
     final MondrianProperties properties = MondrianProperties.instance();
     propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
 
@@ -10255,7 +10255,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToTuple(TestingContext context) {
+  void testStrToTuple(TestContextWrapper context) {
     // single dimension yields member
     assertAxisReturns(context.createConnection(),
       "{StrToTuple(\"[Time].[1997].[Q2]\", [Time])}",
@@ -10271,7 +10271,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToTupleIgnoreInvalidMembers(TestingContext context) {
+  void testStrToTupleIgnoreInvalidMembers(TestContextWrapper context) {
     final MondrianProperties properties = MondrianProperties.instance();
     propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
 
@@ -10284,7 +10284,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToTupleDuHierarchiesFails(TestingContext context) {
+  void testStrToTupleDuHierarchiesFails(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "{StrToTuple(\"([Gender].[F], [Time].[1997].[Q2], [Gender].[M])\", [Gender], [Time], [Gender])}",
       "Tuple contains more than one member of hierarchy '[Gender]'." );
@@ -10292,7 +10292,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToTupleDupHierInSameDimensions(TestingContext context) {
+  void testStrToTupleDupHierInSameDimensions(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "{StrToTuple("
         + "\"([Gender].[F], "
@@ -10306,7 +10306,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToTupleDepends(TestingContext context) {
+  void testStrToTupleDepends(TestContextWrapper context) {
     assertMemberExprDependsOn(context.createConnection(),
       "StrToTuple(\"[Time].[1997].[Q2]\", [Time])",
       "{}" );
@@ -10327,7 +10327,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToSet(TestingContext context) {
+  void testStrToSet(TestContextWrapper context) {
     // TODO: handle text after '}'
     // TODO: handle string which ends too soon
     // TODO: handle spaces before first '{'
@@ -10387,7 +10387,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToSetDupDimensionsFails(TestingContext context) {
+  void testStrToSetDupDimensionsFails(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "StrToSet("
         + "\""
@@ -10404,7 +10404,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testStrToSetIgnoreInvalidMembers(TestingContext context) {
+  void testStrToSetIgnoreInvalidMembers(TestContextWrapper context) {
     final MondrianProperties properties = MondrianProperties.instance();
     propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
     assertAxisReturns(context.createConnection(),
@@ -10438,7 +10438,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testYtd(TestingContext context) {
+  void testYtd(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "Ytd()",
       "[Time].[1997]" );
@@ -10471,7 +10471,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGeneratePlusXtd(TestingContext context) {
+  void testGeneratePlusXtd(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "generate(\n"
         + "  {[Time].[1997].[Q1].[2], [Time].[1997].[Q3].[7]},\n"
@@ -10508,7 +10508,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testQtd(TestingContext context) {
+  void testQtd(TestContextWrapper context) {
     // zero args
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Foo] as ' SetToStr(Qtd()) '\n"
@@ -10544,7 +10544,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMtd(TestingContext context) {
+  void testMtd(TestContextWrapper context) {
     // zero args
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Foo] as ' SetToStr(Mtd()) '\n"
@@ -10579,7 +10579,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testPeriodsToDate(TestingContext context) {
+  void testPeriodsToDate(TestContextWrapper context) {
     assertSetExprDependsOn(context.createConnection(), "PeriodsToDate()", "{[Time]}" );
     assertSetExprDependsOn(context.createConnection(),
       "PeriodsToDate([Time].[Year])",
@@ -10707,7 +10707,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSetToStr(TestingContext context) {
+  void testSetToStr(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "SetToStr([Time].[Time].children)",
       "{[Time].[1997].[Q1], [Time].[1997].[Q2], [Time].[1997].[Q3], [Time].[1997].[Q4]}" );
@@ -10723,7 +10723,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleToStr(TestingContext context) {
+  void testTupleToStr(TestContextWrapper context) {
     // Applied to a dimension (which becomes a member)
     assertExprReturns(context.createConnection(),
       "TupleToStr([Product])",
@@ -10851,7 +10851,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRank(TestingContext context) {
+  void testRank(TestContextWrapper context) {
     // Member within set
     assertExprReturns(context.createConnection(),
       "Rank([Store].[USA].[CA], "
@@ -10910,7 +10910,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankWithExpr(TestingContext context) {
+  void testRankWithExpr(TestContextWrapper context) {
     // Note that [Good] and [Top Measure] have the same [Unit Sales]
     // value (5), but [Good] ranks 1 and [Top Measure] ranks 2. Even though
     // they are sorted descending on unit sales, they remain in their
@@ -10956,7 +10956,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankMembersWithTiedExpr(TestingContext context) {
+  void testRankMembersWithTiedExpr(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with "
         + " Set [Beers] as {[Product].[All Products].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].children} "
@@ -10990,7 +10990,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankTuplesWithTiedExpr(TestingContext context) {
+  void testRankTuplesWithTiedExpr(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with "
         + " Set [Beers for Store] as 'NonEmptyCrossJoin("
@@ -11028,7 +11028,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankWithExpr2(TestingContext context) {
+  void testRankWithExpr2(TestContextWrapper context) {
     // Data: Unit Sales
     // All gender 266,733
     // F          131,558
@@ -11095,7 +11095,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankWithNulls(TestingContext context) {
+  void testRankWithNulls(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[X] as "
         + "'iif([Measures].[Store Sales]=777,"
@@ -11116,7 +11116,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testRankHuge(TestingContext context) {
+  void testRankHuge(TestContextWrapper context) {
     // If caching is disabled, don't even try -- it will take too long.
     if ( !MondrianProperties.instance().EnableExpCache.get() ) {
       return;
@@ -11149,7 +11149,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testRank3Huge(TestingContext context) {
+  void _testRank3Huge(TestContextWrapper context) {
     // If caching is disabled, don't even try -- it will take too long.
     if ( !MondrianProperties.instance().EnableExpCache.get() ) {
       return;
@@ -11203,7 +11203,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLinRegPointQuarter(TestingContext context) {
+  void testLinRegPointQuarter(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Measures].[Test] as \n"
         + "  'LinRegPoint(\n"
@@ -11243,7 +11243,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testLinRegAll(TestingContext context) {
+  void _testLinRegAll(TestContextWrapper context) {
     // We have not implemented the LastPeriods function, so we use
     //   [Time].CurrentMember.Lag(9) : [Time].CurrentMember
     // is equivalent to
@@ -11316,7 +11316,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLinRegPointMonth(TestingContext context) {
+  void testLinRegPointMonth(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER \n"
         + "[Measures].[Test] as \n"
@@ -11376,7 +11376,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLinRegIntercept(TestingContext context) {
+  void testLinRegIntercept(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "LinRegIntercept([Time].[Month].members,"
         + " [Measures].[Unit Sales], [Measures].[Store Sales])",
@@ -11445,7 +11445,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLinRegSlope(TestingContext context) {
+  void testLinRegSlope(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "LinRegSlope([Time].[Month].members,"
         + " [Measures].[Unit Sales], [Measures].[Store Sales])",
@@ -11489,7 +11489,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLinRegPoint(TestingContext context) {
+  void testLinRegPoint(TestContextWrapper context) {
     // NOTE: mdx does not parse
     if ( false ) {
       assertExprReturns(context.createConnection(),
@@ -11548,7 +11548,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testLinRegR2(TestingContext context) {
+  void _testLinRegR2(TestContextWrapper context) {
     // Why would R2 equal the slope
     if ( false ) {
       assertExprReturns(context.createConnection(),
@@ -11585,7 +11585,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void _testLinRegVariance(TestingContext context) {
+  void _testLinRegVariance(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "LinRegVariance([Time].[Month].members,"
         + " [Measures].[Unit Sales], [Measures].[Store Sales])",
@@ -11612,7 +11612,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsBasic(TestingContext context) {
+  void testVisualTotalsBasic(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11640,7 +11640,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsConsecutively(TestingContext context) {
+  void testVisualTotalsConsecutively(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11680,7 +11680,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsNoPattern(TestingContext context) {
+  void testVisualTotalsNoPattern(TestContextWrapper context) {
     assertAxisReturns(context.createConnection(),
       "VisualTotals("
         + "    {[Product].[All Products].[Food].[Baked Goods].[Bread],"
@@ -11695,7 +11695,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsWithFilter(TestingContext context) {
+  void testVisualTotalsWithFilter(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{Filter("
@@ -11724,7 +11724,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsNested(TestingContext context) {
+  void testVisualTotalsNested(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11753,7 +11753,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsFilterInside(TestingContext context) {
+  void testVisualTotalsFilterInside(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11778,7 +11778,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsOutOfOrder(TestingContext context) {
+  void testVisualTotalsOutOfOrder(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11805,7 +11805,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsGrandparentsAndOutOfOrder(TestingContext context) {
+  void testVisualTotalsGrandparentsAndOutOfOrder(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "{VisualTotals("
@@ -11847,7 +11847,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsCrossjoin(TestingContext context) {
+  void testVisualTotalsCrossjoin(TestContextWrapper context) {
     assertAxisThrows(context.createConnection(),
       "VisualTotals(Crossjoin([Gender].Members, [Store].children))",
       "Argument to 'VisualTotals' function must be a set of members; got set of tuples." );
@@ -11860,7 +11860,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsAll(TestingContext context) {
+  void testVisualTotalsAll(TestContextWrapper context) {
     final String query =
       "SELECT \n"
         + "  {[Measures].[Unit Sales]} ON 0, \n"
@@ -11901,7 +11901,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsWithNamedSetAndPivot(TestingContext context) {
+  void testVisualTotalsWithNamedSetAndPivot(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH SET [CA_OR] AS\n"
         + "    VisualTotals(\n"
@@ -12002,7 +12002,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsIntersect(TestingContext context) {
+  void testVisualTotalsIntersect(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH\n"
         + "SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize({Ascendants([Customers].[All Customers].[USA]), "
@@ -12030,7 +12030,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsWithNamedSetAndPivotSameAxis(TestingContext context) {
+  void testVisualTotalsWithNamedSetAndPivotSameAxis(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH SET [XL_Row_Dim_0] AS\n"
         + " VisualTotals(\n"
@@ -12087,7 +12087,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsDistinctCountMeasure(TestingContext context) {
+  void testVisualTotalsDistinctCountMeasure(TestContextWrapper context) {
     // distinct measure
     assertQueryReturns(context.createConnection(),
       "WITH SET [XL_Row_Dim_0] AS\n"
@@ -12198,7 +12198,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsClassCast(TestingContext context) {
+  void testVisualTotalsClassCast(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH  SET [XL_Row_Dim_0] AS\n"
         + " VisualTotals(\n"
@@ -12284,7 +12284,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsWithNamedSetOfTuples(TestingContext context) {
+  void testVisualTotalsWithNamedSetOfTuples(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH SET [XL_Row_Dim_0] AS\n"
         + " VisualTotals(\n"
@@ -12321,7 +12321,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsLevel(TestingContext context) {
+  void testVisualTotalsLevel(TestContextWrapper context) {
     Result result = executeQuery(context.createConnection(),
       "select {[Measures].[Unit Sales]} on columns,\n"
         + "{[Product].[All Products],\n"
@@ -12360,7 +12360,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVisualTotalsMemberInCalculation(TestingContext context) {
+  void testVisualTotalsMemberInCalculation(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Foo] as\n"
         + " [Product].CurrentMember.Name || ' : ' || [Product].Level.Name\n"
@@ -12399,7 +12399,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalculatedChild(TestingContext context) {
+  void testCalculatedChild(TestContextWrapper context) {
     // Construct calculated children with the same name for both [Drink] and
     // [Non-Consumable].  Then, create a metric to select the calculated
     // child based on current product member.
@@ -12432,7 +12432,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalculatedChildUsingItem(TestingContext context) {
+  void testCalculatedChildUsingItem(TestContextWrapper context) {
     // Construct calculated children with the same name for both [Drink] and
     // [Non-Consumable].  Then, create a metric to select the first
     // calculated child.
@@ -12466,7 +12466,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalculatedChildOnMemberWithNoChildren(TestingContext context) {
+  void testCalculatedChildOnMemberWithNoChildren(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "[Measures].[Store Sales].CalculatedChild(\"foobar\")" );
@@ -12475,7 +12475,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalculatedChildOnNullMember(TestingContext context) {
+  void testCalculatedChildOnNullMember(TestContextWrapper context) {
     Member member =
       executeSingletonAxis(context.createConnection(),
         "[Measures].[Store Sales].parent.CalculatedChild(\"foobar\")" );
@@ -12484,7 +12484,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCast(TestingContext context) {
+  void testCast(TestContextWrapper context) {
     // NOTE: Some of these tests fail with 'cannot convert ...', and they
     // probably shouldn't. Feel free to fix the conversion.
     // -- jhyde, 2006/9/3
@@ -12561,7 +12561,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCastAndNull(TestingContext context) {
+  void testCastAndNull(TestContextWrapper context) {
 	    // To Boolean : Expect to return NULL, but since FunUtil.BooleanNull
 	    // does not implement three-valued boolean logic yet, this will return
 	    // false
@@ -12570,7 +12570,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCastNull(TestingContext context) {
+  void testCastNull(TestContextWrapper context) {
 	    // To Boolean : Expect to return NULL, but since FunUtil.BooleanNull
 	    // does not implement three-valued boolean logic yet, this will return
 	    // false
@@ -12579,7 +12579,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBool1(TestingContext context) {
+  void testBool1(TestContextWrapper context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND 1=0", "false" );
 
@@ -12587,7 +12587,7 @@ Intel platforms):
   }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBool2(TestingContext context) {
+  void testBool2(TestContextWrapper context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND 1=1", "true" );
 
@@ -12596,7 +12596,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBool3(TestingContext context) {
+  void testBool3(TestContextWrapper context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND null", "false" );
 
@@ -12608,7 +12608,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCastBug524(TestingContext context) {
+  void testCastBug524(TestContextWrapper context) {
     assertExprReturns(context.createConnection(),
       "Cast(Int([Measures].[Store Sales] / 3600) as String)",
       "157" );
@@ -12680,7 +12680,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexOrExpr(TestingContext context) {
+  void testComplexOrExpr(TestContextWrapper context) {
     Connection connection = context.createConnection();
     switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
@@ -12736,7 +12736,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithValidArguments(TestingContext context) {
+  void testLeftFunctionWithValidArguments(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, 4)=\"Bell\") on 0 from sales",
@@ -12749,7 +12749,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithLengthValueZero(TestingContext context) {
+  void testLeftFunctionWithLengthValueZero(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, 0)=\"\" And "
@@ -12763,7 +12763,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithLengthValueEqualToStringLength(TestingContext context) {
+  void testLeftFunctionWithLengthValueEqualToStringLength(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, 10)=\"Bellingham\") "
@@ -12777,7 +12777,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithLengthMoreThanStringLength(TestingContext context) {
+  void testLeftFunctionWithLengthMoreThanStringLength(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, 20)=\"Bellingham\") "
@@ -12791,7 +12791,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithZeroLengthString(TestingContext context) {
+  void testLeftFunctionWithZeroLengthString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,Left(\"\", 20)=\"\" "
         + "And [Store].CURRENTMEMBER.Name = \"Bellingham\") "
@@ -12805,7 +12805,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeftFunctionWithNegativeLength(TestingContext context) {
+  void testLeftFunctionWithNegativeLength(TestContextWrapper context) {
     assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, -20)=\"Bellingham\") "
@@ -12817,7 +12817,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithValidArguments(TestingContext context) {
+  void testMidFunctionWithValidArguments(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12832,7 +12832,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithZeroLengthStringArgument(TestingContext context) {
+  void testMidFunctionWithZeroLengthStringArgument(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12847,7 +12847,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithLengthArgumentLargerThanStringLength(TestingContext context) {
+  void testMidFunctionWithLengthArgumentLargerThanStringLength(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12862,7 +12862,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithStartIndexGreaterThanStringLength(TestingContext context) {
+  void testMidFunctionWithStartIndexGreaterThanStringLength(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12877,7 +12877,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithStartIndexZeroFails(TestingContext context) {
+  void testMidFunctionWithStartIndexZeroFails(TestContextWrapper context) {
     // Note: SSAS 2005 treats start<=0 as 1, therefore gives different
     // result for this query. We favor the VBA spec over SSAS 2005.
     if ( Bug.Ssas2005Compatible ) {
@@ -12904,7 +12904,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithStartIndexOne(TestingContext context) {
+  void testMidFunctionWithStartIndexOne(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12919,7 +12919,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithNegativeStartIndex(TestingContext context) {
+  void testMidFunctionWithNegativeStartIndex(TestContextWrapper context) {
     assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12931,7 +12931,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithNegativeLength(TestingContext context) {
+  void testMidFunctionWithNegativeLength(TestContextWrapper context) {
     assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12943,7 +12943,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMidFunctionWithoutLength(TestingContext context) {
+  void testMidFunctionWithoutLength(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
@@ -12958,7 +12958,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLenFunctionWithNonEmptyString(TestingContext context) {
+  void testLenFunctionWithNonEmptyString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS, "
         + "Len([Store].CURRENTMEMBER.Name) = 3) on 0 from sales",
@@ -12971,7 +12971,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLenFunctionWithAnEmptyString(TestingContext context) {
+  void testLenFunctionWithAnEmptyString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,Len(\"\")=0 "
         + "And [Store].CURRENTMEMBER.Name = \"Bellingham\") "
@@ -12985,7 +12985,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLenFunctionWithNullString(TestingContext context) {
+  void testLenFunctionWithNullString(TestContextWrapper context) {
     // SSAS2005 returns 0
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Foo] as ' NULL '\n"
@@ -13003,7 +13003,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUCaseWithNonEmptyString(TestingContext context) {
+  void testUCaseWithNonEmptyString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS, "
         + " UCase([Store].CURRENTMEMBER.Name) = \"BELLINGHAM\") "
@@ -13017,7 +13017,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUCaseWithEmptyString(TestingContext context) {
+  void testUCaseWithEmptyString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS, "
         + " UCase(\"\") = \"\" "
@@ -13032,7 +13032,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUCaseWithNullString(TestingContext context) {
+  void testUCaseWithNullString(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS, "
         + " UCase(\"NULL\") = \"\" "
@@ -13045,7 +13045,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testUCaseWithNull(TestingContext context) {
+  void testUCaseWithNull(TestContextWrapper context) {
     try {
       executeQuery(context.createConnection(),
         "select filter([Store].MEMBERS, "
@@ -13066,7 +13066,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testInStrFunctionWithValidArguments(TestingContext context) {
+  void testInStrFunctionWithValidArguments(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,InStr(\"Bellingham\", \"ingha\")=5 "
         + "And [Store].CURRENTMEMBER.Name = \"Bellingham\") "
@@ -13080,7 +13080,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIifFWithBooleanBooleanAndNumericParameterForReturningTruePart(TestingContext context) {
+  void testIifFWithBooleanBooleanAndNumericParameterForReturningTruePart(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT Filter(Store.allmembers, "
         + "iif(measures.profit < 400000,"
@@ -13094,7 +13094,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIifWithBooleanBooleanAndNumericParameterForReturningFalsePart(TestingContext context) {
+  void testIifWithBooleanBooleanAndNumericParameterForReturningFalsePart(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT Filter([Store].[USA].[CA].[Beverly Hills].children, "
         + "iif(measures.profit > 400000,"
@@ -13108,7 +13108,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testIIFWithBooleanBooleanAndNumericParameterForReturningZero(TestingContext context) {
+  void testIIFWithBooleanBooleanAndNumericParameterForReturningZero(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT Filter(Store.allmembers, "
         + "iif(measures.profit > 400000,"
@@ -13120,7 +13120,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testInStrFunctionWithEmptyString1(TestingContext context) {
+  void testInStrFunctionWithEmptyString1(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,InStr(\"\", \"ingha\")=0 "
         + "And [Store].CURRENTMEMBER.Name = \"Bellingham\") "
@@ -13134,7 +13134,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testInStrFunctionWithEmptyString2(TestingContext context) {
+  void testInStrFunctionWithEmptyString2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select filter([Store].MEMBERS,InStr(\"Bellingham\", \"\")=1 "
         + "And [Store].CURRENTMEMBER.Name = \"Bellingham\") "
@@ -13148,7 +13148,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testGetCaptionUsingMemberDotCaption(TestingContext context) {
+  void testGetCaptionUsingMemberDotCaption(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "SELECT Filter(Store.allmembers, "
         + "[store].currentMember.caption = \"USA\") on 0 FROM SALES",
@@ -13166,7 +13166,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCache(TestingContext context) {
+  void testCache(TestContextWrapper context) {
     // test various data types: integer, string, member, set, tuple
     assertExprReturns(context.createConnection(), "Cache(1 + 2)", "3" );
     assertExprReturns(context.createConnection(), "Cache('foo' || 'bar')", "foobar" );
@@ -13196,7 +13196,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaBasic(TestingContext context) {
+  void testVbaBasic(TestContextWrapper context) {
     // Exp is a simple function: one arg.
     assertExprReturns(context.createConnection(), "exp(0)", "1" );
     assertExprReturns(context.createConnection(), "exp(1)", Math.E, 0.00000001 );
@@ -13205,14 +13205,14 @@ Intel platforms):
     }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaBasic1(TestingContext context) {
+  void testVbaBasic1(TestContextWrapper context) {
 	  // If any arg is null, result is null.
 	    assertExprReturns(context.createConnection(), "exp(null)", "" );
 
   }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaBasic2(TestingContext context) {
+  void testVbaBasic2(TestContextWrapper context) {
 	  // If any arg is null, result is null.
 	    assertExprReturns(context.createConnection(), "exp(cast(null as numeric))", "" );
 
@@ -13221,7 +13221,7 @@ Intel platforms):
   // Test a VBA function with variable number of args.
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaOverloading(TestingContext context) {
+  void testVbaOverloading(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "replace('xyzxyz', 'xy', 'a')", "azaz" );
     assertExprReturns(context.createConnection(), "replace('xyzxyz', 'xy', 'a', 2)", "xyzaz" );
     assertExprReturns(context.createConnection(), "replace('xyzxyz', 'xy', 'a', 1, 1)", "azxyz" );
@@ -13230,7 +13230,7 @@ Intel platforms):
   // Test VBA exception handling
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaExceptions(TestingContext context) {
+  void testVbaExceptions(TestContextWrapper context) {
     assertExprThrows(context,
       "right(\"abc\", -4)",
       Util.IBM_JVM
@@ -13241,7 +13241,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVbaDateTime(TestingContext context) {
+  void testVbaDateTime(TestContextWrapper context) {
     // function which returns date
     assertExprReturns(context.createConnection(),
       "Format(DateSerial(2006, 4, 29), \"Long Date\")",
@@ -13252,14 +13252,14 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExcelPi(TestingContext context) {
+  void testExcelPi(TestContextWrapper context) {
     // The PI function is defined in the Excel class.
     assertExprReturns(context.createConnection(), "Pi()", "3" );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExcelPower(TestingContext context) {
+  void testExcelPower(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "Power(8, 0.333333)", 2.0, 0.01 );
     assertExprReturns(context.createConnection(), "Power(-2, 0.5)", Double.NaN, 0.001 );
   }
@@ -13270,7 +13270,7 @@ Intel platforms):
   // conditional path.
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug1881739(TestingContext context) {
+  void testBug1881739(TestContextWrapper context) {
     assertExprReturns(context.createConnection(), "LEFT(\"TEST\", LEN(\"TEST\"))", "TEST" );
   }
 
@@ -13280,7 +13280,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCubeTimeDimensionFails(TestingContext context) {
+  void testCubeTimeDimensionFails(TestContextWrapper context) {
     assertQueryThrows(context.createConnection(),
       "select LastPeriods(1) on columns from [Store]",
       "'LastPeriods', no time dimension" );
@@ -13309,7 +13309,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterEmpty(TestingContext context) {
+  void testFilterEmpty(TestContextWrapper context) {
     // Unlike "Descendants(<set>, ...)", we do not need to know the precise
     // type of the set, therefore it is OK if the set is empty.
     assertAxisReturns(context.createConnection(),
@@ -13322,7 +13322,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterCalcSlicer(TestingContext context) {
+  void testFilterCalcSlicer(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with member [Time].[Time].[Date Range] as \n"
         + "'Aggregate({[Time].[1997].[Q1]:[Time].[1997].[Q3]})'\n"
@@ -13375,7 +13375,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsMembersAll(TestingContext context) {
+  void testExistsMembersAll(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  {[Customers].[All Customers],\n"
@@ -13403,7 +13403,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsMembersLevel2(TestingContext context) {
+  void testExistsMembersLevel2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  {[Customers].[All Customers],\n"
@@ -13425,7 +13425,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsWithImplicitAllMember(TestingContext context) {
+  void testExistsWithImplicitAllMember(TestContextWrapper context) {
     // the tuple in the second arg in this case should implicitly
     // contain [Customers].[All Customers], so the whole tuple list
     // from the first arg should be returned.
@@ -13463,7 +13463,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsWithMultipleHierarchies(TestingContext context) {
+  void testExistsWithMultipleHierarchies(TestContextWrapper context) {
     // tests queries w/ a multi-hierarchy dim in either or both args.
     assertQueryReturns(context.createConnection(),
       "select exists( "
@@ -13508,7 +13508,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsWithDefaultNonAllMember(TestingContext context) {
+  void testExistsWithDefaultNonAllMember(TestContextWrapper context) {
     // default mem for Time is 1997
 
     // non-all default on right side.
@@ -13551,7 +13551,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsMembers2Hierarchies(TestingContext context) {
+  void testExistsMembers2Hierarchies(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  {[Customers].[All Customers],\n"
@@ -13585,7 +13585,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsTuplesAll(TestingContext context) {
+  void testExistsTuplesAll(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  crossjoin({[Product].[All Products]},{[Customers].[All Customers]}),\n"
@@ -13600,7 +13600,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsTuplesLevel2(TestingContext context) {
+  void testExistsTuplesLevel2(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  crossjoin({[Product].[All Products]},{[Customers].[All Customers].Children}),\n"
@@ -13615,7 +13615,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsTuplesLevel23(TestingContext context) {
+  void testExistsTuplesLevel23(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  crossjoin({[Customers].[State Province].Members}, {[Product].[All Products]}),\n"
@@ -13634,7 +13634,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsTuples2Dim(TestingContext context) {
+  void testExistsTuples2Dim(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  crossjoin({[Customers].[State Province].Members}, {[Product].[Product Family].Members}),\n"
@@ -13653,7 +13653,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistsTuplesDiffDim(TestingContext context) {
+  void testExistsTuplesDiffDim(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "select exists(\n"
         + "  crossjoin(\n"
@@ -13682,7 +13682,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexQuery(TestingContext context) {
+  void testComplexQuery(TestContextWrapper context) {
     final String expected =
       "Axis #0:\n"
         + "{}\n"
@@ -13777,7 +13777,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDateParameter(TestingContext context) throws Exception {
+  void testDateParameter(TestContextWrapper context) throws Exception {
     String query = "SELECT"
       + " {[Measures].[Unit Sales]} ON COLUMNS,"
       + " Order([Gender].Members,"
@@ -13806,7 +13806,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizeExcept(TestingContext context) throws Exception {
+  void testHierarchizeExcept(TestContextWrapper context) throws Exception {
     final String[] mdxA =
       new String[] {
         "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS, Hierarchize(Except({[Customers].[USA]"
@@ -13975,7 +13975,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopPercentWithAlias(TestingContext context) {
+  void testTopPercentWithAlias(TestContextWrapper context) {
     final String queryWithoutAlias =
       "select\n"
         + " {[Measures].[Store Cost]}on rows,\n"
@@ -14004,7 +14004,7 @@ Intel platforms):
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian_1187(TestingContext context) {
+  void testMondrian_1187(TestContextWrapper context) {
     final String queryWithoutAlias =
       "WITH\n" + "SET [Top Count] AS\n"
         + "{\n" + "TOPCOUNT(\n" + "DISTINCT([Customers].[Name].Members),\n"
@@ -14025,7 +14025,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_BaseBase(TestingContext context) {
+  void testComplexSlicer_BaseBase(TestContextWrapper context) {
     String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
@@ -14056,7 +14056,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc(TestingContext context) {
+  void testComplexSlicer_Calc(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14093,7 +14093,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_CalcBase(TestingContext context) {
+  void testComplexSlicer_CalcBase(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14131,7 +14131,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_BaseCalc(TestingContext context) {
+  void testComplexSlicer_BaseCalc(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14169,7 +14169,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_Base(TestingContext context) {
+  void testComplexSlicer_Calc_Base(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14193,7 +14193,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_Calc(TestingContext context) {
+  void testComplexSlicer_Calc_Calc(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14221,7 +14221,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicerWith_Calc(TestingContext context) {
+  void testComplexSlicerWith_Calc(TestContextWrapper context) {
     String query =
       "with "
         + "member [Time].[H1 1997] as 'Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2])', $member_scope = \"CUBE\","
@@ -14254,7 +14254,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicerWith_CalcBase(TestingContext context) {
+  void testComplexSlicerWith_CalcBase(TestContextWrapper context) {
     String query =
       "with "
         + "member [Time].[H1 1997] as 'Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2])', $member_scope = \"CUBE\","
@@ -14288,7 +14288,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicerWith_Calc_Calc(TestingContext context) {
+  void testComplexSlicerWith_Calc_Calc(TestContextWrapper context) {
     String query =
       "with "
         + "member [Time].[H1 1997] as 'Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2])', $member_scope = \"CUBE\","
@@ -14310,7 +14310,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Base_Base(TestingContext context) {
+  void testComplexSlicer_X_Base_Base(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14334,7 +14334,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Calc_Base(TestingContext context) {
+  void testComplexSlicer_X_Calc_Base(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14358,7 +14358,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Calc_Calc(TestingContext context) {
+  void testComplexSlicer_X_Calc_Calc(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14386,7 +14386,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_BaseBase_Base(TestingContext context) {
+  void testComplexSlicer_X_BaseBase_Base(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14411,7 +14411,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_BaseBaseBase_BaseBase(TestingContext context) {
+  void testComplexSlicer_X_BaseBaseBase_BaseBase(TestContextWrapper context) {
     String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
@@ -14434,7 +14434,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_CalcBase_Base(TestingContext context) {
+  void testComplexSlicer_X_CalcBase_Base(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14459,7 +14459,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_CalcBase_BaseBase(TestingContext context) {
+  void testComplexSlicer_X_CalcBase_BaseBase(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14487,7 +14487,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_ComplexAxis(TestingContext context) {
+  void testComplexSlicer_Calc_ComplexAxis(TestContextWrapper context) {
 
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -14522,7 +14522,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Unsupported(TestingContext context) {
+  void testComplexSlicer_Unsupported(TestContextWrapper context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14543,7 +14543,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExisting(TestingContext context) {
+  void testExisting(TestContextWrapper context) {
     // basic test
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -14597,7 +14597,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingCalculatedMeasure(TestingContext context) {
+  void testExistingCalculatedMeasure(TestContextWrapper context) {
     // sorry about the mess, this came from Analyzer
     assertQueryReturns(context.createConnection(),
       "WITH \n"
@@ -14634,7 +14634,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingCalculatedMeasureCompoundSlicer(TestingContext context) {
+  void testExistingCalculatedMeasureCompoundSlicer(TestContextWrapper context) {
     // basic test
     assertQueryReturns(context.createConnection(),
       "with \n"
@@ -14666,7 +14666,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingAggSet(TestingContext context) {
+  void testExistingAggSet(TestContextWrapper context) {
     // aggregate simple set
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER [Measures].[Edible Sales] AS \n"
@@ -14696,7 +14696,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingGenerateAgg(TestingContext context) {
+  void testExistingGenerateAgg(TestContextWrapper context) {
     // generate overrides existing context
     assertQueryReturns(context.createConnection(),
       "WITH SET BestOfFamilies AS\n"
@@ -14731,7 +14731,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingGenerateOverrides(TestingContext context) {
+  void testExistingGenerateOverrides(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "WITH MEMBER Measures.[StaticSumNC] AS\n"
         + " 'Sum(Generate([Product].[Non-Consumable],"
@@ -14774,7 +14774,7 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExistingVirtualCube(TestingContext context) {
+  void testExistingVirtualCube(TestContextWrapper context) {
     // this should ideally return 14 for both,
     // but being coherent with exists is good enough
     assertQueryReturns(context.createConnection(),

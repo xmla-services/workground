@@ -17,7 +17,7 @@ import java.io.IOException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ class NullMemberRepresentationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testClosingPeriodMemberLeafWithCustomNullRepresentation(TestingContext context) {
+    void testClosingPeriodMemberLeafWithCustomNullRepresentation(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as ' ClosingPeriod().uniquename '\n"
             + "select {[Measures].[Foo]} on columns,\n"
@@ -59,7 +59,7 @@ class NullMemberRepresentationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testItemMemberWithCustomNullMemberRepresentation(TestingContext context)
+    void testItemMemberWithCustomNullMemberRepresentation(TestContextWrapper context)
         throws IOException
     {
         Connection connection = context.createConnection();
@@ -71,7 +71,7 @@ class NullMemberRepresentationTest {
             "[Time].[" + getNullMemberRepresentation() + "]");
     }
 
-    void testNullMemberWithCustomRepresentation(TestingContext context) throws IOException {
+    void testNullMemberWithCustomRepresentation(TestContextWrapper context) throws IOException {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
             "[Gender].[All Gender].Parent.UniqueName",

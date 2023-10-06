@@ -24,7 +24,7 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -125,13 +125,13 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     @Override
-    protected void prepareContext(TestingContext context) {
+    protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDefaultRecognition(TestingContext context) {
+    void testDefaultRecognition(TestContextWrapper context) {
         prepareContext(context);
         String sqlMysql = ""
                 + "select\n"
@@ -153,7 +153,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggName(TestingContext context) {
+    void testAggName(TestContextWrapper context) {
     	prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -190,7 +190,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testFactColumnNotExists(TestingContext context) {
+    void testFactColumnNotExists(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -219,7 +219,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnUpperCase(TestingContext context) {
+    void testMeasureFactColumnUpperCase(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -256,7 +256,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnNotExist(TestingContext context) {
+    void testMeasureFactColumnNotExist(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -293,7 +293,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testWithoutMeasureFactColumnElement(TestingContext context) {
+    void testWithoutMeasureFactColumnElement(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -327,7 +327,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnAndAggFactCountNotExist(TestingContext context) {
+    void testMeasureFactColumnAndAggFactCountNotExist(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
@@ -356,7 +356,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggNameDifferentColumnNames(TestingContext context) {
+    void testAggNameDifferentColumnNames(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
@@ -393,7 +393,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggDivideByZero(TestingContext context) {
+    void testAggDivideByZero(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
@@ -441,7 +441,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggPattern(TestingContext context) {
+    void testAggPattern(TestContextWrapper context) {
         prepareContext(context);
         String agg = ""
                 + "<AggPattern pattern=\"agg_c_6_fact_csv_2016\">\n"
@@ -483,7 +483,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
         return SCHEMA.replace("%AGG_DESCRIPTION_HERE%", agg);
     }
 
-    private void verifySameAggAndNot(TestingContext context, String query, String schema) {
+    private void verifySameAggAndNot(TestContextWrapper context, String query, String schema) {
         withSchema(context, schema);
         Result resultWithAgg =
                 executeQuery(query, context.createConnection());
@@ -499,7 +499,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     private void verifySameAggAndNot
-            (TestingContext context, String query, String schema, String aggSql) {
+            (TestContextWrapper context, String query, String schema, String aggSql) {
         enableAggregates();
         // check that agg tables are used
         assertQuerySql(context, QUERY, schema, aggSql);
@@ -508,7 +508,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     private void assertQuerySql
-            (TestingContext context, String query, String schema, String sql) {
+            (TestContextWrapper context, String query, String schema, String sql) {
 
         withSchema(context, schema);
         //withFreshConnection();

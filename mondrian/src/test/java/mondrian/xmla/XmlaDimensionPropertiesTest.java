@@ -16,7 +16,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -44,19 +44,19 @@ class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOneHierarchyProperties(TestingContext context) throws Exception {
+    void testOneHierarchyProperties(TestContextWrapper context) throws Exception {
         executeTest(context.createConnection(), "HR");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTwoHierarchiesProperties(TestingContext context) throws Exception {
+    void testTwoHierarchiesProperties(TestContextWrapper context) throws Exception {
         executeTest(context.createConnection(),"HR");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian2342(TestingContext context) throws Exception {
+    void testMondrian2342(TestContextWrapper context) throws Exception {
         executeTest(context.createConnection(), "Sales");
     }
 

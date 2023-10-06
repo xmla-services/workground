@@ -39,7 +39,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -74,7 +74,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testProcessFormatStringAttributeToIgnoreNullFormatString(TestingContext context) {
+    void testProcessFormatStringAttributeToIgnoreNullFormatString(TestContextWrapper context) {
         RolapCube cube =
             (RolapCube) context.createConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
@@ -85,7 +85,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testProcessFormatStringAttribute(TestingContext context) {
+    void testProcessFormatStringAttribute(TestContextWrapper context) {
         RolapCube cube =
             (RolapCube) context.createConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
@@ -101,7 +101,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersWithNoRole(TestingContext context) {
+    void testGetCalculatedMembersWithNoRole(TestContextWrapper context) {
         String[] expectedCalculatedMembers = {
             "[Measures].[Profit]",
             "[Measures].[Average Warehouse Sale]",
@@ -130,7 +130,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersForCaliforniaManager(TestingContext context) {
+    void testGetCalculatedMembersForCaliforniaManager(TestContextWrapper context) {
         String[] expectedCalculatedMembers = new String[] {
             "[Measures].[Profit]", "[Measures].[Profit last Period]",
             "[Measures].[Profit Growth]"
@@ -158,7 +158,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembers(TestingContext context) {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembers(TestContextWrapper context) {
         String[] expectedCalculatedMembers = {
             "[Measures].[Profit]",
             "[Measures].[Profit last Period]",
@@ -190,7 +190,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestingContext context)
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestContextWrapper context)
     {
         String[] expectedCalculatedMembersFromProduct = {
             "[Product].[~Missing]"
@@ -234,7 +234,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel(TestingContext context) {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel(TestContextWrapper context) {
         String[] expectedCalculatedMembersFromProduct = new String[]{
             "[Product].[~Missing]"
         };
@@ -278,7 +278,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonJoiningDimensions(TestingContext context) {
+    void testNonJoiningDimensions(TestContextWrapper context) {
 
         Connection connection = context.createConnection();
 
@@ -312,7 +312,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testRolapCubeDimensionEquality(TestingContext context) {
+    void testRolapCubeDimensionEquality(TestContextWrapper context) {
 
 
         Connection connection1 = context.createConnection();
@@ -357,7 +357,7 @@ class RolapCubeTest {
         }
     }
 
-    void createTestContextWithAdditionalMembersAndARole(TestingContext context) {
+    void createTestContextWithAdditionalMembersAndARole(TestContextWrapper context) {
         String nonAccessibleMember =
             "  <CalculatedMember name=\"~Missing\" dimension=\"Gender\">\n"
             + "    <Formula>100</Formula>\n"
@@ -389,7 +389,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBasedCubesForVirtualCube(TestingContext context) {
+    void testBasedCubesForVirtualCube(TestContextWrapper context) {
       Connection connection = context.createConnection();
       RolapCube cubeSales =
           (RolapCube) connection.getSchema().lookupCube("Sales", false);
@@ -412,7 +412,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBasedCubesForNotVirtualCubeIsThisCube(TestingContext context) {
+    void testBasedCubesForNotVirtualCubeIsThisCube(TestContextWrapper context) {
       RolapCube cubeSales =
           (RolapCube) context.createConnection().getSchema().lookupCube("Sales", false);
       assertNotNull(cubeSales);

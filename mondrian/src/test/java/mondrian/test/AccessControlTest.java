@@ -43,7 +43,7 @@ import org.olap4j.mdx.IdentifierNode;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -95,7 +95,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testSchemaReader(TestingContext foodMartContext) {
+    void testSchemaReader(TestContextWrapper foodMartContext) {
         final Connection connection = foodMartContext.createConnection();
         Schema schema = connection.getSchema();
         final boolean fail = true;
@@ -110,7 +110,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantDimensionNone(TestingContext foodMartContext) {
+    void testGrantDimensionNone(TestContextWrapper foodMartContext) {
         final Connection connection = foodMartContext.createConnection();
         RoleImpl role = ((RoleImpl) connection.getRole()).makeMutableClone();
         Schema schema = connection.getSchema();
@@ -132,7 +132,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRestrictMeasures(TestingContext foodMartContext) {
+    void testRestrictMeasures(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(
 			baseSchema, null, null, null, null, null,
@@ -195,7 +195,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRestrictMeasuresHierarchy_InTwoRoles(TestingContext foodMartContext) {
+    void testRestrictMeasuresHierarchy_InTwoRoles(TestContextWrapper foodMartContext) {
       String schema =
           "<Schema name=\"FoodMart.DimAndMeasure.Role\">\n"
           + " <Dimension name=\"WarehouseShared\">\n"
@@ -302,7 +302,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRestrictLevelsAnalyzer3283(TestingContext foodMartContext) {
+    void testRestrictLevelsAnalyzer3283(TestContextWrapper foodMartContext) {
         String dimensionsDef =
             "    <Dimension visible=\"true\" foreignKey=\"customer_id\" highCardinality=\"false\" name=\"Customers\">\n"
             + "      <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
@@ -416,7 +416,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRoleMemberAccessNonExistentMemberFails(TestingContext foodMartContext) {
+    void testRoleMemberAccessNonExistentMemberFails(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -439,7 +439,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRoleMemberAccess(TestingContext foodMartContext) {
+    void testRoleMemberAccess(TestContextWrapper foodMartContext) {
         final Connection connection = getRestrictedConnection(foodMartContext);
         // because CA has access
         assertMemberAccess(connection, Access.CUSTOM, "[Store].[USA]");
@@ -537,7 +537,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy1a(TestingContext foodMartContext) {
+    void testGrantHierarchy1a(TestContextWrapper foodMartContext) {
         // assert: can access Mexico (explicitly granted)
         // assert: can not access Canada (explicitly denied)
         // assert: can access USA (rule 3 - parent of allowed member San
@@ -551,7 +551,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy1aAllMembers(TestingContext foodMartContext) {
+    void testGrantHierarchy1aAllMembers(TestContextWrapper foodMartContext) {
         // assert: can access Mexico (explicitly granted)
         // assert: can not access Canada (explicitly denied)
         // assert: can access USA (rule 3 - parent of allowed member San
@@ -565,7 +565,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy1b(TestingContext foodMartContext) {
+    void testGrantHierarchy1b(TestContextWrapper foodMartContext) {
         // can access Mexico (explicitly granted) which is the first accessible
         // one
         Connection connection = getRestrictedConnection(foodMartContext);
@@ -577,7 +577,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy1c(TestingContext foodMartContext) {
+    void testGrantHierarchy1c(TestContextWrapper foodMartContext) {
         // the root element is All Customers
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisReturns(
@@ -588,7 +588,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy2(TestingContext foodMartContext) {
+    void testGrantHierarchy2(TestContextWrapper foodMartContext) {
         // assert: can access California (parent of allowed member)
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisReturns(
@@ -608,7 +608,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy3(TestingContext foodMartContext) {
+    void testGrantHierarchy3(TestContextWrapper foodMartContext) {
         // assert: can not access Washington (child of denied member)
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisThrows(connection, "[Store].[USA].[WA]", "not found");
@@ -616,7 +616,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy4(TestingContext foodMartContext) {
+    void testGrantHierarchy4(TestContextWrapper foodMartContext) {
         // assert: can not access Oregon (rule 1 - order matters)
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisThrows(connection,
@@ -625,7 +625,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy5(TestingContext foodMartContext) {
+    void testGrantHierarchy5(TestContextWrapper foodMartContext) {
         // assert: can not access All (above top level)
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisThrows(connection, "[Store].[All Stores]", "not found");
@@ -671,7 +671,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy6(TestingContext foodMartContext) {
+    void testGrantHierarchy6(TestContextWrapper foodMartContext) {
         // assert: parent if at top level is null
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisReturns(
@@ -682,7 +682,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy7(TestingContext foodMartContext) {
+    void testGrantHierarchy7(TestContextWrapper foodMartContext) {
         // assert: members above top level do not exist
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertAxisThrows(
@@ -693,7 +693,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy8(TestingContext foodMartContext) {
+    void testGrantHierarchy8(TestContextWrapper foodMartContext) {
         // assert: can not access Catherine Abel in San Francisco (below bottom
         // level)
         Connection connection = getRestrictedConnection(foodMartContext);
@@ -712,7 +712,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy8AllMembers(TestingContext foodMartContext) {
+    void testGrantHierarchy8AllMembers(TestContextWrapper foodMartContext) {
         // assert: can not access Catherine Abel in San Francisco (below bottom
         // level)
         Connection connection = getRestrictedConnection(foodMartContext);
@@ -735,7 +735,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian_1201_MultipleMembersInRoleAccessControl(TestingContext foodMartContext) {
+    void testBugMondrian_1201_MultipleMembersInRoleAccessControl(TestContextWrapper foodMartContext) {
         String test_1201_Roles =
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -861,7 +861,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian_2586_RaggedDimMembersShouldBeVisible(TestingContext foodMartContext) {
+    void testBugMondrian_2586_RaggedDimMembersShouldBeVisible(TestContextWrapper foodMartContext) {
       String raggedUser =
           "<Role name=\"Sales Ragged\">\n"
           + "  <SchemaGrant access=\"none\">\n"
@@ -899,7 +899,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian_1201_CacheAwareOfRoleAccessControl(TestingContext foodMartContext) {
+    void testBugMondrian_1201_CacheAwareOfRoleAccessControl(TestContextWrapper foodMartContext) {
         String test_1201_Roles =
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -985,7 +985,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian1127OneSlicerOnly(TestingContext foodMartContext) {
+    void testBugMondrian1127OneSlicerOnly(TestContextWrapper foodMartContext) {
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertQueryReturns(
     		connection,
@@ -1029,7 +1029,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian1127MultipleSlicers(TestingContext foodMartContext) {
+    void testBugMondrian1127MultipleSlicers(TestContextWrapper foodMartContext) {
         Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertQueryReturns(
     		connection,
@@ -1078,7 +1078,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchy9(TestingContext foodMartContext) {
+    void testGrantHierarchy9(TestContextWrapper foodMartContext) {
         // Analysis services doesn't allow aggregation within calculated
         // measures, so use the following query to generate the results:
         //
@@ -1112,7 +1112,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGrantHierarchyA(TestingContext foodMartContext) {
+    void testGrantHierarchyA(TestContextWrapper foodMartContext) {
     	final Connection connection = getRestrictedConnection(foodMartContext);
         // assert: totals for USA include missing cells
     	TestUtil.assertQueryReturns(
@@ -1133,7 +1133,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void _testSharedObjectsInGrantMappingsBug(TestingContext foodMartContext) {
+    public void _testSharedObjectsInGrantMappingsBug(TestContextWrapper foodMartContext) {
         boolean mustGet = true;
         Connection connection = foodMartContext.createConnection();
         Schema schema = connection.getSchema();
@@ -1165,12 +1165,12 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNoAccessToCube(TestingContext foodMartContext) {
+    void testNoAccessToCube(TestContextWrapper foodMartContext) {
         final Connection connection = getRestrictedConnection(foodMartContext);
         TestUtil.assertQueryThrows(connection, "select from [HR]", "MDX cube 'HR' not found");
     }
 
-    private Connection getRestrictedConnection(TestingContext foodMartContext) {
+    private Connection getRestrictedConnection(TestContextWrapper foodMartContext) {
         return getRestrictedConnection(foodMartContext, true);
     }
 
@@ -1184,7 +1184,7 @@ class AccessControlTest {
      *
      * @return restricted connection
      */
-    private Connection getRestrictedConnection(TestingContext foodMartContext, boolean restrictCustomers) {
+    private Connection getRestrictedConnection(TestContextWrapper foodMartContext, boolean restrictCustomers) {
         Connection connection = foodMartContext.createConnection();
         RoleImpl role = new RoleImpl();
         Schema schema = connection.getSchema();
@@ -1264,7 +1264,7 @@ class AccessControlTest {
      * Test context where the [Store] hierarchy has restricted access
      * and cell values are rolled up with 'partial' policy.
      */
-    private void setRollupTestContext(TestingContext foodMartContext) {
+    private void setRollupTestContext(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
@@ -1291,7 +1291,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyBasic(TestingContext foodMartContext) {
+    void testRollupPolicyBasic(TestContextWrapper foodMartContext) {
         setRollupTestContext(foodMartContext);
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -1316,7 +1316,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyAll(TestingContext foodMartContext) {
+    void testRollupPolicyAll(TestContextWrapper foodMartContext) {
         setRollupTestContext(foodMartContext);
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertExprReturns(
@@ -1331,7 +1331,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyAllAsDefault(TestingContext foodMartContext) {
+    void testRollupPolicyAllAsDefault(TestContextWrapper foodMartContext) {
         setRollupTestContext(foodMartContext);
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertExprReturns(
@@ -1346,7 +1346,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyAllAsParent(TestingContext foodMartContext) {
+    void testRollupPolicyAllAsParent(TestContextWrapper foodMartContext) {
         setRollupTestContext(foodMartContext);
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertExprReturns(
@@ -1364,7 +1364,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testUnusedAccessControlledDimension(TestingContext foodMartContext) {
+    void testUnusedAccessControlledDimension(TestContextWrapper foodMartContext) {
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -1396,7 +1396,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupBottomLevel(TestingContext foodMartContext) {
+    void testRollupBottomLevel(TestContextWrapper foodMartContext) {
         rollupPolicyBottom(
     		foodMartContext, RollupPolicy.FULL, "74,748", "36,759", "266,773");
         rollupPolicyBottom(
@@ -1405,7 +1405,7 @@ class AccessControlTest {
     }
 
     private void rollupPolicyBottom(
-		TestingContext foodMartContext,
+		TestContextWrapper foodMartContext,
         RollupPolicy rollupPolicy,
         String v1,
         String v2,
@@ -1485,7 +1485,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyNegative(TestingContext foodMartContext) {
+    void testRollupPolicyNegative(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1512,7 +1512,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyGreatGrandchildInvisible(TestingContext foodMartContext) {
+    void testRollupPolicyGreatGrandchildInvisible(TestContextWrapper foodMartContext) {
         rollupPolicyGreatGrandchildInvisible(
     		foodMartContext, RollupPolicy.FULL, "266,773", "74,748");
         rollupPolicyGreatGrandchildInvisible(
@@ -1522,7 +1522,7 @@ class AccessControlTest {
     }
 
     private void rollupPolicyGreatGrandchildInvisible(
-		TestingContext foodMartContext,
+		TestContextWrapper foodMartContext,
         RollupPolicy policy,
         String v1,
         String v2)
@@ -1560,7 +1560,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicySimultaneous(TestingContext foodMartContext) {
+    void testRollupPolicySimultaneous(TestContextWrapper foodMartContext) {
 //         note that v2 is different for full vs partial, v3 is the same
         rollupPolicySimultaneous(
     		foodMartContext, RollupPolicy.FULL, "266,773", "74,748", "25,635");
@@ -1571,7 +1571,7 @@ class AccessControlTest {
     }
 
     private void rollupPolicySimultaneous(
-		TestingContext foodMartContext,
+		TestContextWrapper foodMartContext,
         RollupPolicy policy,
         String v1,
         String v2,
@@ -1627,7 +1627,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testUnionRole(TestingContext foodMartContext) {
+    void testUnionRole(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1812,7 +1812,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testUnionOfUnionRole(TestingContext foodMartContext) {
+    void testUnionOfUnionRole(TestContextWrapper foodMartContext) {
         String roleDefs =
             "<Role name=\"USA manager\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -1868,7 +1868,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testUnionRoleHasInaccessibleDescendants(TestingContext foodMartContext) throws Exception {
+    void testUnionRoleHasInaccessibleDescendants(TestContextWrapper foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1914,7 +1914,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRoleUnionWithLevelRestrictions(TestingContext foodMartContext)  throws Exception {
+    void testRoleUnionWithLevelRestrictions(TestContextWrapper foodMartContext)  throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1998,7 +1998,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNonEmptyAccess(TestingContext foodMartContext) {
+    void testNonEmptyAccess(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -2046,7 +2046,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNonEmptyAccessLevelMembers(TestingContext foodMartContext) {
+    void testNonEmptyAccessLevelMembers(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2104,7 +2104,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGoodman(TestingContext foodMartContext) {
+    void testGoodman(TestContextWrapper foodMartContext) {
         final String query = "select {[Measures].[Unit Sales]} ON COLUMNS,\n"
             + "Hierarchize(Union(Union(Union({[Store].[All Stores]},"
             + " [Store].[All Stores].Children),"
@@ -2204,7 +2204,7 @@ class AccessControlTest {
         checkQuery(connection, query);
     }
 
-    private static void setGoodmanContext(TestingContext foodMartContext, final RollupPolicy policy) {
+    private static void setGoodmanContext(TestContextWrapper foodMartContext, final RollupPolicy policy) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -2232,7 +2232,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian402(TestingContext foodMartContext) {
+    void testBugMondrian402(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -2260,7 +2260,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testPartialRollupParentChildHierarchy(TestingContext foodMartContext) {
+    void testPartialRollupParentChildHierarchy(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2319,7 +2319,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testParentChildUserDefinedRole(TestingContext foodMartContext)
+    void testParentChildUserDefinedRole(TestContextWrapper foodMartContext)
     {
         final Connection connection = foodMartContext.createConnection();
         final Role savedRole = connection.getRole();
@@ -2391,7 +2391,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugBiserver1574(TestingContext foodMartContext) {
+    void testBugBiserver1574(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
@@ -2423,7 +2423,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian435(TestingContext foodMartContext) {
+    void testBugMondrian435(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
@@ -2572,7 +2572,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian436(TestingContext foodMartContext) {
+    void testBugMondrian436(TestContextWrapper foodMartContext) {
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         propSaver.set(propSaver.properties.EnableNativeFilter, true);
         propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
@@ -2586,7 +2586,7 @@ class AccessControlTest {
         checkBugMondrian436(foodMartContext);
     }
 
-    private void checkBugMondrian436(TestingContext foodMartContext) {
+    private void checkBugMondrian436(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
@@ -2643,7 +2643,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testVirtualCube(TestingContext foodMartContext) {
+    void testVirtualCube(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2703,7 +2703,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugBiserver2491(TestingContext foodMartContext) {
+    void testBugBiserver2491(TestContextWrapper foodMartContext) {
         final String BiServer2491Role2 =
             "<Role name=\"role2\">"
             + " <SchemaGrant access=\"none\">"
@@ -2766,7 +2766,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian622(TestingContext foodMartContext) {
+    void testBugMondrian622(TestContextWrapper foodMartContext) {
         StringBuilder buf = new StringBuilder();
         StringBuilder buf2 = new StringBuilder();
         final String cubeName = "Sales with multiple customers";
@@ -2862,7 +2862,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian694(TestingContext foodMartContext) {
+    void testBugMondrian694(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -2956,7 +2956,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian722(TestingContext foodMartContext) {
+    void testBugMondrian722(TestContextWrapper foodMartContext) {
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembers,
             true);
@@ -3010,7 +3010,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCalcMemberLevel(TestingContext foodMartContext) {
+    void testCalcMemberLevel(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkCalcMemberLevel(connection);
 
@@ -3038,7 +3038,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian568(TestingContext foodMartContext) {
+    void testBugMondrian568(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -3101,7 +3101,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian935(TestingContext foodMartContext) {
+    void testBugMondrian935(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -3143,7 +3143,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDimensionGrant(TestingContext foodMartContext) throws Exception {
+    void testDimensionGrant(TestContextWrapper foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -3289,7 +3289,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1030(TestingContext foodMartContext) throws Exception {
+    void testMondrian1030(TestContextWrapper foodMartContext) throws Exception {
         final String mdx1 =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Customers],[*BASE_MEMBERS_Product])'\n"
@@ -3497,7 +3497,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian1030_2(TestingContext foodMartContext) {
+    void testBugMondrian1030_2(TestContextWrapper foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -3536,7 +3536,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1091(TestingContext foodMartContext) throws Exception {
+    void testMondrian1091(TestContextWrapper foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -3608,7 +3608,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1259(TestingContext foodMartContext) throws Exception {
+    void testMondrian1259(TestContextWrapper foodMartContext) throws Exception {
         final String mdx =
             "select non empty {[Store].Members} on columns from [Sales]";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
@@ -3689,7 +3689,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1295(TestingContext foodMartContext) throws Exception {
+    void testMondrian1295(TestContextWrapper foodMartContext) throws Exception {
         final String mdx =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Time],[*BASE_MEMBERS_Product])'\n"
@@ -3763,7 +3763,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian936(TestingContext foodMartContext) throws Exception {
+    void testMondrian936(TestContextWrapper foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -3846,7 +3846,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1434(TestingContext foodMartContext) {
+    void testMondrian1434(TestContextWrapper foodMartContext) {
         String roleDef =
             "<Role name=\"dev\">"
             + "    <SchemaGrant access=\"all\">"
@@ -3906,7 +3906,7 @@ class AccessControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1486(TestingContext foodMartContext) throws Exception {
+    void testMondrian1486(TestContextWrapper foodMartContext) throws Exception {
         final String mdx =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Gender],[*BASE_MEMBERS_Marital Status])'\n"
@@ -3953,7 +3953,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollupPolicyWithNative(TestingContext foodMartContext) {
+    void testRollupPolicyWithNative(TestContextWrapper foodMartContext) {
         // Verifies limited role-restricted results using
         // all variations of rollup policy
         // Also verifies consistent results with a non-all default member.
@@ -4095,7 +4095,7 @@ class AccessControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testValidMeasureWithRestrictedCubes(TestingContext foodMartContext) {
+    void testValidMeasureWithRestrictedCubes(TestContextWrapper foodMartContext) {
         //http://jira.pentaho.com/browse/MONDRIAN-1616
         final String roleDefs =
             "<Role name=\"noBaseCubes\">\n"

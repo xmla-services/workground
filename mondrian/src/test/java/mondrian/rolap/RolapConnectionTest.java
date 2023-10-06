@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -74,7 +74,7 @@ class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testPooledConnectionWithProperties(TestingContext context) throws SQLException {
+    void testPooledConnectionWithProperties(TestContextWrapper context) throws SQLException {
         Util.PropertyList properties = baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -123,14 +123,14 @@ class RolapConnectionTest {
         }
     }
 
-	private Util.PropertyList baseProperties(TestingContext context) {
+	private Util.PropertyList baseProperties(TestContextWrapper context) {
 		Util.PropertyList properties =Util.parseConnectString( context.getOlapConnectString());
 		return properties;
 	}
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNonPooledConnectionWithProperties(TestingContext context) {
+    void testNonPooledConnectionWithProperties(TestContextWrapper context) {
         Util.PropertyList properties =baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -214,7 +214,7 @@ class RolapConnectionTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testFormatLocale(TestingContext context) {
+    void testFormatLocale(TestContextWrapper context) {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
         checkLocale(context, "es_ES", expr, "1.234,6", false);
         checkLocale(context, "es_MX", expr, "1,234.6", false);
@@ -226,13 +226,13 @@ class RolapConnectionTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testFormatStringLocale(TestingContext context) {
+    void testFormatStringLocale(TestContextWrapper context) {
         checkLocale(context, "es_ES", "1234.56", "1.234,6", true);
         checkLocale(context, "es_MX", "1234.56", "1,234.6", true);
         checkLocale(context, "en_US", "1234.56", "1,234.6", true);
     }
 
-    private static void checkLocale(TestingContext context,
+    private static void checkLocale(TestContextWrapper context,
         final String localeName, String expr, String expected, boolean isQuery)
     {
     	//TODO:
@@ -267,7 +267,7 @@ class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testConnectSansCatalogFails(TestingContext context) {
+    void testConnectSansCatalogFails(TestContextWrapper context) {
         Util.PropertyList properties =baseProperties(context);
         properties.remove(RolapConnectionProperties.Catalog.name());
         properties.remove(RolapConnectionProperties.CatalogContent.name());
@@ -296,7 +296,7 @@ class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetJdbcConnectionWhenJdbcIsNull(TestingContext context) {
+    void testGetJdbcConnectionWhenJdbcIsNull(TestContextWrapper context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);

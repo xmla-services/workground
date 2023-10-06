@@ -16,7 +16,7 @@ package mondrian.xmla;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -55,153 +55,153 @@ class XmlaExcel2000Test extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test01(TestingContext context) {
+    void test01(TestContextWrapper context) {
         helperTest(context, false);
     }
 
     // BeginSession
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test02(TestingContext context) {
+    void test02(TestContextWrapper context) {
         helperTest(context, false);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test03(TestingContext context) {
+    void test03(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test04(TestingContext context) {
+    void test04(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test05(TestingContext context) {
+    void test05(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test06(TestingContext context) {
+    void test06(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     // BeginSession
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test07(TestingContext context) {
+    void test07(TestContextWrapper context) {
         helperTest(context, false);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test08(TestingContext context) {
+    void test08(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test09(TestingContext context) {
+    void test09(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test10(TestingContext context) {
+    void test10(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test11(TestingContext context) {
+    void test11(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test12(TestingContext context) {
+    void test12(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMdschemaMeasures(TestingContext context) {
+    void testMdschemaMeasures(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMdschemaMeasuresEmitInvisible(TestingContext context) {
+    void testMdschemaMeasuresEmitInvisible(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test14(TestingContext context) {
+    void test14(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test15(TestingContext context) {
+    void test15(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test16(TestingContext context) {
+    void test16(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test17(TestingContext context) {
+    void test17(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void test18(TestingContext context) {
+    void test18(TestContextWrapper context) {
         helperTest(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect01(TestingContext context) {
+    void testExpect01(TestContextWrapper context) {
         helperTestExpect(context, false);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect02(TestingContext context) {
+    void testExpect02(TestContextWrapper context) {
         helperTestExpect(context, false);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect03(TestingContext context) {
+    void testExpect03(TestContextWrapper context) {
         helperTestExpect(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect04(TestingContext context) {
+    void testExpect04(TestContextWrapper context) {
         helperTestExpect(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect05(TestingContext context) {
+    void testExpect05(TestContextWrapper context) {
         helperTestExpect(context, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpect06(TestingContext context) {
+    void testExpect06(TestContextWrapper context) {
         helperTestExpect(context, true);
     }
 

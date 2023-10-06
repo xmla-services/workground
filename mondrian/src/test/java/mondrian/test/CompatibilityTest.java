@@ -32,7 +32,7 @@ import org.olap4j.OlapException;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -77,7 +77,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCubeCase(TestingContext foodMartContext) {
+    void testCubeCase(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         String queryFrom = "select {[Measures].[Unit Sales]} on columns from ";
         String result =
@@ -98,7 +98,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCubeBrackets(TestingContext foodMartContext) {
+    void testCubeBrackets(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         String queryFrom = "select {[Measures].[Unit Sales]} on columns from ";
         String result =
@@ -119,7 +119,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testReservedWord(TestingContext foodMartContext) {
+    void testReservedWord(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertAxisThrows(
     		connection,
@@ -142,7 +142,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDimensionCase(TestingContext foodMartContext) {
+    void testDimensionCase(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Measures].[Unit Sales]", "[Measures].[Unit Sales]");
         checkAxis(connection, "[Measures].[Unit Sales]", "[MEASURES].[Unit Sales]");
@@ -160,7 +160,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDimensionBrackets(TestingContext foodMartContext) {
+    void testDimensionBrackets(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Measures].[Unit Sales]", "Measures.[Unit Sales]");
         checkAxis(connection, "[Measures].[Unit Sales]", "MEASURES.[Unit Sales]");
@@ -178,7 +178,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMemberCase(TestingContext foodMartContext) {
+    void testMemberCase(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Measures].[Unit Sales]", "[Measures].[UNIT SALES]");
         checkAxis(connection, "[Measures].[Unit Sales]", "[Measures].[uNiT sAlEs]");
@@ -205,7 +205,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCalculatedMemberCase(TestingContext foodMartContext) {
+    void testCalculatedMemberCase(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         propSaver.set(MondrianProperties.instance().CaseSensitive, false);
         TestUtil.assertQueryReturns(
@@ -242,7 +242,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testSolveOrderCase(TestingContext foodMartContext) {
+    void testSolveOrderCase(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkSolveOrder(connection, "SOLVE_ORDER");
         checkSolveOrder(connection, "SoLvE_OrDeR");
@@ -274,7 +274,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMemberBrackets(TestingContext foodMartContext) {
+    void testMemberBrackets(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Measures].[Profit]", "[Measures].Profit");
         checkAxis(connection, "[Measures].[Profit]", "[Measures].pRoFiT");
@@ -305,7 +305,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testHierarchyNames(TestingContext foodMartContext) {
+    void testHierarchyNames(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Customers].[All Customers]", "[Customers].[All Customers]");
         checkAxis(
@@ -345,7 +345,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCaseInsensitiveNullMember(TestingContext foodMartContext) throws SQLException, OlapException, IOException {
+    void testCaseInsensitiveNullMember(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getContext().getDialect();
@@ -423,7 +423,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNullNameColumn(TestingContext foodMartContext) throws SQLException, OlapException, IOException  {
+    void testNullNameColumn(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException  {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getContext().getDialect();
@@ -514,7 +514,7 @@ class CompatibilityTest {
       */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNullCollation(TestingContext foodMartContext) throws SQLException, OlapException, IOException  {
+    void testNullCollation(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException  {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getContext().getDialect();
@@ -604,7 +604,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testPropertyCaseSensitivity(TestingContext foodMartContext) {
+    void testPropertyCaseSensitivity(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         boolean caseSensitive = props.CaseSensitive.get();
 
@@ -660,7 +660,7 @@ class CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testWithDimensionPrefix(TestingContext foodMartContext) {
+    void testWithDimensionPrefix(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         assertAxisWithDimensionPrefix(connection, true);
         assertAxisWithDimensionPrefix(connection, false);
@@ -678,7 +678,7 @@ class CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testWithNoDimensionPrefix(TestingContext foodMartContext) {
+    void testWithNoDimensionPrefix(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         propSaver.set(
             props.NeedDimensionPrefix,

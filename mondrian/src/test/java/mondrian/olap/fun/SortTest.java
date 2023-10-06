@@ -17,7 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -75,7 +75,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderDesc(TestingContext context) {
+  void testOrderDesc(TestContextWrapper context) {
     // In MSAS, NULLs collate last (or almost last, along with +inf and
     // NaN) whereas in Mondrian NULLs collate least (that is, before -inf).
     assertQueryReturns(context.createConnection(),
@@ -126,7 +126,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderAndRank(TestingContext context) {
+  void testOrderAndRank(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
       "with "
         + "   member [Measures].[Foo] as '\n"
@@ -193,7 +193,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testListTuplesExceedsCellEvalLimit(TestingContext context) {
+  void testListTuplesExceedsCellEvalLimit(TestContextWrapper context) {
     // cell eval performed within the sort, so cycles to retrieve all cells.
     propSaver.set( MondrianProperties.instance().CellBatchSize, 2 );
     assertAxisReturns(context.createConnection(),
@@ -227,7 +227,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonBreakingAscendingComparator(TestingContext context) {
+  void testNonBreakingAscendingComparator(TestContextWrapper context) {
     // more than one non-breaking sortkey, where first is ascending
     assertAxisReturns(context.createConnection(),
       "ORDER(GENERATE(CROSSJOIN({[Customers].[USA].[WA].Children},{[Product].[Food]}),\n"
@@ -259,7 +259,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiLevelBrkSort(TestingContext context) {
+  void testMultiLevelBrkSort(TestContextWrapper context) {
     // first 2 sort keys depend on Customers hierarchy only.
     // 3rd requires both Customer and Product
     assertQueryReturns(context.createConnection(), "WITH\n"
@@ -311,7 +311,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAttributesWithShowsRowsColumnsWithMeasureData(TestingContext context) {
+  void testAttributesWithShowsRowsColumnsWithMeasureData(TestContextWrapper context) {
     // Sort on Attributes with Shows rows/columns with measure data.   Most common use case.
     assertQueryReturns(context.createConnection(), "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Store_],NONEMPTYCROSSJOIN"
@@ -376,7 +376,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSortOnMeasureWithShowRowsColumnsWithMeasureData(TestingContext context) {
+  void testSortOnMeasureWithShowRowsColumnsWithMeasureData(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(), "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
       + "([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Yearly Income_],NONEMPTYCROSSJOIN"
@@ -444,7 +444,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSortOnAttributesWithShowsRowsColumnsWithMeasureAndCalculatedMeasureData(TestingContext context) {
+  void testSortOnAttributesWithShowsRowsColumnsWithMeasureAndCalculatedMeasureData(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(), "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS '[*BASE_MEMBERS__Store Type_]'\n"
       + "SET [*NATIVE_CJ_SET] AS 'CROSSJOIN([*BASE_MEMBERS__Education Level_],CROSSJOIN([*BASE_MEMBERS__Product_],"
@@ -495,7 +495,7 @@ class SortTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSortOnMeasureWithShowsRowsColumnsWithShowAllEvenBlank(TestingContext context) {
+  void testSortOnMeasureWithShowsRowsColumnsWithShowAllEvenBlank(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(), "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS '[*BASE_MEMBERS__Store Type_]'\n"
       + "SET [*NATIVE_CJ_SET] AS 'CROSSJOIN([*BASE_MEMBERS__Education Level_],CROSSJOIN([*BASE_MEMBERS__Product_],"

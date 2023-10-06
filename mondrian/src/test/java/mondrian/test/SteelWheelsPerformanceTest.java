@@ -14,7 +14,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testComplexFilters(TestingContext context) throws Exception {
+    void testComplexFilters(TestContextWrapper context) throws Exception {
         if (!LOGGER.isDebugEnabled()) {
             return;
         }

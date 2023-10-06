@@ -23,9 +23,9 @@ import java.sql.SQLException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.olap4j.OlapConnection;
 
-public interface TestingContext {
+@Deprecated
+public interface TestContextWrapper {
 
-	void init(TestContext context);
 
 	/**
 	 * Returns the olap.Connection.

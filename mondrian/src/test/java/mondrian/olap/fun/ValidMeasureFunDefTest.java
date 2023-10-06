@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -32,7 +32,7 @@ class ValidMeasureFunDefTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSecondHierarchyInDimension(TestingContext context) throws SQLException {
+  void testSecondHierarchyInDimension(TestContextWrapper context) throws SQLException {
     final String schema = "<?xml version=\"1.0\"?>\n"
     + "<Schema name=\"FoodMart\">\n"
     + "  <Dimension name=\"Product\">\n"
@@ -87,7 +87,7 @@ class ValidMeasureFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureWithNullTuple(TestingContext context) {
+  void testValidMeasureWithNullTuple(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
         "with member measures.vm as "
         + "'ValidMeasure((Measures.[Unit Sales], Store.[All Stores].Parent))' "

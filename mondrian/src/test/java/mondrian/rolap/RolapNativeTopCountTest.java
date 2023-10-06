@@ -50,7 +50,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -76,14 +76,14 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount_ImplicitCountMeasure(TestingContext context) throws Exception {
+    void testTopCount_ImplicitCountMeasure(TestContextWrapper context) throws Exception {
         assertQueryReturns(context.createConnection(),
             IMPLICIT_COUNT_MEASURE_QUERY, IMPLICIT_COUNT_MEASURE_RESULT);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount_CountMeasure(TestingContext context) throws Exception {
+    void testTopCount_CountMeasure(TestContextWrapper context) throws Exception {
 
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -100,13 +100,13 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount_SumMeasure(TestingContext context) throws Exception {
+    void testTopCount_SumMeasure(TestContextWrapper context) throws Exception {
         assertQueryReturns(context.createConnection(), SUM_MEASURE_QUERY, SUM_MEASURE_RESULT);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_Countries(TestingContext context) {
+    void testEmptyCellsAreShown_Countries(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             EMPTY_CELLS_ARE_SHOWN_COUNTRIES_QUERY,
             EMPTY_CELLS_ARE_SHOWN_COUNTRIES_RESULT);
@@ -114,7 +114,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_States(TestingContext context) {
+    void testEmptyCellsAreShown_States(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             EMPTY_CELLS_ARE_SHOWN_STATES_QUERY,
             EMPTY_CELLS_ARE_SHOWN_STATES_RESULT);
@@ -122,7 +122,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_ButNoMoreThanReallyExist(TestingContext context) {
+    void testEmptyCellsAreShown_ButNoMoreThanReallyExist(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             EMPTY_CELLS_ARE_SHOWN_NOT_MORE_THAN_EXIST_QUERY,
             EMPTY_CELLS_ARE_SHOWN_NOT_MORE_THAN_EXIST_RESULT);
@@ -130,7 +130,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly(TestingContext context) {
+    void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             EMPTY_CELLS_ARE_HIDDEN_WHEN_NON_EMPTY_QUERY,
             EMPTY_CELLS_ARE_HIDDEN_WHEN_NON_EMPTY_RESULT);
@@ -139,7 +139,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testRoleRestrictionWorks_ForRowWithData(TestingContext context) throws Exception {
+    void testRoleRestrictionWorks_ForRowWithData(TestContextWrapper context) throws Exception {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -154,7 +154,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testRoleRestrictionWorks_ForRowWithOutData(TestingContext context) throws Exception {
+    void testRoleRestrictionWorks_ForRowWithOutData(TestContextWrapper context) throws Exception {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -169,7 +169,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_States(TestingContext context) {
+    void testMimicsHeadWhenTwoParams_States(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY,
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_RESULT);
@@ -177,7 +177,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_Cities(TestingContext context) {
+    void testMimicsHeadWhenTwoParams_Cities(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY,
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_RESULT);
@@ -185,7 +185,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist(TestingContext context) {
+    void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_QUERY,
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_RESULT);
@@ -193,7 +193,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty(TestingContext context) {
+    void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_QUERY,
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_RESULT);

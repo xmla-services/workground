@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ class MdcUtilTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMdcContext(TestingContext context) throws Exception {
+  void testMdcContext(TestContextWrapper context) throws Exception {
 
     Connection connection = context.createConnection();
     flushSchemaCache(connection);

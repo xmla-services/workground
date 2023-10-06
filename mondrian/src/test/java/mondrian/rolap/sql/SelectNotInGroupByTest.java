@@ -20,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -162,7 +162,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDependentPropertySkipped(TestingContext context) {
+    void testDependentPropertySkipped(TestContextWrapper context) {
         // Property group by should be skipped only if dialect supports it
         String sqlpat;
         if (dialectAllowsSelectNotInGroupBy(context.createConnection())) {
@@ -189,7 +189,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testIndependentPropertyNotSkipped(TestingContext context) {
+    void testIndependentPropertyNotSkipped(TestContextWrapper context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,
@@ -212,7 +212,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupBySkippedIfUniqueLevel(TestingContext context) {
+    void testGroupBySkippedIfUniqueLevel(TestContextWrapper context) {
         // If unique level is included and all properties are level
         // dependent, then group by can be skipped regardless of dialect
         SqlPattern[] sqlPatterns = {
@@ -237,7 +237,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupByNotSkippedIfIndependentProperty(TestingContext context) {
+    void testGroupByNotSkippedIfIndependentProperty(TestContextWrapper context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,
