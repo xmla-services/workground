@@ -18,12 +18,18 @@
  */
 package org.opencube.junit5.dataloader;
 
-import org.eclipse.daanse.olap.api.Context;
+import java.util.Map.Entry;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public class NoDataLoader implements DataLoader{
 
+
+
 	@Override
-	public boolean loadData(Context dataSource) throws Exception {
+	public boolean loadData(Entry<DataSource, Dialect> dataBaseInfo) throws Exception {
 		return true;
 	}
 

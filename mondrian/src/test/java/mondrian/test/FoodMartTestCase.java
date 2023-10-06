@@ -175,7 +175,7 @@ public class FoodMartTestCase {
     protected static void assertQueriesReturnSimilarResults(
         String query1,
         String query2,
-        TestContext testContext)
+        NotUseOldTestContext testContext)
     {
         String resultString1 =
             FoodmartTestContextImpl.toString(testContext.executeQuery(query1));
@@ -418,7 +418,7 @@ public class FoodMartTestCase {
      * @param context test context to use
      */
     public static void verifySameNativeAndNot(
-        String query, String message, TestContext context)
+        String query, String message, NotUseOldTestContext context)
     {
 	PropertySaver5 propSaver=new PropertySaver5();
 

@@ -21,7 +21,7 @@ import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class XmlaTestContext {
         new IdentityCatalogLocator();
 
 
-    public static String getConnectString(TestingContext context) {
+    public static String getConnectString(TestContextWrapper context) {
 
 
 		String connectString = context.getOlapConnectString();
@@ -68,7 +68,7 @@ public class XmlaTestContext {
         return connectString;
     }
 
-    public DataSourcesConfig.DataSources dataSources(TestingContext context) {
+    public DataSourcesConfig.DataSources dataSources(TestContextWrapper context) {
         if (DATASOURCES != null) {
             return DATASOURCES;
         }
@@ -86,7 +86,7 @@ public class XmlaTestContext {
         return DATASOURCES;
     }
 
-    public static String getDataSourcesString(TestingContext context) {
+    public static String getDataSourcesString(TestContextWrapper context) {
     	String connectString=getConnectString(context);
         Util.PropertyList connectProperties =
             Util.parseConnectString(connectString);

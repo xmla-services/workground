@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -79,7 +79,7 @@ class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoFrench(TestingContext context) {
+    void testAutoFrench(TestContextWrapper context) {
         // Create a connection in French.
         String localeName = "fr_FR";
         String resultString = "12" + Nbsp + "345,67";
@@ -88,19 +88,19 @@ class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoSpanish(TestingContext context) {
+    void testAutoSpanish(TestContextWrapper context) {
         // Format a number in (Peninsular) spanish.
         assertFormatNumber(context, "es", "12.345,67");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoMexican(TestingContext context) {
+    void testAutoMexican(TestContextWrapper context) {
         // Format a number in Mexican spanish.
         assertFormatNumber(context, "es_MX", "12,345.67");
     }
 
-    private void assertFormatNumber(TestingContext context, String localeName, String resultString) {
+    private void assertFormatNumber(TestContextWrapper context, String localeName, String resultString) {
         //final Util.PropertyList properties =
         //    TestUtil.getConnectionProperties().clone();
         //properties.put(RolapConnectionProperties.Locale.name(), localeName);

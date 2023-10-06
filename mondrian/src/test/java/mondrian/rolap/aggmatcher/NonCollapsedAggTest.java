@@ -16,7 +16,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -254,7 +254,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
 
     @Override
-	protected void prepareContext(TestingContext context) {
+	protected void prepareContext(TestContextWrapper context) {
         try {
             super.prepareContext(context);
             String baseSchema = TestUtil.getRawSchema(context);
@@ -269,7 +269,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testSingleJoin(TestingContext context) throws Exception {
+    void testSingleJoin(TestContextWrapper context) throws Exception {
     	super.prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -296,7 +296,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testComplexJoin(TestingContext context) throws Exception {
+    void testComplexJoin(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -338,7 +338,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testComplexJoinDefaultRecognizer(TestingContext context) throws Exception {
+    void testComplexJoinDefaultRecognizer(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -377,7 +377,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testSsasCompatNamingInAgg(TestingContext context) throws Exception {
+    void testSsasCompatNamingInAgg(TestContextWrapper context) throws Exception {
         prepareContext(context);
         // MONDRIAN-1085
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -408,7 +408,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1325(TestingContext context) {
+    void testMondrian1325(TestContextWrapper context) {
         prepareContext(context);
         final String query1 =
             "SELECT\n"

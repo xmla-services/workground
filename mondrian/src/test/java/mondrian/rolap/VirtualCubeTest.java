@@ -33,7 +33,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -69,7 +69,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNoTimeDimension(TestingContext context) {
+    void testNoTimeDimension(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -88,7 +88,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasureAsDefaultMeasureInVC(TestingContext context) {
+    void testCalculatedMeasureAsDefaultMeasureInVC(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -114,7 +114,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureInVCForIncorrectMeasureName(TestingContext context) {
+    void testDefaultMeasureInVCForIncorrectMeasureName(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -141,7 +141,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeMeasureInvalidCubeName(TestingContext context) {
+    void testVirtualCubeMeasureInvalidCubeName(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -164,7 +164,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureInVCForCaseSensitivity(TestingContext context) {
+    void testDefaultMeasureInVCForCaseSensitivity(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -202,7 +202,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testWithTimeDimension(TestingContext context) {
+    void testWithTimeDimension(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -247,7 +247,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonDefaultAllMember(TestingContext context) {
+    void testNonDefaultAllMember(TestContextWrapper context) {
         // Create a virtual cube with a non-conforming dimension (Warehouse)
         // that does not have ALL as its default member.
         createContextWithNonDefaultAllMember(context);
@@ -285,7 +285,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonDefaultAllMember2(TestingContext context) {
+    void testNonDefaultAllMember2(TestContextWrapper context) {
         createContextWithNonDefaultAllMember(context);
         assertQueryReturns(context.createConnection(),
             "select { measures.[unit sales] } on 0 \n"
@@ -304,7 +304,7 @@ class VirtualCubeTest extends BatchTestCase {
      * @return test context with a cube where the default member in the
      *     Warehouse dimension is USA
      */
-    private void createContextWithNonDefaultAllMember(TestingContext context) {
+    private void createContextWithNonDefaultAllMember(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -354,7 +354,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberVisibility(TestingContext context) {
+    void testMemberVisibility(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -436,7 +436,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFormatStringExpressionCubeNoCache(TestingContext context) {
+    void testFormatStringExpressionCubeNoCache(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -486,7 +486,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasure(TestingContext context) {
+    void testCalculatedMeasure(TestContextWrapper context) {
         // calculated measures reference measures defined in the base cube
         assertQueryReturns(context.createConnection(),
             "select\n"
@@ -508,7 +508,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLostData(TestingContext context) {
+    void testLostData(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select {[Time].[Time].Members} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -680,7 +680,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasureAcrossCubes(TestingContext context) {
+    void testCalculatedMeasureAcrossCubes(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Shipped per Ordered] as ' [Measures].[Units Shipped] / [Measures].[Unit Sales] ', format_string='#.00%'\n"
             + " member [Measures].[Profit per Unit Shipped] as ' [Measures].[Profit] / [Measures].[Units Shipped] '\n"
@@ -766,7 +766,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMemberInSchema(TestingContext context) {
+    void testCalculatedMemberInSchema(TestContextWrapper context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null,
@@ -826,7 +826,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllMeasureMembers(TestingContext context) {
+    void testAllMeasureMembers(TestContextWrapper context) {
         // result should exclude measures that are not explicitly defined
         // in the virtual cube (e.g., [Profit last Period])
         assertQueryReturns(context.createConnection(),
@@ -874,7 +874,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOrdinalColumn(TestingContext context) {
+    void testOrdinalColumn(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -920,7 +920,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureProperty(TestingContext context) {
+    void testDefaultMeasureProperty(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -955,7 +955,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeSetCaching(TestingContext context) {
+    void testNativeSetCaching(TestContextWrapper context) {
         // Only need to run this against one db to verify caching
         // behavior is correct.
         final Dialect dialect = getDialect(context.createConnection());
@@ -1076,7 +1076,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322(TestingContext context) {
+    void testBugMondrian322(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1115,7 +1115,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322a(TestingContext context) {
+    void testBugMondrian322a(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1148,7 +1148,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeMeasureCaption(TestingContext context) {
+    void testVirtualCubeMeasureCaption(TestContextWrapper context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1189,7 +1189,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testRolapCubeLevelInVirtualCube(TestingContext context) {
+    void testRolapCubeLevelInVirtualCube(TestContextWrapper context) {
         String query1 =
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Warehouse],[*BASE_MEMBERS_Time])' "
@@ -1251,7 +1251,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyCJConstraintOnVirtualCube(TestingContext context) {
+    void testNonEmptyCJConstraintOnVirtualCube(TestContextWrapper context) {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             // Generated SQL is different if NonEmptyCrossJoin is evaluated in
             // memory.
@@ -1463,7 +1463,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestingContext context) {
+    void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContextWrapper context) {
         if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
@@ -1598,7 +1598,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian902(TestingContext context) {
+    void testBugMondrian902(TestContextWrapper context) {
         Result result = executeQuery(
             "SELECT\n"
             + "NON EMPTY CrossJoin(\n"
@@ -1640,7 +1640,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeRecursiveMember(TestingContext context) {
+    void testVirtualCubeRecursiveMember(TestContextWrapper context) {
       final String schema = "<Schema name=\"FoodMart\">"
           + "<Dimension type=\"TimeDimension\" highCardinality=\"false\" name=\"Time\">"
           + "<Hierarchy visible=\"true\" hasAll=\"false\" primaryKey=\"time_id\">"
@@ -1703,7 +1703,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCrossjoinOptimizerWithVirtualCube(TestingContext context) {
+    void testCrossjoinOptimizerWithVirtualCube(TestContextWrapper context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Warehouse and Sales",
                 null,

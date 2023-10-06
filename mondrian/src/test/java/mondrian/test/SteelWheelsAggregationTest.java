@@ -19,7 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
@@ -98,7 +98,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testWithAggregation(TestingContext context) throws Exception {
+    void testWithAggregation(TestContextWrapper context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Power User\"> \n"
@@ -123,7 +123,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testWithAggregationNoRestrictionsOnTopLevel(TestingContext context) throws Exception {
+    void testWithAggregationNoRestrictionsOnTopLevel(TestContextWrapper context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Power User\"> \n"
@@ -148,7 +148,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testUnionWithAggregation(TestingContext context) throws Exception {
+    void testUnionWithAggregation(TestContextWrapper context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Foo\"> \n"
@@ -184,7 +184,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testWithAggregationUnionRolesWithSameGrants(TestingContext context) throws Exception {
+    void testWithAggregationUnionRolesWithSameGrants(TestContextWrapper context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Foo\"> \n"

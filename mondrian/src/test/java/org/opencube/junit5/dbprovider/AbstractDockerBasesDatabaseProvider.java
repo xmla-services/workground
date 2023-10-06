@@ -27,11 +27,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import org.opencube.junit5.context.TestContext;
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -70,7 +73,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	    }
 
 	  @Override
-	public  TestContext activate() {
+	public  Entry<DataSource,Dialect> activate() {
 
             port = freePort();
             RolapSchemaPool.instance().clear();
@@ -124,7 +127,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 		}
 
 
-			return createConnection();
+			return createDataSource();
 
 		}
 
@@ -138,7 +141,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
         });
     }
 
-    protected abstract  TestContext createConnection();
+    protected abstract  Entry<DataSource,Dialect> createDataSource();
 
 	protected abstract List<String> env();
 

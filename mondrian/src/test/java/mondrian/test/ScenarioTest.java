@@ -35,7 +35,7 @@ import org.olap4j.Scenario;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -52,7 +52,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCreateScenario(TestingContext context) throws SQLException {
+    void testCreateScenario(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
             context.createOlap4jConnection();
         try {
@@ -76,7 +76,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCell(TestingContext context) throws SQLException {
+    void testSetCell(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
             context.createOlap4jConnection();
         try {
@@ -97,7 +97,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCellWithoutScenarioFails(TestingContext context) throws SQLException {
+    void testSetCellWithoutScenarioFails(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
             context.createOlap4jConnection();
         try {
@@ -124,7 +124,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCellCalcError(TestingContext context) throws SQLException {
+    void testSetCellCalcError(TestContextWrapper context) throws SQLException {
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());
         PreparedOlapStatement pstmt = connection.prepareOlapStatement(
@@ -173,7 +173,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnsupportedAllocationPolicyFails(TestingContext context) throws SQLException {
+    void testUnsupportedAllocationPolicyFails(TestContextWrapper context) throws SQLException {
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());
         final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
@@ -212,7 +212,7 @@ class ScenarioTest {
     @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEqualIncrement(TestingContext context) throws SQLException {
+    void testEqualIncrement(TestContextWrapper context) throws SQLException {
         assertAllocation(context, AllocationPolicy.EQUAL_INCREMENT);
     }
 
@@ -222,11 +222,11 @@ class ScenarioTest {
     @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testEqualAllocation(TestingContext context) throws SQLException {
+    void testEqualAllocation(TestContextWrapper context) throws SQLException {
         assertAllocation(context, AllocationPolicy.EQUAL_ALLOCATION);
     }
 
-    private void assertAllocation(TestingContext context,
+    private void assertAllocation(TestContextWrapper context,
         final AllocationPolicy allocationPolicy) throws SQLException
     {
         // TODO: Should not need to explicitly create a scenario. Add element
@@ -416,7 +416,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian815(TestingContext context) throws SQLException {
+    void testBugMondrian815(TestContextWrapper context) throws SQLException {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "<Dimension name='Scenario' foreignKey='time_id'>\n"
@@ -495,7 +495,7 @@ class ScenarioTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testScenarioPropertyBug1496(TestingContext context) {
+    void testScenarioPropertyBug1496(TestContextWrapper context) {
         // looking up the $scenario property for a non ScenarioCalc member
         // causes class cast exception
         // http://jira.pentaho.com/browse/MONDRIAN-1496

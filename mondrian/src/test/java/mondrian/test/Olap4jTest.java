@@ -63,7 +63,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -102,7 +102,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSameMemberByVariousMeans(TestingContext context) throws SQLException {
+    void testSameMemberByVariousMeans(TestContextWrapper context) throws SQLException {
         Random random = new Random();
         final OlapConnection connection =
                 context.createOlap4jConnection();
@@ -175,7 +175,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAnnotation(TestingContext context) throws SQLException {
+    void testAnnotation(TestContextWrapper context) throws SQLException {
 
       final OlapConnection connection =
               context.createOlap4jConnection();
@@ -196,7 +196,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLevelDataType(TestingContext context) throws SQLException {
+    void testLevelDataType(TestContextWrapper context) throws SQLException {
 
         final OlapConnection connection = context.createOlap4jConnection();
         Cube cube = connection.getOlapSchema().getCubes().get( "Sales" );
@@ -213,7 +213,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFormatString(TestingContext context) throws SQLException {
+    void testFormatString(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
                 context.createOlap4jConnection();
         final CellSet cellSet =
@@ -244,7 +244,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLevelProperties(TestingContext context) throws SQLException {
+    void testLevelProperties(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
                 context.createOlap4jConnection();
         final CellSet cellSet =
@@ -275,7 +275,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCellProperties(TestingContext context) throws SQLException {
+    void testCellProperties(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
             context.createOlap4jConnection();
         final CellSet cellSet =
@@ -320,7 +320,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLimit(TestingContext context) throws SQLException {
+    void testLimit(TestContextWrapper context) throws SQLException {
         propSaver.set(MondrianProperties.instance().IterationLimit, 11);
         String queryString =
             "With Set [*NATIVE_CJ_SET] as "
@@ -351,7 +351,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCloseOnCompletion(TestingContext context) throws Exception {
+    void testCloseOnCompletion(TestContextWrapper context) throws Exception {
         if (Util.JDBC_VERSION < 0x0401) {
             // Statement.closeOnCompletion added in JDBC 4.1 / JDK 1.7.
             return;
@@ -406,7 +406,7 @@ class Olap4jTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDrillThrough(TestingContext context) throws Exception {
+    void testDrillThrough(TestContextWrapper context) throws Exception {
         final OlapConnection connection =
                 context.createOlap4jConnection();
         final OlapStatement statement = connection.createStatement();
@@ -471,7 +471,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian1204(TestingContext context) throws SQLException {
+    void testBugMondrian1204(TestContextWrapper context) throws SQLException {
         final OlapConnection connection =
                 context.createOlap4jConnection();
         final String mdx =
@@ -506,7 +506,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian1217(TestingContext context) throws SQLException {
+    void testBugMondrian1217(TestContextWrapper context) throws SQLException {
         // The checked-in version does nothing. Uncomment one of the following
         // lines to stress the system in a dev environment.
         if (false) {
@@ -517,7 +517,7 @@ class Olap4jTest {
         }
     }
 
-    private void checkBugMondrian1217(TestingContext context, final int cancelMin, final int cancelMax)
+    private void checkBugMondrian1217(TestContextWrapper context, final int cancelMin, final int cancelMax)
         throws SQLException
     {
         assert cancelMin < cancelMax;
@@ -620,7 +620,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1353(TestingContext context) throws Exception {
+    void testMondrian1353(TestContextWrapper context) throws Exception {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -658,7 +658,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1390(TestingContext context) throws Exception {
+    void testMondrian1390(TestContextWrapper context) throws Exception {
         final List<Member> members =
                 context.createOlap4jConnection()
                 .getOlapSchema()
@@ -701,7 +701,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalcMemberInCube(TestingContext context) throws SQLException {
+    void testCalcMemberInCube(TestContextWrapper context) throws SQLException {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 null,
@@ -758,7 +758,7 @@ class Olap4jTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1967(TestingContext context) throws Exception {
+    void testMondrian1967(TestContextWrapper context) throws Exception {
         assertTrue(
                 context.createOlap4jConnection()
                         .getOlapSchema()

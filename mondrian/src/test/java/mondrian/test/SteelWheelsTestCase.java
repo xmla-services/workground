@@ -11,7 +11,7 @@ package mondrian.test;
 
 import static org.opencube.junit5.TestUtil.getConnectionProperties;
 
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
@@ -43,7 +43,7 @@ public class SteelWheelsTestCase {
      * @return TestContext which contains the given schema
      */
     public static void createContext(
-        TestingContext context,
+        TestContextWrapper context,
         final String schema)
     {
         final Util.PropertyList properties =
@@ -74,7 +74,7 @@ public class SteelWheelsTestCase {
      * Returns the test context. Override this method if you wish to use a
      * different source for your SteelWheels connection.
      */
-    public void getTestContext(TestingContext context) {
+    public void getTestContext(TestContextWrapper context) {
         createContext(context, null);
 
             //withCube("SteelWheelsSales");

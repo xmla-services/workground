@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -64,7 +64,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasures(TestingContext context) {
+    void testMeasures(TestContextWrapper context) {
         getTestContext(context);
         if (!TestUtil.databaseIsValid(context.createConnection())) {
             return;
@@ -78,7 +78,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1273(TestingContext context) {
+    void testMondrian1273(TestContextWrapper context) {
         final String schema =
             "<Schema name=\"SteelWheels\">\n"
             + "  <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
@@ -258,7 +258,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMarkets(TestingContext context) {
+    void testMarkets(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -333,7 +333,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian755(TestingContext context) {
+    void testBugMondrian755(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -394,7 +394,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "From [SteelWheelsSales]");
     }
 
-    private void checkCellZero(TestingContext context, String mdx) {
+    private void checkCellZero(TestContextWrapper context, String mdx) {
         final Result result = executeQuery(context.createConnection(), mdx);
         final Cell cell = result.getCell(new int[result.getAxes().length]);
         assertTrue(cell.canDrillThrough());
@@ -410,7 +410,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian756(TestingContext context) {
+    void testBugMondrian756(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -453,7 +453,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian756b(TestingContext context) {
+    void testBugMondrian756b(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -481,7 +481,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian805(TestingContext context) {
+    void testBugMondrian805(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -528,7 +528,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrianBug476_770_957(TestingContext context) throws Exception {
+    void testMondrianBug476_770_957(TestContextWrapper context) throws Exception {
             SteelWheelsTestCase.createContext(
                 context,
                 "<Schema name=\"test_namecolumn\">"
@@ -691,7 +691,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian935(TestingContext context) {
+    void testBugMondrian935(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -743,7 +743,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testPropertyWithParameterOfTimestampType(TestingContext context) throws Exception {
+    void testPropertyWithParameterOfTimestampType(TestContextWrapper context) throws Exception {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -797,7 +797,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testEsr1587(TestingContext context) {
+    void testEsr1587(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -820,7 +820,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1133(TestingContext context) {
+    void testMondrian1133(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -852,7 +852,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1197(TestingContext context) {
+    void testMondrian1197(TestContextWrapper context) {
         getTestContext(context);
 
         if (!databaseIsValid(context.createConnection())) {
@@ -1294,7 +1294,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testRangeSortWithNullKeys(TestingContext context) {
+    void testRangeSortWithNullKeys(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1370,7 +1370,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBug1285(TestingContext context) {
+    void testBug1285(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1461,7 +1461,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDoubleValueCanBeRankedAmongIntegers(TestingContext context) {
+    void testDoubleValueCanBeRankedAmongIntegers(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1503,7 +1503,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1360(TestingContext context) {
+    void testMondrian1360(TestContextWrapper context) {
         getTestContext(context);
         withSchema(context,
             "<Schema name=\"SteelWheels\">\n"
@@ -1618,7 +1618,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1464(TestingContext context) {
+    void testMondrian1464(TestContextWrapper context) {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1655,7 +1655,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1252(TestingContext context) throws Exception {
+    void testMondrian1252(TestContextWrapper context) throws Exception {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1773,7 +1773,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1750(TestingContext context) throws Exception {
+    void testMondrian1750(TestContextWrapper context) throws Exception {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -1812,7 +1812,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian2411_1(TestingContext context) throws Exception {
+    void testMondrian2411_1(TestContextWrapper context) throws Exception {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -2101,7 +2101,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian2411_2(TestingContext context) throws Exception {
+    void testMondrian2411_2(TestContextWrapper context) throws Exception {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -2390,7 +2390,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian2411_3(TestingContext context) throws Exception {
+    void testMondrian2411_3(TestContextWrapper context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
         getTestContext(context);
@@ -2703,7 +2703,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian2652(TestingContext context) {
+    void testMondrian2652(TestContextWrapper context) {
         // Check if there is a valid SteelWheels database.
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {

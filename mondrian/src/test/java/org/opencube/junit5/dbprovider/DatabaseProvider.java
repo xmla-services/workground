@@ -19,12 +19,15 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.Closeable;
+import java.util.Map.Entry;
 
-import org.opencube.junit5.context.TestContext;
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public interface DatabaseProvider extends Closeable {
 
-	public TestContext activate();
+	public Entry<DataSource,Dialect> activate();
 
 
 }

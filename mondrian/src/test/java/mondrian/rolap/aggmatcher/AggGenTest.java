@@ -25,7 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ class AggGenTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void
-        testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestingContext context)
+        testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestContextWrapper context)
         throws Exception
     {
         Logger logger = LoggerFactory.getLogger(AggGen.class);

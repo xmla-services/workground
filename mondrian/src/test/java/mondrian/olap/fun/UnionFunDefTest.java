@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -128,7 +128,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity4TupleUnion(TestingContext context) {
+  void testArity4TupleUnion(TestContextWrapper context) {
     String tupleSet =
         "CrossJoin( [Customers].[USA].Children,"
         + " CrossJoin( Time.[1997].children, { (Gender.F, [Marital Status].M ) }) ) ";
@@ -151,7 +151,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity5TupleUnion(TestingContext context) {
+  void testArity5TupleUnion(TestContextWrapper context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].lastChild, "
         + "CrossJoin ([Education Level].children,{ (Gender.F, [Marital Status].M ) })) )";
@@ -167,7 +167,7 @@ class UnionFunDefTest {
     assertAxisReturns(connection, "Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
-  void testArity5TupleUnionAll(TestingContext context) {
+  void testArity5TupleUnionAll(TestContextWrapper context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1998].firstChild, "
         + "CrossJoin ([Education Level].members,{ (Gender.F, [Marital Status].M ) })) )";
@@ -189,7 +189,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity6TupleUnion(TestingContext context) {
+  void testArity6TupleUnion(TestContextWrapper context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"
@@ -225,7 +225,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity6TupleUnionAll(TestingContext context) {
+  void testArity6TupleUnionAll(TestContextWrapper context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"

@@ -23,9 +23,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map.Entry;
+
+import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Context;
 import org.opencube.junit5.Constants;
 
 public class SteelWheelsDataLoader implements DataLoader {
@@ -34,10 +36,10 @@ public class SteelWheelsDataLoader implements DataLoader {
 	"payments", "products", "quadrant_actuals", "time", "trial_balance");
 
 	@Override
-	public boolean loadData(Context context) throws Exception {
-	try (Connection connection = context.getDataSource().getConnection()) {
-
-	    Dialect dialect = context.getDialect();
+	public boolean loadData(Entry<DataSource, Dialect> dataBaseInfo) throws Exception {
+		DataSource dataSource=dataBaseInfo.getKey();
+		Dialect dialect = dataBaseInfo.getValue();
+	try (Connection connection = dataSource.getConnection()) {
 
 	    List<String> dropTableSQLs = dropTableSQLs();
 	    DataLoaderUtil.executeSql(connection, dropTableSQLs,true);

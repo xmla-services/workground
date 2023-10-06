@@ -18,7 +18,7 @@ import java.io.StringWriter;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -38,14 +38,14 @@ class CmdRunnerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testQuery(TestingContext context) throws IOException {
+    void testQuery(TestContextWrapper context) throws IOException {
         connection = context.createConnection();
         doTest();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void test7731(TestingContext context) throws IOException {
+    void test7731(TestContextWrapper context) throws IOException {
         connection = context.createConnection();
         doTest();
     }

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -59,7 +59,7 @@ class CancellationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyListCancellation(TestingContext context) throws MondrianException {
+    void testNonEmptyListCancellation(TestContextWrapper context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.nonEmptyList
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
@@ -82,7 +82,7 @@ class CancellationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMutableCrossJoinCancellation(TestingContext context) throws MondrianException {
+    void testMutableCrossJoinCancellation(TestContextWrapper context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.mutableCrossJoin
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);

@@ -43,7 +43,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -88,7 +88,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void  testBugMondrian550(TestingContext context) {
+  void  testBugMondrian550(TestContextWrapper context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
       new Statistician( "testBugMondrian550" );
@@ -127,7 +127,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian550Tuple(TestingContext context) {
+  void testBugMondrian550Tuple(TestContextWrapper context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
       new Statistician( "testBugMondrian550Tuple" );
@@ -163,7 +163,7 @@ public class PerformanceTest {
     assertEquals( 3263, result2.getAxes()[ 1 ].getPositions().size() );
   }
 
-  void getBugMondrian550Schema(TestingContext context) {
+  void getBugMondrian550Schema(TestContextWrapper context) {
 
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -197,7 +197,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrianBug641(TestingContext context) {
+  void testMondrianBug641(TestContextWrapper context) {
     if ( !Bug.BugMondrian641Fixed ) {
       return;
     }
@@ -218,7 +218,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVeryLargeExplicitSet(TestingContext context) {
+  void testVeryLargeExplicitSet(TestContextWrapper context) {
     final Statistician[] statisticians = {
       // jdk1.6 mackerel access main old    5,000 ms
       // jdk1.6 marmalade 3.2 14036   4,376 4,055 ms
@@ -351,7 +351,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian639(TestingContext context) {
+  void testBugMondrian639(TestContextWrapper context) {
     // unknown revision before fix mac-mini 233,000 ms
     // unknown revision after fix mac-mini    4,500 ms
     // jdk1.6 marmalade 3.2 14036             1,821 1,702 ms
@@ -396,7 +396,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBigResultsWithBigSchemaPerforms(TestingContext context) {
+  void testBigResultsWithBigSchemaPerforms(TestContextWrapper context) {
     if ( !LOGGER.isDebugEnabled() ) {
       return;
     }
@@ -459,7 +459,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
-  void testInMemoryCalc(TestingContext context) {
+  void testInMemoryCalc(TestContextWrapper context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Test is too expensive to run as part of standard regress.
       // Take 10h on hudson (MySQL)!!!
@@ -539,7 +539,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian843(TestingContext context) {
+  void testBugMondrian843(TestContextWrapper context) {
     // On my core i7 laptop:
     // takes 2.5 seconds before bug fixed
     // takes 0.4 seconds after bug fixed
@@ -571,7 +571,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
-  void testBugMondrian981(TestingContext context) {
+  void testBugMondrian981(TestContextWrapper context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Too slow to run as part of standard regress until bug is fixed.
       return;
@@ -638,7 +638,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian1242(TestingContext context) {
+  void testBugMondrian1242(TestContextWrapper context) {
     propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,

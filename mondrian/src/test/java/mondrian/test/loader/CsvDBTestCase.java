@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.rolap.BatchTestCase;
@@ -41,7 +41,7 @@ import mondrian.rolap.RolapSchemaPool;
  */
 public abstract class CsvDBTestCase extends BatchTestCase {
 
-    protected void prepareContext(TestingContext context) {
+    protected void prepareContext(TestContextWrapper context) {
         try {
             File inputFile = new File(Constants.TESTFILES_DIR + "/mondrian/rolap/agg/" +  getFileName());
 

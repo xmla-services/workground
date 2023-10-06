@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -35,7 +35,7 @@ class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchema3withVersion(TestingContext context) throws SQLException {
+    void testSchema3withVersion(TestContextWrapper context) throws SQLException {
         withSchema(context, SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -46,7 +46,7 @@ class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchema3noVersion(TestingContext context) throws SQLException {
+    void testSchema3noVersion(TestContextWrapper context) throws SQLException {
         withSchema(context,SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -57,7 +57,7 @@ class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchema4withVersion(TestingContext context) {
+    void testSchema4withVersion(TestContextWrapper context) {
         withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
         try {
             Util.PropertyList connectInfo =
@@ -72,7 +72,7 @@ class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchema4noVersion(TestingContext context) {
+    void testSchema4noVersion(TestContextWrapper context) {
         withSchema(context,
                 SCHEMA_4_NVHEADER + SCHEMA_4_BODY);
         try {

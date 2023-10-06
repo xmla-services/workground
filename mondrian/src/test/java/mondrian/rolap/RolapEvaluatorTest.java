@@ -15,7 +15,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -23,7 +23,7 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetSlicerPredicateInfo(TestingContext context) throws Exception {
+    void testGetSlicerPredicateInfo(TestContextWrapper context) throws Exception {
         RolapResult result = (RolapResult) executeQuery(context.createConnection(),
             "select  from sales "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -56,7 +56,7 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testListColumnPredicateInfo(TestingContext context) throws Exception {
+    void testListColumnPredicateInfo(TestContextWrapper context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink],[Product].[Non-Consumable]} ");
@@ -71,7 +71,7 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testOrPredicateInfo(TestingContext context) throws Exception {
+    void testOrPredicateInfo(TestContextWrapper context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink].[Beverages],[Product].[Food].[Produce],[Product].[Non-Consumable]} ");

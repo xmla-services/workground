@@ -27,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -82,7 +82,7 @@ class XmlaHandlerTypeTest  {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDatatypeConsistency(TestingContext context) throws SQLException {
+    void testDatatypeConsistency(TestContextWrapper context) throws SQLException {
         // MDX cast expressions
         String[] castedTypes = {
             "Cast(1 as String)",
@@ -160,7 +160,7 @@ class XmlaHandlerTypeTest  {
         }
     }
 
-    private void getContextWithMeasureExpression(TestingContext context,
+    private void getContextWithMeasureExpression(TestContextWrapper context,
         String expression, String type)
     {
         String datatype = "";

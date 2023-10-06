@@ -14,6 +14,7 @@ package mondrian.olap;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 
+import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.CatalogLocator;
@@ -92,11 +93,13 @@ public class DriverManager {
         CatalogLocator locator,
         Context context)
     {
-        String provider = properties.get("PROVIDER", "mondrian");
-        if (!provider.equalsIgnoreCase("mondrian")) {
-            throw Util.newError("Provider not recognized: " + provider);
-        }
-        final String instance =
+    	
+    	if(properties==null) {
+    		properties=new PropertyList();	
+    		properties.put(RolapConnectionProperties.CatalogContent.name(), "dummy");
+    	}
+
+    	final String instance =
             properties.get(RolapConnectionProperties.Instance.name());
         MondrianServer server = MondrianServer.forId(instance);
         if (server == null) {

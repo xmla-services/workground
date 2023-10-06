@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opentest4j.AssertionFailedError;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -273,7 +273,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void helperTestExpect(TestingContext context, boolean doSessionId)
+    protected void helperTestExpect(TestContextWrapper context, boolean doSessionId)
     {
         try {
             java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
@@ -310,7 +310,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void helperTest(TestingContext context, boolean doSessionId)
+    protected void helperTest(TestContextWrapper context, boolean doSessionId)
     {
         try {
             java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
@@ -339,7 +339,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void addDatasourceInfoResponseKey(TestingContext context, Properties props) {
+    protected void addDatasourceInfoResponseKey(TestContextWrapper context, Properties props) {
         XmlaTestContext s = new XmlaTestContext();
         String con = s.getConnectString(context).replaceAll("&amp;","&");
         PropertyList pl = Util.parseConnectString(con);

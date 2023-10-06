@@ -23,9 +23,9 @@ import mondrian.olap.Util;
  * @since 7 September, 2005
  */
 public class DelegatingTestContext extends FoodmartTestContextImpl {
-    protected final TestContext context;
+    protected final NotUseOldTestContext context;
 
-    protected DelegatingTestContext(TestContext context) {
+    protected DelegatingTestContext(NotUseOldTestContext context) {
         this.context = context;
     }
 

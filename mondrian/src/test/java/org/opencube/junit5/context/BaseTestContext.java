@@ -22,7 +22,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Context;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapWrapper;
 import org.opencube.junit5.propupdator.PropertyUpdater;
@@ -31,13 +30,13 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
 
-public class BaseTestContext implements TestingContext {
+public class BaseTestContext implements TestContextWrapper {
 
 	private TestContext context;
 	private Util.PropertyList properties = new Util.PropertyList();
 
-	@Override
-	public void init(TestContext context) {
+	
+	public  BaseTestContext(TestContext context) {
 		this.context = context;
 
 

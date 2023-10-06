@@ -20,11 +20,15 @@ package org.opencube.junit5.dbprovider;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
-import org.opencube.junit5.context.MysqlContext;
-import org.opencube.junit5.context.TestContext;
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 
 import com.github.dockerjava.api.model.PortBinding;
 import com.mysql.cj.jdbc.MysqlDataSource;
@@ -59,7 +63,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected  TestContext createConnection() {
+	protected Entry<DataSource, Dialect> createDataSource() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
 		dataSource.setPort(port);
@@ -84,9 +88,11 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 				Thread.sleep(100);
 
 				Connection connection = dataSource.getConnection(MYSQL_USER, MYSQL_PASSWORD);
-// wait until connection is possible
+				// wait until connection is possible
 
-				return new MysqlContext(dataSource);
+				Dialect dialect = new MySqlDialect(connection);
+				connection.close();
+				return new SimpleEntry<>(dataSource, dialect);
 
 			} catch (Exception e) {
 //				e.printStackTrace();
@@ -101,7 +107,5 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	protected String image() {
 		return "mysql:latest";
 	}
-
-
 
 }

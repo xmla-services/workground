@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
@@ -73,7 +73,7 @@ import mondrian.test.SqlPattern;
 
 
     // implement TestCase
-    protected void runTest(TestingContext context) {
+    protected void runTest(TestContextWrapper context) {
             DiffRepository diffRepos = getDiffRepos();
             // add calculated member to a cube if specified in the xml file
             String cubeName = diffRepos.expand(null, "${modifiedCubeName}").trim();

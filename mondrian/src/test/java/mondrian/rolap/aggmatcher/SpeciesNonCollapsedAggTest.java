@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -93,7 +93,7 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 
 
     @Override
-	protected void prepareContext(TestingContext context) {
+	protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
         TestUtil.withSchema(context, ANIMAL_SCHEMA);
     }
@@ -110,7 +110,7 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian1105(TestingContext context) {
+    void testBugMondrian1105(TestContextWrapper context) {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
