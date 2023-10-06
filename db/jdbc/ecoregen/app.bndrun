@@ -1,0 +1,18 @@
+
+-runee: JavaSE-17
+
+-runfw: org.apache.felix.framework
+
+-runrequires: \
+	bnd.identity;id='${project.artifactId}',\
+	bnd.identity;id='org.apache.felix.scr'
+-runbundles: \
+	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
+	org.eclipse.daanse.db.jdbc.ecoregen;version='[0.0.1,0.0.2)',\
+	org.eclipse.emf.common;version='[2.29.0,2.29.1)',\
+	org.eclipse.emf.ecore;version='[2.35.0,2.35.1)',\
+	org.osgi.service.component;version='[1.5.1,1.5.2)',\
+	org.osgi.util.function;version='[1.2.0,1.2.1)',\
+	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
+	org.eclipse.emf.ecore.xmi;version='[2.35.0,2.35.1)',\
+	org.osgi.util.converter;version='[1.0.9,1.0.10)'

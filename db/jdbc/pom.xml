@@ -23,5 +23,6 @@
       <module>metadata</module>
       <module>util</module>
       <module>dataloader</module>
+      <module>ecoregen</module>
   </modules>
 </project>
