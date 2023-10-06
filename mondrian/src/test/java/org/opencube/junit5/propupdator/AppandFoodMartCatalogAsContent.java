@@ -20,8 +20,11 @@
 package org.opencube.junit5.propupdator;
 
 import java.io.File;
+import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
 import org.opencube.junit5.Constants;
+import org.opencube.junit5.context.TestContext;
 
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
@@ -40,6 +43,11 @@ public class AppandFoodMartCatalogAsContent implements PropertyUpdater {
 			throw new RuntimeException(e);
 		}
 
+	}
+	
+	@Override
+	public void updateContext(TestContext context) {
+		context.setDatabaseMappingSchemaProviders(List.of(new FoodMartRecordDbMappingSchemaProvider()));
 	}
 
 }

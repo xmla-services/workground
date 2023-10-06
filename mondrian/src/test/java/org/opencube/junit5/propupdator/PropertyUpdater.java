@@ -18,10 +18,19 @@
  */
 package org.opencube.junit5.propupdator;
 
+import org.opencube.junit5.context.TestContext;
+
 import mondrian.olap.Util.PropertyList;
 
 public interface PropertyUpdater {
 
-	PropertyList update(PropertyList propertyList);
+	default PropertyList update(PropertyList propertyList) {
+		return propertyList;
+		
+	}
+
+	default void updateContext(TestContext context) {
+		
+	}
 
 }

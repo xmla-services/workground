@@ -243,7 +243,11 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
                                     LOGGER.error("prepareContexts error", e);
 									throw new RuntimeException(e);
 								}
-							}).forEachOrdered(u->btcontext.update(u));
+							}).forEachOrdered(u->{
+								btcontext.update(u);
+								u.updateContext(testContextImpl);
+								
+							});
 
 							testingContexts.add(btcontext);
 						}

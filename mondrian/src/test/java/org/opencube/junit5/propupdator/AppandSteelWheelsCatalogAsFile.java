@@ -18,7 +18,11 @@
  */
 package org.opencube.junit5.propupdator;
 
+import java.util.List;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record.SteelWheelRecordDbMappingSchemaProvider;
 import org.opencube.junit5.Constants;
+import org.opencube.junit5.context.TestContext;
 
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
@@ -32,4 +36,9 @@ public class AppandSteelWheelsCatalogAsFile implements PropertyUpdater {
 		return propertyList;
 	}
 
+	
+	@Override
+	public void updateContext(TestContext context) {
+		context.setDatabaseMappingSchemaProviders(List.of(new SteelWheelRecordDbMappingSchemaProvider()));
+	}
 }
