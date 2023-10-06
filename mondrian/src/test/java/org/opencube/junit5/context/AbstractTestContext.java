@@ -55,16 +55,16 @@ public abstract class AbstractTestContext implements  TestContext {
 	public void setDialect(Dialect dialect) {
 		this.dialect = dialect;
 	}
-	
+
 	@Override
 	public void setDatabaseMappingSchemaProviders(List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders){
 		this.databaseMappingSchemaProviders=databaseMappingSchemaProviders;
 	}
-	
+
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource=dataSource;
-		
+
 	}
 
 	@Override
@@ -89,9 +89,7 @@ public abstract class AbstractTestContext implements  TestContext {
 
 	@Override
 	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
-		databaseMappingSchemaProviders = List.of(new FoodMartRecordDbMappingSchemaProvider());
-		
-		return databaseMappingSchemaProviders;
+		return databaseMappingSchemaProviders != null ? databaseMappingSchemaProviders : List.of(new FoodMartRecordDbMappingSchemaProvider());
 	}
     public SchemaImpl read(InputStream inputStream) throws JAXBException {
 

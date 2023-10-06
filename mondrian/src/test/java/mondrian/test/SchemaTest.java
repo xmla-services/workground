@@ -16,6 +16,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.aggmatcher.AggTableManager;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
@@ -49,7 +50,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggExcludeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
@@ -207,72 +210,63 @@ class SchemaTest {
                 super(mappingSchema);
             }
             @Override
-            protected MappingCube cube(MappingCube cube) {
-                MappingCube c = super.cube(cube);
-                if ("Sales".equals(c.name())) {
+            protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
+            	List<MappingCalculatedMember> cm = new ArrayList();
+            	cm.addAll(super.cubeCalculatedMembers(cube));
+            	if ("Sales".equals(cube.name())) {
                     MappingFormula formula1 =
-                        FormulaRBuilder.builder()
-                            .cdata("[Measures].[Store Sales] / [Measures].[Store Cost]")
-                            .build();
-                    MappingCalculatedMemberProperty cmProperty1 =
-                        CalculatedMemberPropertyRBuilder.builder()
-                        .name("FORMAT_STRING")
-                        .value("$#,##0.00")
-                        .build();
-                    MappingCalculatedMember calculatedMember1 =
-                        CalculatedMemberRBuilder.builder()
-                            .name("QuantumProfit")
-                            .dimension("Measures")
-                            .formulaElement(formula1)
-                            .calculatedMemberProperties(List.of(
-                                cmProperty1
-                            ))
-                            .build();
-                    MappingFormula formula2 =
-                        FormulaRBuilder.builder()
-                            .cdata("Sum(Gender.Members)")
-                            .build();
-                    MappingCalculatedMemberProperty cmProperty21 =
-                        CalculatedMemberPropertyRBuilder.builder()
+                            FormulaRBuilder.builder()
+                                .cdata("[Measures].[Store Sales] / [Measures].[Store Cost]")
+                                .build();
+                        MappingCalculatedMemberProperty cmProperty1 =
+                            CalculatedMemberPropertyRBuilder.builder()
                             .name("FORMAT_STRING")
                             .value("$#,##0.00")
                             .build();
-                    MappingCalculatedMemberProperty cmProperty22 =
-                        CalculatedMemberPropertyRBuilder.builder()
-                            .name("SOLVE_ORDER")
-                            .value("2000")
-                            .build();
-                    MappingCalculatedMember calculatedMember2 =
-                        CalculatedMemberRBuilder.builder()
-                            .name("foo")
-                            .dimension("Gender")
-                            .formulaElement(formula2)
-                            .calculatedMemberProperties(List.of(
-                                cmProperty21, cmProperty22
-                            ))
-                            .build();
-                    c.calculatedMembers().add(calculatedMember1);
-                    c.calculatedMembers().add(calculatedMember2);
-                }
-                return c;
+                        MappingCalculatedMember calculatedMember1 =
+                            CalculatedMemberRBuilder.builder()
+                                .name("QuantumProfit")
+                                .dimension("Measures")
+                                .formulaElement(formula1)
+                                .calculatedMemberProperties(List.of(
+                                    cmProperty1
+                                ))
+                                .build();
+                        MappingFormula formula2 =
+                            FormulaRBuilder.builder()
+                                .cdata("Sum(Gender.Members)")
+                                .build();
+                        MappingCalculatedMemberProperty cmProperty21 =
+                            CalculatedMemberPropertyRBuilder.builder()
+                                .name("FORMAT_STRING")
+                                .value("$#,##0.00")
+                                .build();
+                        MappingCalculatedMemberProperty cmProperty22 =
+                            CalculatedMemberPropertyRBuilder.builder()
+                                .name("SOLVE_ORDER")
+                                .value("2000")
+                                .build();
+                        MappingCalculatedMember calculatedMember2 =
+                            CalculatedMemberRBuilder.builder()
+                                .name("foo")
+                                .dimension("Gender")
+                                .formulaElement(formula2)
+                                .calculatedMemberProperties(List.of(
+                                    cmProperty21, cmProperty22
+                                ))
+                                .build();
+                        cm.add(calculatedMember1);
+                        cm.add(calculatedMember2);
+            	}
+            	return cm;
             }
         }
-
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales",
-            null,
-            "<CalculatedMember\n"
-            + "      name=\"QuantumProfit\"\n"
-            + "      dimension=\"Measures\">\n"
-            + "    <Formula>[Measures].[Store Sales] / [Measures].[Store Cost]</Formula>\n"
-            + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
-            + "  </CalculatedMember>, <CalculatedMember\n"
-            + "      name=\"foo\"\n"
-            + "      dimension=\"Gender\">\n"
-            + "    <Formula>Sum(Gender.Members)</Formula>\n"
-            + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
-            + "    <CalculatedMemberProperty name=\"SOLVE_ORDER\" value=\'2000\'/>\n"
-            + "  </CalculatedMember>"));
+        org.opencube.junit5.context.TestContext testContext = context.getContext();
+        testContext.setDatabaseMappingSchemaProviders(null);
+        context.getContext()
+            .setDatabaseMappingSchemaProviders(
+                List.of(new TestSolveOrderInCalculatedMemberModifier(
+                    context.getContext().getDatabaseMappingSchemaProviders().get(0).get())));
 
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[QuantumProfit]} on 0, {(Gender.foo)} on 1 from sales",
@@ -283,6 +277,7 @@ class SchemaTest {
             + "Axis #2:\n"
             + "{[Gender].[foo]}\n"
             + "Row #0: $7.52\n");
+        testContext.setDatabaseMappingSchemaProviders(null);
     }
 
     @ParameterizedTest
@@ -2661,7 +2656,7 @@ class SchemaTest {
 
                 MappingPrivateDimension d2 = PrivateDimensionRBuilder.builder()
                     .name("StoreB")
-                    .foreignKey("warehouse_id")
+                    .foreignKey("store_id")
                     .hierarchies(List.of(h2))
                     .build();
 
@@ -2730,6 +2725,9 @@ class SchemaTest {
             null,
             null);
         withSchema(context, schema);
+        context.getContext().setDatabaseMappingSchemaProviders(
+        		List.of(new TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(
+        				context.getContext().getDatabaseMappingSchemaProviders().get(0).get())));
         assertQueryReturns(context.createConnection(),
             "select {[StoreA].[USA]} on rows,"
             + "{[StoreB].[USA]} on columns"
@@ -3547,9 +3545,10 @@ class SchemaTest {
                 super(mappingSchema);
             }
             @Override
-            protected MappingCube cube(MappingCube cube) {
-                MappingCube c = super.cube(cube);
-                if ("Sales".equals(c.name())) {
+            protected List<MappingMeasure> cubeMeasures(MappingCube cube) {
+                List<MappingMeasure> result = new ArrayList<>();
+                result.addAll(super.cubeMeasures(cube));
+                if ("Sales".equals(cube.name())) {
                     MappingMeasure measure =
                         MeasureRBuilder
                             .builder()
@@ -3558,6 +3557,16 @@ class SchemaTest {
                             .aggregator("distinct count")
                             .formatString("#,###")
                             .build();
+                    result.add(measure);
+                }
+                return result;
+            }
+
+            @Override
+            protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
+                List<MappingCalculatedMember> result = new ArrayList<>();
+                result.addAll(super.cubeCalculatedMembers(cube));
+                if ("Sales".equals(cube.name())) {
                     MappingCalculatedMember calculatedMember =
                         CalculatedMemberRBuilder
                             .builder()
@@ -3566,23 +3575,14 @@ class SchemaTest {
                             .visible(false)
                             .formula("[Measures].[Customer Count2] / 2")
                             .build();
-                    c.measures().add(measure);
-                    c.calculatedMembers().add(calculatedMember);
+                    result.add(calculatedMember);
                 }
-                return c;
+                return result;
             }
         }
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales",
-            null,
-            "  <Measure name=\"Customer Count2\" column=\"customer_id\"\n"
-            + "      aggregator=\"distinct count\" formatString=\"#,###\"/>\n"
-            + "  <CalculatedMember\n"
-            + "      name=\"Half Customer Count\"\n"
-            + "      dimension=\"Measures\"\n"
-            + "      visible=\"false\"\n"
-            + "      formula=\"[Measures].[Customer Count2] / 2\">\n"
-            + "  </CalculatedMember>"));
+        context.getContext().setDatabaseMappingSchemaProviders(
+        		List.of(new TestDeprecatedDistinctCountAggregatorModifier(
+        				context.getContext().getDatabaseMappingSchemaProviders().get(0).get())));
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],"
             + "    [Measures].[Customer Count], "
@@ -3614,6 +3614,7 @@ class SchemaTest {
             + "Row #2: 901\n"
             + "Row #2: 901\n"
             + "Row #2: 451\n");
+        RolapSchemaPool.instance().clear();
     }
 
     /**
@@ -3935,21 +3936,56 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian233(TestingContext context) {
-        String baseSchema = TestUtil.getRawSchema(context);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null,
-                "<Cube name=\"Sales2\" defaultMeasure=\"Unit Sales\">"
-                + "  <Table name=\"sales_fact_1997\">\n"
-                + "  </Table>\n"
-                + "  <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
-                + "  <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\"/>\n"
-                + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
-                + "      formatString=\"Standard\"/>\n"
-                + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\"\n"
-                + "      formatString=\"#,###.00\"/>\n"
-                + "</Cube>",
-                null, null, null, null);
-        withSchema(context, schema);
+        class TestBugMondrian233Modifier extends RDbMappingSchemaModifier {
+            public TestBugMondrian233Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                MappingDimensionUsage d1 = DimensionUsageRBuilder.builder()
+                    .name("Time")
+                    .source("Time")
+                    .foreignKey("time_id")
+                    .build();
+                MappingDimensionUsage d2 = DimensionUsageRBuilder.builder()
+                    .name("Product")
+                    .source("Product")
+                    .foreignKey("product_id")
+                    .build();
+                MappingCube c = CubeRBuilder
+                    .builder()
+                    .name("Sales2")
+                    .defaultMeasure("Unit Sales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(d1, d2))
+                    .measures(List.of(
+                        MeasureRBuilder
+                            .builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build(),
+                        MeasureRBuilder
+                            .builder()
+                            .name("Store Cost")
+                            .column("store_cost")
+                            .aggregator("sum")
+                            .formatString("#,###.00")
+                            .build()
+                    ))
+                    .build();
+                result.add(c);
+                result.addAll(super.cubes(cubes));
+                return result;
+            }
+        }
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(
+            List.of(
+                new TestBugMondrian233Modifier(context.getContext().getDatabaseMappingSchemaProviders().get(0).get())
+            ));
         // With bug, and with aggregates enabled, query against Sales returns
         // 565,238, which is actually the total for [Store Sales]. I think the
         // aggregate tables are getting crossed.
@@ -3979,9 +4015,10 @@ class SchemaTest {
                 super(mappingSchema);
             }
             @Override
-            protected MappingCube cube(MappingCube cube) {
-                MappingCube c = super.cube(cube);
-                if ("Sales".equals(c.name())) {
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
                     MappingLevel level = LevelRBuilder
                         .builder()
                         .name("Store2")
@@ -4017,9 +4054,9 @@ class SchemaTest {
                         .foreignKey("store_id")
                         .hierarchies(List.of(hierarchy))
                         .build();
-                    c.dimensionUsageOrDimensions().add(dimension);
+                    result.add(dimension);
                 }
-                return c;
+                return result;
             }
         }
         // In order to reproduce the problem a dimension specifying
@@ -4035,7 +4072,10 @@ class SchemaTest {
             + "     </Level>"
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
-
+        context.getContext().setDatabaseMappingSchemaProviders(
+            List.of(
+                new TestBugMondrian303Modifier(context.getContext().getDatabaseMappingSchemaProviders().get(0).get())
+            ));
         // In the query below Mondrian (prior to the fix) would
         // return the store name instead of the store type.
         assertQueryReturns(context.createConnection(),
@@ -4196,16 +4236,34 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoDimensions(TestingContext context) {
-        String baseSchema = TestUtil.getRawSchema(context);
-        String schema = SchemaUtil.getSchema(baseSchema,
-            null,
-            "<Cube name=\"NoDim\" defaultMeasure=\"Unit Sales\">\n"
-            + "  <Table name=\"sales_fact_1997\"/>\n"
-            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
-            + "      formatString=\"Standard\"/>\n"
-            + "</Cube>",
-            null, null, null, null);
-        withSchema(context, schema);
+        class TestCubeWithNoDimensionsModifier extends RDbMappingSchemaModifier {
+            public TestCubeWithNoDimensionsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                MappingCube c = CubeRBuilder
+                    .builder()
+                    .name("NoDim")
+                    .defaultMeasure("Unit Sales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .measures(List.of(
+                        MeasureRBuilder
+                            .builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build();
+                result.add(c);
+                result.addAll(super.cubes(cubes));
+                return result;
+            }
+        }
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestCubeWithNoDimensionsModifier(context.getContext().getDatabaseMappingSchemaProviders().get(0).get())));
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales]} on columns from [NoDim]",
             "Axis #0:\n"
@@ -4804,30 +4862,64 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberNoStringReplace(TestingContext context) {
-        String baseSchema = TestUtil.getRawSchema(context);
-        String schema = SchemaUtil.getSchema(baseSchema,
-            null,
-            "<Cube name=\"Sales Special Time\">\n"
-            + "  <Table name=\"sales_fact_1997\"/>\n"
-            + "<Dimension name=\"TIME\" foreignKey=\"time_id\" type=\"TimeDimension\">"
-            + "<Hierarchy name=\"CALENDAR\" hasAll=\"true\" allMemberName=\"All TIME(CALENDAR)\" primaryKey=\"time_id\">"
-            + "  <Table name=\"time_by_day\"/>"
-            + "  <Level name=\"Years\" column=\"the_year\" uniqueMembers=\"true\" levelType=\"TimeYears\"/>"
-            + "  <Level name=\"Quarters\" column=\"quarter\" uniqueMembers=\"false\" levelType=\"TimeQuarters\"/>"
-            + "  <Level name=\"Months\" column=\"month_of_year\" uniqueMembers=\"false\" levelType=\"TimeMonths\"/>"
-            + "</Hierarchy>"
-            + "</Dimension>"
-            + "  <DimensionUsage name=\"Store\" source=\"Store\" foreignKey=\"store_id\"/>\n"
-            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" "
-            + "   formatString=\"Standard\"/>\n"
-            + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\""
-            + "   formatString=\"#,###.00\"/>\n"
-            + "</Cube>",
-            null,
-            null,
-            null,
-            null);
-        withSchema(context, schema);
+        class TestAllMemberNoStringReplaceModifier extends RDbMappingSchemaModifier {
+            public TestAllMemberNoStringReplaceModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+
+                MappingLevel l11 = LevelRBuilder.builder().name("Years").column("the_year").uniqueMembers(true).levelType(LevelTypeEnum.TIME_YEARS).build();
+                MappingLevel l12 = LevelRBuilder.builder().name("Quarters").column("quarter").uniqueMembers(false).levelType(LevelTypeEnum.TIME_QUARTERS).build();
+                MappingLevel l13 = LevelRBuilder.builder().name("Months").column("month_of_year").uniqueMembers(false).levelType(LevelTypeEnum.TIME_MONTHS).build();
+                MappingHierarchy h1 = HierarchyRBuilder.builder().name("CALENDAR")
+                    .hasAll(true).allMemberName("All TIME(CALENDAR)").primaryKey("time_id")
+                    .relation(new TableR("time_by_day"))
+                    .levels(List.of(l11, l12, l13))
+                    .build();
+                MappingPrivateDimension d1 = PrivateDimensionRBuilder.builder()
+                    .name("TIME")
+                    .foreignKey("time_id")
+                    .type(DimensionTypeEnum.TIME_DIMENSION)
+                    .hierarchies(List.of(h1))
+                    .build();
+                MappingDimensionUsage d2 = DimensionUsageRBuilder.builder()
+                    .name("Store")
+                    .source("Store")
+                    .foreignKey("store_id")
+                    .build();
+
+                MappingCube c = CubeRBuilder
+                    .builder()
+                    .name("Sales Special Time")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(d1, d2))
+                    .measures(List.of(
+                        MeasureRBuilder
+                            .builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build(),
+                        MeasureRBuilder
+                            .builder()
+                            .name("Store Cost")
+                            .column("store_cost")
+                            .aggregator("sum")
+                            .formatString("#,###.00")
+                            .build()
+                    ))
+                    .build();
+                result.add(c);
+                result.addAll(super.cubes(cubes));
+                return result;
+            }
+        }
+
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestAllMemberNoStringReplaceModifier(context.getContext().getDatabaseMappingSchemaProviders().get(0).get())));
+        RolapSchemaPool.instance().clear();
         assertQueryReturns(context.createConnection(),
             "select [TIME.CALENDAR].[All TIME(CALENDAR)] on columns\n"
             + "from [Sales Special Time]",
@@ -5508,9 +5600,10 @@ class SchemaTest {
                 super(mappingSchema);
             }
             @Override
-            protected MappingCube cube(MappingCube cube) {
-                MappingCube c = super.cube(cube);
-                if ("Sales".equals(c.name())) {
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
                     MappingJoin join = new JoinR(List.of(
                         new TableR("product"),
                         new TableR("product_class")
@@ -5542,24 +5635,13 @@ class SchemaTest {
                         .foreignKey("product_id")
                         .hierarchies(List.of(hierarchy))
                         .build();
-                    c.dimensionUsageOrDimensions().add(dimension);
+                    result.add(dimension);
                 }
-                return c;
+                return result;
             }
         }
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-                "Sales",
-                "  <Dimension name=\"Product truncated\" foreignKey=\"product_id\">\n"
-                + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
-                + "      <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
-                + "        <Table name=\"product\"/>\n"
-                + "        <Table name=\"product_class\"/>\n"
-                + "      </Join>\n"
-                + "      <Level name=\"Product Class\" table=\"product_class\" nameColumn=\"product_subcategory\"\n"
-                + "          column=\"product_class_id\" type=\"Numeric\" uniqueMembers=\"true\"/>\n"
-                + "    </Hierarchy>\n"
-                + "  </Dimension>\n",
-                null, null, null));
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestScdJoinModifier(schema)));
         assertQueryReturns(context.createConnection(),
             "select non empty {[Measures].[Unit Sales]} on 0,\n"
             + " non empty Filter({[Product truncated].Members}, [Measures].[Unit Sales] > 10000) on 1\n"
@@ -5810,6 +5892,83 @@ class SchemaTest {
     }
 
     public void checkBugMondrian355(TestingContext context, String timeHalfYear) {
+        class CheckBugMondrian355Modifier1 extends RDbMappingSchemaModifier {
+            public CheckBugMondrian355Modifier1(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> ds = new ArrayList<>();
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+                    MappingLevel l1 = LevelRBuilder.builder()
+                        .name("Years").column("the_year").uniqueMembers(true)
+                        .type(TypeEnum .NUMERIC).levelType(LevelTypeEnum.TIME_YEARS).build();
+                    MappingLevel l2 = LevelRBuilder.builder()
+                        .name("Half year").column("quarter").uniqueMembers(false)
+                        .levelType(LevelTypeEnum.fromValue(timeHalfYear)).build();
+                    MappingLevel l3 = LevelRBuilder.builder()
+                        .name("Hours").column("month_of_year").uniqueMembers(false)
+                        .type(TypeEnum.NUMERIC)
+                        .levelType(LevelTypeEnum.TIME_HOURS).build();
+                    MappingLevel l4 = LevelRBuilder.builder()
+                        .name("Quarter hours").column("time_id").uniqueMembers(false)
+                        .type(TypeEnum.NUMERIC)
+                        .levelType(LevelTypeEnum.TIME_UNDEFINED).build();
+                    MappingHierarchy h = HierarchyRBuilder.builder()
+                        .hasAll(true).primaryKey("time_id")
+                        .relation(new TableR("time_by_day"))
+                        .levels(List.of(l1, l2, l3, l4))
+                        .build();
+                    MappingPrivateDimension d = PrivateDimensionRBuilder.builder()
+                        .name("Time2").foreignKey("time_id").type(DimensionTypeEnum.TIME_DIMENSION)
+                        .hierarchies(List.of(h))
+                        .build();
+                    ds.add(d);
+                }
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                return ds;
+            }
+        }
+        class CheckBugMondrian355Modifier2 extends RDbMappingSchemaModifier {
+            public CheckBugMondrian355Modifier2(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> ds = new ArrayList<>();
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+                    MappingLevel l1 = LevelRBuilder.builder()
+                        .name("Years").column("the_year").uniqueMembers(true)
+                        .type(TypeEnum .NUMERIC).levelType(LevelTypeEnum.TIME_YEARS).build();
+                    MappingLevel l2 = LevelRBuilder.builder()
+                        .name("Half year").column("quarter").uniqueMembers(false)
+                        .levelType(LevelTypeEnum.fromValue(timeHalfYear)).build();
+                    MappingLevel l3 = LevelRBuilder.builder()
+                        .name("Hours").column("month_of_year").uniqueMembers(false)
+                        .type(TypeEnum.NUMERIC)
+                        .levelType(LevelTypeEnum.TIME_HOURS).build();
+                    MappingLevel l4 = LevelRBuilder.builder()
+                        .name("Quarter hours").column("time_id").uniqueMembers(false)
+                        .type(TypeEnum.NUMERIC)
+                        .levelType(LevelTypeEnum.TIME_UNDEFINED).build();
+                    MappingHierarchy h = HierarchyRBuilder.builder()
+                        .hasAll(true).primaryKey("time_id")
+                        .relation(new TableR("time_by_day"))
+                        .levels(List.of(l1, l2, l3, l4))
+                        .build();
+                    MappingPrivateDimension d = PrivateDimensionRBuilder.builder()
+                        .name("Time2").foreignKey("time_id").type(DimensionTypeEnum.TIME_DIMENSION)
+                        .hierarchies(List.of(h))
+                        .build();
+                    ds.add(d);
+                }
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                return ds;
+            }
+        }
+
         final String xml =
             "<Dimension name=\"Time2\" foreignKey=\"time_id\" type=\"TimeDimension\">\n"
             + "<Hierarchy hasAll=\"true\" primaryKey=\"time_id\">\n"
@@ -5819,12 +5978,14 @@ class SchemaTest {
             + timeHalfYear
             + "\"/>\n"
             + "  <Level name=\"Hours\" column=\"month_of_year\" uniqueMembers=\"false\" type=\"Numeric\" levelType=\"TimeHours\"/>\n"
-            + "  <Level name=\"Quarter hours\" column=\"time_id\" uniqueMembers=\"false\" type=\"Numeric\" levelType=\"TimeUndefined\"/>\n"
+            + "  <Level name=\"Quarter hours\" column=\"time_id\" uniqueMembers=\"false\" type=\"Numeric\" levelType=\"TimeUnspecified\"/>\n"
             + "</Hierarchy>\n"
             + "</Dimension>";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales", xml, false));
-
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(
+            List.of(new CheckBugMondrian355Modifier1(schema)));
         assertQueryReturns(context.createConnection(),
             "select Head([Time2].[Quarter hours].Members, 3) on columns\n"
             + "from [Sales]",
@@ -5854,7 +6015,10 @@ class SchemaTest {
             ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                     "Sales",
                 xml.replace("TimeUndefined", "TimeUnspecified"), false));
-                assertSimpleQuery(context.createConnection());
+
+            context.getContext().setDatabaseMappingSchemaProviders(
+                List.of(new CheckBugMondrian355Modifier2(schema)));
+            assertSimpleQuery(context.createConnection());
             fail("expected error");
         } catch (Throwable e) {
             checkThrowable(
