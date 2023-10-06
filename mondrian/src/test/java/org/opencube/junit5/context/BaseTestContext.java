@@ -33,11 +33,11 @@ import mondrian.olap4j.MondrianOlap4jDriver;
 
 public class BaseTestContext implements TestingContext {
 
-	private Context context;
+	private TestContext context;
 	private Util.PropertyList properties = new Util.PropertyList();
 
 	@Override
-	public void init(Context context) {
+	public void init(TestContext context) {
 		this.context = context;
 
 
@@ -74,7 +74,7 @@ public class BaseTestContext implements TestingContext {
 	}
 
     @Override
-    public Context getContext() {
+    public TestContext getContext() {
         return context;
     }
 

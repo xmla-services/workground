@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.eclipse.daanse.olap.api.Context;
 import org.opencube.junit5.context.SQLLiteContext;
+import org.opencube.junit5.context.TestContext;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
@@ -32,7 +32,7 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 
 	private static String getTempFile() {
 		try {
-			Path temp = Path.of("foodsqlite.db");
+			Path temp = Path.of("sqlite.db");
 			if (Files.exists(temp)) {
 				Files.delete(temp);
 			}
@@ -52,12 +52,11 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public Context activate() {
+	public TestContext activate() {
 		SQLiteConfig cfg = new SQLiteConfig();
 		SQLiteDataSource ds = new SQLiteDataSource(cfg);
 		ds.setUrl(JDBC_SQLITE_MEMORY);
-		Context context = new SQLLiteContext(ds);
-
+		TestContext context = new SQLLiteContext(ds);
 		return context;
 	}
 

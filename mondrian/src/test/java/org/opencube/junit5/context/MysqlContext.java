@@ -14,16 +14,22 @@
 package org.opencube.junit5.context;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 
 public class MysqlContext extends AbstractTestContext {
 
 	public MysqlContext(DataSource dataSource) {
-		super(dataSource);
+		
+		setDataSource(dataSource);
+		try (Connection connection = dataSource.getConnection()) {
+			setDialect(new MySqlDialect(connection));
+		} catch (SQLException e) {
+			new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -31,9 +37,7 @@ public class MysqlContext extends AbstractTestContext {
 		return "mysqlBaseContext";
 	}
 
-	@Override
-	Dialect createDialect(Connection connection) {
-		return new MySqlDialect(connection);
-	}
+
+	
 
 }

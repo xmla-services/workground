@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
@@ -40,6 +39,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
@@ -54,15 +54,13 @@ import aQute.bnd.annotation.spi.ServiceConsumer;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import mondrian.olap.Util.PropertyList;
-import mondrian.rolap.RolapConnectionProperties;
 
 @ServiceConsumer(cardinality = Cardinality.MULTIPLE, value = DatabaseProvider.class)
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContextArgumentsProvider.class);
 	private ContextSource contextSource;
 
-	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>,  Context>> store = new HashMap<>();
+	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>,  TestContext>> store = new HashMap<>();
 	public static boolean dockerWasChanged = true;
 
 	@Override
@@ -165,7 +163,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		}
 		List<TestingContext> args = providers.parallel().map(dbp -> {
 
-			 Context context = null;
+			TestContext context = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
 
 			if (!store.containsKey(clazzProvider)) {
@@ -188,7 +186,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Class<? extends DataLoader> dataLoaderClass = contextSource.dataloader();
 
-								Map<Class<? extends DataLoader>, Context> storedLoaders = store
+								Map<Class<? extends DataLoader>, TestContext> storedLoaders = store
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass) && !dockerWasChanged) {
 									context = storedLoaders.get(dataLoaderClass);

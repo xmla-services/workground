@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +32,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.opencube.junit5.context.TestContext;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -46,7 +46,6 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
-import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapSchemaPool;
 
 public abstract class AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
@@ -72,7 +71,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	    }
 
 	  @Override
-	public  Context activate() {
+	public  TestContext activate() {
 
             port = freePort();
             RolapSchemaPool.instance().clear();
@@ -140,7 +139,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
         });
     }
 
-    protected abstract  Context createConnection();
+    protected abstract  TestContext createConnection();
 
 	protected abstract List<String> env();
 

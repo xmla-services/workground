@@ -1,10 +1,6 @@
 package org.opencube.junit5.context;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,20 +10,17 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
-import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
-import org.opencube.junit5.Constants;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public abstract class AbstractTestContext implements Context {
+public abstract class AbstractTestContext implements  TestContext {
 
 	private Dialect dialect;
 	private StatisticsProvider statisticsProvider = new StatisticsProvider() {
@@ -54,15 +47,24 @@ public abstract class AbstractTestContext implements Context {
 	private DataSource dataSource;
 
 	private ExpressionCompilerFactory expressionCompilerFactory = new BaseExpressionCompilerFactory();
+	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 
-	public AbstractTestContext(DataSource dataSource) {
-		this.dataSource = dataSource;
-		try (Connection connection = dataSource.getConnection()) {
-			dialect = createDialect(connection);
-		} catch (SQLException e) {
-			new RuntimeException(e);
-		}
 
+
+	@Override
+	public void setDialect(Dialect dialect) {
+		this.dialect = dialect;
+	}
+	
+	@Override
+	public void setDatabaseMappingSchemaProviders(List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders){
+		this.databaseMappingSchemaProviders=databaseMappingSchemaProviders;
+	}
+	
+	@Override
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource=dataSource;
+		
 	}
 
 	@Override
@@ -87,27 +89,9 @@ public abstract class AbstractTestContext implements Context {
 
 	@Override
 	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
-		DatabaseMappingSchemaProvider dbp = new FoodMartRecordDbMappingSchemaProvider();
-		try {
-			SchemaImpl	 s=read(Files.newInputStream( Path.of( Constants.DEMO_DIR+"FoodMart.xml")));
-			 dbp= new DatabaseMappingSchemaProvider() {
-				 
-				 @Override
-				 public MappingSchema get() {
-					 return s;
-				 }
-			 }; 
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return List.of(dbp);
+		databaseMappingSchemaProviders = List.of(new FoodMartRecordDbMappingSchemaProvider());
+		
+		return databaseMappingSchemaProviders;
 	}
     public SchemaImpl read(InputStream inputStream) throws JAXBException {
 
@@ -121,11 +105,11 @@ public abstract class AbstractTestContext implements Context {
 		return expressionCompilerFactory;
 	}
 
-	abstract Dialect createDialect(Connection connection);
-	
 	@Override
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

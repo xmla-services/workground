@@ -20,11 +20,11 @@ package org.opencube.junit5.dbprovider;
 
 import java.io.Closeable;
 
-import org.eclipse.daanse.olap.api.Context;
+import org.opencube.junit5.context.TestContext;
 
 public interface DatabaseProvider extends Closeable {
 
-	public Context activate();
+	public TestContext activate();
 
 
 }
