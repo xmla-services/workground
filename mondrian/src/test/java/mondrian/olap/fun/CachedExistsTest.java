@@ -17,7 +17,9 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsContent;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.PropertyUpdater;
 
+import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
 
 
@@ -330,12 +332,19 @@ class CachedExistsTest{
             + "</Cube>";
     
     
-		((BaseTestContext) context).update(p -> {
-			String schemaOld=p.get(RolapConnectionProperties.CatalogContent.name());
-			String schema= SchemaUtil.getSchema(schemaOld, null, cube, null, null, null, null);
-			p.put(RolapConnectionProperties.CatalogContent.name(), schema);
-			return p;
-		});
+    PropertyUpdater p=new PropertyUpdater() {
+    	
+    	@Override
+		public PropertyList update(PropertyList propertyList) {
+
+			String schemaOld = propertyList.get(RolapConnectionProperties.CatalogContent.name());
+			String schema = SchemaUtil.getSchema(schemaOld, null, cube, null, null, null, null);
+			propertyList.put(RolapConnectionProperties.CatalogContent.name(), schema);
+			return propertyList;
+		}
+
+	};
+		((BaseTestContext) context).update(p);
 
 
     

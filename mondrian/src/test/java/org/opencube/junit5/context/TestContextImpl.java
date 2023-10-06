@@ -68,8 +68,7 @@ public class TestContextImpl implements TestContext {
 
 	@Override
 	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
-		return databaseMappingSchemaProviders != null ? databaseMappingSchemaProviders
-				: List.of(new FoodMartRecordDbMappingSchemaProvider());
+		return databaseMappingSchemaProviders;
 	}
 
 	public SchemaImpl read(InputStream inputStream) throws JAXBException {

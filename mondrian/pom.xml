@@ -391,6 +391,16 @@
 			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>
+			<version>${revision}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		
+		
 	</dependencies>
 	<build>
 		<!--
