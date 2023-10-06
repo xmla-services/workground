@@ -43,6 +43,7 @@ public class BaseTestContext implements TestingContext {
 
 	}
 
+	@Deprecated
 	public void update(PropertyUpdater updater) {
 		properties = updater.update(properties);
 	}
@@ -54,6 +55,8 @@ public class BaseTestContext implements TestingContext {
 		return DriverManager.getConnection(properties, null, context);
 
 	}
+	@Deprecated
+
 
 	protected String getCatalogContent() {
 		return "";

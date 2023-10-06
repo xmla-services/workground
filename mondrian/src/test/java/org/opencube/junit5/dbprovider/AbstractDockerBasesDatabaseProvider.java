@@ -31,7 +31,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.daanse.olap.api.Context;
 import org.opencube.junit5.context.TestContext;
 
 import com.github.dockerjava.api.DockerClient;
