@@ -71,6 +71,7 @@ import org.olap4j.OlapStatement;
 import org.olap4j.OlapWrapper;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 
 import mondrian.calc.impl.UnaryTupleList;
@@ -238,7 +239,27 @@ public class TestUtil {
 		}
 		checkThrowable(throwable, pattern);
 	}
-		/**
+
+    /**
+     * Executes a query, and asserts that it throws an exception which contains the
+     * given pattern.
+     *
+     * @param queryString Query string
+     * @param pattern     Pattern which exception must match
+     */
+    public static void assertQueryThrows(TestContext context, String queryString, String pattern) {
+        Throwable throwable;
+        try {
+            Result result = executeQuery(context.getConnection(), queryString);
+            Util.discard(result);
+            throwable = null;
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
+    /**
 		 * Executes an expression, and asserts that it gives an error which contains a
 		 * particular pattern. The error might occur during parsing, or might be
 		 * contained within the cell value.
