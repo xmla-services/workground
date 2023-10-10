@@ -74,6 +74,16 @@ public class TableR implements MappingTable {
         }
     }
 
+    public TableR(String name, MappingSQL sql) {
+        this.name = name;
+        this.schema = null;
+        this.alias = null;
+        this.hints = List.of();
+        this.aggExcludes = List.of();
+        this.aggTables = List.of();
+        this.sql = sql;
+    }
+
     public TableR(String name) {
     	this.name = name;
     	this.schema = null;

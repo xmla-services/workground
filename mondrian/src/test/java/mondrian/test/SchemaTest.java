@@ -13,7 +13,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapSchemaPool;
@@ -55,25 +54,33 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggColumnNameR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggExcludeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggMeasureR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.FormulaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.RoleUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ValueR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggForeignKeyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggNameRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AnnotationRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberPropertyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ClosureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ColumnDefRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
@@ -108,7 +115,6 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.metadata.NamedList;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
@@ -119,8 +125,6 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.SQLException;
@@ -144,7 +148,6 @@ import static org.opencube.junit5.TestUtil.checkThrowable;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
 
 //import org.apache.logging.log4j.spi.LoggerContext;
 
@@ -6310,7 +6313,7 @@ class SchemaTest {
     @Disabled //not implemented yet
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testValidatorFindsNumericLevel(TestContextWrapper context) {
+    void _testValidatorFindsNumericLevel(TestContextWrapper context) {
 
         class TestValidatorFindsNumericLevelModifier extends RDbMappingSchemaModifier {
             public TestValidatorFindsNumericLevelModifier(MappingSchema mappingSchema) {
@@ -6776,7 +6779,7 @@ class SchemaTest {
     @Disabled // Adventure Works schema not found
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testAttributeHierarchy(TestContext context) {
+    void _testAttributeHierarchy(TestContext context) {
         // from email from peter tran dated 2008/9/8
         // TODO: schema syntax to create attribute hierarchy
         assertQueryReturns(context.getConnection(),
@@ -6892,7 +6895,7 @@ class SchemaTest {
     @Disabled //not implemented yet
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testNonUniqueAlias(TestContext context) {
+    void _testNonUniqueAlias(TestContext context) {
         class TestNonUniqueAliasModifier extends RDbMappingSchemaModifier {
             public TestNonUniqueAliasModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -8037,16 +8040,187 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian747(TestContextWrapper context) {
+    void testBugMondrian747(TestContext context) {
         // Test case requires a pecular inline view, and it works on dialects
         // that scalar subqery, viz oracle. I believe that the mondrian code
         // being works in all dialects.
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case ORACLE:
             break;
         default:
             return;
         }
+        class TestBugMondrian747Modifier extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian747Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+                MappingPrivateDimension sd1 = PrivateDimensionRBuilder.builder()
+                    .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                    .name("Store")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKey("store_id")
+                            .relation(new TableR("store"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("country")
+                                    .column("store_country")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("state")
+                                    .column("store_state")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("city")
+                                    .column("store_city")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingPrivateDimension sd2 = PrivateDimensionRBuilder.builder()
+                    .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                    .name("Product")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .name("New Hierarchy 0")
+                            .hasAll(true)
+                            .primaryKey("product_id")
+                            .relation(new TableR("product"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("product_name")
+                                    .column("product_name")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingCube c1 = CubeRBuilder.builder()
+                    .name("cube1")
+                    .cache(true)
+                    .enabled(true)
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .source("Store")
+                            .name("Store")
+                            .foreignKey("store_id")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .source("Product")
+                            .name("Product")
+                            .foreignKey("product_id")
+                            .build()
+                        ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("unitsales1")
+                            .column("unit_sales")
+                            .datatype(MeasureDataTypeEnum.NUMERIC)
+                            .aggregator("sum")
+                            .visible(true)
+                            .build()
+                    ))
+                    .build();
+
+                MappingCube c2 = CubeRBuilder.builder()
+                    .name("cube2")
+                    .cache(true)
+                    .enabled(true)
+                    .fact(ViewRBuilder.builder()
+                        .alias("sales_fact_1997_test")
+                        .sqls(List.of(
+                            new SQLR("select \"product_id\", \"time_id\", \"customer_id\", \"promotion_id\", " +
+                                "\"store_id\", \"store_sales\", \"store_cost\", \"unit_sales\", (select \"store_state\" " +
+ "from \"store\" where \"store_id\" = \"sales_fact_1997\".\"store_id\") as " +
+                                "\"sales_state_province\" from \"sales_fact_1997\"", "generic")
+                        ))
+                        .build())
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .source("Store")
+                            .level("state")
+                            .name("Store")
+                            .foreignKey("sales_state_province")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .source("Product")
+                            .name("Product")
+                            .foreignKey("product_id")
+                            .build()
+
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("unitsales2")
+                            .column("unit_sales")
+                            .datatype(MeasureDataTypeEnum.NUMERIC)
+                            .aggregator("sum")
+                            .visible(true)
+                            .build()
+                    ))
+                    .build();
+                MappingVirtualCube vc = VirtualCubeRBuilder.builder()
+                    .enabled(true)
+                    .name("virtual_cube")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Store")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("cube1")
+                            .name("[Measures].[unitsales1]")
+                            .visible(true)
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("cube2")
+                            .name("[Measures].[unitsales2]")
+                            .visible(true)
+                            .build()
+                    ))
+                    .build();
+                return SchemaRBuilder.builder()
+                    .name("Test_DimensionUsage")
+                    .dimensions(List.of(
+                        sd1, sd2
+                    ))
+                    .cubes(List.of(
+                        c1, c2
+                    ))
+                    .virtualCubes(List.of(vc))
+                    .build();
+            }
+        }
+        /*
         withSchema(context,
             "<Schema name='Test_DimensionUsage'> \n"
             + "  <Dimension type='StandardDimension' name='Store'> \n"
@@ -8102,6 +8276,7 @@ class SchemaTest {
             + "    </VirtualCubeMeasure> \n"
             + "  </VirtualCube> \n"
             + "</Schema>");
+        */
 
         if (!Bug.BugMondrian747Fixed
             && MondrianProperties.instance().EnableGroupingSets.get())
@@ -8110,13 +8285,16 @@ class SchemaTest {
             return;
         }
 
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian747Modifier(schema)));
+
         // [Store].[All Stores] and [Store].[USA] should be 266,773. A higher
         // value would indicate that there is a cartesian product going on --
         // because "store_state" is not unique in "store" table.
         final String x = !Bug.BugMondrian747Fixed
             ? "1,379,620"
             : "266,773";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select non empty {[Measures].[unitsales2]} on 0,\n"
             + " non empty [Store].members on 1\n"
             + "from [cube2]",
@@ -8136,7 +8314,7 @@ class SchemaTest {
             + "Row #3: 135,318\n"
             + "Row #4: 870,562\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select non empty {[Measures].[unitsales1]} on 0,\n"
             + " non empty [Store].members on 1\n"
             + "from [cube1]",
@@ -8182,7 +8360,7 @@ class SchemaTest {
             + "Row #16: 2,203\n"
             + "Row #17: 11,491\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select non empty {[Measures].[unitsales2], [Measures].[unitsales1]} on 0,\n"
             + " non empty [Store].members on 1\n"
             + "from [virtual_cube]",
@@ -8255,7 +8433,7 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian463(TestContextWrapper context) {
+    void testBugMondrian463(TestContext context) {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -8263,6 +8441,100 @@ class SchemaTest {
             // we get wild stuff because of referential integrity.
             return;
         }
+        class TestBugMondrian463Modifier1 extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian463Modifier1(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> ds = new ArrayList<>();
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+                    MappingLevel l1 = LevelRBuilder.builder()
+                        .name("Product Family")
+                        .table("product_class")
+                        .column("product_family")
+                        .uniqueMembers(true)
+                        .build();
+                    MappingLevel l2 = LevelRBuilder.builder()
+                        .name("Product Department")
+                        .table("product_class")
+                        .column("product_department")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l3 = LevelRBuilder.builder()
+                        .name("Product Category")
+                        .table("product_class")
+                        .column("product_category")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l4 = LevelRBuilder.builder()
+                        .name("Product Subcategory")
+                        .table("product_class")
+                        .column("product_subcategory")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l5 = LevelRBuilder.builder()
+                        .name("Product Class")
+                        .table("store")
+                        .column("store_id")
+                        .type(TypeEnum.NUMERIC)
+                        .uniqueMembers(true)
+                        .build();
+                    MappingLevel l6 = LevelRBuilder.builder()
+                        .name("Brand Name")
+                        .table("product")
+                        .column("brand_name")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l7 = LevelRBuilder.builder()
+                        .name("Product Name")
+                        .table("product")
+                        .column("product_name")
+                        .uniqueMembers(true)
+                        .build();
+
+                    MappingJoin j1 = new JoinR(List.of(
+                        new TableR("store"),
+                        new TableR("product_class")
+                    ),
+                        null,
+                        "region_id",
+                        null,
+                        "product_class_id");
+
+                    MappingJoin j = new JoinR(List.of(
+                        new TableR("product"),
+                        j1
+                    ),
+                        null,
+                        "product_class_id",
+                        null,
+                        "store_id");
+
+
+                    MappingHierarchy h = HierarchyRBuilder.builder()
+                        .hasAll(true).primaryKey("product_id")
+                        .primaryKeyTable("product")
+                        .relation(j)
+                        .levels(List.of(l1, l2, l3, l4, l5, l6, l7))
+                        .build();
+
+                    MappingPrivateDimension d = PrivateDimensionRBuilder.builder()
+                        .name("Product3").foreignKey("product_id")
+                        .hierarchies(List.of(h))
+                        .build();
+                    ds.add(d);
+
+                }
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                return ds;
+            }
+
+        }
+
         // To build a dimension that is a 3-way snowflake, take the 2-way
         // product -> product_class join and convert to product -> store ->
         // product_class.
@@ -8272,7 +8544,7 @@ class SchemaTest {
         // region_id has 24 distinct values in the range 0 .. 106 (region_id 25
         // occurs twice).
         // Therefore in store, store_id -> region_id is a 25 to 24 mapping.
-
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "<Dimension name='Product3' foreignKey='product_id'>\n"
@@ -8293,6 +8565,9 @@ class SchemaTest {
                 + "    <Level name='Product Name' table='product' column='product_name' uniqueMembers='true'/>\n"
                 + "  </Hierarchy>\n"
                 + "</Dimension>"));
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian463Modifier1(schema)));
         checkBugMondrian463(context);
         // As above, but using shared dimension.
         if (MondrianProperties.instance().ReadAggregates.get()
@@ -8303,6 +8578,149 @@ class SchemaTest {
             // integrity problems.
             return;
         }
+        class TestBugMondrian463Modifier2 extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian463Modifier2(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+
+                MappingLevel l1 = LevelRBuilder.builder()
+                    .name("Product Family")
+                    .table("product_class")
+                    .column("product_family")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l2 = LevelRBuilder.builder()
+                    .name("Product Department")
+                    .table("product_class")
+                    .column("product_department")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l3 = LevelRBuilder.builder()
+                    .name("Product Category")
+                    .table("product_class")
+                    .column("product_category")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l4 = LevelRBuilder.builder()
+                    .name("Product Subcategory")
+                    .table("product_class")
+                    .column("product_subcategory")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l5 = LevelRBuilder.builder()
+                    .name("Product Class")
+                    .table("store")
+                    .column("store_id")
+                    .type(TypeEnum.NUMERIC)
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l6 = LevelRBuilder.builder()
+                    .name("Brand Name")
+                    .table("product")
+                    .column("brand_name")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l7 = LevelRBuilder.builder()
+                    .name("Product Name")
+                    .table("product")
+                    .column("product_name")
+                    .uniqueMembers(true)
+                    .build();
+
+                MappingJoin j1 = new JoinR(
+                    List.of(new TableR("store"), new TableR("product_class")),
+                    null,
+                    "region_id",
+                    null,
+                    "product_class_id");
+                MappingJoin j = new JoinR(
+                    List.of(new TableR("product"), j1),
+                    null,
+                    "product_class_id",
+                    null,
+                    "store_id");
+                MappingHierarchy h1 = HierarchyRBuilder.builder()
+                    .hasAll(true)
+                    .primaryKey("product_id")
+                    .primaryKeyTable("product")
+                    .relation(j)
+                    .levels(List.of(l1, l2, l3, l4, l5, l6, l7))
+                    .build();
+                MappingCube c = CubeRBuilder.builder()
+                    .name("Sales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("Time")
+                            .type(DimensionTypeEnum.TIME_DIMENSION)
+                            .foreignKey("time_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("time_id")
+                                    .relation(new TableR("time_by_day"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Year")
+                                            .column("the_year")
+                                            .type(TypeEnum.NUMERIC)
+                                            .uniqueMembers(true)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("Quarter")
+                                            .column("quarter")
+                                            .uniqueMembers(false)
+                                            .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("Month")
+                                            .column("month_of_year")
+                                            .uniqueMembers(false)
+                                            .type(TypeEnum.NUMERIC)
+                                            .levelType(LevelTypeEnum.TIME_MONTHS)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .source("Product3")
+                            .name("Product3")
+                            .foreignKey("product_id")
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("#,###")
+                            .build()
+                    ))
+                    .build();
+
+
+                MappingSchema schema = SchemaRBuilder.builder()
+                    .name("FoodMart")
+                    .dimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("Product3")
+                            .hierarchies(
+                                List.of(h1)
+                            )
+                            .build()
+                    ))
+                    .cubes(List.of(c))
+                    .build();
+
+                return schema;
+            }
+        }
+        /*
         withSchema(context,
                 "<?xml version='1.0'?>\n"
                 + "<Schema name='FoodMart'>\n"
@@ -8342,11 +8760,14 @@ class SchemaTest {
                 + "      formatString='#,###'/>\n"
                 + "</Cube>\n"
                 + "</Schema>");
+         */
+        schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian463Modifier2(schema)));
         checkBugMondrian463(context);
     }
 
-    private void checkBugMondrian463(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    private void checkBugMondrian463(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select [Measures] on 0,\n"
             + " head([Product3].members, 10) on 1\n"
             + "from [Sales]",
@@ -8384,7 +8805,98 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLeftDeepJoinFails(TestContextWrapper context) {
+    void testLeftDeepJoinFails(TestContext context) {
+        class TestLeftDeepJoinFailsModifier extends RDbMappingSchemaModifier {
+
+            public TestLeftDeepJoinFailsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> ds = new ArrayList<>();
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+
+                    MappingLevel l1 = LevelRBuilder.builder()
+                        .name("Product Family")
+                        .table("product_class")
+                        .column("product_family")
+                        .uniqueMembers(true)
+                        .build();
+                    MappingLevel l2 = LevelRBuilder.builder()
+                        .name("Product Department")
+                        .table("product_class")
+                        .column("product_department")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l3 = LevelRBuilder.builder()
+                        .name("Product Category")
+                        .table("product_class")
+                        .column("product_category")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l4 = LevelRBuilder.builder()
+                        .name("Product Subcategory")
+                        .table("product_class")
+                        .column("product_subcategory")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l5 = LevelRBuilder.builder()
+                        .name("Product Class")
+                        .table("store")
+                        .column("store_id")
+                        .type(TypeEnum.NUMERIC)
+                        .uniqueMembers(true)
+                        .build();
+                    MappingLevel l6 = LevelRBuilder.builder()
+                        .name("Brand Name")
+                        .table("product")
+                        .column("brand_name")
+                        .uniqueMembers(false)
+                        .build();
+                    MappingLevel l7 = LevelRBuilder.builder()
+                        .name("Product Name")
+                        .table("product")
+                        .column("product_name")
+                        .uniqueMembers(true)
+                        .build();
+
+                    MappingJoin j1 = new JoinR(List.of(
+                        new TableR("product"),
+                        new TableR("store")
+                    ),
+                        null,
+                        "product_class_id",
+                        null,
+                        "region_id");
+
+                    MappingJoin j = new JoinR(List.of(
+                        j1,
+                        new TableR("product_class")
+                    ),
+                        null,
+                        "store_id",
+                        null,
+                        "product_class_id");
+
+                    MappingHierarchy h = HierarchyRBuilder.builder()
+                        .hasAll(true).primaryKey("product_id")
+                        .primaryKeyTable("product")
+                        .relation(j)
+                        .levels(List.of(l1, l2, l3, l4, l5, l6, l7))
+                        .build();
+
+                    MappingPrivateDimension d = PrivateDimensionRBuilder.builder()
+                        .name("Product3").foreignKey("product_id")
+                        .hierarchies(List.of(h))
+                        .build();
+                    ds.add(d);
+                }
+                return ds;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name='Product3' foreignKey='product_id'>\n"
@@ -8405,8 +8917,11 @@ class SchemaTest {
             + "    <Level name='Product Name' table='product' column='product_name' uniqueMembers='true'/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+         */
         try {
-            assertSimpleQuery(context.createConnection());
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestLeftDeepJoinFailsModifier(schema)));
+            assertSimpleQuery(context.getConnection());
             fail("expected error");
         } catch (MondrianException e) {
             assertEquals(
@@ -8420,7 +8935,49 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCaptionWithOrdinalColumn(TestContextWrapper context) {
+    void testCaptionWithOrdinalColumn(TestContext context) {
+        class TestCaptionWithOrdinalColumnModifier extends RDbMappingSchemaModifier {
+
+            public TestCaptionWithOrdinalColumnModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> ds = new ArrayList<>();
+                ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("HR".equals(cube.name())) {
+                    MappingPrivateDimension d = PrivateDimensionRBuilder.builder()
+                        .name("Position").foreignKey("employee_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Position")
+                                .primaryKey("employee_id")
+                                .relation(new TableR("employee"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Management Role")
+                                        .uniqueMembers(true)
+                                        .column("management_role")
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Position Title")
+                                        .uniqueMembers(false)
+                                        .column("position_title")
+                                        .ordinalColumn("position_id")
+                                        .captionColumn("position_title")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build();
+                    ds.add(d);
+                }
+                return ds;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",
                 "<Dimension name=\"Position\" foreignKey=\"employee_id\">\n"
@@ -8430,11 +8987,15 @@ class SchemaTest {
                 + "    <Level name=\"Position Title\" uniqueMembers=\"false\" column=\"position_title\" ordinalColumn=\"position_id\" captionColumn=\"position_title\"/>\n"
                 + "  </Hierarchy>\n"
                 + "</Dimension>\n"));
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestCaptionWithOrdinalColumnModifier(schema)));
+
         String mdxQuery =
             "WITH SET [#DataSet#] as '{Descendants([Position].[All Position], 2)}' "
             + "SELECT {[Measures].[Org Salary]} on columns, "
             + "NON EMPTY Hierarchize({[#DataSet#]}) on rows FROM [HR]";
-        Result result = executeQuery(context.createConnection(), mdxQuery);
+        Result result = executeQuery(context.getConnection(), mdxQuery);
         Axis[] axes = result.getAxes();
         List<Position> positions = axes[1].getPositions();
         Member mall = positions.get(0).get(0);
@@ -8459,7 +9020,59 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian923(TestContextWrapper context) throws Exception {
+    void testBugMondrian923(TestContext context) throws Exception {
+        class TestBugMondrian923Modifier extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian923Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
+                List<MappingCalculatedMember> result = new ArrayList<>();
+                result.addAll(super.cubeCalculatedMembers(cube));
+                if ("Warehouse and Sales".equals(cube.name())) {
+                    result.add(
+                        CalculatedMemberRBuilder.builder()
+                            .name("Image Unit Sales")
+                            .dimension("Measures")
+                            .formulaElement(new FormulaR("[Measures].[Unit Sales]"))
+                            .calculatedMemberProperties(List.of(
+                                CalculatedMemberPropertyRBuilder.builder()
+                                    .name("FORMAT_STRING")
+                                    .value("|$#,###.00|image=icon_chart\\.gif|link=http://www\\.pentaho\\.com")
+                                    .build()
+                            ))
+                        .build());
+                    result.add(
+                        CalculatedMemberRBuilder.builder()
+                            .name("Arrow Unit Sales")
+                            .dimension("Measures")
+                            .formulaElement(new FormulaR("[Measures].[Unit Sales]"))
+                            .calculatedMemberProperties(List.of(
+                                CalculatedMemberPropertyRBuilder.builder()
+                                    .name("FORMAT_STRING")
+                                    .value("IIf([Measures].[Unit Sales] > 10000,'|#,###|arrow=up',IIf([Measures].[Unit Sales] > 5000,'|#,###|arrow=down','|#,###|arrow=none'))")
+                                    .build()
+                            ))
+                            .build());
+                    result.add(
+                        CalculatedMemberRBuilder.builder()
+                            .name("Style Unit Sales")
+                            .dimension("Measures")
+                            .formulaElement(new FormulaR("[Measures].[Unit Sales]"))
+                            .calculatedMemberProperties(List.of(
+                                CalculatedMemberPropertyRBuilder.builder()
+                                    .name("FORMAT_STRING")
+                                    .value("IIf([Measures].[Unit Sales] > 100000,'|#,###|style=green',IIf([Measures].[Unit Sales] > 50000,'|#,###|style=yellow','|#,###|style=red'))")
+                                    .build()
+                            ))
+                            .build());
+                }
+                return result;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Warehouse and Sales",
                 null,
@@ -8468,14 +9081,17 @@ class SchemaTest {
                 + "<CalculatedMember name=\"Arrow Unit Sales\" dimension=\"Measures\"><Formula>[Measures].[Unit Sales]</Formula><CalculatedMemberProperty name=\"FORMAT_STRING\" expression=\"IIf([Measures].[Unit Sales] > 10000,'|#,###|arrow=up',IIf([Measures].[Unit Sales] > 5000,'|#,###|arrow=down','|#,###|arrow=none'))\"/></CalculatedMember>"
                 + "<CalculatedMember name=\"Style Unit Sales\" dimension=\"Measures\"><Formula>[Measures].[Unit Sales]</Formula><CalculatedMemberProperty name=\"FORMAT_STRING\" expression=\"IIf([Measures].[Unit Sales] > 100000,'|#,###|style=green',IIf([Measures].[Unit Sales] > 50000,'|#,###|style=yellow','|#,###|style=red'))\"/></CalculatedMember>",
                 null));
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian923Modifier(schema)));
         for (Cube cube
-                : context.createConnection().getSchemaReader().getCubes())
+                : context.getConnection().getSchemaReader().getCubes())
         {
             if (cube.getName().equals("Warehouse and Sales")) {
                 for (Dimension dim : cube.getDimensions()) {
                     if (dim.isMeasures()) {
                         List<Member> members =
-                            context.createConnection()
+                            context.getConnection()
                                 .getSchemaReader().getLevelMembers(
                                     dim.getHierarchy().getLevels()[0],
                                     true);
@@ -8504,8 +9120,52 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubesVisibility(TestContextWrapper context) throws Exception {
+    void testCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestCubesVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestCubesVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                    List<MappingCube> result = new ArrayList<>();
+                    result.add(CubeRBuilder.builder()
+                        .name("Foo")
+                        .visible(testValue)
+                        .fact(new TableR("store"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Store Type")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Store Type")
+                                                .column("store_type")
+                                                .uniqueMembers(true)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sqft")
+                                .column("store_sqft")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaCubes(schema));
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<Cube name=\"Foo\" visible=\"@REPLACE_ME@\">\n"
                 + "  <Table name=\"store\"/>\n"
@@ -8524,8 +9184,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestCubesVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             assertTrue(testValue.equals(cube.isVisible()));
         }
@@ -8533,8 +9196,39 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubesVisibility(TestContextWrapper context) throws Exception {
+    void testVirtualCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestVirtualCubesVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestVirtualCubesVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                    List<MappingVirtualCube> result = new ArrayList<>();
+                    result.add(VirtualCubeRBuilder.builder()
+                        .name("Foo")
+                        .defaultMeasure("Store Sales")
+                        .visible(testValue)
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("Customers")
+                                .build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("[Measures].[Store Sales]")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaVirtualCubes(schema));
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\" visible=\"@REPLACE_ME@\">\n"
                 + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Customers\"/>\n"
@@ -8547,8 +9241,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubesVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             assertTrue(testValue.equals(cube.isVisible()));
         }
@@ -8556,8 +9253,52 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionVisibility(TestContextWrapper context) throws Exception {
+    void testDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestDimensionVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestDimensionVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                    List<MappingCube> result = new ArrayList<>();
+                    result.add(CubeRBuilder.builder()
+                        .name("Foo")
+                        .fact(new TableR("store"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Bar")
+                                .visible(testValue)
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Store Type")
+                                                .column("store_type")
+                                                .uniqueMembers(true)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sqft")
+                                .column("store_sqft")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
                 + "  <Table name=\"store\"/>\n"
@@ -8576,8 +9317,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
@@ -8592,8 +9336,39 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualDimensionVisibility(TestContextWrapper context) throws Exception {
+    void testVirtualDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestVirtualDimensionVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestVirtualDimensionVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                    List<MappingVirtualCube> result = new ArrayList<>();
+                    result.add(VirtualCubeRBuilder.builder()
+                        .name("Foo")
+                        .defaultMeasure("Store Sales")
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("Customers")
+                                .visible(testValue)
+                                .build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("[Measures].[Store Sales]")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaVirtualCubes(schema));
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\">\n"
                 + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Customers\" visible=\"@REPLACE_ME@\"/>\n"
@@ -8606,8 +9381,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualDimensionVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
@@ -8622,8 +9400,51 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionUsageVisibility(TestContextWrapper context) throws Exception {
+    void testDimensionUsageVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestDimensionUsageVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestDimensionUsageVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                    List<MappingCube> result = new ArrayList<>();
+                    result.add(CubeRBuilder.builder()
+                        .name("Foo")
+                        .fact(new TableR("store"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Bacon")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Store Type")
+                                                .column("store_type")
+                                                .uniqueMembers(true)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sqft")
+                                .column("store_sqft")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
                 + "  <Table name=\"store\"/>\n"
@@ -8639,15 +9460,18 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionUsageVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             String dimensionDef =
                 "<DimensionUsage name=\"Bar\" source=\"Time\" foreignKey=\"time_id\" visible=\"@REPLACE_ME@\"/>";
             dimensionDef = dimensionDef.replace(
                 "@REPLACE_ME@",
                 String.valueOf(testValue));
-            context.createConnection().getSchema().createDimension(
+            context.getConnection().getSchema().createDimension(
                 cube, dimensionDef);
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
@@ -8662,8 +9486,53 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testHierarchyVisibility(TestContextWrapper context) throws Exception {
+    void testHierarchyVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestHierarchyVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestHierarchyVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                    List<MappingCube> result = new ArrayList<>();
+                    result.add(CubeRBuilder.builder()
+                        .name("Foo")
+                        .fact(new TableR("store"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Bar")
+                                .visible(testValue)
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .name("Bacon")
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Store Type")
+                                                .column("store_type")
+                                                .uniqueMembers(true)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sqft")
+                                .column("store_sqft")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
                 + "  <Table name=\"store\"/>\n"
@@ -8682,8 +9551,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
@@ -8705,8 +9577,53 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLevelVisibility(TestContextWrapper context) throws Exception {
+    void testLevelVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
+            class TestLevelVisibilityModifier extends RDbMappingSchemaModifier {
+
+                public TestLevelVisibilityModifier(MappingSchema mappingSchema) {
+                    super(mappingSchema);
+                }
+
+                @Override
+                protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                    List<MappingCube> result = new ArrayList<>();
+                    result.add(CubeRBuilder.builder()
+                        .name("Foo")
+                        .fact(new TableR("store"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Bar")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .name("Bacon")
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Samosa")
+                                                .column("store_type")
+                                                .uniqueMembers(true)
+                                                .visible(testValue)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sqft")
+                                .column("store_sqft")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .build()
+                        ))
+                        .build());
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                    return result;
+                }
+            }
+            /*
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
                 + "  <Table name=\"store\"/>\n"
@@ -8725,8 +9642,11 @@ class SchemaTest {
             String schema = SchemaUtil.getSchema(baseSchema,
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
+             */
+            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+            context.setDatabaseMappingSchemaProviders(List.of(new TestLevelVisibilityModifier(schema)));
             final Cube cube =
-                context.createConnection().getSchema()
+                context.getConnection().getSchema()
                     .lookupCube("Foo", true);
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
@@ -8750,12 +9670,134 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonCollapsedAggregate(TestContextWrapper context) throws Exception {
+    void testNonCollapsedAggregate(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
             return;
         }
+        class TestNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
+
+            public TestNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                MappingTable t = new TableR("sales_fact_1997", List.of(
+                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build()
+                ), List.of(
+                    AggNameRBuilder.builder()
+                        .name("agg_l_05_sales_fact_1997")
+                        .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                        .aggIgnoreColumns(List.of(
+                            AggColumnNameRBuilder.builder().column("customer_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_id").build(),
+                            AggColumnNameRBuilder.builder().column("promotion_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_sales").build(),
+                            AggColumnNameRBuilder.builder().column("store_cost").build()
+                        ))
+                        .aggMeasures(List.of(
+                            AggMeasureRBuilder.builder().name("[Measures].[Unit Sales]").column("unit_sales").build()
+                        ))
+                        .aggLevels(List.of(
+                            AggLevelRBuilder.builder()
+                                .name("[Product].[Product Id]")
+                                .column("product_id")
+                                .collapsed(false)
+                                .build()
+                        ))
+                        .build()
+                ));
+
+                MappingLevel l1 = LevelRBuilder.builder()
+                    .name("Product Family")
+                    .table("product_class")
+                    .column("product_family")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l2 = LevelRBuilder.builder()
+                    .name("Product Department")
+                    .table("product_class")
+                    .column("product_department")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l3 = LevelRBuilder.builder()
+                    .name("Product Category")
+                    .table("product_class")
+                    .column("product_category")
+                    .uniqueMembers(false)
+                    .build();
+
+                MappingLevel l4 = LevelRBuilder.builder()
+                    .name("Product Subcategory")
+                    .table("product_class")
+                    .column("product_subcategory")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l5 = LevelRBuilder.builder()
+                    .name("Brand Name")
+                    .table("product")
+                    .column("brand_name")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l6 = LevelRBuilder.builder()
+                    .name("Product Name")
+                    .table("product")
+                    .column("product_name")
+                    .uniqueMembers(true)
+                    .build();
+
+                MappingLevel l7 = LevelRBuilder.builder()
+                    .name("Product Id")
+                    .table("product")
+                    .column("product_id")
+                    .uniqueMembers(true)
+                    .build();
+
+                result.add(CubeRBuilder.builder()
+                    .name("Foo")
+                    .defaultMeasure("Unit Sales")
+                    .fact(t)
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .foreignKey("product_id")
+                            .name("Product")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("product_id")
+                                    .primaryKeyTable("product")
+                                    .relation(
+                                        new JoinR(
+                                            List.of(new TableR("product"), new TableR("product_class")),
+                                            null, "product_class_id",
+                                            null, "product_class_id"))
+                                    .levels(List.of(
+                                        l1, l2, l3, l4, l5, l6, l7
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                return result;
+            }
+        }
+        /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -8802,7 +9844,10 @@ class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestNonCollapsedAggregateModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Axis #0:\n"
             + "{}\n"
@@ -8819,7 +9864,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonCollapsedAggregateOnNonUniqueLevelFails(TestContextWrapper context)
+    void testNonCollapsedAggregateOnNonUniqueLevelFails(TestContext context)
         throws Exception
     {
         if (MondrianProperties.instance().UseAggregates.get() == false
@@ -8827,6 +9872,128 @@ class SchemaTest {
         {
             return;
         }
+        class TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier extends RDbMappingSchemaModifier {
+
+            public TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+
+                MappingTable t = new TableR("sales_fact_1997", List.of(
+                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build()
+                ), List.of(
+                    AggNameRBuilder.builder()
+                        .name("agg_l_05_sales_fact_1997")
+                        .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                        .aggIgnoreColumns(List.of(
+                            AggColumnNameRBuilder.builder().column("customer_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_id").build(),
+                            AggColumnNameRBuilder.builder().column("promotion_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_sales").build(),
+                            AggColumnNameRBuilder.builder().column("store_cost").build()
+                        ))
+                        .aggMeasures(List.of(
+                            AggMeasureRBuilder.builder().name("[Measures].[Unit Sales]").column("unit_sales").build()
+                        ))
+                        .aggLevels(List.of(
+                            AggLevelRBuilder.builder()
+                                .name("[Product].[Product Name]")
+                                .column("product_id")
+                                .collapsed(false)
+                                .build()
+                        ))
+                        .build()
+                ));
+
+                MappingLevel l1 = LevelRBuilder.builder()
+                    .name("Product Family")
+                    .table("product_class")
+                    .column("product_family")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l2 = LevelRBuilder.builder()
+                    .name("Product Department")
+                    .table("product_class")
+                    .column("product_department")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l3 = LevelRBuilder.builder()
+                    .name("Product Category")
+                    .table("product_class")
+                    .column("product_category")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l4 = LevelRBuilder.builder()
+                    .name("Product Subcategory")
+                    .table("product_class")
+                    .column("product_subcategory")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l5 = LevelRBuilder.builder()
+                    .name("Brand Name")
+                    .table("product")
+                    .column("brand_name")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l6 = LevelRBuilder.builder()
+                    .name("Product Name")
+                    .table("product")
+                    .column("product_name")
+                    .uniqueMembers(true)
+                    .build();
+
+                MappingLevel l7 = LevelRBuilder.builder()
+                    .name("Product Id")
+                    .table("product")
+                    .column("product_id")
+                    .uniqueMembers(true)
+                    .build();
+
+                result.add(CubeRBuilder.builder()
+                    .name("Foo")
+                    .defaultMeasure("Unit Sales")
+                    .fact(t)
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .foreignKey("product_id")
+                            .name("Product")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("product_id")
+                                    .primaryKeyTable("product")
+                                    .relation(
+                                        new JoinR(
+                                            List.of(new TableR("product"), new TableR("product_class")),
+                                            null, "product_class_id",
+                                            null, "product_class_id"))
+                                    .levels(List.of(
+                                        l1, l2, l3, l4, l5, l6, l7
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                return result;
+            }
+        }
+        /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -8873,6 +10040,9 @@ class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(schema)));
         assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "mondrian.olap.MondrianException: Mondrian Error:Too many errors, '1', while loading/reloading aggregates.");
@@ -8880,12 +10050,164 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testTwoNonCollapsedAggregate(TestContextWrapper context) throws Exception {
+    void testTwoNonCollapsedAggregate(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
             return;
         }
+        class TestTwoNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
+
+            public TestTwoNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                MappingTable t = new TableR("sales_fact_1997", List.of(
+                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build()
+                ), List.of(
+                    AggNameRBuilder.builder()
+                        .name("agg_l_05_sales_fact_1997")
+                        .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                        .aggIgnoreColumns(List.of(
+                            AggColumnNameRBuilder.builder().column("customer_id").build(),
+                            AggColumnNameRBuilder.builder().column("promotion_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_sales").build(),
+                            AggColumnNameRBuilder.builder().column("store_cost").build()
+                        ))
+                        .aggMeasures(List.of(
+                            AggMeasureRBuilder.builder().name("[Measures].[Unit Sales]").column("unit_sales").build()
+                        ))
+                        .aggLevels(List.of(
+                            AggLevelRBuilder.builder()
+                                .name("[Product].[Product Name]")
+                                .column("product_id")
+                                .collapsed(false)
+                                .build(),
+                            AggLevelRBuilder.builder()
+                                .name("[Store].[Store Id]")
+                                .column("store_id")
+                                .collapsed(false)
+                                .build()
+                        ))
+                        .build()
+                ));
+
+                MappingLevel l1 = LevelRBuilder.builder()
+                    .name("Product Family")
+                    .table("product_class")
+                    .column("product_family")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l2 = LevelRBuilder.builder()
+                    .name("Product Department")
+                    .table("product_class")
+                    .column("product_department")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l3 = LevelRBuilder.builder()
+                    .name("Product Category")
+                    .table("product_class")
+                    .column("product_category")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l4 = LevelRBuilder.builder()
+                    .name("Product Subcategory")
+                    .table("product_class")
+                    .column("product_subcategory")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l5 = LevelRBuilder.builder()
+                    .name("Brand Name")
+                    .table("product")
+                    .column("brand_name")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l6 = LevelRBuilder.builder()
+                    .name("Product Name")
+                    .table("product")
+                    .column("product_name")
+                    .uniqueMembers(true)
+                    .build();
+
+                MappingLevel l7 = LevelRBuilder.builder()
+                    .name("Product Id")
+                    .table("product")
+                    .column("product_id")
+                    .uniqueMembers(true)
+                    .build();
+
+                result.add(CubeRBuilder.builder()
+                    .name("Foo")
+                    .defaultMeasure("Unit Sales")
+                    .fact(t)
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .foreignKey("product_id")
+                            .name("Product")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("product_id")
+                                    .primaryKeyTable("product")
+                                    .relation(
+                                        new JoinR(
+                                            List.of(new TableR("product"), new TableR("product_class")),
+                                            null, "product_class_id",
+                                            null, "product_class_id"))
+                                    .levels(List.of(
+                                        l1, l2, l3, l4, l5, l6, l7
+                                    ))
+                                    .build()
+                            ))
+                            .build(),
+                        PrivateDimensionRBuilder.builder()
+                            .name("Store")
+                            .foreignKey("store_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("store_id")
+                                    .primaryKeyTable("store")
+                                    .relation(new JoinR(List.of(new TableR("store"), new TableR("region")),
+                                        null, "region_id", null, "region_id"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Store Region")
+                                            .table("region")
+                                            .column("sales_city")
+                                            .uniqueMembers(false)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("Store Id")
+                                            .table("store")
+                                            .column("store_id")
+                                            .uniqueMembers(true)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                return result;
+            }
+        }
+        /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -8946,7 +10268,10 @@ class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestTwoNonCollapsedAggregateModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {Crossjoin([Product].[Product Family].Members, [Store].[Store Id].Members)} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Axis #0:\n"
             + "{}\n"
@@ -9107,12 +10432,133 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCollapsedError(TestContextWrapper context) throws Exception {
+    void testCollapsedError(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
             return;
         }
+        class TestCollapsedErrorModifier extends RDbMappingSchemaModifier {
+
+            public TestCollapsedErrorModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+
+                MappingTable t = new TableR("sales_fact_1997", List.of(
+                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build()
+                ), List.of(
+                    AggNameRBuilder.builder()
+                        .name("agg_l_05_sales_fact_1997")
+                        .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                        .aggIgnoreColumns(List.of(
+                            AggColumnNameRBuilder.builder().column("customer_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_id").build(),
+                            AggColumnNameRBuilder.builder().column("promotion_id").build(),
+                            AggColumnNameRBuilder.builder().column("store_sales").build(),
+                            AggColumnNameRBuilder.builder().column("store_cost").build()
+                        ))
+                        .aggMeasures(List.of(
+                            AggMeasureRBuilder.builder().name("[Measures].[Unit Sales]").column("unit_sales").build()
+                        ))
+                        .aggLevels(List.of(
+                            AggLevelRBuilder.builder()
+                                .name("[Product].[Product Id]")
+                                .column("product_id")
+                                .collapsed(true)
+                                .build()
+                        ))
+                        .build()
+                ));
+
+                MappingLevel l1 = LevelRBuilder.builder()
+                    .name("Product Family")
+                    .table("product_class")
+                    .column("product_family")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l2 = LevelRBuilder.builder()
+                    .name("Product Department")
+                    .table("product_class")
+                    .column("product_department")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l3 = LevelRBuilder.builder()
+                    .name("Product Category")
+                    .table("product_class")
+                    .column("product_category")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l4 = LevelRBuilder.builder()
+                    .name("Product Subcategory")
+                    .table("product_class")
+                    .column("product_subcategory")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l5 = LevelRBuilder.builder()
+                    .name("Brand Name")
+                    .table("product")
+                    .column("brand_name")
+                    .uniqueMembers(false)
+                    .build();
+                MappingLevel l6 = LevelRBuilder.builder()
+                    .name("Product Name")
+                    .table("product")
+                    .column("product_name")
+                    .uniqueMembers(true)
+                    .build();
+                MappingLevel l7 = LevelRBuilder.builder()
+                    .name("Product Id")
+                    .table("product")
+                    .column("product_id")
+                    .uniqueMembers(true)
+                    .build();
+
+                result.add(CubeRBuilder.builder()
+                    .name("Foo")
+                    .defaultMeasure("Unit Sales")
+                    .fact(t)
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .foreignKey("product_id")
+                            .name("Product")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("product_id")
+                                    .primaryKeyTable("product")
+                                    .relation(
+                                        new JoinR(
+                                            List.of(new TableR("product"), new TableR("product_class")),
+                                            null, "product_class_id",
+                                            null, "product_class_id"))
+                                    .levels(List.of(
+                                        l1, l2, l3, l4, l5, l6, l7
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
+                return result;
+            }
+        }
+        /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -9159,6 +10605,9 @@ class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestCollapsedErrorModifier(schema)));
         assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Too many errors, '1', while loading/reloading aggregates.");
@@ -9172,9 +10621,9 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian1047(TestContextWrapper context) {
+    void testBugMondrian1047(TestContext context) {
         // Test case only works under MySQL, due to how columns are quoted.
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             break;
@@ -9190,15 +10639,16 @@ class SchemaTest {
     }
 
 
-    public void checkBugMondrian1047(TestContextWrapper context, int n) {
-        class CheckBugMondrian1047 extends RDbMappingSchemaModifier{
-            public CheckBugMondrian1047(MappingSchema mappingSchema) {
+    public void checkBugMondrian1047(TestContext context, int n) {
+        class CheckBugMondrian1047Modifier extends RDbMappingSchemaModifier{
+            public CheckBugMondrian1047Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
             }
             @Override
-            protected MappingCube cube(MappingCube cube) {
-                MappingCube c = super.cube(cube);
-                if ("HR".equals(c.name())) {
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("HR".equals(cube.name())) {
                     List<MappingPrivateDimension> dimensions = new ArrayList<>();
                     for ( int i = 0; i < n; i++ ) {
                         MappingSQL sql = new SQLR("`position_title` + " + i,
@@ -9223,11 +10673,14 @@ class SchemaTest {
                                 .build()
                         );
                     }
-                    c.dimensionUsageOrDimensions().addAll(dimensions);
+                    result.addAll(dimensions);
                 }
-                return c;
+                return result;
             }
-        };
+        }
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new CheckBugMondrian1047Modifier(schema)));
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",
                 TestUtil.repeatString(
@@ -9241,7 +10694,8 @@ class SchemaTest {
                     + "  </Hierarchy>\n"
                     + "</Dimension>"),
                 null, false));
-        assertQueryReturns(context.createConnection(),
+         */
+        assertQueryReturns(context.getConnection(),
             "select from [HR]",
             "Axis #0:\n"
             + "{}\n"
@@ -9256,14 +10710,113 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian1065(TestContextWrapper context) {
+    void testBugMondrian1065(TestContext context) {
         // Test case only works under Oracle
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case ORACLE:
             break;
         default:
             return;
         }
+        class TestBugMondrian1065Modifier extends RDbMappingSchemaModifier{
+            public TestBugMondrian1065Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+                    List<MappingPrivateDimension> dimensions = new ArrayList<>();
+                        MappingInlineTable i = InlineTableRBuilder.builder()
+                            .alias("meatShack")
+                            .columnDefs(List.of(
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_1_id")
+                                    .type(TypeEnum.INTEGER)
+                                    .build(),
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_1_name")
+                                    .type(TypeEnum.STRING)
+                                    .build(),
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_2_id")
+                                    .type(TypeEnum.INTEGER)
+                                    .build(),
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_2_name")
+                                    .type(TypeEnum.STRING)
+                                    .build(),
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_3_id")
+                                    .type(TypeEnum.INTEGER)
+                                    .build(),
+                                ColumnDefRBuilder.builder()
+                                    .name("lvl_3_name")
+                                    .type(TypeEnum.STRING)
+                                    .build()
+                                )
+                            )
+                            .rows(List.of(
+                                RowRBuilder.builder()
+                                    .values(List.of(
+                                        new ValueR("lvl_1_id", "1"),
+                                        new ValueR("lvl_1_name", "level 1"),
+                                        new ValueR("lvl_2_id", "1"),
+                                        new ValueR("lvl_2_name", "level 2 - 1"),
+                                        new ValueR("lvl_3_id", "112"),
+                                        new ValueR("lvl_3_name", "level 3 - 1")
+                                    ))
+                                    .build(),
+                                RowRBuilder.builder()
+                                    .values(List.of(
+                                        new ValueR("lvl_1_id", "1"),
+                                        new ValueR("lvl_1_name", "level 1"),
+                                        new ValueR("lvl_2_id", "1"),
+                                        new ValueR("lvl_2_name", "level 2 - 1"),
+                                        new ValueR("lvl_3_id", "114"),
+                                        new ValueR("lvl_3_name", "level 3 - 2")
+                                    ))
+                                    .build()
+                            ))
+                            .build();
+                    MappingHierarchy hierarchy = HierarchyRBuilder
+                            .builder()
+                            .hasAll(false)
+                            .primaryKey("lvl_3_id")
+                            .levels (List.of(
+                                LevelRBuilder.builder()
+                                    .name("Level1")
+                                    .column("lvl_1_id")
+                                    .nameColumn("lvl_1_name")
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Level2")
+                                    .column("lvl_2_id")
+                                    .nameColumn("lvl_2_name")
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Level3")
+                                    .column("lvl_3_id")
+                                    .nameColumn("lvl_3_name")
+                                    .build()
+                                ))
+                            .relation(i)
+                            .build();
+                        dimensions.add(
+                            PrivateDimensionRBuilder
+                                .builder()
+                                .name("PandaSteak")
+                                .foreignKey("promotion_id")
+                                .hierarchies(List.of(hierarchy))
+                                .build()
+                        );
+                    result.addAll(dimensions);
+                }
+                return result;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"PandaSteak\" foreignKey=\"promotion_id\">\n"
@@ -9301,7 +10854,11 @@ class SchemaTest {
             + "      <Level name=\"Level3\" column=\"lvl_3_id\" nameColumn=\"lvl_3_name\" />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
-        assertQueryReturns(context.createConnection(),
+         */
+
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian1065Modifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select non empty crossjoin({[PandaSteak].[Level3].[level 3 - 1], [PandaSteak].[Level3].[level 3 - 2]}, {[Measures].[Unit Sales], [Measures].[Store Cost]}) on columns, {[Product].[Product Family].Members} on rows from [Sales]",
             "Axis #0:\n"
             + "{}\n"
@@ -9338,8 +10895,8 @@ class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1390(TestContextWrapper context) throws Exception {
-        Schema schema = context.createConnection().getSchema();
+    void testMondrian1390(TestContext context) throws Exception {
+        Schema schema = context.getConnection().getSchema();
         Cube salesCube = schema.lookupCube("Sales", true);
         SchemaReader sr = salesCube.getSchemaReader(null).withLocus();
         List<Member> members = sr.getLevelMembers(
@@ -9378,9 +10935,252 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1499(TestContextWrapper context) throws Exception {
+    void testMondrian1499(TestContext context) throws Exception {
         propSaver.set(propSaver.properties.UseAggregates, false);
         propSaver.set(propSaver.properties.ReadAggregates, false);
+        class TestMondrian1499Modifier extends RDbMappingSchemaModifier {
+
+            public TestMondrian1499Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+                MappingPrivateDimension d1 = PrivateDimensionRBuilder.builder()
+                    .name("Store")
+                    .foreignKey("employee_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKey("employee_id")
+                            .primaryKeyTable("employee")
+                            .relation(new JoinR(
+                                List.of(
+                                    new TableR("employee", new SQLR("1 = 1", null)),
+                                    new TableR("store")),
+                                null , "store_id", null , "store_id"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Store Country")
+                                    .table("store")
+                                    .column("store_country")
+                                    .uniqueMembers(true)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Store State")
+                                    .table("store")
+                                    .column("store_state")
+                                    .uniqueMembers(true)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Store City")
+                                    .table("store")
+                                    .column("store_city")
+                                    .uniqueMembers(false)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Store Name")
+                                    .table("store")
+                                    .column("store_name")
+                                    .uniqueMembers(true)
+                                    .properties(List.of(
+                                        PropertyRBuilder.builder()
+                                            .name("Store Type")
+                                            .column("store_type")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Store Manager")
+                                            .column("store_manager")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Store Sqft")
+                                            .column("store_sqft")
+                                            .type(PropertyTypeEnum.NUMERIC)
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Grocery Sqft")
+                                            .column("grocery_sqft")
+                                            .type(PropertyTypeEnum.NUMERIC)
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Frozen Sqft")
+                                            .column("frozen_sqft")
+                                            .type(PropertyTypeEnum.NUMERIC)
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Meat Sqft")
+                                            .column("meat_sqft")
+                                            .type(PropertyTypeEnum.NUMERIC)
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Has coffee bar")
+                                            .column("coffee_bar")
+                                            .type(PropertyTypeEnum.BOOLEAN)
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Street address")
+                                            .column("store_street_address")
+                                            .type(PropertyTypeEnum.STRING)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingPrivateDimension d2 = PrivateDimensionRBuilder.builder()
+                    .name("Pay Type")
+                    .foreignKey("employee_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKey("employee_id")
+                            .primaryKeyTable("employee")
+                            .relation(new JoinR(
+                                List.of(
+                                    new TableR("employee", new SQLR("1 = 1", null)),
+                                    new TableR("position")),
+                                null, "position_id", null, "position_id"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Pay Type")
+                                    .table("position")
+                                    .column("pay_type")
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingPrivateDimension d3 = PrivateDimensionRBuilder.builder()
+                    .name("Store Type")
+                    .foreignKey("employee_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKeyTable("employee")
+                            .primaryKey("employee_id")
+                            .relation(new JoinR(List.of(
+                                new TableR("employee", new SQLR("1 = 1", null)),
+                                new TableR("store")
+                            ), null, "store_id", null, "store_id")
+                            )
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Store Type")
+                                    .table("store")
+                                    .column("store_type")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingPrivateDimension d4 = PrivateDimensionRBuilder.builder()
+                    .name("Position")
+                    .foreignKey("employee_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Position")
+                            .primaryKey("employee_id")
+                            .relation(new TableR("employee", new SQLR("1 = 1", null)))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Management Role")
+                                    .uniqueMembers(true)
+                                    .column("management_role")
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Position Title")
+                                    .uniqueMembers(false)
+                                    .column("position_title")
+                                    .ordinalColumn("position_id")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+
+                MappingPrivateDimension d5 = PrivateDimensionRBuilder.builder()
+                    .name("Employees")
+                    .foreignKey("employee_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Employees")
+                            .primaryKey("employee_id")
+                            .relation(new TableR("employee", new SQLR("1 = 1", null)))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Employee Id")
+                                    .type(TypeEnum.NUMERIC)
+                                    .uniqueMembers(true)
+                                    .column("employee_id")
+                                    .parentColumn("supervisor_id")
+                                    .nameColumn("full_name")
+                                    .nullParentValue("0")
+                                    .closure(ClosureRBuilder.builder()
+                                        .parentColumn("supervisor_id")
+                                        .childColumn("employee_id")
+                                        .table(new TableR("employee_closure"))
+                                        .build())
+                                    .properties(List.of(
+                                        PropertyRBuilder.builder()
+                                            .name("Marital Status")
+                                            .column("marital_status")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Position Title")
+                                            .column("position_title")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Gender")
+                                            .column("gender")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Salary")
+                                            .column("salary")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Education Level")
+                                            .column("education_level")
+                                            .build(),
+                                        PropertyRBuilder.builder()
+                                            .name("Management Role")
+                                            .column("management_role")
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+                return SchemaRBuilder.builder()
+                    .name("FoodMart")
+                    .cubes(List.of(
+                        CubeRBuilder.builder()
+                            .name("HR")
+                            .fact(new TableR("salary"))
+                            .dimensionUsageOrDimensions(List.of(
+                                d1, d2, d3, d4, d5
+                            ))
+                            .measures(List.of(
+                                MeasureRBuilder.builder()
+                                    .name("Org Salary")
+                                    .column("salary_paid")
+                                    .aggregator("sum")
+                                    .formatString("Currency")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+            }
+        }
+        /*
         withSchema(context,
                 "<?xml version='1.0'?>\n"
                 + "<Schema name='FoodMart'>\n"
@@ -9440,6 +11240,7 @@ class SchemaTest {
                 + "          uniqueMembers=\"true\"/>\n"
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"
+
                 + "  <Dimension name=\"Position\" foreignKey=\"employee_id\">\n"
                 + "    <Hierarchy hasAll=\"true\" allMemberName=\"All Position\"\n"
                 + "        primaryKey=\"employee_id\">\n"
@@ -9477,7 +11278,10 @@ class SchemaTest {
                 + "      formatString=\"Currency\"/>\n"
                 + "</Cube>\n"
                 + "</Schema>");
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1499Modifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary]} on columns,\n"
             + "{[Store].[Store Country].Members} on rows from [HR]",
             "Axis #0:\n"
@@ -9500,14 +11304,88 @@ class SchemaTest {
     */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1073(TestContextWrapper context) throws Exception {
+    void testMondrian1073(TestContext context) throws Exception {
+        class TestMondrian1073Modifier extends RDbMappingSchemaModifier {
+
+            public TestMondrian1073Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                result.add(CubeRBuilder.builder()
+                    .name("CubeA")
+                    .defaultMeasure("Unit Sales")
+                    .fact(new TableR(null, "sales_fact_1997", "TableAlias",
+                        List.of(), new SQLR("`TableAlias`.`promotion_id` = 108", "mysql"),
+                        List.of(), List.of()))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .name("Store Type")
+                            .source("Store Type")
+                            .foreignKey("store_id")
+                            .build()
+                        )
+                    )
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Customer Count")
+                            .column("customer_id")
+                            .aggregator("distinct-count")
+                            .formatString("#,###")
+                            .build(),
+                        MeasureRBuilder.builder()
+                            .name("Fantastic Count for Different Types of Promotion")
+                            .column("promotion_id")
+                            .aggregator("count")
+                            .formatString("Standard")
+                            .build()
+                        ))
+                    .build());
+                result.add(CubeRBuilder.builder()
+                    .name("CubeB")
+                    .defaultMeasure("Unit Sales")
+                    .fact(new TableR(null, "sales_fact_1997", "TableAlias",
+                        List.of(), new SQLR("`TableAlias`.`promotion_id` = 112", "mysql"),
+                        List.of(), List.of()))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .name("Store Type")
+                            .source("Store Type")
+                            .foreignKey("store_id")
+                            .build()
+                        )
+                    )
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build(),
+                        MeasureRBuilder.builder()
+                            .name("Fantastic Count for Different Types of Promotion")
+                            .column("promotion_id")
+                            .aggregator("count")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                result.addAll(super.schemaCubes(schema));
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                     null, CUBES_AB,
                     null, null, null, null);
         withSchema(context, schema);
-
-        assertQueryReturns(context.createConnection(), "CubeB",
+        */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1073Modifier(schema)));
+        assertQueryReturns(context.getConnection(), "CubeB",
             "SELECT [Measures].[Fantastic Count for Different Types of Promotion] ON COLUMNS\n"
             + "FROM [CubeB]",
             "Axis #0:\n"
@@ -9519,8 +11397,31 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMultiByteSchemaReadFromFile(TestContextWrapper context) throws IOException {
+    void testMultiByteSchemaReadFromFile(TestContext context) throws IOException {
         //String rawSchema = TestContext.getRawFoodMartSchema().replace(
+        class TestMultiByteSchemaReadFromFile extends RDbMappingSchemaModifier {
+
+            public TestMultiByteSchemaReadFromFile(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected MappingHierarchy hierarchy(MappingHierarchy hierarchy) {
+                MappingHierarchy h = super.hierarchy(hierarchy);
+                if (h.hasAll() == true
+                    && "All Gender".equals(h.allMemberName())
+                    && "customer_id".equals(h.primaryKey())) {
+                    return HierarchyRBuilder.builder()
+                        .name("地域")
+                        .hasAll(true)
+                        .allMemberName("All Gender")
+                        .primaryKey("customer_id")
+                        .build();
+                }
+                return h;
+            }
+        }
+        /*
         String rawSchema = TestUtil.getRawSchema(context).replace(
             "<Hierarchy hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">",
             "<Hierarchy name=\"地域\" hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">");
@@ -9537,7 +11438,10 @@ class SchemaTest {
         //    schemaFile.getAbsolutePath());
         context.setProperty(RolapConnectionProperties.Catalog.name(),
                 schemaFile.getAbsolutePath());
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMultiByteSchemaReadFromFile(schema)));
+        assertQueryReturns(context.getConnection(),
             "select [Gender].members on 0 from sales",
             "Axis #0:\n"
             + "{}\n"
