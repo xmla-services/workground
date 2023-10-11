@@ -717,6 +717,16 @@
         <artifactId>asm-util</artifactId>
         <version>${asm.version}</version>
       </dependency>
+  	  <dependency>
+	    <groupId>biz.aQute</groupId>
+	    <artifactId>biz.aQute.api.scheduler</artifactId>
+	    <version>1.10.0</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>biz.aQute</groupId>
+	    <artifactId>biz.aQute.scheduler.basic.provider</artifactId>
+	    <version>1.9.0</version>
+	  </dependency>
       <dependency>
         <groupId>com.github.ben-manes.caffeine</groupId>
         <artifactId>caffeine</artifactId>

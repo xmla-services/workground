@@ -4,7 +4,7 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition(name = "DatabaseSchemaObserver", description = "")
-public interface Config {
+public interface CreatorConfig {
 
 	@AttributeDefinition(name = "databaseSchema", description = "name of the schema in the database", required = true)
 	default String database_schema() {
@@ -27,8 +27,4 @@ public interface Config {
 		return null;
 	}
 
-	@AttributeDefinition(name = "ecore compare file", description = "url of the ecore file that could be used to compare the database with")
-	default String ecore_compare_file_url() {
-		return null;
-	}
 }
