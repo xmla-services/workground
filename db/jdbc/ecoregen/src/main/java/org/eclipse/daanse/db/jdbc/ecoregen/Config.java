@@ -1,22 +1,34 @@
 package org.eclipse.daanse.db.jdbc.ecoregen;
 
+import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-@ObjectClassDefinition()
+@ObjectClassDefinition(name = "DatabaseSchemaObserver", description = "")
 public interface Config {
-//
-//	@AttributeDefinition
-//	default String packageName() {
-//		return "default";
-//	}
-//
-//	@AttributeDefinition
-//	default String nsUri() {
-//		return "http://model.data.jena.de/database.xyz";
-//	}
-//
-//	@AttributeDefinition
-//	default String nsPrefix() {
-//		return "default";
-//	}
+
+	@AttributeDefinition(name = "databaseSchema", description = "name of the schema in the database", required = true)
+	default String database_schema() {
+		return null;
+	}
+
+	@AttributeDefinition(name = "package name", description = "name of the package in the ecore model", required = true)
+	default String ecore_packageName() {
+		return null;
+	}
+
+	@AttributeDefinition(name = "namespace uri", description = "namespace uri of the package in the schema", required = true)
+	default String ecore_nsUri() {
+		return null;
+
+	}
+
+	@AttributeDefinition(name = "namespace prefix", description = "namespace prefix of the package in the schema", required = true)
+	default String ecore_nsPrefix() {
+		return null;
+	}
+
+	@AttributeDefinition(name = "ecore compare file", description = "url of the ecore file that could be used to compare the database with")
+	default String ecore_compare_file_url() {
+		return null;
+	}
 }
