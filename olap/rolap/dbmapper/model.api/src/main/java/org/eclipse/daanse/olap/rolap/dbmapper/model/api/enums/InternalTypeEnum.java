@@ -35,6 +35,6 @@ public enum InternalTypeEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException("Illegal value '" + v + "'.  Legal values: {int, long, Object, String}");
     }
 }

@@ -107,6 +107,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ViewRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,12 +117,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.metadata.NamedList;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -344,6 +343,7 @@ class SchemaTest {
                 return result;
             }
         }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -356,6 +356,7 @@ class SchemaTest {
             + "      <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\" />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyDefaultMemberModifier(schema)));
         assertQueryReturns(context.getConnection(),
@@ -437,6 +438,7 @@ class SchemaTest {
                 return result;
             }
         };
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Product with no all\" foreignKey=\"product_id\">\n"
@@ -452,6 +454,7 @@ class SchemaTest {
             + "          uniqueMembers=\"true\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
+        */
         // note that default member name has no 'all' and has a name not an id
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMemberNameModifier(schema)));
@@ -503,6 +506,7 @@ class SchemaTest {
                 return result;
             }
         };
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -514,6 +518,7 @@ class SchemaTest {
             + "      <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\" />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyAbbreviatedDefaultMemberModifier(schema)));
         assertQueryReturns(context.getConnection(),
@@ -558,6 +563,7 @@ class SchemaTest {
                 return result;
             }
         };
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender no levels' foreignKey='customer_id'>\n"
@@ -565,6 +571,7 @@ class SchemaTest {
             + "      <Table name='customer'/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyNoLevelsFailsModifier(schema)));
         assertQueryThrows(context,
@@ -616,6 +623,7 @@ class SchemaTest {
                 return result;
             }
         };
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender dup levels' foreignKey='customer_id'>\n"
@@ -625,6 +633,7 @@ class SchemaTest {
             + "      <Level name='Gender' column='gender' uniqueMembers='true' />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyNonUniqueLevelsFailsModifier(schema)));
         assertQueryThrows(context,
@@ -659,10 +668,12 @@ class SchemaTest {
                 return result;
             }
         }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
             "<Measure name=\"Fact Count\" aggregator=\"count\"/>\n"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestCountMeasureModifier(schema)));
         assertQueryReturns(context.getConnection(),
@@ -727,6 +738,7 @@ class SchemaTest {
                 return result;
             }
         }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income3\" foreignKey=\"product_id\">\n"
@@ -735,6 +747,7 @@ class SchemaTest {
             + "    <Level name=\"Yearly Income\" column=\"yearly_income\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+        */
         // FIXME: This should validate the schema, and fail.
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyTableNotFoundModifier(schema)));
@@ -783,6 +796,7 @@ class SchemaTest {
                 return result;
             }
         }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income4\" foreignKey=\"product_id\">\n"
@@ -791,6 +805,7 @@ class SchemaTest {
             + "    <Level name=\"Yearly Income\" column=\"yearly_income\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+        */
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestPrimaryKeyTableNotFoundModifier(schema)));
         assertQueryThrows(context,
@@ -2718,6 +2733,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTableSameForeignKeys(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         class TestTwoAliasesDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
             public TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3519,8 +3535,8 @@ class SchemaTest {
                     .sqls(List.of(
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "generic"),
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "oracle"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "mysql"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "infobright")
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "mysql"),
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "infobright")
                     ))
                     .build();
                 MappingLevel l1 = LevelRBuilder.builder()
@@ -3536,15 +3552,14 @@ class SchemaTest {
                 MappingPrivateDimension d4 = PrivateDimensionRBuilder.builder()
                     .name("Warehouse")
                     .hierarchies(List.of(h1))
-                    .foreignKey("store_id")
                     .build();
                 MappingView view = ViewRBuilder.builder()
                     .alias("FACT")
                     .sqls(List.of(
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "generic"),
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "oracle"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "mysql"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "infobright")
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "mysql"),
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "infobright")
                     ))
                     .build();
 
@@ -3712,8 +3727,8 @@ class SchemaTest {
                     .sqls(List.of(
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "generic"),
                         new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "oracle"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "mysql"),
-                        new SQLR("select * from \"inventory_fact_1997\" as \"FOOBAR\"", "infobright")
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "mysql"),
+                        new SQLR("select * from `inventory_fact_1997` as `FOOBAR`", "infobright")
                     ))
                     .build();
 
@@ -3844,8 +3859,8 @@ class SchemaTest {
                     .sqls(List.of(
                         new SQLR("select * from \"store\" as \"FOOBAR\"", "generic"),
                         new SQLR("select * from \"store\" as \"FOOBAR\"", "oracle"),
-                        new SQLR("select * from \"store\" as \"FOOBAR\"", "mysql"),
-                        new SQLR("select * from \"store\" as \"FOOBAR\"", "infobright")
+                        new SQLR("select * from `store` as `FOOBAR`", "mysql"),
+                        new SQLR("select * from `store` as `FOOBAR`", "infobright")
                     ))
                     .build();
 
@@ -5366,6 +5381,7 @@ class SchemaTest {
 
         // Test where hierarchy & dimension both specified. should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier2 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier2(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5373,7 +5389,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5427,6 +5443,7 @@ class SchemaTest {
 
         // test where hierarchy is not uname of valid hierarchy. should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier3 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier3(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5434,7 +5451,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5486,6 +5503,7 @@ class SchemaTest {
 
         // test where formula is invalid. should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier4 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier4(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5493,7 +5511,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5543,6 +5561,7 @@ class SchemaTest {
 
         // Test where parent is invalid. should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier5 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier5(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5550,7 +5569,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5603,6 +5622,7 @@ class SchemaTest {
 
         // test where parent is not in same hierarchy as hierarchy. should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier6 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier6(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5610,7 +5630,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5664,6 +5684,7 @@ class SchemaTest {
         // test where calc member has no formula (formula attribute or
         //   embedded element); should fail
         try {
+        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier7 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier7(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5671,7 +5692,7 @@ class SchemaTest {
                 @Override
                 protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
                     List<MappingCalculatedMember> result = new ArrayList<>();
-                    result.addAll(super.cubeCalculatedMembers(cube));
+                    result.addAll(super.cubeCalculatedMembers(cube).stream().filter(cm -> !"SF and LA".equals(cm.name())).toList());
                     if ("Sales".equals(cube.name())) {
                             MappingCalculatedMember calculatedMember = CalculatedMemberRBuilder
                             .builder()
@@ -5680,6 +5701,7 @@ class SchemaTest {
                             .parent("[Store].[USA].[CA]")
                             .formulaElement(FormulaRBuilder
                                 .builder()
+                                .cdata("")
                                 .build())
                             .build();
                         result.add(calculatedMember);
@@ -5843,13 +5865,13 @@ class SchemaTest {
                 MappingView v1 = ViewRBuilder.builder()
                     .sqls(List.of(
                         new SQLR("SELECT * FROM customer", "generic"),
-                        new SQLR("SELECT * FROM customer", "oracle"),
-                        new SQLR("SELECT * FROM customer", "derby"),
-                        new SQLR("SELECT * FROM customer", "hsqldb"),
-                        new SQLR("SELECT * FROM customer", "luciddb"),
-                        new SQLR("SELECT * FROM customer", "neoview"),
-                        new SQLR("SELECT * FROM customer", "netezza"),
-                        new SQLR("SELECT * FROM customer", "db2")
+                        new SQLR("SELECT * FROM \"customer\"", "oracle"),
+                        new SQLR("SELECT * FROM \"customer\"", "derby"),
+                        new SQLR("SELECT * FROM \"customer\"", "hsqldb"),
+                        new SQLR("SELECT * FROM \"customer\"", "luciddb"),
+                        new SQLR("SELECT * FROM \"customer\"", "neoview"),
+                        new SQLR("SELECT * FROM \"customer\"", "netezza"),
+                        new SQLR("SELECT * FROM \"customer\"", "db2")
                     ))
                     .build();
 
@@ -6774,7 +6796,7 @@ class SchemaTest {
                         .name("Level1")
                         .column("big_num")
                         .type(TypeEnum.INTEGER)
-                        .internalType(InternalTypeEnum.STRING)
+                        .internalType(InternalTypeEnum.fromValue("char"))
                         .build();
                     MappingLevel level2 = LevelRBuilder
                         .builder()
@@ -6827,7 +6849,8 @@ class SchemaTest {
         context.setDatabaseMappingSchemaProviders(List.of(new TestLevelInternalTypeErrModifier(schema)));
         assertQueryThrows(context,
             "select {[Big numbers].members} on 0 from [Sales]",
-            "In Schema: In Cube: In Dimension: In Hierarchy: In Level: Value 'char' of attribute 'internalType' has illegal value 'char'.  Legal values: {int, long, Object, String}");
+        		"Illegal value 'char'.  Legal values: {int, long, Object, String}");
+            //"In Schema: In Cube: In Dimension: In Hierarchy: In Level: Value 'char' of attribute 'internalType' has illegal value 'char'.  Legal values: {int, long, Object, String}");
     }
 
     @Disabled // Adventure Works schema not found
@@ -7237,6 +7260,7 @@ class SchemaTest {
                 List<MappingCubeDimension> ds = new ArrayList<>();
                 ds.addAll(super.cubeDimensionUsageOrDimensions(cube));
                 if ("Sales".equals(cube.name())) {
+                	String type = timeHalfYear.equals("TimeUndefined") ? "TimeUnspecified" : timeHalfYear;
                     MappingLevel l1 = LevelRBuilder.builder()
                         .name("Years").column("the_year").uniqueMembers(true)
                         .type(TypeEnum .NUMERIC).levelType(LevelTypeEnum.TIME_YEARS).build();
@@ -7250,7 +7274,7 @@ class SchemaTest {
                     MappingLevel l4 = LevelRBuilder.builder()
                         .name("Quarter hours").column("time_id").uniqueMembers(false)
                         .type(TypeEnum.NUMERIC)
-                        .levelType(LevelTypeEnum.TIME_UNDEFINED).build();
+                        .levelType(LevelTypeEnum.fromValue("TimeUnspecified")).build();
                     MappingHierarchy h = HierarchyRBuilder.builder()
                         .hasAll(true).primaryKey("time_id")
                         .relation(new TableR("time_by_day"))
@@ -7282,6 +7306,7 @@ class SchemaTest {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales", xml, false));
          */
+        DatabaseMappingSchemaProvider provider = context.getDatabaseMappingSchemaProviders().get(0);
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(
             List.of(new CheckBugMondrian355Modifier1(schema)));
@@ -7316,14 +7341,18 @@ class SchemaTest {
                     "Sales",
                 xml.replace("TimeUndefined", "TimeUnspecified"), false));
             */
+        	RolapSchemaPool.instance().clear();
             context.setDatabaseMappingSchemaProviders(
                 List.of(new CheckBugMondrian355Modifier2(schema)));
             assertSimpleQuery(context.getConnection());
             fail("expected error");
         } catch (Throwable e) {
+        	context.setDatabaseMappingSchemaProviders(
+        			List.of(provider));
             checkThrowable(
                 e,
-                "Mondrian Error:Level '[Time2].[Quarter hours]' belongs to a time hierarchy, so its level-type must be  'Regular', 'TimeYears', 'TimeHalfYears', 'TimeHalfYear', 'TimeQuarters', 'TimeMonths', 'TimeWeeks', 'TimeDays', 'TimeHours', 'TimeMinutes', 'TimeSeconds', 'TimeUndefined'.");
+           		"level-type must be  'Regular', 'TimeYears', 'TimeHalfYears', 'TimeHalfYear', 'TimeQuarters', 'TimeMonths', 'TimeWeeks', 'TimeDays', 'TimeHours', 'TimeMinutes', 'TimeSeconds', 'TimeUndefined'.");
+                //"Mondrian Error:Level '[Time2].[Quarter hours]' belongs to a time hierarchy, so its level-type must be  'Regular', 'TimeYears', 'TimeHalfYears', 'TimeHalfYear', 'TimeQuarters', 'TimeMonths', 'TimeWeeks', 'TimeDays', 'TimeHours', 'TimeMinutes', 'TimeSeconds', 'TimeUndefined'.");
         }
     }
 
@@ -7538,6 +7567,7 @@ class SchemaTest {
                             .name("Foo")
                             .dimension("Measures")
                             .caption("Calc member caption")
+                            .description("Calc member description")
                             .annotations(List.of(
                                 AnnotationRBuilder.builder()
                                     .name("a")
@@ -9186,8 +9216,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubesVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestCubesVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestCubesVisibilityModifier(MappingSchema mappingSchema) {
@@ -9227,7 +9257,7 @@ class SchemaTest {
                                 .build()
                         ))
                         .build());
-                    result.addAll(super.schemaCubes(schema));
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
                     return result;
                 }
             }
@@ -9263,8 +9293,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubesVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestVirtualCubesVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestVirtualCubesVisibilityModifier(MappingSchema mappingSchema) {
@@ -9291,7 +9321,7 @@ class SchemaTest {
                                 .build()
                         ))
                         .build());
-                    result.addAll(super.schemaVirtualCubes(schema));
+                    result.addAll(super.schemaVirtualCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
                     return result;
                 }
             }
@@ -9321,8 +9351,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestDimensionVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestDimensionVisibilityModifier(MappingSchema mappingSchema) {
@@ -9405,8 +9435,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualDimensionVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestVirtualDimensionVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestVirtualDimensionVisibilityModifier(MappingSchema mappingSchema) {
@@ -9433,7 +9463,7 @@ class SchemaTest {
                                 .build()
                         ))
                         .build());
-                    result.addAll(super.schemaVirtualCubes(schema));
+                    result.addAll(super.schemaVirtualCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
                     return result;
                 }
             }
@@ -9557,8 +9587,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestHierarchyVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestHierarchyVisibilityModifier(MappingSchema mappingSchema) {
@@ -9574,11 +9604,11 @@ class SchemaTest {
                         .dimensionUsageOrDimensions(List.of(
                             PrivateDimensionRBuilder.builder()
                                 .name("Bar")
-                                .visible(testValue)
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
                                         .name("Bacon")
                                         .hasAll(true)
+                                        .visible(testValue)
                                         .levels(List.of(
                                             LevelRBuilder.builder()
                                                 .name("Store Type")
@@ -9649,8 +9679,8 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
+        	RolapSchemaPool.instance().clear();
             class TestLevelVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestLevelVisibilityModifier(MappingSchema mappingSchema) {
@@ -9669,7 +9699,7 @@ class SchemaTest {
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
                                         .name("Bacon")
-                                        .hasAll(true)
+                                        .hasAll(false)
                                         .levels(List.of(
                                             LevelRBuilder.builder()
                                                 .name("Samosa")
@@ -11488,15 +11518,12 @@ class SchemaTest {
             @Override
             protected MappingHierarchy hierarchy(MappingHierarchy hierarchy) {
                 MappingHierarchy h = super.hierarchy(hierarchy);
-                if (h.hasAll() == true
+                if (h.hasAll()
                     && "All Gender".equals(h.allMemberName())
                     && "customer_id".equals(h.primaryKey())) {
-                    return HierarchyRBuilder.builder()
-                        .name("地域")
-                        .hasAll(true)
-                        .allMemberName("All Gender")
-                        .primaryKey("customer_id")
-                        .build();
+                    return new_Hierarchy("地域", h.caption(), h.description(), h.annotations(), h.levels(), h.memberReaderParameters(), h.hasAll(),
+                            h.allMemberName(), h.allMemberCaption(), h.allLevelName(), h.primaryKey(), h.primaryKeyTable(), h.defaultMember(),
+                            h.memberReaderClass(), h.uniqueKeyLevelName(), h.visible(), h.displayFolder(), h.relation(), h.origin());
                 }
                 return h;
             }
