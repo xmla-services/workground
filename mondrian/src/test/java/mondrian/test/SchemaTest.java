@@ -2610,7 +2610,7 @@ class SchemaTest {
                 MappingHierarchy h1 = HierarchyRBuilder
                     .builder()
                     .hasAll(true)
-                    .primaryKeyTable("store_id")
+                    .primaryKey("store_id")
                     .relation(new TableR(null, "store", "storea", null))
                     .levels(List.of(l11, l12))
                     .build();
@@ -2652,22 +2652,26 @@ class SchemaTest {
                     .builder()
                     .name("AliasedDimensionsTesting")
                     .defaultMeasure("Supply Time")
-                    .fact(new TableR("sales_fact_1997"))
+                    .fact(new TableR("inventory_fact_1997"))
                     .dimensionUsageOrDimensions(List.of(d1, d2))
                     .measures(List.of(
                         MeasureRBuilder
                             .builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
+                            .name("Store Invoice")
+                            .column("store_invoice")
                             .aggregator("sum")
-                            .formatString("Standard")
                             .build(),
                         MeasureRBuilder
                             .builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
+                            .name("Supply Time")
+                            .column("supply_time")
+                            .aggregator("sum")                            
+                            .build(),
+                            MeasureRBuilder
+                            .builder()
+                            .name("Warehouse Cost")
+                            .column("warehouse_cost")
+                            .aggregator("sum")                            
                             .build()
                     ))
                     .build();
@@ -2758,7 +2762,7 @@ class SchemaTest {
                 MappingHierarchy h1 = HierarchyRBuilder
                     .builder()
                     .hasAll(true)
-                    .primaryKeyTable("store_id")
+                    .primaryKey("store_id")
                     .relation(new TableR(null, "store", "storea", null))
                     .levels(List.of(l11, l12))
                     .build();
@@ -5863,6 +5867,7 @@ class SchemaTest {
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
                 MappingView v1 = ViewRBuilder.builder()
+                    .alias("gender2")
                     .sqls(List.of(
                         new SQLR("SELECT * FROM customer", "generic"),
                         new SQLR("SELECT * FROM \"customer\"", "oracle"),
@@ -5899,7 +5904,10 @@ class SchemaTest {
                 MappingCube c = CubeRBuilder
                     .builder()
                     .name("GenderCube")
-                    .fact(new TableR("sales_fact_1997"))
+                    .fact(new TableR("sales_fact_1997",
+                        List.of(
+                            AggExcludeRBuilder.builder().pattern("agg_g_ms_pcat_sales_fact_1997").build()
+                        ), List.of()))
                     .dimensionUsageOrDimensions(List.of(d1))
                     .measures(List.of(
                         MeasureRBuilder.builder()
@@ -6017,12 +6025,13 @@ class SchemaTest {
         withRole(context, "Role1");
         assertQueryThrows(context,
             "select from [Sales]",
-            "Cannot invoke \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum.name()\" because the return value of \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant.access()\" is null");
+            "Cannot invoke \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum.name()\" because the return value of \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant.access()\" is null");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberNoStringReplace(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         class TestAllMemberNoStringReplaceModifier extends RDbMappingSchemaModifier {
             public TestAllMemberNoStringReplaceModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
