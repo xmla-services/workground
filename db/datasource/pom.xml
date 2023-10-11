@@ -27,5 +27,6 @@
     <module>jtdssqlserver</module>
     <module>clickhouse</module>
     <module>mysql</module>
+    <module>postgresql</module>
   </modules>
 </project>
