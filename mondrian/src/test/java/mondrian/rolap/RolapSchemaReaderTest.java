@@ -11,33 +11,39 @@
 
 package mondrian.rolap;
 
+import mondrian.olap.MondrianException;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Dimension;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.MondrianException;
 
 /**
  * Unit test for {@link SchemaReader}.
@@ -158,6 +164,51 @@ class RolapSchemaReaderTest {
             hierarchyName("Time", "Weekly");
         final String timeTime =
             hierarchyName("Time", "Time");
+        RolapSchemaPool.instance().clear();
+        class TestGetCubeDimensionsModifier extends RDbMappingSchemaModifier {
+
+            public TestGetCubeDimensionsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingRole> roles(List<MappingRole> roles) {
+                List<MappingRole> result = new ArrayList<>();
+                result.addAll(super.roles(roles));
+                result.add(RoleRBuilder.builder()
+                    .name("REG1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("Store")
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy(timeTime)
+                                            .access(AccessEnum.NONE)
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy(timeWeekly)
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -175,7 +226,10 @@ class RolapSchemaReaderTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
         withSchema(context, schema);
+         */
         withRole(context, "REG1");
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestGetCubeDimensionsModifier(schema)));
         Connection connection = context.createConnection();
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();

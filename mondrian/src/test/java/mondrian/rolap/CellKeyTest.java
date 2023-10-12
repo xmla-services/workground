@@ -11,25 +11,33 @@
 
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.test.PropertySaver5;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 
 /**
  * Test that the implementations of the CellKey interface are correct.
@@ -320,7 +328,7 @@ class CellKeyTest  {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCellLookup(TestContextWrapper context) {
+    void testCellLookup(TestContext context) {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -377,7 +385,87 @@ class CellKeyTest  {
         propSaver.set(
             MondrianProperties.instance().ExpandNonNative,
             false);
+        RolapSchemaPool.instance().clear();
+        class TestCellLookupModifier extends RDbMappingSchemaModifier {
 
+            public TestCellLookupModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(CubeRBuilder.builder()
+                    .name("SalesTest")
+                    .defaultMeasure("Unit Sales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("City")
+                            .foreignKey("customer_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("customer_id")
+                                    .relation(new TableR("customer"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("city")
+                                            .column("city")
+                                            .uniqueMembers(true)
+                                            .build()
+                                    )).build()
+                            )).build(),
+                        PrivateDimensionRBuilder.builder()
+                            .name("Gender")
+                            .foreignKey("customer_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                     .hasAll(true)
+                                     .primaryKey("customer_id")
+                                     .relation(new TableR("customer"))
+                                     .levels(List.of(
+                                         LevelRBuilder.builder()
+                                             .name("gender")
+                                             .column("gender")
+                                             .uniqueMembers(true)
+                                             .build()
+                                     ))
+                                     .build()
+                            )).build(),
+                        PrivateDimensionRBuilder.builder()
+                            .name("Address2")
+                            .foreignKey("customer_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("customer_id")
+                                    .relation(new TableR("customer"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("addr")
+                                            .column("address2")
+                                            .uniqueMembers(true)
+                                            .build()
+                                    ))
+                                    .build()
+                                ))
+                            .build()
+                            ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -387,7 +475,10 @@ class CellKeyTest  {
                 null,
                 null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(), query, result);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestCellLookupModifier(schema)));
+        assertQueryReturns(context.getConnection(), query, result);
     }
 
     void testSize() {

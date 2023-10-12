@@ -8,39 +8,6 @@
 */
 package mondrian.rolap;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Future;
-
-import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Connection;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
@@ -56,6 +23,45 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
 import mondrian.util.DelegatingInvocationHandler;
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ExpressionViewRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
 
 /**
  * Test for <code>FastBatchingCellReader</code>.
@@ -99,6 +105,17 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     locus = new Locus( e, "FastBatchingCellReaderTest", null );
     Locus.push( locus );
     salesCube = (RolapCube) connection.getSchemaReader().withLocus().getCubes()[0];
+  }
+
+  private void prepareContext(TestContext context) {
+        connection = context.getConnection();
+        connection.getCacheControl( null ).flushSchemaCache();
+        final Statement statement = ((RolapConnection) connection).getInternalStatement();
+        e = new Execution( statement, 0 );
+        aggMgr = e.getMondrianStatement().getMondrianConnection().getServer().getAggregationManager();
+        locus = new Locus( e, "FastBatchingCellReaderTest", null );
+        Locus.push( locus );
+        salesCube = (RolapCube) connection.getSchemaReader().withLocus().getCubes()[0];
   }
 
   private BatchLoader createFbcr( Boolean useGroupingSets, RolapCube cube ) {
@@ -929,11 +946,11 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLoadDistinctSqlMeasure(TestContextWrapper context) {
+  void testLoadDistinctSqlMeasure(TestContext context) {
     prepareContext(context);
     // Some databases cannot handle scalar subqueries inside
     // count(distinct).
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     final Dialect dialect = getDialect(connection);
     switch ( getDatabaseProduct(dialect.getDialectName()) ) {
       case ORACLE:
@@ -990,12 +1007,115 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "    [Measures].[Count All of Warehouses (Large Independent)],"
             + "    [Measures].[Count Distinct Store+Warehouse]," + "    [Measures].[Count All Store+Warehouse],"
             + "    [Measures].[Store Count]} on columns " + "from [Warehouse2]";
+      RolapSchemaPool.instance().clear();
+      class TestLoadDistinctSqlMeasureModifier extends RDbMappingSchemaModifier {
 
+          public TestLoadDistinctSqlMeasureModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCube> cubes(List<MappingCube> cubes) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("warehouse"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Store Type")
+                          .source("Store Type")
+                          .foreignKey("stores_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Count Distinct of Warehouses (Large Owned)")
+                          .aggregator("distinct count")
+                          .formatString("#,##0")
+                          .measureExpression(ExpressionViewRBuilder.builder()
+                              .sqls(List.of(
+                                  SQLRBuilder.builder()
+                                      .dialect("generic")
+                                      .content("(select `warehouse_class`.`warehouse_class_id` AS `warehouse_class_id` from `warehouse_class` AS `warehouse_class` where `warehouse_class`.`warehouse_class_id` = `warehouse`.`warehouse_class_id` and `warehouse_class`.`description` = 'Large Owned')")
+                                      .build()
+                              ))
+                              .build())
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Count Distinct of Warehouses (Large Independent)")
+                          .aggregator("distinct count")
+                          .formatString("#,##0")
+                          .measureExpression(ExpressionViewRBuilder.builder()
+                              .sqls(List.of(
+                                  SQLRBuilder.builder()
+                                      .dialect("generic")
+                                      .content("(select `warehouse_class`.`warehouse_class_id` AS `warehouse_class_id` from `warehouse_class` AS `warehouse_class` where `warehouse_class`.`warehouse_class_id` = `warehouse`.`warehouse_class_id` and `warehouse_class`.`description` = 'Large Independent')")
+                                      .build()
+                              ))
+                              .build())
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Count All of Warehouses (Large Independent)")
+                          .aggregator("count")
+                          .formatString("#,##0")
+                          .measureExpression(ExpressionViewRBuilder.builder()
+                              .sqls(List.of(
+                                  SQLRBuilder.builder()
+                                      .dialect("generic")
+                                      .content("(select `warehouse_class`.`warehouse_class_id` AS `warehouse_class_id` from `warehouse_class` AS `warehouse_class` where `warehouse_class`.`warehouse_class_id` = `warehouse`.`warehouse_class_id` and `warehouse_class`.`description` = 'Large Independent')")
+                                      .build()
+                              ))
+                              .build())
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Count Distinct Store+Warehouse")
+                          .aggregator("distinct count")
+                          .formatString("#,##0")
+                          .measureExpression(ExpressionViewRBuilder.builder()
+                              .sqls(List.of(
+                                  SQLRBuilder.builder()
+                                      .dialect("generic")
+                                      .content("`store_id`+`warehouse_id`")
+                                      .build()
+                              ))
+                              .build())
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Count All Store+Warehouse")
+                          .aggregator("count")
+                          .formatString("#,##0")
+                          .measureExpression(ExpressionViewRBuilder.builder()
+                              .sqls(List.of(
+                                  SQLRBuilder.builder()
+                                      .dialect("generic")
+                                      .content("`store_id`+`warehouse_id`")
+                                      .build()
+                              ))
+                              .build())
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Store Count")
+                          .column("stores_id")
+                          .aggregator("count")
+                          .formatString("#,###")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
             null, cube, null, null, null, null );
     withSchema(context, schema);
-    String desiredResult =
+     */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(
+          List.of(new TestLoadDistinctSqlMeasureModifier(schema)));
+      String desiredResult =
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Count Distinct of Warehouses (Large Owned)]}\n"
             + "{[Measures].[Count Distinct of Warehouses (Large Independent)]}\n"
             + "{[Measures].[Count All of Warehouses (Large Independent)]}\n"
@@ -1011,7 +1131,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "Row #4: 4\n" + "Row #5: 0\n" + "Row #5: 1\n" + "Row #5: 3\n" + "Row #5: 8\n" + "Row #5: 8\n"
             + "Row #5: 8\n";
 
-    assertQueryReturns(context.createConnection(), query, desiredResult );
+    assertQueryReturns(context.getConnection(), query, desiredResult );
 
     String loadCountDistinct_luciddb1 =
         "select " + "\"store\".\"store_type\" as \"c0\", " + "count(distinct "
@@ -1071,7 +1191,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
           new SqlPattern( DatabaseProduct.MYSQL, load_mysql, load_mysql ), };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+    assertQuerySql(context.getConnection(), query, patterns );
   }
 
   @ParameterizedTest
@@ -1426,12 +1546,66 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCountDistinctAggWithOtherCountDistinctInContext(TestContextWrapper context) {
+  void testCountDistinctAggWithOtherCountDistinctInContext(TestContext context) {
     prepareContext(context);
     // tests that Aggregate( <set>, <count-distinct measure>) aggregates
     // the correct measure when a *different* count-distinct measure is
     // in context (MONDRIAN-2128)
+      RolapSchemaPool.instance().clear();
+      class TestCountDistinctAggWithOtherCountDistinctInContextModifier extends RDbMappingSchemaModifier {
 
+          public TestCountDistinctAggWithOtherCountDistinctInContextModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCube> cubes(List<MappingCube> cubes) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+
+              result.add(CubeRBuilder.builder()
+                  .name("2CountDistincts")
+                  .defaultMeasure("Store Count")
+                  .fact(new TableR("sales_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Time")
+                          .source("Time")
+                          .foreignKey("time_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Store")
+                          .source("Store")
+                          .foreignKey("store_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Store Count")
+                          .column("store_id")
+                          .aggregator("distinct count")
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Customer Count")
+                          .column("customer_id")
+                          .aggregator("distinct-count")
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Unit Sales")
+                          .column("unit_sales")
+                          .aggregator("sum")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
             null, "<Cube name=\"2CountDistincts\" defaultMeasure=\"Store Count\">\n"
@@ -1443,7 +1617,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "aggregator=\"distinct-count\"/>\n" + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" "
             + "aggregator=\"sum\"/>\n" + "</Cube>", null, null, null, null );
     withSchema(context, schema);
-    // We should get the same answer whether the default [Store Count]
+     */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestCountDistinctAggWithOtherCountDistinctInContextModifier(schema)));
+      // We should get the same answer whether the default [Store Count]
     // measure is in context or [Unit Sales]. The measure specified in the
     // second param of Aggregate() should be used.
     final String queryStoreCountInContext =
@@ -1453,13 +1630,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
         "with member Store.agg as " + "'aggregate({[Store].[USA].[CA],[Store].[USA].[OR]}, "
             + "           measures.[Customer Count])'" + " select Store.agg on 0 from [2CountDistincts] where "
             + "measures.[Unit Sales] ";
-    assertQueriesReturnSimilarResults(context.createConnection(), queryStoreCountInContext, queryUnitSalesInContext);
+    assertQueriesReturnSimilarResults(context.getConnection(), queryStoreCountInContext, queryUnitSalesInContext);
 
     final String queryCAORRollup =
         "with member measures.agg as " + "'aggregate({[Store].[USA].[CA],[Store].[USA].[OR]}, "
             + "           measures.[Customer Count])'" + " select {measures.agg, measures.[Customer Count]} on 0,  "
             + " [Product].[All Products].children on 1 " + "from [2CountDistincts] ";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertQueryReturns(connection, queryCAORRollup, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[agg]}\n"
         + "{[Measures].[Customer Count]}\n" + "Axis #2:\n" + "{[Product].[Drink]}\n" + "{[Product].[Food]}\n"
         + "{[Product].[Non-Consumable]}\n" + "Row #0: 2,243\n" + "Row #0: 3,485\n" + "Row #1: 3,711\n"
