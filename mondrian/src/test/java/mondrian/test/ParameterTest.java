@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -37,12 +38,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import mondrian.rolap.RolapSchemaPool;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ParameterRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.eigenbase.util.property.Property;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,6 +58,7 @@ import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -1272,7 +1281,27 @@ class ParameterTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaProp(TestContextWrapper context) {
+    void testSchemaProp(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestSchemaPropModifier extends RDbMappingSchemaModifier {
+
+            public TestSchemaPropModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
+                List<MappingParameter> result = new ArrayList<>();
+                result.addAll(super.schemaParameters(schema));
+                result.add(ParameterRBuilder.builder()
+                    .name("prop")
+                    .type(ParameterTypeEnum.STRING)
+                    .defaultValue("foo bar")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             "<Parameter name=\"prop\" type=\"String\" "
@@ -1281,7 +1310,10 @@ class ParameterTest {
             null,
             null, null, null);
         withSchema(context, schema);
-        assertExprReturns(context.createConnection(), "ParamRef(\"prop\")", "foo bar");
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropModifier(schema)));
+        assertExprReturns(context.getConnection(), "ParamRef(\"prop\")", "foo bar");
     }
 
     /**
@@ -1289,7 +1321,37 @@ class ParameterTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaPropDupFails(TestContextWrapper context) {
+    void testSchemaPropDupFails(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestSchemaPropDupFailsModifier extends RDbMappingSchemaModifier {
+
+            public TestSchemaPropDupFailsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
+                List<MappingParameter> result = new ArrayList<>();
+                result.addAll(super.schemaParameters(schema));
+                result.add(ParameterRBuilder.builder()
+                    .name("foo")
+                    .type(ParameterTypeEnum.NUMERIC)
+                    .defaultValue("1")
+                    .build());
+                result.add(ParameterRBuilder.builder()
+                    .name("bar")
+                    .type(ParameterTypeEnum.NUMERIC)
+                    .defaultValue("2")
+                    .build());
+                result.add(ParameterRBuilder.builder()
+                    .name("foo")
+                    .type(ParameterTypeEnum.NUMERIC)
+                    .defaultValue("3")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             "<Parameter name=\"foo\" type=\"Numeric\" defaultValue=\"1\" />\n"
@@ -1301,6 +1363,9 @@ class ParameterTest {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropDupFailsModifier(schema)));
         assertExprThrows(context,
             "ParamRef(\"foo\")",
             "Duplicate parameter 'foo' in schema");
@@ -1309,7 +1374,27 @@ class ParameterTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaPropIllegalTypeFails(TestContextWrapper context) {
+    void testSchemaPropIllegalTypeFails(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestSchemaPropIllegalTypeFailsModifier extends RDbMappingSchemaModifier {
+
+            public TestSchemaPropIllegalTypeFailsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
+                List<MappingParameter> result = new ArrayList<>();
+                result.addAll(super.schemaParameters(schema));
+                result.add(ParameterRBuilder.builder()
+                    .name("foo")
+                    .type(ParameterTypeEnum.NUMERIC)
+                    .defaultValue("1")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             "<Parameter name=\"foo\" type=\"Bad type\" defaultValue=\"1\" />",
@@ -1319,6 +1404,9 @@ class ParameterTest {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropIllegalTypeFailsModifier(schema)));
         assertExprThrows(context,
             "1",
             "In Schema: In Parameter: "
@@ -1328,7 +1416,27 @@ class ParameterTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaPropInvalidDefaultExpFails(TestContextWrapper context) {
+    void testSchemaPropInvalidDefaultExpFails(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestSchemaPropInvalidDefaultExpFailsModifier extends RDbMappingSchemaModifier {
+
+            public TestSchemaPropInvalidDefaultExpFailsModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
+                List<MappingParameter> result = new ArrayList<>();
+                result.addAll(super.schemaParameters(schema));
+                result.add(ParameterRBuilder.builder()
+                    .name("Product Current Member")
+                    .type(ParameterTypeEnum.MEMBER)
+                    .defaultValue("[Product].DefaultMember.Children(2)")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             "<Parameter name=\"Product Current Member\" type=\"Member\" defaultValue=\"[Product].DefaultMember.Children(2) \" />",
@@ -1338,7 +1446,10 @@ class ParameterTest {
             null,
             null);
         withSchema(context,schema);
-        assertExprThrows(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropInvalidDefaultExpFailsModifier(schema)));
+        assertExprThrows(context.getConnection(),
             "ParamRef(\"Product Current Member\")",
             "No function matches signature '<Member>.Children(<Numeric Expression>)'");
     }
@@ -1349,7 +1460,27 @@ class ParameterTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaPropContext(TestContextWrapper context) {
+    void testSchemaPropContext(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestSchemaPropContextModifier extends RDbMappingSchemaModifier {
+
+            public TestSchemaPropContextModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
+                List<MappingParameter> result = new ArrayList<>();
+                result.addAll(super.schemaParameters(schema));
+                result.add(ParameterRBuilder.builder()
+                    .name("Customer Current Member")
+                    .type(ParameterTypeEnum.MEMBER)
+                    .defaultValue("[Customers].DefaultMember.Children.Item(2)")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             "<Parameter name=\"Customer Current Member\" type=\"Member\" defaultValue=\"[Customers].DefaultMember.Children.Item(2) \" />",
@@ -1359,7 +1490,10 @@ class ParameterTest {
             null,
             null);
         withSchema(context,schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropContextModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' ParamRef(\"Customer Current Member\").Name '\n"
             + "select {[Measures].[Foo]} on columns\n"
             + "from [Sales]",
@@ -1369,7 +1503,7 @@ class ParameterTest {
             + "{[Measures].[Foo]}\n"
             + "Row #0: USA\n");
 
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context.getConnection(),
             "with member [Measures].[Foo] as ' ParamRef(\"Customer Current Member\").Name '\n"
             + "select {[Measures].[Foo]} on columns\n"
             + "from [Warehouse]",

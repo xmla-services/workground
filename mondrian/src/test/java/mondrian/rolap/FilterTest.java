@@ -16,6 +16,17 @@ import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +34,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -32,6 +44,9 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests for Filter and native Filters.
@@ -546,7 +561,7 @@ class FilterTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void  testNotInMultiLevelMemberConstraintMixedNullNonNullParent(TestContextWrapper context) {
+  public void  testNotInMultiLevelMemberConstraintMixedNullNonNullParent(TestContext context) {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -641,7 +656,70 @@ class FilterTest extends BatchTestCase {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
+      RolapSchemaPool.instance().clear();
+      class TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier extends RDbMappingSchemaModifier {
 
+          public TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCube> cubes(List<MappingCube> cubes) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("inventory_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Warehouse2")
+                          .source("Warehouse2")
+                          .foreignKey("warehouse_id")
+                          .build(),
+                      PrivateDimensionRBuilder.builder()
+                          .name("Warehouse2")
+                          .hierarchies(List.of(
+                              HierarchyRBuilder.builder()
+                                  .hasAll(true)
+                                  .primaryKey("warehouse_id")
+                                  .relation(new TableR("warehouse"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("fax").column("warehouse_fax").uniqueMembers(true)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("address1").column("wa_address1").uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("name").column("warehouse_name").uniqueMembers(false)
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Warehouse Cost")
+                          .column("warehouse_cost")
+                          .aggregator("sum")
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Warehouse Sales")
+                          .column("warehouse_sales")
+                          .aggregator("sum")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
         dimension,
@@ -651,8 +729,10 @@ class FilterTest extends BatchTestCase {
         null,
         null );
     withSchema(context, schema);
-
-    assertQuerySql(context.createConnection(), query, patterns );
+    */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier(schema)));
+      assertQuerySql(context.getConnection(), query, patterns );
   }
 
   /**
@@ -661,7 +741,7 @@ class FilterTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void  testNotInMultiLevelMemberConstraintSingleNullParent(TestContextWrapper context) {
+  public void  testNotInMultiLevelMemberConstraintSingleNullParent(TestContext context) {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -748,7 +828,70 @@ class FilterTest extends BatchTestCase {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
+      RolapSchemaPool.instance().clear();
+      class TestNotInMultiLevelMemberConstraintSingleNullParentModifier extends RDbMappingSchemaModifier {
 
+          public TestNotInMultiLevelMemberConstraintSingleNullParentModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCube> cubes(List<MappingCube> cubes) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("inventory_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Warehouse2")
+                          .source("Warehouse2")
+                          .foreignKey("warehouse_id")
+                          .build(),
+                      PrivateDimensionRBuilder.builder()
+                          .name("Warehouse2")
+                          .hierarchies(List.of(
+                              HierarchyRBuilder.builder()
+                                  .hasAll(true)
+                                  .primaryKey("warehouse_id")
+                                  .relation(new TableR("warehouse"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("fax").column("warehouse_fax").uniqueMembers(true)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("address1").column("wa_address1").uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("name").column("warehouse_name").uniqueMembers(false)
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Warehouse Cost")
+                          .column("warehouse_cost")
+                          .aggregator("sum")
+                          .build(),
+                      MeasureRBuilder.builder()
+                          .name("Warehouse Sales")
+                          .column("warehouse_sales")
+                          .aggregator("sum")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
         dimension,
@@ -758,8 +901,10 @@ class FilterTest extends BatchTestCase {
         null,
         null );
     withSchema(context, schema);
-
-    assertQuerySql(context.createConnection(), query, patterns);
+    */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestNotInMultiLevelMemberConstraintSingleNullParentModifier(schema)));
+      assertQuerySql(context.getConnection(), query, patterns);
   }
 
   @ParameterizedTest

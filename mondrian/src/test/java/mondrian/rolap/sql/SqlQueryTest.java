@@ -10,6 +10,52 @@
 */
 package mondrian.rolap.sql;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ExpressionViewRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static mondrian.enums.DatabaseProduct.MYSQL;
 import static mondrian.enums.DatabaseProduct.POSTGRES;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
@@ -19,33 +65,6 @@ import static org.mockito.Mockito.when;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.olap.api.Connection;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.BatchTestCase;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 
 /**
  * Test for <code>SqlQuery</code>.
@@ -605,10 +624,10 @@ class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDoubleInList(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testDoubleInList(TestContext context) {
+        Connection connection = context.getConnection();
         prepareContext(connection);
-        final Dialect dialect = getDialect(context.createConnection());
+        final Dialect dialect = getDialect(context.getConnection());
         if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.LUCIDDB) {
             return;
         }
@@ -685,6 +704,63 @@ class SqlQueryTest  extends BatchTestCase {
                 loadSqlLucidDB)
         };
 
+        RolapSchemaPool.instance().clear();
+        class TestDoubleInListModifier extends RDbMappingSchemaModifier {
+
+            public TestDoubleInListModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(CubeRBuilder.builder()
+                    .name("Sales 3")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("StoreEmpSalary")
+                            .foreignKey("store_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .allMemberName("All Salary")
+                                    .primaryKey("store_id")
+                                    .relation(new TableR("employee"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Salary").column("salary")
+                                            .type(TypeEnum.NUMERIC).uniqueMembers(true)
+                                            .approxRowCount("10000000")
+                                            .keyExpression(
+                                                ExpressionViewRBuilder.builder()
+                                                    .sqls(List.of(
+                                                        SQLRBuilder.builder()
+                                                            .dialect("luciddb")
+                                                            .content("cast(cast(\"salary\" as double)*cast(1000.0 as double)/cast(3.1234567890123456 as double) as double)")
+                                                            .build()
+                                                    ))
+                                                    .build()
+                                            )
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Store Cost")
+                            .column("store_cost")
+                            .aggregator("sum")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -694,7 +770,10 @@ class SqlQueryTest  extends BatchTestCase {
                 null,
                 null);
         withSchema(context, schema);
-        assertQuerySql(connection, query, patterns);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestDoubleInListModifier(schema)));
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
     /**
@@ -743,8 +822,8 @@ class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testApproxRowCountOverridesCount(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testApproxRowCountOverridesCount(TestContext context) {
+        Connection connection = context.getConnection();
         prepareContext(connection);
         final String cubeSchema =
             "<Cube name=\"ApproxTest\"> \n"
@@ -774,6 +853,53 @@ class SqlQueryTest  extends BatchTestCase {
                 MYSQL, forbiddenSqlMysql, null)
         };
 
+        RolapSchemaPool.instance().clear();
+        class TestApproxRowCountOverridesCountModifier extends RDbMappingSchemaModifier {
+
+            public TestApproxRowCountOverridesCountModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(CubeRBuilder.builder()
+                    .name("ApproxTest")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("Gender")
+                            .foreignKey("customer_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .allMemberName("All Gender")
+                                    .primaryKey("customer_id")
+                                    .relation(new TableR("customer"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Gender").column("gender")
+                                            .type(TypeEnum.NUMERIC).uniqueMembers(true)
+                                            .approxRowCount("2")
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -783,8 +909,11 @@ class SqlQueryTest  extends BatchTestCase {
                 null,
                 null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestApproxRowCountOverridesCountModifier(schema)));
         assertQuerySqlOrNot(
-        	context.createConnection(),
+        	context.getConnection(),
             mdxQuery,
             patterns,
             true,
@@ -799,6 +928,48 @@ class SqlQueryTest  extends BatchTestCase {
         prepareContext(connection);
         final String mdx =
             "select NON EMPTY { [Store].[Store].[Store State].members } on 0 from [Sales]";
+        RolapSchemaPool.instance().clear();
+        class TestLimitedRollupMemberRetrievableFromCacheModifier extends RDbMappingSchemaModifier {
+
+            public TestLimitedRollupMemberRetrievableFromCacheModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingRole> roles(List<MappingRole> roles) {
+                List<MappingRole> result = new ArrayList<>();
+                result.addAll(super.roles(roles));
+                result.add(RoleRBuilder.builder()
+                    .name("justCA")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+                return roles;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -812,6 +983,9 @@ class SqlQueryTest  extends BatchTestCase {
                 + " </SchemaGrant>\n"
                 + " </Role>\n");
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestLimitedRollupMemberRetrievableFromCacheModifier(schema)));
         withRole(context,"justCA");
 
         String pgSql =
