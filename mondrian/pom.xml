@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
-			<scope>test</scope>
+			<version>1.2.0</version>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.olap4j</groupId>-->
