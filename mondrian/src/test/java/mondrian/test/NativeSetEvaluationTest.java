@@ -9,6 +9,51 @@
 */
 package mondrian.test;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluationUnsupportedException;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.util.Bug;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -19,32 +64,6 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import org.eclipse.daanse.olap.api.CacheControl;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.NativeEvaluationUnsupportedException;
-import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.util.Bug;
 
 /**
  * Test native evaluation of supported set operations.
@@ -1019,7 +1038,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultipleAllWithInExpr(TestContextWrapper context) {
+  void testMultipleAllWithInExpr(TestContext context) {
     // set up three hierarchies on same dimension
     final String multiHierarchyCube =
       " <Cube name=\"3StoreHCube\">\n"
@@ -1067,6 +1086,112 @@ protected void assertQuerySql(Connection connection,
         + "Mouthwash]}\n"
         + "Row #0: 51.60\n"
         + "Row #1: 28.96\n";
+      RolapSchemaPool.instance().clear();
+      class TestMultipleAllWithInExprModifier extends RDbMappingSchemaModifier {
+
+          public TestMultipleAllWithInExprModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCube> cubes(List<MappingCube> cubes) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+              result.add(CubeRBuilder.builder()
+                  .name("AltStore")
+                  .fact(new TableR("sales_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      PrivateDimensionRBuilder.builder()
+                          .name("Cities")
+                          .foreignKey("store_id")
+                          .hierarchies(List.of(
+                              HierarchyRBuilder.builder()
+                                  .hasAll(true)
+                                  .primaryKey("store_id")
+                                  .allMemberName("All")
+                                  .relation(new TableR("store"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("Store Name")
+                                          .column("store_name")
+                                          .uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Store City")
+                                          .column("store_city")
+                                          .uniqueMembers(false)
+                                          .build()
+                                  ))
+                                  .build(),
+                              HierarchyRBuilder.builder()
+                                  .name("City")
+                                  .hasAll(true)
+                                  .primaryKey("store_id")
+                                  .allMemberName("All")
+                                  .relation(new TableR("store"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("Store City")
+                                          .column("store_city")
+                                          .uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Store Name")
+                                          .column("store_name")
+                                          .uniqueMembers(false)
+                                          .build()
+                                  ))
+                                  .build(),
+                              HierarchyRBuilder.builder()
+                                  .name("State")
+                                  .hasAll(true)
+                                  .primaryKey("store_id")
+                                  .allMemberName("All")
+                                  .relation(new TableR("store"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("Store State")
+                                          .column("store_state")
+                                          .uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Store City")
+                                          .column("store_city")
+                                          .uniqueMembers(false)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Store Name")
+                                          .column("store_name")
+                                          .uniqueMembers(false)
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Time")
+                          .source("Time")
+                          .foreignKey("time_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Store Sales")
+                          .column("store_sales")
+                          .aggregator("sum")
+                          .formatString("#,###.00")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
         null,
@@ -1076,7 +1201,10 @@ protected void assertQuerySql(Connection connection,
         null,
         null );
     withSchema(context, schema);
-    assertQueryReturns(context.createConnection(),
+     */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestMultipleAllWithInExprModifier(schema)));
+    assertQueryReturns(context.getConnection(),
       mdx,
       result );
   }
@@ -1446,6 +1574,52 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeVirtualRestrictedSet(TestContextWrapper context) throws Exception {
+      RolapSchemaPool.instance().clear();
+      class TestNativeVirtualRestrictedSetModifier extends RDbMappingSchemaModifier {
+
+          public TestNativeVirtualRestrictedSetModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingRole> roles(List<MappingRole> roles) {
+              List<MappingRole> result = new ArrayList<>();
+              result.addAll(super.roles(roles));
+              result.add(RoleRBuilder.builder()
+                  .name("F-MIS-BE-CLIENT")
+                  .schemaGrants(List.of(
+                      SchemaGrantRBuilder.builder()
+                          .access(AccessEnum.NONE)
+                          .cubeGrants(List.of(
+                              CubeGrantRBuilder.builder()
+                                  .cube("Warehouse and Sales")
+                                  .access("all")
+                                  .hierarchyGrants(List.of(
+                                      HierarchyGrantRBuilder.builder()
+                                          .hierarchy("[Store]")
+                                          .rollupPolicy("partial")
+                                          .access(AccessEnum.CUSTOM)
+                                          .memberGrants(List.of(
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Store].[All Stores]")
+                                                  .access(MemberGrantAccessEnum.NONE)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Store].[USA]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build()
+                                          ))
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
       null, null, null, null, null,
@@ -1470,7 +1644,10 @@ protected void assertQuerySql(Connection connection,
         + "    </SchemaGrant>\n"
         + "  </Role>\n" );
     withSchema(context, schema);
+    */
     withRole(context, "F-MIS-BE-CLIENT" );
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestNativeVirtualRestrictedSetModifier(schema)));
     Result result = executeQuery(
       "With\n"
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Store],[*BASE_MEMBERS_Warehouse])'\n"
@@ -1530,12 +1707,78 @@ protected void assertQuerySql(Connection connection,
         + "  </Role>";
     // The following queries should not include [Denny C-Size Batteries] or
     // [Denny D-Size Batteries]
+      RolapSchemaPool.instance().clear();
+      class TestNativeHonorsRoleRestrictionsModifier extends RDbMappingSchemaModifier {
+
+          public TestNativeHonorsRoleRestrictionsModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingRole> roles(List<MappingRole> roles) {
+              List<MappingRole> result = new ArrayList<>();
+              result.addAll(super.roles(roles));
+              result.add(RoleRBuilder.builder()
+                  .name("Test")
+                  .schemaGrants(List.of(
+                      SchemaGrantRBuilder.builder()
+                          .access(AccessEnum.NONE)
+                          .cubeGrants(List.of(
+                              CubeGrantRBuilder.builder()
+                                  .cube("Sales")
+                                  .access("all")
+                                  .hierarchyGrants(List.of(
+                                      HierarchyGrantRBuilder.builder()
+                                          .hierarchy("[Product]")
+                                          .rollupPolicy("partial")
+                                          .access(AccessEnum.CUSTOM)
+                                          .memberGrants(List.of(
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AAA-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant C-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AA-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AAA-Size Batteries]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build()
+                                          ))
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
       null, null, null, null, null, roleDef );
     withSchema(context, schema);
+     */
     withRole(context, "Test" );
-    Connection connection = context.createConnection();
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestNativeHonorsRoleRestrictionsModifier(schema)));
+
+      Connection connection = context.createConnection();
     verifySameNativeAndNot(connection,
       "select non empty crossjoin([Store].[USA],[Product].[Product Name].members) on 0 from sales",
       "Native crossjoin mismatch", propSaver);

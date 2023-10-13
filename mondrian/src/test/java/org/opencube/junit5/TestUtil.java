@@ -307,7 +307,31 @@ public class TestUtil {
 		checkThrowable(throwable, pattern);
 	}
 
-	/**
+    /**
+     * Executes an expression, and asserts that it gives an error which contains a
+     * particular pattern. The error might occur during parsing, or might be
+     * contained within the cell value.
+     */
+    public static void assertExprThrows(TestContext context, String cubeName, String expression, String pattern) {
+        Throwable throwable = null;
+        try {
+            if (cubeName.indexOf(' ') >= 0) {
+                cubeName = Util.quoteMdxIdentifier(cubeName);
+            }
+            expression = expression.replace("'", "''");
+            Result result = executeQuery(context.getConnection(), "with member [Measures].[Foo] as '" + expression
+                + "' select {[Measures].[Foo]} on columns from " + cubeName);
+            Cell cell = result.getCell(new int[] { 0 });
+            if (cell.isError()) {
+                throwable = (Throwable) cell.getValue();
+            }
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
+    /**
 	 * Executes an expression, and asserts that it gives an error which contains a
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
@@ -327,7 +351,17 @@ public class TestUtil {
 		assertExprThrows(context, cubeName, expression, pattern);
 	}
 
-	/**
+    /**
+     * Executes an expression, and asserts that it gives an error which contains a
+     * particular pattern. The error might occur during parsing, or might be
+     * contained within the cell value.
+     */
+    public static void assertExprThrows(TestContext context, String expression, String pattern) {
+        String cubeName = getDefaultCubeName();
+        assertExprThrows(context, cubeName, expression, pattern);
+    }
+
+    /**
 		 * Checks that an actual string matches an expected string.
 		 *
 		 * <p>

@@ -8,29 +8,48 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withRole;
 
 /**
  * Test case for pushing MDX filter conditions down to SQL.
@@ -313,12 +332,125 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "        </SchemaGrant>\n"
             + "    </Role> ";
 
+        RolapSchemaPool.instance().clear();
+        class TestCachedNativeFilterModifier extends RDbMappingSchemaModifier {
+
+            public TestCachedNativeFilterModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+                List<MappingPrivateDimension> result = new ArrayList<>();
+                result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Store2")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKey("store_id")
+                            .relation(new TableR("store"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Store Country")
+                                    .column("store_country")
+                                    .uniqueMembers(true)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Store State")
+                                    .column("store_state")
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+
+            @Override
+            protected List<MappingRole> schemaRoles(MappingSchema schema) {
+                List<MappingRole> result = new ArrayList<>();
+                result.addAll(super.schemaRoles(schema));
+                result.add(RoleRBuilder.builder()
+                    .name("test")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("TinySales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store2]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("PARTIAL")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[Canada]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(CubeRBuilder.builder()
+                    .name("TinySales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .name("Product")
+                            .source("Product")
+                            .foreignKey("product_id")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .name("Store2")
+                            .source("Store2")
+                            .foreignKey("store_id")
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 dimension,
             cube, null, null, null,
             roleDefs);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestCachedNativeFilterModifier(schema)));
         withRole(context, "test");
         Connection connection = context.createConnection();
         verifySameNativeAndNot(connection,

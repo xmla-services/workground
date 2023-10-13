@@ -9,39 +9,45 @@
 
 package mondrian.rolap;
 
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryImpl;
+import mondrian.test.PropertySaver5;
+import mondrian.util.Bug;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.test.PropertySaver5;
-import mondrian.util.Bug;
 
 /**
  * Unit-test for non cacheable elementos of high dimensions.
@@ -133,7 +139,7 @@ class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testPromotionsTwoDimensions(TestContextWrapper context) throws Exception {
+    void testPromotionsTwoDimensions(TestContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -148,7 +154,7 @@ class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testHead(TestContextWrapper context) throws Exception {
+    void testHead(TestContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -165,8 +171,8 @@ class HighDimensionsTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testTopCount(TestContextWrapper context) throws Exception {
-        final Connection connection = context.createConnection();
+    public void _testTopCount(TestContext context) throws Exception {
+        final Connection connection = context.getConnection();
         final StringBuffer buffer = new StringBuffer();
         QueryImpl query =
             connection.parseQuery(
@@ -215,7 +221,7 @@ class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmpty(TestContextWrapper context) throws Exception {
+    void testNonEmpty(TestContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -230,7 +236,7 @@ class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFilter(TestContextWrapper context) throws Exception {
+    void testFilter(TestContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -255,11 +261,59 @@ class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1488(TestContextWrapper context) {
+    void testMondrian1488(TestContext context) {
         //  MONDRIAN-1501 / MONDRIAN-1488
         // Both involve an attempt to modify the list backing
         // HighCardSqlTupleReader when handling null values.
         // Requires use of a dim flagged as high card which has null members
+        RolapSchemaPool.instance().clear();
+        class TestMondrian1488Modifier extends RDbMappingSchemaModifier {
+
+            public TestMondrian1488Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> cubes(List<MappingCube> cubes) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(CubeRBuilder.builder()
+                    .name("highCard")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("StoreSize")
+                            .foreignKey("customer_id")
+                            .highCardinality(true)
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .primaryKey("store_id")
+                                    .relation(new TableR("store"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Sqft")
+                                            .column("store_sqft")
+                                            .type(TypeEnum.NUMERIC)
+                                            .uniqueMembers(true)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -278,8 +332,11 @@ class HighDimensionsTest {
             null,
             null);
         withSchema(context, schema);
+         */
         // this will throw an exception if .remove is called on the HCSTR list
-        executeQuery(context.createConnection(),
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1488Modifier(schema)));
+        executeQuery(context.getConnection(),
             "select NON EMPTY filter([StoreSize].[Sqft].members, 1=1) on 0 from highCard");
     }
 
@@ -292,7 +349,7 @@ class HighDimensionsTest {
      * into an axis from the results.
      */
     private void execHighCardTest(
-        TestContextWrapper context,
+        TestContext context,
         final String queryString,
         final int axisIndex,
         final String highDimensionName,
@@ -303,6 +360,43 @@ class HighDimensionsTest {
         throws Exception
     {
         propSaver.set(MondrianProperties.instance().ResultLimit, resultLimit);
+        RolapSchemaPool.instance().clear();
+        class ExecHighCardTestModifier extends RDbMappingSchemaModifier {
+
+            public ExecHighCardTestModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales Ragged".equals(cube.name())) {
+                    result.add(PrivateDimensionRBuilder.builder()
+                        .name("Promotions")
+                        .highCardinality(true)
+                        .foreignKey("promotion_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Promotions")
+                                .primaryKey("promotion_id")
+                                .relation(new TableR("promotion"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Promotion Name")
+                                        .column("promotion_name")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build());
+                }
+                return result;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales Ragged",
                 "<Dimension name=\"Promotions\" highCardinality=\"true\" "
@@ -316,8 +410,10 @@ class HighDimensionsTest {
                 + "                uniqueMembers=\"true\"/>"
                 + "    </Hierarchy>"
                 + "</Dimension>"));
-
-        final Connection connection = context.createConnection();
+        */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new ExecHighCardTestModifier(schema)));
+        final Connection connection = context.getConnection();
         final QueryImpl query = connection.parseQuery(queryString);
         query.setResultStyle(ResultStyle.ITERABLE);
         Result result = connection.execute(query);
