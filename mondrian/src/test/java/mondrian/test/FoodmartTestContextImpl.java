@@ -18,26 +18,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.AbstractList;
 import java.util.Formatter;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
@@ -60,10 +53,6 @@ import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.olap4j.OlapWrapper;
-import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
 
@@ -73,12 +62,10 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap4j.MondrianInprocProxy;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-import mondrian.rolap.RolapUtil;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.DelegatingInvocationHandler;
@@ -453,48 +440,6 @@ public Result executeQuery( String queryString ) {
 
 
 
-
-  @Override
-public CellSet executeOlap4jXmlaQuery( String queryString )
-    throws SQLException {
-    String schema = getConnectionProperties()
-      .get( RolapConnectionProperties.CatalogContent.name() );
-    if ( schema == null ) {
-      schema = getRawSchema();
-    }
-    // TODO:  Need to better handle semicolons in schema content.
-    // Util.parseValue does not appear to allow escaping them.
-    schema = schema.replace( "&quot;", "" ).replace( ";", "" );
-
-
-
-    String cookie = XmlaOlap4jDriver.nextCookie();
-    Map<String, String> catalogs = new HashMap<>();
-    catalogs.put( "FoodMart", "" );
-    XmlaOlap4jDriver.PROXY_MAP.put(
-      cookie, new MondrianInprocProxy(
-        catalogs,
-        "jdbc:mondrian:Server=http://whatever;"
-          + "Jdbc=" + "NOT ACCESSIBLE" + ";TestProxyCookie="
-          + cookie
-          + ";CatalogContent=" + schema ) );
-    try {
-      Class.forName( "org.olap4j.driver.xmla.XmlaOlap4jDriver" );
-    } catch ( ClassNotFoundException e ) {
-      throw new RuntimeException( "oops", e );
-    }
-    Properties info = new Properties();
-    info.setProperty(
-      XmlaOlap4jDriver.Property.CATALOG.name(), "FoodMart" );
-    java.sql.Connection connection = java.sql.DriverManager.getConnection(
-      "jdbc:xmla:Server=http://whatever;Catalog=FoodMart;TestProxyCookie="
-        + cookie,
-      info );
-    OlapConnection olapConnection =
-      connection.unwrap( OlapConnection.class );
-    OlapStatement statement = olapConnection.createStatement();
-    return statement.executeOlapQuery( queryString );
-  }
 
 
   /**

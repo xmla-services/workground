@@ -11,48 +11,48 @@
 
 
 	<dependencies>
-		
-		  <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.datasource.common</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.annotation.bundle</artifactId>
-      <scope>provided</scope>
-    </dependency>
 
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.framework</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.util.converter</artifactId>
-      <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.datasource.common</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.annotation.bundle</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.component.annotations</artifactId>
-      <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.framework</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.util.converter</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.jdbc</artifactId>
-      <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.component.annotations</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.metatype.annotations</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.jdbc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.metatype.annotations</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

@@ -39,15 +39,15 @@
 			<artifactId>org.eclipse.daanse.db.datasource.postgresql</artifactId>
 			<version>${revision}</version>
 		</dependency>
-  	  <dependency>
-	    <groupId>biz.aQute</groupId>
-	    <artifactId>biz.aQute.api.scheduler</artifactId>
-	    <scope>compile</scope>
-	  </dependency>
-	  <dependency>
-	    <groupId>biz.aQute</groupId>
-	    <artifactId>biz.aQute.scheduler.basic.provider</artifactId>
-	    <scope>runtime</scope>
-	  </dependency>
+		<dependency>
+			<groupId>biz.aQute</groupId>
+			<artifactId>biz.aQute.api.scheduler</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute</groupId>
+			<artifactId>biz.aQute.scheduler.basic.provider</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -9,13 +9,13 @@
   <artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
   <version>${olap4j-xmlaserver.version}</version>
   
-	<dependencies>
-		<dependency>
-			<groupId>org.olap4j</groupId>
-			<artifactId>olap4j-xmla</artifactId>
-			<version>${olap4j-xmlaserver.version}</version>
-		</dependency>
-	</dependencies>
+<!--	<dependencies>-->
+<!--		<dependency>-->
+<!--			<groupId>org.olap4j</groupId>-->
+<!--			<artifactId>olap4j-xmla</artifactId>-->
+<!--			<version>${olap4j-xmlaserver.version}</version>-->
+<!--		</dependency>-->
+<!--	</dependencies>-->
   
   
   
