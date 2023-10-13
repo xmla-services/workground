@@ -11,6 +11,56 @@
 */
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.test.BasicQueryTest;
+import mondrian.test.PropertySaver5;
+import mondrian.util.Bug;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eigenbase.xom.StringEscaper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
+import org.opentest4j.AssertionFailedError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CancellationException;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,51 +86,7 @@ import static org.opencube.junit5.TestUtil.executeSingletonAxis;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CancellationException;
-
-import javax.sql.DataSource;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionMetaData;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eigenbase.xom.StringEscaper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-import org.opentest4j.AssertionFailedError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryTimeoutException;
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 //import mondrian.spi.DialectManager;
-import mondrian.test.BasicQueryTest;
-import mondrian.test.PropertySaver5;
-import mondrian.util.Bug;
-
 
 /**
  * <code>FunctionTest</code> tests the functions defined in
@@ -8013,10 +8019,29 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @Disabled
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterWillTimeout(TestContextWrapper context) {
+  void testFilterWillTimeout(TestContext context) {
     propSaver.set( propSaver.properties.QueryTimeout, 3 );
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
+        RolapSchemaPool.instance().clear();
+        class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
+
+            public TestFilterWillTimeoutModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+                List<MappingUserDefinedFunction> result = new ArrayList<>();
+                result.addAll(super.schemaUserDefinedFunctions(schema));
+                result.add(UserDefinedFunctionRBuilder.builder()
+                    .name("SleepUdf")
+                    .className(BasicQueryTest.SleepUdf.class.getName())
+                    .build());
+                return result;
+            }
+        }
+      /*
       String baseSchema = TestUtil.getRawSchema(context);
       String schema = SchemaUtil.getSchema(baseSchema,
         null, null, null, null,
@@ -8024,7 +8049,10 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
           + BasicQueryTest.SleepUdf.class.getName()
           + "\"/>", null );
       TestUtil.withSchema(context, schema);
-      executeAxis(context.createConnection(),
+       */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestFilterWillTimeoutModifier(schema)));
+      executeAxis(context.getConnection(),
         "Filter("
           + "Filter(CrossJoin([Customers].[Name].members, [Product].[Product Name].members), SleepUdf([Measures]"
           + ".[Unit Sales]) > 0),"
@@ -9449,7 +9477,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOrderTupleMultiKeyswithVCube(TestContextWrapper context) {
+  void testOrderTupleMultiKeyswithVCube(TestContext context) {
     // WA unit sales is greater than CA unit sales
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey, true );
@@ -9457,6 +9485,39 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     // a non-sense cube just to test ordering by order key
+
+      RolapSchemaPool.instance().clear();
+      class TestOrderTupleMultiKeyswithVCubeModifier extends RDbMappingSchemaModifier {
+
+          public TestOrderTupleMultiKeyswithVCubeModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingVirtualCube> virtualCubes(List<MappingVirtualCube> cubes) {
+              List<MappingVirtualCube> result = new ArrayList<>();
+              result.addAll(super.virtualCubes(cubes));
+              result.add(VirtualCubeRBuilder.builder()
+                  .name("Sales vs HR")
+                  .virtualCubeDimensions(List.of(
+                      VirtualCubeDimensionRBuilder.builder()
+                          .cubeName("Sales")
+                          .name("Customers")
+                          .build(),
+                      VirtualCubeDimensionRBuilder.builder()
+                          .cubeName("HR")
+                          .name("Position")
+                          .build(),
+                      VirtualCubeDimensionRBuilder.builder()
+                          .cubeName("HR")
+                          .name("[Measures].[Org Salary]")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+    /*
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
       null,
@@ -9468,7 +9529,10 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
         + "</VirtualCube>",
       null, null, null );
     TestUtil.withSchema(context, schema);
-    assertQueryReturns(context.createConnection(),
+     */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestOrderTupleMultiKeyswithVCubeModifier(schema)));
+    assertQueryReturns(context.getConnection(),
       "with \n"
         + "  set [CJ] as \n"
         + "    'CrossJoin( \n"

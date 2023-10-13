@@ -10,6 +10,49 @@
 */
 package mondrian.rolap;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberPropertyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.FormulaRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
@@ -17,32 +60,6 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.List;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Property;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 
 /**
  * Unit tests for virtual cubes.
@@ -69,7 +86,40 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNoTimeDimension(TestContextWrapper context) {
+    void testNoTimeDimension(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestNoTimeDimensionModifier extends RDbMappingSchemaModifier {
+
+            public TestNoTimeDimensionModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -83,12 +133,49 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        checkXxx(context.createConnection());
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestNoTimeDimensionModifier(schema)));
+        checkXxx(context.getConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasureAsDefaultMeasureInVC(TestContextWrapper context) {
+    void testCalculatedMeasureAsDefaultMeasureInVC(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestCalculatedMeasureAsDefaultMeasureInVCModifier extends RDbMappingSchemaModifier {
+
+            public TestCalculatedMeasureAsDefaultMeasureInVCModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .defaultMeasure("Profit")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Profit]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -106,15 +193,57 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestCalculatedMeasureAsDefaultMeasureInVCModifier(schema)));
         String query1 = "select from [Sales vs Warehouse]";
         String query2 =
             "select from [Sales vs Warehouse] where measures.profit";
-        assertQueriesReturnSimilarResults(context.createConnection(), query1, query2);
+        assertQueriesReturnSimilarResults(context.getConnection(), query1, query2);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureInVCForIncorrectMeasureName(TestContextWrapper context) {
+    void testDefaultMeasureInVCForIncorrectMeasureName(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestDefaultMeasureInVCForIncorrectMeasureNameModifier extends RDbMappingSchemaModifier {
+
+            public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .defaultMeasure("Profit Error")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Profit]")
+                            .build()
+
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -132,16 +261,53 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasureInVCForIncorrectMeasureNameModifier(schema)));
         String query1 = "select from [Sales vs Warehouse]";
         String query2 =
             "select from [Sales vs Warehouse] "
             + "where measures.[Warehouse Sales]";
-        assertQueriesReturnSimilarResults(context.createConnection(), query1, query2);
+        assertQueriesReturnSimilarResults(context.getConnection(), query1, query2);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeMeasureInvalidCubeName(TestContextWrapper context) {
+    void testVirtualCubeMeasureInvalidCubeName(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestVirtualCubeMeasureInvalidCubeNameModifier extends RDbMappingSchemaModifier {
+
+            public TestVirtualCubeMeasureInvalidCubeNameModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .defaultMeasure("Profit Error")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Bad cube")
+                            .name("[Measures].[Unit Sales]")
+                            .build()
+                        ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -157,6 +323,9 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeMeasureInvalidCubeNameModifier(schema)));
         assertQueryThrows(context,
             "select from [Sales vs Warehouse]",
             "Cube 'Bad cube' not found");
@@ -164,7 +333,45 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureInVCForCaseSensitivity(TestContextWrapper context) {
+    void testDefaultMeasureInVCForCaseSensitivity(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestDefaultMeasureInVCForCaseSensitivityModifier extends RDbMappingSchemaModifier {
+
+            public TestDefaultMeasureInVCForCaseSensitivityModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .defaultMeasure("PROFIT")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Profit]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -182,6 +389,9 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasureInVCForCaseSensitivityModifier(schema)));
         String queryWithoutFilter = "select from [Sales vs Warehouse]";
         String queryWithFirstMeasure =
             "select from [Sales vs Warehouse] "
@@ -190,7 +400,7 @@ class VirtualCubeTest extends BatchTestCase {
             "select from [Sales vs Warehouse] "
             + "where measures.[Profit]";
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         if (MondrianProperties.instance().CaseSensitive.get()) {
             assertQueriesReturnSimilarResults(connection,
                 queryWithoutFilter, queryWithFirstMeasure);
@@ -202,7 +412,43 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testWithTimeDimension(TestContextWrapper context) {
+    void testWithTimeDimension(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestWithTimeDimensionModifier extends RDbMappingSchemaModifier {
+
+            public TestWithTimeDimensionModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -217,7 +463,10 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        checkXxx(context.createConnection());
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestWithTimeDimensionModifier(schema)));
+        checkXxx(context.getConnection());
     }
 
 
@@ -247,12 +496,12 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonDefaultAllMember(TestContextWrapper context) {
+    void testNonDefaultAllMember(TestContext context) {
         // Create a virtual cube with a non-conforming dimension (Warehouse)
         // that does not have ALL as its default member.
         createContextWithNonDefaultAllMember(context);
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Warehouse].defaultMember} on columns, "
             + "{[Measures].[Warehouse Cost]} on rows from [Warehouse (Default USA)]",
             "Axis #0:\n"
@@ -265,7 +514,7 @@ class VirtualCubeTest extends BatchTestCase {
 
         // There is a value for [USA] -- because it is the default member and
         // the hierarchy has no all member -- but not for [USA].[CA].
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Warehouse].defaultMember, [Warehouse].[USA].[CA]} on columns, "
             + "{[Measures].[Warehouse Cost], [Measures].[Sales Count]} on rows "
             + "from [Warehouse (Default USA) and Sales]",
@@ -285,9 +534,9 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonDefaultAllMember2(TestContextWrapper context) {
+    void testNonDefaultAllMember2(TestContext context) {
         createContextWithNonDefaultAllMember(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select { measures.[unit sales] } on 0 \n"
             + "from [warehouse (Default USA) and Sales]",
             "Axis #0:\n"
@@ -304,7 +553,159 @@ class VirtualCubeTest extends BatchTestCase {
      * @return test context with a cube where the default member in the
      *     Warehouse dimension is USA
      */
-    private void createContextWithNonDefaultAllMember(TestContextWrapper context) {
+    private void createContextWithNonDefaultAllMember(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class CreateContextWithNonDefaultAllMemberModifier extends RDbMappingSchemaModifier {
+
+            public CreateContextWithNonDefaultAllMemberModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(CubeRBuilder.builder()
+                    .name("Warehouse (Default USA)")
+                    .fact(new TableR("inventory_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .name("Time")
+                            .source("Time")
+                            .foreignKey("time_id")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .name("Product")
+                            .source("Product")
+                            .foreignKey("product_id")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .name("Store")
+                            .source("Store")
+                            .foreignKey("store_id")
+                            .build(),
+                        PrivateDimensionRBuilder.builder()
+                            .name("Warehouse")
+                            .foreignKey("warehouse_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(false)
+                                    .defaultMember("[USA]")
+                                    .primaryKey("warehouse_id")
+                                    .relation(new TableR("warehouse"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Country")
+                                            .column("warehouse_country")
+                                            .uniqueMembers(true)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("State Province")
+                                            .column("warehouse_state_province")
+                                            .uniqueMembers(true)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("City")
+                                            .column("warehouse_city")
+                                            .uniqueMembers(false)
+                                            .build(),
+                                        LevelRBuilder.builder()
+                                            .name("Warehouse Name")
+                                            .column("warehouse_name")
+                                            .uniqueMembers(true)
+                                            .build()
+
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Warehouse Cost")
+                            .column("warehouse_cost")
+                            .aggregator("sum")
+                            .build(),
+                        MeasureRBuilder.builder()
+                            .name("Warehouse Sales")
+                            .column("warehouse_sales")
+                            .aggregator("sum")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse (Default USA) and Sales")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Store")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Warehouse (Default USA)")
+                            .name("Warehouse")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales 2")
+                            .name("[Measures].[Sales Count]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales 2")
+                            .name("[Measures].[Store Cost]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales 2")
+                            .name("[Measures].[Store Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales 2")
+                            .name("[Measures].[Unit Sales]")
+                            .build(),
+
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Store Invoice]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Supply Time]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Units Ordered]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Units Shipped]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Cost]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build()
+                    ))
+                    .build());
+
+                return result;
+            }
+        }
+
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -349,12 +750,83 @@ class VirtualCubeTest extends BatchTestCase {
             + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\"/>\n"
             + "</VirtualCube>",
             null, null, null);
-        withSchema(context, schema);
+            withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new CreateContextWithNonDefaultAllMemberModifier(schema)));
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberVisibility(TestContextWrapper context) {
+    void testMemberVisibility(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestMemberVisibilityModifier extends RDbMappingSchemaModifier {
+
+            public TestMemberVisibilityModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse and Sales Member Visibility")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("Customers")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Sales Count]")
+                            .visible(true)
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Cost]")
+                            .visible(false)
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Profit last Period]")
+                            .visible(true)
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Units Shipped]")
+                            .visible(false)
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Average Warehouse Sale]")
+                            .visible(false)
+                            .build()
+                    ))
+                    .calculatedMembers(List.of(
+                        CalculatedMemberRBuilder.builder()
+                            .name("Profit")
+                            .dimension("Measures")
+                            .visible(false)
+                            .formulaElement(FormulaRBuilder.builder()
+                                .cdata("[Measures].[Store Sales] - [Measures].[Store Cost]")
+                                .build())
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -376,6 +848,9 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMemberVisibilityModifier(schema)));
         Result result = executeQuery(
             "select {[Measures].[Sales Count],\n"
             + " [Measures].[Store Cost],\n"
@@ -384,7 +859,7 @@ class VirtualCubeTest extends BatchTestCase {
             + " [Measures].[Profit],\n"
             + " [Measures].[Profit last Period],\n"
             + " [Measures].[Average Warehouse Sale]} on columns\n"
-            + "from [Warehouse and Sales Member Visibility]", context.createConnection());
+            + "from [Warehouse and Sales Member Visibility]", context.getConnection());
         assertVisibility(result, 0, "Sales Count", true); // explicitly visible
         assertVisibility(
             result, 1, "Store Cost", false); // explicitly invisible
@@ -397,13 +872,13 @@ class VirtualCubeTest extends BatchTestCase {
 
         // check that visibilities in the base cubes are still the same
         result = executeQuery(
-          "select {[Measures].[Profit last Period]} on columns from [Sales]", context.createConnection());
+          "select {[Measures].[Profit last Period]} on columns from [Sales]", context.getConnection());
         assertVisibility(result, 0, "Profit last Period", false); // explicitly invisible in base cube
 
         result = executeQuery(
           "select {[Measures].[Units Shipped],\n"
             + " [Measures].[Average Warehouse Sale]} on columns\n"
-            + " from [Warehouse]", context.createConnection());
+            + " from [Warehouse]", context.getConnection());
         assertVisibility(result, 0, "Units Shipped", true); // implicitly visible in base cube
         assertVisibility(result, 1, "Average Warehouse Sale", true); // implicitly visible in base cube
     }
@@ -436,7 +911,100 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFormatStringExpressionCubeNoCache(TestContextWrapper context) {
+    void testFormatStringExpressionCubeNoCache(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestFormatStringExpressionCubeNoCacheModifier extends RDbMappingSchemaModifier {
+
+            public TestFormatStringExpressionCubeNoCacheModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(CubeRBuilder.builder()
+                    .name("Warehouse No Cache")
+                    .fact(new TableR("inventory_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .name("Time")
+                            .source("Time")
+                            .foreignKey("time_id")
+                            .build(),
+                        DimensionUsageRBuilder.builder()
+                            .name("Store")
+                            .source("Store")
+                            .foreignKey("store_id")
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Units Shipped")
+                            .column("units_shipped")
+                            .aggregator("sum")
+                            .formatString("#.0")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse and Sales Format Expression Cube No Cache")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Store")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Cost]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse No Cache")
+                            .name("[Measures].[Units Shipped]")
+                            .build()
+                    ))
+                    .calculatedMembers(List.of(
+                        CalculatedMemberRBuilder.builder()
+                            .name("Profit")
+                            .dimension("Measures")
+                            .formulaElement(FormulaRBuilder.builder()
+                                .cdata("[Measures].[Store Sales] - [Measures].[Store Cost]")
+                                .build())
+                            .build(),
+                        CalculatedMemberRBuilder.builder()
+                            .name("Profit Per Unit Shipped")
+                            .dimension("Measures")
+                            .formulaElement(FormulaRBuilder.builder()
+                                .cdata("[Measures].[Profit] / [Measures].[Units Shipped]")
+                                .build())
+                            .calculatedMemberProperties(List.of(
+                                CalculatedMemberPropertyRBuilder.builder()
+                                    .name("FORMAT_STRING")
+                                    .expression("IIf(([Measures].[Profit Per Unit Shipped] > 2.0), '|0.#|style=green', '|0.#|style=red')")
+                                    .build()
+                            ))
+                            .build()
+
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -466,7 +1034,10 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestFormatStringExpressionCubeNoCacheModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Profit Per Unit Shipped]} ON COLUMNS, "
             + "{[Store].[All Stores].[USA].[CA], [Store].[All Stores].[USA].[OR], [Store].[All Stores].[USA].[WA]} ON ROWS "
             + "from [Warehouse and Sales Format Expression Cube No Cache] "
@@ -874,7 +1445,40 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testOrdinalColumn(TestContextWrapper context) {
+    void testOrdinalColumn(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestOrdinalColumnModifier extends RDbMappingSchemaModifier {
+
+            public TestOrdinalColumnModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs HR")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Store")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("HR")
+                            .name("Position")
+                            .build()
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("HR")
+                            .name("[Measures].[Org Salary]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -888,7 +1492,10 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestOrdinalColumnModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary]} on columns, "
             + "non empty "
             + "crossjoin([Store].[Store Country].members, [Position].[Store Management].children) "
@@ -920,7 +1527,46 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultMeasureProperty(TestContextWrapper context) {
+    void testDefaultMeasureProperty(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestDefaultMeasurePropertyModifier extends RDbMappingSchemaModifier {
+
+            public TestDefaultMeasurePropertyModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Sales vs Warehouse")
+                    .defaultMeasure("Unit Sales")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Product")
+                            .build()
+
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("[Measures].[Warehouse Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Unit Sales]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Profit]")
+                            .build()
+                ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -938,13 +1584,16 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasurePropertyModifier(schema)));
         String queryWithoutFilter =
             "select"
             + " from [Sales vs Warehouse]";
         String queryWithDeflaultMeasureFilter =
             "select "
             + "from [Sales vs Warehouse] where measures.[Unit Sales]";
-        assertQueriesReturnSimilarResults(context.createConnection(),
+        assertQueriesReturnSimilarResults(context.getConnection(),
             queryWithoutFilter, queryWithDeflaultMeasureFilter);
     }
 
@@ -1076,7 +1725,50 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322(TestContextWrapper context) {
+    void testBugMondrian322(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestBugMondrian322Modifier extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian322Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse and Sales2")
+                    .defaultMeasure("Store Sales")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("Customers")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("Warehouse")
+                            .build()
+
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Customer Count]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Sales]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1092,6 +1784,10 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian322Modifier(schema)));
+
 //       This test case does not actually reject the dimension constraint from
 //       an unrelated base cube. The reason is that the constraint contains an
 //       AllLevel member. Even though semantically constraining Cells using an
@@ -1102,7 +1798,7 @@ class VirtualCubeTest extends BatchTestCase {
 //       See the next test case for a constraint that does not contain
 //       AllLevel member and hence cannot be satisfied. The cell should be
 //       empty.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Warehouse].[x] as 'Aggregate([Warehouse].members)'\n"
             + "member [Measures].[foo] AS '([Warehouse].[x],[Measures].[Customer Count])'\n"
             + "select {[Measures].[foo]} on 0 from [Warehouse And Sales2]",
@@ -1115,7 +1811,50 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322a(TestContextWrapper context) {
+    void testBugMondrian322a(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestBugMondrian322aModifier extends RDbMappingSchemaModifier {
+
+            public TestBugMondrian322aModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse and Sales2")
+                    .defaultMeasure("Store Sales")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("Customers")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("Warehouse")
+                            .build()
+
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Customer Count]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Sales]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1131,7 +1870,10 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian322aModifier(schema)));
+        assertQueryReturns(context.getConnection(),
             "with member [Warehouse].[x] as 'Aggregate({[Warehouse].[Canada], [Warehouse].[USA]})'\n"
             + "member [Measures].[foo] AS '([Warehouse].[x],[Measures].[Customer Count])'\n"
             + "select {[Measures].[foo]} on 0 from [Warehouse And Sales2]",
@@ -1148,7 +1890,88 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeMeasureCaption(TestContextWrapper context) {
+    void testVirtualCubeMeasureCaption(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestVirtualCubeMeasureCaptionModifier extends RDbMappingSchemaModifier {
+
+            public TestVirtualCubeMeasureCaptionModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(CubeRBuilder.builder()
+                    .name("TestStore")
+                    .fact(new TableR("store"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("HCB")
+                            .caption("Has coffee bar caption")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Has coffee bar")
+                                            .column("coffee_bar")
+                                            .uniqueMembers(true)
+                                            .type(TypeEnum.BOOLEAN)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Store Sqft")
+                            .caption("Store Sqft Caption")
+                            .column("store_sqft")
+                            .aggregator("sum")
+                            .formatString("#,###")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+
+            @Override
+            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
+                List<MappingVirtualCube> result = new ArrayList<>();
+                result.addAll(super.schemaVirtualCubes(schema));
+                result.add(VirtualCubeRBuilder.builder()
+                    .name("Warehouse and Sales2")
+                    .defaultMeasure("Store Sales")
+                    .virtualCubeDimensions(List.of(
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("Customers")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .name("Time")
+                            .build(),
+                        VirtualCubeDimensionRBuilder.builder()
+                            .cubeName("Warehouse")
+                            .name("Warehouse")
+                            .build()
+
+                    ))
+                    .virtualCubeMeasures(List.of(
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Customer Count]")
+                            .build(),
+                        VirtualCubeMeasureRBuilder.builder()
+                            .cubeName("Sales")
+                            .name("[Measures].[Store Sales]")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1171,10 +1994,13 @@ class VirtualCubeTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeMeasureCaptionModifier(schema)));
         Result result = executeQuery(
             "select {[Measures].[Store Sqft]} ON COLUMNS,"
             + "{[HCB]} ON ROWS "
-            + "from [VirtualTestStore]", context.createConnection());
+            + "from [VirtualTestStore]", context.getConnection());
 
         Axis[] axes = result.getAxes();
         List<Position> positions = axes[0].getPositions();
