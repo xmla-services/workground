@@ -71,7 +71,6 @@ public interface NotUseOldTestContext {
 
 
 
-    CellSet executeOlap4jXmlaQuery(String queryString) throws SQLException;
 
     /**
        * Executes a query, and asserts that it throws an exception which contains the given pattern.
