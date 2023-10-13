@@ -12,6 +12,30 @@
 */
 package mondrian.test;
 
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.NamedSetRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
@@ -20,27 +44,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withSchema;
 import static org.opencube.junit5.TestUtil.withSchemaProcessor;
-
-import java.io.InputStream;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 
 /**
  * Unit-test for named sets, in all their various forms: <code>WITH SET</code>,
@@ -865,7 +869,26 @@ class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBadNamedSet(TestContextWrapper context) {
+    void testBadNamedSet(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        class TestBadNamedSetModifier extends RDbMappingSchemaModifier {
+
+            public TestBadNamedSetModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingNamedSet> schemaNamedSets(MappingSchema schema) {
+                List<MappingNamedSet> result = new ArrayList<>();
+                result.addAll(super.schemaNamedSets(schema));
+                result.add(NamedSetRBuilder.builder()
+                    .name("Bad")
+                    .formula("{[Store].[USA].[WA].Children}}")
+                    .build());
+                return result;
+            }
+        }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -875,6 +898,9 @@ class NamedSetTest {
             null,
             null);
         withSchema(context, schema);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestBadNamedSetModifier(schema)));
         assertQueryThrows(context,
             "SELECT {[Measures].[Store Sales]} on columns,\n"
             + " {[Bad]} on rows\n"
