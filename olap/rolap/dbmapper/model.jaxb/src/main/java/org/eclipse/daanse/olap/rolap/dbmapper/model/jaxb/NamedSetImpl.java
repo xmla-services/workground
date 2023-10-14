@@ -14,9 +14,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
@@ -24,95 +21,44 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "NamedSet", propOrder = {"annotations", "formulaElement"})
-public class NamedSetImpl implements MappingNamedSet {
+@XmlType(name = "NamedSet", propOrder = { "formulaElement" })
+public class NamedSetImpl extends AbstractMainElement implements MappingNamedSet {
 
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "displayFolder")
-    private String displayFolder;
-    @XmlAttribute(name = "formula")
-    protected String formula;
-    @XmlElement(name = "Formula", type = FormulaImpl.class)
-    protected MappingFormula formulaElement;
+	@XmlAttribute(name = "displayFolder")
+	private String displayFolder;
+	@XmlAttribute(name = "formula")
+	protected String formula;
+	@XmlElement(name = "Formula", type = FormulaImpl.class)
+	protected MappingFormula formulaElement;
 
-    /**
-     * Gets the value of the annotations property.
-     *
-     * @return possible object is {@link MappingAnnotation }
-     */
-    @Override
-    public List<MappingAnnotation> annotations() {
-        return annotations;
-    }
+	@Override
+	public String formula() {
+		return formula;
+	}
 
-    public void setAnnotations(List<MappingAnnotation> value) {
-        this.annotations = value;
-    }
+	public void setFormula(String value) {
+		this.formula = value;
+	}
 
-    @Override
-    public String formula() {
-        return formula;
-    }
+	@Override
+	public String displayFolder() {
+		return displayFolder;
+	}
 
-    public void setFormula(String value) {
-        this.formula = value;
-    }
+	@Override
+	public MappingFormula formulaElement() {
+		return formulaElement;
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
+	public void setDisplayFolder(String displayFolder) {
+		this.displayFolder = displayFolder;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    @Override
-    public String caption() {
-        return caption;
-    }
-
-    public void setCaption(String value) {
-        this.caption = value;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    @Override
-    public String displayFolder() {
-        return displayFolder;
-    }
-
-    @Override
-    public MappingFormula formulaElement() {
-        return formulaElement;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public void setDisplayFolder(String displayFolder) {
-        this.displayFolder = displayFolder;
-    }
-
-    public void setFormulaElement(MappingFormula formulaElement) {
-        this.formulaElement = formulaElement;
-    }
+	public void setFormulaElement(MappingFormula formulaElement) {
+		this.formulaElement = formulaElement;
+	}
 
 }

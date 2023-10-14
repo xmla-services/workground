@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "value" })

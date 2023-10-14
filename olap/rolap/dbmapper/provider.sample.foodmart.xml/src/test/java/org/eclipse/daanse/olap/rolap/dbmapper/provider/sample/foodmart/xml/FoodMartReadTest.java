@@ -875,7 +875,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkRoleItem(MappingRole role, Map<String, Object> map) {
-		assertNull(role.annotations());
+		assertThat(role.annotations()).isNotNull().isEmpty();
 		checkGrants(role.schemaGrants(), get(SCHEMA_GRANT, map));
 		assertNull(role.union());
 		assertEquals(role.name(), get(NAME, map));
@@ -965,7 +965,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkVirtualCubeItem(MappingVirtualCube virtualCube, Map<String, Object> map) {
-		assertNull(virtualCube.annotations());
+		assertThat(virtualCube.annotations()).isNotNull().isEmpty();
 		assertNull(virtualCube.cubeUsages());
 		checkVirtualCubeDimension(virtualCube.virtualCubeDimensions(), get(VIRTUAL_CUBE_DIMENSION, map));
 		checkVirtualCubeMeasure(virtualCube.virtualCubeMeasures(), get(VIRTUAL_CUBE_MEASURE, map));
@@ -991,7 +991,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkVirtualCubeCalculatedMemberItem(MappingCalculatedMember calculatedMember, Map<String, Object> map) {
-		assertNull(calculatedMember.annotations());
+		assertThat(calculatedMember.annotations()).isNotNull().isEmpty();
 		// TODO formula
 		assertNull(calculatedMember.formula());
 		assertNotNull(calculatedMember.calculatedMemberProperties());
@@ -1017,7 +1017,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkVirtualCubeMeasureItem(MappingVirtualCubeMeasure virtualCubeMeasure, Map<String, Object> map) {
-		assertNull(virtualCubeMeasure.annotations());
+		assertThat(virtualCubeMeasure.annotations()).isNotNull().isEmpty();
 		assertEquals(virtualCubeMeasure.cubeName(), get(CUBE_NAME, map));
 		assertEquals(virtualCubeMeasure.name(), get(NAME, map));
 		assertTrue(virtualCubeMeasure.visible());
@@ -1129,7 +1129,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkHierarchyItem(MappingHierarchy hierarchy, Map<String, Object> map) {
-		assertNull(hierarchy.annotations());
+		assertThat(hierarchy.annotations()).isNotNull().isEmpty();
 		assertNotNull(hierarchy.levels());
 		checkLevel(hierarchy.levels(), (List) map.get(LEVEL));
 		assertNotNull(hierarchy.memberReaderParameters());
@@ -1190,7 +1190,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkLevelItem(MappingLevel level, Map<String, Object> map) {
-		assertNull(level.annotations());
+		assertThat(level.annotations()).isNotNull().isEmpty();
 		checkExpression(level.keyExpression(), get(KEY_EXPRESSION, map));
 		checkExpression(level.nameExpression(), get(NAME_EXPRESSION, map));
 		checkExpression(level.captionExpression(), get(CAPTION_EXPRESSION, map));
@@ -1241,7 +1241,7 @@ class FoodMartReadTest {
 	}
 
 	private void checkMeasureItem(MappingCube cube, MappingMeasure measure, Map<String, Object> map, int ixdex) {
-		assertNull(measure.annotations());
+		assertThat(measure.annotations()).isNotNull().isEmpty();
 		checkExpression(measure.measureExpression(), get(MEASURE_EXPRESSION, map));
 		assertNotNull(measure.calculatedMemberProperties());
 		assertEquals(map.get(NAME), measure.name(), new StringBuilder("Wrong measure name ").append(ixdex)
@@ -1281,7 +1281,8 @@ class FoodMartReadTest {
 
 	private void checkCubeAnnotations(List<? extends MappingAnnotation> annotations, Object o) {
 		if (o == null) {
-			assertNull(annotations);
+			assertThat(annotations).isNotNull().isEmpty();
+
 		} else {
 			List<Map<String, Object>> list = (List<Map<String, Object>>) o;
 			assertEquals(annotations.size(), list.size());

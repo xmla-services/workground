@@ -24,68 +24,68 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
+@XmlType(name = "Parameter")
 public class ParameterImpl implements MappingParameter {
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "type", required = true)
-    @XmlJavaTypeAdapter(ParameterTypeAdaptor.class)
-    protected ParameterTypeEnum type;
-    @XmlAttribute(name = "modifiable")
-    protected Boolean modifiable;
-    @XmlAttribute(name = "defaultValue")
-    protected String defaultValue;
+	@XmlAttribute(name = "name", required = true)
+	protected String name;
+	@XmlAttribute(name = "description")
+	protected String description;
+	@XmlAttribute(name = "type", required = true)
+	@XmlJavaTypeAdapter(ParameterTypeAdaptor.class)
+	protected ParameterTypeEnum type;
+	@XmlAttribute(name = "modifiable")
+	protected Boolean modifiable;
+	@XmlAttribute(name = "defaultValue")
+	protected String defaultValue;
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String name() {
+		return name;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    @Override
-    public String description() {
-        return description;
-    }
+	@Override
+	public String description() {
+		return description;
+	}
 
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	public void setDescription(String value) {
+		this.description = value;
+	}
 
-    @Override
-    public ParameterTypeEnum type() {
-        return type;
-    }
+	@Override
+	public ParameterTypeEnum type() {
+		return type;
+	}
 
-    public void setType(ParameterTypeEnum value) {
-        this.type = value;
-    }
+	public void setType(ParameterTypeEnum value) {
+		this.type = value;
+	}
 
-    @Override
-    public Boolean modifiable() {
-        if (modifiable == null) {
-            return true;
-        } else {
-            return modifiable;
-        }
-    }
+	@Override
+	public Boolean modifiable() {
+		if (modifiable == null) {
+			return true;
+		} else {
+			return modifiable;
+		}
+	}
 
-    public void setModifiable(Boolean value) {
-        this.modifiable = value;
-    }
+	public void setModifiable(Boolean value) {
+		this.modifiable = value;
+	}
 
-    @Override
-    public String defaultValue() {
-        return defaultValue;
-    }
+	@Override
+	public String defaultValue() {
+		return defaultValue;
+	}
 
-    public void setDefaultValue(String value) {
-        this.defaultValue = value;
-    }
+	public void setDefaultValue(String value) {
+		this.defaultValue = value;
+	}
 
 }

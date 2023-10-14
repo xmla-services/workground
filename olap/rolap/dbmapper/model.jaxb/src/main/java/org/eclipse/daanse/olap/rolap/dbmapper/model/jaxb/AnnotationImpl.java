@@ -22,30 +22,30 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "content" })
+@XmlType(name = "Annotation", propOrder = { "content" })
 public class AnnotationImpl implements MappingAnnotation {
 
-    @XmlValue
-    protected String content;
-    @XmlAttribute(name = "name")
-    protected String name;
+	@XmlValue
+	protected String content;
+	@XmlAttribute(name = "name")
+	protected String name;
 
-    @Override
-    public String content() {
-        return content;
-    }
+	@Override
+	public String content() {
+		return content;
+	}
 
-    public void setContent(String value) {
-        this.content = value;
-    }
+	public void setContent(String value) {
+		this.content = value;
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String name() {
+		return name;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	public void setName(String value) {
+		this.name = value;
+	}
 
 }

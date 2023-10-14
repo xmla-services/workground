@@ -26,104 +26,72 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "propertyFormatter" })
-public class PropertyImpl implements MappingProperty {
+@XmlType(name = "Property", propOrder = { "propertyFormatter" })
+public class PropertyImpl extends AbstractMainElement implements MappingProperty {
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "column", required = true)
-    protected String column;
-    @XmlAttribute(name = "type")
-    @XmlJavaTypeAdapter(PropertyTypeAdaptor.class)
-    protected PropertyTypeEnum type;
-    @XmlAttribute(name = "formatter")
-    protected String formatter;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "dependsOnLevelValue")
-    protected Boolean dependsOnLevelValue;
-    @XmlElement(name = "PropertyFormatter", type = ElementFormatterImpl.class)
-    protected MappingElementFormatter propertyFormatter;
+	@XmlAttribute(name = "column", required = true)
+	protected String column;
+	@XmlAttribute(name = "type")
+	@XmlJavaTypeAdapter(PropertyTypeAdaptor.class)
+	protected PropertyTypeEnum type;
+	@XmlAttribute(name = "formatter")
+	protected String formatter;
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@XmlAttribute(name = "dependsOnLevelValue")
+	protected Boolean dependsOnLevelValue;
+	@XmlElement(name = "PropertyFormatter", type = ElementFormatterImpl.class)
+	protected MappingElementFormatter propertyFormatter;
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	@Override
+	public String column() {
+		return column;
+	}
 
-    @Override
-    public String column() {
-        return column;
-    }
+	public void setColumn(String value) {
+		this.column = value;
+	}
 
-    public void setColumn(String value) {
-        this.column = value;
-    }
+	@Override
+	public PropertyTypeEnum type() {
+		if (type == null) {
+			return PropertyTypeEnum.STRING;
+		} else {
+			return type;
+		}
+	}
 
-    @Override
-    public PropertyTypeEnum type() {
-        if (type == null) {
-            return PropertyTypeEnum.STRING;
-        } else {
-            return type;
-        }
-    }
+	public void setType(PropertyTypeEnum type) {
+		this.type = type;
+	}
 
-    public void setType(PropertyTypeEnum type) {
-        this.type = type;
-    }
+	@Override
+	public String formatter() {
+		return formatter;
+	}
 
-    @Override
-    public String formatter() {
-        return formatter;
-    }
+	public void setFormatter(String value) {
+		this.formatter = value;
+	}
 
-    public void setFormatter(String value) {
-        this.formatter = value;
-    }
+	@Override
+	public Boolean dependsOnLevelValue() {
+		if (dependsOnLevelValue == null) {
+			return false;
+		} else {
+			return dependsOnLevelValue;
+		}
+	}
 
-    @Override
-    public String caption() {
-        return caption;
-    }
+	@Override
+	public MappingElementFormatter propertyFormatter() {
+		return propertyFormatter;
+	}
 
-    public void setCaption(String value) {
-        this.caption = value;
-    }
+	public void setDependsOnLevelValue(Boolean value) {
+		this.dependsOnLevelValue = value;
+	}
 
-    @Override
-    public String description() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    @Override
-    public Boolean dependsOnLevelValue() {
-        if (dependsOnLevelValue == null) {
-            return false;
-        } else {
-            return dependsOnLevelValue;
-        }
-    }
-
-    @Override
-    public MappingElementFormatter propertyFormatter() {
-        return propertyFormatter;
-    }
-
-    public void setDependsOnLevelValue(Boolean value) {
-        this.dependsOnLevelValue = value;
-    }
-
-    public void setPropertyFormatter(MappingElementFormatter propertyFormatter) {
-        this.propertyFormatter = propertyFormatter;
-    }
+	public void setPropertyFormatter(MappingElementFormatter propertyFormatter) {
+		this.propertyFormatter = propertyFormatter;
+	}
 }

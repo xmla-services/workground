@@ -13,70 +13,43 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations" })
-public class VirtualCubeMeasureImpl implements MappingVirtualCubeMeasure {
+@XmlType(name = "", propOrder = {  })
+public class VirtualCubeMeasureImpl extends AbstractMainElement implements MappingVirtualCubeMeasure {
 
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
-    @XmlAttribute(name = "cubeName", required = true)
-    protected String cubeName;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "visible")
-    protected Boolean visible;
+	@XmlAttribute(name = "cubeName", required = true)
+	protected String cubeName;
 
-    @Override
-    public List<MappingAnnotation> annotations() {
-        return annotations;
-    }
+	@XmlAttribute(name = "visible")
+	protected Boolean visible;
 
-    public void setAnnotations(List<MappingAnnotation> value) {
-        this.annotations = value;
-    }
+	@Override
+	public String cubeName() {
+		return cubeName;
+	}
 
-    @Override
-    public String cubeName() {
-        return cubeName;
-    }
+	public void setCubeName(String value) {
+		this.cubeName = value;
+	}
 
-    public void setCubeName(String value) {
-        this.cubeName = value;
-    }
+	@Override
+	public Boolean visible() {
+		if (visible == null) {
+			return Boolean.TRUE;
+		} else {
+			return visible;
+		}
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    @Override
-    public Boolean visible() {
-        if (visible == null) {
-            return Boolean.TRUE;
-        } else {
-            return visible;
-        }
-    }
-
-    public void setVisible(Boolean value) {
-        this.visible = value;
-    }
+	public void setVisible(Boolean value) {
+		this.visible = value;
+	}
 
 }

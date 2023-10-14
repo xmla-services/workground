@@ -28,12 +28,10 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExcludes", "aggTables", "hints" })
-@XmlRootElement(name = "Table")
 public class TableImpl implements MappingTable {
 
     @XmlElement(name = "SQL", type = SQLImpl.class)

@@ -22,62 +22,29 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedMemberProperty")
-public class CalculatedMemberPropertyImpl implements MappingCalculatedMemberProperty {
+public class CalculatedMemberPropertyImpl extends AbstractMainElement implements MappingCalculatedMemberProperty {
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "expression")
-    protected String expression;
-    @XmlAttribute(name = "value")
-    protected String value;
+	@XmlAttribute(name = "expression")
+	protected String expression;
+	@XmlAttribute(name = "value")
+	protected String value;
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String expression() {
+		return expression;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	public void setExpression(String value) {
+		this.expression = value;
+	}
 
-    @Override
-    public String caption() {
-        return caption;
-    }
+	@Override
+	public String value() {
+		return value;
+	}
 
-    public void setCaption(String value) {
-        this.caption = value;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    @Override
-    public String expression() {
-        return expression;
-    }
-
-    public void setExpression(String value) {
-        this.expression = value;
-    }
-
-    @Override
-    public String value() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
 }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +25,6 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InlineTable", propOrder = { "columnDefs", "rows" })

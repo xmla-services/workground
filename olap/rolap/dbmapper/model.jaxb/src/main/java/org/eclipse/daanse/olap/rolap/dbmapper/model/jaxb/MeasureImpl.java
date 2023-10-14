@@ -13,14 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
@@ -28,185 +23,146 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.MeasureDataTypeAdaptor;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "measureExpression", "calculatedMemberProperties", "cellFormatter" })
-public class MeasureImpl implements MappingMeasure {
+@XmlType(name = "", propOrder = { "measureExpression", "calculatedMemberProperties", "cellFormatter" })
+public class MeasureImpl extends AbstractMainElement implements MappingMeasure {
 
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
-    @XmlElement(name = "MeasureExpression", type = ExpressionViewImpl.class)
-    protected MappingExpressionView measureExpression;
-    @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
-    protected List<MappingCalculatedMemberProperty> calculatedMemberProperties;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "column")
-    protected String column;
-    @XmlAttribute(name = "datatype")
-    @XmlJavaTypeAdapter(MeasureDataTypeAdaptor.class)
-    protected MeasureDataTypeEnum datatype;
-    @XmlAttribute(name = "formatString")
-    protected String formatString;
-    @XmlAttribute(name = "aggregator", required = true)
-    protected String aggregator;
-    @XmlAttribute(name = "formatter")
-    protected String formatter;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "visible")
-    protected Boolean visible;
-    @XmlAttribute(name = "displayFolder")
-    protected String displayFolder;
-    @XmlElement(name = "CellFormatter", type = CellFormatterImpl.class)
-    MappingElementFormatter cellFormatter;
-    @XmlAttribute(name = "backColor")
-    protected String backColor;
+	@XmlElement(name = "MeasureExpression", type = ExpressionViewImpl.class)
+	protected MappingExpressionView measureExpression;
+	@XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
+	protected List<MappingCalculatedMemberProperty> calculatedMemberProperties;
 
-    @Override
-    public List<MappingAnnotation> annotations() {
-        return annotations;
-    }
+	@XmlAttribute(name = "column")
+	protected String column;
+	@XmlAttribute(name = "datatype")
+	@XmlJavaTypeAdapter(MeasureDataTypeAdaptor.class)
+	protected MeasureDataTypeEnum datatype;
+	@XmlAttribute(name = "formatString")
+	protected String formatString;
+	@XmlAttribute(name = "aggregator", required = true)
+	protected String aggregator;
+	@XmlAttribute(name = "formatter")
+	protected String formatter;
 
-    public void setAnnotations(List<MappingAnnotation> value) {
-        this.annotations = value;
-    }
+	@XmlAttribute(name = "visible")
+	protected Boolean visible;
+	@XmlAttribute(name = "displayFolder")
+	protected String displayFolder;
+	@XmlElement(name = "CellFormatter", type = CellFormatterImpl.class)
+	MappingElementFormatter cellFormatter;
+	@XmlAttribute(name = "backColor")
+	protected String backColor;
 
-    @Override
-    public MappingExpressionView measureExpression() {
-        return measureExpression;
-    }
+	@Override
+	public MappingExpressionView measureExpression() {
+		return measureExpression;
+	}
 
-    public void setMeasureExpression(MappingExpressionView value) {
-        this.measureExpression = value;
-    }
+	public void setMeasureExpression(MappingExpressionView value) {
+		this.measureExpression = value;
+	}
 
-    @Override
-    public List<MappingCalculatedMemberProperty> calculatedMemberProperties() {
-        if (calculatedMemberProperties == null) {
-            calculatedMemberProperties = new ArrayList<>();
-        }
-        return this.calculatedMemberProperties;
-    }
+	@Override
+	public List<MappingCalculatedMemberProperty> calculatedMemberProperties() {
+		if (calculatedMemberProperties == null) {
+			calculatedMemberProperties = new ArrayList<>();
+		}
+		return this.calculatedMemberProperties;
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String column() {
+		return column;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	public void setColumn(String value) {
+		this.column = value;
+	}
 
-    @Override
-    public String column() {
-        return column;
-    }
+	@Override
+	public MeasureDataTypeEnum datatype() {
+		return datatype;
+	}
 
-    public void setColumn(String value) {
-        this.column = value;
-    }
+	public void setDatatype(MeasureDataTypeEnum value) {
+		this.datatype = value;
+	}
 
-    @Override
-    public MeasureDataTypeEnum datatype() {
-        return datatype;
-    }
+	@Override
+	public String formatString() {
+		return formatString;
+	}
 
-    public void setDatatype(MeasureDataTypeEnum value) {
-        this.datatype = value;
-    }
+	public void setFormatString(String value) {
+		this.formatString = value;
+	}
 
-    @Override
-    public String formatString() {
-        return formatString;
-    }
+	@Override
+	public String aggregator() {
+		return aggregator;
+	}
 
-    public void setFormatString(String value) {
-        this.formatString = value;
-    }
+	public void setAggregator(String value) {
+		this.aggregator = value;
+	}
 
-    @Override
-    public String aggregator() {
-        return aggregator;
-    }
+	@Override
+	public String formatter() {
+		return formatter;
+	}
 
-    public void setAggregator(String value) {
-        this.aggregator = value;
-    }
+	public void setFormatter(String value) {
+		this.formatter = value;
+	}
 
-    @Override
-    public String formatter() {
-        return formatter;
-    }
+	@Override
+	public Boolean visible() {
+		if (visible == null) {
+			return true;
+		} else {
+			return visible;
+		}
+	}
 
-    public void setFormatter(String value) {
-        this.formatter = value;
-    }
+	public void setVisible(Boolean value) {
+		this.visible = value;
+	}
 
-    @Override
-    public String caption() {
-        return caption;
-    }
+	@Override
+	public String displayFolder() {
+		return displayFolder;
+	}
 
-    public void setCaption(String value) {
-        this.caption = value;
-    }
+	@Override
+	public MappingElementFormatter cellFormatter() {
+		return cellFormatter;
+	}
 
-    @Override
-    public String description() {
-        return description;
-    }
+	@Override
+	public String backColor() {
+		return backColor;
+	}
 
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	public void setDisplayFolder(String value) {
+		this.displayFolder = value;
+	}
 
-    @Override
-    public Boolean visible() {
-        if (visible == null) {
-            return true;
-        } else {
-            return visible;
-        }
-    }
+	public void setCalculatedMemberProperties(List<MappingCalculatedMemberProperty> calculatedMemberProperties) {
+		this.calculatedMemberProperties = calculatedMemberProperties;
+	}
 
-    public void setVisible(Boolean value) {
-        this.visible = value;
-    }
+	public void setCellFormatter(MappingElementFormatter cellFormatter) {
+		this.cellFormatter = cellFormatter;
+	}
 
-    @Override
-    public String displayFolder() {
-        return displayFolder;
-    }
-
-    @Override
-    public MappingElementFormatter cellFormatter() {
-        return cellFormatter;
-    }
-
-    @Override
-    public String backColor() {
-        return backColor;
-    }
-
-    public void setDisplayFolder(String value) {
-        this.displayFolder = value;
-    }
-
-    public void setCalculatedMemberProperties(List<MappingCalculatedMemberProperty> calculatedMemberProperties) {
-        this.calculatedMemberProperties = calculatedMemberProperties;
-    }
-
-    public void setCellFormatter(MappingElementFormatter cellFormatter) {
-        this.cellFormatter = cellFormatter;
-    }
-
-    public void setBackColor(String backColor) {
-        this.backColor = backColor;
-    }
+	public void setBackColor(String backColor) {
+		this.backColor = backColor;
+	}
 }
