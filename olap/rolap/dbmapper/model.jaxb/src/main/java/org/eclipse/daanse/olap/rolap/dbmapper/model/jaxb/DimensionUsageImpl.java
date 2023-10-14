@@ -14,141 +14,87 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DimensionUsage", propOrder = { "annotations" })
-@XmlRootElement(name = "DimensionUsage")
-public class DimensionUsageImpl implements MappingDimensionUsage {
+@XmlType(name = "DimensionUsage", propOrder = {})
+public class DimensionUsageImpl extends AbstractMainElement implements MappingDimensionUsage {
 
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "source", required = true)
-    protected String source;
-    @XmlAttribute(name = "level")
-    protected String level;
-    @XmlAttribute(name = "usagePrefix")
-    protected String usagePrefix;
-    @XmlAttribute(name = "foreignKey")
-    protected String foreignKey;
-    @XmlAttribute(name = "highCardinality")
-    protected Boolean highCardinality;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "visible")
-    protected Boolean visible = true;
-    @XmlAttribute(name = "description")
-    protected  String description;
+	@XmlAttribute(name = "source", required = true)
+	protected String source;
+	@XmlAttribute(name = "level")
+	protected String level;
+	@XmlAttribute(name = "usagePrefix")
+	protected String usagePrefix;
+	@XmlAttribute(name = "foreignKey")
+	protected String foreignKey;
+	@XmlAttribute(name = "highCardinality")
+	protected Boolean highCardinality;
 
-    @Override
-    public List<MappingAnnotation> annotations() {
-        if (annotations == null) {
-            annotations = new ArrayList<>();
-        }
-        return this.annotations;
-    }
+	@XmlAttribute(name = "visible")
+	protected Boolean visible = true;
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String source() {
+		return source;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
+	public void setSource(String value) {
+		this.source = value;
+	}
 
-    @Override
-    public String source() {
-        return source;
-    }
+	@Override
+	public String level() {
+		return level;
+	}
 
-    public void setSource(String value) {
-        this.source = value;
-    }
+	public void setLevel(String value) {
+		this.level = value;
+	}
 
-    @Override
-    public String level() {
-        return level;
-    }
+	@Override
+	public String usagePrefix() {
+		return usagePrefix;
+	}
 
-    public void setLevel(String value) {
-        this.level = value;
-    }
+	public void setUsagePrefix(String value) {
+		this.usagePrefix = value;
+	}
 
-    @Override
-    public String usagePrefix() {
-        return usagePrefix;
-    }
+	@Override
+	public String foreignKey() {
+		return foreignKey;
+	}
 
-    public void setUsagePrefix(String value) {
-        this.usagePrefix = value;
-    }
+	public void setForeignKey(String value) {
+		this.foreignKey = value;
+	}
 
-    @Override
-    public String foreignKey() {
-        return foreignKey;
-    }
+	@Override
+	public Boolean highCardinality() {
+		if (highCardinality == null) {
+			return Boolean.FALSE;
+		} else {
+			return highCardinality;
+		}
+	}
 
-    public void setForeignKey(String value) {
-        this.foreignKey = value;
-    }
+	@Override
+	public Boolean visible() {
+		return visible == null ? Boolean.FALSE : visible;
+	}
 
-    @Override
-    public Boolean highCardinality() {
-        if (highCardinality == null) {
-            return Boolean.FALSE;
-        } else {
-            return highCardinality;
-        }
-    }
+	public void setHighCardinality(Boolean value) {
+		this.highCardinality = value;
+	}
 
-    @Override
-    public String caption() {
-        return caption;
-    }
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
-    @Override
-    public Boolean visible() {
-        return visible == null ? Boolean.FALSE : visible;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    public void setHighCardinality(Boolean value) {
-        this.highCardinality = value;
-    }
-
-    public void setAnnotations(List<MappingAnnotation> annotations) {
-        this.annotations = annotations;
-    }
-
-    public void setCaption(String caption) {
-        this.caption = caption;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

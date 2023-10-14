@@ -472,7 +472,8 @@ class SteelwheelReadTest {
         MappingCube cube = schema.cubes().get(0);
         assertThat(cube).isNotNull();
         assertEquals("SteelWheelsSales", cube.name());
-        assertNull(cube.annotations());
+		assertThat(cube.annotations()).isNotNull().isEmpty();
+
         assertNotNull(cube.calculatedMembers());
         assertNull(cube.caption());
         assertNull(cube.defaultMeasure());
@@ -760,7 +761,7 @@ class SteelwheelReadTest {
     }
 
     private void checkHierarchyItem(MappingHierarchy hierarchy, Map<String, Object> map) {
-        assertNull(hierarchy.annotations());
+		assertThat(hierarchy.annotations()).isNotNull().isEmpty();
         assertNotNull(hierarchy.levels());
         checkLevel(hierarchy.levels(), (List) map.get(LEVEL));
         assertNotNull(hierarchy.memberReaderParameters());
@@ -821,7 +822,7 @@ class SteelwheelReadTest {
     }
 
     private void checkLevelItem(MappingLevel level, Map<String, Object> map) {
-        assertNull(level.annotations());
+		assertThat(level.annotations()).isNotNull().isEmpty();
         checkExpression(level.keyExpression(), get(KEY_EXPRESSION, map));
         checkExpression(level.nameExpression(), get(NAME_EXPRESSION, map));
         checkExpression(level.captionExpression(), get(CAPTION_EXPRESSION, map));
@@ -869,7 +870,7 @@ class SteelwheelReadTest {
     }
 
     private void checkMeasureItem(MappingCube cube, MappingMeasure measure, Map<String, Object> map, int ixdex) {
-        assertNull(measure.annotations());
+		assertThat(measure.annotations()).isNotNull().isEmpty();
         checkExpression(measure.measureExpression(), get(MEASURE_EXPRESSION, map));
         assertNotNull(measure.calculatedMemberProperties());
         assertEquals(map.get(NAME), measure.name(),

@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
 
@@ -24,83 +23,38 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DrillThroughAction", propOrder = { "annotations", "drillThroughElements" })
-public class DrillThroughActionImpl implements MappingDrillThroughAction {
+@XmlType(name = "DrillThroughAction", propOrder = { "drillThroughElements" })
+public class DrillThroughActionImpl extends AbstractMainElement implements MappingDrillThroughAction {
 
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
-    @XmlElements({ @XmlElement(name = "Attribute", type = DrillThroughAttributeImpl.class),
-            @XmlElement(name = "Measure", type = DrillThroughMeasureImpl.class) })
-    protected List<MappingDrillThroughElement> drillThroughElements;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "default")
-    protected Boolean defaultt;
-    @XmlAttribute(name = "caption")
-    protected String caption;
-    @XmlAttribute(name = "description")
-    protected String description;
+	@XmlElements({ @XmlElement(name = "Attribute", type = DrillThroughAttributeImpl.class),
+			@XmlElement(name = "Measure", type = DrillThroughMeasureImpl.class) })
+	protected List<MappingDrillThroughElement> drillThroughElements;
 
-    @Override
-    public List<MappingAnnotation> annotations() {
-        return annotations;
-    }
+	@XmlAttribute(name = "default")
+	protected Boolean defaultt;
 
-    public void setAnnotations(List<MappingAnnotation> value) {
-        this.annotations = value;
-    }
+	@Override
+	public List<MappingDrillThroughElement> drillThroughElements() {
+		if (drillThroughElements == null) {
+			drillThroughElements = new ArrayList<>();
+		}
+		return this.drillThroughElements;
+	}
 
-    @Override
-    public List<MappingDrillThroughElement> drillThroughElements() {
-        if (drillThroughElements == null) {
-            drillThroughElements = new ArrayList<>();
-        }
-        return this.drillThroughElements;
-    }
+	@Override
+	public Boolean defaultt() {
+		return defaultt;
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
+	public void setDefaultt(Boolean value) {
+		this.defaultt = value;
+	}
 
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    @Override
-    public Boolean defaultt() {
-        return defaultt;
-    }
-
-    public void setDefaultt(Boolean value) {
-        this.defaultt = value;
-    }
-
-    @Override
-    public String caption() {
-        return caption;
-    }
-
-    public void setCaption(String value) {
-        this.caption = value;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public void setDrillThroughElements(List<MappingDrillThroughElement> drillThroughElements) {
-        this.drillThroughElements = drillThroughElements;
-    }
+	public void setDrillThroughElements(List<MappingDrillThroughElement> drillThroughElements) {
+		this.drillThroughElements = drillThroughElements;
+	}
 }

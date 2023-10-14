@@ -17,7 +17,6 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
@@ -31,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -41,17 +39,12 @@ import jakarta.xml.bind.annotation.XmlType;
  * declarations of user-defined functions.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"annotations", "parameters", "dimensions", "cubes", "virtualCubes", "namedSets", "roles",
+@XmlType(name = "", propOrder = { "parameters", "dimensions", "cubes", "virtualCubes", "namedSets", "roles",
     "userDefinedFunctions"})
 @XmlRootElement(name = "Schema")
-public class SchemaImpl implements MappingSchema {
+public class SchemaImpl extends AbstractMainElement implements MappingSchema {
 
-    /**
-     * A bcd
-     */
-    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    @XmlElementWrapper(name = "Annotations")
-    protected List<MappingAnnotation> annotations;
+	
     @XmlElement(name = "Parameter", type = ParameterImpl.class)
     protected List<MappingParameter> parameters;
     @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class)
@@ -70,23 +63,10 @@ public class SchemaImpl implements MappingSchema {
     @Deprecated(since = "new version")
     @XmlElement(name = "UserDefinedFunction", type = UserDefinedFunctionImpl.class)
     protected List<MappingUserDefinedFunction> userDefinedFunctions;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "description")
-    protected String description;
     @XmlAttribute(name = "measuresCaption")
     protected String measuresCaption;
     @XmlAttribute(name = "defaultRole")
     protected String defaultRole;
-
-    @Override
-    public List<MappingAnnotation> annotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<MappingAnnotation> value) {
-        this.annotations = value;
-    }
 
     @Override
     public List<MappingParameter> parameters() {
@@ -146,24 +126,6 @@ public class SchemaImpl implements MappingSchema {
             userDefinedFunctions = new ArrayList<>();
         }
         return this.userDefinedFunctions;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
     }
 
     @Override
