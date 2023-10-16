@@ -8,6 +8,66 @@
 */
 package mondrian.rolap.agg;
 
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.ResultBase;
+import mondrian.olap.Util;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.CrossJoinFunDef;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,44 +85,6 @@ import static org.opencube.junit5.TestUtil.member;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 import static org.opencube.junit5.TestUtil.upgradeActual;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.calc.impl.ArrayTupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.ResultBase;
-import mondrian.olap.Util;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.CrossJoinFunDef;
-import mondrian.rolap.RolapCube;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 
 /**
  * <code>AggregationOnDistinctCountMeasureTest</code> tests the
@@ -90,7 +112,9 @@ class AggregationOnDistinctCountMeasuresTest {
         propSaver.reset();
     }
 
-    private void prepareContext(TestContextWrapper context) {
+    private void prepareContext(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -117,7 +141,10 @@ class AggregationOnDistinctCountMeasuresTest {
             null,
             null);
         withSchema(context, schema);
-        Connection connection = context.createConnection();
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AggregationOnDistinctCountMeasuresTestModifier(schema)));
+        Connection connection = context.getConnection();
 
         schemaReader =
                 connection.getSchemaReader().withLocus();
@@ -132,9 +159,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleWithAllLevelMembersOnly(TestContextWrapper context) {
+  void testTupleWithAllLevelMembersOnly(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER GENDER.X AS 'AGGREGATE({([GENDER].DEFAULTMEMBER,\n"
             + "[STORE].DEFAULTMEMBER)})'\n"
             + "SELECT GENDER.X ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES",
@@ -149,9 +176,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinOfAllMembers(TestContextWrapper context) {
+  void testCrossJoinOfAllMembers(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER GENDER.X AS 'AGGREGATE({CROSSJOIN({[GENDER].DEFAULTMEMBER},\n"
             + "{[STORE].DEFAULTMEMBER})})'\n"
             + "SELECT GENDER.X ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES",
@@ -166,7 +193,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinMembersWithASingleMember(TestContextWrapper context) {
+  void testCrossJoinMembersWithASingleMember(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
         propSaver.set(propSaver.properties.MaxConstraints, 1);
@@ -184,7 +211,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 2,716\n";
 
-      assertQueryReturns(context.createConnection(),query, result);
+      assertQueryReturns(context.getConnection(), query, result);
 
         // Check aggregate loading sql pattern
         String mysqlSql =
@@ -212,12 +239,12 @@ class AggregationOnDistinctCountMeasuresTest {
                 DatabaseProduct.TERADATA, oraTeraSql, oraTeraSql),
         };
 
-        assertQuerySql(context.createConnection(), query, patterns);
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinMembersWithSetOfMembers(TestContextWrapper context) {
+  void testCrossJoinMembersWithSetOfMembers(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
         propSaver.set(propSaver.properties.MaxConstraints, 2);
@@ -236,7 +263,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 2,716\n";
 
-      assertQueryReturns(context.createConnection(),query, result);
+      assertQueryReturns(context.getConnection(), query, result);
 
         // Check aggregate loading sql pattern.  Note Derby does not support
         // multicolumn IN list, so the predicates remain in AND/OR form.
@@ -277,14 +304,14 @@ class AggregationOnDistinctCountMeasuresTest {
                 DatabaseProduct.TERADATA, oraTeraSql, oraTeraSql),
         };
 
-        assertQuerySql(context.createConnection(), query, patterns);
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinParticularMembersFromTwoDimensions(TestContextWrapper context) {
+  void testCrossJoinParticularMembersFromTwoDimensions(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].M} * "
             + "{[STORE].[ALL STORES].[USA].[CA]})', solve_order=100 "
             + "SELECT GENDER.X ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES",
@@ -299,9 +326,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountOnSetOfMembersFromOneDimension(TestContextWrapper context) {
+  void testDistinctCountOnSetOfMembersFromOneDimension(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members})'"
             + "SELECT GENDER.X ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES",
             "Axis #0:\n"
@@ -315,9 +342,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountWithAMeasureAsPartOfTuple(TestContextWrapper context) {
+  void testDistinctCountWithAMeasureAsPartOfTuple(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "SELECT [STORE].[ALL STORES].[USA].[CA] ON 0, "
             + "([MEASURES].[CUSTOMER COUNT], [Gender].[m]) ON 1 FROM SALES",
             "Axis #0:\n"
@@ -331,9 +358,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountOnSetOfMembers(TestContextWrapper context) {
+  void testDistinctCountOnSetOfMembers(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER STORE.X as 'Aggregate({[STORE].[ALL STORES].[USA].[CA],"
             + "[STORE].[ALL STORES].[USA].[WA]})'"
             + "SELECT STORE.X  ON ROWS, "
@@ -350,7 +377,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountOnTuplesWithSomeNonJoiningDimensions(TestContextWrapper context) {
+  void testDistinctCountOnTuplesWithSomeNonJoiningDimensions(TestContext context) {
       prepareContext(context);
         propSaver.set(
             props.IgnoreMeasureForNonJoiningDimension, false);
@@ -368,17 +395,17 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Warehouse].[X]}\n"
             + "Row #0: \n";
-      assertQueryReturns(context.createConnection(),mdx, expectedResult);
+      assertQueryReturns(context.getConnection(), mdx, expectedResult);
         propSaver.set(
             props.IgnoreMeasureForNonJoiningDimension, true);
-      assertQueryReturns(context.createConnection(),mdx, expectedResult);
+      assertQueryReturns(context.getConnection() ,mdx, expectedResult);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregationListOptimizationForChildren(TestContextWrapper context) {
+  void testAggregationListOptimizationForChildren(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
             + "{[STORE].[ALL STORES].[USA].[CA], [STORE].[ALL STORES].[USA].[OR], "
             + "[STORE].[ALL STORES].[USA].[WA], [Store].[All Stores].[Canada]})' "
@@ -394,10 +421,10 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountOnMembersWithNonJoiningDimensionNotAtAllLevel(TestContextWrapper context)
+  void testDistinctCountOnMembersWithNonJoiningDimensionNotAtAllLevel(TestContext context)
     {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X as "
             + "'Aggregate({WAREHOUSE.[STATE PROVINCE].MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -414,9 +441,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonJoiningDimensionWithAllMember(TestContextWrapper context) {
+  void testNonJoiningDimensionWithAllMember(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X as 'Aggregate({WAREHOUSE.MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
             + "{[MEASURES].[CUSTOMER COUNT]} ON COLUMNS\n"
@@ -432,9 +459,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinOfJoiningAndNonJoiningDimensionWithAllMember(TestContextWrapper context) {
+  void testCrossJoinOfJoiningAndNonJoiningDimensionWithAllMember(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -448,7 +475,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Warehouse].[X]}\n"
             + "Row #0: 5,581\n");
 
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -465,9 +492,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinOfJoiningAndNonJoiningDimension(TestContextWrapper context) {
+  void testCrossJoinOfJoiningAndNonJoiningDimension(TestContext context) {
       prepareContext(context);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.[STATE PROVINCE].MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -481,7 +508,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Warehouse].[X]}\n"
             + "Row #0: \n");
 
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.[STATE PROVINCE].MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -498,16 +525,16 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregationOverLargeListGeneratesError(TestContextWrapper context) {
+  void testAggregationOverLargeListGeneratesError(TestContext context) {
       prepareContext(context);
         propSaver.set(props.MaxConstraints, 7);
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
-            getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+            getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
             == DatabaseProduct.LUCIDDB;
 
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             makeQuery("[MEASURES].[CUSTOMER COUNT]"),
             isLuciddb
             ? "Axis #0:\n"
@@ -527,7 +554,7 @@ class AggregationOnDistinctCountMeasuresTest {
               + "Aggregation is not supported over a list with more than 7 predicates (see property mondrian.rolap.maxConstraints)\n");
 
         // aggregation over a non-distinct-count measure is OK
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             makeQuery("[Measures].[Store Sales]"),
             "Axis #0:\n"
             + "{}\n"
@@ -540,7 +567,7 @@ class AggregationOnDistinctCountMeasuresTest {
         // aggregation over a non-distinct-count measure in slicer should be
         // OK. Before bug MONDRIAN-1122 was fixed, a large set in the slicer
         // would cause an error even if there was not a distinct-count measure.
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "SELECT {[Measures].[Store Sales]} ON COLUMNS\n"
             + "FROM [WAREHOUSE AND SALES2]\n"
             + "WHERE {\n"
@@ -591,13 +618,13 @@ class AggregationOnDistinctCountMeasuresTest {
      */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateMaxConstraints(TestContextWrapper context) {
+  void testAggregateMaxConstraints(TestContext context) {
       prepareContext(context);
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
         propSaver.set(MondrianProperties.instance().MaxConstraints, 5);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "  Measures.[Unit Sales] on columns,\n"
             + "  Product.[Product Family].Members on rows\n"
@@ -629,7 +656,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiLevelMembersNullParents(TestContextWrapper context) {
+  void testMultiLevelMembersNullParents(TestContext context) {
       prepareContext(context);
         if (!isDefaultNullMemberRepresentation()) {
             return;
@@ -682,7 +709,82 @@ class AggregationOnDistinctCountMeasuresTest {
             + "in (('5617 Saclan Terrace', 'Arnold and Sons'), "
             + "('3377 Coachman Place', 'Jones International'))))";
 
-        String baseSchema = TestUtil.getRawSchema(context);
+      class TestMultiLevelMembersNullParentsModifier extends RDbMappingSchemaModifier {
+
+          public TestMultiLevelMembersNullParentsModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+          @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(schema));
+              result.add(PrivateDimensionRBuilder.builder()
+                  .name("Warehouse2")
+                  .hierarchies(List.of(
+                      HierarchyRBuilder.builder()
+                          .hasAll(true)
+                          .primaryKey("warehouse_id")
+                          .relation(new TableR("warehouse"))
+                          .levels(List.of(
+                              LevelRBuilder.builder()
+                                  .name("address3")
+                                  .column("wa_address3")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address2")
+                                  .column("wa_address2")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address1")
+                                  .column("wa_address1")
+                                  .uniqueMembers(false)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("name")
+                                  .column("warehouse_name")
+                                  .uniqueMembers(false)
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+
+          @Override
+          protected List<MappingCube> schemaCubes(MappingSchema schema) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.schemaCubes(schema));
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("inventory_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Warehouse2")
+                          .source("Warehouse2")
+                          .foreignKey("warehouse_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Cost Count")
+                          .column("warehouse_cost")
+                          .aggregator("distinct-count")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+      /*
+      String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 dimension,
                 cube,
@@ -691,23 +793,27 @@ class AggregationOnDistinctCountMeasuresTest {
                 null,
                 null);
         withSchema(context, schema);
-        SqlPattern[] patterns = {
+       */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMembersNullParentsModifier(schema)));
+      SqlPattern[] patterns = {
             new SqlPattern(
                 DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby),
             new SqlPattern(
                 DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql)
         };
 
-        assertQuerySql(context.createConnection(), query, patterns);
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiLevelMembersMixedNullNonNullParent(TestContextWrapper context) {
+  void testMultiLevelMembersMixedNullNonNullParent(TestContext context) {
       prepareContext(context);
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
+        /*
         String dimension =
             "<Dimension name=\"Warehouse2\">\n"
             + "  <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
@@ -725,7 +831,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "  <DimensionUsage name=\"Warehouse2\" source=\"Warehouse2\" foreignKey=\"warehouse_id\"/>\n"
             + "  <Measure name=\"Cost Count\" column=\"warehouse_cost\" aggregator=\"distinct-count\"/>\n"
             + "</Cube>";
-
+        */
         String query =
             "with\n"
             + "set [Filtered Warehouse Set] as "
@@ -738,6 +844,76 @@ class AggregationOnDistinctCountMeasuresTest {
         String necjSqlMySql2 =
             "select count(distinct `inventory_fact_1997`.`warehouse_cost`) as `m0` from `warehouse` as `warehouse`, `inventory_fact_1997` as `inventory_fact_1997` where `inventory_fact_1997`.`warehouse_id` = `warehouse`.`warehouse_id` and ((`warehouse`.`warehouse_name` = 'Freeman And Co' and `warehouse`.`wa_address1` = '234 West Covina Pkwy' and `warehouse`.`warehouse_fax` is null) or (`warehouse`.`warehouse_name` = 'Jones International' and `warehouse`.`wa_address1` = '3377 Coachman Place' and `warehouse`.`warehouse_fax` = '971-555-6213'))";
 
+      class TestMultiLevelMembersMixedNullNonNullParentModifier extends RDbMappingSchemaModifier {
+
+          public TestMultiLevelMembersMixedNullNonNullParentModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+          @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(schema));
+              result.add(PrivateDimensionRBuilder.builder()
+                  .name("Warehouse2")
+                  .hierarchies(List.of(
+                      HierarchyRBuilder.builder()
+                          .hasAll(true)
+                          .primaryKey("warehouse_id")
+                          .relation(new TableR("warehouse"))
+                          .levels(List.of(
+                              LevelRBuilder.builder()
+                                  .name("fax")
+                                  .column("warehouse_fax")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address1")
+                                  .column("wa_address1")
+                                  .uniqueMembers(false)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("name")
+                                  .column("warehouse_name")
+                                  .uniqueMembers(false)
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+
+          @Override
+          protected List<MappingCube> schemaCubes(MappingSchema schema) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.schemaCubes(schema));
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("inventory_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Warehouse2")
+                          .source("Warehouse2")
+                          .foreignKey("warehouse_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Cost Count")
+                          .column("warehouse_cost")
+                          .aggregator("distinct-count")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+      /*
       String baseSchema = TestUtil.getRawSchema(context);
       String schema = SchemaUtil.getSchema(baseSchema,
               dimension,
@@ -747,7 +923,10 @@ class AggregationOnDistinctCountMeasuresTest {
                 null,
                 null);
         withSchema(context, schema);
-        String result =
+       */
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMembersMixedNullNonNullParentModifier(schema)));
+      String result =
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
@@ -756,12 +935,12 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Warehouse2].[TwoMembers]}\n"
             + "Row #0: 220\n";
 
-        assertQueryReturns(context.createConnection(), query, result);
+        assertQueryReturns(context.getConnection(), query, result);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiLevelsMixedNullNonNullChild(TestContextWrapper context) {
+  void testMultiLevelsMixedNullNonNullChild(TestContext context) {
       prepareContext(context);
         if (!isDefaultNullMemberRepresentation()) {
             return;
@@ -796,6 +975,77 @@ class AggregationOnDistinctCountMeasuresTest {
         String necjSqlMySql2 =
             "select count(distinct `inventory_fact_1997`.`warehouse_cost`) as `m0` from `warehouse` as `warehouse`, `inventory_fact_1997` as `inventory_fact_1997` where `inventory_fact_1997`.`warehouse_id` = `warehouse`.`warehouse_id` and ((`warehouse`.`warehouse_fax` is null and `warehouse`.`wa_address2` is null and `warehouse`.`wa_address3` is null) or (`warehouse`.`warehouse_fax` = '971-555-6213' and `warehouse`.`wa_address2` is null and `warehouse`.`wa_address3` is null))";
 
+
+      class TestMultiLevelsMixedNullNonNullChildModifier extends RDbMappingSchemaModifier {
+
+          public TestMultiLevelsMixedNullNonNullChildModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+          @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(schema));
+              result.add(PrivateDimensionRBuilder.builder()
+                  .name("Warehouse2")
+                  .hierarchies(List.of(
+                      HierarchyRBuilder.builder()
+                          .hasAll(true)
+                          .primaryKey("warehouse_id")
+                          .relation(new TableR("warehouse"))
+                          .levels(List.of(
+                              LevelRBuilder.builder()
+                                  .name("fax")
+                                  .column("warehouse_fax")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address1")
+                                  .column("wa_address1")
+                                  .uniqueMembers(false)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("name")
+                                  .column("warehouse_name")
+                                  .uniqueMembers(false)
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+
+          @Override
+          protected List<MappingCube> schemaCubes(MappingSchema schema) {
+              List<MappingCube> result = new ArrayList<>();
+              result.addAll(super.schemaCubes(schema));
+              result.add(CubeRBuilder.builder()
+                  .name("Warehouse2")
+                  .fact(new TableR("inventory_fact_1997"))
+                  .dimensionUsageOrDimensions(List.of(
+                      DimensionUsageRBuilder.builder()
+                          .name("Product")
+                          .source("Product")
+                          .foreignKey("product_id")
+                          .build(),
+                      DimensionUsageRBuilder.builder()
+                          .name("Warehouse2")
+                          .source("Warehouse2")
+                          .foreignKey("warehouse_id")
+                          .build()
+                  ))
+                  .measures(List.of(
+                      MeasureRBuilder.builder()
+                          .name("Cost Count")
+                          .column("warehouse_cost")
+                          .aggregator("distinct-count")
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+      }
+      /*
       String baseSchema = TestUtil.getRawSchema(context);
       String schema = SchemaUtil.getSchema(baseSchema,
               dimension,
@@ -805,7 +1055,8 @@ class AggregationOnDistinctCountMeasuresTest {
                 null,
                 null);
       TestUtil.withSchema(context, schema);
-        String result =
+      */
+      String result =
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
@@ -813,13 +1064,14 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Warehouse2].[TwoMembers]}\n"
             + "Row #0: 220\n";
-
-        assertQueryReturns(context.createConnection(), query, result);
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelsMixedNullNonNullChildModifier(schema)));
+      assertQueryReturns(context.getConnection(), query, result);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregationOnCJofMembersGeneratesOptimalQuery(TestContextWrapper context) {
+  void testAggregationOnCJofMembersGeneratesOptimalQuery(TestContext context) {
       prepareContext(context);
         // Mondrian does not use GROUPING SETS for distinct-count measures.
         // So, this test should not use GROUPING SETS, even if they are enabled.
@@ -844,7 +1096,7 @@ class AggregationOnDistinctCountMeasuresTest {
             new SqlPattern(
                 DatabaseProduct.TERADATA, oraTeraSql, oraTeraSql),
         };
-        assertQuerySql(context.createConnection(),
+        assertQuerySql(context.getConnection(),
             "WITH \n"
             + "SET [COG_OQP_INT_s2] AS 'CROSSJOIN({[Store].[Store].MEMBERS}, "
             + "{{[Gender].[Gender].MEMBERS}, "
@@ -869,7 +1121,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanNotBatchForDifferentCompoundPredicate(TestContextWrapper context) {
+  void testCanNotBatchForDifferentCompoundPredicate(TestContext context) {
       prepareContext(context);
         propSaver.set(props.EnableGroupingSets, true);
         String mdxQueryWithFewMembers =
@@ -937,8 +1189,8 @@ class AggregationOnDistinctCountMeasuresTest {
                 oraTeraSqlForDetail),
         };
 
-      assertQueryReturns(context.createConnection(),mdxQueryWithFewMembers, desiredResult);
-        assertQuerySql(context.createConnection(), mdxQueryWithFewMembers, patterns);
+      assertQueryReturns(context.getConnection(), mdxQueryWithFewMembers, desiredResult);
+        assertQuerySql(context.getConnection(), mdxQueryWithFewMembers, patterns);
     }
 
 
@@ -948,7 +1200,7 @@ class AggregationOnDistinctCountMeasuresTest {
      */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountInNonGroupingSetsQuery(TestContextWrapper context) {
+  void testDistinctCountInNonGroupingSetsQuery(TestContext context) {
       prepareContext(context);
         propSaver.set(props.EnableGroupingSets, true);
 
@@ -1021,13 +1273,13 @@ class AggregationOnDistinctCountMeasuresTest {
                 oraTeraSqlForDistinctCountAgg),
         };
 
-      assertQueryReturns(context.createConnection(),mdxQueryWithFewMembers, desiredResult);
-        assertQuerySql(context.createConnection(), mdxQueryWithFewMembers, patterns);
+      assertQueryReturns(context.getConnection(), mdxQueryWithFewMembers, desiredResult);
+        assertQuerySql(context.getConnection(), mdxQueryWithFewMembers, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets(TestContextWrapper context) {
+  void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets(TestContext context) {
       prepareContext(context);
         propSaver.set(props.EnableGroupingSets, false);
 
@@ -1082,15 +1334,15 @@ class AggregationOnDistinctCountMeasuresTest {
                 DatabaseProduct.TERADATA, oraTeraSql, oraTeraSql),
         };
 
-      assertQueryReturns(context.createConnection(),mdxQueryWithMembers, desiredResult);
-        assertQuerySql(context.createConnection(), mdxQueryWithMembers, patterns);
-      assertQueryReturns(context.createConnection(),mdxQueryWithDefaultMember, desiredResult);
-        assertQuerySql(context.createConnection(), mdxQueryWithDefaultMember, patterns);
+      assertQueryReturns(context.getConnection(), mdxQueryWithMembers, desiredResult);
+        assertQuerySql(context.getConnection(), mdxQueryWithMembers, patterns);
+      assertQueryReturns(context.getConnection(), mdxQueryWithDefaultMember, desiredResult);
+        assertQuerySql(context.getConnection(), mdxQueryWithDefaultMember, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeChildren(TestContextWrapper context) {
+  void testOptimizeChildren(TestContext context) {
       prepareContext(context);
         String query =
             "with member gender.x as "
@@ -1105,7 +1357,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 5,581\n";
-      assertQueryReturns(context.createConnection(), query, expected);
+      assertQueryReturns(context.getConnection(), query, expected);
 
         String derbySql =
             "select \"time_by_day\".\"the_year\" as \"c0\", "
@@ -1141,12 +1393,12 @@ class AggregationOnDistinctCountMeasuresTest {
                 DatabaseProduct.LUCIDDB, luciddbSql, luciddbSql),
         };
 
-        assertQuerySql(context.createConnection(), query, patterns);
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeListWhenTuplesAreFormedWithDifferentLevels(TestContextWrapper context) {
+  void testOptimizeListWhenTuplesAreFormedWithDifferentLevels(TestContext context) {
       prepareContext(context);
         String query =
             "WITH\n"
@@ -1172,7 +1424,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 421\n";
-      assertQueryReturns(context.createConnection(),query, expected);
+      assertQueryReturns(context.getConnection(), query, expected);
         String derbySql =
             "select \"time_by_day\".\"the_year\" as \"c0\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" "
@@ -1231,12 +1483,12 @@ class AggregationOnDistinctCountMeasuresTest {
             new SqlPattern(
                 DatabaseProduct.ACCESS, accessSql, accessSql)};
 
-        assertQuerySql(context.createConnection(), query, patterns);
+        assertQuerySql(context.getConnection(), query, patterns);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeListWithTuplesOfLength3(TestContextWrapper context) {
+  void testOptimizeListWithTuplesOfLength3(TestContext context) {
       prepareContext(context);
         String query =
             "WITH\n"
@@ -1270,12 +1522,12 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 189\n";
-      assertQueryReturns(context.createConnection(),query, expected);
+      assertQueryReturns(context.getConnection(), query, expected);
     }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeChildrenForTuplesWithLength1(TestContextWrapper context) {
+  void testOptimizeChildrenForTuplesWithLength1(TestContext context) {
       prepareContext(context);
         TupleList memberList =
             productMembersPotScrubbersPotsAndPans(
@@ -1321,7 +1573,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeChildrenForTuplesWithLength3(TestContextWrapper context) {
+  void testOptimizeChildrenForTuplesWithLength3(TestContext context) {
       prepareContext(context);
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
@@ -1350,7 +1602,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOptimizeChildrenWhenTuplesAreFormedWithDifferentLevels(TestContextWrapper context) {
+  void testOptimizeChildrenWhenTuplesAreFormedWithDifferentLevels(TestContext context) {
       prepareContext(context);
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
@@ -1390,7 +1642,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testWhetherCJOfChildren(TestContextWrapper context) {
+  void testWhetherCJOfChildren(TestContext context) {
       prepareContext(context);
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
@@ -1404,7 +1656,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldNotRemoveDuplicateTuples(TestContextWrapper context) {
+  void testShouldNotRemoveDuplicateTuples(TestContext context) {
       prepareContext(context);
         Member maleChildMember = member(
             org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
@@ -1424,7 +1676,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberCountIsSameForAllMembersInTuple(TestContextWrapper context) {
+  void testMemberCountIsSameForAllMembersInTuple(TestContext context) {
       prepareContext(context);
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
@@ -1445,7 +1697,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberCountIsNotSameForAllMembersInTuple(TestContextWrapper context) {
+  void testMemberCountIsNotSameForAllMembersInTuple(TestContext context) {
       prepareContext(context);
         Member maleChild =
             member(
@@ -1485,11 +1737,11 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure(TestContextWrapper context) {
+  void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure(TestContext context) {
       prepareContext(context);
         propSaver.set(props.EnableGroupingSets, true);
 
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH "
             + "MEMBER GENDER.AGG AS 'AGGREGATE({ GENDER.[F] })' "
             + "MEMBER GENDER.AGG2 AS 'AGGREGATE({ GENDER.[M] })' "
@@ -1513,10 +1765,10 @@ class AggregationOnDistinctCountMeasuresTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountForAggregatesAtTheSameLevel(TestContextWrapper context) {
+  void testDistinctCountForAggregatesAtTheSameLevel(TestContext context) {
       prepareContext(context);
         propSaver.set(props.EnableGroupingSets, true);
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
             "WITH "
             + "MEMBER GENDER.AGG AS 'AGGREGATE({ GENDER.[F], GENDER.[M] })' "
             + "SELECT "
@@ -1541,7 +1793,56 @@ class AggregationOnDistinctCountMeasuresTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian906(TestContextWrapper context) {
-      prepareContext(context);
+      prepareContext(context.getContext());
+
+      class TestMondrian906Modifier extends RDbMappingSchemaModifier {
+
+          public TestMondrian906Modifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingRole> schemaRoles(MappingSchema schema) {
+              List<MappingRole> result = new ArrayList<>();
+              result.addAll(super.schemaRoles(schema));
+              result.add(RoleRBuilder.builder()
+                  .name("Role1")
+                  .schemaGrants(List.of(
+                      SchemaGrantRBuilder.builder()
+                          .access(AccessEnum.ALL)
+                          .cubeGrants(List.of(
+                              CubeGrantRBuilder.builder()
+                                  .cube("Sales")
+                                  .access("all")
+                                  .hierarchyGrants(List.of(
+                                      HierarchyGrantRBuilder.builder()
+                                          .hierarchy("[Customers]")
+                                          .access(AccessEnum.CUSTOM)
+                                          .rollupPolicy("partial")
+                                          .memberGrants(List.of(
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Customers].[USA].[OR]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build(),
+                                              MemberGrantRBuilder.builder()
+                                                  .member("[Customers].[USA].[WA]")
+                                                  .access(MemberGrantAccessEnum.ALL)
+                                                  .build()
+                                          ))
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+
+              return result;
+          }
+      }
+
+
+      /*
       String baseSchema = TestUtil.getRawSchema(context);
       String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1556,7 +1857,11 @@ class AggregationOnDistinctCountMeasuresTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n");
       withSchema(context, schema);
-        final String mdx =
+       */
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier(schema)));
+
+      final String mdx =
             "select {[Customers].[USA], [Customers].[USA].[OR], [Customers].[USA].[WA]} on columns, {[Measures].[Customer Count]} on rows from [Sales]";
 
         withRole(context, "Role1");
@@ -1584,7 +1889,7 @@ class AggregationOnDistinctCountMeasuresTest {
      */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTupleOptimizationBug1225(TestContextWrapper context) {
+  void testTupleOptimizationBug1225(TestContext context) {
       prepareContext(context);
         Member caMember =
             member(
@@ -1683,7 +1988,7 @@ class AggregationOnDistinctCountMeasuresTest {
      */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountAggMeasure(TestContextWrapper context) {
+  void testDistinctCountAggMeasure(TestContext context) {
       prepareContext(context);
         String dimension =
             "<Dimension name=\"Time\" type=\"TimeDimension\"> "
@@ -1742,9 +2047,62 @@ class AggregationOnDistinctCountMeasuresTest {
         // should skip aggregate table, cannot aggregate
         propSaver.set(propSaver.properties.UseAggregates, true);
         propSaver.set(propSaver.properties.ReadAggregates, true);
+      class TestDistinctCountAggMeasureModifier extends RDbMappingSchemaModifier {
 
+          public TestDistinctCountAggMeasureModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+              return SchemaRBuilder.builder()
+                  .name("FoodMart")
+                  .dimensions(List.of(
+                      PrivateDimensionRBuilder.builder()
+                          .name("Time")
+                          .type(DimensionTypeEnum.TIME_DIMENSION)
+                          .hierarchies(List.of(
+                              HierarchyRBuilder.builder()
+                                  .hasAll(false)
+                                  .primaryKey("time_id")
+                                  .relation(new TableR("time_by_day"))
+                                  .levels(List.of(
+                                      LevelRBuilder.builder()
+                                          .name("Year")
+                                          .column("the_year")
+                                          .type(TypeEnum.NUMERIC)
+                                          .uniqueMembers(true)
+                                          .levelType(LevelTypeEnum.TIME_YEARS)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Quarter")
+                                          .column("quarter")
+                                          .type(TypeEnum.NUMERIC)
+                                          .uniqueMembers(false)
+                                          .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                          .build(),
+                                      LevelRBuilder.builder()
+                                          .name("Month")
+                                          .column("month_of_year")
+                                          .type(TypeEnum.NUMERIC)
+                                          .uniqueMembers(false)
+                                          .levelType(LevelTypeEnum.TIME_MONTHS)
+                                          .build()
+                                  ))
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build();
+          }
+
+      }
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestDistinctCountAggMeasureModifier(schema)));
+        /*
         withSchema(context, simpleSchema);
-        assertQueryReturns(context.createConnection(),
+        */
+        assertQueryReturns(context.getConnection(),
             query,
             "Axis #0:\n"
             + "{}\n"
@@ -1772,7 +2130,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "and\n"
             + "    `agg_c_10_sales_fact_1997`.`month_of_year` in (1, 2, 3)";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             monthsQuery,
             new SqlPattern[]{
                 new SqlPattern(
@@ -1793,10 +2151,10 @@ class AggregationOnDistinctCountMeasuresTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCachedAggregate(TestContextWrapper context) {
+  void testCachedAggregate(TestContext context) {
         prepareContext(context);
     Result result =
-        executeQuery(context.createConnection(), " WITH\r\n"
+        executeQuery(context.getConnection(), " WITH\r\n"
             + " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Store Type_],[*BASE_MEMBERS__Product_]))'\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Gender].CURRENTMEMBER,[Store Type].CURRENTMEMBER)})'\r\n"
             + " SET [*BASE_MEMBERS__Store Type_] AS '{[Store Type].[All Store Types].[Gourmet Supermarket],[Store Type].[All Store Types].[Supermarket]}'\r\n"
@@ -1828,10 +2186,10 @@ class AggregationOnDistinctCountMeasuresTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCachedCompoundSlicer(TestContextWrapper context) {
+  void testCachedCompoundSlicer(TestContext context) {
         prepareContext(context);
     Result result =
-        executeQuery(context.createConnection(), " WITH\r\n"
+        executeQuery(context.getConnection(), " WITH\r\n"
             + " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Store Type_],[*BASE_MEMBERS__Product_]))'\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Gender].CURRENTMEMBER,[Store Type].CURRENTMEMBER)})'\r\n"
             + " SET [*BASE_MEMBERS__Store Type_] AS '{[Store Type].[All Store Types].[Gourmet Supermarket],[Store Type].[All Store Types].[Supermarket]}'\r\n"
@@ -1866,10 +2224,10 @@ class AggregationOnDistinctCountMeasuresTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpCacheHit(TestContextWrapper context) {
+  void testExpCacheHit(TestContext context) {
         prepareContext(context);
     Result result =
-        executeQuery(context.createConnection(), "WITH\r\n"
+        executeQuery(context.getConnection(), "WITH\r\n"
             + " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Store Type_],[*BASE_MEMBERS__Product_]))'\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Gender].CURRENTMEMBER,[Store Type].CURRENTMEMBER)})'\r\n"
             + " SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Gender].CURRENTMEMBER IN [*METRIC_CACHE_SET])'\r\n"
@@ -1902,10 +2260,10 @@ class AggregationOnDistinctCountMeasuresTest {
 
 @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpCacheHit2(TestContextWrapper context) {
+  void testExpCacheHit2(TestContext context) {
     prepareContext(context);
     Result result =
-        executeQuery(context.createConnection(), "WITH\r\n" +
+        executeQuery(context.getConnection(), "WITH\r\n" +
             " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Promotion Media_]))))'\r\n" +
             " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Customers].CURRENTMEMBER,[Education Level].CURRENTMEMBER,[Time].CURRENTMEMBER)})'\r\n" +
             " SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Customers].CURRENTMEMBER IN [*METRIC_CACHE_SET])'\r\n" +
