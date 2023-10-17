@@ -8,23 +8,26 @@
 */
 package mondrian.test;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.BatchTestCase;
+import java.util.List;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test cases to verify requiresOrderByAlias()=true for the MySQL 5.7+
@@ -53,15 +56,16 @@ class OrderByAliasTest extends BatchTestCase {
 
   @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInKeyExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInKeyExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -73,7 +77,12 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(context.createConnection(),
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+
+      assertQuerySql(context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "
@@ -94,15 +103,16 @@ class OrderByAliasTest extends BatchTestCase {
 
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInNameExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInNameExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -114,8 +124,12 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+         RolapSchemaPool.instance().clear();
+         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         assertQuerySql(
+        context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "
@@ -138,15 +152,16 @@ class OrderByAliasTest extends BatchTestCase {
 
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInCaptionExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInCaptionExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -158,8 +173,12 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+         RolapSchemaPool.instance().clear();
+         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         assertQuerySql(
+        context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "
@@ -182,15 +201,16 @@ class OrderByAliasTest extends BatchTestCase {
 
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInOrdinalExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInOrdinalExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -202,8 +222,12 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+         RolapSchemaPool.instance().clear();
+         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         assertQuerySql(
+        context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "
@@ -226,15 +250,16 @@ class OrderByAliasTest extends BatchTestCase {
 
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInParentExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInParentExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("supervisor_id");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "HR",
         "<Dimension name=\"Employees\" foreignKey=\"employee_id\">\n"
@@ -258,8 +283,12 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+         RolapSchemaPool.instance().clear();
+         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier2(schema, colName)));
+         assertQuerySql(
+        context.getConnection(),
         "select non empty{[Employees].[All Employees].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [HR] "
@@ -293,15 +322,16 @@ class OrderByAliasTest extends BatchTestCase {
 
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInPropertyExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInPropertyExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -313,8 +343,13 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+         RolapSchemaPool.instance().clear();
+         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier3(schema, colName)));
+
+         assertQuerySql(
+        context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "
@@ -335,15 +370,16 @@ class OrderByAliasTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSqlInMeasureExpression(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testSqlInMeasureExpression(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    final StringBuilder colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -355,8 +391,13 @@ class OrderByAliasTest extends BatchTestCase {
         + "    </Level>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>"));
-    assertQuerySql(
-        context.createConnection(),
+     */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+
+        assertQuerySql(
+        context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
         + "non empty {[Store].[All Stores]} ON columns "
         + "from [Sales] "

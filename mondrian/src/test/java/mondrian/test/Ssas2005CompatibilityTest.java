@@ -9,6 +9,28 @@
 
 package mondrian.test;
 
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.sql.SQLException;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertExprReturns;
@@ -17,27 +39,6 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.sql.SQLException;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapSchemaPool;
 
 /**
  * Unit tests that check compatibility with Microsoft SQL Server Analysis
@@ -1077,7 +1078,8 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionDotHierarchySameNameInBrackets(TestContextWrapper context) {
+    void testDimensionDotHierarchySameNameInBrackets(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Store Type 2\" foreignKey=\"store_id\">"
@@ -1087,7 +1089,12 @@ class Ssas2005CompatibilityTest {
             + " </Hierarchy>"
             + "</Dimension>",
             null));
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier1(schema)));
+
+        assertQueryReturns(context.getConnection(),
             "select [Store Type 2.Store Type 2].[Store Type].members ON columns "
             + "from [Sales] where [Time].[1997]",
             "Axis #0:\n"
@@ -1875,6 +1882,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCanHaveMemberWithSameNameAsLevel(TestContextWrapper context) throws SQLException {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
              "<Dimension name=\"SameName\" foreignKey=\"customer_id\">\n"
@@ -1894,6 +1902,10 @@ class Ssas2005CompatibilityTest {
              + " <Level name=\"SameName\" column=\"desc\" uniqueMembers=\"true\" />\n"
              + " </Hierarchy>\n"
              + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier2(schema)));
 
         org.olap4j.metadata.Member member = context.createOlap4jConnection()
             .getOlapSchema().getCubes().get("Sales").getDimensions()
@@ -1938,6 +1950,7 @@ class Ssas2005CompatibilityTest {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
     	prepareContext(context);
+    	/*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "  <Dimension name=\"Customer Last Name\" "
@@ -1948,6 +1961,10 @@ class Ssas2005CompatibilityTest {
                 + "      <Level name=\"Last Name\" column=\"lname\" keyColumn=\"customer_id\" uniqueMembers=\"true\"/>\n"
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"));
+    	 */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier3(schema)));
         assertAxisReturns(context.createConnection(),
             "head(\n"
             + "  filter(\n"

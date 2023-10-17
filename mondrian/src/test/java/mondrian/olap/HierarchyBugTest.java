@@ -12,12 +12,10 @@
 */
 package mondrian.olap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.sql.SQLException;
-import java.util.List;
-
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -26,6 +24,17 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,14 +42,17 @@ import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.test.PropertySaver5;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 class HierarchyBugTest {
 	private PropertySaver5 propSaver;
 
@@ -121,14 +133,14 @@ class HierarchyBugTest {
             + "   [Time].[Time].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
        Connection conn= foodMartContext.createConnection();
-       
-        
+
+
         Result resultTime = TestUtil.executeQuery(conn, mdxTime);
         verifyMemberLevelNamesIdentityMeasureAxis(
             resultTime.getAxes()[0], "[Measures]");
         verifyMemberLevelNamesIdentityDimAxis(
             resultTime.getAxes()[1], "[Time].[Time]");
-        
+
 TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
@@ -140,7 +152,7 @@ TestUtil.flushSchemaCache(conn);
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Weekly].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
-        
+
        // Fresh sets this before get new Conn
        //  RolapConnectionProperties.UseSchemaPool.name(), false);
         foodMartContext.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
@@ -160,7 +172,7 @@ TestUtil.flushSchemaCache(conn);
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
-        
+
         Connection conn=foodMartContext.createConnection();
         Result resultTime =TestUtil.executeQuery(conn, mdxTime);
         verifyMemberLevelNamesIdentityMeasureAxis(
@@ -176,7 +188,7 @@ TestUtil.flushSchemaCache(conn);
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time.Weekly].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
-        
+
         Connection conn=foodMartContext.createConnection();
         Result resultWeekly =TestUtil.executeQuery(conn, mdxWeekly);
 
@@ -287,6 +299,7 @@ TestUtil.flushSchemaCache(conn);
             + "   [Date].[Date].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
 
+        /*
         String dateDim  =
             "<Dimension name=\"Date\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
             + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
@@ -299,10 +312,65 @@ TestUtil.flushSchemaCache(conn);
             + "          levelType=\"TimeMonths\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>";
-    
+        */
+        class VerifyMemberLevelNamesIdentityOlap4jDateDimModifier extends RDbMappingSchemaModifier {
 
+            public VerifyMemberLevelNamesIdentityOlap4jDateDimModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+
+                    MappingCubeDimension dimension = PrivateDimensionRBuilder
+                        .builder()
+                        .name("Date")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .foreignKey("time_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarter")
+                                        .column("quarter")
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Month")
+                                        .column("month_of_year")
+                                        .uniqueMembers(false)
+                                        .type(TypeEnum.NUMERIC)
+                                        .levelType(LevelTypeEnum.TIME_MONTHS)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build();
+                    result.add(dimension);
+                }
+                return result;
+            }
+        }
+       /*
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
-        
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new VerifyMemberLevelNamesIdentityOlap4jDateDimModifier(schema)));
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 	@ParameterizedTest
@@ -334,7 +402,7 @@ TestUtil.flushSchemaCache(conn);
     private void verifyMemberLevelNamesIdentityOlap4jWeekly(TestContextWrapper context,
         String mdx, String expected) throws SQLException
     {
-   
+
         String dateDim =
             "<Dimension name=\"Date\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
             + "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n"
@@ -347,10 +415,65 @@ TestUtil.flushSchemaCache(conn);
             + "          levelType=\"TimeDays\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>";
-        
 
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
-        
+
+        //((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
+        class VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier extends RDbMappingSchemaModifier {
+
+            public VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+                List<MappingCubeDimension> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+                if ("Sales".equals(cube.name())) {
+                    MappingCubeDimension dimension = PrivateDimensionRBuilder
+                        .builder()
+                        .name("Date")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .foreignKey("time_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .name("Weekly")
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Week")
+                                        .column("week_of_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_WEEKS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Day")
+                                        .column("day_of_month")
+                                        .uniqueMembers(false)
+                                        .type(TypeEnum.NUMERIC)
+                                        .levelType(LevelTypeEnum.TIME_DAYS)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build();
+                    result.add(dimension);
+                }
+                return result;
+            }
+        }
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AggregationOnDistinctCountMeasuresTestModifier(schema)));
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 
@@ -358,7 +481,7 @@ TestUtil.flushSchemaCache(conn);
         String mdx, TestContextWrapper context, String expected) throws SQLException
     {
     OlapConnection olapConnection=	context.createOlap4jConnection();
-    
+
         CellSet result = TestUtil.executeOlap4jQuery(olapConnection,mdx);
 
         List<org.olap4j.Position> positions =
@@ -371,7 +494,7 @@ TestUtil.flushSchemaCache(conn);
         org.olap4j.metadata.Level year = year1997.getLevel();
         String yearHierarchyName = year.getHierarchy().getUniqueName();
         assertEquals(year1997HierarchyName, yearHierarchyName);
-        
+
         TestUtil.flushSchemaCache(context.createConnection());
     }
 

@@ -9,23 +9,26 @@
 */
 package mondrian.test;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.util.Bug;
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync
@@ -219,7 +222,10 @@ class CompoundSlicerTest {
                         + "Row #2: 131,164\n");
     }
 
-    void testCompoundSlicerWithCellFormatter(TestContextWrapper context) {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    void testCompoundSlicerWithCellFormatter(TestContext context) {
+        /*
         String xmlMeasure =
                 "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
                         + "    aggregator='sum' formatString='Standard' formatter='"
@@ -227,9 +233,13 @@ class CompoundSlicerTest {
                         + "'/>";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales", null, xmlMeasure, null, null));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier1(schema)));
 
         // the cell formatter for the measure should still be used
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select from sales where "
                         + " measures.[Unit Sales Foo Bar] * Gender.Gender.members ",
                 "Axis #0:\n"
@@ -237,7 +247,7 @@ class CompoundSlicerTest {
                         + "{[Measures].[Unit Sales Foo Bar], [Gender].[M]}\n"
                         + "foo266773.0bar");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select from sales where "
                         + " Gender.Gender.members * measures.[Unit Sales Foo Bar]",
                 "Axis #0:\n"
@@ -784,7 +794,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testRollupAvg(TestContextWrapper context) {
+    void testRollupAvg(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 null,
@@ -793,8 +804,12 @@ class CompoundSlicerTest {
                         + "<Measure name='Sum Unit Sales' aggregator='sum' column='unit_sales'/>\n",
                 null,
                 null));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier2(schema)));
         // basic query with avg
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select from [Sales]\n"
                         + "where [Measures].[Avg Unit Sales]",
                 "Axis #0:\n"
@@ -803,7 +818,7 @@ class CompoundSlicerTest {
 
         // roll up using compound slicer
         // (should give a real value, not an error)
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
                 "select from [Sales]\n"
                         + "where [Measures].[Avg Unit Sales]\n"
@@ -1385,9 +1400,9 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeWithCountDistinctUnsatisfiable(TestContextWrapper context) {
+    void testVirtualCubeWithCountDistinctUnsatisfiable(TestContext context) {
         virtualCubeWithDC(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select {measures.[Customer Count], "
                         + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
                         + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -1406,9 +1421,9 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeWithCountDistinctSatisfiable(TestContextWrapper context) {
+    void testVirtualCubeWithCountDistinctSatisfiable(TestContext context) {
         virtualCubeWithDC(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select {measures.[Customer Count], "
                         + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
                         + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -1427,9 +1442,9 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeWithCountDistinctPartiallySatisfiable(TestContextWrapper context) {
+    void testVirtualCubeWithCountDistinctPartiallySatisfiable(TestContext context) {
         virtualCubeWithDC(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select {measures.[Warehouse Sales], "
                         + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
                         + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -1452,7 +1467,8 @@ class CompoundSlicerTest {
                         + "Row #0: 30\n");
     }
 
-    private void virtualCubeWithDC(TestContextWrapper context) {
+    private void virtualCubeWithDC(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Warehouse and Sales", null,
                 "<VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Customer Count]\"/>\n",
@@ -1460,12 +1476,17 @@ class CompoundSlicerTest {
                         + "<Formula>Measures.[Unit Sales]/Measures.[Customer Count]</Formula>"
                         + "</CalculatedMember>",
                 null, "Warehouse Sales"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier3(schema)));
+
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicerWithComplexAggregation(TestContextWrapper context) {
+    void testCompoundSlicerWithComplexAggregation(TestContext context) {
         virtualCubeWithDC(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member time.agg as 'Aggregate( { ( Gender.F, Time.[1997].Q1), (Gender.M, Time.[1997].Q2) })'\n"
                         + "select measures.[customer count] on 0\n"

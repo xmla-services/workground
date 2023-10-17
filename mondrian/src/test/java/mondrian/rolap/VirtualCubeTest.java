@@ -43,12 +43,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1337,7 +1335,8 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMemberInSchema(TestContextWrapper context) {
+    void testCalculatedMemberInSchema(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null,
@@ -1345,7 +1344,11 @@ class VirtualCubeTest extends BatchTestCase {
             + "    <Formula>[Measures].[Units Shipped] / [Measures].[Unit Sales]</Formula>\n"
             + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"#.0%\"/>\n"
             + "  </CalculatedMember>\n"));
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.VirtualCubeTestModifier1(schema)));
+        assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Measures].[Unit Sales], \n"
             + "  [Measures].[Shipped per Ordered]} on 0,\n"
@@ -2529,15 +2532,20 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCrossjoinOptimizerWithVirtualCube(TestContextWrapper context) {
+    void testCrossjoinOptimizerWithVirtualCube(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Warehouse and Sales",
                 null,
                 "<VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Customer Count]\"/>",
                 null,
                 null));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.VirtualCubeTestModifier2(schema)));
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "WITH member measures.ratio as 'measures.[Store Cost]/measures.[warehouse cost]' "
             + " member [marital status].agg as 'aggregate({[marital status].M})' "
             + " select non empty [Warehouse].[USA] "

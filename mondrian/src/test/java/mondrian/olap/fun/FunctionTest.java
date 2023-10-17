@@ -17,6 +17,7 @@ import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import mondrian.test.BasicQueryTest;
 import mondrian.test.PropertySaver5;
 import mondrian.util.Bug;
@@ -27,9 +28,18 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
@@ -42,12 +52,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -2362,11 +2370,11 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDefaultMember(TestContextWrapper context) {
+  void testDefaultMember(TestContext context) {
     // [Time] has no default member and no all, so the default member is
     // the first member of the first level.
     Result result =
-      executeQuery(context.createConnection(),
+      executeQuery(context.getConnection(),
         "select {[Time].[Time].DefaultMember} on columns\n"
           + "from Sales" );
     assertEquals(
@@ -2375,7 +2383,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
     // [Time].[Weekly] has an all member and no explicit default.
     result =
-      executeQuery(context.createConnection(),
+      executeQuery(context.getConnection(),
         "select {[Time.Weekly].DefaultMember} on columns\n"
           + "from Sales" );
     assertEquals(
@@ -2388,6 +2396,7 @@ class FunctionTest {//extends FoodMartTestCase {
       MondrianProperties.instance().SsasCompatibleNaming.get()
         ? "[Time2].[Weekly].[1997].[23]"
         : "[Time2.Weekly].[1997].[23]";
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "  <Dimension name=\"Time2\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
@@ -2413,11 +2422,96 @@ class FunctionTest {//extends FoodMartTestCase {
         + "          levelType=\"TimeDays\"/>\n"
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
+      */
+      class TestDefaultMemberModifier extends RDbMappingSchemaModifier {
 
-    // In this variant of the schema, Time2.Weekly has an explicit default
+          public TestDefaultMemberModifier(MappingSchema mappingSchema) {
+              super(mappingSchema);
+          }
+
+          @Override
+          protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+              List<MappingCubeDimension> result = new ArrayList<>();
+              result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+              if ("Sales".equals(cube.name())) {
+                  MappingCubeDimension dimension = PrivateDimensionRBuilder
+                      .builder()
+                      .name("Time2")
+                      .type(DimensionTypeEnum.TIME_DIMENSION)
+                      .foreignKey("time_id")
+                      .hierarchies(List.of(
+                          HierarchyRBuilder.builder()
+                              .hasAll(false)
+                              .primaryKey("time_id")
+                              .relation(new TableR("time_by_day"))
+                              .levels(List.of(
+                                  LevelRBuilder.builder()
+                                      .name("Year")
+                                      .column("the_year")
+                                      .type(TypeEnum.NUMERIC)
+                                      .uniqueMembers(true)
+                                      .levelType(LevelTypeEnum.TIME_YEARS)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("Quarter")
+                                      .column("quarter")
+                                      .uniqueMembers(false)
+                                      .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("Month")
+                                      .column("month_of_year")
+                                      .uniqueMembers(false)
+                                      .type(TypeEnum.NUMERIC)
+                                      .levelType(LevelTypeEnum.TIME_MONTHS)
+                                      .build()
+                              ))
+                              .build(),
+                          HierarchyRBuilder.builder()
+                              .hasAll(true)
+                              .name("Weekly")
+                              .primaryKey("time_id")
+                              .defaultMember(memberUname)
+                              .relation(new TableR("time_by_day"))
+                              .levels(List.of(
+                                  LevelRBuilder.builder()
+                                      .name("Year")
+                                      .column("the_year")
+                                      .type(TypeEnum.NUMERIC)
+                                      .uniqueMembers(true)
+                                      .levelType(LevelTypeEnum.TIME_YEARS)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("Week")
+                                      .column("week_of_year")
+                                      .type(TypeEnum.NUMERIC)
+                                      .uniqueMembers(false)
+                                      .levelType(LevelTypeEnum.TIME_WEEKS)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("Day")
+                                      .column("day_of_month")
+                                      .uniqueMembers(false)
+                                      .type(TypeEnum.NUMERIC)
+                                      .levelType(LevelTypeEnum.TIME_DAYS)
+                                      .build()
+                              ))
+                              .build()
+                      ))
+                      .build();
+                  result.add(dimension);
+              }
+              return result;
+          }
+      }
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMemberModifier(schema)));
+
+      // In this variant of the schema, Time2.Weekly has an explicit default
     // member.
     result =
-      executeQuery(context.createConnection(),
+      executeQuery(context.getConnection(),
         "select {[Time2.Weekly].DefaultMember} on columns\n"
           + "from Sales" );
     assertEquals(
@@ -14120,14 +14214,19 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc(TestContextWrapper context) {
-    ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
+  void testComplexSlicer_Calc(TestContext context) {
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      /*
+      ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
       "<CalculatedMember "
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
+       */
     String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
@@ -14152,12 +14251,13 @@ Intel platforms):
         + "Row #3: 1,237\n"
         + "Row #4: 394\n"
         + "Row #5: 1,277\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_CalcBase(TestContextWrapper context) {
+  void testComplexSlicer_CalcBase(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14165,7 +14265,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
         + "{[Education Level].Members} ON 1 "
@@ -14190,12 +14295,13 @@ Intel platforms):
         + "Row #3: 1,237\n"
         + "Row #4: 394\n"
         + "Row #5: 1,277\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_BaseCalc(TestContextWrapper context) {
+  void testComplexSlicer_BaseCalc(TestContext context) {
+     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14203,7 +14309,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+    */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
         + "{[Education Level].Members} ON 1 "
@@ -14228,12 +14339,13 @@ Intel platforms):
         + "Row #3: 1,237\n"
         + "Row #4: 394\n"
         + "Row #5: 1,277\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_Base(TestContextWrapper context) {
+  void testComplexSlicer_Calc_Base(TestContext context) {
+     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14241,7 +14353,11 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14252,12 +14368,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 394\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_Calc(TestContextWrapper context) {
+  void testComplexSlicer_Calc_Calc(TestContext context) {
+      /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14269,7 +14386,12 @@ Intel platforms):
         + "name='Partial' "
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />"));
-    String query =
+       */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14280,7 +14402,7 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 1,671\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
@@ -14374,7 +14496,8 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Base_Base(TestContextWrapper context) {
+  void testComplexSlicer_X_Base_Base(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14382,7 +14505,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14393,12 +14521,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 278\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Calc_Base(TestContextWrapper context) {
+  void testComplexSlicer_X_Calc_Base(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14406,7 +14535,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+    */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14417,12 +14551,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 394\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_Calc_Calc(TestContextWrapper context) {
+  void testComplexSlicer_X_Calc_Calc(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14434,7 +14569,11 @@ Intel platforms):
         + "name='Partial' "
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />" ));
-    String query =
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14445,12 +14584,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 1,671\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_BaseBase_Base(TestContextWrapper context) {
+  void testComplexSlicer_X_BaseBase_Base(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14458,7 +14598,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+    */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14470,7 +14615,7 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 394\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
@@ -14498,7 +14643,8 @@ Intel platforms):
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_CalcBase_Base(TestContextWrapper context) {
+  void testComplexSlicer_X_CalcBase_Base(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14506,7 +14652,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14518,12 +14669,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 394\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_X_CalcBase_BaseBase(TestContextWrapper context) {
+  void testComplexSlicer_X_CalcBase_BaseBase(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14531,7 +14683,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
         + "FROM [Sales] "
@@ -14546,13 +14703,13 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n"
         + "Row #0: 1,671\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Calc_ComplexAxis(TestContextWrapper context) {
-
+  void testComplexSlicer_Calc_ComplexAxis(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14564,7 +14721,12 @@ Intel platforms):
         + "name='Partial' "
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />" ));
-    String query =
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
         + "{[Time].[H1 1997], [Time].[1997].[Q1]} ON 1"
@@ -14581,12 +14743,13 @@ Intel platforms):
         + "{[Time].[1997].[Q1]}\n"
         + "Row #0: 1,671\n"
         + "Row #1: 1,173\n";
-    assertQueryReturns(context.createConnection(), query, expectedResult );
+    assertQueryReturns(context.getConnection(), query, expectedResult );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testComplexSlicer_Unsupported(TestContextWrapper context) {
+  void testComplexSlicer_Unsupported(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       null,
@@ -14594,7 +14757,12 @@ Intel platforms):
         + "name='H1 1997' "
         + "formula='([Time].[1997].[Q1] - [Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
-    String query =
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+
+      String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "
         + "{[Education Level].Members} ON 1 "

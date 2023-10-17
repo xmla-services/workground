@@ -12,29 +12,58 @@
 */
 package mondrian.test;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static mondrian.olap.Util.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertAxisThrows;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertExprThrows;
-import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.assertSimpleQuery;
-import static org.opencube.junit5.TestUtil.assertSize;
-import static org.opencube.junit5.TestUtil.checkThrowable;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.executeQueryTimeoutTest;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.Util;
+import mondrian.olap.type.NumericType;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.server.Execution;
+import mondrian.spi.StatisticsProvider;
+import mondrian.spi.UserDefinedFunction;
+import mondrian.spi.impl.JdbcStatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
+import mondrian.util.Bug;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eigenbase.util.property.StringProperty;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.CellSet;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapStatement;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.SchemaUtil;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.slf4j.Logger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -58,58 +87,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.Syntax;
-import org.eclipse.daanse.olap.api.element.Dimension;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.api.type.Type;
-import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.eigenbase.util.property.StringProperty;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-import org.slf4j.Logger;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryCanceledException;
-import mondrian.olap.Util;
-import mondrian.olap.type.NumericType;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapSchema;
-import mondrian.rolap.RolapUtil;
-import mondrian.server.Execution;
-import mondrian.spi.StatisticsProvider;
-import mondrian.spi.UserDefinedFunction;
-import mondrian.spi.impl.JdbcStatisticsProvider;
-import mondrian.spi.impl.SqlStatisticsProvider;
-import mondrian.spi.impl.SqlStatisticsProviderNew;
-import mondrian.util.Bug;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.olap.Util.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertAxisThrows;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSimpleQuery;
+import static org.opencube.junit5.TestUtil.assertSize;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.executeQueryTimeoutTest;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * <code>BasicQueryTest</code> is a test case which tests simple queries against the FoodMart database.
@@ -1791,13 +1791,13 @@ public class BasicQueryTest {
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testCatalogHierarchyBasedOnView(TestContextWrapper context) {
+  void testCatalogHierarchyBasedOnView(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
     if ( props.ReadAggregates.get() ) {
       return;
     }
-
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales",
             "<Dimension name=\"Gender2\" foreignKey=\"customer_id\">\n"
                 + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">\n"
@@ -1817,7 +1817,11 @@ public class BasicQueryTest {
                 + "        <![CDATA[SELECT * FROM \"customer\"]]>\n" + "      </SQL>\n" + "    </View>\n"
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>", null ));
-    Connection connection = context.createConnection();
+     */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier1(schema)));
+        Connection connection = context.getConnection();
     if ( !TestUtil.getDialect(connection).allowsFromQuery() ) {
       return;
     }
@@ -1825,13 +1829,14 @@ public class BasicQueryTest {
         + "[Gender2].[M]" );
   }
 
-    @ParameterizedTest
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testMemberSameNameAsLevel(TestContextWrapper context) throws SQLException {
+  void testMemberSameNameAsLevel(TestContext context) throws SQLException {
     // http://jira.pentaho.com/browse/ANALYZER-1618
     // Tests the case where the Level name matches the name of a member
     // in the level. We were failing to resolve such members.
     // In this test the "Product Family" level has been renamed "Drink"
+      /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales",
             "   <Dimension name=\"ProdAmbiguousLevelName\" foreignKey=\"product_id\">\n"
                 + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
@@ -1844,7 +1849,10 @@ public class BasicQueryTest {
                 + "          uniqueMembers=\"false\"/>\n"
                 + "      <Level name=\"Product Category\" table=\"product_class\" column=\"product_category\"\n"
                 + "          uniqueMembers=\"false\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n", null ));
-
+       */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier2(schema)));
     // These two references should resolve
     // to the same member whether used in the WITH block or on an axis
     String[] alternateReferences =
@@ -1852,7 +1860,7 @@ public class BasicQueryTest {
           "ProdAmbiguousLevelName.[All ProdAmbiguousLevelNames].Drink.calc" };
     for ( String withMemberName : alternateReferences ) {
       for ( String queryMemberName : alternateReferences ) {
-        assertQueryReturns(context.createConnection(),"with member " + withMemberName + " as '1' " + " select " + queryMemberName
+        assertQueryReturns(context.getConnection(),"with member " + withMemberName + " as '1' " + " select " + queryMemberName
             + " on 0 from sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
                 + "{[ProdAmbiguousLevelName].[Drink].[Drink].[calc]}\n" + "Row #0: 1\n" );
       }
@@ -1865,15 +1873,16 @@ public class BasicQueryTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testCatalogHierarchyBasedOnView2(TestContextWrapper context) {
+  void testCatalogHierarchyBasedOnView2(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
     if ( props.ReadAggregates.get() ) {
       return;
     }
-    if ( TestUtil.getDialect(context.createConnection()).allowsFromQuery() ) {
+    if ( TestUtil.getDialect(context.getConnection()).allowsFromQuery() ) {
       return;
     }
+            /*
             ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales",
             "<Dimension name=\"ProductView\" foreignKey=\"product_id\">\n"
                 + "   <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"productView\">\n"
@@ -1913,7 +1922,12 @@ public class BasicQueryTest {
                 + "       <Level name=\"Brand Name\" column=\"brand_name\" uniqueMembers=\"false\"/>\n"
                 + "       <Level name=\"Product Name\" column=\"product_name\" uniqueMembers=\"true\"/>\n"
                 + "   </Hierarchy>\n" + "</Dimension>" ));
-    assertQueryReturns( context.createConnection(),"select {[Measures].[Unit Sales]} on columns,\n"
+             */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier3(schema)));
+
+        assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales]} on columns,\n"
         + " {[ProductView].[Drink].[Beverages].children} on rows\n" + "from Sales",
 
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -3746,14 +3760,20 @@ public class BasicQueryTest {
    * This test modifies the Sales cube to contain both the regular usage of the [Store] shared dimension, and another
    * usage called [Other Store] which is connected to the [Unit Sales] column
    */
-  public void _testCubeWhichUsesSameSharedDimTwice(TestContextWrapper context) {
+  public void _testCubeWhichUsesSameSharedDimTwice(TestContext context) {
     // Create a second usage of the "Store" shared dimension called "Other
     // Store". Attach it to the "unit_sales" column (which has values [1,
     // 6] whereas store has values [1, 24].
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales",
             "<DimensionUsage name=\"Other Store\" source=\"Store\" foreignKey=\"unit_sales\" />" ));
-    Axis axis = executeAxis(connection, "[Other Store].members" );
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier4(schema)));
+
+      Axis axis = executeAxis(connection, "[Other Store].members" );
     assertEquals( 63, axis.getPositions().size() );
 
     axis = executeAxis(connection, "[Store].members" );
@@ -3855,7 +3875,8 @@ public class BasicQueryTest {
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testAllMemberCaption(TestContextWrapper context) {
+  void testAllMemberCaption(TestContext context) {
+     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales",
             "<Dimension name=\"Gender3\" foreignKey=\"customer_id\">\n"
                 + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Gender\"\n"
@@ -3863,8 +3884,13 @@ public class BasicQueryTest {
                 + "  <Table name=\"customer\"/>\n"
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>" ));
+      */
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+    context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier5(schema)));
+
     String mdx = "select {[Gender3].[All Gender]} on columns from Sales";
-    Result result = executeQuery(context.createConnection(), mdx);
+    Result result = executeQuery(context.getConnection(), mdx);
     Axis axis0 = result.getAxes()[0];
     Position pos0 = axis0.getPositions().get( 0 );
     Member allGender = pos0.get( 0 );
@@ -3874,15 +3900,20 @@ public class BasicQueryTest {
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testAllLevelName(TestContextWrapper context) {
+  void testAllLevelName(TestContext context) {
+      /*
       ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales",
             "<Dimension name=\"Gender4\" foreignKey=\"customer_id\">\n"
                 + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Gender\"\n"
                 + " allLevelName=\"GenderLevel\" primaryKey=\"customer_id\">\n" + "  <Table name=\"customer\"/>\n"
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>" ));
-    String mdx = "select {[Gender4].[All Gender]} on columns from Sales";
-    Result result = executeQuery(context.createConnection(), mdx );
+       */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier10(schema)));
+        String mdx = "select {[Gender4].[All Gender]} on columns from Sales";
+    Result result = executeQuery(context.getConnection(), mdx );
     Axis axis0 = result.getAxes()[0];
     Position pos0 = axis0.getPositions().get( 0 );
     Member allGender = pos0.get( 0 );
@@ -4194,7 +4225,7 @@ public class BasicQueryTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testMONDRIAN2608(TestContextWrapper context) {
+  void testMONDRIAN2608(TestContext context) {
     // this issue takes place only for the case when ordinalColumn is defined
     // and CompareSiblingsByOrderKey=false and ExpandNonNative=true
     propSaver.set( props.CompareSiblingsByOrderKey, false );
@@ -4212,7 +4243,7 @@ public class BasicQueryTest {
     String MDX2 =
         "WITH MEMBER [Measures].[0] as 0\n" + "select {[Measures].[0]} ON COLUMNS, \n"
             + "[Position].[Position Title].Members ON ROWS \n" + "from [HR]";
-
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "HR",
             "<Dimension name=\"Position2608\" foreignKey=\"employee_id\">\n"
                 + " <Hierarchy hasAll=\"true\" allMemberName=\"All Position\"\n"
@@ -4222,16 +4253,21 @@ public class BasicQueryTest {
                 + "   <Level name=\"Position Title\" uniqueMembers=\"false\"\n"
                 + "          column=\"position_title\" ordinalColumn=\"position_id\"/>\n" + " </Hierarchy>\n"
                 + "</Dimension>" ));
-    // Use a fresh connection to make sure bad member ordinals haven't
+     */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier6(schema)));
+
+        // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     //final TestContext context = testContext.withFreshConnection().withCube( "HR" );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
 
     try {
       // After running of MDX1
       // members cache will contain items
       // for [Position].[Position Title].members
-      assertQueryReturns( context.createConnection(),  MDX1, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[0]}\n" + "Axis #2:\n"
+      assertQueryReturns( context.getConnection(),  MDX1, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[0]}\n" + "Axis #2:\n"
           + "{[Store Type].[Mid-Size Grocery], [Position].[Store Full Time Staf].[Store Permanent Checker]}\n"
           + "{[Store Type].[Mid-Size Grocery], [Position].[Store Full Time Staf].[Store Temporary Checker]}\n"
           + "{[Store Type].[Mid-Size Grocery], [Position].[Store Full Time Staf].[Store Permanent Stocker]}\n"
@@ -4259,7 +4295,7 @@ public class BasicQueryTest {
 
       // Run MDX2 - all [Position].[Position Title].Members should be sorted
       // correctly by ordinalColumn inside Management Role groups
-      assertQueryReturns( context.createConnection(),MDX2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[0]}\n" + "Axis #2:\n"
+      assertQueryReturns( context.getConnection(), MDX2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[0]}\n" + "Axis #2:\n"
           + "{[Position].[Middle Management].[HQ Information Systems]}\n"
           + "{[Position].[Middle Management].[HQ Marketing]}\n"
           + "{[Position].[Middle Management].[HQ Human Resources]}\n"
@@ -4862,10 +4898,11 @@ public class BasicQueryTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testBug1630754(TestContextWrapper context) {
+  void testBug1630754(TestContext context) {
     // In order to reproduce this bug a dimension with 2 levels with more
     // than 1000 member each was necessary. The customer_id column has more
     // than 1000 distinct members so it was used for this test.
+        /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales",
             "  <Dimension name=\"Customer_2\" foreignKey=\"customer_id\">\n" + "    <Hierarchy hasAll=\"true\" "
                 + "allMemberName=\"All Customers\" " + "primaryKey=\"customer_id\" " + " >\n"
@@ -4874,8 +4911,13 @@ public class BasicQueryTest {
                 + "      <Level name=\"Name2\" column=\"customer_id\" uniqueMembers=\"true\"/>\n"
                 + "    </Hierarchy>\n" + "  </Dimension>" ));
 
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier11(schema)));
+
     Result result =
-        executeQuery(context.createConnection(), "WITH SET [#DataSet#] AS "
+        executeQuery(context.getConnection(), "WITH SET [#DataSet#] AS "
             + "   'NonEmptyCrossjoin({Descendants([Customer_2].[All Customers], 2)}, "
             + "   {[Product].[All Products]})' "
             + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} on columns, "
@@ -5157,14 +5199,19 @@ public class BasicQueryTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testMondrian1432(TestContextWrapper context) {
+  void testMondrian1432(TestContext context) {
+      /*
       ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales", null, "<Measure name='zero' aggregator='sum'>\n"
             + "  <MeasureExpression>\n" + "  <SQL dialect='generic'>\n" + "    0"
             + "  </SQL></MeasureExpression></Measure>", null, null ));
-    assertQueryReturns(context.createConnection(),"select " + "Crossjoin([Gender].[Gender].Members, [Measures].[zero]) ON COLUMNS\n"
+       */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier12(schema)));
+      assertQueryReturns(context.getConnection(),"select " + "Crossjoin([Gender].[Gender].Members, [Measures].[zero]) ON COLUMNS\n"
         + "from [Sales] " + "  \n", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Gender].[F], [Measures].[zero]}\n"
             + "{[Gender].[M], [Measures].[zero]}\n" + "Row #0: 0\n" + "Row #0: 0\n" );
-    assertQueryReturns( context.createConnection(),"select [Measures].[zero] ON COLUMNS,\n" + "  {[Gender].[All Gender]}  ON ROWS\n"
+    assertQueryReturns( context.getConnection(),"select [Measures].[zero] ON COLUMNS,\n" + "  {[Gender].[All Gender]}  ON ROWS\n"
         + "from [Sales] " + " ", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[zero]}\n" + "Axis #2:\n"
             + "{[Gender].[All Gender]}\n" + "Row #0: 0\n" );
   }
@@ -5327,11 +5374,16 @@ public class BasicQueryTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testDirectMemberReferenceOnDimensionWithCalculationsDefined(TestContextWrapper context) {
+  void testDirectMemberReferenceOnDimensionWithCalculationsDefined(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales", null,
             "<CalculatedMember dimension=\"Gender\" visible=\"true\" name=\"last\">"
                 + "<Formula>([Gender].LastChild)</Formula>" + "</CalculatedMember>" ));
-    assertQueryReturns( context.createConnection(),"select {[Gender].[M]} on 0 from sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier9(schema)));
+      assertQueryReturns( context.getConnection(),"select {[Gender].[M]} on 0 from sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
         + "{[Gender].[M]}\n" + "Row #0: 135,215\n" );
   }
 
@@ -5752,12 +5804,18 @@ public class BasicQueryTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testArrayIndexOutOfBoundsWithEmptySegment(TestContextWrapper context) {
+  void testArrayIndexOutOfBoundsWithEmptySegment(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales", null, "<Measure name='zero' aggregator='sum'>\n"
             + " <MeasureExpression>\n" + " <SQL dialect='generic'>\n" + " NULL" + " </SQL>"
             + " <SQL dialect='vertica'>\n" + " NULL::FLOAT" + " </SQL>" + "</MeasureExpression></Measure>", null,
             null ));
-    Connection connection = context.createConnection();
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier7(schema)));
+
+      Connection connection = context.getConnection();
     executeQuery(connection, "select " + "Crossjoin([Gender].[Gender].Members, [Measures].[zero]) ON COLUMNS\n"
         + "from [Sales] " + " \n" );
     // Some DBs return 0 when we ask for null. Like Oracle.
@@ -5770,7 +5828,7 @@ public class BasicQueryTest {
         returnedValue = "";
     }
 
-    assertQueryReturns(context.createConnection(),"select [Measures].[zero] ON COLUMNS,\n" + " {[Gender].[All Gender]} ON ROWS\n"
+    assertQueryReturns(context.getConnection(),"select [Measures].[zero] ON COLUMNS,\n" + " {[Gender].[All Gender]} ON ROWS\n"
         + "from [Sales] " + " ", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[zero]}\n" + "Axis #2:\n"
             + "{[Gender].[All Gender]}\n" + "Row #0: " + returnedValue + "\n" );
   }
@@ -5862,9 +5920,10 @@ public class BasicQueryTest {
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  void testNameExpressionSnowflake(TestContextWrapper context) {
-    Connection connection = context.createConnection();
+  void testNameExpressionSnowflake(TestContext context) {
+    Connection connection = context.getConnection();
     Dialect dialect = getDialect(connection);
+    /*
       ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales",
             "<Dimension foreignKey=\"product_id\" type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" "
                 + "name=\"Example\">\n"
@@ -5889,7 +5948,12 @@ public class BasicQueryTest {
                     .quoteIdentifier( "product", "product_name" ) + "]]>\n" + "        </SQL>\n"
                 + "      </NameExpression>\n" + "    </Level>\n" + "  </Hierarchy>\n" + "</Dimension>\n", null, null,
             null ));
-    connection = context.createConnection();
+     */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier8(schema, dialect)));
+
+        connection = context.getConnection();
     assertAxisReturns(connection, "[Example.Example Hierarchy].[Non-Zero]",
         "[Example.Example Hierarchy].[Non-Zero]" );
     assertAxisReturns(connection, "[Example.Example Hierarchy].[Non-Zero].Children",

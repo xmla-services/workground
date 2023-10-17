@@ -9,23 +9,26 @@
 
 package mondrian.test;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.List;
+
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.hierarchyName;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
 
 /**
  * Tests multiple hierarchies within the same dimension.
@@ -185,7 +188,8 @@ class MultipleHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testProperty(TestContextWrapper context) {
+    void testProperty(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -220,8 +224,13 @@ class MultipleHierarchyTest {
             + "  </Level>\n"
             + "</Hierarchy>\n"
             + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MultipleHierarchyTestModifier1(schema)));
+
         final String nuStore = hierarchyName("NuStore", "NuStore");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Store level] as '" + nuStore
             + ".CurrentMember.Level.Name'\n"
             + "member [Measures].[Store type] as 'IIf((" + nuStore
@@ -355,7 +364,8 @@ class MultipleHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDefaultNamedHierarchy(TestContextWrapper context) {
+    void testDefaultNamedHierarchy(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -372,10 +382,13 @@ class MultipleHierarchyTest {
             + "  <Level name=\"NuStore Name\" column=\"store_name\"  uniqueMembers=\"true\"/>\n"
             + "</Hierarchy>\n"
             + "</Dimension>"));
-
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MultipleHierarchyTestModifier2(schema)));
         final String nuStore = hierarchyName("NuStore", "NuStore");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_NuStore]' "
             + "set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], "
             + nuStore + ".CurrentMember.OrderKey, BASC)' "

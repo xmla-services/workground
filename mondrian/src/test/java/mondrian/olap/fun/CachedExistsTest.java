@@ -8,20 +8,30 @@
 */
 package mondrian.olap.fun;
 
+import mondrian.rolap.RolapSchemaPool;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsContent;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.PropertyUpdater;
 
-import mondrian.olap.Util.PropertyList;
-import mondrian.rolap.RolapConnectionProperties;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests the CachedExists function.
@@ -166,22 +176,22 @@ class CachedExistsTest{
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testProductFamilyDisplayMember(TestContextWrapper context) {
     String query =
-        "WITH\r\n" + 
-        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n" + 
-        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]).ORDERKEY,BASC,[Gender].CURRENTMEMBER.ORDERKEY,BASC)'\r\n" + 
-        "SET [*NATIVE_MEMBERS__Product_] AS 'GENERATE([*NATIVE_CJ_SET], {[Product].CURRENTMEMBER})'\r\n" + 
-        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\r\n" + 
-        "SET [*BASE_MEMBERS__Gender_] AS '[Gender].[Gender].MEMBERS'\r\n" + 
-        "SET [*BASE_MEMBERS__Product_] AS 'FILTER([Product].[Product Category].MEMBERS,(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IN {[Product].[All Products].[Drink],[Product].[All Products].[Non-Consumable]}) AND ([Product].CURRENTMEMBER IN {[Product].[All Products].[Non-Consumable].[Household].[Candles],[Product].[All Products].[Drink].[Dairy].[Dairy],[Product].[All Products].[Non-Consumable].[Periodicals].[Magazines],[Product].[All Products].[Drink].[Beverages].[Pure Juice Beverages]}))'\r\n" + 
-        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]).CALCULATEDCHILD(\"*DISPLAY_MEMBER\"),[Gender].CURRENTMEMBER)})'\r\n" + 
-        "MEMBER [Gender].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CachedExists([*CJ_ROW_AXIS], ([Product].CURRENTMEMBER), \"*CJ_ROW_AXIS\" ))', SOLVE_ORDER=99\r\n" + 
-        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" + 
-        "MEMBER [Product].[Drink].[*DISPLAY_MEMBER] AS 'AGGREGATE (FILTER([*NATIVE_MEMBERS__Product_],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IS [Product].[All Products].[Drink]))', SOLVE_ORDER=-100\r\n" + 
-        "MEMBER [Product].[Non-Consumable].[*DISPLAY_MEMBER] AS 'AGGREGATE (FILTER([*NATIVE_MEMBERS__Product_],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IS [Product].[All Products].[Non-Consumable]))', SOLVE_ORDER=-100\r\n" + 
-        "SELECT\r\n" + 
-        "[*BASE_MEMBERS__Measures_] ON COLUMNS\r\n" + 
-        ", NON EMPTY\r\n" + 
-        "UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]))}),{[Gender].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS]) ON ROWS\r\n" + 
+        "WITH\r\n" +
+        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n" +
+        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]).ORDERKEY,BASC,[Gender].CURRENTMEMBER.ORDERKEY,BASC)'\r\n" +
+        "SET [*NATIVE_MEMBERS__Product_] AS 'GENERATE([*NATIVE_CJ_SET], {[Product].CURRENTMEMBER})'\r\n" +
+        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\r\n" +
+        "SET [*BASE_MEMBERS__Gender_] AS '[Gender].[Gender].MEMBERS'\r\n" +
+        "SET [*BASE_MEMBERS__Product_] AS 'FILTER([Product].[Product Category].MEMBERS,(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IN {[Product].[All Products].[Drink],[Product].[All Products].[Non-Consumable]}) AND ([Product].CURRENTMEMBER IN {[Product].[All Products].[Non-Consumable].[Household].[Candles],[Product].[All Products].[Drink].[Dairy].[Dairy],[Product].[All Products].[Non-Consumable].[Periodicals].[Magazines],[Product].[All Products].[Drink].[Beverages].[Pure Juice Beverages]}))'\r\n" +
+        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]).CALCULATEDCHILD(\"*DISPLAY_MEMBER\"),[Gender].CURRENTMEMBER)})'\r\n" +
+        "MEMBER [Gender].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CachedExists([*CJ_ROW_AXIS], ([Product].CURRENTMEMBER), \"*CJ_ROW_AXIS\" ))', SOLVE_ORDER=99\r\n" +
+        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" +
+        "MEMBER [Product].[Drink].[*DISPLAY_MEMBER] AS 'AGGREGATE (FILTER([*NATIVE_MEMBERS__Product_],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IS [Product].[All Products].[Drink]))', SOLVE_ORDER=-100\r\n" +
+        "MEMBER [Product].[Non-Consumable].[*DISPLAY_MEMBER] AS 'AGGREGATE (FILTER([*NATIVE_MEMBERS__Product_],ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IS [Product].[All Products].[Non-Consumable]))', SOLVE_ORDER=-100\r\n" +
+        "SELECT\r\n" +
+        "[*BASE_MEMBERS__Measures_] ON COLUMNS\r\n" +
+        ", NON EMPTY\r\n" +
+        "UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {(ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]))}),{[Gender].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS]) ON ROWS\r\n" +
         "FROM [Sales]";
     String expected =
         "Axis #0:\n"
@@ -203,29 +213,29 @@ class CachedExistsTest{
             + "Row #5: 2,502\n";
     TestUtil.assertQueryReturns( context.createConnection(), query, expected );
   }
-  
+
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testTop10Customers(TestContextWrapper context) {
     String query =
-        "WITH\r\n" + 
-        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store_]))'\r\n" + 
-        "SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Measures].[*TOP_Unit Sales_SEL~SUM] <= 10)'\r\n" + 
-        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Customers].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Customers].CURRENTMEMBER,[Customers].[City]).ORDERKEY,BASC,[Product].CURRENTMEMBER.ORDERKEY,BASC,[Measures].[*SORTED_MEASURE],BDESC)'\r\n" + 
-        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\r\n" + 
-        "SET [*BASE_MEMBERS__Store_] AS '[Store].[Store Country].MEMBERS'\r\n" + 
-        "SET [*BASE_MEMBERS__Customers_] AS '[Customers].[Name].MEMBERS'\r\n" + 
-        "SET [*TOP_SET] AS 'ORDER(GENERATE([*NATIVE_CJ_SET],{[Customers].CURRENTMEMBER}),([Measures].[Unit Sales],[Education Level].[*TOPBOTTOM_CTX_SET_SUM]),BDESC)'\r\n" + 
-        "SET [*BASE_MEMBERS__Product_] AS '{[Product].[All Products].[Drink],[Product].[All Products].[Food]}'\r\n" + 
-        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Customers].CURRENTMEMBER,[Product].CURRENTMEMBER,[Store].CURRENTMEMBER)})'\r\n" + 
-        "MEMBER [Education Level].[*TOPBOTTOM_CTX_SET_SUM] AS 'SUM(CachedExists([*NATIVE_CJ_SET],([Customers].CURRENTMEMBER), \"*NATIVE_CJ_SET\"))', SOLVE_ORDER=100\r\n" + 
-        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" + 
-        "MEMBER [Measures].[*SORTED_MEASURE] AS '([Measures].[*FORMATTED_MEASURE_0])', SOLVE_ORDER=400\r\n" + 
-        "MEMBER [Measures].[*TOP_Unit Sales_SEL~SUM] AS 'RANK([Customers].CURRENTMEMBER,[*TOP_SET])', SOLVE_ORDER=400\r\n" + 
-        "SELECT\r\n" + 
-        "[*BASE_MEMBERS__Measures_] ON COLUMNS\r\n" + 
-        ", NON EMPTY\r\n" + 
-        "[*SORTED_ROW_AXIS] ON ROWS\r\n" + 
+        "WITH\r\n" +
+        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store_]))'\r\n" +
+        "SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Measures].[*TOP_Unit Sales_SEL~SUM] <= 10)'\r\n" +
+        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Customers].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Customers].CURRENTMEMBER,[Customers].[City]).ORDERKEY,BASC,[Product].CURRENTMEMBER.ORDERKEY,BASC,[Measures].[*SORTED_MEASURE],BDESC)'\r\n" +
+        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\r\n" +
+        "SET [*BASE_MEMBERS__Store_] AS '[Store].[Store Country].MEMBERS'\r\n" +
+        "SET [*BASE_MEMBERS__Customers_] AS '[Customers].[Name].MEMBERS'\r\n" +
+        "SET [*TOP_SET] AS 'ORDER(GENERATE([*NATIVE_CJ_SET],{[Customers].CURRENTMEMBER}),([Measures].[Unit Sales],[Education Level].[*TOPBOTTOM_CTX_SET_SUM]),BDESC)'\r\n" +
+        "SET [*BASE_MEMBERS__Product_] AS '{[Product].[All Products].[Drink],[Product].[All Products].[Food]}'\r\n" +
+        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Customers].CURRENTMEMBER,[Product].CURRENTMEMBER,[Store].CURRENTMEMBER)})'\r\n" +
+        "MEMBER [Education Level].[*TOPBOTTOM_CTX_SET_SUM] AS 'SUM(CachedExists([*NATIVE_CJ_SET],([Customers].CURRENTMEMBER), \"*NATIVE_CJ_SET\"))', SOLVE_ORDER=100\r\n" +
+        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" +
+        "MEMBER [Measures].[*SORTED_MEASURE] AS '([Measures].[*FORMATTED_MEASURE_0])', SOLVE_ORDER=400\r\n" +
+        "MEMBER [Measures].[*TOP_Unit Sales_SEL~SUM] AS 'RANK([Customers].CURRENTMEMBER,[*TOP_SET])', SOLVE_ORDER=400\r\n" +
+        "SELECT\r\n" +
+        "[*BASE_MEMBERS__Measures_] ON COLUMNS\r\n" +
+        ", NON EMPTY\r\n" +
+        "[*SORTED_ROW_AXIS] ON ROWS\r\n" +
         "FROM [Sales]";
     String expected =
         "Axis #0:\n"
@@ -275,7 +285,7 @@ class CachedExistsTest{
             + "Row #19: 319\n";
     TestUtil.assertQueryReturns( context.createConnection(), query, expected );
   }
-  
+
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testTop1CustomersWithColumnLevel(TestContextWrapper context) {
@@ -305,35 +315,35 @@ class CachedExistsTest{
             + "Row #0: 47\n";
     TestUtil.assertQueryReturns( context.createConnection(), query, expected );
   }
-  
+
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsContent.class,dataloader = FastFoodmardDataLoader.class )
-    void testMondrian2704(TestContextWrapper context) {
+    void testMondrian2704(TestContext context) {
     String cube=    "<Cube name=\"Alternate Sales\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"
-            + "<Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n" + 
-            "    <Hierarchy name=\"Time\" hasAll=\"true\" primaryKey=\"time_id\">\n" + 
-            "      <Table name=\"time_by_day\"/>\n" + 
-            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-            "          levelType=\"TimeYears\"/>\n" + 
-            "    </Hierarchy>\n" + 
-            "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n" + 
-            "      <Table name=\"time_by_day\"/>\n" + 
-            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-            "          levelType=\"TimeYears\"/>\n" + 
-            "    </Hierarchy>\n" + 
-            "    <Hierarchy hasAll=\"true\" name=\"Weekly2\" primaryKey=\"time_id\">\n" + 
-            "      <Table name=\"time_by_day\"/>\n" + 
-            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-            "          levelType=\"TimeYears\"/>\n" + 
-            "    </Hierarchy>\n" + 
+            + "<Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n" +
+            "    <Hierarchy name=\"Time\" hasAll=\"true\" primaryKey=\"time_id\">\n" +
+            "      <Table name=\"time_by_day\"/>\n" +
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" +
+            "          levelType=\"TimeYears\"/>\n" +
+            "    </Hierarchy>\n" +
+            "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n" +
+            "      <Table name=\"time_by_day\"/>\n" +
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" +
+            "          levelType=\"TimeYears\"/>\n" +
+            "    </Hierarchy>\n" +
+            "    <Hierarchy hasAll=\"true\" name=\"Weekly2\" primaryKey=\"time_id\">\n" +
+            "      <Table name=\"time_by_day\"/>\n" +
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" +
+            "          levelType=\"TimeYears\"/>\n" +
+            "    </Hierarchy>\n" +
             "  </Dimension>"
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/>\n"
             + "</Cube>";
-    
-    
+
+    /*
     PropertyUpdater p=new PropertyUpdater() {
-    	
+
     	@Override
 		public PropertyList update(PropertyList propertyList) {
 
@@ -345,27 +355,109 @@ class CachedExistsTest{
 
 	};
 		((BaseTestContext) context).update(p);
+    */
+        class TestMondrian2704Modifier extends RDbMappingSchemaModifier {
+
+            public TestMondrian2704Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            @Override
+            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+                List<MappingCube> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(CubeRBuilder.builder()
+                    .name("Alternate Sales")
+                    .fact(new TableR("sales_fact_1997"))
+                    .dimensionUsageOrDimensions(List.of(
+                        PrivateDimensionRBuilder.builder()
+                            .name("Time")
+                            .type(DimensionTypeEnum.TIME_DIMENSION)
+                            .foreignKey("time_id")
+                            .hierarchies(List.of(
+                                HierarchyRBuilder.builder()
+                                    .name("Time")
+                                    .hasAll(true)
+                                    .primaryKey("time_id")
+                                    .relation(new TableR("time_by_day"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Year")
+                                            .column("the_year")
+                                            .type(TypeEnum.NUMERIC)
+                                            .uniqueMembers(true)
+                                            .levelType(LevelTypeEnum.TIME_YEARS)
+                                            .build()
+                                    ))
+                                    .build(),
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .name("Weekly")
+                                    .primaryKey("time_id")
+                                    .relation(new TableR("time_by_day"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Year")
+                                            .column("the_year")
+                                            .type(TypeEnum.NUMERIC)
+                                            .uniqueMembers(true)
+                                            .levelType(LevelTypeEnum.TIME_YEARS)
+                                            .build()
+                                    ))
+                                    .build(),
+                                HierarchyRBuilder.builder()
+                                    .hasAll(true)
+                                    .name("Weekly2")
+                                    .primaryKey("time_id")
+                                    .relation(new TableR("time_by_day"))
+                                    .levels(List.of(
+                                        LevelRBuilder.builder()
+                                            .name("Year")
+                                            .column("the_year")
+                                            .type(TypeEnum.NUMERIC)
+                                            .uniqueMembers(true)
+                                            .levelType(LevelTypeEnum.TIME_YEARS)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Unit Sales")
+                            .column("unit_sales")
+                            .aggregator("sum")
+                            .formatString("Standard")
+                            .build()
+                    ))
+                    .build());
+                return result;
+            }
+        }
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian2704Modifier(schema)));
 
 
-    
-    
+
     // Verifies second arg of CachedExists uses a tuple type
-    	TestUtil.assertQueryReturns(context.createConnection(),
-        "WITH\n" + 
-        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],[*BASE_MEMBERS__Time.Weekly_])'\n" + 
-        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Time].CURRENTMEMBER.ORDERKEY,BASC,[Time.Weekly].CURRENTMEMBER.ORDERKEY,BASC)'\n" + 
-        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\n" + 
-        "SET [*BASE_MEMBERS__Time.Weekly_] AS '[Time.Weekly].[Year].MEMBERS'\n" + 
-        "SET [*BASE_MEMBERS__Time_] AS '[Time].[Year].MEMBERS'\n" + 
-        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {([Time].CURRENTMEMBER,[Time.Weekly].CURRENTMEMBER)})'\n" + 
-        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\n" + 
-        "MEMBER [Time.Weekly].[*DEFAULT_MEMBER] AS '[Time.Weekly].DEFAULTMEMBER', SOLVE_ORDER=-400\n" + 
-        "MEMBER [Time.Weekly].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CACHEDEXISTS([*CJ_ROW_AXIS],([Time].CURRENTMEMBER),\"[*CJ_ROW_AXIS]\"))', SOLVE_ORDER=99\n" + 
-        "MEMBER [Time].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM([*CJ_ROW_AXIS])', SOLVE_ORDER=100\n" + 
-        "SELECT\n" + 
-        "[*BASE_MEMBERS__Measures_] ON COLUMNS\n" + 
-        ", NON EMPTY\n" + 
-        "UNION(CROSSJOIN({[Time].[*TOTAL_MEMBER_SEL~SUM]},{([Time.Weekly].[*DEFAULT_MEMBER])}),UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {([Time].CURRENTMEMBER)}),{[Time.Weekly].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS])) ON ROWS\n" + 
+    	TestUtil.assertQueryReturns(context.getConnection(),
+        "WITH\n" +
+        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],[*BASE_MEMBERS__Time.Weekly_])'\n" +
+        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Time].CURRENTMEMBER.ORDERKEY,BASC,[Time.Weekly].CURRENTMEMBER.ORDERKEY,BASC)'\n" +
+        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\n" +
+        "SET [*BASE_MEMBERS__Time.Weekly_] AS '[Time.Weekly].[Year].MEMBERS'\n" +
+        "SET [*BASE_MEMBERS__Time_] AS '[Time].[Year].MEMBERS'\n" +
+        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {([Time].CURRENTMEMBER,[Time.Weekly].CURRENTMEMBER)})'\n" +
+        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\n" +
+        "MEMBER [Time.Weekly].[*DEFAULT_MEMBER] AS '[Time.Weekly].DEFAULTMEMBER', SOLVE_ORDER=-400\n" +
+        "MEMBER [Time.Weekly].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CACHEDEXISTS([*CJ_ROW_AXIS],([Time].CURRENTMEMBER),\"[*CJ_ROW_AXIS]\"))', SOLVE_ORDER=99\n" +
+        "MEMBER [Time].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM([*CJ_ROW_AXIS])', SOLVE_ORDER=100\n" +
+        "SELECT\n" +
+        "[*BASE_MEMBERS__Measures_] ON COLUMNS\n" +
+        ", NON EMPTY\n" +
+        "UNION(CROSSJOIN({[Time].[*TOTAL_MEMBER_SEL~SUM]},{([Time.Weekly].[*DEFAULT_MEMBER])}),UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {([Time].CURRENTMEMBER)}),{[Time.Weekly].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS])) ON ROWS\n" +
         "FROM [Alternate Sales]",
         "Axis #0:\n"
             + "{}\n"
@@ -378,23 +470,23 @@ class CachedExistsTest{
             + "Row #0: 266,773\n"
             + "Row #1: 266,773\n"
             + "Row #2: 266,773\n");
-    
+
     // Verified second arg of CachedExists uses a member type
-    TestUtil.assertQueryReturns(context.createConnection(),
-        "WITH\n" + 
-        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time.Weekly_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],[*BASE_MEMBERS__Time.Weekly2_]))'\n" + 
-        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Time.Weekly].CURRENTMEMBER.ORDERKEY,BASC,[Time].CURRENTMEMBER.ORDERKEY,BASC,[Time.Weekly2].CURRENTMEMBER.ORDERKEY,BASC)'\n" + 
-        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\n" + 
-        "SET [*BASE_MEMBERS__Time.Weekly2_] AS '[Time.Weekly2].[Year].MEMBERS'\n" + 
-        "SET [*BASE_MEMBERS__Time.Weekly_] AS '[Time.Weekly].[Year].MEMBERS'\n" + 
-        "SET [*BASE_MEMBERS__Time_] AS '[Time].[Year].MEMBERS'\n" + 
-        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {([Time.Weekly].CURRENTMEMBER,[Time].CURRENTMEMBER,[Time.Weekly2].CURRENTMEMBER)})'\n" + 
-        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\n" + 
-        "MEMBER [Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CACHEDEXISTS([*CJ_ROW_AXIS],([Time.Weekly].CURRENTMEMBER, [Time].CURRENTMEMBER),\"[*CJ_ROW_AXIS]\"))', SOLVE_ORDER=98\n" + 
-        "SELECT\n" + 
-        "[*BASE_MEMBERS__Measures_] ON COLUMNS\n" + 
-        ", NON EMPTY\n" + 
-        "UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {([Time.Weekly].CURRENTMEMBER,[Time].CURRENTMEMBER)}),{[Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS]) ON ROWS\n" + 
+    TestUtil.assertQueryReturns(context.getConnection(),
+        "WITH\n" +
+        "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time.Weekly_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],[*BASE_MEMBERS__Time.Weekly2_]))'\n" +
+        "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Time.Weekly].CURRENTMEMBER.ORDERKEY,BASC,[Time].CURRENTMEMBER.ORDERKEY,BASC,[Time.Weekly2].CURRENTMEMBER.ORDERKEY,BASC)'\n" +
+        "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\n" +
+        "SET [*BASE_MEMBERS__Time.Weekly2_] AS '[Time.Weekly2].[Year].MEMBERS'\n" +
+        "SET [*BASE_MEMBERS__Time.Weekly_] AS '[Time.Weekly].[Year].MEMBERS'\n" +
+        "SET [*BASE_MEMBERS__Time_] AS '[Time].[Year].MEMBERS'\n" +
+        "SET [*CJ_ROW_AXIS] AS 'GENERATE([*NATIVE_CJ_SET], {([Time.Weekly].CURRENTMEMBER,[Time].CURRENTMEMBER,[Time.Weekly2].CURRENTMEMBER)})'\n" +
+        "MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\n" +
+        "MEMBER [Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM] AS 'SUM(CACHEDEXISTS([*CJ_ROW_AXIS],([Time.Weekly].CURRENTMEMBER, [Time].CURRENTMEMBER),\"[*CJ_ROW_AXIS]\"))', SOLVE_ORDER=98\n" +
+        "SELECT\n" +
+        "[*BASE_MEMBERS__Measures_] ON COLUMNS\n" +
+        ", NON EMPTY\n" +
+        "UNION(CROSSJOIN(GENERATE([*CJ_ROW_AXIS], {([Time.Weekly].CURRENTMEMBER,[Time].CURRENTMEMBER)}),{[Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM]}),[*SORTED_ROW_AXIS]) ON ROWS\n" +
         "FROM [Alternate Sales]",
         "Axis #0:\n"
             + "{}\n"
@@ -406,8 +498,8 @@ class CachedExistsTest{
             + "Row #0: 266,773\n"
             + "Row #1: 266,773\n");
   }
-    
-    
+
+
 
 }
 
