@@ -29,12 +29,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1188,7 +1186,7 @@ class FilterTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void  testBugMondrian706(TestContextWrapper context) {
+  public void  testBugMondrian706(TestContext context) {
     propSaver.set(
       MondrianProperties.instance().UseAggregates,
       false );
@@ -1231,7 +1229,7 @@ class FilterTest extends BatchTestCase {
         + ".`store_name`, `store`.`store_type`, `store`.`store_manager`, `store`.`store_sqft`, `store`"
         + ".`grocery_sqft`, `store`.`frozen_sqft`, `store`.`meat_sqft`, `store`.`coffee_bar`, `store`"
         + ".`store_street_address` having NOT((sum(`store`.`store_sqft`) is null)) "
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "order by ISNULL(`c0`) ASC, `c0` ASC, "
         + "ISNULL(`c1`) ASC, `c1` ASC, "
         + "ISNULL(`c2`) ASC, `c2` ASC, "
@@ -1246,7 +1244,7 @@ class FilterTest extends BatchTestCase {
         + "('CA', 'OR')) and ((`store`.`store_id`, `store`.`store_city`, `store`.`store_state`) in ((11, 'Portland', "
         + "'OR'), (14, 'San Francisco', 'CA'))) group by `store`.`store_country`, `store`.`store_state`, `store`"
         + ".`store_city`, `store`.`store_id`, `store`.`store_name` having NOT((sum(`store`.`store_sqft`) is null)) "
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? " order by ISNULL(`c0`) ASC, `c0` ASC, "
         + "ISNULL(`c1`) ASC, `c1` ASC, "
         + "ISNULL(`c2`) ASC, `c2` ASC, "
@@ -1289,6 +1287,7 @@ class FilterTest extends BatchTestCase {
         goodMysqlSQL,
         null )
     };
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Store",
         "<Dimension name='Store Type'>\n"
@@ -1306,11 +1305,15 @@ class FilterTest extends BatchTestCase {
           + "uniqueMembers='false'/>\n"
           + "    </Hierarchy>\n"
           + "  </Dimension>\n" ));
-    Connection connection = context.createConnection();
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FilterTestModifier(schema)));
+      Connection connection = context.getConnection();
     assertQuerySqlOrNot(connection, mdx, badPatterns, true, true, true );
     TestUtil.flushSchemaCache(connection);
-    assertQuerySqlOrNot(context.createConnection(), mdx, goodPatterns, false, true, true );
-    assertQueryReturns(context.createConnection(),
+    assertQuerySqlOrNot(context.getConnection(), mdx, goodPatterns, false, true, true );
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{}\n"

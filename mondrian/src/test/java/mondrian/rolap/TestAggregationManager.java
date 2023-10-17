@@ -51,12 +51,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1093,8 +1091,9 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNoNullPtrInCellRequest(TestContextWrapper context) {
+    void testNoNullPtrInCellRequest(TestContext context) {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -1107,8 +1106,11 @@ class TestAggregationManager extends BatchTestCase {
             + "    <Level name=\"Store Name\"    column=\"store_name\"    uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
-
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier1(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns, "
             + "Filter ({ "
             + "[Store2].[All Stores].[USA].[CA].[Beverly Hills], "
@@ -2007,9 +2009,9 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testLevelKeyAsSqlExpWithAgg(TestContextWrapper context) {
+    void testLevelKeyAsSqlExpWithAgg(TestContext context) {
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final boolean p;
         switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
         case POSTGRES:
@@ -2032,6 +2034,7 @@ class TestAggregationManager extends BatchTestCase {
         final StringBuilder colName =
             getDialect(connection)
                 .quoteIdentifier("promotion_name");
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -2043,10 +2046,15 @@ class TestAggregationManager extends BatchTestCase {
             + "    </Level>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>", false));
-        assertQueryThrows(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier2(schema, colName)));
+        assertQueryThrows(context.getConnection(),
             mdxQuery,
             "ERROR_TEST_FUNCTION_NAME");
         // Run for real this time
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -2058,7 +2066,11 @@ class TestAggregationManager extends BatchTestCase {
             + "    </Level>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>", false));
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier2(schema, colName)));
+        assertQueryReturns(context.getConnection(),
             "select non empty{[Promotions].[All Promotions].Children} ON rows, "
             + "non empty {[Store].[All Stores]} ON columns "
             + "from [Sales] "

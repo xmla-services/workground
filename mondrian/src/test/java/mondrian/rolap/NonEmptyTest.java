@@ -52,12 +52,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1811,6 +1809,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankLeafAndNoAll(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1822,7 +1821,10 @@ class NonEmptyTest extends BatchTestCase {
         + "        />\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier(schema)));
     // No 'all' level, and ragged because [Product Name] is hidden if
     // blank.  Native evaluation should be able to handle this query.
     checkNative(context,
@@ -1842,6 +1844,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankLeaf(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1853,7 +1856,10 @@ class NonEmptyTest extends BatchTestCase {
         + "        />\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema)));
     // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     checkNative(context,
@@ -1873,6 +1879,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfParentsNameLeaf(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1884,7 +1891,10 @@ class NonEmptyTest extends BatchTestCase {
         + "        />\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
+     */
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema)));
     // [Product Name] can be hidden if it it matches its parent name, so
     // native evaluation can not handle this query.
     checkNotNative(context,
@@ -1903,6 +1913,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankNameAncestor(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1914,7 +1925,10 @@ class NonEmptyTest extends BatchTestCase {
         + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\"\n uniqueMembers=\"true\"/>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
+     */
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier3(schema)));
     // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
@@ -1934,6 +1948,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfParentsNameAncestor(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1945,8 +1960,11 @@ class NonEmptyTest extends BatchTestCase {
         + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\"\n uniqueMembers=\"true\"/>\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
-    // Since the parent of [Product Name] can be hidden, native evaluation
+    */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier3(schema)));
+      // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
       0,
@@ -1965,6 +1983,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumWithHideIfBlankLeaf(TestContextWrapper context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1976,7 +1995,10 @@ class NonEmptyTest extends BatchTestCase {
         + "        />\n"
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
-
+      */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema)));
     // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     // Note there's an existing bug with result ordering in native
@@ -3786,6 +3808,7 @@ class NonEmptyTest extends BatchTestCase {
     if ( !Bug.BugMondrian229Fixed ) {
       return;
     }
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
@@ -3799,7 +3822,10 @@ class NonEmptyTest extends BatchTestCase {
         + "          levelType=\"TimeMonths\"/>\n"
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
-
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier4(schema)));
     // Check that the grand total is different than when [Time].[1997] is
     // the default member.
     assertQueryReturns(context.createConnection(),
@@ -7456,7 +7482,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testDefaultMemberNonEmptyContext(TestContextWrapper context)  {
+  void testDefaultMemberNonEmptyContext(TestContext context)  {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "  <Dimension name=\"Store2\"  foreignKey=\"store_id\" >\n"
@@ -7469,7 +7496,11 @@ class NonEmptyTest extends BatchTestCase {
         + "      <Level name=\"Store City\" column=\"store_city\" uniqueMembers=\"false\" />\n"
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
-    assertQueryReturns(context.createConnection(),
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier5(schema)));
+      assertQueryReturns(context.getConnection(),
       "with member measures.one as '1' select non empty store2.usa.[OR].children on 0, measures.one on 1 from sales",
       "Axis #0:\n"
         + "{}\n"
@@ -7480,7 +7511,7 @@ class NonEmptyTest extends BatchTestCase {
         + "{[Measures].[one]}\n"
         + "Row #0: 1\n"
         + "Row #0: 1\n" );
-    assertQueryReturns(context.createConnection(), "with member measures.one as '1' "
+    assertQueryReturns(context.getConnection(), "with member measures.one as '1' "
         + "select store2.usa.[OR].children on 0, measures.one on 1 from sales",
       "Axis #0:\n"
         + "{}\n"

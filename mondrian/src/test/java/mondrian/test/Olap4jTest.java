@@ -12,6 +12,7 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import mondrian.xmla.XmlaHandler;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.element.MetaElement;
@@ -50,11 +51,9 @@ import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -760,10 +759,15 @@ class Olap4jTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMemberInCube(TestContextWrapper context) throws SQLException {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 null,
                 "<CalculatedMember name='H1 1997' formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' dimension='Time' />"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Olap4jTestModifier(schema)));
         final OlapConnection testContext = context.createOlap4jConnection();
         final Cube cube = testContext.getOlapSchema().getCubes().get("Sales");
         final List<Measure> measureList = cube.getMeasures();

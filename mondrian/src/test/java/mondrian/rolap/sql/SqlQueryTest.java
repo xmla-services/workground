@@ -14,6 +14,7 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -43,12 +44,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1031,6 +1030,7 @@ class SqlQueryTest  extends BatchTestCase {
         Connection connection = context.createConnection();
         prepareContext(connection);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
@@ -1038,6 +1038,10 @@ class SqlQueryTest  extends BatchTestCase {
             + " formatString=\"#.###\"/>",
             null,
             null));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SqlQueryTestModifier(schema)));
         String mdx = "select measures.[avg sales] on 0 from sales"
                        + " where { time.[1997].q1, time.[1997].q2.[4] }";
         assertQueryReturns(context.createConnection(),

@@ -9,26 +9,28 @@
 
 package mondrian.test;
 
-import static mondrian.olap.SolveOrderMode.ABSOLUTE;
-import static mondrian.olap.SolveOrderMode.SCOPED;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SolveOrderMode;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.SolveOrderMode;
-import mondrian.olap.Util;
+import java.util.List;
+
+import static mondrian.olap.SolveOrderMode.ABSOLUTE;
+import static mondrian.olap.SolveOrderMode.SCOPED;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * <code>SolveOrderScopeIsolationTest</code> Test conformance to SSAS2005 solve
@@ -110,13 +112,20 @@ class SolveOrderScopeIsolationTest {
     }
 
     public void prepareContext(TestContextWrapper context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales", null, memberDefs));
+
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SolveOrderScopeIsolationTestModifier(schema)));
+
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllSolveOrderModesHandled(TestContextWrapper context)    
+    void testAllSolveOrderModesHandled(TestContextWrapper context)
     {
         for (SolveOrderMode mode : SolveOrderMode.values()) {
             switch (mode) {
@@ -213,7 +222,7 @@ class SolveOrderScopeIsolationTest {
     @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContextWrapper context) { 
+    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContextWrapper context) {
     	prepareContext(context);
         setSolveOrderMode(SCOPED);
         assertQueryReturns(context.createConnection(),

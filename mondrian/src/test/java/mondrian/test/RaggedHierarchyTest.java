@@ -10,24 +10,27 @@
 */
 package mondrian.test;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import java.util.List;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
 
 /**
  * <code>RaggedHierarchyTest</code> tests ragged hierarchies.
@@ -470,12 +473,13 @@ class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testHideIfBlankHidesWhitespace(TestContextWrapper context) {
-        if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testHideIfBlankHidesWhitespace(TestContext context) {
+        if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
             != DatabaseProduct.ORACLE)
         {
             return;
         }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "<Dimension name=\"Gender4\" foreignKey=\"customer_id\">\n"
@@ -493,7 +497,12 @@ class RaggedHierarchyTest {
                     + "      </Level>"
                     + "    </Hierarchy>\n"
                     + "  </Dimension>"));
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier1(schema)));
+
+        assertQueryReturns(context.getConnection(),
             " select {[Gender4].[Gender].members} "
             + "on COLUMNS "
             + "from sales",
@@ -506,7 +515,8 @@ class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithHideMemberIfBlankOnLeaf(TestContextWrapper context) throws Exception {
+    void testNativeFilterWithHideMemberIfBlankOnLeaf(TestContext context) throws Exception {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"
@@ -520,8 +530,12 @@ class RaggedHierarchyTest {
             + "          hideMemberIf=\"IfBlankName\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier2(schema)));
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "[Measures].[Unit Sales] ON COLUMNS\n"
             + ",FILTER([Store].[Store City].MEMBERS, NOT ISEMPTY ([Measures].[Unit Sales])) ON ROWS\n"
@@ -559,7 +573,8 @@ class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeCJWithHideMemberIfBlankOnLeaf(TestContextWrapper context) throws Exception {
+    void testNativeCJWithHideMemberIfBlankOnLeaf(TestContext context) throws Exception {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"
@@ -573,8 +588,12 @@ class RaggedHierarchyTest {
             + "          hideMemberIf=\"IfBlankName\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier2(schema)));
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "[Measures].[Unit Sales] ON COLUMNS\n"
             + ",non empty Crossjoin([Gender].[Gender].members, [Store].[Store City].MEMBERS) ON ROWS\n"

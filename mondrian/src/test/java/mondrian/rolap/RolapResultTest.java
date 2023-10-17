@@ -9,22 +9,22 @@
 
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
+import mondrian.rolap.aggmatcher.AggTableTestCase;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.rolap.aggmatcher.AggTableTestCase;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * Testcase for
@@ -297,6 +297,7 @@ Axis #2:
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testNonAllPromotionMembers(TestContextWrapper context) {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Promotions2\" foreignKey=\"promotion_id\">\n"
@@ -305,7 +306,10 @@ Axis #2:
             + "    <Level name=\"Promotion2 Name\" column=\"promotion_name\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
-
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RolapResultTestModifier(schema)));
         assertQueryReturns(context.createConnection(),
             "select {[Promotion2 Name].[Price Winners], [Promotion2 Name].[Sale Winners]} * {Tail([Time].[Year].Members,3)} ON COLUMNS, "
             + "NON EMPTY Crossjoin({[Store].CurrentMember.Children},  {[Store Type].[All Store Types].Children}) ON ROWS "

@@ -11,6 +11,34 @@
 
 package mondrian.test;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.SchemaUtil;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opentest4j.AssertionFailedError;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,31 +49,6 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.executeExpr;
 import static org.opencube.junit5.TestUtil.executeExprRaw;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-import org.opentest4j.AssertionFailedError;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.rolap.BatchTestCase;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync
@@ -127,15 +130,19 @@ import mondrian.rolap.BatchTestCase;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberInCubeWithSpace(TestContextWrapper context) {
+     void testCalculatedMemberInCubeWithSpace(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null,
             "<CalculatedMember name='Profit With Spaces'"
             + "  dimension='Measures'"
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]'/>"));
-
-        Cell s = executeExprRaw(context.createConnection(), "Warehouse and Sales", "[Measures].[Profit With Spaces]");
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier1(schema)));
+        Cell s = executeExprRaw(context.getConnection(), "Warehouse and Sales", "[Measures].[Profit With Spaces]");
         assertEquals("339,610.90", s.getFormattedValue());
     }
 
@@ -1106,8 +1113,9 @@ import mondrian.rolap.BatchTestCase;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInSchema(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInSchema(TestContext context) {
         // calc member defined in schema
+        /*
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             cubeName,
@@ -1122,7 +1130,11 @@ import mondrian.rolap.BatchTestCase;
             + UdfTest.FooBarCellFormatter.class.getName()
             + "\"/>\n"
             + "</CalculatedMember>\n"));
-        assertQueryReturns(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier2(schema)));
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales], [Measures].[Profit Formatted]} on 0,\n"
             + " {[Store].Children} on rows\n"
             + "from [Sales]",
@@ -1145,8 +1157,9 @@ import mondrian.rolap.BatchTestCase;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInSchemaNegative(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInSchemaNegative(TestContext context) {
         // calc member defined in schema
+        /*
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 cubeName,
@@ -1159,6 +1172,10 @@ import mondrian.rolap.BatchTestCase;
                 + "  <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
                 + "  <CalculatedMemberProperty name=\"CELL_FORMATTER\" value=\"mondrian.test.NonExistentCellFormatter\"/>\n"
                 + "</CalculatedMember>\n"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier4(schema)));
         assertQueryThrows(context,
             "select {[Measures].[Unit Sales], [Measures].[Profit Formatted]} on 0,\n"
             + " {[Store].Children} on rows\n"
@@ -1171,8 +1188,9 @@ import mondrian.rolap.BatchTestCase;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testStrToSetInCubeCalcMember(TestContextWrapper context) {
+     void testStrToSetInCubeCalcMember(TestContext context) {
         // calc member defined in schema
+        /*
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 cubeName,
@@ -1182,18 +1200,22 @@ import mondrian.rolap.BatchTestCase;
                 + "    dimension=\"Measures\"\n"
                 + "    visible=\"false\"\n"
                 + "    formula=\"StrToTuple('([Gender].[M], [Marital Status].[S])', [Gender], [Marital Status])\"/>\n"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier3(schema)));
         String desiredResult =
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
             + "{[Measures].[My Tuple]}\n"
             + "Row #0: 68,755\n";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[My Tuple]} on 0 from [Sales]",
             desiredResult);
 
         // same result if calc member is defined in query
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[My Tuple] as\n"
             + " 'StrToTuple(\"([Gender].[M], [Marital Status].[S])\", [Gender], [Marital Status])'\n"
             + "select {[Measures].[My Tuple]} on 0 from [Sales]",

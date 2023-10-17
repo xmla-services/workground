@@ -11,26 +11,19 @@
 
 package mondrian.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertMatchesVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeExprRaw;
-import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
-import static org.opencube.junit5.TestUtil.executeQuery;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.spi.CellFormatter;
+import mondrian.spi.MemberFormatter;
+import mondrian.spi.PropertyFormatter;
+import mondrian.spi.UserDefinedFunction;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -40,7 +33,8 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
-//import org.apache.logging.log4j.ThreadContext;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,17 +51,27 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.olap.type.HierarchyType;
-import mondrian.olap.type.MemberType;
-import mondrian.olap.type.NumericType;
-import mondrian.olap.type.SetType;
-import mondrian.olap.type.StringType;
-import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
-import mondrian.spi.PropertyFormatter;
-import mondrian.spi.UserDefinedFunction;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertMatchesVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
+//import org.apache.logging.log4j.ThreadContext;
 
 /**
  * Unit-test for {@link UserDefinedFunction user-defined functions}.
@@ -82,7 +86,7 @@ import mondrian.spi.UserDefinedFunction;
  * @author jhyde
  * @since Apr 29, 2005
  */
-class UdfTest {
+public class UdfTest {
 
 
 
@@ -114,21 +118,9 @@ class UdfTest {
      * @param xmlMeasure Measure definition
      * @return Test context
      */
-    private void measureTestContext(TestContextWrapper context, String xmlMeasure) {
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales", null, xmlMeasure, null, null));
-    }
-
-    /**
-     * Shorthand for containing a test context that consists of the standard
-     * FoodMart Sales cube plus one calculated member.
-     *
-     * @param xmlCalcMember Calculated member definition
-     * @return Test context
-     */
-    private void calcMemberTestContext(TestContextWrapper context, String xmlCalcMember) {
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales", null, null, xmlCalcMember, null));
+    private void measureTestContext(TestContextWrapper context, RDbMappingSchemaModifier modifier) {
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(modifier));
     }
 
     // ~ Tests follow ----------------------------------------------------------
@@ -1165,11 +1157,15 @@ class UdfTest {
         // Note that
         //   formatString="Standard"
         // is ignored.
+        /*
         measureTestContext(context,
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
             + "    aggregator='sum' formatString='Standard' formatter='"
             + FooBarCellFormatter.class.getName()
             + "'/>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier1(schema));
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],\n"
             + "      [Measures].[Unit Sales Foo Bar]} on 0\n"
@@ -1194,6 +1190,7 @@ class UdfTest {
         // Note that
         //   formatString="Standard"
         // is ignored.
+        /*
         measureTestContext(context,
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
             + "    aggregator='sum' formatString='Standard'>\n"
@@ -1201,6 +1198,10 @@ class UdfTest {
             + FooBarCellFormatter.class.getName()
             + "'/>\n"
             + "</Measure>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier1(schema));
+
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],\n"
             + "      [Measures].[Unit Sales Foo Bar]} on 0\n"
@@ -1220,6 +1221,7 @@ class UdfTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterScript(TestContextWrapper context) {
+        /*
         measureTestContext(context,
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
             + "    aggregator='sum' formatString='Standard'>\n"
@@ -1229,6 +1231,10 @@ class UdfTest {
             + "    </Script>\n"
             + "  </CellFormatter>\n"
             + "</Measure>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier2(schema));
+
         // Note that the result is slightly different to above (a missing ".0").
         // Not a great concern -- in fact it proves that the scripted UDF is
         // being used.
@@ -1252,6 +1258,7 @@ class UdfTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMember(TestContextWrapper context) {
+        /*
         calcMemberTestContext(context,
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1261,6 +1268,10 @@ class UdfTest {
             + FooBarCellFormatter.class.getName()
             + "'/>\n"
             + "</CalculatedMember>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier3(schema));
+
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],\n"
             + "      [Measures].[Unit Sales Foo Bar]} on 0\n"
@@ -1281,6 +1292,7 @@ class UdfTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMemberNested(TestContextWrapper context) {
+        /*
         calcMemberTestContext(context,
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1290,6 +1302,10 @@ class UdfTest {
             + FooBarCellFormatter.class.getName()
             + "'/>\n"
             + "</CalculatedMember>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier4(schema));
+
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],\n"
             + "      [Measures].[Unit Sales Foo Bar]} on 0\n"
@@ -1311,6 +1327,7 @@ class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMemberScript(TestContextWrapper context) {
         prepareContext(context);
+        /*
         calcMemberTestContext(context,
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1322,6 +1339,10 @@ class UdfTest {
             + "    </Script>\n"
             + "  </CellFormatter>\n"
             + "</CalculatedMember>");
+         */
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        measureTestContext(context, new SchemaModifiers.UdfTestModifier5(schema));
+
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales],\n"
             + "      [Measures].[Unit Sales Foo Bar]} on 0\n"

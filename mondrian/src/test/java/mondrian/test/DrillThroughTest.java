@@ -12,6 +12,46 @@
 */
 package mondrian.test;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.OlapConnection;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,45 +66,6 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.executeStatement;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.sql.DataSource;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapConnection;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapLevel;
-import mondrian.rolap.RolapStar;
 
 /**
  * Test generation of SQL to access the fact table data underlying an MDX
@@ -867,7 +868,7 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughDupKeys(TestContextWrapper context) {
+    void  testDrillThroughDupKeys(TestContext context) {
          // Note here that the type on the Store Id level is Integer or
          // Numeric. The default, of course, would be String.
          //
@@ -877,6 +878,8 @@ class DrillThroughTest {
          //      `store_ragged`.`store_id` = '19'
          //
          //  and DB2 and Derby don't like converting from CHAR to INTEGER
+
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -893,7 +896,12 @@ class DrillThroughTest {
             + "      <Level name=\"Store Id\" column=\"store_id\" captionColumn=\"store_name\" uniqueMembers=\"true\" type=\"Numeric\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
-        Result result = executeQuery(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier1(schema)));
+
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Store2].[Store Id].Members} on columns,\n"
             + " NON EMPTY([Store3].[Store Id].Members) on rows\n"
             + "from Sales");
@@ -915,11 +923,11 @@ class DrillThroughTest {
             + " and `sales_fact_1997`.`store_id` = `store`.`store_id`"
             + " and `store`.`store_id` = 2 "
             + "order by "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "`Year` ASC, `Store Id` ASC, `Store Id_0` ASC"
                 : "`time_by_day`.`the_year` ASC, `store_ragged`.`store_id` ASC, `store`.`store_id` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 0);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 0);
     }
 
     @ParameterizedTest
@@ -1127,8 +1135,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void  testBug1438285(TestContextWrapper context) {
-        final Dialect dialect = getDialect(context.createConnection());
+    void  testBug1438285(TestContext context) {
+        final Dialect dialect = getDialect(context.getConnection());
         if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.TERADATA) {
             // On default Teradata express instance there isn't enough spool
             // space to run this query.
@@ -1137,6 +1145,8 @@ class DrillThroughTest {
 
         // Specify the column and nameColumn to be the same
         // in order to reproduce the problem
+
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "  <Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -1147,7 +1157,12 @@ class DrillThroughTest {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"));
 
-        Result result = executeQuery(context.createConnection(),
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier2(schema)));
+
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Measures].[Unit Sales]} on columns, "
             + "{[Store2].members} on rows FROM [Sales]");
 
@@ -1204,7 +1219,7 @@ class DrillThroughTest {
             + " and `sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id`"
             + " and `sales_fact_1997`.`customer_id` = `customer`.`customer_id`"
             + " order by"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? " `Store Country` ASC,"
                 + " `Store State` ASC,"
                 + " `Store City` ASC,"
@@ -1264,7 +1279,7 @@ class DrillThroughTest {
                 + " `customer`.`marital_status` ASC,"
                 + " `customer`.`yearly_income` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 86837);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 86837);
     }
 
     /**
@@ -1279,7 +1294,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void  testTruncateLevelName(TestContextWrapper context) throws Exception {
+    void  testTruncateLevelName(TestContext context) throws Exception {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Education Level2\" foreignKey=\"customer_id\">\n"
@@ -1289,8 +1305,12 @@ class DrillThroughTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>",
             null));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier3(schema)));
 
-        Result result = executeQuery(context.createConnection(),
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Measures].[Unit Sales]} on columns,\n"
             + "{[Education Level2].Children} on rows\n"
             + "FROM [Sales]\n"
@@ -1301,12 +1321,12 @@ class DrillThroughTest {
         // Check that SQL is valid.
         java.sql.Connection connection = null;
         try {
-            DataSource dataSource = context.createConnection().getDataSource();
+            DataSource dataSource = context.getConnection().getDataSource();
             connection = dataSource.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet resultSet = statement.executeQuery(sql);
             final int columnCount = resultSet.getMetaData().getColumnCount();
-            final Dialect dialect = getDialect(context.createConnection());
+            final Dialect dialect = getDialect(context.getConnection());
             if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.DERBY) {
                 // derby counts ORDER BY columns as columns. insane!
                 assertEquals(11, columnCount);

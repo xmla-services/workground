@@ -10,6 +10,32 @@
 */
 package mondrian.rolap;
 
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.test.PropertySaver5;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -20,35 +46,6 @@ import static org.opencube.junit5.TestUtil.cubeByName;
 import static org.opencube.junit5.TestUtil.getDimensionWithName;
 import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Dimension;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.test.PropertySaver5;
 
 /**
  * Unit test for {@link RolapCube}.
@@ -358,6 +355,7 @@ class RolapCubeTest {
     }
 
     void createTestContextWithAdditionalMembersAndARole(TestContextWrapper context) {
+        /*
         String nonAccessibleMember =
             "  <CalculatedMember name=\"~Missing\" dimension=\"Gender\">\n"
             + "    <Formula>100</Formula>\n"
@@ -371,6 +369,10 @@ class RolapCubeTest {
             null,
             nonAccessibleMember
             + accessibleMember));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RolapCubeTestModifier1(schema)));
         withRole(context, "California manager");
     }
 
