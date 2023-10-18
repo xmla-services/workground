@@ -6,7 +6,7 @@
 
 -tester: biz.aQute.tester.junit-platform
 
-# JaCoCo calculates test coverage    
+# JaCoCo calculates test coverage
 -runpath.jacoco:\
 	org.jacoco.agent,\
 	org.jacoco.agent.rt
@@ -116,9 +116,9 @@
 	org.xmlunit.xmlunit-core;version='[2.9.0,2.9.1)',\
 	slf4j.api;version='[2.0.4,2.0.5)',\
 	slf4j.simple;version='[2.0.4,2.0.5)'
-	
+
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
-    
+
 #-runproperties.tester: \
 #    tester.names='mondrian.test.SchemaTest'

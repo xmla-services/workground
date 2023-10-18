@@ -32,6 +32,7 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
@@ -2452,6 +2453,45 @@ class NonEmptyTest extends BatchTestCase {
           }
 
           @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+              result.add(PrivateDimensionRBuilder.builder()
+                  .name("Warehouse2")
+                  .hierarchies(List.of(
+                      HierarchyRBuilder.builder()
+                          .hasAll(true)
+                          .primaryKey("warehouse_id")
+                          .relation(new TableR("warehouse"))
+                          .levels(List.of(
+                              LevelRBuilder.builder()
+                                  .name("address3")
+                                  .column("wa_address3")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address2")
+                                  .column("wa_address2")
+                                  .uniqueMembers(true)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("address1")
+                                  .column("wa_address1")
+                                  .uniqueMembers(false)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("name")
+                                  .column("warehouse_name")
+                                  .uniqueMembers(false)
+                                  .build()
+                              ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+
+          @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
@@ -2468,38 +2508,6 @@ class NonEmptyTest extends BatchTestCase {
                           .name("Warehouse2")
                           .source("Warehouse2")
                           .foreignKey("warehouse_id")
-                          .build(),
-              PrivateDimensionRBuilder.builder()
-                          .name("Warehouse2")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .primaryKey("warehouse_id")
-                                  .relation(new TableR("warehouse"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("address3")
-                                          .column("wa_address3")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("address2")
-                                          .column("wa_address2")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("address1")
-                                          .column("wa_address1")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("name")
-                                          .column("warehouse_name")
-                                          .uniqueMembers(false)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
                           .build()
                   ))
                   .measures(List.of(
@@ -2629,6 +2637,40 @@ class NonEmptyTest extends BatchTestCase {
           }
 
           @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+              result.add(              PrivateDimensionRBuilder.builder()
+                  .name("Warehouse2")
+                  .hierarchies(List.of(
+                      HierarchyRBuilder.builder()
+                          .hasAll(true)
+                          .primaryKey("warehouse_id")
+                          .relation(new TableR("warehouse"))
+                          .levels(List.of(
+                              LevelRBuilder.builder()
+                                  .name("fax")
+                                  .column("warehouse_fax")
+                                  .uniqueMembers(true)
+                                  .build(),
+              LevelRBuilder.builder()
+                                  .name("address1")
+                                  .column("wa_address1")
+                                  .uniqueMembers(false)
+                                  .build(),
+                              LevelRBuilder.builder()
+                                  .name("name")
+                                  .column("warehouse_name")
+                                  .uniqueMembers(false)
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .build());
+              return result;
+          }
+
+          @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
@@ -2645,38 +2687,6 @@ class NonEmptyTest extends BatchTestCase {
                           .name("Warehouse2")
                           .source("Warehouse2")
                           .foreignKey("warehouse_id")
-                          .build(),
-              PrivateDimensionRBuilder.builder()
-                          .name("Warehouse2")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .primaryKey("warehouse_id")
-                                  .relation(new TableR("warehouse"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("fax")
-                                          .column("warehouse_fax")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("address1")
-                                          .column("wa_address1")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("name")
-                                          .column("warehouse_name")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("name")
-                                          .column("warehouse_name")
-                                          .uniqueMembers(false)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
                           .build()
                   ))
                   .measures(List.of(

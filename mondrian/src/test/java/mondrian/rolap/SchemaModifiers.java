@@ -26,6 +26,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
@@ -64,6 +65,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ScriptRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ValueRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ViewRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
@@ -2839,40 +2841,6 @@ public class SchemaModifiers {
                                             .type(PropertyTypeEnum.STRING)
                                             .build()
                                     ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build());
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Store")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Country")
-                                    .column("store_country")
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store State")
-                                    .column("store_state")
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store City")
-                                    .column("store_city")
-                                    .uniqueMembers(false)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store Name")
-                                    .column("store_id")
-                                    .type(TypeEnum.NUMERIC)
-                                    .nameColumn("store_name")
-                                    .uniqueMembers(false)
                                     .build()
                             ))
                             .build()
@@ -5807,7 +5775,7 @@ public class SchemaModifiers {
                     .column("unit_sales")
                     .aggregator("sum")
                     .formatString("Standard")
-                    .formatter("FooBarCellFormatter.class.getName()")
+                    .formatter(UdfTest.FooBarCellFormatter.class.getName())
                     .build());
             }
             return result;
@@ -5843,7 +5811,7 @@ public class SchemaModifiers {
                     .formatString("Standard")
                     .cellFormatter(CellFormatterRBuilder.builder()
                         .script(ScriptRBuilder.builder()
-                            .cdata("      return \"foo\" + value + \"bar\";\n")
+                            .cdata("return \"foo\" + value + \"bar\";")
                             .build())
                         .build())
                     .build());
@@ -5959,7 +5927,7 @@ public class SchemaModifiers {
                     .dimension("Measures")
                     .cellFormatter(CellFormatterRBuilder.builder()
                         .script(ScriptRBuilder.builder()
-                            .cdata("      return \"foo\" + value + \"bar\";\n")
+                            .cdata("return \"foo\" + value + \"bar\";\n")
                             .build())
                         .build())
                     .build());
@@ -6102,12 +6070,12 @@ public class SchemaModifiers {
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
                 result.add(PrivateDimensionRBuilder.builder()
-                    .name("Promotion Media2")
+                    .name("Promotions2")
                     .foreignKey("promotion_id")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
                             .hasAll(true)
-                            .allMemberName("All Media")
+                            .allMemberName("All Promotions")
                             .primaryKey("promotion_id")
                             .defaultMember("[All Promotions]")
                             .relation(new TableR("promotion"))
@@ -6116,6 +6084,13 @@ public class SchemaModifiers {
                                     .name("Promotion Name")
                                     .column("promotion_id")
                                     .uniqueMembers(true)
+                                    .properties(List.of(
+                                        PropertyRBuilder.builder()
+                                            .name("Medium")
+                                            .column("media_type")
+                                            .formatter(UdfTest.FooBarPropertyFormatter.class.getName())
+                                            .build()
+                                    ))
                                     .formatter(UdfTest.FooBarMemberFormatter.class.getName())
                                     .build()
                             ))
@@ -6254,6 +6229,489 @@ public class SchemaModifiers {
                     )).build()
                 );
             }
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier11 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"PlusOne\" className=\""
+            + PlusOneUdf.class.getName()
+            + "\"/>\n");
+
+            */
+
+
+        public UdfTestModifier11(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("PlusOne")
+                .className(UdfTest.PlusOneUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier12 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"BadPlusOne\" className=\""
+            + BadPlusOneUdf.class.getName()
+            + "\"/>\n");
+
+            */
+
+
+        public UdfTestModifier12(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("BadPlusOne")
+                .className(UdfTest.BadPlusOneUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier14 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"GenericPlusOne\" className=\""
+            + PlusOrMinusOneUdf.class.getName()
+            + "\"/>\n"
+            + "<UserDefinedFunction name=\"GenericMinusOne\" className=\""
+            + PlusOrMinusOneUdf.class.getName()
+            + "\"/>\n");
+
+            */
+
+
+        public UdfTestModifier14(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("GenericPlusOne")
+                .className(UdfTest.PlusOrMinusOneUdf.class.getName())
+                .build());
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("GenericMinusOne")
+                .className(UdfTest.PlusOrMinusOneUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier15 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"StringMult\" className=\""
+            + StringMultUdf.class.getName()
+            + "\"/>\n");
+            */
+
+
+        public UdfTestModifier15(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("StringMult")
+                .className(UdfTest.StringMultUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier16 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"PlusOne\" className=\""
+            + PlusOneUdf.class.getName() + "\"/>\n"
+            + "<UserDefinedFunction name=\"AnotherMemberError\" className=\""
+            + AnotherMemberErrorUdf.class.getName() + "\"/>");
+
+            */
+
+
+        public UdfTestModifier16(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("PlusOne")
+                .className(UdfTest.PlusOneUdf.class.getName())
+                .build());
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("AnotherMemberError")
+                .className(UdfTest.AnotherMemberErrorUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier17 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"Reverse\" className=\""
+            + functionClass.getName()
+            + "\"/>\n");
+            */
+
+        private final Class<? extends UdfTest.ReverseFunction> functionClass;
+
+        public UdfTestModifier17(MappingSchema mappingSchema, final Class<? extends UdfTest.ReverseFunction> functionClass) {
+            super(mappingSchema);
+            this.functionClass = functionClass;
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema).stream().filter(f -> !"Reverse".equals(f.name())).toList());
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("Reverse")
+                .className(functionClass.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier18 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"Reverse2\" className=\""
+            + ReverseFunctionNotStatic.class.getName()
+            + "\"/>\n");
+            + "\"/>\n");            */
+
+
+        public UdfTestModifier18(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("Reverse2")
+                .className(UdfTest.ReverseFunctionNotStatic.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier19 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name=\"MemberName\" className=\""
+            + MemberNameFunction.class.getName()
+            + "\"/>\n");
+        */
+
+
+        public UdfTestModifier19(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("MemberName")
+                .className(UdfTest.MemberNameFunction.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier20 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name='StringMult'/>\n");
+        */
+
+
+        public UdfTestModifier20(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("StringMult")
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier21 extends RDbMappingSchemaModifier {
+
+        /*
+                        "<UserDefinedFunction name='StringMult' className='foo'>\n"
+            + " <Script>bar</Script>\n"
+            + "</UserDefinedFunction>");
+
+        */
+
+
+        public UdfTestModifier21(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("StringMult")
+                .script(ScriptRBuilder.builder()
+                    .cdata("bar")
+                    .build())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier22 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name='StringMult'>\n"
+            + " <Script language='bad'>bar</Script>\n"
+            + "</UserDefinedFunction>");
+
+        */
+
+
+        public UdfTestModifier22(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("StringMult")
+                .script(ScriptRBuilder.builder()
+                    .language("bad")
+                    .cdata("bar")
+                    .build())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier23 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name='StringMult'>\n"
+            + "  <Script language='JavaScript'>\n"
+            + "    function getParameterTypes() {\n"
+            + "      return new Array(\n"
+            + "        new mondrian.olap.type.NumericType(),\n"
+            + "        new mondrian.olap.type.StringType());\n"
+            + "    }\n"
+            + "    function getReturnType(parameterTypes) {\n"
+            + "      return new mondrian.olap.type.StringType();\n"
+            + "    }\n"
+            + "    function execute(evaluator, arguments) {\n"
+            + "      var n = arguments[0].evaluateScalar(evaluator);\n"
+            + "      var s = arguments[1].evaluateScalar(evaluator);\n"
+            + "      var r = \"\";\n"
+            + "      while (n-- > 0) {\n"
+            + "        r = r + s;\n"
+            + "      }\n"
+            + "      return r;\n"
+            + "    }\n"
+            + "  </Script>\n"
+            + "</UserDefinedFunction>\n");
+
+        */
+
+
+        public UdfTestModifier23(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            String f = """
+                            function getParameterTypes() {
+                                return new Array(
+                                    new mondrian.olap.type.NumericType(),
+                                    new mondrian.olap.type.StringType());
+                            }
+                            function getReturnType(parameterTypes) {
+                                return new mondrian.olap.type.StringType();
+                            }
+                            function execute(evaluator, arguments) {
+                                var n = arguments[0].evaluateScalar(evaluator);
+                                var s = arguments[1].evaluateScalar(evaluator);
+                                var r = \\"\\";
+                                while (n-- > 0) {
+                                    r = r + s;
+                                }
+                                  return r;
+                            }
+                """;
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("StringMult")
+                .script(ScriptRBuilder.builder()
+                    .language("JavaScript")
+                    .cdata(f)
+                    .build())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier24 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name='Factorial'>\n"
+            + "  <Script language='JavaScript'><![CDATA[\n"
+            + "    function getParameterTypes() {\n"
+            + "      return new Array(\n"
+            + "        new mondrian.olap.type.NumericType());\n"
+            + "    }\n"
+            + "    function getReturnType(parameterTypes) {\n"
+            + "      return new mondrian.olap.type.NumericType();\n"
+            + "    }\n"
+            + "    function execute(evaluator, arguments) {\n"
+            + "      var n = arguments[0].evaluateScalar(evaluator);\n"
+            + "      return factorial(n);\n"
+            + "    }\n"
+            + "    function factorial(n) {\n"
+            + "      return n <= 1 ? 1 : n * factorial(n - 1);\n"
+            + "    }\n"
+            + "  ]]>\n"
+            + "  </Script>\n"
+            + "</UserDefinedFunction>\n");
+        */
+
+
+        public UdfTestModifier24(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            String f = """
+                    function getParameterTypes() {
+                      return new Array(
+                        new mondrian.olap.type.NumericType());
+                    }
+                    function getReturnType(parameterTypes) {
+                      return new mondrian.olap.type.NumericType();
+                    }
+                    function execute(evaluator, arguments) {
+                      var n = arguments[0].evaluateScalar(evaluator);
+                      return factorial(n);
+                    }
+                    function factorial(n) {
+                      return n <= 1 ? 1 : n * factorial(n - 1);
+                    }
+                    """;
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("Factorial")
+                .script(ScriptRBuilder.builder()
+                    .language("JavaScript")
+                    .cdata(f)
+                    .build())
+                .build());
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier25 extends RDbMappingSchemaModifier {
+
+        /*
+            "<UserDefinedFunction name='Factorial'>\n"
+            + "  <Script language='JavaScript'><![CDATA[\n"
+            + "    function getParameterTypes() {\n"
+            + "      return new Array(\n"
+            + "        new mondrian.olap.type.NumericType());\n"
+            + "    }\n"
+            + "    function getReturnType(parameterTypes) {\n"
+            + "      return new mondrian.olap.type.NumericType();\n"
+            + "    }\n"
+            + "    function execute(evaluator, arguments) {\n"
+            + "      var n = arguments[0].evaluateScalar(evaluator);\n"
+            + "      return factorial(n);\n"
+            + "    }\n"
+            + "    function factorial(n) {\n"
+            + "      return n <= 1 ? 1 : n * factorial_xx(n - 1);\n"
+            + "    }\n"
+            + "  ]]>\n"
+            + "  </Script>\n"
+            + "</UserDefinedFunction>\n");
+        */
+
+
+        public UdfTestModifier25(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            String f = """
+                    function getParameterTypes() {
+                      return new Array(
+                        new mondrian.olap.type.NumericType());
+                    }
+                    function getReturnType(parameterTypes) {
+                      return new mondrian.olap.type.NumericType();
+                    }
+                    function execute(evaluator, arguments) {
+                      var n = arguments[0].evaluateScalar(evaluator);
+                      return factorial(n);
+                    }
+                    function factorial(n) {
+                      return n <= 1 ? 1 : n * factorial_xx(n - 1);
+                    }
+                        """;
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("Factorial")
+                .script(ScriptRBuilder.builder()
+                    .language("JavaScript")
+                    .cdata(f)
+                    .build())
+                .build());
             return result;
         }
     }
