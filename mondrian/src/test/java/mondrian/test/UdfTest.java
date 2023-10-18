@@ -45,11 +45,9 @@ import org.olap4j.metadata.Property;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1364,6 +1362,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatter(TestContextWrapper context) {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1375,6 +1374,10 @@ public class UdfTest {
             + "'/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier6(schema)));
         assertExprReturns(context.createConnection(),
             "[Promotion Media2].FirstChild.Caption",
             "fooBulk Mailbar");
@@ -1388,6 +1391,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatterNested(TestContextWrapper context) {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1401,6 +1405,11 @@ public class UdfTest {
             + "      </Level>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier6(schema)));
+
         assertExprReturns(context.createConnection(),
             "[Promotion Media2].FirstChild.Caption",
             "fooBulk Mailbar");
@@ -1413,6 +1422,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatterScript(TestContextWrapper context) {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1428,6 +1438,10 @@ public class UdfTest {
             + "      </Level>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier7(schema)));
         assertExprReturns(context.createConnection(),
             "[Promotion Media2].FirstChild.Caption",
             "fooBulk Mailbar");
@@ -1443,6 +1457,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatter(TestContextWrapper context) throws SQLException {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1455,6 +1470,11 @@ public class UdfTest {
             + "    </Level>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier8(schema)));
+
         final CellSet result =
             executeOlap4jQuery(context.createOlap4jConnection(),
                 "select [Promotions2].Children on 0\n"
@@ -1477,6 +1497,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatterNested(TestContextWrapper context) throws SQLException {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1491,6 +1512,11 @@ public class UdfTest {
             + "    </Level>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier9(schema)));
+
         final CellSet result =
             executeOlap4jQuery(context.createOlap4jConnection(),
                 "select [Promotions2].Children on 0\n"
@@ -1512,6 +1538,7 @@ public class UdfTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatterScript(TestContextWrapper context) throws SQLException {
         prepareContext(context);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1530,6 +1557,11 @@ public class UdfTest {
             + "    </Level>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.UdfTestModifier10(schema)));
+
         final CellSet result =
             executeOlap4jQuery(context.createOlap4jConnection(),
                 "select [Promotions2].Children on 0\n"
