@@ -5968,4 +5968,294 @@ public class SchemaModifiers {
         }
     }
 
+    public static class UdfTestModifier6 extends RDbMappingSchemaModifier {
+
+        /*
+            "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
+            + "    <Hierarchy hasAll='true' allMemberName='All Media' primaryKey='promotion_id'>\n"
+            + "      <Table name='promotion'/>\n"
+            + "      <Level name='Media Type' column='media_type'\n"
+            + "          uniqueMembers='true' formatter='"
+            + FooBarMemberFormatter.class.getName()
+            + "'/>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>"));
+            */
+
+
+        public UdfTestModifier6(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotion Media2")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Media")
+                            .primaryKey("promotion_id")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Media Type")
+                                    .column("media_type")
+                                    .uniqueMembers(true)
+                                    .formatter(UdfTest.FooBarMemberFormatter.class.getName())
+                                    .build()
+                            ))
+                            .build()
+                    )).build()
+                );
+            }
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier7 extends RDbMappingSchemaModifier {
+
+        /*
+            "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
+            + "    <Hierarchy hasAll='true' allMemberName='All Media' primaryKey='promotion_id'>\n"
+            + "      <Table name='promotion'/>\n"
+            + "      <Level name='Media Type' column='media_type'\n"
+            + "          uniqueMembers='true'>\n"
+            + "        <MemberFormatter>\n"
+            + "          <Script language='JavaScript'>\n"
+            + "             return \"foo\" + member.getName() + \"bar\"\n"
+            + "          </Script>\n"
+            + "        </MemberFormatter>\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>"));
+
+            */
+
+        public UdfTestModifier7(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotion Media2")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Media")
+                            .primaryKey("promotion_id")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Media Type")
+                                    .column("media_type")
+                                    .uniqueMembers(true)
+                                    .memberFormatter(CellFormatterRBuilder.builder()
+                                        .script(ScriptRBuilder.builder()
+                                            .language("JavaScript")
+                                            .cdata("return \"foo\" + member.getName() + \"bar\"\n")
+                                            .build())
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    )).build()
+                );
+            }
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier8 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
+            + "  <Hierarchy hasAll='true' allMemberName='All Promotions' primaryKey='promotion_id' defaultMember='[All Promotions]'>\n"
+            + "    <Table name='promotion'/>\n"
+            + "    <Level name='Promotion Name' column='promotion_id' uniqueMembers='true'>\n"
+            + "      <Property name='Medium' column='media_type' formatter='"
+            + FooBarPropertyFormatter.class.getName()
+            + "'/>\n"
+            + "    </Level>\n"
+            + "  </Hierarchy>\n"
+            + "</Dimension>"));
+
+            */
+
+
+        public UdfTestModifier8(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotion Media2")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Media")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_id")
+                                    .uniqueMembers(true)
+                                    .formatter(UdfTest.FooBarMemberFormatter.class.getName())
+                                    .build()
+                            ))
+                            .build()
+                    )).build()
+                );
+            }
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier9 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
+            + "  <Hierarchy hasAll='true' allMemberName='All Promotions' primaryKey='promotion_id' defaultMember='[All Promotions]'>\n"
+            + "    <Table name='promotion'/>\n"
+            + "    <Level name='Promotion Name' column='promotion_id' uniqueMembers='true'>\n"
+            + "      <Property name='Medium' column='media_type'>\n"
+            + "        <PropertyFormatter className='"
+            + FooBarPropertyFormatter.class.getName()
+            + "'/>\n"
+            + "      </Property>\n"
+            + "    </Level>\n"
+            + "  </Hierarchy>\n"
+            + "</Dimension>"));
+
+            */
+
+
+        public UdfTestModifier9(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotions2")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_id")
+                                    .uniqueMembers(true)
+                                    .properties(List.of(
+                                        PropertyRBuilder.builder()
+                                            .name("Medium")
+                                            .column("media_type")
+                                            .propertyFormatter(CellFormatterRBuilder.builder()
+                                                .className(UdfTest.FooBarPropertyFormatter.class.getName())
+                                                .build())
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    )).build()
+                );
+            }
+            return result;
+        }
+    }
+
+    public static class UdfTestModifier10 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
+            + "  <Hierarchy hasAll='true' allMemberName='All Promotions' primaryKey='promotion_id' defaultMember='[All Promotions]'>\n"
+            + "    <Table name='promotion'/>\n"
+            + "    <Level name='Promotion Name' column='promotion_id' uniqueMembers='true'>\n"
+            + "      <Property name='Medium' column='media_type'>\n"
+            + "        <PropertyFormatter>\n"
+            + "          <Script language='JavaScript'>\n"
+            + "            return \"foo\" + member.getName() + \"/\"\n"
+            + "                   + propertyName + \"/\"\n"
+            + "                   + propertyValue + \"bar\";\n"
+            + "          </Script>\n"
+            + "        </PropertyFormatter>\n"
+            + "      </Property>\n"
+            + "    </Level>\n"
+            + "  </Hierarchy>\n"
+            + "</Dimension>"));
+
+            */
+
+
+        public UdfTestModifier10(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotions2")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_id")
+                                    .uniqueMembers(true)
+                                    .properties(List.of(
+                                        PropertyRBuilder.builder()
+                                            .name("Medium")
+                                            .column("media_type")
+                                            .propertyFormatter(CellFormatterRBuilder.builder()
+                                                .script(ScriptRBuilder.builder()
+                                                    .language("JavaScript")
+                                                    .cdata("return \"foo\" + member.getName() + \"/\"\n + propertyName + \"/\"\n + propertyValue + \"bar\";\n")
+                                                    .build())
+                                                .build())
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    )).build()
+                );
+            }
+            return result;
+        }
+    }
+
 }
