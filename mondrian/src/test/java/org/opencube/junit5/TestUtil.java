@@ -18,31 +18,30 @@
  */
 package org.opencube.junit5;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.Constants.PROJECT_DIR;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
-
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.Util;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap4j.MondrianOlap4jConnection;
+import mondrian.rolap.MemberCacheHelper;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SmartMemberReader;
+import mondrian.server.Execution;
+import mondrian.server.Statement;
+import mondrian.spi.DynamicSchemaProcessor;
+import mondrian.test.FoodmartTestContextImpl;
+import mondrian.test.NotUseOldTestContext;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.DelegatingInvocationHandler;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
@@ -64,6 +63,8 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
@@ -74,30 +75,33 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.Util;
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap4j.MondrianOlap4jConnection;
-import mondrian.rolap.MemberCacheHelper;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.rolap.RolapUtil;
-import mondrian.rolap.SmartMemberReader;
-import mondrian.server.Execution;
-import mondrian.server.Statement;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Proxy;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Formatter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.Constants.PROJECT_DIR;
+
 //import mondrian.spi.DialectManager;
-import mondrian.spi.DynamicSchemaProcessor;
-import mondrian.test.FoodmartTestContextImpl;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.test.NotUseOldTestContext;
-import mondrian.util.DelegatingInvocationHandler;
 
 public class TestUtil {
 
@@ -1306,11 +1310,18 @@ public class TestUtil {
 			return rawSchema;
 		}
 
+		@Deprecated
 		public static void withSchema(TestContextWrapper context, String schema) {
 			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
 		}
 
-		public static void withRole(TestContextWrapper context, String roleName) {
+	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {
+          RolapSchemaPool.instance().clear();
+          MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+          context.setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));
+    }
+
+    public static void withRole(TestContextWrapper context, String roleName) {
 			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
 		}
 
