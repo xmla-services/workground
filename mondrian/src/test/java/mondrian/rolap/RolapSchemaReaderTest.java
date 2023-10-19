@@ -197,7 +197,7 @@ class RolapSchemaReaderTest {
                                             .build(),
                                         HierarchyGrantRBuilder.builder()
                                             .hierarchy(timeWeekly)
-                                            .access(AccessEnum.NONE)
+                                            .access(AccessEnum.ALL)
                                             .build()
                                     ))
                                     .build()

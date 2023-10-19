@@ -38,14 +38,19 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnu
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.FormulaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PropertyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.StringProperty;
@@ -75,7 +80,6 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests for NON EMPTY Optimization, includes SqlConstraint type hierarchy and RolapNative classes.
@@ -873,10 +877,9 @@ class NonEmptyTest extends BatchTestCase {
                   ))
                   .measures(List.of(
                       MeasureRBuilder.builder()
-                          .name("Media")
-                          .column("media_type")
-                          .aggregator("max")
-                          .datatype(MeasureDataTypeEnum.STRING)
+                          .name("Unit Sales")
+                          .column("unit_sales")
+                          .aggregator("sum")
                           .build()
                   ))
                   .build());
@@ -912,6 +915,7 @@ class NonEmptyTest extends BatchTestCase {
       null );
     withSchema(context, schema);
      */
+      RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
       context.setDatabaseMappingSchemaProviders(List.of(new TestBug1515302Modifier(schema)));
     assertQueryReturns(context.getConnection(),
@@ -969,11 +973,11 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCube(TestContextWrapper context) {
+  void testVirtualCube(TestContext context) {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       99,
       3,
       "select NON EMPTY {[Measures].[Unit Sales], [Measures].[Warehouse Sales]} ON COLUMNS, "
@@ -1771,8 +1775,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSetInSlicerResults(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testSetInSlicerResults(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Measures].[Unit Sales]} ON columns,  "
         + "NON EMPTY [Product].Children ON rows from [Sales] "
         + "where {[Time].[1998].[Q1].[1], [Time].[1997].[Q1].[1]} ",
@@ -2263,7 +2267,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMultiLevelMemberConstraintNonNullParent(TestContextWrapper context)  {
+  void testMultiLevelMemberConstraintNonNullParent(TestContext context)  {
     String query =
       "with "
         + "set [Filtered Store City Set] as "
@@ -2312,7 +2316,7 @@ class NonEmptyTest extends BatchTestCase {
         + "and (`product_class`.`product_family` = 'Food') "
         + "group by `store`.`store_country`, `store`.`store_state`, `store`.`store_city`, `product_class`"
         + ".`product_family` order by "
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "ISNULL(`c0`) ASC, `c0` ASC, ISNULL(`c1`) ASC, `c1` ASC, "
         + "ISNULL(`c2`) ASC, `c2` ASC, ISNULL(`c3`) ASC, `c3` ASC"
         :
@@ -2357,7 +2361,7 @@ class NonEmptyTest extends BatchTestCase {
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+    assertQuerySql(context.getConnection(), query, patterns );
   }
 
   /**
@@ -2716,6 +2720,7 @@ class NonEmptyTest extends BatchTestCase {
         null );
     withSchema(context, schema);
      */
+      RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
       context.setDatabaseMappingSchemaProviders(
           List.of(new TestMultiLevelMemberConstraintMixedNullNonNullParentModifier(schema)));
@@ -2820,6 +2825,46 @@ class NonEmptyTest extends BatchTestCase {
           }
 
           @Override
+          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+              List<MappingPrivateDimension> result = new ArrayList<>();
+              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+              result.add(
+            		  PrivateDimensionRBuilder.builder()
+                      .name("Warehouse2")
+                      .hierarchies(List.of(
+                          HierarchyRBuilder.builder()
+                              .hasAll(true)
+                              .primaryKey("warehouse_id")
+                              .relation(new TableR("warehouse"))
+                              .levels(List.of(
+                                  LevelRBuilder.builder()
+                                      .name("address3")
+                                      .column("wa_address3")
+                                      .uniqueMembers(true)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("address2")
+                                      .column("wa_address2")
+                                      .uniqueMembers(false)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("fax")
+                                      .column("warehouse_fax")
+                                      .uniqueMembers(false)
+                                      .build(),
+                                  LevelRBuilder.builder()
+                                      .name("name")
+                                      .column("warehouse_name")
+                                      .uniqueMembers(false)
+                                      .build()
+                              ))
+                              .build()
+                      ))
+                      .build());
+              return result;
+          }
+
+          @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
@@ -2836,38 +2881,6 @@ class NonEmptyTest extends BatchTestCase {
                           .name("Warehouse2")
                           .source("Warehouse2")
                           .foreignKey("warehouse_id")
-                          .build(),
-              PrivateDimensionRBuilder.builder()
-                          .name("Warehouse2")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .primaryKey("warehouse_id")
-                                  .relation(new TableR("warehouse"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("address3")
-                                          .column("wa_address3")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("address2")
-                                          .column("wa_address2")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("fax")
-                                          .column("warehouse_fax")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("name")
-                                          .column("warehouse_name")
-                                          .uniqueMembers(false)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
                           .build()
                   ))
                   .measures(List.of(
@@ -2897,6 +2910,7 @@ class NonEmptyTest extends BatchTestCase {
         null );
     withSchema(context, schema);
     */
+      RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
       context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier(schema)));
     SqlPattern[] patterns = {
@@ -5695,6 +5709,56 @@ class NonEmptyTest extends BatchTestCase {
                         ))
                         .build()
                   ))
+                  .cubes(List.of(
+                      CubeRBuilder.builder()
+                          .name("Sales")
+                          .defaultMeasure("Unit Sales")
+                          .fact(new TableR("sales_fact_1997"))
+                          .dimensionUsageOrDimensions(List.of(
+                              DimensionUsageRBuilder.builder()
+                                  .name("Store")
+                                  .source("Store")
+                                  .foreignKey("store_id")
+                                  .build()
+                          ))
+                          .measures(List.of(
+                              MeasureRBuilder.builder()
+                                  .name("Unit Sales")
+                                  .column("unit_sales")
+                                  .aggregator("sum")
+                                  .formatString("Standard")
+                                  .build()
+                          ))
+                          .calculatedMembers(List.of(
+                              CalculatedMemberRBuilder.builder()
+                                  .name("dummyMeasure")
+                                  .dimension("Measures")
+                                  .formulaElement(FormulaRBuilder.builder().cdata("1").build())
+                                  .build()
+                          ))
+                          .build()
+                  ))
+                  .virtualCubes(List.of(
+                      VirtualCubeRBuilder.builder()
+                          .defaultMeasure("dummyMeasure")
+                          .name("virtual")
+                          .virtualCubeDimensions(List.of(
+                              VirtualCubeDimensionRBuilder.builder()
+                                  .name("Store")
+                                  .build()
+                          ))
+                          .virtualCubeMeasures(List.of(
+                              VirtualCubeMeasureRBuilder.builder()
+                                  .cubeName("Sales")
+                                  .name("[Measures].[Unit Sales]")
+                                  .build(),
+                              VirtualCubeMeasureRBuilder.builder()
+                                  .cubeName("Sales")
+                                  .name("[Measures].[dummyMeasure]")
+                                  .build()
+                          ))
+                          .build()
+                  ))
                   .build();
           }
       }
@@ -5734,6 +5798,7 @@ class NonEmptyTest extends BatchTestCase {
           + "  </VirtualCube>"
           + "</Schema>" );
        */
+      RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
       context.setDatabaseMappingSchemaProviders(
           List.of(new TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(schema)));
@@ -5917,7 +5982,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterChildlessSnowflakeMembers(TestContextWrapper context)  {
+  void testFilterChildlessSnowflakeMembers(TestContext context)  {
     propSaver.set(
       MondrianProperties.instance().FilterChildlessSnowflakeMembers,
       false );
@@ -5927,14 +5992,14 @@ class NonEmptyTest extends BatchTestCase {
         "select `product_class`.`product_family` as `c0` "
           + "from `product_class` as `product_class` "
           + "group by `product_class`.`product_family` "
-          + ( getDialect(context.createConnection()).requiresOrderByAlias()
+          + ( getDialect(context.getConnection()).requiresOrderByAlias()
           ? "order by ISNULL(`c0`) ASC,"
           + " `c0` ASC"
           : "order by ISNULL(`product_class`.`product_family`) ASC,"
           + " `product_class`.`product_family` ASC" ),
         null )
     };
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       assertQuerySql(
               connection,
@@ -6073,6 +6138,7 @@ class NonEmptyTest extends BatchTestCase {
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
+    /*
     final String schema =
       "<?xml version=\"1.0\"?>\n"
         + "<Schema name=\"custom\">\n"
@@ -6120,7 +6186,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </SchemaGrant>\n"
         + "</Role> \n"
         + "</Schema>\n";
-
+     */
     final String query =
       "With\n"
         + "Set [*BASE_MEMBERS_Product] as 'Filter([Store].[Store State].Members,[Store].CurrentMember.Caption Matches"
@@ -6233,7 +6299,10 @@ class NonEmptyTest extends BatchTestCase {
         oracleWithFactJoin, oracleWithFactJoin )
     };
 
-    withSchema(context, schema );
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier6(schema)));
+    //withSchema(context, schema );
 
     // The filter condition does not require a join to the fact table.
     assertQuerySql(context.createConnection(), query, patterns );
@@ -6270,6 +6339,7 @@ class NonEmptyTest extends BatchTestCase {
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
+    /*
     final String schema =
       "<?xml version=\"1.0\"?>\n"
         + "<Schema name=\"custom\">\n"
@@ -6317,7 +6387,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </SchemaGrant>\n"
         + "</Role> \n"
         + "</Schema>\n";
-
+    */
     final String query =
       "With\n"
         + "Set [*BASE_MEMBERS_Product] as 'Filter([Store].[Store State].Members,[Store].CurrentMember.Caption Matches"
@@ -6425,7 +6495,10 @@ class NonEmptyTest extends BatchTestCase {
         oracleWithFactJoin, oracleWithFactJoin )
     };
 
-    withSchema(context, schema );
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier6(schema)));
+    //withSchema(context, schema );
 
     // The filter condition does not require a join to the fact table.
     assertQuerySql(context.createConnection(), query, patterns );
@@ -6616,7 +6689,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian1658(TestContextWrapper context)  {
+  void testMondrian1658(TestContext context)  {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     String mdx =
       "Select\n"
@@ -6639,7 +6712,7 @@ class NonEmptyTest extends BatchTestCase {
         + "{[Gender].[F], [Time].[1997].[Q2]}\n"
         + "Row #0: 33,381\n"
         + "Row #1: 30,992\n";
-    assertQueryReturns(context.createConnection(), mdx, expected );
+    assertQueryReturns(context.getConnection(), mdx, expected );
   }
 
   @ParameterizedTest
@@ -7539,6 +7612,7 @@ class NonEmptyTest extends BatchTestCase {
   void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContextWrapper context)  {
     // http://jira.pentaho.com/browse/ANALYZER-3630
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+    /*
     withSchema(context,
         "<Schema name=\"FoodMart\">"
           + "  <Dimension name=\"Store\">"
@@ -7575,7 +7649,11 @@ class NonEmptyTest extends BatchTestCase {
           + "    <VirtualCubeMeasure name=\"[Measures].[dummyMeasure2]\" cubeName=\"Sales\" />"
           + "  </VirtualCube>"
           + "</Schema>" );
-    verifySameNativeAndNot(context.createConnection(),
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier7(schema)));
+      verifySameNativeAndNot(context.createConnection(),
       "select "
         + " [Measures].[dummyMeasure2] on COLUMNS, "
         + " NON EMPTY CrossJoin([Store].[Store State].Members, Time.[Year].members) ON ROWS "
