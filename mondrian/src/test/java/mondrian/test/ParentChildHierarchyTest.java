@@ -12,6 +12,30 @@
 */
 package mondrian.test;
 
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.util.Bug;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,31 +46,6 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.unfold;
 import static org.opencube.junit5.TestUtil.upgradeActual;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Dimension;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.util.Bug;
 
 /**
  * Tests for parent-child hierarchies.
@@ -71,7 +70,8 @@ class ParentChildHierarchyTest {
      * [Employee]) is equivalent to the base hierarchy; the [Closure] level
      * relates each descendant to all its ancestors.
      */
-    private void getEmpClosureTestContext(TestContextWrapper context) {
+    private void getEmpClosureTestContext(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "HR",
             "  <Dimension name=\"EmployeesClosure\" foreignKey=\"employee_id\">\n"
@@ -87,6 +87,10 @@ class ParentChildHierarchyTest {
             + "            table=\"employee_closure\" column=\"employee_id\"/>\n"
             + "      </Hierarchy>\n"
             + "  </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier1(schema)));
     }
 
     /**
@@ -95,7 +99,8 @@ class ParentChildHierarchyTest {
      * this is almost identical to employee, except we do a join with store
      * to validate joins with closures work
      */
-    private void getEmpSnowFlakeClosureTestContext(TestContextWrapper context) {
+    private void getEmpSnowFlakeClosureTestContext(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "HR",
             "<Dimension name=\"EmployeeSnowFlake\" foreignKey=\"employee_id\">"
@@ -123,6 +128,11 @@ class ParentChildHierarchyTest {
             + "  </Level>"
             + "</Hierarchy>"
             + "</Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier2(schema)));
+
     }
 
     /**
@@ -131,7 +141,8 @@ class ParentChildHierarchyTest {
      * this is almost identical to employee, except we do a join with store
      * to validate joins with closures work
      */
-    private void getEmpSharedClosureTestContext(TestContextWrapper context) {
+    private void getEmpSharedClosureTestContext(TestContext context) {
+        /*
         String sharedClosureDimension =
             "<Dimension name=\"SharedEmployee\">"
             + "<Hierarchy hasAll=\"true\""
@@ -179,6 +190,11 @@ class ParentChildHierarchyTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 sharedClosureDimension, cube, null, null, null, null);
         withSchema(context, schema);
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier3(schema)));
+
     }
 
     /**
@@ -187,7 +203,8 @@ class ParentChildHierarchyTest {
      * closure. this is almost identical to employee, except we removed the
      * closure to validate that non-closures work
      */
-    private void getEmpNonClosureTestContext(TestContextWrapper context) {
+    private void getEmpNonClosureTestContext(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "HR",
             "<Dimension name=\"EmployeesNonClosure\" foreignKey=\"employee_id\">"
@@ -207,11 +224,17 @@ class ParentChildHierarchyTest {
             + "</Hierarchy>"
             + "</Dimension>",
             null));
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier4(schema)));
+
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDotMembersNoClosure(TestContextWrapper context) {
+    void testDotMembersNoClosure(TestContext context) {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",
                 "<Dimension name=\"EmployeesNoClosure\" foreignKey=\"employee_id\">\n"
@@ -227,7 +250,12 @@ class ParentChildHierarchyTest {
                 + "</Level>\n"
                 + "</Hierarchy>\n"
                 + "</Dimension>\n"));
-        assertQueryReturns(context.createConnection(),
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier5(schema)));
+
+        assertQueryReturns(context.getConnection(),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'Head(FILTER([*BASE_MEMBERS__EmployeesNoClosure_], NOT ISEMPTY ([Measures].[Count])), 5)'\n"
             + "SET [*BASE_MEMBERS__EmployeesNoClosure_] AS '[EmployeesNoClosure].[Employee Id].MEMBERS'\n"
@@ -265,9 +293,9 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSnowflakeClosure(TestContextWrapper context) {
+    void testSnowflakeClosure(TestContext context) {
         getEmpSnowFlakeClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[EmployeeSnowFlake]} on rows\n"
@@ -289,9 +317,9 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testSharedClosureParentChildHierarchy(TestContextWrapper context) {
+    void testSharedClosureParentChildHierarchy(TestContext context) {
         getEmpSharedClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "Select "
             + "{[SharedEmployee].[All SharedEmployees].[Sheri Nowmer].[Derrick Whelply].children} on columns "
             // + [SharedEmployee].[Sheri Nowmer].children
@@ -314,14 +342,14 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonClosureParentChildHierarchy(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testNonClosureParentChildHierarchy(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "Select {[Employees].members} on columns from HR");
         String expected = upgradeActual(
             TestUtil.toString(result))
           .replace("[Employees]", "[EmployeesNonClosure]");
         getEmpNonClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "Select {[EmployeesNonClosure].members} on columns from HR",
           expected, 120000l);
     }
@@ -447,9 +475,9 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctAllExplicitClosure(TestContextWrapper context) {
+    void testDistinctAllExplicitClosure(TestContext context) {
         getEmpClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[EmployeesClosure]} on rows\n"
@@ -471,11 +499,11 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctChildrenOfAllExplicitClosure(TestContextWrapper context) {
+    void testDistinctChildrenOfAllExplicitClosure(TestContext context) {
         // the children of the closed relation are all the descendants, so limit
         // results
         getEmpClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[EmployeesClosure].FirstChild} on rows\n"
@@ -497,9 +525,9 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctSubtreeExplicitClosure(TestContextWrapper context) {
+    void testDistinctSubtreeExplicitClosure(TestContext context) {
         getEmpClosureTestContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[EmployeesClosure].[All Employees].[7]} on rows\n"
@@ -733,12 +761,12 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testHierarchyFalseCycle(TestContextWrapper context) {
-        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.createConnection()))) {
+    void testHierarchyFalseCycle(TestContext context) {
+        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
         }
         // On the regular HR cube, this has always worked.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT {[Employees].[All Employees].Children} on columns,\n"
             + " {[Measures].[Org Salary]} on rows\n"
             + "FROM [HR]",
@@ -751,6 +779,7 @@ class ParentChildHierarchyTest {
             + "{[Measures].[Org Salary]}\n"
             + "Row #0: $39,431.67\n");
 
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -783,8 +812,13 @@ class ParentChildHierarchyTest {
             null,
             null);
         withSchema(context,schema);
+         */
         // On a cube with fewer dimensions, this gave a false failure.
-        assertQueryReturns(context.createConnection(),
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier6(schema)));
+
+        assertQueryReturns(context.getConnection(),
             "SELECT {[Employees].[All Employees].Children} on columns,\n"
             + " {[Measures].[Org Salary]} on rows\n"
             + "FROM [HR-fewer-dims]",
@@ -980,7 +1014,7 @@ class ParentChildHierarchyTest {
             + " `salary`.`salary_paid` as `Org Salary` "
             + "from"
             + " `salary` =as= `salary`,"
-            + " `time_by_day` =as= `time_by_day`,"            
+            + " `time_by_day` =as= `time_by_day`,"
             + " `store` =as= `store`,"
             + " `employee` =as= `employee`,"
             + " `position` =as= `position`,"
@@ -1092,10 +1126,11 @@ class ParentChildHierarchyTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testParentChildOrdinal(TestContextWrapper context) {
-        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.createConnection()))) {
+    void testParentChildOrdinal(TestContext context) {
+        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
         }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -1128,8 +1163,13 @@ class ParentChildHierarchyTest {
             null,
             null);
         withSchema(context, schema);
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier7(schema)));
+
         // Make sure <Member>.CHILDREN is sorted.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki].Children} on columns from [HR-ordered]",
 
             "Axis #0:\n"
@@ -1141,7 +1181,7 @@ class ParentChildHierarchyTest {
             + "Row #0: $152.76\n");
 
         // Make sure <Member>.DESCENDANTS is sorted.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {HEAD(DESCENDANTS([Employees].[Sheri Nowmer], [Employees].[Employee Id], LEAVES), 6)} on columns from [HR-ordered]",
             "Axis #0:\n"
             + "{}\n"
@@ -1199,7 +1239,8 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testClosureTableInVirtualCube(TestContextWrapper context) {
+    void testClosureTableInVirtualCube(TestContext context) {
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 "<Dimension name=\"Employees\" >"
@@ -1238,7 +1279,11 @@ class ParentChildHierarchyTest {
             null,
             null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier8(schema)));
+        assertQueryReturns(context.getConnection(),
             "select "
             + "[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki].Children"
             + " ON COLUMNS, "
@@ -1261,10 +1306,11 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testClosureVsNoClosure(TestContextWrapper context) {
-        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.createConnection()))) {
+    void testClosureVsNoClosure(TestContext context) {
+        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
         }
+        /*
         String cubestart =
                 "<Cube name=\"HR4C\">\n"
                         + "  <Table name=\"salary\"/>\n"
@@ -1291,6 +1337,10 @@ class ParentChildHierarchyTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cubestart + closure + cubeend, null, null, null, null);
         withSchema(context, schema);
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier9(schema)));
 
         String mdx;
         String expected;
@@ -1301,7 +1351,7 @@ class ParentChildHierarchyTest {
                         + " NON EMPTY {[Employees].AllMembers} ON ROWS\n"
                         + "from [HR4C]";
         expected =
-                TestUtil.toString(executeQuery(context.createConnection(), mdx));
+                TestUtil.toString(executeQuery(context.getConnection(), mdx));
         assertTrue(unfold(expected).contains("Row #0: 21,252\n"), expected);
 
         // 2. Run a small query with known results on both contexts.
@@ -1335,17 +1385,22 @@ class ParentChildHierarchyTest {
                         + "Row #6: 60\n"
                         + "Row #7: 168\n"
                         + "Row #8: 60\n";
-        assertQueryReturns(context.createConnection(), mdx, expected);
-
+        assertQueryReturns(context.getConnection(), mdx, expected);
+        /*
         schema = SchemaUtil.getSchema(baseSchema,
                 null, cubestart + cubeend, null, null, null, null);
         withSchema(context, schema);
+         */
+        RolapSchemaPool.instance().clear();
+        schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier10(schema)));
+
         // Need to unfold because 'expect' has platform-specific line-endings,
         // yet assertQueryReturns assumes that it contains linefeeds.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 mdx, unfold(expected));
 
-        assertQueryReturns(context.createConnection(), mdx, expected);
+        assertQueryReturns(context.getConnection(), mdx, expected);
     }
 
     @ParameterizedTest
@@ -1392,13 +1447,14 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBridgeTable(TestContextWrapper context) {
+    void testBridgeTable(TestContext context) {
         if (!Bug.BugMondrian441Fixed) {
             return;
         }
         // The test case in the bug has a new table "bri_store_employee". For
         // convenience of configuration, we replace that with an InlineTable
         // here.
+        /*
         withSchema(context,
             "<Schema name='FoodMart'>\n"
             + "  <Dimension type='StandardDimension' highCardinality='false' name='Employee'>\n"
@@ -1455,7 +1511,11 @@ class ParentChildHierarchyTest {
             + "    <Measure name='Store Sales' column='store_sales' datatype='Numeric' formatString='#,###.00' aggregator='sum' visible='true'/>\n"
             + "  </Cube>\n"
             + "</Schema>");
-        assertQueryReturns(context.createConnection(),
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier11(schema)));
+        assertQueryReturns(context.getConnection(),
             "select\n"
             + " NON EMPTY {[Measures].[Store Sales]} ON COLUMNS,\n"
             + " {[Employee].[Sheri Nowmer]} on ROWS\n"

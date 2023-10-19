@@ -9,20 +9,10 @@
 
 package mondrian.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.checkThrowable;
-import static org.opencube.junit5.TestUtil.executeQuery;
-
-import java.sql.SQLException;
-import java.util.Arrays;
-
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.AllocationPolicy;
@@ -34,11 +24,23 @@ import org.olap4j.PreparedOlapStatement;
 import org.olap4j.Scenario;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
+
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeQuery;
 
 /**
  * Test for writeback functionality.
@@ -234,6 +236,7 @@ class ScenarioTest {
         // to cube definition, and [Scenario] dimension will appear. Also, need
         // more elegant way for users to create dimensions that only contain
         // calculated members.
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "<Dimension name='Scenario' foreignKey='time_id'>\n"
@@ -248,6 +251,11 @@ class ScenarioTest {
                 + "  </Hierarchy>\n"
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ScenarioTestModifier1(schema)));
+
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());
         final Scenario scenario = connection.getScenario();
@@ -417,6 +425,7 @@ class ScenarioTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian815(TestContextWrapper context) throws SQLException {
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "<Dimension name='Scenario' foreignKey='time_id'>\n"
@@ -431,6 +440,11 @@ class ScenarioTest {
                 + "  </Hierarchy>\n"
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ScenarioTestModifier1(schema)));
+
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());
         final Scenario scenario = connection.createScenario();

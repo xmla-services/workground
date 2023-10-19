@@ -9,22 +9,14 @@
 
 package mondrian.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.fun.sort.Sorter;
+import mondrian.olap.type.NumericType;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.spi.UserDefinedFunction;
+import mondrian.util.Bug;
 import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -34,6 +26,7 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -42,20 +35,28 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.fun.sort.Sorter;
-import mondrian.olap.type.NumericType;
-import mondrian.spi.UserDefinedFunction;
-import mondrian.util.Bug;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Various unit tests concerned with performance.
@@ -88,12 +89,12 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void  testBugMondrian550(TestContextWrapper context) {
+  void  testBugMondrian550(TestContext context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
       new Statistician( "testBugMondrian550" );
     for ( int i = 0; i < 10; i++ ) {
-      checkBugMondrian550(context.createConnection(), statistician );
+      checkBugMondrian550(context.getConnection(), statistician );
     }
     statistician.printDurations();
   }
@@ -127,12 +128,12 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian550Tuple(TestContextWrapper context) {
+  void testBugMondrian550Tuple(TestContext context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
       new Statistician( "testBugMondrian550Tuple" );
     int n = LOGGER.isDebugEnabled() ? 10 : 2;
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     for ( int i = 0; i < n; i++ ) {
       checkBugMondrian550Tuple(connection, statistician );
     }
@@ -163,8 +164,8 @@ public class PerformanceTest {
     assertEquals( 3263, result2.getAxes()[ 1 ].getPositions().size() );
   }
 
-  void getBugMondrian550Schema(TestContextWrapper context) {
-
+  void getBugMondrian550Schema(TestContext context) {
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
       "      <Dimension name=\"ACC\" caption=\"Account\" type=\"StandardDimension\" foreignKey=\"customer_id\">\n"
@@ -186,6 +187,10 @@ public class PerformanceTest {
         + "\"/>\n"
         + "      <CalculatedMember dimension=\"Measures\" name=\"EXP2\" formula=\"IIf(0 &#60; [Measures].[EXP2_4], "
         + "[Measures].[EXP2_4], NULL)\"/>\n" ));
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.PerformanceTestModifier1(schema)));
   }
 
   /**
@@ -396,10 +401,11 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testBigResultsWithBigSchemaPerforms(TestContextWrapper context) {
+  void testBigResultsWithBigSchemaPerforms(TestContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       return;
     }
+    /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         TestUtil.repeatString(
@@ -411,7 +417,12 @@ public class PerformanceTest {
             + "  </Hierarchy>"
             + "</Dimension>" ),
         null ));
-    String mdx =
+     */
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.PerformanceTestModifier2(schema)));
+
+      String mdx =
       "with "
         + " member [Measures].[one] as '1'"
         + " member [Measures].[two] as '2'"
@@ -424,7 +435,7 @@ public class PerformanceTest {
         + "Crossjoin([Customers].[name].members,[Store].[Store Name].members)"
         + " on 1 from sales";
     long start = System.currentTimeMillis();
-    executeQuery(context.createConnection(), mdx);
+    executeQuery(context.getConnection(), mdx);
 
     // jdk1.6 marmalade 3.2 14036  23,588 23,426 ms
     // jdk1.6 marmalade main 14036 26,430 27,045 25,497 ms

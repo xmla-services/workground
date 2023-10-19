@@ -9,16 +9,20 @@
 */
 package mondrian.olap.fun;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
-import java.sql.SQLException;
-
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * Tests for ValidMeasureFunDef
@@ -32,7 +36,8 @@ class ValidMeasureFunDefTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSecondHierarchyInDimension(TestContextWrapper context) throws SQLException {
+  void testSecondHierarchyInDimension(TestContext context) throws SQLException {
+    /*
     final String schema = "<?xml version=\"1.0\"?>\n"
     + "<Schema name=\"FoodMart\">\n"
     + "  <Dimension name=\"Product\">\n"
@@ -66,14 +71,18 @@ class ValidMeasureFunDefTest {
     + "    <VirtualCubeMeasure cubeName=\"Sales 1\" name=\"[Measures].[Unit Sales1]\" visible=\"true\">\n"
     + "    </VirtualCubeMeasure>\n"
     + "  </VirtualCube>\n" + "</Schema>";
-
+    */
     final String query =
         "with member [Measures].[TestValid] as ValidMeasure([Measures].[Unit Sales1])\n"
         + "select [Measures].[TestValid] on columns,\n"
         + "TopCount([Product.BrandOnly].[Product].members, 1) on rows\n"
         + "from [Virtual Cube]";
-
+    /*
     TestUtil.withSchema(context, schema);
+     */
+    RolapSchemaPool.instance().clear();
+    MappingSchema schemaOb = context.getDatabaseMappingSchemaProviders().get(0).get();
+    context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ValidMeasureFunDefTestModifier(schemaOb)));
 
     final String expected = "Axis #0:\n"
         + "{}\n"
@@ -81,7 +90,7 @@ class ValidMeasureFunDefTest {
         + "{[Measures].[TestValid]}\n" + "Axis #2:\n"
         + "{[Product.BrandOnly].[ADJ]}\n" + "Row #0: 266,773\n";
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
         query, expected);
   }
 

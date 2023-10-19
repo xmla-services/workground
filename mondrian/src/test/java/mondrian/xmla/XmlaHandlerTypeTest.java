@@ -9,31 +9,32 @@
 
 package mondrian.xmla;
 
+import mondrian.enums.DatabaseProduct;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.CellSet;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
 import static org.opencube.junit5.TestUtil.executeOlap4jXmlaQuery;
 import static org.opencube.junit5.TestUtil.executeQuery;
-
-import java.math.BigInteger;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.enums.DatabaseProduct;
-import mondrian.rolap.RolapCube;
 
 /**
  * Unit test to validate expected marshalling of Java objects
@@ -163,6 +164,7 @@ class XmlaHandlerTypeTest  {
     private void getContextWithMeasureExpression(TestContextWrapper context,
         String expression, String type)
     {
+        /*
         String datatype = "";
         String aggregator = " aggregator='sum' ";
         if (type != null) {
@@ -180,6 +182,11 @@ class XmlaHandlerTypeTest  {
             + expression
             + "  </SQL></MeasureExpression></Measure>",
             null, null, false));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.XmlaHandlerTypeTestModifier(schema, expression, type)));
+
     }
 
     static class TestVal {

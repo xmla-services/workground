@@ -8,20 +8,28 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.MondrianProperties;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Testcase for non-collapsed levels in agg tables.
@@ -422,12 +430,38 @@ class NonCollapsedAggTest extends AggTableTestCase {
             + "non empty Descendants([Time].[Year].Members, Time.Month, SELF_AND_BEFORE) on 1\n"
             + "FROM [Sales]";
 
+        class TestMondrian1325Modifier extends RDbMappingSchemaModifier {
+
+            public TestMondrian1325Modifier(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+            @Override
+            protected List<MappingMeasure> cubeMeasures(MappingCube cube) {
+                List<MappingMeasure> result = new ArrayList<>();
+                result.addAll(super.cubeMeasures(cube));
+                if ("Sales".equals(cube.name())) {
+                    result.add(MeasureRBuilder.builder()
+                        .name("Bogus Number")
+                        .column("promotion_id")
+                        .datatype(MeasureDataTypeEnum.NUMERIC)
+                        .aggregator("max")
+                        .visible(true)
+                        .build());
+                }
+                return result;
+            }
+        }
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 null,
                 "<Measure name=\"Bogus Number\" column=\"promotion_id\" datatype=\"Numeric\" aggregator=\"max\" visible=\"true\"/>",
                 null,
                 null));
+        */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier1(schema)));
 
         executeQuery(query1, context.createConnection());
         executeQuery(query2, context.createConnection());

@@ -17,4 +17,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
 public record  ScriptR(String language, String cdata) implements MappingScript {
 
+    public ScriptR(String language, String cdata) {
+        this.language = language == null ? "JavaScript" : language;
+        this.cdata = cdata;
+    }
 }

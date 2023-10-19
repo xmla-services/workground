@@ -9,25 +9,25 @@
 
 package mondrian.rolap.sql;
 
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.enums.DatabaseProduct;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.rolap.BatchTestCase;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.getDialect;
 
 /**
  * Test that various values of {@link Dialect#allowsSelectNotInGroupBy}
@@ -162,10 +162,10 @@ class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDependentPropertySkipped(TestContextWrapper context) {
+    void testDependentPropertySkipped(TestContext context) {
         // Property group by should be skipped only if dialect supports it
         String sqlpat;
-        if (dialectAllowsSelectNotInGroupBy(context.createConnection())) {
+        if (dialectAllowsSelectNotInGroupBy(context.getConnection())) {
             sqlpat = sqlWithLevelGroupBy;
         } else {
             sqlpat = sqlWithAllGroupBy;
@@ -175,6 +175,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
         };
 
         // Use dimension with level-dependent property
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             storeDimensionLevelDependent,
@@ -184,12 +185,15 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQuerySqlOrNot(context.createConnection(), queryCubeA, sqlPatterns, false, false, true);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier1(schema)));
+        assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testIndependentPropertyNotSkipped(TestContextWrapper context) {
+    void testIndependentPropertyNotSkipped(TestContext context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,
@@ -198,6 +202,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
         };
 
         // Use dimension with level-independent property
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             storeDimensionLevelIndependent,
@@ -207,12 +212,15 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQuerySqlOrNot(context.createConnection(), queryCubeA, sqlPatterns, false, false, true);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier2(schema)));
+        assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupBySkippedIfUniqueLevel(TestContextWrapper context) {
+    void testGroupBySkippedIfUniqueLevel(TestContext context) {
         // If unique level is included and all properties are level
         // dependent, then group by can be skipped regardless of dialect
         SqlPattern[] sqlPatterns = {
@@ -223,6 +231,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
         };
 
         // Use dimension with unique level & level-dependent properties
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             storeDimensionUniqueLevelDependentProp,
@@ -232,12 +241,15 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQuerySqlOrNot(context.createConnection(), queryCubeA, sqlPatterns, false, false, true);
+         */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier3(schema)));
+        assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupByNotSkippedIfIndependentProperty(TestContextWrapper context) {
+    void testGroupByNotSkippedIfIndependentProperty(TestContext context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,
@@ -246,6 +258,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
         };
 
         // Use dimension with unique level but level-indpendent property
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             storeDimensionUniqueLevelIndependentProp,
@@ -255,7 +268,10 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null,
             null);
         withSchema(context, schema);
-        assertQuerySqlOrNot(context.createConnection(), queryCubeA, sqlPatterns, false, false, true);
+        */
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier4(schema)));
+        assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
     private boolean dialectAllowsSelectNotInGroupBy(Connection connection) {

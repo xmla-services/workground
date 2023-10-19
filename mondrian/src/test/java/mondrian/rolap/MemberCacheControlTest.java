@@ -9,51 +9,6 @@
 
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushCache;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.daanse.olap.api.CacheControl;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
-import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
-import org.slf4j.Logger;
-
-import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -64,6 +19,48 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.slf4j.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushCache;
 
 /**
  * Unit tests for flushing member cache and editing cached member properties.
@@ -109,15 +106,14 @@ class MemberCacheControlTest {
         return DiffRepository.lookup(MemberCacheControlTest.class);
     }
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void prepareTestContext(TestContextWrapper context) {
+    private void prepareTestContext(TestContextWrapper context) {
         final RolapConnection conn = (RolapConnection) context.createConnection();
         final Statement statement = conn.getInternalStatement();
         final Execution execution = new Execution(statement, 0);
         //locus = new Locus(execution, getName(), null);
         locus = new Locus(execution, "MemberCacheControlTest", null);
         Locus.push(locus);
+        /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             // Reduced size Store dimension. Omits the 'Store Country' level,
@@ -140,6 +136,11 @@ class MemberCacheControlTest {
             + "      </Level>\n"
             + "    </Hierarchy>\n"
             + "   </Dimension>"));
+         */
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MemberCacheControlTestModifier(schema)));
+
     }
 
     /**
