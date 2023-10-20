@@ -38,7 +38,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggNameRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
@@ -85,6 +91,7 @@ import static org.opencube.junit5.TestUtil.member;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 import static org.opencube.junit5.TestUtil.upgradeActual;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * <code>AggregationOnDistinctCountMeasureTest</code> tests the
@@ -113,7 +120,6 @@ class AggregationOnDistinctCountMeasuresTest {
     }
 
     private void prepareContext(TestContext context) {
-        RolapSchemaPool.instance().clear();
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -142,8 +148,7 @@ class AggregationOnDistinctCountMeasuresTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AggregationOnDistinctCountMeasuresTestModifier(schema)));
+        withSchema(context, SchemaModifiers.AggregationOnDistinctCountMeasuresTestModifier::new);
         Connection connection = context.getConnection();
 
         schemaReader =
@@ -661,6 +666,7 @@ class AggregationOnDistinctCountMeasuresTest {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
+        /*
         String dimension =
             "<Dimension name=\"Warehouse2\">\n"
             + "  <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
@@ -679,7 +685,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "  <DimensionUsage name=\"Warehouse2\" source=\"Warehouse2\" foreignKey=\"warehouse_id\"/>\n"
             + "  <Measure name=\"Cost Count\" column=\"warehouse_cost\" aggregator=\"distinct-count\"/>\n"
             + "</Cube>";
-
+        */
         String query =
             "with set [Filtered Warehouse Set] as "
             + "{[Warehouse2].[#null].[#null].[5617 Saclan Terrace].[Arnold and Sons],"
@@ -794,8 +800,7 @@ class AggregationOnDistinctCountMeasuresTest {
                 null);
         withSchema(context, schema);
        */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMembersNullParentsModifier(schema)));
+      withSchema(context, TestMultiLevelMembersNullParentsModifier::new);
       SqlPattern[] patterns = {
             new SqlPattern(
                 DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby),
@@ -924,8 +929,7 @@ class AggregationOnDistinctCountMeasuresTest {
                 null);
         withSchema(context, schema);
        */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMembersMixedNullNonNullParentModifier(schema)));
+      withSchema(context, TestMultiLevelMembersMixedNullNonNullParentModifier::new);
       String result =
             "Axis #0:\n"
             + "{}\n"
@@ -945,6 +949,7 @@ class AggregationOnDistinctCountMeasuresTest {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
+        /*
         String dimension =
             "<Dimension name=\"Warehouse2\">\n"
             + "  <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
@@ -962,7 +967,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "  <DimensionUsage name=\"Warehouse2\" source=\"Warehouse2\" foreignKey=\"warehouse_id\"/>\n"
             + "  <Measure name=\"Cost Count\" column=\"warehouse_cost\" aggregator=\"distinct-count\"/>\n"
             + "</Cube>";
-
+        */
         String query =
             "with\n"
             + "set [Filtered Warehouse Set] as "
@@ -1064,8 +1069,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Axis #2:\n"
             + "{[Warehouse2].[TwoMembers]}\n"
             + "Row #0: 220\n";
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelsMixedNullNonNullChildModifier(schema)));
+      withSchema(context, TestMultiLevelsMixedNullNonNullChildModifier::new);
       assertQueryReturns(context.getConnection(), query, result);
     }
 
@@ -1858,8 +1862,7 @@ class AggregationOnDistinctCountMeasuresTest {
                 + "</Role>\n");
       withSchema(context, schema);
        */
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier(schema)));
+      withSchema(context.getContext(), TestMondrian906Modifier::new);
 
       final String mdx =
             "select {[Customers].[USA], [Customers].[USA].[OR], [Customers].[USA].[WA]} on columns, {[Measures].[Customer Count]} on rows from [Sales]";
@@ -1990,6 +1993,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountAggMeasure(TestContext context) {
       prepareContext(context);
+      /*
         String dimension =
             "<Dimension name=\"Time\" type=\"TimeDimension\"> "
             + "  <Hierarchy hasAll=\"false\" primaryKey=\"time_id\"> "
@@ -2032,6 +2036,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "      formatString=\"#,###.00\"/>"
             + "  <Measure name=\"Customer Count\" column=\"customer_id\" aggregator=\"distinct-count\" formatString=\"#,###\" />"
             + "</Cube>";
+       */
         final String query =
             "select "
             + "  NON EMPTY {[Measures].[Customer Count]} ON COLUMNS, "
@@ -2042,8 +2047,8 @@ class AggregationOnDistinctCountMeasuresTest {
             + "  NON EMPTY {[Measures].[Customer Count]} ON COLUMNS, "
             + "  NON EMPTY {[Time].[1997].[Q1].Children} ON ROWS "
             + "from [Sales]";
-        String simpleSchema = "<Schema name=\"FoodMart\">" + dimension + cube
-            + "</Schema>";
+        //String simpleSchema = "<Schema name=\"FoodMart\">" + dimension + cube
+        //    + "</Schema>";
         // should skip aggregate table, cannot aggregate
         propSaver.set(propSaver.properties.UseAggregates, true);
         propSaver.set(propSaver.properties.ReadAggregates, true);
@@ -2093,12 +2098,101 @@ class AggregationOnDistinctCountMeasuresTest {
                           ))
                           .build()
                   ))
+                  .cubes(List.of(
+                      CubeRBuilder.builder()
+                          .name("Sales")
+                          .defaultMeasure("Unit Sales")
+                          .fact(new TableR(
+                              "sales_fact_1997",
+                              List.of(
+                                  AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_l_05_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_lc_06_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_l_04_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
+                                  AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build()
+                              ),
+                              List.of(AggNameRBuilder.builder()
+                                  .name("agg_c_10_sales_fact_1997")
+                                  .aggFactCount(AggColumnNameRBuilder.builder().column("FACT_COUNT").build())
+                                  .aggMeasures(List.of(
+                                      AggMeasureRBuilder.builder()
+                                          .name("[Measures].[Store Sales]")
+                                          .column("store_sales")
+                                          .build(),
+                                      AggMeasureRBuilder.builder()
+                                          .name("[Measures].[Store Cost]")
+                                          .column("store_cost")
+                                          .build(),
+                                      AggMeasureRBuilder.builder()
+                                          .name("[Measures].[Unit Sales]")
+                                          .column("unit_sales")
+                                          .build(),
+                                      AggMeasureRBuilder.builder()
+                                          .name("[Measures].[Customer Count]")
+                                          .column("customer_count")
+                                          .build()
+                                  ))
+                                  .aggLevels(List.of(
+                                      AggLevelRBuilder.builder()
+                                          .name("[Time].[Year]")
+                                          .column("the_year")
+                                          .build(),
+                                      AggLevelRBuilder.builder()
+                                          .name("[Time].[Quarter]")
+                                          .column("quarter")
+                                          .build(),
+                                      AggLevelRBuilder.builder()
+                                          .name("[Time].[Month]")
+                                          .column("month_of_year")
+                                          .build()
+                                  ))
+                                  .build())
+                          ))
+                          .dimensionUsageOrDimensions(List.of(
+                              DimensionUsageRBuilder.builder()
+                                  .name("Time")
+                                  .source("Time")
+                                  .foreignKey("time_id")
+                                  .build()
+                          ))
+                          .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build(),
+                              MeasureRBuilder.builder()
+                                  .name("Store Cost")
+                                  .column("store_cost")
+                                  .aggregator("sum")
+                                  .formatString("#,###.00")
+                                  .build(),
+                              MeasureRBuilder.builder()
+                                  .name("Store Sales")
+                                  .column("store_sales")
+                                  .aggregator("sum")
+                                  .formatString("#,###.00")
+                                  .build(),
+                              MeasureRBuilder.builder()
+                                  .name("Customer Count")
+                                  .column("customer_id")
+                                  .aggregator("distinct-count")
+                                  .formatString("#,###")
+                                  .build()
+                          ))
+                          .build()
+                  ))
                   .build();
           }
 
       }
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestDistinctCountAggMeasureModifier(schema)));
+      withSchema(context, TestDistinctCountAggMeasureModifier::new);
         /*
         withSchema(context, simpleSchema);
         */

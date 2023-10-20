@@ -1814,8 +1814,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322a(TestContext context) {
-        RolapSchemaPool.instance().clear();
+    void testBugMondrian322a(TestContext context) {     
         class TestBugMondrian322aModifier extends RDbMappingSchemaModifier {
 
             public TestBugMondrian322aModifier(MappingSchema mappingSchema) {
@@ -1874,6 +1873,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
+        RolapSchemaPool.instance().clear();
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian322aModifier(schema)));
         assertQueryReturns(context.getConnection(),
@@ -1944,30 +1944,18 @@ class VirtualCubeTest extends BatchTestCase {
                 List<MappingVirtualCube> result = new ArrayList<>();
                 result.addAll(super.schemaVirtualCubes(schema));
                 result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse and Sales2")
-                    .defaultMeasure("Store Sales")
+                    .name("VirtualTestStore")                   
                     .virtualCubeDimensions(List.of(
                         VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("Customers")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("Warehouse")
+                            .cubeName("TestStore")
+                            .name("HCB")
                             .build()
 
                     ))
                     .virtualCubeMeasures(List.of(
                         VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Customer Count]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Sales]")
+                            .cubeName("TestStore")
+                            .name("[Measures].[Store Sqft]")
                             .build()
                     ))
                     .build());
@@ -2469,7 +2457,8 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeRecursiveMember(TestContextWrapper context) {
+    void testVirtualCubeRecursiveMember(TestContext context) {
+       /*
       final String schema = "<Schema name=\"FoodMart\">"
           + "<Dimension type=\"TimeDimension\" highCardinality=\"false\" name=\"Time\">"
           + "<Hierarchy visible=\"true\" hasAll=\"false\" primaryKey=\"time_id\">"
@@ -2511,6 +2500,8 @@ class VirtualCubeTest extends BatchTestCase {
           + "</VirtualCube>"
           + "</Schema>";
       withSchema(context, schema);
+        */
+      withSchema(context, SchemaModifiers.VirtualCubeTestModifier3::new);
       final String query = "SELECT {[Time].[1998].Children} on columns,"
           + " {[recurse]} on rows "
           + "FROM [Warehouse and Sales]";
@@ -2527,7 +2518,7 @@ class VirtualCubeTest extends BatchTestCase {
         + "Row #0: 72,024\n"
         + "Row #0: 72,024\n"
         + "Row #0: 72,024\n";
-      assertQueryReturns(context.createConnection(), query, expected);
+      assertQueryReturns(context.getConnection(), query, expected);
     }
 
     @ParameterizedTest

@@ -2187,10 +2187,11 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggNameApproxRowCount(TestContextWrapper context) {
+    void testAggNameApproxRowCount(TestContext context) {
         prepareContext(context);
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
+        /*
         withSchema(context,
                 "<Schema name=\"FooSchema\"><Cube name=\"Sales_Foo\" defaultMeasure=\"Unit Sales\">\n"
                 + "  <Table name=\"sales_fact_1997\">\n"
@@ -2339,6 +2340,8 @@ class TestAggregationManager extends BatchTestCase {
                 + "  <Measure name=\"Customer Count\" column=\"customer_id\"\n"
                 + "      aggregator=\"distinct-count\" formatString=\"#,###\"/>\n"
                 + "</Cube></Schema>\n");
+         */
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier5::new);
         final String mdxQuery =
             "select {[Measures].[Unit Sales]} on columns, "
             + "non empty CrossJoin({[Time.Weekly].[1997].[1].[15]},CrossJoin({[Customers].[USA].[CA].[Lincoln Acres].[William Smith]}, {[Product].[Drink].[Beverages].[Carbonated Beverages].[Soda].[Washington].[Washington Diet Cola]})) on rows "
@@ -2350,7 +2353,7 @@ class TestAggregationManager extends BatchTestCase {
         // If the approxRowcount is used, there should not be
         // a query like : select count(*) from agg_pl_01_sales_fact_1997
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdxQuery,
             new SqlPattern[] {
                 new SqlPattern(
@@ -2417,7 +2420,6 @@ class TestAggregationManager extends BatchTestCase {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube>\n";
          */
-        RolapSchemaPool.instance().clear();
         class TestNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
 
             public TestNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
@@ -2446,6 +2448,7 @@ class TestAggregationManager extends BatchTestCase {
                             .build()
                     ), List.of(
                         AggNameRBuilder.builder()
+                            .name("agg_l_05_sales_fact_1997")
                             .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
                             .aggIgnoreColumns(List.of(
                                 AggColumnNameRBuilder.builder()
@@ -2560,8 +2563,7 @@ class TestAggregationManager extends BatchTestCase {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNonCollapsedAggregateModifier(schema)));
+        withSchema(context, TestNonCollapsedAggregateModifier::new);
         final String mdx =
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]";
         final String sqlOracle =
@@ -2637,10 +2639,7 @@ class TestAggregationManager extends BatchTestCase {
             + "</Cube></Schema>\n";
         withSchema(context, cube);
          */
-
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier(schema)));
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier::new);
 
         final String mdx =
             "select \n"
@@ -2678,13 +2677,14 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonCollapsedAggregateAllLevelsPresentInQuery(TestContextWrapper context)
+    void testNonCollapsedAggregateAllLevelsPresentInQuery(TestContext context)
         throws Exception
     {
         prepareContext(context);
         // MONDRIAN-1072
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
+        /*
         final String cube =
             "<Schema name=\"AMC\"><Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -2723,12 +2723,14 @@ class TestAggregationManager extends BatchTestCase {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube></Schema>\n";
         withSchema(context, cube);
+         */
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier8::new);
         final String mdx =
             "select \n"
             + "{ "
             + "[Promotions].[Media Type].members } on rows, {[Measures].[Unit Sales]} on columns from [Foo]";
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -2766,7 +2768,7 @@ class TestAggregationManager extends BatchTestCase {
         final String sqlMysql =
             "select `promotion`.`media_type` as `c0`, sum(`agg_c_special_sales_fact_1997`.`unit_sales_sum`) as `m0` from `promotion` as `promotion`, `agg_c_special_sales_fact_1997` as `agg_c_special_sales_fact_1997` where `agg_c_special_sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id` group by `promotion`.`media_type`";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
@@ -2784,6 +2786,7 @@ class TestAggregationManager extends BatchTestCase {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
             + "  <Table name=\"sales_fact_1997\">\n"
@@ -2840,7 +2843,7 @@ class TestAggregationManager extends BatchTestCase {
             + "<Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"Standard\"/>\n"
             + "</Cube>\n";
-        RolapSchemaPool.instance().clear();
+         */
         class TestTwoNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
 
             public TestTwoNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
@@ -3011,8 +3014,7 @@ class TestAggregationManager extends BatchTestCase {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestTwoNonCollapsedAggregateModifier(schema)));
+        withSchema(context, TestTwoNonCollapsedAggregateModifier::new);
 
         final String mdx =
             "select {Crossjoin([Product].[Product Family].Members, [Store].[Store Id].Members)} on rows, {[Measures].[Unit Sales]} on columns from [Foo]";
@@ -3073,7 +3075,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCubeAggBugMondrian1221(TestContextWrapper context) {
+    void testVirtualCubeAggBugMondrian1221(TestContext context) {
         prepareContext(context);
         propSaver.set(
             MondrianProperties.instance().UseAggregates,
@@ -3084,6 +3086,7 @@ class TestAggregationManager extends BatchTestCase {
         propSaver.set(
             propSaver.properties.GenerateFormattedSql,
             true);
+        /*
         final String schema =
             "<?xml version=\"1.0\"?>\n"
             + "<Schema name=\"custom\">\n"
@@ -3179,13 +3182,13 @@ class TestAggregationManager extends BatchTestCase {
             + " <VirtualCubeMeasure cubeName=\"Sales2\" name=\"[Measures].[Store Sales]\"/>\n"
             + "  </VirtualCube>\n"
             + "</Schema>\n";
-
+         */
         final String mdx =
             "select {NonEmptyCrossJoin([Time].[Month].Members, [Store].[Store Country].Members)} on rows,"
             + "{[Measures].[Unit Sales]} on columns "
             + "from [SuperSales]";
 
-        withSchema(context, schema);
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier9::new);
 
         if (MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             final String sqlMysql =
@@ -3205,7 +3208,7 @@ class TestAggregationManager extends BatchTestCase {
                 + "    `agg_c_14_sales_fact_1997`.`month_of_year`,\n"
                 + "    `store`.`store_country`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -3216,7 +3219,7 @@ class TestAggregationManager extends BatchTestCase {
                     + "    ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC");
 
             assertQuerySqlOrNot(
-                context.createConnection(),
+                context.getConnection(),
                 mdx,
                 new SqlPattern[] {
                     new SqlPattern(
@@ -3226,7 +3229,7 @@ class TestAggregationManager extends BatchTestCase {
                 },
                 false, false, true);
         }
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -3268,7 +3271,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1271(TestContextWrapper context) {
+    void testMondrian1271(TestContext context) {
         prepareContext(context);
         if (!propSaver.properties.EnableNativeCrossJoin.get()) {
             return;
@@ -3282,6 +3285,7 @@ class TestAggregationManager extends BatchTestCase {
         propSaver.set(
             propSaver.properties.GenerateFormattedSql,
             true);
+        /*
         final String schema =
             "<?xml version=\"1.0\"?>\n"
             + "<Schema name=\"custom\">\n"
@@ -3344,6 +3348,7 @@ class TestAggregationManager extends BatchTestCase {
             + "      formatString=\"#,###.00\"/>\n"
             + "  </Cube>\n"
             + "</Schema>\n";
+         */
 
         final String mdx =
             "select {NonEmptyCrossJoin([Time].[Year].Members, [Store].[Store Country].Members)} on rows,"
@@ -3370,7 +3375,7 @@ class TestAggregationManager extends BatchTestCase {
             + "    `time_by_day`.`the_year`,\n"
             + "    `store`.`store_country`\n"
             + "order by\n"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                 + "    ISNULL(`c1`) ASC, `c1` ASC"
                 : "    ISNULL(`time_by_day`.`the_year`) ASC, `time_by_day`.`the_year` ASC,\n"
@@ -3417,7 +3422,7 @@ class TestAggregationManager extends BatchTestCase {
             + "    `time_by_day`.`day_of_month`,\n"
             + "    `store`.`store_country`\n"
             + "order by\n"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                 + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                 + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -3450,10 +3455,10 @@ class TestAggregationManager extends BatchTestCase {
             + "    `time_by_day`.`month_of_year`,\n"
             + "    `time_by_day`.`day_of_month`";
 
-        withSchema(context, schema);
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier6::new);
 
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
@@ -3464,7 +3469,7 @@ class TestAggregationManager extends BatchTestCase {
             false, false, true);
 
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
@@ -3476,7 +3481,7 @@ class TestAggregationManager extends BatchTestCase {
 
         // Because we have caused a many-to-many relation between the agg table
         // and the dim table, we expect retarded numbers here.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -3491,7 +3496,7 @@ class TestAggregationManager extends BatchTestCase {
         // Make sure that queries on lower levels don't trigger a
         // false positive with the agg matcher.
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdxTooLowForAgg,
             new SqlPattern[] {
                 new SqlPattern(
@@ -3502,7 +3507,7 @@ class TestAggregationManager extends BatchTestCase {
             false, false, true);
 
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             mdxTooLowForAgg,
             new SqlPattern[] {
                 new SqlPattern(
@@ -3515,11 +3520,12 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggStarWithIgnoredColumnsRequiresRollup(TestContextWrapper context) {
+    void testAggStarWithIgnoredColumnsRequiresRollup(TestContext context) {
         prepareContext(context);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.UseAggregates, true);
+        /*
         withSchema(context,
                 "<Schema name=\"FoodMart\">"
                 + "  <Dimension name=\"Time\" type=\"TimeDimension\">\n"
@@ -3550,13 +3556,15 @@ class TestAggregationManager extends BatchTestCase {
                 + "      formatString=\"Standard\"/>\n"
                 + "</Cube>\n"
                 + "</Schema>");
-        RolapStar star = context.createConnection().getSchemaReader()
+         */
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier7::new);
+        RolapStar star = context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997");
         AggStar aggStarSpy = spy(
             getAggStar(star, "agg_c_10_sales_fact_1997"));
         // make sure the test AggStar will be prioritized first
         when(aggStarSpy.getSize()).thenReturn(0l);
-        context.createConnection().getSchemaReader()
+        context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997").addAggStar(aggStarSpy);
         boolean[] rollup = { false };
         AggStar returnedStar = AggregationManager
@@ -3590,7 +3598,7 @@ class TestAggregationManager extends BatchTestCase {
             + "group by\n"
             + "    \"agg_c_10_sales_fact_1997\".\"the_year\"";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             "select Time.[1997] on 0 from sales",
             new SqlPattern[]{
                 new SqlPattern(
@@ -3689,11 +3697,12 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggStarWithIgnoredColumnsAndCountDistinct(TestContextWrapper context) {
+    void testAggStarWithIgnoredColumnsAndCountDistinct(TestContext context) {
         prepareContext(context);
         propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.UseAggregates, true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        /*
         withSchema(context,
                 "<Schema name=\"FoodMart\">"
                 + "  <Dimension name=\"Time\" type=\"TimeDimension\">\n"
@@ -3726,13 +3735,15 @@ class TestAggregationManager extends BatchTestCase {
                 + "      formatString=\"Standard\"/>\n"
                 + "</Cube>\n"
                 + "</Schema>");
-        RolapStar star = context.createConnection().getSchemaReader()
+         */
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier4::new);
+        RolapStar star = context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997");
         AggStar aggStarSpy = spy(
             getAggStar(star, "agg_g_ms_pcat_sales_fact_1997"));
         // make sure the test AggStar will be prioritized first
         when(aggStarSpy.getSize()).thenReturn(0l);
-        context.createConnection().getSchemaReader()
+        context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997").addAggStar(aggStarSpy);
         boolean[] rollup = { false };
         AggStar returnedStar = AggregationManager
@@ -3769,7 +3780,7 @@ class TestAggregationManager extends BatchTestCase {
             + "group by\n"
             + "    `time_by_day`.`the_year`";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             "select Time.[1997] on 0 from sales where "
             + "measures.[Customer Count]",
             new SqlPattern[]{
