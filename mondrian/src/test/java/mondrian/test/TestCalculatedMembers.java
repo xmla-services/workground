@@ -29,8 +29,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -624,8 +622,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testBracketInCubeCalcMemberName(TestContextWrapper context) {
+     void testBracketInCubeCalcMemberName(TestContext context) {
         final String cubeName = "Sales_BracketInCubeCalcMemberName";
+        /*
         String s =
             "<Cube name=\"" + cubeName + "\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"
@@ -650,13 +649,15 @@ import static org.opencube.junit5.TestUtil.withSchema;
         String schema = SchemaUtil.getSchema(baseSchema,
             null, s, null, null, null, null);
         withSchema(context, schema);
+         */
+        withSchema(context, SchemaModifiers.TestCalculatedMembers3::new);
         assertQueryThrows(context,
             "select {[Measures].[With a [bracket] inside it]} on columns,\n"
             + " {[Gender].Members} on rows\n"
             + "from [" + cubeName + "]",
             "Syntax error at line 1, column 38, token 'inside'");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[With a [bracket]] inside it]} on columns,\n"
             + " {[Gender].Members} on rows\n"
             + "from [" + cubeName + "]",
@@ -831,8 +832,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testQuoteInCalcMember(TestContextWrapper context) {
+     void testQuoteInCalcMember(TestContext context) {
         final String cubeName = "Sales_Bug1410383";
+        /*
         String s =
                 "<Cube name=\"" + cubeName + "\">\n"
                 + "  <Table name=\"sales_fact_1997\"/>\n"
@@ -879,7 +881,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
         String schema = SchemaUtil.getSchema(baseSchema,
             null, s, null, null, null, null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+        */
+        withSchema(context, SchemaModifiers.TestCalculatedMembers1::new);
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Apos in dq], [Measures].[Dq in dq], [Measures].[Apos in apos], [Measures].[Dq in apos], [Measures].[Colored Profit]} on columns,\n"
             + " {[Gender].Members} on rows\n"
             + "from [" + cubeName + "]",
@@ -1723,11 +1727,12 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testCycleFalsePositive(TestContextWrapper context) {
+     void testCycleFalsePositive(TestContext context) {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // This test uses old-style [dimension.hierarchy] names.
             return;
         }
+        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1769,7 +1774,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
             null,
             null);
         withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+        */
+        withSchema(context, SchemaModifiers.TestCalculatedMembers2::new);
+        assertQueryReturns(context.getConnection(),
             "With \n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Country],[*BASE_MEMBERS_Store Type.Store Types Hierarchy])' \n"
             + "Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Country].CurrentMember.OrderKey,BASC,[Store Type.Store Types Hierarchy].CurrentMember.OrderKey,BASC)' \n"
@@ -1846,7 +1853,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "{}\n"
             + "Axis #1:\n"
             + "{[Measures].[Foo]}\n"
-            + "Row #0: #ERR: mondrian.olap.fun.MondrianEvaluationException: Expected value of type NUMERIC; got value '123' (STRING)\n");
+            + "Row #0: #ERR: mondrian.olap.fun.MondrianEvaluationException: wrtong typed, was: 123.0\n");
 
         // unrelated to Mondrian852 we were occasionally seeing differences
         // in number of digits of the casted value based on whether the

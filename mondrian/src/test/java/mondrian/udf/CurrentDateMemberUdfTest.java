@@ -8,14 +8,18 @@
 */
 package mondrian.udf;
 
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests the CurrentDateMemberUdf class.
@@ -26,10 +30,10 @@ class CurrentDateMemberUdfTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCurrentDateMemberUdf(TestContextWrapper context) {
-		Connection connection=context.createConnection();
+    void testCurrentDateMemberUdf(TestContext context) {
 		//TODO: context redesign
 		//Assertions.fail("Handle comment , Context redesign nedded");
+        /*
 		String baseSchema = TestUtil.getRawSchema(context);
 	    String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -39,8 +43,10 @@ class CurrentDateMemberUdfTest {
             "<UserDefinedFunction name=\"MockCurrentDateMember\" "
             + "className=\"mondrian.udf.MockCurrentDateMember\" /> ",
             null);
-	    TestUtil.withSchema(context, schema);
-	    TestUtil.assertQueryReturns(context.createConnection(),
+	    withSchema(context, schema);
+         */
+        withSchema(context, SchemaModifiers.CurrentDateMemberUdfTestModifier1::new);
+	    TestUtil.assertQueryReturns(context.getConnection(),
             "SELECT NON EMPTY {[Measures].[Org Salary]} ON COLUMNS, "
             + "NON EMPTY {MockCurrentDateMember([Time].[Time], \"[yyyy]\")} ON ROWS "
             + "FROM [HR] ",
