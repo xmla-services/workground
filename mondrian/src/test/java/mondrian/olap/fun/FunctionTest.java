@@ -42,6 +42,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.eigenbase.xom.StringEscaper;
@@ -93,6 +94,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.executeSingletonAxis;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 //import mondrian.spi.DialectManager;
 
@@ -2186,8 +2188,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
     assertAxisThrows(connection,
       "AddCalculatedMembers({([Store].[USA].[CA], [Gender].[F])})",
-      "Only single dimension members allowed in set for "
-        + "AddCalculatedMembers" );
+      "Only single dimension members allowed in Set for AddCalculatedMembers");
   }
 
   @ParameterizedTest
@@ -6165,9 +6166,9 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCoalesceEmpty(TestContextWrapper context) {
+  void testCoalesceEmpty(TestContext context) {
     // [DF] is all null and [WA] has numbers for 1997 but not for 1998.
-    Result result = executeQuery(context.createConnection(),
+    Result result = executeQuery(context.getConnection(),
       "with\n"
         + "    member Measures.[Coal1] as 'coalesceempty(([Time].[1997], Measures.[Store Sales]), ([Time].[1998], "
         + "Measures.[Store Sales]))'\n"
@@ -6187,7 +6188,7 @@ class FunctionTest {//extends FoodMartTestCase {
       result,
       0.001 );
 
-    result = executeQuery(context.createConnection(),
+    result = executeQuery(context.getConnection(),
       "with\n"
         + "    member Measures.[Sales Per Customer] as 'Measures.[Sales Count] / Measures.[Customer Count]'\n"
         + "    member Measures.[Coal] as 'coalesceempty(([Measures].[Sales Per Customer], [Store].[All Stores]"
@@ -6209,7 +6210,7 @@ class FunctionTest {//extends FoodMartTestCase {
       result,
       0.001 );
 
-    result = executeQuery(context.createConnection(),
+    result = executeQuery(context.getConnection(),
       "with\n"
         + "    member Measures.[Sales Per Customer] as 'Measures.[Sales Count] / Measures.[Customer Count]'\n"
         + "    member Measures.[Coal] as 'coalesceempty(([Measures].[Sales Per Customer], [Store].[All Stores]"
@@ -6380,7 +6381,7 @@ class FunctionTest {//extends FoodMartTestCase {
 mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
     org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc(type=MemberType<member=[Gender].[M]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
     mondrian.olap.fun.SetItemFunDef$5(type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
-        mondrian.olap.fun.BuiltinFunTable$21$1(type=SetType<MemberType<hierarchy=[Time]>>, resultStyle=LIST, callCount=0, callMillis=0)
+        mondrian.olap.fun.BuiltinFunTable$20$1(type=SetType<MemberType<hierarchy=[Time]>>, resultStyle=LIST, callCount=0, callMillis=0)
             mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
         org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc(type=DecimalType(0), resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
     org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc(type=MemberType<member=[Measures].[Unit Sales]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
@@ -8209,8 +8210,8 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHeadBug(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testHeadBug(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "SELECT\n"
         + "                        UNION(\n"
         + "                            {([Customers].CURRENTMEMBER)},\n"
@@ -8238,7 +8239,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
         + "Row #0: 266,773\n"
         + "Row #0: 266,773\n" );
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "    MEMBER\n"
         + "        [Customers].[COG_OQP_INT_t2]AS '1',\n"
@@ -8271,7 +8272,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
         + "Row #0: 266,773\n" );
 
     // More minimal test case. Also demonstrates similar problem with Tail.
-    assertAxisReturns(context.createConnection(),
+    assertAxisReturns(context.getConnection(),
       "Union(\n"
         + "  Union(\n"
         + "    Tail([Customers].[USA].[CA].Children, 2),\n"
@@ -8423,9 +8424,9 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testHierarchizeOrdinal(TestContextWrapper context) {
+  void testHierarchizeOrdinal(TestContext context) {
     //TestContext testContext = getTestContext().withCube( "[Sales_Hierarchize]" );
-    final Connection connection = context.createConnection();
+    /*
     connection.getSchema().createCube(
       "<Cube name=\"Sales_Hierarchize\">\n"
         + "  <Table name=\"sales_fact_1997\"/>\n"
@@ -8454,6 +8455,9 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
         + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
         + "      formatString=\"Standard\"/>\n"
         + "</Cube>" );
+     */
+    withSchema(context, SchemaModifiers.FunctionTestModifier3::new);
+    final Connection connection = context.getConnection();
 
     // The [Time_Alphabetical] is ordered alphabetically by month
     assertAxisReturns(connection, "[Sales_Hierarchize]",
@@ -9601,12 +9605,14 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
                       VirtualCubeDimensionRBuilder.builder()
                           .cubeName("HR")
                           .name("Position")
-                          .build(),
-                      VirtualCubeDimensionRBuilder.builder()
-                          .cubeName("HR")
-                          .name("[Measures].[Org Salary]")
                           .build()
                   ))
+                  .virtualCubeMeasures(List.of(
+                          VirtualCubeMeasureRBuilder.builder()
+                          .cubeName("HR")
+                          .name("[Measures].[Org Salary]")
+                          .build()                		  
+                		  ))
                   .build());
               return result;
           }
@@ -9624,8 +9630,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
       null, null, null );
     TestUtil.withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestOrderTupleMultiKeyswithVCubeModifier(schema)));
+    TestUtil.withSchema(context, TestOrderTupleMultiKeyswithVCubeModifier::new);
     assertQueryReturns(context.getConnection(),
       "with \n"
         + "  set [CJ] as \n"

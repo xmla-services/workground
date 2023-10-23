@@ -17,7 +17,6 @@ import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
@@ -38,7 +37,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
@@ -999,18 +997,18 @@ class AggregationOnDistinctCountMeasuresTest {
                           .relation(new TableR("warehouse"))
                           .levels(List.of(
                               LevelRBuilder.builder()
-                                  .name("fax")
-                                  .column("warehouse_fax")
+                                  .name("address3")
+                                  .column("wa_address3")
                                   .uniqueMembers(true)
                                   .build(),
-                              LevelRBuilder.builder()
-                                  .name("address1")
-                                  .column("wa_address1")
+                             LevelRBuilder.builder()
+                                  .name("address2")
+                                  .column("wa_address2")
                                   .uniqueMembers(false)
                                   .build(),
                               LevelRBuilder.builder()
-                                  .name("name")
-                                  .column("warehouse_name")
+                                  .name("fax")
+                                  .column("warehouse_fax")
                                   .uniqueMembers(false)
                                   .build()
                           ))
