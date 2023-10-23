@@ -16,7 +16,6 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,9 +24,8 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.List;
-
 import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test that various values of {@link Dialect#allowsSelectNotInGroupBy}
@@ -186,8 +184,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.SelectNotInGroupByTestModifier1::new);
         assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
@@ -213,8 +210,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.SelectNotInGroupByTestModifier2::new);
         assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
@@ -242,8 +238,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier3(schema)));
+        withSchema(context, SchemaModifiers.SelectNotInGroupByTestModifier3::new);
         assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 
@@ -269,8 +264,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
             null);
         withSchema(context, schema);
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SelectNotInGroupByTestModifier4(schema)));
+        withSchema(context, SchemaModifiers.SelectNotInGroupByTestModifier4::new);
         assertQuerySqlOrNot(context.getConnection(), queryCubeA, sqlPatterns, false, false, true);
     }
 

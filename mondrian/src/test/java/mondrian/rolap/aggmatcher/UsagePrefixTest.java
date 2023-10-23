@@ -12,6 +12,7 @@ package mondrian.rolap.aggmatcher;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import mondrian.rolap.SchemaModifiers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -30,43 +31,6 @@ import mondrian.olap.MondrianProperties;
 class UsagePrefixTest extends AggTableTestCase {
 
     private static final String MONDRIAN_595_CSV = "MONDRIAN-595.csv";
-
-    private final String schema =
-            "<Schema name=\"usagePrefixTest\">"
-            + "<Dimension name='StoreX' >\n"
-            + " <Hierarchy hasAll='true' primaryKey='store_id'>\n"
-            + " <Table name='store_x'/>\n"
-            + " <Level name='Store Value' column='value' uniqueMembers='true'/>\n"
-            + " </Hierarchy>\n"
-            + "</Dimension>\n"
-            + "<Dimension name='StoreY' >\n"
-            + " <Hierarchy hasAll='true' primaryKey='store_id'>\n"
-            + " <Table name='store_y'/>\n"
-            + " <Level name='Store Value' column='value' uniqueMembers='true'/>\n"
-            + " </Hierarchy>\n"
-            + "</Dimension>\n"
-            + "<Cube name='Cheques'>\n"
-            + "<Table name='cheques'>\n"
-            + "<AggName name='agg_lp_xxx_cheques'>\n"
-            + "<AggFactCount column='FACT_COUNT'/>\n"
-
-            + "<AggMeasure name='[Measures].[Amount]'\n"
-            + "   column='amount' />\n"
-            + "        <AggLevel name=\"[StoreX].[Store Value]\" column=\"value\" />"
-            + "</AggName>\n"
-            + "</Table>\n"
-
-            + "<DimensionUsage name=\"StoreX\" source=\"StoreX\" foreignKey=\"store_id\" "
-            + " usagePrefix=\"firstprefix_\" />"
-
-            + "<DimensionUsage name=\"StoreY\" source=\"StoreY\" foreignKey=\"store_id\" "
-            + " usagePrefix=\"secondprefix_\" />"
-
-            + "<Measure name='Amount' \n"
-            + "    column='amount' aggregator='sum'\n"
-            + "   formatString='00.0'/>\n"
-            + "</Cube>"
-            + "</Schema>";
 
     @Override
 	protected String getCubeDescription() {
@@ -90,7 +54,7 @@ class UsagePrefixTest extends AggTableTestCase {
             "select {[StoreX].[Store Value].members} on columns, "
                 +   "{ measures.[Amount] } on rows from Cheques";
 
-        withSchema(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.UsagePrefixTestModifier1::new);
         context.createConnection().getCacheControl(null).flushSchemaCache();
         assertQueryReturns(context.createConnection(),
             mdx,
@@ -125,7 +89,7 @@ class UsagePrefixTest extends AggTableTestCase {
             + " [StoreY].[Store Value].members) on columns, "
             +   "{ measures.[Amount] } on rows from Cheques";
 
-        withSchema(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.UsagePrefixTestModifier1::new);
         context.createConnection().getCacheControl(null).flushSchemaCache();
         assertQueryReturns(context.createConnection(),
             mdx,

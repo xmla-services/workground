@@ -64,6 +64,7 @@ import static org.mockito.Mockito.when;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test for <code>SqlQuery</code>.
@@ -983,8 +984,7 @@ class SqlQueryTest  extends BatchTestCase {
                 + " </Role>\n");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestLimitedRollupMemberRetrievableFromCacheModifier(schema)));
+        withSchema(context.getContext(), TestLimitedRollupMemberRetrievableFromCacheModifier::new);
         withRole(context,"justCA");
 
         String pgSql =

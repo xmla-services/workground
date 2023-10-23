@@ -13,6 +13,7 @@
  */
 package mondrian.rolap;
 
+import mondrian.test.BasicQueryTest;
 import mondrian.test.UdfTest;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
@@ -4109,11 +4110,17 @@ public class SchemaModifiers {
             result.addAll(super.cubeMeasures(cube));
             if ("Sales".equals(cube.name())) {
                 result.add(MeasureRBuilder.builder()
+                	.name("zero")
+                	.aggregator("sum")
                     .measureExpression(ExpressionViewRBuilder.builder()
                         .sqls(List.of(
+                        	SQLRBuilder.builder()
+                                .dialect("generic")
+                                .content(" NULL ")
+                                .build(),
                             SQLRBuilder.builder()
                                 .dialect("vertica")
-                                .content(" NULL::FLOAT")
+                                .content(" NULL::FLOAT ")
                                 .build()
                         ))
                         .build())
@@ -4390,6 +4397,1751 @@ public class SchemaModifiers {
                     .build());
             }
             return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier14 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2442\">\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n" + "  <Table name=\"sales_fact_1997\">\n"
+            + "    <AggName name=\"agg_c_special_sales_fact_1997\">\n"
+            + "        <AggFactCount column=\"FACT_COUNT\"/>\n" + "        <AggIgnoreColumn column=\"foo\"/>\n"
+            + "        <AggIgnoreColumn column=\"bar\"/>\n"
+            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES_SUM\" />\n"
+            + "        <AggLevel name=\"[Time].[Year]\" column=\"TIME_YEAR\" />\n"
+            + "        <AggLevel name=\"[Time].[Quarter]\" column=\"TIME_QUARTER\" />\n" + "    </AggName>\n"
+            + "  </Table>\n"
+
+            + " <Dimension name=\"Time\"" + " type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+            + "   <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "      <Table name=\"time_by_day\"/>\n"
+            + "      <Level name=\"Year\" \n"
+
+            // column and nameColumn are the same
+            + "         column=\"the_year\" nameColumn=\"the_year\" ordinalColumn=\"the_year\"\n"
+            + "         type=\"Numeric\" uniqueMembers=\"true\" levelType=\"TimeYears\"/>\n"
+            + "      <Level name=\"Quarter\" \n" + "         column=\"quarter\" ordinalColumn=\"quarter\"\n"
+            + "         uniqueMembers=\"false\" levelType=\"TimeQuarters\"/>\n" + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
+            */
+        public BasicQueryTestModifier14(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart 2442")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997",
+                            List.of(),
+                            List.of(
+                                AggNameRBuilder.builder()
+                                    .name("agg_c_special_sales_fact_1997")
+                                    .aggFactCount(AggColumnNameRBuilder.builder()
+                                        .column("FACT_COUNT")
+                                        .build())
+                                    .aggIgnoreColumns(List.of(
+                                        AggColumnNameRBuilder.builder()
+                                            .column("foo")
+                                            .build(),
+                                        AggColumnNameRBuilder.builder()
+                                            .column("bar")
+                                            .build()
+                                    ))
+                                    .aggMeasures(List.of(
+                                        AggMeasureRBuilder.builder()
+                                            .name("[Measures].[Unit Sales]")
+                                            .column("UNIT_SALES_SUM")
+                                            .build()
+                                    ))
+                                    .aggLevels(List.of(
+                                        AggLevelRBuilder.builder()
+                                            .name("[Time].[Year]")
+                                            .column("TIME_YEAR")
+                                            .build(),
+                                        AggLevelRBuilder.builder()
+                                            .name("[Time].[Quarter]")
+                                            .column("TIME_QUARTER")
+                                            .build()
+                                    ))
+                                    .build()
+                            )))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Time")
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .foreignKey("time_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(false)
+                                        .primaryKey("time_id")
+                                        .relation(new TableR("time_by_day"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Year")
+                                                .column("the_year")
+                                                .nameColumn("the_year")
+                                                .ordinalColumn("the_year")
+                                                .type(TypeEnum.NUMERIC)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarter")
+                                                .column("quarter")
+                                                .ordinalColumn("quarter")
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier15 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2285\">\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n" + "  <Table name=\"sales_fact_1997\">\n"
+            + "     <AggExclude name=\"agg_c_special_sales_fact_1997\" />" + "  </Table>\n"
+            + "  <Dimension name=\"Product\" foreignKey=\"product_id\">\n"
+            + "     <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
+            + "         <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
+            + "             <Table name=\"product\"/>\n" + "             <Table name=\"product_class\"/>\n"
+            + "         </Join>\t  \n"
+            + "         <Level name=\"Product Subcategory\" table=\"product_class\" column=\"product_class_id\"\n"
+            + "             uniqueMembers=\"false\"/>\n" + "     </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+            + "     <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "         <Table name=\"time_by_day\"/>\n"
+            + "         <Level name=\"Month Upper\" column=\"month_of_year\" nameColumn=\"the_month\" "
+            + "             uniqueMembers=\"false\" type=\"Numeric\" levelType=\"TimeMonths\"/>"
+            + "         <Level name=\"Month\" column=\"month_of_year\" nameColumn=\"the_month\" "
+            + "             uniqueMembers=\"false\" type=\"Numeric\" levelType=\"TimeMonths\"/>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" "
+            + "     formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
+            */
+        public BasicQueryTestModifier15(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart 2285")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997",
+                            List.of(AggExcludeRBuilder.builder()
+                                .name("agg_c_special_sales_fact_1997")
+                                .build()),
+                            List.of()))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Product")
+                                .foreignKey("product_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .primaryKey("product_id")
+                                        .primaryKeyTable("product")
+                                        .relation(new JoinR(List.of(new TableR("product"), new TableR("product_class")),
+                                            null, "product_class_id", null, "product_class_id"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Product Subcategory")
+                                                .table("product_class")
+                                                .column("product_class_id")
+                                                .uniqueMembers(false)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .name("Time")
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .foreignKey("time_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(false)
+                                        .primaryKey("time_id")
+                                        .relation(new TableR("time_by_day"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Month Upper")
+                                                .column("month_of_year")
+                                                .nameColumn("the_month")
+                                                .uniqueMembers(false)
+                                                .type(TypeEnum.NUMERIC)
+                                                .levelType(LevelTypeEnum.TIME_MONTHS)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Month")
+                                                .column("month_of_year")
+                                                .nameColumn("the_month")
+                                                .uniqueMembers(false)
+                                                .type(TypeEnum.NUMERIC)
+                                                .levelType(LevelTypeEnum.TIME_MONTHS)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier16 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"tiny\">\n"
+            + "  <Dimension name=\"Time\" type=\"TimeDimension\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "      <Table name=\"time_by_day\" />\n"
+            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\" "
+            + "levelType=\"TimeYears\" />\n"
+            + "      <Level name=\"Quarter\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" >\n"
+            + "        <KeyExpression><SQL>RTRIM(quarter)</SQL></KeyExpression>\n" + "      </Level>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n" + "
+
+            <Dimension name=\"Product\">\n"
+            + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
+            + "      <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
+            + "        <Table name=\"product\"/>\n" + "        <Table name=\"product_class\"/>\n" + "      </Join>\n"
+            + "      <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\" "
+            + "uniqueMembers=\"true\" />\n" + "    </Hierarchy>\n" + "  </Dimension>\n"
+
+            + "  <Dimension name=\"Warehouse\">\n" + "    <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
+            + "      <Table name=\"warehouse\"/>\n"
+            + "      <Level name=\"Country\" column=\"warehouse_country\" uniqueMembers=\"true\"/>\n"
+            + "      <Level name=\"State Province\" column=\"warehouse_state_province\"\n"
+            + "          uniqueMembers=\"true\"/>\n"
+            + "      <Level name=\"City\" column=\"warehouse_city\" uniqueMembers=\"false\"/>\n"
+            + "      <Level name=\"Warehouse Name\" column=\"warehouse_name\" uniqueMembers=\"true\"/>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n" + "
+
+
+            <Cube name=\"Sales\">\n"
+            + "    <Table name=\"sales_fact_1997\" />\n"
+            + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
+            + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
+            + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\" />\n"
+            + "  </Cube>\n" + "
+            <Cube name=\"Warehouse\">\n" + "    <Table name=\"inventory_fact_1997\" />\n"
+            + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
+            + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
+            + "    <DimensionUsage name=\"Warehouse\" source=\"Warehouse\" foreignKey=\"warehouse_id\"/>\n"
+            + "    <Measure name=\"Warehouse Sales\" column=\"warehouse_sales\" aggregator=\"sum\" "
+            + "formatString=\"Standard\" />\n"
+            + "    <CalculatedMember name=\"Warehouse Sales Calc\" dimension=\"Measures\">\n"
+            + "      <Formula>[Measures].[Warehouse Sales]</Formula>\n" + "    </CalculatedMember>\n" + "  </Cube>\n"
+
+            + "  <VirtualCube name=\"Warehouse and Sales\">\n" + "    <VirtualCubeDimension name=\"Time\" />\n"
+            + "    <VirtualCubeDimension name=\"Product\" />\n"
+            + "    <VirtualCubeDimension cubeName=\"Warehouse\" name=\"Warehouse\"/>\n"
+            + "    <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Unit Sales]\" />\n"
+            + "    <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales Calc]\" />\n"
+            + "  </VirtualCube>\n" + "</Schema>\n";
+
+            */
+        public BasicQueryTestModifier16(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("tiny")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Time")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarter")
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .keyExpression(ExpressionViewRBuilder.builder()
+                                            .sqls(List.of(
+                                                SQLRBuilder.builder()
+                                                    .content("RTRIM(quarter)")
+                                                    .build()
+                                            ))
+                                            .build())
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Product")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("product_id")
+                                .primaryKeyTable("product")
+                                .relation(new JoinR(List.of(
+                                    new TableR("product"),
+                                    new TableR("product_class")),
+                                    null, "product_class_id",
+                                    null, "product_class_id"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Product Family")
+                                        .table("product_class")
+                                        .column("product_family")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Warehouse")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("warehouse_id")
+                                .relation(new TableR("warehouse"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Country")
+                                        .column("warehouse_country")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("State Province")
+                                        .column("warehouse_state_province")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .column("warehouse_city")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Warehouse Name")
+                                        .column("warehouse_name")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .fact(new TableR("sales_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Time")
+                                .source("Time")
+                                .foreignKey("time_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Product")
+                                .source("Product")
+                                .foreignKey("product_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("Warehouse")
+                        .fact(new TableR("inventory_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Time").source("Time").foreignKey("time_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Product").source("Product").foreignKey("product_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Warehouse").source("Warehouse").foreignKey("warehouse_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Warehouse Sales")
+                                .column("warehouse_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .calculatedMembers(List.of(
+                            CalculatedMemberRBuilder.builder()
+                                .name("Warehouse Sales Calc")
+                                .dimension("Measures")
+                                .formulaElement(
+                                    FormulaRBuilder.builder()
+                                        .cdata("[Measures].[Warehouse Sales]")
+                                    .build())
+                                .build()
+                        ))
+                        .build()
+                ))
+                .virtualCubes(List.of(
+                    VirtualCubeRBuilder.builder()
+                        .name("Warehouse and Sales")
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder()
+                                .name("Time")
+                                .build(),
+                            VirtualCubeDimensionRBuilder.builder()
+                                .name("Product")
+                                .build(),
+                            VirtualCubeDimensionRBuilder.builder()
+                                .name("Warehouse")
+                                .build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("[Measures].[Unit Sales]")
+                                .build(),
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Warehouse")
+                                .name("[Measures].[Warehouse Sales Calc]")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier17 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n" + "  <Table name=\"sales_fact_1997\">\n"
+            + "<AggExclude name=\"agg_c_14_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_g_ms_pcat_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_l_03_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_04_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_05_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_06_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_100_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_ll_01_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_pl_01_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_c_special_sales_fact_1997\" />\n"
+            + "    <AggName name=\"agg_c_10_sales_fact_1997\">\n" + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
+            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" rollupType=\"AvgFromSum\" />\n"
+            + "        <AggLevel name=\"[Time].[Year]\" column=\"THE_YEAR\" />\n"
+            + "        <AggLevel name=\"[Time].[Quarter]\" column=\"QUARTER\" />\n" + "    </AggName>\n"
+            + "  </Table>\n" + "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "      <Table name=\"time_by_day\"/>\n"
+            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
+            + "          levelType=\"TimeYears\"/>\n"
+            + "      <Level name=\"Quarter\" column=\"quarter\" uniqueMembers=\"false\"\n"
+            + "          levelType=\"TimeQuarters\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
+            + "</Schema>";
+            */
+        public BasicQueryTestModifier17(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart 2399 Rollup Type")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997",
+                            List.of(
+                                AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_l_04_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_l_05_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_lc_06_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build()
+                            ),
+                            List.of(
+                                AggNameRBuilder.builder()
+                                    .name("agg_c_10_sales_fact_1997")
+                                    .aggFactCount(AggColumnNameRBuilder.builder()
+                                        .column("FACT_COUNT")
+                                        .build())
+                                    .aggMeasures(List.of(
+                                        AggMeasureRBuilder.builder()
+                                            .name("[Measures].[Unit Sales]")
+                                            .column("UNIT_SALES")
+                                            .rollupType("AvgFromSum")
+                                            .build()
+                                    ))
+                                    .aggLevels(List.of(
+                                        AggLevelRBuilder.builder()
+                                            .name("[Time].[Year]")
+                                            .column("THE_YEAR")
+                                            .build(),
+                                        AggLevelRBuilder.builder()
+                                            .name("[Time].[Quarter]")
+                                            .column("QUARTER")
+                                            .build()
+                                    ))
+                                    .build())
+                            )
+                        )
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Time")
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .foreignKey("time_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(false)
+                                        .primaryKey("time_id")
+                                        .relation(new TableR("time_by_day"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Year")
+                                                .column("the_year")
+                                                .type(TypeEnum.NUMERIC)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarter")
+                                                .column("quarter")
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .build()
+                        )).build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class BasicQueryTestModifier18 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n" + "  <Table name=\"sales_fact_1997\">\n"
+            + "<AggExclude name=\"agg_c_14_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_g_ms_pcat_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_l_03_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_04_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_05_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_06_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_100_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_ll_01_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_pl_01_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_c_special_sales_fact_1997\" />\n"
+            + "    <AggName name=\"agg_c_10_sales_fact_1997\">\n" + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
+            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" rollupType=\"SumFromAvg\" />\n"
+            + "        <AggLevel name=\"[Time].[Year]\" column=\"THE_YEAR\" />\n"
+            + "        <AggLevel name=\"[Time].[Quarter]\" column=\"QUARTER\" />\n" + "    </AggName>\n"
+            + "  </Table>\n" + "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "      <Table name=\"time_by_day\"/>\n"
+            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
+            + "          levelType=\"TimeYears\"/>\n"
+            + "      <Level name=\"Quarter\" column=\"quarter\" uniqueMembers=\"false\"\n"
+            + "          levelType=\"TimeQuarters\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
+            + "</Schema>";
+            */
+        public BasicQueryTestModifier18(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart 2399 Rollup Type")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997",
+                                List.of(
+                                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_04_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_05_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_lc_06_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build()
+                                ),
+                                List.of(
+                                    AggNameRBuilder.builder()
+                                        .name("agg_c_10_sales_fact_1997")
+                                        .aggFactCount(AggColumnNameRBuilder.builder()
+                                            .column("FACT_COUNT")
+                                            .build())
+                                        .aggMeasures(List.of(
+                                            AggMeasureRBuilder.builder()
+                                                .name("[Measures].[Unit Sales]")
+                                                .column("UNIT_SALES")
+                                                .rollupType("AvgFromAvg")
+                                                .build()
+                                        ))
+                                        .aggLevels(List.of(
+                                            AggLevelRBuilder.builder()
+                                                .name("[Time].[Year]")
+                                                .column("THE_YEAR")
+                                                .build(),
+                                            AggLevelRBuilder.builder()
+                                                .name("[Time].[Quarter]")
+                                                .column("QUARTER")
+                                                .build()
+                                        ))
+                                        .build())
+                            )
+                        )
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Time")
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .foreignKey("time_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(false)
+                                        .primaryKey("time_id")
+                                        .relation(new TableR("time_by_day"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Year")
+                                                .column("the_year")
+                                                .type(TypeEnum.NUMERIC)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarter")
+                                                .column("quarter")
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("avg")
+                                .build()
+                        )).build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class BasicQueryTestModifier19 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n" + "  <Table name=\"sales_fact_1997\">\n"
+            + "<AggExclude name=\"agg_c_14_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_g_ms_pcat_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_l_03_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_04_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_l_05_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_06_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_lc_100_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_ll_01_sales_fact_1997\" />\n"
+            + "    <AggExclude name=\"agg_pl_01_sales_fact_1997\" />\n"
+            + "<AggExclude name=\"agg_c_special_sales_fact_1997\" />\n"
+            + "    <AggName name=\"agg_c_10_sales_fact_1997\">\n" + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
+            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" />\n"
+            + "        <AggLevel name=\"[Time].[Year]\" column=\"THE_YEAR\" />\n"
+            + "        <AggLevel name=\"[Time].[Quarter]\" column=\"QUARTER\" />\n" + "    </AggName>\n"
+            + "  </Table>\n" + "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n" + "      <Table name=\"time_by_day\"/>\n"
+            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
+            + "          levelType=\"TimeYears\"/>\n"
+            + "      <Level name=\"Quarter\" column=\"quarter\" uniqueMembers=\"false\"\n"
+            + "          levelType=\"TimeQuarters\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
+            + "</Schema>";
+            */
+        public BasicQueryTestModifier19(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart 2399 Rollup Type")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997",
+                                List.of(
+                                    AggExcludeRBuilder.builder().name("agg_c_14_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_04_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_l_05_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_lc_06_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                                    AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build()
+                                ),
+                            List.of(
+                                    AggNameRBuilder.builder()
+                                        .name("agg_c_10_sales_fact_1997")
+                                        .aggFactCount(AggColumnNameRBuilder.builder()
+                                            .column("FACT_COUNT")
+                                            .build())
+                                        .aggMeasures(List.of(
+                                            AggMeasureRBuilder.builder()
+                                                .name("[Measures].[Unit Sales]")
+                                                .column("UNIT_SALES")
+                                                .build()
+                                        ))
+                                        .aggLevels(List.of(
+                                            AggLevelRBuilder.builder()
+                                                .name("[Time].[Year]")
+                                                .column("THE_YEAR")
+                                                .build(),
+                                            AggLevelRBuilder.builder()
+                                                .name("[Time].[Quarter]")
+                                                .column("QUARTER")
+                                                .build()
+                                        ))
+                                        .build())
+                            )
+                        )
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Time")
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .foreignKey("time_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(false)
+                                        .primaryKey("time_id")
+                                        .relation(new TableR("time_by_day"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Year")
+                                                .column("the_year")
+                                                .type(TypeEnum.NUMERIC)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarter")
+                                                .column("quarter")
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("avg")
+                                .build()
+                        )).build()
+                ))
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier20 extends RDbMappingSchemaModifier {
+
+        /*
+            String cubeName = "Sales_MemberVis";
+            String schema = SchemaUtil.getSchema(baseSchema, null, "<Cube name=\"" + cubeName + "\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\" visible=\"false\"/>\n"
+            + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\"\n"
+            + "      formatString=\"#,###.00\"/>\n"
+            + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"#,###.00\"/>\n"
+            + "  <Measure name=\"Sales Count\" column=\"product_id\" aggregator=\"count\"\n"
+            + "      formatString=\"#,###\"/>\n" + "  <Measure name=\"Customer Count\" column=\"customer_id\"\n"
+            + "      aggregator=\"distinct-count\" formatString=\"#,###\"/>\n" + "  <CalculatedMember\n"
+            + "      name=\"Profit\"\n" + "      dimension=\"Measures\"\n" + "      visible=\"false\"\n"
+            + "      formula=\"[Measures].[Store Sales]-[Measures].[Store Cost]\">\n"
+            + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
+            + "  </CalculatedMember>\n" + "</Cube>", null, null, null, null );
+            */
+        public BasicQueryTestModifier20(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales_MemberVis")
+                .fact(new TableR("sales_fact_1997"))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .visible(false)
+                        .build(),
+                   MeasureRBuilder.builder()
+                        .name("Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
+                        .formatString("#,###.00")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Store Sales")
+                        .column("store_sales")
+                        .aggregator("sum")
+                        .formatString("#,###.00")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Sales Count")
+                        .column("product_id")
+                        .aggregator("count")
+                        .formatString("#,###")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Customer Count")
+                        .column("customer_id")
+                        .aggregator("distinct-count")
+                        .formatString("#,###")
+                        .build()
+                ))
+                .calculatedMembers(List.of(
+                    CalculatedMemberRBuilder.builder()
+                        .name("Profit")
+                        .dimension("Measures")
+                        .visible(false)
+                        .formula("[Measures].[Store Sales]-[Measures].[Store Cost]")
+                        .calculatedMemberProperties(List.of(
+                            CalculatedMemberPropertyRBuilder.builder()
+                                .name("FORMAT_STRING")
+                                .value("$#,##0.00")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier21 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Cube name=\"Sales_DimWithoutAll\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n" + "  <Dimension name=\"Product\" foreignKey=\"product_id\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"product_id\" " + "primaryKeyTable=\"product\">\n"
+            + "      <Join leftKey=\"product_class_id\" " + "rightKey=\"product_class_id\">\n"
+            + "        <Table name=\"product\"/>\n" + "        <Table name=\"product_class\"/>\n" + "      </Join>\n"
+            + "      <Level name=\"Product Family\" table=\"product_class\" " + "column=\"product_family\"\n"
+            + "          uniqueMembers=\"true\"/>\n" + "      <Level name=\"Product Department\" "
+            + "table=\"product_class\" column=\"product_department\"\n" + "          uniqueMembers=\"false\"/>\n"
+            + "      <Level name=\"Product Category\" table=\"product_class\"" + " column=\"product_category\"\n"
+            + "          uniqueMembers=\"false\"/>\n" + "      <Level name=\"Product Subcategory\" "
+            + "table=\"product_class\" column=\"product_subcategory\"\n" + "          uniqueMembers=\"false\"/>\n"
+            + "      <Level name=\"Brand Name\" table=\"product\" "
+            + "column=\"brand_name\" uniqueMembers=\"false\"/>\n"
+            + "      <Level name=\"Product Name\" table=\"product\" " + "column=\"product_name\"\n"
+            + "          uniqueMembers=\"true\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n"
+            + "  <Dimension name=\"Gender\" foreignKey=\"customer_id\">\n"
+            + "    <Hierarchy hasAll=\"false\" primaryKey=\"customer_id\">\n" + "    <Table name=\"customer\"/>\n"
+            + "      <Level name=\"Gender\" column=\"gender\" " + "uniqueMembers=\"true\"/>\n" + "    </Hierarchy>\n"
+            + "  </Dimension>" + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" " + "aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\" visible=\"false\"/>\n"
+            + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\"\n"
+            + "      formatString=\"#,###.00\"/>\n" + "</Cube>"
+            */
+        public BasicQueryTestModifier21(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales_DimWithoutAll")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Product")
+                        .foreignKey("product_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("product_id")
+                                .primaryKeyTable("product")
+                                .relation(new JoinR(List.of(
+                                    new TableR("product"),
+                                    new TableR("product_class")
+                                ),
+                                    null, "product_class_id", null, "product_class_id"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Product Family")
+                                        .table("product_class")
+                                        .column("product_family")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product Department")
+                                        .table("product_class")
+                                        .column("product_department")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product Category")
+                                        .table("product_class")
+                                        .column("product_category")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product Subcategory")
+                                        .table("product_class")
+                                        .column("product_subcategory")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Brand Name")
+                                        .table("product")
+                                        .column("brand_name")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product Name")
+                                        .table("product")
+                                        .column("product_name")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Gender")
+                        .foreignKey("customer_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Gender")
+                                        .column("gender")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .visible(false)
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
+                        .formatString("#,###.00")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier22 extends RDbMappingSchemaModifier {
+
+        /*
+            final String cubeName = "Sales_withCities";
+      String baseSchema = TestUtil.getRawSchema(context);
+      String schema = SchemaUtil.getSchema(baseSchema, null, "<Cube name=\"" + cubeName + "\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
+            + "  <Dimension name=\"Cities\" foreignKey=\"customer_id\">\n"
+            + "    <Hierarchy hasAll=\"true\" allMemberName=\"All Cities\" primaryKey=\"customer_id\">\n"
+            + "      <Table name=\"customer\"/>\n"
+            + "      <Level name=\"City\" column=\"city\" uniqueMembers=\"false\"/> \n" + "    </Hierarchy>\n"
+            + "  </Dimension>\n" + "  <Dimension name=\"Customers\" foreignKey=\"customer_id\">\n"
+            + "    <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
+            + "      <Table name=\"customer\"/>\n"
+            + "      <Level name=\"Country\" column=\"country\" uniqueMembers=\"true\"/>\n"
+            + "      <Level name=\"State Province\" column=\"state_province\" uniqueMembers=\"true\"/>\n"
+            + "      <Level name=\"City\" column=\"city\" uniqueMembers=\"false\"/>\n"
+            + "      <Level name=\"Name\" column=\"fullname\" uniqueMembers=\"true\">\n"
+            + "        <Property name=\"Gender\" column=\"gender\"/>\n"
+            + "        <Property name=\"Marital Status\" column=\"marital_status\"/>\n"
+            + "        <Property name=\"Education\" column=\"education\"/>\n"
+            + "        <Property name=\"Yearly Income\" column=\"yearly_income\"/>\n" + "      </Level>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n" + "  <Dimension name=\"Gender\" foreignKey=\"customer_id\">\n"
+            + "    <Hierarchy hasAll=\"true\" primaryKey=\"customer_id\">\n" + "    <Table name=\"customer\"/>\n"
+            + "      <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "    </Hierarchy>\n"
+            + "  </Dimension>" + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\" visible=\"false\"/>\n"
+            + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"#,###.00\"/>\n" + "</Cube>", null, null, null, null );
+            */
+        public BasicQueryTestModifier22(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales_withCities")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Time")
+                        .source("Time")
+                        .foreignKey("time_id")
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Cities")
+                        .foreignKey("customer_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Cities")
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .column("city")
+                                        .uniqueMembers(false)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Customers")
+                        .foreignKey("customer_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Customers")
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Country")
+                                        .column("country")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("State Province")
+                                        .column("state_province")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .column("city")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Name")
+                                        .column("fullname")
+                                        .uniqueMembers(true)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Gender")
+                                                .column("gender")
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Marital Status")
+                                                .column("marital_status")
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Education")
+                                                .column("education")
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Yearly Income")
+                                                .column("yearly_income")
+                                                .build()
+
+
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Gender")
+                        .foreignKey("customer_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Gender")
+                                        .column("gender")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .visible(false)
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Store Sales")
+                        .column("store_sales")
+                        .aggregator("sum")
+                        .formatString("#,###.00")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier23 extends RDbMappingSchemaModifier {
+
+        /*
+            <Cube name=\"SalesWithBadMeasure\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
+            + "  <Measure name=\"Bad Measure\" aggregator=\"sum\"\n" + "      formatString=\"Standard\"/>\n"
+            + "</Cube>
+            */
+        public BasicQueryTestModifier23(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("SalesWithBadMeasure")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Time")
+                        .source("Time")
+                        .foreignKey("time_id")
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Bad Measure")
+                        .aggregator("sum").formatString("Standard")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier24 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Cube name=\"SalesWithBadMeasure2\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
+            + "  <Measure name=\"Bad Measure\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\">\n" + "    <MeasureExpression>\n" + "       <SQL dialect=\"generic\">\n"
+            + "         unit_sales\n" + "       </SQL>\n" + "    </MeasureExpression>\n" + "  </Measure>\n"
+            + "</Cube>"
+            */
+        public BasicQueryTestModifier24(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("SalesWithBadMeasure2")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Time")
+                        .source("Time")
+                        .foreignKey("time_id")
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Bad Measure")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .measureExpression(ExpressionViewRBuilder.builder()
+                            .sqls(List.of(
+                                SQLRBuilder.builder()
+                                    .dialect("generic")
+                                    .content("unit_sales")
+                                    .build()
+                            ))
+                            .build())
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier25 extends RDbMappingSchemaModifier {
+
+        /*
+            <UserDefinedFunction name=\"SleepUdf\" className=\""
+            + SleepUdf.class.getName() + "\"/>"
+            */
+        public BasicQueryTestModifier25(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("SleepUdf")
+                .className(BasicQueryTest.SleepUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier26 extends RDbMappingSchemaModifier {
+
+        /*
+            <Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time\">\n"
+            + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
+            + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
+            + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
+            + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
+            + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
+            + "aggregator=\"sum\"/>\n" + "</Cube>
+            */
+        public BasicQueryTestModifier26(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("DefaultMeasureTesting")
+                .defaultMeasure("Supply Time")
+                .fact(new TableR("inventory_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Store")
+                        .source("Store")
+                        .foreignKey("store_id")
+                        .build(),
+                    DimensionUsageRBuilder.builder()
+                        .name("Store Type")
+                        .source("Store Type")
+                        .foreignKey("store_id")
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Store Invoice")
+                        .column("store_invoice")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Supply Time")
+                        .column("supply_time")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Warehouse Cost")
+                        .column("warehouse_cost")
+                        .aggregator("sum")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier27 extends RDbMappingSchemaModifier {
+
+        /*
+                        "<Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time Error\">\n"
+                + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
+                + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
+                + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
+                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
+                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
+                + "aggregator=\"sum\"/>\n" + "</Cube>"
+            */
+        public BasicQueryTestModifier27(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("DefaultMeasureTesting")
+                .defaultMeasure("Supply Time Error")
+                .fact(new TableR("inventory_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Store")
+                        .source("Store")
+                        .foreignKey("store_id")
+                        .build(),
+                    DimensionUsageRBuilder.builder()
+                        .name("Store Type")
+                        .source("Store Type")
+                        .foreignKey("store_id")
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Store Invoice")
+                        .column("store_invoice")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Supply Time")
+                        .column("supply_time")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Warehouse Cost")
+                        .column("warehouse_cost")
+                        .aggregator("sum")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier28 extends RDbMappingSchemaModifier {
+
+        /*
+                        <Cube name='FooBarZerOneAnything'>\n" + "  <Table name='sales_fact_1997'/>\n"
+            + "  <Dimension name='Gender' foreignKey='customer_id'>\n"
+            + "    <Hierarchy hasAll='true' allMemberName='All Gender' primaryKey='customer_id'>\n"
+            + "      <Table name='customer'/>\n"
+            + "      <Level name='Gender' column='gender' uniqueMembers='true'/>\n" + "    </Hierarchy>\n"
+            + "  </Dimension>" + "<Measure name='zero' aggregator='sum'>\n" + "  <MeasureExpression>\n"
+            + "  <SQL dialect='generic'>\n" + "    0" + "  </SQL></MeasureExpression></Measure>" + "</Cube>
+            */
+        public BasicQueryTestModifier28(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("FooBarZerOneAnything")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Gender")
+                        .foreignKey("customer_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Gender")
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Gender").column("gender").uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("zero")
+                        .aggregator("sum")
+                        .measureExpression(ExpressionViewRBuilder.builder()
+                            .sqls(List.of(
+                                SQLRBuilder.builder()
+                                    .dialect("generic")
+                                    .content("0")
+                                    .build()
+                            ))
+                            .build())
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier29 extends RDbMappingSchemaModifier {
+
+        /*
+            <UserDefinedFunction name='CountConcurrentUdf' className='" + CountConcurrentUdf.class.getName() + "'/>
+            */
+        public BasicQueryTestModifier29(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
+            List<MappingUserDefinedFunction> result = new ArrayList<>();
+            result.addAll(super.schemaUserDefinedFunctions(schema));
+            result.add(UserDefinedFunctionRBuilder.builder()
+                .name("CountConcurrentUdf")
+                .className(BasicQueryTest.CountConcurrentUdf.class.getName())
+                .build());
+            return result;
+        }
+    }
+
+    public static class BasicQueryTestModifier30 extends RDbMappingSchemaModifier {
+
+        /*
+        "<Schema name=\"Foo\">\n" + "  <Cube name=\"Bar\">\n"
+            + "    <Table name=\"warehouse\">\n" + "      <SQL>sleep(0.1) = 0</SQL>\n" + "    </Table>   \n"
+            + " <Dimension name=\"Dim\">\n" + "   <Hierarchy hasAll=\"true\">\n"
+            + "     <Level name=\"Level\" column=\"warehouse_id\"/>\n" + "      </Hierarchy>\n" + " </Dimension>\n"
+            + " <Measure name=\"Measure\" aggregator=\"sum\">\n" + "   <MeasureExpression>\n" + "     <SQL>1</SQL>\n"
+            + "   </MeasureExpression>\n" + " </Measure>\n" + "  </Cube>\n" + "</Schema>\n"
+            */
+        public BasicQueryTestModifier30(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("Foo")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Bar")
+                        .fact(new TableR("warehouse", SQLRBuilder.builder().content("sleep(0.1) = 0").build()))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Dim")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Level").column("warehouse_id")
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Measure").aggregator("sum")
+                                .measureExpression(ExpressionViewRBuilder.builder()
+                                    .sqls(List.of(
+                                        SQLRBuilder.builder().content("1").build()
+                                    ))
+                                    .build())
+                                .build()
+                        ))
+                        .build()))
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier31 extends RDbMappingSchemaModifier {
+
+        /*
+        "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"snowflake bug\">\n" + "  <Cube name=\"Bug\">\n"
+            + "    <Table name=\"sales_fact_1997\"/>\n"
+            + "    <Dimension name=\"Product - Bug\" foreignKey=\"product_id\" highCardinality=\"false\">\n"
+            + "      <Hierarchy hasAll=\"true\" primaryKeyTable=\"product\" primaryKey=\"product_id\">\n"
+            + "        <Join leftAlias=\"product_class\" leftKey=\"product_class_id\" rightAlias=\"product\" "
+            + "rightKey=\"product_class_id\">\n"
+            + "          <Table name=\"product_class\" alias=\"product_class\"/>\n"
+            + "          <Table name=\"product\" alias=\"product\"/>\n" + "        </Join>\n"
+            + "        <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\" "
+            + "uniqueMembers=\"false\"/>\n" + "      </Hierarchy>\n" + "    </Dimension>\n"
+            + "    <Measure name=\"Sales\" aggregator=\"sum\" column=\"store_sales\"/>\n" + "  </Cube>\n"
+            + "  <Cube name=\"No Bug\">\n" + "    <Table name=\"sales_fact_1997\"/>\n"
+            + "    <Dimension name=\"Product - no Bug\" highCardinality=\"false\" foreignKey=\"product_id\">\n"
+            + "      <Hierarchy hasAll=\"true\" primaryKeyTable=\"product\" primaryKey=\"product_id\">\n"
+            + "        <Join leftAlias=\"product\" leftKey=\"product_class_id\" rightAlias=\"product_class\" "
+            + "rightKey=\"product_class_id\">\n" + "          <Table name=\"product\" alias=\"product\"/>\n"
+            + "          <Table name=\"product_class\" alias=\"product_class\"/>\n" + "        </Join>\n"
+            + "        <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\"/>\n"
+            + "      </Hierarchy>\n" + "    </Dimension>\n"
+            + "    <Measure name=\"Sales\" aggregator=\"sum\" column=\"store_sales\"/>\n" + "  </Cube>\n"
+            + "</Schema>";
+
+            */
+        public BasicQueryTestModifier31(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("snowflake bug")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Bug")
+                        .fact(new TableR("sales_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Product - Bug")
+                                .foreignKey("product_id")
+                                .highCardinality(false)
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .primaryKeyTable("product")
+                                        .primaryKey("product_id")
+                                        .relation(new JoinR(List.of(
+                                            new TableR(null, "product_class", "product_class", List.of()),
+                                            new TableR(null, "product", "product", List.of())
+                                        ),
+                                            "product_class", "product_class_id",
+                                            "product", "product_class_id"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Product Family")
+                                                .table("product_class")
+                                                .column("product_family")
+                                                .uniqueMembers(false)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Sales").aggregator("sum")
+                                .column("store_sales")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                    	.name("No Bug")
+                    	.fact(new TableR("sales_fact_1997"))
+                    	.dimensionUsageOrDimensions(List.of(
+                    	    PrivateDimensionRBuilder.builder()
+                                .name("Product - no Bug")
+                                .highCardinality(false)
+                                .foreignKey("product_id")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .primaryKeyTable("product")
+                                        .primaryKey("product_id")
+                                        .relation(new JoinR(List.of(
+                                            new TableR(null, "product", "product", List.of()),
+                                            new TableR(null, "product_class", "product_class", List.of())
+                                        ),
+                                            "product", "product_class_id",
+                                            "product_class", "product_class_id"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Product Family")
+                                                .table("product_class")
+                                                .column("product_family")
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                    			.build()
+                    			))
+                    	.measures(List.of(
+                    	    MeasureRBuilder.builder()
+                                .name("Sales")
+                                .aggregator("sum")
+                                .column("store_sales")
+                                .build()
+                        ))
+                        .build()
+                        ))
+
+                .build();
+        }
+    }
+
+    public static class BasicQueryTestModifier32 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Schema name=\"FoodMart\">\n"
+            + "  <Dimension name=\"Store Size in SQFT\">\n"
+            + "    <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n" + "      <Table name=\"store\"/>\n"
+            + "      <Level name=\"Store Sqft\" column=\"store_sqft\" type=\"Numeric\" uniqueMembers=\"true\"/>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n" + "  <Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">\n"
+            + "    <Table name=\"sales_fact_1997\"/>\n"
+            + "    <DimensionUsage name=\"Store Size in SQFT\" source=\"Store Size in SQFT\" foreignKey=\"store_id\"/>\n"
+            + "    <DimensionUsage name=\"SQFT 2\" source=\"Store Size in SQFT\" foreignKey=\"store_id\"/>\n"
+            + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/>\n"
+            + "  </Cube>\n" + "</Schema>"
+            */
+        public BasicQueryTestModifier32(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Store Size in SQFT")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("store_id")
+                                .relation(new TableR("store"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Store Sqft")
+                                        .column("store_sqft")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .fact(new TableR("sales_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Store Size in SQFT")
+                                .source("Store Size in SQFT")
+                                .foreignKey("store_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("SQFT 2")
+                                .source("Store Size in SQFT")
+                                .foreignKey("store_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales").aggregator("sum")
+                                .column("unit_sales")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build()))
+                .build();
         }
     }
 
@@ -9350,7 +11102,7 @@ public class SchemaModifiers {
                         .calculatedMemberProperties(List.of(
                             CalculatedMemberPropertyRBuilder.builder()
                                 .name("FORMAT_STRING")
-                                .expression("Iif([Measures].[Colored Profit] < 0, '|($#,##0.00)|style=red', '|$#,##0.00|style=green')")                                
+                                .expression("Iif([Measures].[Colored Profit] < 0, '|($#,##0.00)|style=red', '|$#,##0.00|style=green')")
                                 .build()
                         ))
                         .build()
@@ -9598,6 +11350,138 @@ public class SchemaModifiers {
                 .className("mondrian.udf.MockCurrentDateMember")
                 .build());
             return result;
+        }
+    }
+
+    public static class UsagePrefixTestModifier1 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Schema name=\"usagePrefixTest\">"
+            + "<Dimension name='StoreX' >\n"
+            + " <Hierarchy hasAll='true' primaryKey='store_id'>\n"
+            + " <Table name='store_x'/>\n"
+            + " <Level name='Store Value' column='value' uniqueMembers='true'/>\n"
+            + " </Hierarchy>\n"
+            + "</Dimension>\n"
+            + "<Dimension name='StoreY' >\n"
+            + " <Hierarchy hasAll='true' primaryKey='store_id'>\n"
+            + " <Table name='store_y'/>\n"
+            + " <Level name='Store Value' column='value' uniqueMembers='true'/>\n"
+            + " </Hierarchy>\n"
+            + "</Dimension>\n"
+            + "<Cube name='Cheques'>\n"
+            + "<Table name='cheques'>\n"
+            + "<AggName name='agg_lp_xxx_cheques'>\n"
+            + "<AggFactCount column='FACT_COUNT'/>\n"
+
+            + "<AggMeasure name='[Measures].[Amount]'\n"
+            + "   column='amount' />\n"
+            + "        <AggLevel name=\"[StoreX].[Store Value]\" column=\"value\" />"
+            + "</AggName>\n"
+            + "</Table>\n"
+
+            + "<DimensionUsage name=\"StoreX\" source=\"StoreX\" foreignKey=\"store_id\" "
+            + " usagePrefix=\"firstprefix_\" />"
+
+            + "<DimensionUsage name=\"StoreY\" source=\"StoreY\" foreignKey=\"store_id\" "
+            + " usagePrefix=\"secondprefix_\" />"
+
+            + "<Measure name='Amount' \n"
+            + "    column='amount' aggregator='sum'\n"
+            + "   formatString='00.0'/>\n"
+            + "</Cube>"
+            + "</Schema>";
+
+         */
+        public UsagePrefixTestModifier1(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("usagePrefixTest")
+                .dimensions(List.of(PrivateDimensionRBuilder.builder()
+                    .name("StoreX")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .primaryKey("store_id")
+                            .relation(new TableR("store_x"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Store Value")
+                                    .column("value")
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("StoreY")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("store_id")
+                                .relation(new TableR("store_y"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Store Value")
+                                        .column("value")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                    ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Cheques")
+                        .fact(new TableR("cheques",
+                            List.of(),
+                            List.of(AggNameRBuilder.builder()
+                                .name("agg_lp_xxx_cheques")
+                                .aggFactCount(AggColumnNameRBuilder.builder()
+                                    .column("FACT_COUNT")
+                                    .build())
+                                .aggMeasures(List.of(
+                                    AggMeasureRBuilder.builder()
+                                        .name("[Measures].[Amount]")
+                                        .column("amount")
+                                        .build()
+                                ))
+                                .aggLevels(List.of(
+                                    AggLevelRBuilder.builder()
+                                        .name("[StoreX].[Store Value]")
+                                        .column("value")
+                                        .build()
+                                ))
+                                .build())))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("StoreX").source("StoreX").foreignKey("store_id")
+                                .usagePrefix("firstprefix_")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("StoreY").source("StoreY").foreignKey("store_id")
+                                .usagePrefix("secondprefix_")
+                                .build()
+
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Amount")
+                                .column("amount")
+                                .aggregator("sum")
+                                .formatString("00.0")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+
         }
     }
 
