@@ -2758,6 +2758,122 @@ public class SchemaModifiers {
         }
     }
 
+    public static class FunctionTestModifier3 extends RDbMappingSchemaModifier {
+
+        /*
+      "<Cube name=\"Sales_Hierarchize\">\n"
+        + "  <Table name=\"sales_fact_1997\"/>\n"
+        + "  <Dimension name=\"Time_Alphabetical\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+        + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
+        + "      <Table name=\"time_by_day\"/>\n"
+        + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
+        + "          levelType=\"TimeYears\"/>\n"
+        + "      <Level name=\"Quarter\" column=\"quarter\" uniqueMembers=\"false\"\n"
+        + "          levelType=\"TimeQuarters\"/>\n"
+        + "      <Level name=\"Month\" column=\"month_of_year\" uniqueMembers=\"false\" type=\"Numeric\"\n"
+        + "          ordinalColumn=\"the_month\"\n"
+        + "          levelType=\"TimeMonths\"/>\n"
+        + "    </Hierarchy>\n"
+        + "  </Dimension>\n"
+        + "\n"
+        + "  <Dimension name=\"Month_Alphabetical\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
+        + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
+        + "      <Table name=\"time_by_day\"/>\n"
+        + "      <Level name=\"Month\" column=\"month_of_year\" uniqueMembers=\"false\" type=\"Numeric\"\n"
+        + "          ordinalColumn=\"the_month\"\n"
+        + "          levelType=\"TimeMonths\"/>\n"
+        + "    </Hierarchy>\n"
+        + "  </Dimension>\n"
+        + "\n"
+        + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+        + "      formatString=\"Standard\"/>\n"
+        + "</Cube>"
+         */
+        public FunctionTestModifier3(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales_Hierarchize")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Time_Alphabetical")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .foreignKey("time_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarter")
+                                        .column("quarter")
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Month")
+                                        .column("month_of_year")
+                                        .uniqueMembers(false)
+                                        .type(TypeEnum.NUMERIC)
+                                        .ordinalColumn("the_month")
+                                        .levelType(LevelTypeEnum.TIME_MONTHS)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Month_Alphabetical")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .foreignKey("time_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Month")
+                                        .column("month_of_year")
+                                        .uniqueMembers(false)
+                                        .type(TypeEnum.NUMERIC)
+                                        .ordinalColumn("the_month")
+                                        .levelType(LevelTypeEnum.TIME_MONTHS)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .build()
+                ))
+                .build());
+
+
+            return result;
+        }
+    }
+
     public static class FilterTestModifier extends RDbMappingSchemaModifier {
 
         /*
@@ -9234,7 +9350,7 @@ public class SchemaModifiers {
                         .calculatedMemberProperties(List.of(
                             CalculatedMemberPropertyRBuilder.builder()
                                 .name("FORMAT_STRING")
-                                .expression("Iif([Measures].[Colored Profit] &lt; 0, '|($#,##0.00)|style=red', '|$#,##0.00|style=green')")
+                                .expression("Iif([Measures].[Colored Profit] < 0, '|($#,##0.00)|style=red', '|$#,##0.00|style=green')")                                
                                 .build()
                         ))
                         .build()
