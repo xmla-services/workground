@@ -27,6 +27,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withSchema;
@@ -255,24 +256,19 @@ class NonCollapsedAggTest extends AggTableTestCase {
         return "non_collapsed_agg_test.csv";
     }
 
-    @Override
-    protected String getCubeDescription() {
-        return CUBE_1;
-    }
 
 
     @Override
 	protected void prepareContext(TestContextWrapper context) {
         try {
             super.prepareContext(context);
-            String baseSchema = TestUtil.getRawSchema(context);
-            String schema = SchemaUtil.getSchema(baseSchema,
-                    null, getCubeDescription(), null, null, null, null);
-            TestUtil.withSchema(context, schema);
+            TestUtil.withSchema(context.getContext(), getModifierFunction());
         }
         catch (Exception e) {
             throw  new RuntimeException("Prepare context for csv tests failed");
         }
+
+
     }
 
     @ParameterizedTest
@@ -465,6 +461,10 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
         executeQuery(query1, context.createConnection());
         executeQuery(query2, context.createConnection());
+    }
+
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return NonCollapsedAggTestModifier::new;
     }
 
 }

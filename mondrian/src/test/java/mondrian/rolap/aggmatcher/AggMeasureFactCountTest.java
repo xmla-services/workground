@@ -11,88 +11,44 @@
 
 package mondrian.rolap.aggmatcher;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianException;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.test.loader.CsvDBTestCase;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureFactCountRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggNameRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggPatternRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianException;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.test.loader.CsvDBTestCase;
+import java.util.List;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 class AggMeasureFactCountTest extends CsvDBTestCase {
-
-    private static final String SCHEMA = ""
-            + "<Schema name=\"FoodMart\">\n"
-            + "<Dimension name=\"Time\" type=\"TimeDimension\">\n"
-            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
-            + "      <Table name=\"time_csv\"/>\n"
-            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
-            + "          levelType=\"TimeYears\"/>\n"
-            + "      <Level name=\"Quarter\" column=\"quarter\" uniqueMembers=\"false\"\n"
-            + "          levelType=\"TimeQuarters\"/>\n"
-            + "      <Level name=\"Month\" column=\"month_of_year\" uniqueMembers=\"false\" type=\"Numeric\"\n"
-            + "          levelType=\"TimeMonths\"/>\n"
-            + "    </Hierarchy>\n"
-            + "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n"
-            + "      <Table name=\"time_csv\"/>\n"
-            + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n"
-            + "          levelType=\"TimeYears\"/>\n"
-            + "      <Level name=\"Week\" column=\"week_of_year\" type=\"Numeric\" uniqueMembers=\"false\"\n"
-            + "          levelType=\"TimeWeeks\"/>\n"
-            + "      <Level name=\"Day\" column=\"day_of_month\" uniqueMembers=\"false\" type=\"Numeric\"\n"
-            + "          levelType=\"TimeDays\"/>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "<Dimension name=\"Store\">\n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n"
-            + "      <Table name=\"store\"/>\n"
-            + "      <Level name=\"Store Country\" column=\"store_country\" uniqueMembers=\"true\"/>\n"
-            + "      <Level name=\"Store State\" column=\"store_state\" uniqueMembers=\"true\"/>\n"
-            + "      <Level name=\"Store City\" column=\"store_city\" uniqueMembers=\"false\"/>\n"
-            + "      <Level name=\"Store Name\" column=\"store_name\" uniqueMembers=\"true\">\n"
-            + "        <Property name=\"Store Type\" column=\"store_type\"/>\n"
-            + "        <Property name=\"Store Manager\" column=\"store_manager\"/>\n"
-            + "        <Property name=\"Store Sqft\" column=\"store_sqft\" type=\"Numeric\"/>\n"
-            + "        <Property name=\"Grocery Sqft\" column=\"grocery_sqft\" type=\"Numeric\"/>\n"
-            + "        <Property name=\"Frozen Sqft\" column=\"frozen_sqft\" type=\"Numeric\"/>\n"
-            + "        <Property name=\"Meat Sqft\" column=\"meat_sqft\" type=\"Numeric\"/>\n"
-            + "        <Property name=\"Has coffee bar\" column=\"coffee_bar\" type=\"Boolean\"/>\n"
-            + "        <Property name=\"Street address\" column=\"store_street_address\" type=\"String\"/>\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>"
-            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\"> \n"
-            + "<Table name=\"fact_csv_2016\"> \n"
-
-            // add aggregation table here
-            + "%AGG_DESCRIPTION_HERE%"
-
-            + "</Table> \n"
-            + "<DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/> \n"
-            + "<DimensionUsage name=\"Store\" source=\"Store\" foreignKey=\"store_id\"/>"
-            + "<Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\"\n"
-            + "   formatString=\"Standard\"/>\n"
-            + "<Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"avg\"\n"
-            + "   formatString=\"#,###.00\"/>\n"
-            + "<Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"avg\"\n"
-            + "   formatString=\"#,###.00\"/>\n"
-            + "</Cube>\n"
-            + "</Schema>";
 
     private final String QUERY = ""
             + "select [Time].[Quarter].Members on columns, \n"
@@ -120,11 +76,6 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     @Override
-    protected String getCubeDescription() {
-        return "";
-    }
-
-    @Override
     protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
     }
@@ -148,13 +99,56 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context, QUERY, getAggSchema(null), sqlMysql);
+        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), List.of()), sqlMysql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAggName(TestContextWrapper context) {
     	prepareContext(context);
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .factColumn("store_sales")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .factColumn("store_cost")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .factColumn("unit_sales")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -168,7 +162,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         String aggSql = ""
                 + "select\n"
                 + "    `agg_c_6_fact_csv_2016`.`the_year` as `c0`,\n"
@@ -184,7 +178,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context, QUERY, getAggSchema(agg), aggSql);
+        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
@@ -192,6 +186,46 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testFactColumnNotExists(TestContextWrapper context) {
         prepareContext(context);
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -205,9 +239,9 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         try {
-            verifySameAggAndNot(context, QUERY, getAggSchema(agg));
+            verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables));
             fail("Should throw mondrian exception");
         } catch (MondrianException e) {
             assertTrue
@@ -221,6 +255,49 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnUpperCase(TestContextWrapper context) {
         prepareContext(context);
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .factColumn("STORE_SALES")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .factColumn("StOrE_cosT")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .factColumn("unit_SALES")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -234,7 +311,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         // aggregation tables are used, but with general fact count column
         String aggSql = ""
                 + "select\n"
@@ -251,13 +328,56 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context, QUERY, getAggSchema(agg), aggSql);
+        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnNotExist(TestContextWrapper context) {
         prepareContext(context);
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .factColumn("not_exist")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .factColumn("not_exist")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .factColumn("not_exist")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -271,7 +391,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         // aggregation tables are used, but with general fact count column
         String aggSql = ""
                 + "select\n"
@@ -288,13 +408,43 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context, QUERY, getAggSchema(agg), aggSql);
+        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testWithoutMeasureFactColumnElement(TestContextWrapper context) {
         prepareContext(context);
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -305,7 +455,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         // aggregation tables are used, but with general fact count column
         String aggSql = ""
                 + "select\n"
@@ -322,13 +472,57 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context, QUERY, getAggSchema(agg), aggSql);
+        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnAndAggFactCountNotExist(TestContextWrapper context) {
         prepareContext(context);
+
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("not_exist").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .factColumn("not_exist")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .factColumn("not_exist")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .factColumn("not_exist")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"not_exist\"/>\n"
@@ -342,9 +536,9 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         try {
-            assertQuerySql(context, QUERY, getAggSchema(agg), "");
+            assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), "");
             fail("Should have thrown mondrian exception");
         } catch (MondrianException e) {
             assertEquals
@@ -358,7 +552,55 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAggNameDifferentColumnNames(TestContextWrapper context) {
         prepareContext(context);
-        String agg = ""
+        List<MappingAggExclude> aggExcludes = List.of(
+            AggExcludeRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .build()
+        );
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_csv_different_column_names")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("ss_fc")
+                        .factColumn("store_sales")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("sc_fc")
+                        .factColumn("store_cost")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("us_fc")
+                        .factColumn("unit_sales")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                ))
+                .build()
+        );
+        /*
+            String agg = ""
                 + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
                 + "<AggName name=\"agg_csv_different_column_names\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -372,7 +614,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
                 + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
                 + "</AggName>\n";
-
+        */
         String aggSql = ""
                 + "select\n"
                 + "    `agg_csv_different_column_names`.`the_year` as `c0`,\n"
@@ -388,28 +630,60 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_csv_different_column_names`.`the_year`,\n"
                 + "    `agg_csv_different_column_names`.`quarter`";
 
-        verifySameAggAndNot(context, QUERY, getAggSchema(agg), aggSql);
+        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(aggExcludes, aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAggDivideByZero(TestContextWrapper context) {
         prepareContext(context);
-        String agg = ""
-                + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
-                + "<AggName name=\"agg_csv_divide_by_zero\">\n"
-                + "    <AggFactCount column=\"fact_count\"/>\n"
-                + "    <AggMeasureFactCount column=\"store_sales_fact_count\" factColumn=\"store_sales\" />\n"
-                + "    <AggMeasureFactCount column=\"store_cost_fact_count\" factColumn=\"store_cost\" />\n"
-                + "    <AggMeasureFactCount column=\"unit_sales_fact_count\" factColumn=\"unit_sales\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Store Cost]\" column=\"STORE_COST\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Store Sales]\" column=\"STORE_SALES\" />\n"
-                + "    <AggLevel name=\"[Time].[Year]\" column=\"the_year\" />\n"
-                + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
-                + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
-                + "</AggName>\n";
-
+        List<MappingAggExclude> aggExcludes = List.of(
+            AggExcludeRBuilder.builder()
+                .name("agg_c_6_fact_csv_2016")
+                .build()
+        );
+        List<MappingAggTable> aggTables = List.of(
+            AggNameRBuilder.builder()
+                .name("agg_csv_divide_by_zero")
+                .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
+                .measuresFactCounts(List.of(
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_sales_fact_count")
+                        .factColumn("store_sales")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("store_cost_fact_count")
+                        .factColumn("store_cost")
+                        .build(),
+                    AggMeasureFactCountRBuilder.builder()
+                        .column("unit_sales_fact_count")
+                        .factColumn("unit_sales")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("UNIT_SALES")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("STORE_COST")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Sales]")
+                        .column("STORE_SALES")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Year]").column("the_year").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Quarter]").column("quarter").build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Time].[Month]").column("month_of_year").build()
+                    ))
+                .build()
+        );
         String result = ""
                 + "Axis #0:\n"
                 + "{}\n"
@@ -435,27 +709,62 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "Row #2: 3\n"
                 + "Row #2: 3\n";
 
-        withSchema(context, getAggSchema(agg));
-        assertQueryReturns(context.createConnection(), QUERY, result);
+        withSchema(context.getContext(), getAggSchema(aggExcludes, aggTables));
+        assertQueryReturns(context.getContext().getConnection(), QUERY, result);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAggPattern(TestContextWrapper context) {
         prepareContext(context);
-        String agg = ""
-                + "<AggPattern pattern=\"agg_c_6_fact_csv_2016\">\n"
-                + "    <AggFactCount column=\"fact_count\"/>\n"
-                + "    <AggMeasureFactCount column=\"store_sales_fact_count\" factColumn=\"store_sales\" />\n"
-                + "    <AggMeasureFactCount column=\"store_cost_fact_count\" factColumn=\"store_cost\" />\n"
-                + "    <AggMeasureFactCount column=\"unit_sales_fact_count\" factColumn=\"unit_sales\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Store Cost]\" column=\"STORE_COST\" />\n"
-                + "    <AggMeasure name=\"[Measures].[Store Sales]\" column=\"STORE_SALES\" />\n"
-                + "    <AggLevel name=\"[Time].[Year]\" column=\"the_year\" />\n"
-                + "    <AggLevel name=\"[Time].[Quarter]\" column=\"quarter\" />\n"
-                + "    <AggLevel name=\"[Time].[Month]\" column=\"month_of_year\" />\n"
-                + "</AggPattern>\n";
+        List<MappingAggTable> aggTables = List.of(AggPatternRBuilder.builder()
+            .pattern("agg_c_6_fact_csv_2016")
+            .aggFactCount(AggColumnNameRBuilder.builder()
+                .column("fact_count")
+                .build())
+            .measuresFactCounts(List.of(
+                AggMeasureFactCountRBuilder.builder()
+                    .column("store_sales_fact_count")
+                    .factColumn("store_sales")
+                    .build(),
+                AggMeasureFactCountRBuilder.builder()
+                    .column("store_cost_fact_count")
+                    .factColumn("store_cost")
+                    .build(),
+                AggMeasureFactCountRBuilder.builder()
+                    .column("unit_sales_fact_count")
+                    .factColumn("unit_sales")
+                    .build()
+            ))
+            .aggMeasures(List.of(
+                AggMeasureRBuilder.builder()
+                    .name("[Measures].[Unit Sales]")
+                    .column("UNIT_SALES")
+                    .build(),
+                AggMeasureRBuilder.builder()
+                    .name("[Measures].[Store Cost]")
+                    .column("STORE_COST")
+                    .build(),
+                AggMeasureRBuilder.builder()
+                    .name("[Measures].[Store Sales]")
+                    .column("STORE_SALES")
+                    .build()
+            ))
+            .aggLevels(List.of(
+                AggLevelRBuilder.builder()
+                    .name("[Time].[Year]")
+                    .column("the_year")
+                    .build(),
+                AggLevelRBuilder.builder()
+                    .name("[Time].[Quarter]")
+                    .column("quarter")
+                    .build(),
+                AggLevelRBuilder.builder()
+                    .name("[Time].[Month]")
+                    .column("month_of_year")
+                    .build()
+            ))
+            .build());
 
         String aggSql = ""
                 + "select\n"
@@ -472,23 +781,33 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context, QUERY, getAggSchema(agg), aggSql);
+        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
-    private String getAggSchema(String agg) {
-        if (agg == null) {
-            agg = "";
+    private Function<MappingSchema, RDbMappingSchemaModifier> getAggSchema(List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {
+        class AggMeasureFactCountTestModifierInner extends AggMeasureFactCountTestModifier {
+
+            public AggMeasureFactCountTestModifierInner(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            protected List<MappingAggTable> getAggTables() {
+                return aggTables;
+            }
+
+            protected List<MappingAggExclude> getAggExcludes() {
+                return aggExcludes;
+            }
         }
-
-        return SCHEMA.replace("%AGG_DESCRIPTION_HERE%", agg);
+        return AggMeasureFactCountTestModifierInner::new;
     }
 
-    private void verifySameAggAndNot(TestContextWrapper context, String query, String schema) {
-        withSchema(context, schema);
+    private void verifySameAggAndNot(TestContext context, String query, Function<MappingSchema, RDbMappingSchemaModifier> mf) {
+        withSchema(context, mf);
         Result resultWithAgg =
-                executeQuery(query, context.createConnection());
+                executeQuery(query, context.getConnection());
         disableAggregates();
-        Result result = executeQuery(query, context.createConnection());
+        Result result = executeQuery(query, context.getConnection());
 
         String resultStr = TestUtil.toString(result);
         String resultWithAggStr = TestUtil.toString(resultWithAgg);
@@ -499,21 +818,21 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     private void verifySameAggAndNot
-            (TestContextWrapper context, String query, String schema, String aggSql) {
+            (TestContext context, String query, Function<MappingSchema, RDbMappingSchemaModifier> mf, String aggSql) {
         enableAggregates();
         // check that agg tables are used
-        assertQuerySql(context, QUERY, schema, aggSql);
+        assertQuerySql(context, QUERY, mf, aggSql);
 
-        verifySameAggAndNot(context, query, schema);
+        verifySameAggAndNot(context, query, mf);
     }
 
     private void assertQuerySql
-            (TestContextWrapper context, String query, String schema, String sql) {
+            (TestContext context, String query, Function<MappingSchema, RDbMappingSchemaModifier> mf, String sql) {
 
-        withSchema(context, schema);
+        withSchema(context, mf);
         //withFreshConnection();
         assertQuerySql
-                (context.createConnection(), query, new SqlPattern[]
+                (context.getConnection(), query, new SqlPattern[]
                         {
                                 new SqlPattern
                                         (DatabaseProduct.MYSQL,

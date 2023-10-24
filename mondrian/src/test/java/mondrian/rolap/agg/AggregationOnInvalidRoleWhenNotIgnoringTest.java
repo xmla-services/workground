@@ -8,11 +8,11 @@
 */
 package mondrian.rolap.agg;
 
-import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.CUBE;
-import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.ROLE;
 import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.executeAnalyzerQuery;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,6 +24,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
+
+import java.util.function.Function;
 
 /**
  * @author Andrey Khayrutdinov
@@ -51,20 +53,9 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     }
 
 
-    @Override
     protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
         TestUtil.withRole(context,  "Test");
-    }
-
-    @Override
-    protected String getCubeDescription() {
-        return CUBE;
-    }
-
-    @Override
-    protected String getRoleDescription() {
-        return ROLE;
     }
 
     @ParameterizedTest
@@ -80,4 +71,9 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
         }
         fail("Schema should not load when restriction is invalid");
     }
+
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return AggregationOnInvalidRoleTestModifier::new;
+    }
+
 }

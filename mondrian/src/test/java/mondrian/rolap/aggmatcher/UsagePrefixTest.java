@@ -32,11 +32,6 @@ class UsagePrefixTest extends AggTableTestCase {
 
     private static final String MONDRIAN_595_CSV = "MONDRIAN-595.csv";
 
-    @Override
-	protected String getCubeDescription() {
-        return "";
-    }
-
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefix(TestContextWrapper context) throws Exception {
