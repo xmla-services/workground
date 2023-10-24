@@ -12,6 +12,8 @@ package mondrian.rolap.aggmatcher;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,6 +26,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.MondrianProperties;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
+
+import java.util.function.Function;
 
 /**
  * Checkin 7634 attempted to correct a problem demonstrated by this
@@ -96,37 +100,9 @@ public class Checkin_7634 extends CsvDBTestCase {
         return CHECKIN_7634;
     }
 
-    @Override
-	protected String getCubeDescription() {
-        // defines [Product].[Class2] as default (implicit) member
-        return
-            "<Cube name='Checkin_7634'>\n"
-            + "<Table name='table7634'/>\n"
-            + "<Dimension name='Geography' foreignKey='cust_loc_id'>\n"
-            + "    <Hierarchy hasAll='true' allMemberName='All Regions' primaryKey='cust_loc_id'>\n"
-            + "    <Table name='geography7631'/>\n"
-            + "    <Level column='state_cd' name='State' type='String' uniqueMembers='true'/>\n"
-            + "    <Level column='city_nm' name='City' type='String' uniqueMembers='true'/>\n"
-            + "    <Level column='zip_cd' name='Zip Code' type='String' uniqueMembers='true'/>\n"
-            + "    </Hierarchy>\n"
-            + "</Dimension>\n"
-            + "<Dimension name='Product' foreignKey='prod_id'>\n"
-            + "    <Hierarchy hasAll='true' allMemberName='All Products' primaryKey='prod_id'>\n"
-            + "    <Table name='prod7631'/>\n"
-            + "    <Level column='class' name='Class' type='String' uniqueMembers='true'/>\n"
-            + "    <Level column='brand' name='Brand' type='String' uniqueMembers='true'/>\n"
-            + "    <Level column='item' name='Item' type='String' uniqueMembers='true'/>\n"
-            + "    </Hierarchy>\n"
-            + "</Dimension>\n"
-            + "<Measure name='First Measure' \n"
-            + "    column='first' aggregator='sum'\n"
-            + "   formatString='#,###'/>\n"
-            + "<Measure name='Requested Value' \n"
-            + "    column='request_value' aggregator='sum'\n"
-            + "   formatString='#,###'/>\n"
-            + "<Measure name='Shipped Value' \n"
-            + "    column='shipped_value' aggregator='sum'\n"
-            + "   formatString='#,###'/>\n"
-            + "</Cube>";
+
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return Checkin_7634Modifier::new;
     }
+
 }

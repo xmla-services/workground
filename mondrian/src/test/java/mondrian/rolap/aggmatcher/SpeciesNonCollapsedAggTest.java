@@ -95,13 +95,10 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
     @Override
 	protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
+        //TODO
         TestUtil.withSchema(context, ANIMAL_SCHEMA);
     }
 
-    @Override
-	protected String getCubeDescription() {
-        return "";
-    }
 
     /**
      * Test case for bug

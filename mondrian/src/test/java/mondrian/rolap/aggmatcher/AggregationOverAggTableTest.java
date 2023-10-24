@@ -9,8 +9,6 @@
  */
 package mondrian.rolap.aggmatcher;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,6 +16,10 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * @author Andrey Khayrutdinov
@@ -44,28 +46,23 @@ class AggregationOverAggTableTest extends AggTableTestCase {
         propSaver.reset();
     }
 
-    @Override
-	protected String getCubeDescription() {
-        return null;
-    }
-
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAvgMeasureLowestGranularity(TestContextWrapper context) throws Exception {
         prepareContext(context);
-        ExplicitRecognizerTest.setupMultiColDimCube(context,
-            "",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" ",
-            "");
+        ExplicitRecognizerTest.setupMultiColDimCube(context.getContext(),
+            List.of(),
+            "the_year",
+            "quarter",
+            "month_of_year", null, null, null,
+            List.of());
 
         String query =
             "select {[Measures].[Avg Unit Sales]} on columns, "
             + "non empty CrossJoin({[TimeExtra].[1997].[Q1].Children},{[Gender].[M]}) on rows "
             + "from [ExtraCol]";
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getContext().getConnection(),
             query,
             "Axis #0:\n"
             + "{}\n"
@@ -80,7 +77,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
             + "Row #2: 3\n");
 
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"

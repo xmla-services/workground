@@ -9,6 +9,8 @@
 package mondrian.rolap.agg;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,6 +22,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
+
+import java.util.function.Function;
 
 /**
  * @author Andrey Khayrutdinov
@@ -47,20 +51,10 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         propSaver.reset();
     }
 
-    @Override
+
     protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
         TestUtil.withRole(context,  "Test");
-    }
-
-    @Override
-    protected String getCubeDescription() {
-        return CUBE;
-    }
-
-    @Override
-    protected String getRoleDescription() {
-        return ROLE;
     }
 
 
@@ -77,7 +71,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         }
     }
 
-
+    /*
     static final String CUBE = ""
         + "<Cube name=\"mondrian2225\" visible=\"true\" cache=\"true\" enabled=\"true\">"
         + "  <Table name=\"mondrian2225_fact\">"
@@ -112,7 +106,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         + "    </CubeGrant>"
         + "  </SchemaGrant>"
         + "</Role>";
-
+    */
     static void executeAnalyzerQuery(Connection connection) {
         // select measures on columns
         // and sorted lexicography products on rows
@@ -153,4 +147,9 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
 
         TestUtil.assertQueryReturns(connection, queryFromAnalyzer, expected);
     }
+
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return AggregationOnInvalidRoleTestModifier::new;
+    }
+
 }
