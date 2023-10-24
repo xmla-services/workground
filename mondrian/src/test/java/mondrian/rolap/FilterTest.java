@@ -41,6 +41,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests for Filter and native Filters.
@@ -1306,10 +1307,8 @@ class FilterTest extends BatchTestCase {
           + "    </Hierarchy>\n"
           + "  </Dimension>\n" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FilterTestModifier(schema)));
-      Connection connection = context.getConnection();
+    withSchema(context, SchemaModifiers.FilterTestModifier::new);
+    Connection connection = context.getConnection();
     assertQuerySqlOrNot(connection, mdx, badPatterns, true, true, true );
     TestUtil.flushSchemaCache(connection);
     assertQuerySqlOrNot(context.getConnection(), mdx, goodPatterns, false, true, true );

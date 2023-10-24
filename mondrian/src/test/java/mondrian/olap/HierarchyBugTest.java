@@ -14,7 +14,6 @@ package mondrian.olap;
 
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
 import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -473,7 +472,7 @@ TestUtil.flushSchemaCache(conn);
         }
         RolapSchemaPool.instance().clear();
         MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AggregationOnDistinctCountMeasuresTestModifier(schema)));
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier(schema)));
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 
