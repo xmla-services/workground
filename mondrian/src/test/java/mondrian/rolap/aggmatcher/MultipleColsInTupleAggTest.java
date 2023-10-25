@@ -16,6 +16,8 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,8 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapAxis;
 import mondrian.test.SqlPattern;
+
+import java.util.function.Function;
 
 /**
  * Testcase for levels that contain multiple columns and are
@@ -290,6 +294,11 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "{[Product].[Cat One].[Prod Cat One]}\n"
             + "Row #0: 18\n"
             + "Row #1: 15\n");
+    }
+
+    @Override
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return MultipleColsInTupleAggTestModifier::new;
     }
 
 }

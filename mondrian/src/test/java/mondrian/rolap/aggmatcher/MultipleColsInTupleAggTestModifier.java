@@ -180,7 +180,7 @@ public class MultipleColsInTupleAggTestModifier extends RDbMappingSchemaModifier
                                     null, "cat", null, "cat")
                             ),
                                 null, "prod_cat",
-                                null, "product_cat"))
+                                 "product_cat", "prod_cat"))
                             .levels(List.of(
                                 LevelRBuilder.builder()
                                     .name("Category")

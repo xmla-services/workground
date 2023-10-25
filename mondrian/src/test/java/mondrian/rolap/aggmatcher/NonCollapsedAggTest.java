@@ -455,11 +455,9 @@ class NonCollapsedAggTest extends AggTableTestCase {
                 null,
                 null));
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier1(schema)));
+        withSchema(context.getContext(), TestMondrian1325Modifier::new);
 
-        executeQuery(query1, context.createConnection());
+
         executeQuery(query2, context.createConnection());
     }
 
