@@ -175,7 +175,7 @@ public class RolapResultTestModifier extends RDbMappingSchemaModifier {
             .build());
 
         result.add(CubeRBuilder.builder()
-            .name("FTAll")
+            .name("FT1")
             .fact(new TableR("FT1"))
             .dimensionUsageOrDimensions(List.of(
                 PrivateDimensionRBuilder.builder()
@@ -183,7 +183,8 @@ public class RolapResultTestModifier extends RDbMappingSchemaModifier {
                     .foreignKey("d1_id")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
-                            .hasAll(true)
+                            .hasAll(false)
+                            .defaultMember("[D1].[d]")
                             .primaryKey("d1_id")
                             .relation(new TableR("D1"))
                             .levels(List.of(
@@ -202,7 +203,8 @@ public class RolapResultTestModifier extends RDbMappingSchemaModifier {
                     .foreignKey("d2_id")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
-                            .hasAll(true)
+                            .hasAll(false)
+                            .defaultMember("[D2].[w]")
                             .primaryKey("d2_id")
                             .relation(new TableR("D2"))
                             .levels(List.of(
@@ -227,6 +229,121 @@ public class RolapResultTestModifier extends RDbMappingSchemaModifier {
             ))
             .build());
 
+        result.add(CubeRBuilder.builder()
+            .name("FT2")
+            .fact(new TableR("FT2"))
+            .dimensionUsageOrDimensions(List.of(
+                PrivateDimensionRBuilder.builder()
+                    .name("D1")
+                    .foreignKey("d1_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .defaultMember("[D1].[d]")
+                            .primaryKey("d1_id")
+                            .relation(new TableR("D1"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Name")
+                                    .column("name")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build(),
+                PrivateDimensionRBuilder.builder()
+                    .name("D2")
+                    .foreignKey("d2_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .defaultMember("[D2].[w]")
+                            .primaryKey("d2_id")
+                            .relation(new TableR("D2"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Name")
+                                    .column("name")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            ))
+            .measures(List.of(
+                MeasureRBuilder.builder()
+                    .name("Value")
+                    .column("value")
+                    .aggregator("sum")
+                    .formatString("#,###")
+                    .build()
+            ))
+            .build());
+
+        result.add(CubeRBuilder.builder()
+            .name("FT2Extra")
+            .fact(new TableR("FT2"))
+            .dimensionUsageOrDimensions(List.of(
+                PrivateDimensionRBuilder.builder()
+                    .name("D1")
+                    .foreignKey("d1_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .defaultMember("[D1].[d]")
+                            .primaryKey("d1_id")
+                            .relation(new TableR("D1"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Name")
+                                    .column("name")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build(),
+        PrivateDimensionRBuilder.builder()
+                    .name("D2")
+                    .foreignKey("d2_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(false)
+                            .defaultMember("[D2].[w]")
+                            .primaryKey("d2_id")
+                            .relation(new TableR("D2"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Name")
+                                    .column("name")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            ))
+            .measures(List.of(
+                MeasureRBuilder.builder()
+                    .name("VExtra")
+                    .column("vextra")
+                    .aggregator("sum")
+                    .formatString("#,###")
+                    .build(),
+                MeasureRBuilder.builder()
+                    .name("Value")
+                    .column("value")
+                    .aggregator("sum")
+                    .formatString("#,###")
+                    .build()
+            ))
+            .build());
         return result;
 
     }

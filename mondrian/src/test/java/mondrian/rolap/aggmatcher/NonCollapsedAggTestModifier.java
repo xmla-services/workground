@@ -181,7 +181,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
         result.addAll(super.schemaCubes(mappingSchemaOriginal));
         result.add(CubeRBuilder.builder()
             .name("foo")
-            .fact(new TableR("foo_fact",
+                .fact(new TableR("foo_fact",
                 List.of(),
                 List.of(
                     AggNameRBuilder.builder()
@@ -230,7 +230,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                         ))
                         .aggLevels(List.of(
                             AggLevelRBuilder.builder()
-                                .name("[dimension.distributor].[line class]")
+                                .name("[dimension.network].[line class]")
                                 .column("line_class_id").collapsed(false)
                                 .build()
                         ))
@@ -273,6 +273,53 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                                     .nameColumn("line_name")
                                     .build()
 
+                            ))
+                            .build(),
+                        HierarchyRBuilder.builder()
+                            .name("distributor")
+                            .hasAll(true)
+                            .allMemberName("All distributors")
+                            .primaryKey("line_id")
+                            .primaryKeyTable("line")
+                            .relation(new JoinR(List.of(
+                                new TableR("line"),
+                                new JoinR(List.of(
+                                    new TableR("line_line_class"),
+                                    new JoinR(List.of(
+                                        new TableR("line_class"),
+                                        new JoinR(List.of(
+                                            new TableR("line_class_distributor"),
+                                            new TableR("distributor")),
+                                            null, "distributor_id", null, "distributor_id")
+                                    ),
+                                        null, "line_class_id",
+                                        "line_class_distributor", "line_class_id" )
+                                ),
+                                    null, "line_class_id",
+                                    "line_class", "line_class_id")
+                            ),
+                                null, "line_id",
+                                "line_line_class", "line_id"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("distributor")
+                                    .table("distributor")
+                                    .column("distributor_id")
+                                    .nameColumn("distributor_name")
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("line class")
+                                    .table("line_class")
+                                    .column("line_class_id")
+                                    .nameColumn("line_class_name")
+                                    .uniqueMembers(true)
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("line")
+                                    .table("line")
+                                    .column("line_id")
+                                    .nameColumn("line_name")
+                                    .build()
                             ))
                             .build(),
                         HierarchyRBuilder.builder()
@@ -409,9 +456,9 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                                     .build(),
                                 LevelRBuilder.builder()
                                     .name("line class")
-                                    .table("line class")
-                                    .column("line class_id")
-                                    .nameColumn("line class_name")
+                                    .table("line_class")
+                                    .column("line_class_id")
+                                    .nameColumn("line_class_name")
                                     .uniqueMembers(true)
                                     .build(),
                                 LevelRBuilder.builder()
@@ -419,7 +466,6 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                                     .table("line")
                                     .column("line_id")
                                     .nameColumn("line_name")
-                                    .uniqueMembers(true)
                                     .build()
                             ))
                             .build(),
@@ -441,7 +487,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                                             null, "network_id", null, "network_id")
                                     ),
                                         null, "line_class_id",
-                                        "line_class", "line_class_id" )
+                                        "line_class_network", "line_class_id" )
                                 ),
                                     null, "line_class_id",
                                     "line_class", "line_class_id")
