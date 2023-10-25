@@ -12,6 +12,7 @@ package mondrian.rolap;
 import mondrian.rolap.aggmatcher.AggTableTestCase;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -21,6 +22,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -252,4 +254,9 @@ Axis #2:
             + "Row #2: \n"
             + "Row #2: \n");
     }
+
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return RolapResultTestModifier::new;
+    }
+
 }
