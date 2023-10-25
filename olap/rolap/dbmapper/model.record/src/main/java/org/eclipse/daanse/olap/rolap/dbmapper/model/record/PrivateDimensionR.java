@@ -51,7 +51,7 @@ public record PrivateDimensionR(String name,
 			this.annotations = annotations == null ? List.of() : annotations;
 			this.caption = caption;
 			this.visible = visible == null ? Boolean.TRUE : visible;
-			this.type = type; //  null ? DimensionTypeEnum.STANDARD_DIMENSION : type; not work for ExplicitRecognizerTest
+			this.type = type;
 			this.foreignKey = foreignKey;
 			this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
 			this.hierarchies = hierarchies == null ? List.of() : hierarchies;
