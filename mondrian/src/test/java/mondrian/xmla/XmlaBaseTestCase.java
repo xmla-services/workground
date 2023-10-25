@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opentest4j.AssertionFailedError;
@@ -276,7 +275,7 @@ System.out.println("Got CONTINUE");
     protected void helperTestExpect(TestContextWrapper context, boolean doSessionId)
     {
         try {
-            java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+            //java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
             java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -313,7 +312,7 @@ System.out.println("Got CONTINUE");
     protected void helperTest(TestContextWrapper context, boolean doSessionId)
     {
         try {
-            java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+            //java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
             java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
         } catch (SQLException throwables) {
             throwables.printStackTrace();
