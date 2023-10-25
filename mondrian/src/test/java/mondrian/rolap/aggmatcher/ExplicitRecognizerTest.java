@@ -9,12 +9,17 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.sql.SQLException;
-
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggForeignKeyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelPropertyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggNameRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PropertyRBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +27,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 class ExplicitRecognizerTest extends AggTableTestCase {
 
@@ -54,36 +67,54 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         return "explicit_aggs.csv";
     }
 
-    @Override
-    protected String getCubeDescription() {
-        return "";
-    }
-
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggExtraColsRequiringJoin(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"agg_g_ms_pcat_sales_fact_1997\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"UNIT_SALES\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"the_year\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Quarter]\" column=\"quarter\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Month]\" column=\"month_of_year\" />\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" captionColumn=\"the_month\" ordinalColumn=\"month_of_year\"",
-            "");
+        setupMultiColDimCube(context.getContext(),
+                List.of(AggNameRBuilder.builder()
+                        .name("agg_g_ms_pcat_sales_fact_1997")
+                        .aggFactCount(AggColumnNameRBuilder.builder()
+                        .column("FACT_COUNT")
+                        .build())
+                        .aggMeasures(List.of(
+                        AggMeasureRBuilder.builder()
+                            .name("[Measures].[Unit Sales]")
+                            .column("UNIT_SALES")
+                            .build()
+                        ))
+                        .aggLevels(List.of(
+                            AggLevelRBuilder.builder()
+                                .name("[Gender].[Gender]")
+                                .column("gender")
+                                .build(),
+                            AggLevelRBuilder.builder()
+                                .name("[TimeExtra].[Year]")
+                                .column("the_year")
+                                .build(),
+                            AggLevelRBuilder.builder()
+                                .name("[TimeExtra].[Quarter]")
+                                .column("quarter")
+                                .build(),
+                            AggLevelRBuilder.builder()
+                                .name("[TimeExtra].[Month]")
+                                .column("month_of_year")
+                                .build()
+                        ))
+                        .build()
+                    ),
+            "the_year",
+            "quarter",
+            "month_of_year", "the_month", "month_of_year", null,
+            List.of());
 
         String query =
             "select {[Measures].[Unit Sales]} on columns, "
             + "non empty CrossJoin({[TimeExtra].[Month].members},{[Gender].[M]}) on rows "
             + "from [ExtraCol] ";
-        TestUtil.flushSchemaCache(context.createConnection());
+        TestUtil.flushSchemaCache(context.getContext().getConnection());
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -106,7 +137,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `time_by_day`.`the_month`,\n"
                 + "    `agg_g_ms_pcat_sales_fact_1997`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -116,7 +147,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`agg_g_ms_pcat_sales_fact_1997`.`month_of_year`) ASC, `agg_g_ms_pcat_sales_fact_1997`.`month_of_year` ASC,\n"
                     + "    ISNULL(`agg_g_ms_pcat_sales_fact_1997`.`gender`) ASC, `agg_g_ms_pcat_sales_fact_1997`.`gender` ASC")));
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -142,21 +173,52 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitForeignKey(TestContextWrapper context) {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"agg_c_14_sales_fact_1997\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggForeignKey factColumn=\"store_id\" aggColumn=\"store_id\" />"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"unit_sales\" />\n"
-            + "        <AggMeasure name=\"[Measures].[Store Cost]\" column=\"store_cost\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"the_year\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Quarter]\" column=\"quarter\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Month]\" column=\"month_of_year\" />\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" captionColumn=\"the_month\" ordinalColumn=\"month_of_year\"",
-            "");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("agg_c_14_sales_fact_1997")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggForeignKeys(List.of(
+                    AggForeignKeyRBuilder.builder()
+                        .factColumn("store_id")
+                        .aggColumn("store_id")
+                        .build()
+                ))
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("unit_sales")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Store Cost]")
+                        .column("store_cost")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("the_year")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Quarter]")
+                        .column("quarter")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Month]")
+                        .column("month_of_year")
+                        .build()
+                ))
+                .build()
+            ),
+            "the_year",
+            "quarter",
+            "month_of_year", "the_month", "month_of_year", null,
+            List.of());
 
 
         String query =
@@ -166,7 +228,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         // Run the query twice, verifying both the SqlTupleReader and
         // Segment load queries.
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -198,7 +260,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `store`.`store_name`,\n"
                 + "    `store`.`store_street_address`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -215,7 +277,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`store`.`store_name`) ASC, `store`.`store_name` ASC")));
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -242,19 +304,43 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggOrdinalOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"test_unit_sales\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Quarter]\" column=\"testqtr\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Month]\" column=\"testmonthname\"  ordinalColumn=\"testmonthord\"/>\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"the_month\"  ordinalColumn=\"month_of_year\"",
-            "");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("test_unit_sales")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Quarter]")
+                        .column("testqtr")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Month]")
+                        .column("testmonthname")
+                        .ordinalColumn("testmonthord")
+                        .build()
+                ))
+                .build()
+            ),
+            "the_year",
+            "quarter",
+            "the_month", null,  "month_of_year", null,
+            List.of());
 
         String query =
             "select {[Measures].[Unit Sales]} on columns, "
@@ -262,7 +348,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -282,7 +368,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonthord`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c3`) ASC, `c3` ASC,\n"
@@ -297,19 +383,43 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggCaptionOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"test_unit_sales\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Quarter]\" column=\"testqtr\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Month]\" column=\"testmonthname\"  captionColumn=\"testmonthcap\"/>\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"the_month\"  captionColumn=\"month_of_year\"",
-            "");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("test_unit_sales")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Quarter]")
+                        .column("testqtr")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Month]")
+                        .column("testmonthname")
+                        .captionColumn("testmonthcap")
+                        .build()
+                ))
+                .build()
+            ),
+            "the_year",
+            "quarter",
+            "the_month",  "month_of_year", null, null,
+            List.of());
 
         String query =
             "select {[Measures].[Unit Sales]} on columns, "
@@ -317,7 +427,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -337,7 +447,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonthcap`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -352,21 +462,52 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggNameColumnOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"test_unit_sales\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Quarter]\" column=\"testqtr\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Month]\" column=\"testmonthname\"  nameColumn=\"testmonthcap\">\n"
-            + "             <AggLevelProperty name='aProperty' column='testmonprop1'  />"
-            + "          </AggLevel>"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"the_month\"  nameColumn=\"month_of_year\"",
-            "<Property name='aProperty' column='fiscal_period' /> ");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("test_unit_sales")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Quarter]")
+                        .column("testqtr")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Month]")
+                        .column("testmonthname")
+                        .nameColumn("testmonthcap")
+                        .properties(List.of(
+                            AggLevelPropertyRBuilder.builder()
+                                .name("aProperty")
+                                .column("testmonprop1")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build()
+            ),
+            "the_year",
+            "quarter",
+            "the_month", null, null,  "month_of_year",
+            List.of(PropertyRBuilder.builder()
+                .name("aProperty")
+                .column("fiscal_period")
+                .build()));
 
         String query =
             "select {[Measures].[Unit Sales]} on columns, "
@@ -374,7 +515,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -396,7 +537,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonprop1`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -412,24 +553,61 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggPropertiesOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test_distinct_count\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"unit_s\" />\n"
-            + "        <AggMeasure name=\"[Measures].[Customer Count]\" column=\"cust_cnt\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Country]\" column=\"store_country\" />\n"
-            + "        <AggLevel name=\"[Store].[Store State]\" column=\"store_st\" />\n"
-            + "        <AggLevel name=\"[Store].[Store City]\" column=\"store_cty\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Name]\" column=\"store_name\" >\n"
-            + "           <AggLevelProperty name='Street address' column='store_add' />"
-            + "        </AggLevel>\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" captionColumn=\"the_month\" ordinalColumn=\"month_of_year\"",
-            "");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test_distinct_count")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("unit_s")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Customer Count]")
+                        .column("cust_cnt")
+                        .build()
+                    ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Country]")
+                        .column("store_country")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store State]")
+                        .column("store_st")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store City]")
+                        .column("store_cty")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Name]")
+                        .column("store_name")
+                        .properties(List.of(
+                            AggLevelPropertyRBuilder.builder()
+                                .name("Street address")
+                                .column("store_add")
+                                .build()
+                        ))
+                        .build()
+
+                        ))
+                        .build()
+                ),
+            "the_year",
+            "quarter",
+            "month_of_year", "the_month", "month_of_year", null,
+            List.of());
 
         String query =
             "with member measures.propVal as 'Store.CurrentMember.Properties(\"Street Address\")'"
@@ -437,7 +615,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "non empty CrossJoin({[Gender].Gender.members},{[Store].[USA].[WA].[Spokane].[Store 16]}) on rows "
             + "from [ExtraCol]";
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -459,7 +637,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test_distinct_count`.`store_name`,\n"
                 + "    `exp_agg_test_distinct_count`.`store_add`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -471,7 +649,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_cty`) ASC, `exp_agg_test_distinct_count`.`store_cty` ASC,\n"
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_name`) ASC, `exp_agg_test_distinct_count`.`store_name` ASC")));
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getContext().getConnection(),
             "Store Address Property should be '5922 La Salle Ct'",
             query,
             "Axis #0:\n"
@@ -491,7 +669,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "Row #1: 11,523\n");
         // Should use agg table for distinct count measure
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -512,24 +690,60 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDistinctAllowableRollup(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test_distinct_count\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"unit_s\" />\n"
-            + "        <AggMeasure name=\"[Measures].[Customer Count]\" column=\"cust_cnt\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Country]\" column=\"store_country\" />\n"
-            + "        <AggLevel name=\"[Store].[Store State]\" column=\"store_st\" />\n"
-            + "        <AggLevel name=\"[Store].[Store City]\" column=\"store_cty\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Name]\" column=\"store_name\" >\n"
-            + "           <AggLevelProperty name='Street address' column='store_add' />"
-            + "        </AggLevel>\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" captionColumn=\"the_month\" ordinalColumn=\"month_of_year\"",
-            "", "Customer Count");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test_distinct_count")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("unit_s")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Customer Count]")
+                        .column("cust_cnt")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Country]")
+                        .column("store_country")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store State]")
+                        .column("store_st")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store City]")
+                        .column("store_cty")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Name]")
+                        .column("store_name")
+                        .properties(List.of(
+                            AggLevelPropertyRBuilder.builder()
+                                .name("Street address")
+                                .column("store_add")
+                                .build()
+                        ))
+                        .build()
+
+                ))
+                .build()),
+            "the_year",
+            "quarter",
+            "month_of_year", "the_month", "month_of_year", null,
+            List.of(), "Customer Count");
 
         // Query brings in Year and Store Name, omitting Gender.
         // It's okay to roll up the agg table in this case
@@ -540,7 +754,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol]";
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -562,7 +776,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test_distinct_count`.`store_name`,\n"
                 + "    `exp_agg_test_distinct_count`.`store_add`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -575,7 +789,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_name`) ASC, `exp_agg_test_distinct_count`.`store_name` ASC")));
 
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -598,24 +812,61 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDisallowedRollup(TestContextWrapper context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context,
-            "    <AggName name=\"exp_agg_test_distinct_count\">\n"
-            + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
-            + "        <AggMeasure name=\"[Measures].[Unit Sales]\" column=\"unit_s\" />\n"
-            + "        <AggMeasure name=\"[Measures].[Customer Count]\" column=\"cust_cnt\" />\n"
-            + "        <AggLevel name=\"[TimeExtra].[Year]\" column=\"testyear\" />\n"
-            + "        <AggLevel name=\"[Gender].[Gender]\" column=\"gender\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Country]\" column=\"store_country\" />\n"
-            + "        <AggLevel name=\"[Store].[Store State]\" column=\"store_st\" />\n"
-            + "        <AggLevel name=\"[Store].[Store City]\" column=\"store_cty\" />\n"
-            + "        <AggLevel name=\"[Store].[Store Name]\" column=\"store_name\" >\n"
-            + "           <AggLevelProperty name='Street address' column='store_add' />"
-            + "        </AggLevel>\n"
-            + "    </AggName>\n",
-            "column=\"the_year\"",
-            "column=\"quarter\"",
-            "column=\"month_of_year\" captionColumn=\"the_month\" ordinalColumn=\"month_of_year\"",
-            "", "Customer Count");
+        setupMultiColDimCube(context.getContext(),
+            List.of(AggNameRBuilder.builder()
+                .name("exp_agg_test_distinct_count")
+                .aggFactCount(AggColumnNameRBuilder.builder()
+                    .column("FACT_COUNT")
+                    .build())
+                .aggMeasures(List.of(
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Unit Sales]")
+                        .column("unit_s")
+                        .build(),
+                    AggMeasureRBuilder.builder()
+                        .name("[Measures].[Customer Count]")
+                        .column("cust_cnt")
+                        .build()
+                ))
+                .aggLevels(List.of(
+                    AggLevelRBuilder.builder()
+                        .name("[TimeExtra].[Year]")
+                        .column("testyear")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Gender].[Gender]")
+                        .column("gender")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Country]")
+                        .column("store_country")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store State]")
+                        .column("store_st")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store City]")
+                        .column("store_cty")
+                        .build(),
+                    AggLevelRBuilder.builder()
+                        .name("[Store].[Store Name]")
+                        .column("store_name")
+                        .properties(List.of(
+                            AggLevelPropertyRBuilder.builder()
+                                .name("Street address")
+                                .column("store_add")
+                                .build()
+                        ))
+                        .build()
+
+                ))
+                .build()
+            ),
+            "the_year",
+            "quarter",
+            "month_of_year", "the_month", "month_of_year", null,
+            List.of(), "Customer Count");
 
         String query =
             "select { measures.[Customer Count]} on columns, "
@@ -627,7 +878,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         // attributes for store are on the aggStar bitkey and not part of the
         // request and rollup is not safe
         assertQuerySql(
-            context.createConnection(),
+            context.getContext().getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -651,90 +902,68 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `customer`.`gender`"));
     }
 
-    public static void setupMultiColDimCube(TestContextWrapper context,
-        String aggName, String yearCols, String qtrCols, String monthCols,
-        String monthProp)
+    public static void setupMultiColDimCube(
+        TestContext context, List<MappingAggTable> aggTables, String yearCols, String qtrCols, String monthCols,
+        String monthCaptionCol, String monthOrdinalCol, String monthNameCol, List<MappingProperty> monthProp)
     {
         setupMultiColDimCube(context,
-            aggName, yearCols, qtrCols, monthCols, monthProp, "Unit Sales");
+            aggTables, yearCols, qtrCols, monthCols, monthCaptionCol, monthOrdinalCol, monthNameCol, monthProp, "Unit Sales");
     }
 
-    public static void setupMultiColDimCube(TestContextWrapper context,
-        String aggName, String yearCols, String qtrCols, String monthCols,
-        String monthProp, String defaultMeasure)
+    public static void setupMultiColDimCube(
+        TestContext context, List<MappingAggTable> aggTables, String yearCol, String qtrCol, String monthCol,
+        String monthCaptionCol, String monthOrdinalCol, String monthNameCol,
+        List<MappingProperty> monthProp, String defaultMeasure)
     {
-        String cube =
-            "<?xml version=\"1.0\"?>\n"
-            + "<Schema name=\"FoodMart\">\n"
-            + "  <Dimension name=\"Store\">\n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n"
-            + "      <Table name=\"store\"/>\n"
-            + "      <Level name=\"Store Country\" column=\"store_country\" uniqueMembers=\"true\"/>\n"
-            + "      <Level name=\"Store State\" column=\"store_state\" uniqueMembers=\"true\"/>\n"
-            + "      <Level name=\"Store City\" column=\"store_city\" uniqueMembers=\"false\"/>\n"
-            + "      <Level name=\"Store Name\" column=\"store_name\" uniqueMembers=\"true\">\n"
-            + "        <Property name=\"Street address\" column=\"store_street_address\" type=\"String\"/>\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Dimension name=\"Product\">\n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
-            + "      <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
-            + "        <Table name=\"product\"/>\n"
-            + "        <Table name=\"product_class\"/>\n"
-            + "      </Join>\n"
-            + "      <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\"\n"
-            + "          uniqueMembers=\"true\"/>\n"
-            + "      <Level name=\"Product Department\" table=\"product_class\" column=\"product_department\"\n"
-            + "          uniqueMembers=\"false\"/>\n"
-            + "      <Level name=\"Product Category\" table=\"product_class\" column=\"product_category\"\n"
-            + "          uniqueMembers=\"false\"/>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "<Cube name=\"ExtraCol\" defaultMeasure='#DEFMEASURE#'>\n"
-            + "  <Table name=\"sales_fact_1997\">\n"
-            + "           #AGGNAME# "
-            + "  </Table>"
-            + "  <Dimension name=\"TimeExtra\" foreignKey=\"time_id\">\n"
-            + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
-            + "      <Table name=\"time_by_day\"/>\n"
-            + "      <Level name=\"Year\" #YEARCOLS#  type=\"Numeric\" uniqueMembers=\"true\""
-            + "          levelType=\"TimeYears\">\n"
-            + "      </Level>\n"
-            + "      <Level name=\"Quarter\" #QTRCOLS#  uniqueMembers=\"false\""
-            + "          levelType=\"TimeQuarters\">\n"
-            + "      </Level>\n"
-            + "      <Level name=\"Month\" #MONTHCOLS# uniqueMembers=\"false\" type=\"Numeric\""
-            + "          levelType=\"TimeMonths\">\n"
-            + "           #MONTHPROP# "
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Dimension name=\"Gender\" foreignKey=\"customer_id\">\n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"customer_id\">\n"
-            + "    <Table name=\"customer\"/>\n"
-            + "      <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>  "
-            + "  <DimensionUsage name=\"Store\" source=\"Store\" foreignKey=\"store_id\"/>"
-            + "  <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\"/>"
-            + "<Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
-            + "      formatString=\"Standard\" visible=\"false\"/>\n"
-            + "<Measure name=\"Avg Unit Sales\" column=\"unit_sales\" aggregator=\"avg\"\n"
-            + "      formatString=\"Standard\" visible=\"false\"/>\n"
-            + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\"\n"
-            + "      formatString=\"#,###.00\"/>\n"
-            + "<Measure name=\"Customer Count\" column=\"customer_id\" aggregator=\"distinct-count\" formatString=\"#,###\"/>"
-            + "</Cube>\n"
-            + "</Schema>";
-        cube = cube
-            .replace("#AGGNAME#", aggName)
-            .replace("#YEARCOLS#", yearCols)
-            .replace("#QTRCOLS#", qtrCols)
-            .replace("#MONTHCOLS#", monthCols)
-            .replace("#MONTHPROP#", monthProp)
-            .replace("#DEFMEASURE#", defaultMeasure);
-        withSchema(context, cube);
+        class ExplicitRecognizerTestModifierInner extends ExplicitRecognizerTestModifier {
+
+            protected List<MappingProperty> getMonthProp() {
+                return monthProp;
+            }
+
+            protected String getMonthOrdinalCol() {
+                return monthOrdinalCol;
+            }
+
+            protected String getMonthNameCol() {
+                return monthNameCol;
+            }
+
+            protected String getMonthCaptionCol() {
+                return monthCaptionCol;
+            }
+
+            public ExplicitRecognizerTestModifierInner(MappingSchema mappingSchema) {
+                super(mappingSchema);
+            }
+
+            protected List<MappingAggTable> getAggTables() {
+                return aggTables;
+            }
+
+            protected List<MappingAggExclude> getAggExcludes() {
+                return List.of();
+            }
+
+            protected String getdefaultMeasure() {
+                return defaultMeasure;
+            }
+
+            protected String getQuarterCol() {
+                return qtrCol;
+            }
+
+            protected String getMonthCol() {
+                return monthCol;
+            }
+
+            protected String getYearCol() {
+                return yearCol;
+            }
+
+        }
+
+        withSchema(context, ExplicitRecognizerTestModifierInner::new);
     }
 
 }

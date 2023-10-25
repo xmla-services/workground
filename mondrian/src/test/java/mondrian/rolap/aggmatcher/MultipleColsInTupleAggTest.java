@@ -16,6 +16,8 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,8 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapAxis;
 import mondrian.test.SqlPattern;
+
+import java.util.function.Function;
 
 /**
  * Testcase for levels that contain multiple columns and are
@@ -293,55 +297,8 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @Override
-	protected String getCubeDescription() {
-        return "<Cube name='Fact'>\n"
-           + "<Table name='fact'>\n"
-           + " <AggName name='test_lp_xxx_fact'>\n"
-           + "  <AggFactCount column='fact_count'/>\n"
-           + "  <AggMeasure column='amount' name='[Measures].[Total]'/>\n"
-           + "  <AggLevel column='category' name='[Product].[Category]'/>\n"
-           + "  <AggLevel column='product_category' "
-           + "            name='[Product].[Product Category]'/>\n"
-           + " </AggName>\n"
-            + " <AggName name='test_lp_xx2_fact'>\n"
-            + "  <AggFactCount column='fact_count'/>\n"
-            + "  <AggMeasure column='amount' name='[Measures].[Total]'/>\n"
-            + "  <AggLevel column='prodname' name='[Product].[Product Name]' collapsed='false'/>\n"
-            + " </AggName>\n"
-           + "</Table>"
-           + "<Dimension name='Store' foreignKey='store_id'>\n"
-           + " <Hierarchy hasAll='true' primaryKey='store_id'>\n"
-           + "  <Table name='store_csv'/>\n"
-           + "  <Level name='Store Value' column='value' "
-           + "         uniqueMembers='true'/>\n"
-           + " </Hierarchy>\n"
-           + "</Dimension>\n"
-           + "<Dimension name='Product' foreignKey='prod_id'>\n"
-           + " <Hierarchy hasAll='true' primaryKey='prod_id' "
-           + "primaryKeyTable='product_csv'>\n"
-           + " <Join leftKey='prod_cat' rightAlias='product_cat' "
-           + "rightKey='prod_cat'>\n"
-           + "  <Table name='product_csv'/>\n"
-           + "  <Join leftKey='cat' rightKey='cat'>\n"
-           + "   <Table name='product_cat'/>\n"
-           + "   <Table name='cat'/>\n"
-           + "  </Join>"
-           + " </Join>\n"
-           + " <Level name='Category' table='cat' column='cat' "
-           + "ordinalColumn='ord' captionColumn='cap' nameColumn='name3' "
-           + "uniqueMembers='false' type='Numeric'/>\n"
-           + " <Level name='Product Category' table='product_cat' "
-           + "column='name2' ordinalColumn='ord' captionColumn='cap' "
-           + "uniqueMembers='false'/>\n"
-           + " <Level name='Product Name' table='product_csv' column='name1' "
-           + "uniqueMembers='true'>\n"
-            + "<Property name='Product Color' table='product_csv' column='color' />"
-            + "</Level>"
-           + " </Hierarchy>\n"
-           + "</Dimension>\n"
-           + "<Measure name='Total' \n"
-           + "    column='amount' aggregator='sum'\n"
-           + "   formatString='#,###'/>\n"
-           + "</Cube>";
+    protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){
+        return MultipleColsInTupleAggTestModifier::new;
     }
+
 }
