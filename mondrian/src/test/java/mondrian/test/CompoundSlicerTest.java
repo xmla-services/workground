@@ -19,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.SchemaUtil;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -1477,9 +1479,7 @@ class CompoundSlicerTest {
                         + "</CalculatedMember>",
                 null, "Warehouse Sales"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier3(schema)));
+    	TestUtil.withSchema(context, SchemaModifiers.CompoundSlicerTestModifier3::new);
 
     }
     @ParameterizedTest

@@ -2080,7 +2080,6 @@ class AggregationOnDistinctCountMeasuresTest {
                                       LevelRBuilder.builder()
                                           .name("Quarter")
                                           .column("quarter")
-                                          .type(TypeEnum.NUMERIC)
                                           .uniqueMembers(false)
                                           .levelType(LevelTypeEnum.TIME_QUARTERS)
                                           .build(),
@@ -2113,7 +2112,7 @@ class AggregationOnDistinctCountMeasuresTest {
                                   AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
                                   AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
                                   AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build()
-                              ),
+                              ),                             
                               List.of(AggNameRBuilder.builder()
                                   .name("agg_c_10_sales_fact_1997")
                                   .aggFactCount(AggColumnNameRBuilder.builder().column("FACT_COUNT").build())

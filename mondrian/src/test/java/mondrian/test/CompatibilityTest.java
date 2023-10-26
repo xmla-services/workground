@@ -20,6 +20,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Cell;
@@ -457,6 +458,7 @@ class CompatibilityTest {
         }
         final String cubeName = "Sales_inline";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
+        /*
         String schema = SchemaUtil.getSchema(
     		baseSchema,
             null,
@@ -488,8 +490,8 @@ class CompatibilityTest {
             + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"#,###.00\"/>\n"
             + "</Cube>", null, null, null, null);
-
-        TestUtil.withSchema(foodMartContext, schema);
+        */
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.CompatibilityTestModifier::new);
         connection = foodMartContext.createConnection();
 
         TestUtil.assertQueryReturns(

@@ -96,7 +96,7 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 	protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
         //TODO
-        TestUtil.withSchema(context, ANIMAL_SCHEMA);
+        TestUtil.withSchema(context.getContext(), SpeciesNonCollapsedAggTestModifier::new);
     }
 
 
