@@ -16,6 +16,7 @@ package mondrian.rolap;
 import mondrian.test.BasicQueryTest;
 import mondrian.test.UdfTest;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -56,6 +57,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ColumnDefRBui
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ExpressionViewRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.FormulaRBuilder;
@@ -68,11 +70,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRB
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PropertyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleUsageRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RowRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ScriptRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UnionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ValueRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ViewRBuilder;
@@ -725,6 +729,11 @@ public class SchemaModifiers {
                         .formatString("#,###.00")
                         .build(),
                     MeasureRBuilder.builder()
+                        .name("Custom Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
                         .name("Sales Count")
                         .column("product_id")
                         .aggregator("count")
@@ -739,6 +748,30 @@ public class SchemaModifiers {
 
     //storeDimensionLevelIndependent,
     //cubeA,
+    /*
+             "<Dimension name=\"CustomStore\">\n"
+        + "  <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n"
+        + "    <Table name=\"store\"/>\n"
+        + "    <Level name=\"Store Country\" column=\"store_country\" uniqueMembers=\"true\"/>\n"
+        + "    <Level name=\"Store City\" column=\"store_city\" uniqueMembers=\"false\">\n"
+        + "      <Property name=\"Store State\" column=\"store_state\"/>\n"
+        + "    </Level>\n"
+        + "    <Level name=\"Store Name\" column=\"store_name\" uniqueMembers=\"true\"/>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>";
+
+     */
+    /*
+               "<Cube name=\"CustomSales\">\n"
+        + "  <Table name=\"sales_fact_1997\"/>\n"
+        + "  <DimensionUsage name=\"CustomStore\" source=\"CustomStore\" foreignKey=\"store_id\"/>\n"
+        + "  <Measure name=\"Custom Store Sales\" column=\"store_sales\" aggregator=\"sum\" formatString=\"#,###.00\"/>\n"
+        + "  <Measure name=\"Custom Store Cost\" column=\"store_cost\" aggregator=\"sum\"/>\n"
+        + "  <Measure name=\"Sales Count\" column=\"product_id\" aggregator=\"count\"/>\n"
+        + "</Cube>";
+
+     */
+
     public static class SelectNotInGroupByTestModifier2 extends RDbMappingSchemaModifier {
 
         public SelectNotInGroupByTestModifier2(MappingSchema mappingSchema) {
@@ -804,6 +837,11 @@ public class SchemaModifiers {
                         .column("store_sales")
                         .aggregator("sum")
                         .formatString("#,###.00")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Custom Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
                         .build(),
                     MeasureRBuilder.builder()
                         .name("Sales Count")
@@ -886,6 +924,11 @@ public class SchemaModifiers {
                         .formatString("#,###.00")
                         .build(),
                     MeasureRBuilder.builder()
+                        .name("Custom Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
+                        .build(),
+                    MeasureRBuilder.builder()
                         .name("Sales Count")
                         .column("product_id")
                         .aggregator("count")
@@ -965,6 +1008,11 @@ public class SchemaModifiers {
                         .column("store_sales")
                         .aggregator("sum")
                         .formatString("#,###.00")
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Custom Store Cost")
+                        .column("store_cost")
+                        .aggregator("sum")
                         .build(),
                     MeasureRBuilder.builder()
                         .name("Sales Count")
@@ -7356,10 +7404,10 @@ public class SchemaModifiers {
         }
 
         @Override
-        protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
+        protected List<MappingCalculatedMember> virtualCubeCalculatedMember(MappingVirtualCube virtualCube) {
             List<MappingCalculatedMember> result = new ArrayList<>();
-            result.addAll(super.cubeCalculatedMembers(cube));
-            if ("Warehouse and Sales".equals(cube.name())) {
+            result.addAll(super.virtualCubeCalculatedMember(virtualCube));
+            if ("Warehouse and Sales".equals(virtualCube.name())) {
                 result.add(CalculatedMemberRBuilder.builder()
                     .name("Unit Sales by Customer")
                     .dimension("Measures")
@@ -7371,13 +7419,6 @@ public class SchemaModifiers {
             return result;
         }
 
-        @Override
-        protected String virtualCubeDefaultMeasure(MappingVirtualCube virtualCube) {
-            if ("Warehouse and Sales".equals(virtualCube.name())) {
-                return "Warehouse Sales";
-            }
-            return super.virtualCubeDefaultMeasure(virtualCube);
-        }
     }
 
     public static class XmlaHandlerTypeTestModifier extends RDbMappingSchemaModifier {
@@ -7402,7 +7443,7 @@ public class SchemaModifiers {
             List<MappingMeasure> result = new ArrayList<>();
             result.addAll(super.cubeMeasures(cube));
             if ("Sales".equals(cube.name())) {
-                String datatype = "";
+                //String datatype = "";
                 String aggregator = "sum";
                 if (type != null) {
                     if (type.equals("String")) {
@@ -7413,7 +7454,7 @@ public class SchemaModifiers {
                 result.add(MeasureRBuilder.builder()
                     .name("typeMeasure")
                     .aggregator(aggregator)
-                    .datatype(MeasureDataTypeEnum.fromValue(type))
+                    .datatype(type != null ? MeasureDataTypeEnum.fromValue(type) : null)
                     .column("unit_sales")
                     .measureExpression(ExpressionViewRBuilder.builder()
                         .sqls(List.of(SQLRBuilder.builder()
@@ -11482,6 +11523,3661 @@ public class SchemaModifiers {
                 ))
                 .build();
 
+        }
+    }
+
+    public static class DrillThroughExcludeFilterTestModifier extends RDbMappingSchemaModifier {
+
+        /*
+    String schema = "<Schema name=\"MYFoodmart\">\n"
+            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Store\">\n"
+            + "    <Hierarchy visible=\"true\" hasAll=\"true\" primaryKey=\"store_id\">\n"
+            + "      <Table name=\"store\"/>\n"
+            + "      <Level name=\"Store ID\" visible=\"true\" column=\"store_id\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\"/>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Dimension type=\"TimeDimension\" visible=\"true\" highCardinality=\"false\" name=\"Time\">\n"
+            + "    <Hierarchy name=\"Time Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"time_id\">\n"
+            + "      <Table name=\"time_by_day\"/>\n"
+            + "      <Level name=\"Year\" visible=\"true\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"false\" levelType=\"TimeYears\" hideMemberIf=\"Never\"/>\n"
+            + "      <Level name=\"Quarter\" visible=\"true\" column=\"quarter\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" hideMemberIf=\"Never\"/>\n"
+            + "      <Level name=\"Month\" visible=\"true\" column=\"month_of_year\" nameColumn=\"the_month\" type=\"Integer\" uniqueMembers=\"false\" levelType=\"TimeMonths\" hideMemberIf=\"Never\"/>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Warehouse\">\n"
+            + "    <Hierarchy name=\"Warehouse\" visible=\"true\" hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
+            + "      <Table name=\"warehouse\"/>\n"
+            + "      <Level name=\"Warehouse Name\" visible=\"true\" column=\"warehouse_name\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\"/>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Cube name=\"Sales\" visible=\"true\" defaultMeasure=\"Unit Sales\" cache=\"true\" enabled=\"true\">\n"
+            + "    <Table name=\"sales_fact_1997\"/>\n"
+            + "    <DimensionUsage source=\"Store\" name=\"Store\" visible=\"true\" foreignKey=\"store_id\" highCardinality=\"false\"/>\n"
+            + "    <DimensionUsage source=\"Time\" name=\"Time\" visible=\"true\" foreignKey=\"time_id\" highCardinality=\"false\"/>\n"
+            + "    <Measure name=\"Store Sales\" column=\"store_sales\" formatString=\"#,###.00\" aggregator=\"sum\"/>\n"
+            + "  </Cube>\n"
+            + "  <Cube name=\"Warehouse\" visible=\"true\" cache=\"true\" enabled=\"true\">\n"
+            + "    <Table name=\"inventory_fact_1997\"/>\n"
+            + "    <DimensionUsage source=\"Store\" name=\"Store\" visible=\"true\" foreignKey=\"store_id\" highCardinality=\"false\"/>\n"
+            + "    <DimensionUsage source=\"Time\" name=\"Time\" visible=\"true\" foreignKey=\"time_id\" highCardinality=\"false\"/>\n"
+            + "    <DimensionUsage source=\"Warehouse\" name=\"Warehouse\" visible=\"true\" foreignKey=\"warehouse_id\" highCardinality=\"false\"/>\n"
+            + "    <Measure name=\"Warehouse Sales\" column=\"warehouse_sales\" aggregator=\"sum\"/>\n"
+            + "  </Cube>\n"
+            + "  <VirtualCube enabled=\"true\" name=\"Warehouse and Sales\" defaultMeasure=\"Store Sales\" visible=\"true\">\n"
+            + "    <VirtualCubeDimension visible=\"true\" highCardinality=\"false\" name=\"Time\"/>\n"
+            + "    <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Store Sales]\"/>\n"
+            + "    <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\"/>\n"
+            + "  </VirtualCube>  \n"
+            + "</Schema>\n";
+
+         */
+        public DrillThroughExcludeFilterTestModifier(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("MYFoodmart")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Store")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("store_id")
+                                .relation(new TableR("store"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Store ID")
+                                        .visible(true)
+                                        .column("store_id")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Time")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .name("Time Hierarchy")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .visible(true)
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarter")
+                                        .visible(true)
+                                        .column("quarter")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Month")
+                                        .visible(true)
+                                        .column("month_of_year")
+                                        .nameColumn("the_month")
+                                        .type(TypeEnum.INTEGER)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_MONTHS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Warehouse")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .name("Warehouse")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("warehouse_id")
+                                .relation(new TableR("warehouse"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Warehouse Name")
+                                        .visible(true)
+                                        .column("warehouse_name")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .visible(true)
+                        .defaultMeasure("Unit Sales")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("sales_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Store").source("Store")
+                                .visible(true)
+                                .foreignKey("store_id")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Time").source("Time")
+                                .visible(true)
+                                .foreignKey("time_id")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Store Sales")
+                                .column("store_sales")
+                                .formatString("#,###.00")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("Warehouse")
+                        .visible(true)
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("inventory_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Store")
+                                .name("Store")
+                                .visible(true)
+                                .foreignKey("store_id")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Time")
+                                .name("Time")
+                                .visible(true)
+                                .foreignKey("time_id")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Warehouse")
+                                .name("Warehouse")
+                                .visible(true)
+                                .foreignKey("warehouse_id")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Warehouse Sales")
+                                .column("warehouse_sales")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .virtualCubes(List.of(
+                    VirtualCubeRBuilder.builder()
+                        .enabled(true)
+                        .name("Warehouse and Sales")
+                        .defaultMeasure("Store Sales")
+                        .visible(true)
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder()
+                                .visible(true)
+                                .highCardinality(false)
+                                .name("Time")
+                                .build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("[Measures].[Store Sales]")
+                                .build(),
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Warehouse")
+                                .name("[Measures].[Warehouse Sales]")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+    }
+
+    public static class CompatibilityTestModifier extends RDbMappingSchemaModifier {
+
+        /*
+        final String cubeName = "Sales_inline";
+        String schema = SchemaUtil.getSchema(
+    		baseSchema,
+            null,
+            "<Cube name=\"" + cubeName + "\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
+            + "  <Dimension name=\"Alternative Promotion\" foreignKey=\"promotion_id\">\n"
+            + "    <Hierarchy hasAll=\"true\" primaryKey=\"promo_id\">\n"
+            + "      <InlineTable alias=\"alt_promotion\">\n"
+            + "        <ColumnDefs>\n"
+            + "          <ColumnDef name=\"promo_id\" type=\"Numeric\"/>\n"
+            + "          <ColumnDef name=\"promo_name\" type=\"String\"/>\n"
+            + "        </ColumnDefs>\n"
+            + "        <Rows>\n"
+            + "          <Row>\n"
+            + "            <Value column=\"promo_id\">0</Value>\n"
+            + "          </Row>\n"
+            + "          <Row>\n"
+            + "            <Value column=\"promo_id\">1</Value>\n"
+            + "            <Value column=\"promo_name\">Promo1</Value>\n"
+            + "          </Row>\n"
+            + "        </Rows>\n"
+            + "      </InlineTable>\n"
+            + "      <Level name=\"Alternative Promotion\" column=\"promo_id\" nameColumn=\"promo_name\" uniqueMembers=\"true\"/> \n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\" visible=\"false\"/>\n"
+            + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"#,###.00\"/>\n"
+            + "</Cube>", null, null, null, null);
+         */
+        public CompatibilityTestModifier(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales_inline")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Time")
+                        .source("Time")
+                        .foreignKey("time_id")
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Alternative Promotion")
+                        .foreignKey("promotion_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("promo_id")
+                                .relation(InlineTableRBuilder.builder()
+                                    .alias("alt_promotion")
+                                    .columnDefs(List.of(
+                                        ColumnDefRBuilder.builder()
+                                            .name("promo_id")
+                                            .type(TypeEnum.NUMERIC)
+                                            .build(),
+                                        ColumnDefRBuilder.builder()
+                                            .name("promo_name")
+                                            .type(TypeEnum.STRING)
+                                            .build()
+                                    ))
+                                    .rows(List.of(
+                                        RowRBuilder.builder()
+                                            .values(List.of(
+                                                ValueRBuilder.builder()
+                                                    .column("promo_id")
+                                                    .content("0")
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        RowRBuilder.builder()
+                                            .values(List.of(
+                                                ValueRBuilder.builder()
+                                                    .column("promo_id")
+                                                    .content("1")
+                                                    .build(),
+                                                ValueRBuilder.builder()
+                                                    .column("promo_name")
+                                                    .content("Promo1")
+                                                    .build()
+
+                                            ))
+                                            .build()
+                                    ))
+                                    .build())
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Alternative Promotion")
+                                        .column("promo_id")
+                                        .nameColumn("promo_name")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .formatString("Standard")
+                        .visible(false)
+                        .build(),
+                    MeasureRBuilder.builder()
+                        .name("Store Sales")
+                        .column("store_sales")
+                        .aggregator("sum")
+                        .formatString("#,###.00")
+                        .build()
+                ))
+                .build());
+            return result;
+
+        }
+
+    }
+
+    public static class AccessControlTestModifier1 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"bad\" bottomLevel=\"[Customers].[City]\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA]\" access=\"all\"/>\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>");
+        */
+
+        public AccessControlTestModifier1(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(RoleRBuilder.builder()
+                .name("Role1")
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .cube("Sales")
+                                .access("all")
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Customers]")
+                                        .access(AccessEnum.CUSTOM)
+                                        .rollupPolicy("bad")
+                                        .bottomLevel("[Customers].[City]")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build(),
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[CA].[Los Angeles]")
+                                                .access(MemberGrantAccessEnum.NONE)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier2 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"Partial\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco].[Gladys Evans]\" access=\"none\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "      <HierarchyGrant hierarchy=\"[Promotion Media]\" access=\"all\"/>\n"
+                + "      <HierarchyGrant hierarchy=\"[Marital Status]\" access=\"none\"/>\n"
+                + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"Partial\" topLevel=\"[Store].[Store State]\"/>\n"
+                + "    </CubeGrant>\n"
+                + "    <CubeGrant cube=\"Warehouse\" access=\"all\"/>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n"
+                + "<Role name=\"Role2\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"none\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"Hidden\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA]\" access=\"all\"/>\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"none\"/>\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[OR]\" access=\"none\"/>\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[OR].[Portland]\" access=\"all\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"all\" rollupPolicy=\"Hidden\"/>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n");
+        */
+
+        public AccessControlTestModifier2(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                .name("Role1")
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .cube("Sales")
+                                .access("all")
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Customers]")
+                                        .access(AccessEnum.CUSTOM)
+                                        .rollupPolicy("Partial")
+                                        .bottomLevel("[Customers].[City]")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[CA]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build(),
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[CA].[San Francisco].[Gladys Evans]")
+                                                .access(MemberGrantAccessEnum.NONE)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Promotion Media]")
+                                        .access(AccessEnum.ALL)
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Marital Status]")
+                                        .access(AccessEnum.NONE)
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Gender]")
+                                        .access(AccessEnum.NONE)
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Store]")
+                                        .access(AccessEnum.CUSTOM)
+                                        .rollupPolicy("Partial")
+                                        .topLevel("[Store].[Store State]")
+                                        .build()
+                                ))
+                                .build(),
+                            CubeGrantRBuilder.builder()
+                                .cube("Warehouse")
+                                .access("all")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build()
+            );
+            result.add(
+                RoleRBuilder.builder()
+                .name("Role2")
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .cube("Sales")
+                                .access("none")
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Customers]")
+                                        .access(AccessEnum.CUSTOM)
+                                        .rollupPolicy("Hidden")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build(),
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[CA]")
+                                                .access(MemberGrantAccessEnum.NONE)
+                                                .build(),
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[OR]")
+                                                .access(MemberGrantAccessEnum.NONE)
+                                                .build(),
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customers].[USA].[OR].[Portland]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Store]")
+                                        .access(AccessEnum.ALL)
+                                        .rollupPolicy("Hidden")
+                                        .build()
+
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier3 extends RDbMappingSchemaModifier {
+
+        /*
+        String roleDefs =
+            "<Role name=\"USA manager\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <DimensionGrant access=\"all\" dimension=\"[Measures]\"/>\n"
+            + "      <HierarchyGrant access=\"custom\" hierarchy=\"[Customers]\">\n"
+            + "        <MemberGrant access=\"all\" member=\"[Customers].[USA]\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"parent of USA manager\">\n"
+            + "  <Union>\n"
+            + "    <RoleUsage roleName=\"USA manager\"/>\n"
+            + "  </Union>\n"
+            + "</Role>"
+            + "<Role name=\"grandparent of USA manager\">\n"
+            + "  <Union>\n"
+            + "    <RoleUsage roleName=\"parent of USA manager\"/>\n"
+            + "  </Union>\n"
+            + "</Role>";
+        */
+
+        public AccessControlTestModifier3(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("USA manager")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .access(AccessEnum.ALL)
+                                            .dimension("[Measures]")
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            result.add(
+                RoleRBuilder.builder()
+                    .name("parent of USA manager")
+                    .union(UnionRBuilder.builder()
+                        .roleUsages(List.of(
+                            RoleUsageRBuilder.builder()
+                                .roleName("USA manager")
+                                .build()
+                        ))
+                        .build())
+                    .build()
+            );
+            result.add(
+                RoleRBuilder.builder()
+                    .name("grandparent of USA manager")
+                    .union(UnionRBuilder.builder()
+                        .roleUsages(List.of(
+                            RoleUsageRBuilder.builder()
+                                .roleName("parent of USA manager")
+                                .build()
+                        ))
+                        .build())
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier4 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n"
+                + "<Role name=\"Role2\">\n"
+                + "  <SchemaGrant access=\"all\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[OR]\" access=\"all\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n");
+
+        */
+
+        public AccessControlTestModifier4(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .build()
+                    ))
+                    .build()
+            );
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier5 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"all\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"Partial\" topLevel=\"[Customers].[State Province]\" bottomLevel=\"[Customers].[State Province]\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n"
+                + "<Role name=\"Role2\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n");
+
+        */
+
+        public AccessControlTestModifier5(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .topLevel("[Customers].[State Province]")
+                                            .bottomLevel("[Customers].[State Province]")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier6 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Product]\" access=\"custom\">\n"
+                + "        <MemberGrant member=\"[Product].[Drink]\" access=\"all\"/>\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>");
+        */
+
+        public AccessControlTestModifier6(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Product]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Product].[Drink]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier7 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"California manager\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"none\" />\n"
+                + "    </CubeGrant>\n"
+                + "    <CubeGrant cube=\"Sales Ragged\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" />\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>");
+        */
+
+        public AccessControlTestModifier7(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("California manager")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales Ragged")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier8 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Buggy Role\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"HR\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Employees]\" access=\"custom\"\n"
+            + "                      rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant\n"
+            + "            member=\"[Employees].[All Employees].[Sheri Nowmer].[Darren Stanz]\"\n"
+            + "            access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\"\n"
+            + "                      rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[All Stores].[USA].[CA]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier8(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Buggy Role")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("HR")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Employees]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Employees].[All Employees].[Sheri Nowmer].[Darren Stanz]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[All Stores].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier9 extends RDbMappingSchemaModifier {
+
+        /*
+        "<Role name=\"role1\">\n"
+        + " <SchemaGrant access=\"none\">\n"
+        + "  <CubeGrant cube=\"Warehouse\" access=\"all\">\n"
+        + "   <HierarchyGrant hierarchy=\"[Store Size in SQFT]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+        + "    <MemberGrant member=\"[Store Size in SQFT].[20319]\" access=\"all\"/>\n"
+        + "    <MemberGrant member=\"[Store Size in SQFT].[21215]\" access=\"none\"/>\n"
+        + "   </HierarchyGrant>\n"
+        + "   <HierarchyGrant hierarchy=\"[Store Type]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+        + "    <MemberGrant member=\"[Store Type].[Supermarket]\" access=\"all\"/>\n"
+        + "   </HierarchyGrant>\n"
+        + "  </CubeGrant>\n"
+        + " </SchemaGrant>\n"
+        + "</Role>";
+        */
+
+        public AccessControlTestModifier9(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Warehouse")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("Store Size in SQFT]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store Size in SQFT].[20319]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store Size in SQFT].[21215]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store Type]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store Type].[Supermarket]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier10 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"VCRole\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\"\n"
+            + "          topLevel=\"[Customers].[State Province]\" bottomLevel=\"[Customers].[City]\">\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier10(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("VCRole")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Warehouse and Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .topLevel("[Customers].[State Province]")
+                                            .bottomLevel("[Customers].[City]")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Gender]")
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier11 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"role2\">"
+            + " <SchemaGrant access=\"none\">"
+            + "  <CubeGrant cube=\"Sales\" access=\"all\">"
+            + "   <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">"
+            + "    <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>"
+            + "    <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"none\"/>"
+            + "   </HierarchyGrant>"
+            + "  </CubeGrant>"
+            + " </SchemaGrant>"
+            + "</Role>";
+        */
+
+        public AccessControlTestModifier11(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier12 extends RDbMappingSchemaModifier {
+
+        /*
+        */
+
+        public AccessControlTestModifier12(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            //TODO
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier14 extends RDbMappingSchemaModifier {
+
+        /*
+                        "<Role name=\"REG1\"> \n"
+                + "  <SchemaGrant access=\"none\"> \n"
+                + "    <CubeGrant cube=\"HR\" access=\"all\"> \n"
+                + "      <HierarchyGrant hierarchy=\"Employees\" access=\"custom\" rollupPolicy=\"partial\"> \n"
+                + "        <MemberGrant member=\"[Employees].[All Employees]\" access=\"none\"/>\n"
+                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Steven Betsekas]\" access=\"all\"/> \n"
+                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Arvid Ziegler]\" access=\"all\"/> \n"
+                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Ann Weyerhaeuser]\" access=\"all\"/> \n"
+                + "      </HierarchyGrant> \n"
+                + "    </CubeGrant> \n"
+                + "  </SchemaGrant> \n"
+                + "</Role>");
+        */
+
+        public AccessControlTestModifier14(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("REG1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("HR")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("Employees")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Employees].[All Employees]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Steven Betsekas]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Arvid Ziegler]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Ann Weyerhaeuser]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                                ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier15 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"CTO\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\">\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[XX]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[XX].[Yyy Yyyyyyy]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Zzz Zzzz]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+
+        */
+
+        public AccessControlTestModifier15(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("CTO")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[XX]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[XX].[Yyy Yyyyyyy]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Zzz Zzzz]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder().hierarchy("[Gender]").access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier16 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"Partial\" topLevel=\"[Store].[Store State]\">\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n");
+        */
+
+        public AccessControlTestModifier16(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("Partial")
+                                            .topLevel("[Store].[Store State]")
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier17 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Role1\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"none\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"custom\">\n"
+                + "        <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\"/>\n"
+                + "      </HierarchyGrant>"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>\n"
+                + "<Role name=\"Role2\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales Ragged\" access=\"all\"/>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role>");
+        */
+
+        public AccessControlTestModifier17(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("none")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Measures]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Measures].[Unit Sales]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales Ragged")
+                                    .access("all")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier18 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"CTO\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\">\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[XX]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[XX].[Yyy Yyyyyyy]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Zzz Zzzz]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+
+        */
+
+        public AccessControlTestModifier18(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("CTO")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[XX]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[XX].[Yyy Yyyyyyy]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Zzz Zzzz]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder().hierarchy("[Gender]")
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier19 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
+            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\" />\n"
+            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
+            + "      <DimensionGrant dimension=\"[Gender]\" access=\"all\" />\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"Role2\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
+            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\" />\n"
+            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
+            + "      <DimensionGrant dimension=\"[Customers]\" access=\"none\" />\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"Role3\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
+            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
+            + "      <DimensionGrant dimension=\"[Measures]\" access=\"custom\" />\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n");
+
+        */
+
+        public AccessControlTestModifier19(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("custom")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Measures]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Education Level]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Gender]")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("custom")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Measures]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Education Level]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Gender]")
+                                            .access(AccessEnum.NONE)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role3")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("custom")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Education Level]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Measures]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier20 extends RDbMappingSchemaModifier {
+
+        /*
+                    "  <Role name=\"Role1\">\n"
+                    + "    <SchemaGrant access=\"all\">\n"
+                    + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                    + "        <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" topLevel=\"[Customers].[City]\" bottomLevel=\"[Customers].[City]\" rollupPolicy=\"partial\">\n"
+                    + "          <MemberGrant member=\"[City].[Coronado]\" access=\"all\">\n"
+                    + "          </MemberGrant>\n"
+                    + "        </HierarchyGrant>\n"
+                    + "      </CubeGrant>\n"
+                    + "    </SchemaGrant>\n"
+                    + "  </Role>\n"
+                    + "  <Role name=\"Role2\">\n"
+                    + "    <SchemaGrant access=\"all\">\n"
+                    + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                    + "        <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" topLevel=\"[Customers].[City]\" bottomLevel=\"[Customers].[City]\" rollupPolicy=\"partial\">\n"
+                    + "          <MemberGrant member=\"[City].[Burbank]\" access=\"all\">\n"
+                    + "          </MemberGrant>\n"
+                    + "        </HierarchyGrant>\n"
+                    + "      </CubeGrant>\n"
+                    + "    </SchemaGrant>\n"
+                    + "  </Role>\n");
+
+        */
+
+        public AccessControlTestModifier20(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .topLevel("[Customers].[City]")
+                                            .bottomLevel("[Customers].[City]")
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[City].[Coronado]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .topLevel("[Customers].[City]")
+                                            .bottomLevel("[Customers].[City]")
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[City].[Burbank]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier21 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Bacon\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+
+        */
+
+        public AccessControlTestModifier21(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Bacon")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier22 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier22(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier23 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>"
+            + "<Role name=\"Role2\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier23(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+
+    public static class AccessControlTestModifier24 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Admin\">\n"
+                + "  <SchemaGrant access=\"none\">\n"
+                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "      <HierarchyGrant hierarchy=\"[Store]\" rollupPolicy=\"partial\" access=\"custom\">\n"
+                + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\">\n"
+                + "        </MemberGrant>\n"
+                + "      </HierarchyGrant>\n"
+                + "      <HierarchyGrant hierarchy=\"[Customers]\" rollupPolicy=\"partial\" access=\"custom\">\n"
+                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\">\n"
+                + "        </MemberGrant>\n"
+                + "      </HierarchyGrant>\n"
+                + "    </CubeGrant>\n"
+                + "  </SchemaGrant>\n"
+                + "</Role> \n");
+        */
+
+        public AccessControlTestModifier24(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Admin")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier25 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"test\">\n"
+            + " <SchemaGrant access=\"none\">\n"
+            + "   <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "     <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\"\n"
+            + "         topLevel=\"[Store].[Store Country]\" rollupPolicy=\"partial\">\n"
+            + "       <MemberGrant member=\"[Store].[All Stores]\" access=\"none\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[CA].[Alameda]\" access=\"all\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[CA].[Beverly Hills]\"\n"
+            + "access=\"all\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\"\n"
+            + "access=\"all\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[CA].[San Diego]\" access=\"all\"/>\n"
+            + "\n"
+            + "       <MemberGrant member=\"[Store].[USA].[OR].[Portland]\" access=\"all\"/>\n"
+            + "       <MemberGrant member=\"[Store].[USA].[OR].[Salem]\" access=\"all\"/>\n"
+            + "     </HierarchyGrant>\n"
+            + "   </CubeGrant>\n"
+            + " </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier25(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("test")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .topLevel("[Store].[Store Country]")
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[All Stores]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Alameda]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Beverly Hills]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Diego]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR].[Portland]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR].[Salem]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier26 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"dev\">"
+            + "    <SchemaGrant access=\"all\">"
+            + "      <CubeGrant cube=\"Sales\" access=\"all\">"
+            + "      </CubeGrant>"
+            + "      <CubeGrant cube=\"HR\" access=\"all\">"
+            + "      </CubeGrant>"
+            + "      <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">"
+            + "         <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">"
+            + "            <MemberGrant member=\"[Measures].[Warehouse Sales]\" access=\"all\">"
+            + "            </MemberGrant>"
+            + "         </HierarchyGrant>"
+            + "     </CubeGrant>"
+            + "  </SchemaGrant>"
+            + "</Role>";
+        */
+
+        public AccessControlTestModifier26(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("dev")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("HR")
+                                    .access("all")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Warehouse and Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("Measures")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Measures].[Warehouse Sales]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier27 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"dev\">"
+            + "    <SchemaGrant access=\"all\">"
+            + "      <CubeGrant cube=\"Sales\" access=\"all\">"
+            + "         <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">"
+            + "            <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\">"
+            + "            </MemberGrant>"
+            + "         </HierarchyGrant>"
+            + "      </CubeGrant>"
+            + "      <CubeGrant cube=\"HR\" access=\"all\">"
+            + "      </CubeGrant>"
+            + "      <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">"
+            + "     </CubeGrant>"
+            + "  </SchemaGrant>"
+            + "</Role>";
+        */
+
+        public AccessControlTestModifier27(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("dev")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("Measures")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Measures].[Unit Sales]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("HR")
+                                    .access("all")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Warehouse and Sales")
+                                    .access("all")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier28 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Admin\">\n"
+                + "    <SchemaGrant access=\"none\">\n"
+                + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "        <HierarchyGrant hierarchy=\"[Gender]\" rollupPolicy=\"partial\" access=\"custom\">\n"
+                + "          <MemberGrant member=\"[Gender].[F]\" access=\"all\">\n"
+                + "          </MemberGrant>\n"
+                + "        </HierarchyGrant>\n"
+                + "      </CubeGrant>\n"
+                + "    </SchemaGrant>\n"
+                + "  </Role>\n");
+        */
+
+        public AccessControlTestModifier28(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Admin")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Gender]")
+                                            .rollupPolicy("partial")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Gender].[F]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier29 extends RDbMappingSchemaModifier {
+
+        /*
+                "<Role name=\"Admin\">\n"
+                + "    <SchemaGrant access=\"none\">\n"
+                + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
+                + "        <HierarchyGrant hierarchy=\"[Gender]\" rollupPolicy=\"partial\" access=\"custom\">\n"
+                + "          <MemberGrant member=\"[Gender].[F]\" access=\"all\">\n"
+                + "          </MemberGrant>\n"
+                + "        </HierarchyGrant>\n"
+                + "      </CubeGrant>\n"
+                + "    </SchemaGrant>\n"
+                + "  </Role>\n");
+        */
+        private final Boolean hasAll;
+        private final String defaultMem;
+        private final RollupPolicy policy;
+
+        public AccessControlTestModifier29(MappingSchema mappingSchema,
+                                           Boolean hasAll, String defaultMem, RollupPolicy policy) {
+            super(mappingSchema);
+            this.hasAll = hasAll;
+            this.defaultMem = defaultMem;
+            this.policy = policy;
+        }
+
+        /*
+            "<Cube name=\"TinySales\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "  <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\"/>\n"
+            + "  <DimensionUsage name=\"Store2\" source=\"Store2\" foreignKey=\"store_id\"/>\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"/>\n"
+            + "</Cube>";
+         */
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("TinySales")
+                .fact(new TableR("sales_fact_1997"))
+                .dimensionUsageOrDimensions(List.of(
+                    DimensionUsageRBuilder.builder()
+                        .name("Product")
+                        .source("Product")
+                        .foreignKey("product_id")
+                        .build(),
+                    DimensionUsageRBuilder.builder()
+                        .name("Store2")
+                        .source("Store2")
+                        .foreignKey("store_id")
+                        .build()
+                ))
+                .measures(List.of(
+                    MeasureRBuilder.builder()
+                        .name("Unit Sales")
+                        .column("unit_sales")
+                        .aggregator("sum")
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+
+        protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+            List<MappingPrivateDimension> result = new ArrayList<>();
+            result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+            result.add(PrivateDimensionRBuilder.builder()
+                .name("Store2")
+                .hierarchies(List.of(
+                    HierarchyRBuilder.builder()
+                        .hasAll(hasAll)
+                        .primaryKeyTable("store_id")
+                        .defaultMember(defaultMem)
+                        .relation(new TableR("store"))
+                        .levels(List.of(
+                            LevelRBuilder.builder()
+                                .name("Store Country")
+                                .column("store_country")
+                                .uniqueMembers(true)
+                                .build(),
+                            LevelRBuilder.builder()
+                                .name("Store State")
+                                .column("store_state")
+                                .uniqueMembers(true)
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build());
+            return result;
+        }
+
+        /*
+                    "<Role name=\"test\">\n"
+            + "        <SchemaGrant access=\"none\">\n"
+            + "            <CubeGrant cube=\"TinySales\" access=\"all\">\n"
+            + "                <HierarchyGrant hierarchy=\"[Store2]\" access=\"custom\"\n"
+            + "                                 rollupPolicy=\"%s\">\n"
+            + "                    <MemberGrant member=\"[Store2].[USA].[CA]\" access=\"all\"/>\n"
+            + "                    <MemberGrant member=\"[Store2].[USA].[OR]\" access=\"all\"/>\n"
+            + "                    <MemberGrant member=\"[Store2].[Canada]\" access=\"all\"/>\n"
+            + "                </HierarchyGrant>\n"
+            + "            </CubeGrant>\n"
+            + "        </SchemaGrant>\n"
+            + "    </Role> ";
+
+         */
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("test")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("TinySales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store2]")
+                                            .rollupPolicy(policy.name())
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[USA].[CA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store2].[Canada]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier30 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"noBaseCubes\">\n"
+            + " <SchemaGrant access=\"all\">\n"
+            + "  <CubeGrant cube=\"Sales\" access=\"none\" />\n"
+            + "  <CubeGrant cube=\"Sales Ragged\" access=\"none\" />\n"
+            + "  <CubeGrant cube=\"Sales 2\" access=\"none\" />\n"
+            + "  <CubeGrant cube=\"Warehouse\" access=\"none\" />\n"
+            + " </SchemaGrant>\n"
+            + "</Role> ";
+        */
+
+        public AccessControlTestModifier30(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("noBaseCubes")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("none")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales Ragged")
+                                    .access("none")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales 2")
+                                    .access("none")
+                                    .build(),
+                                CubeGrantRBuilder.builder()
+                                    .cube("Warehouse")
+                                    .access("none")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier31 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"all\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>"
+            + "<Role name=\"Role2\">\n"
+            + "  <SchemaGrant access=\"all\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"custom\">\n"
+            + "        <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier31(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Measures]")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Measures]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Measures].[Unit Sales]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier33 extends RDbMappingSchemaModifier {
+
+
+        public AccessControlTestModifier33(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+                String cubeDef = "<Cube name=\"Sales1\">"
+          + "  <Table name=\"sales_fact_1997\"/>\n"
+            "    <Dimension visible=\"true\" foreignKey=\"customer_id\" highCardinality=\"false\" name=\"Customers\">\n"
+            + "      <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
+            + "        <Table name=\"customer\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Country\" visible=\"true\" column=\"country\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"State Province\" visible=\"true\" column=\"state_province\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"City\" visible=\"true\" column=\"city\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Name1\" visible=\"true\" column=\"fname\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "          <Property name=\"Gender\" column=\"gender\" type=\"String\">\n"
+            + "          </Property>\n"
+            + "          <Property name=\"Marital Status\" column=\"marital_status\" type=\"String\">\n"
+            + "          </Property>\n"
+            + "          <Property name=\"Education\" column=\"education\" type=\"String\">\n"
+            + "          </Property>\n"
+            + "          <Property name=\"Yearly Income\" column=\"yearly_income\" type=\"String\">\n"
+            + "          </Property>\n"
+            + "        </Level>\n"
+            + "        <Level name=\"First Name\" visible=\"true\" column=\"fname\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "      <Hierarchy name=\"Gender\" visible=\"true\" hasAll=\"true\" primaryKey=\"customer_id\">\n"
+            + "        <Table name=\"customer\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Gender\" visible=\"true\" column=\"gender\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"AnalyzerBusinessGroup\">\n"
+            + "              <![CDATA[Customers]]>\n"
+            + "            </Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "      <Hierarchy name=\"Marital Status\" visible=\"true\" hasAll=\"true\" primaryKey=\"customer_id\">\n"
+            + "        <Table name=\"customer\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Marital Status\" visible=\"true\" column=\"marital_status\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"AnalyzerBusinessGroup\">\n"
+            + "              <![CDATA[Customers]]>\n"
+            + "            </Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Store\" foreignKey=\"store_id\">\n"
+            + "    <Hierarchy visible=\"true\" hasAll=\"true\" primaryKey=\"store_id\">\n"
+            + "      <Table name=\"store\">\n"
+            + "      </Table>\n"
+            + "      <Level name=\"Store ID\" visible=\"true\" column=\"store_id\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Store Country\" visible=\"true\" column=\"store_country\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Store State\" visible=\"true\" column=\"store_state\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Store City\" visible=\"true\" column=\"store_city\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Store Name\" visible=\"true\" column=\"store_name\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        <Property name=\"Store Type\" column=\"store_type\" type=\"String\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Store Manager\" column=\"store_manager\" type=\"String\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Store Sqft\" column=\"store_sqft\" type=\"Numeric\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Grocery Sqft\" column=\"grocery_sqft\" type=\"Numeric\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Frozen Sqft\" column=\"frozen_sqft\" type=\"Numeric\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Meat Sqft\" column=\"meat_sqft\" type=\"Numeric\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Has coffee bar\" column=\"coffee_bar\" type=\"Boolean\">\n"
+            + "        </Property>\n"
+            + "        <Property name=\"Street address\" column=\"store_street_address\" type=\"String\">\n"
+            + "        </Property>\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n";
+
+          + "</Cube>";
+
+         */
+        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+            List<MappingCube> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.add(CubeRBuilder.builder()
+                .name("Sales1")
+                .dimensionUsageOrDimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .foreignKey("customer_id")
+                        .highCardinality(false)
+                        .name("Customers")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .visible(true)
+                                .hasAll(true)
+                                .allMemberName("All Customers")
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Country")
+                                        .visible(true)
+                                        .column("country")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("State Province")
+                                        .visible(true)
+                                        .column("state_province")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .visible(true)
+                                        .column("city")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Name1")
+                                        .visible(true)
+                                        .column("fname")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Gender")
+                                                .column("gender")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Marital Status")
+                                                .column("marital_status")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Education")
+                                                .column("education")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Yearly Income")
+                                                .column("yearly_income")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("First Name")
+                                        .visible(true)
+                                        .column("fname")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build(),
+                            HierarchyRBuilder.builder()
+                                .name("Gender")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Gender")
+                                        .visible(true)
+                                        .column("gender")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .annotations(List.of(
+                                            AnnotationRBuilder.builder()
+                                                .name("AnalyzerBusinessGroup")
+                                                .content("Customers")
+                                                .build()
+                                        ))
+                                        .build()
+
+                                ))
+                                .build(),
+                            HierarchyRBuilder.builder()
+                                .name("Marital Status")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Marital Status")
+                                        .visible(true)
+                                        .column("marital_status")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .annotations(List.of(
+                                            AnnotationRBuilder.builder()
+                                                .name("AnalyzerBusinessGroup")
+                                                .content("Customers")
+                                                .build()
+                                        ))
+                                        .build()
+
+                                ))
+                                .build()
+                        ))
+                        .build()
+                )).build());
+            return result;
+        }
+
+
+        /*
+            "<Role name=\"MR\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales1\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"all\">\n"
+            + "      </HierarchyGrant>\n"
+            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" topLevel=\"[Customers].[State Province]\" bottomLevel=\"[Customers].[City]\">\n"
+            + "\t  </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"DBPentUsers\">\n"
+            + "   <SchemaGrant access=\"none\">\n"
+            + "   </SchemaGrant>\n"
+            + "</Role>");
+        */
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("MR")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales1")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customers]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .topLevel("[Customers].[State Province]")
+                                            .bottomLevel("[Customers].[City]")
+                                            .build()
+
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("DBPentUsers")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier34 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[Non Existent]\" access=\"all\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier34(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[Non Existent]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier35 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"Role2\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"full\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>";
+
+        */
+
+        public AccessControlTestModifier35(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("full")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[WA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico].[DF]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Canada]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("full")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[WA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico].[DF]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Canada]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier36 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>\n"
+            + "<Role name=\"Role2\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
+            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>";
+
+        */
+
+        public AccessControlTestModifier36(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[WA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[Los Angeles]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico].[DF]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Canada]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role2")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[WA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[OR]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[USA].[CA].[San Francisco]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Mexico].[DF]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Store].[Canada]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier37 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Role name=\"Role1\">\n"
+            + "  <SchemaGrant access=\"none\">\n"
+            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
+            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\"/>\n"
+            + "      <DimensionGrant dimension=\"[Gender]\" access=\"all\"/>\n"
+            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
+            + "        <MemberGrant member=\"[Store].[USA]\" access=\"all\"/>\n"
+            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"none\"/>\n"
+            + "      </HierarchyGrant>\n"
+            + "    </CubeGrant>\n"
+            + "  </SchemaGrant>\n"
+            + "</Role>");
+        */
+
+        public AccessControlTestModifier37(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("Role1")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Sales")
+                                    .access("custom")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Measures]")
+                                            .access(AccessEnum.ALL)
+                                            .build(),
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("[Gender]")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Store]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            );
+            return result;
+        }
+    }
+
+    public static class AccessControlTestModifier32 extends RDbMappingSchemaModifier {
+
+        /*
+      String schema =
+          "<Schema name=\"FoodMart.DimAndMeasure.Role\">\n"
+          + " <Dimension name=\"WarehouseShared\">\n"
+          + "   <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
+          + "     <Table name=\"warehouse\"/>\n"
+          + "     <Level name=\"Country\" column=\"warehouse_country\" uniqueMembers=\"true\"/>\n"
+          + "     <Level name=\"State Province\" column=\"warehouse_state_province\"\n"
+          + "          uniqueMembers=\"true\"/>\n"
+          + "     <Level name=\"City\" column=\"warehouse_city\" uniqueMembers=\"false\"/>\n"
+          + "     <Level name=\"Warehouse Name\" column=\"warehouse_name\" uniqueMembers=\"true\"/>\n"
+          + "   </Hierarchy>\n"
+          + " </Dimension>\n"
+          + " <Cube name=\"Warehouse1\">\n"
+          + "   <Table name=\"inventory_fact_1997\"/>\n"
+          + "   <DimensionUsage name=\"WarehouseShared\" source=\"WarehouseShared\" foreignKey=\"warehouse_id\"/>\n"
+          + "   <Measure name=\"Measure1_0\" column=\"warehouse_cost\" aggregator=\"sum\"/>\n"
+          + "   <Measure name=\"Measure1_1\" column=\"warehouse_sales\" aggregator=\"sum\"/>\n"
+          + "   <CalculatedMember name=\"Calculated Measure1\" dimension=\"Measures\">\n"
+          + "     <Formula>[Measures].[Measure1_1] / [Measures].[Measure1_0]</Formula>\n"
+          + "     <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
+          + "   </CalculatedMember>\n"
+          + " </Cube>\n"
+          + " <Cube name=\"Warehouse2\">\n"
+          + "   <Table name=\"inventory_fact_1997\"/>\n"
+          + "   <DimensionUsage name=\"WarehouseShared\" source=\"WarehouseShared\" foreignKey=\"warehouse_id\"/>\n"
+          + "   <Measure name=\"Measure2_0\" column=\"warehouse_cost\" aggregator=\"sum\"/>\n"
+          + "   <Measure name=\"Measure2_1\" column=\"warehouse_sales\" aggregator=\"sum\"/>\n"
+          + "   <CalculatedMember name=\"Calculated Measure2\" dimension=\"Measures\">\n"
+          + "     <Formula>[Measures].[Measure2_1] / [Measures].[Measure2_0]</Formula>\n"
+          + "     <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
+          + "   </CalculatedMember>\n"
+          + " </Cube>\n"
+          + " <Role name=\"Administrator\">\n"
+          + "   <SchemaGrant access=\"none\">\n"
+          + "     <CubeGrant cube=\"Warehouse1\" access=\"custom\">\n"
+          + "       <HierarchyGrant hierarchy=\"[WarehouseShared]\" access=\"all\">\n"
+          + "       </HierarchyGrant>\n"
+          + "       <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
+          + "       </HierarchyGrant>\n"
+          + "     </CubeGrant>\n"
+          + "     <CubeGrant cube=\"Warehouse2\" access=\"custom\">\n"
+          + "       <HierarchyGrant hierarchy=\"[WarehouseShared]\" access=\"all\">\n"
+          + "       </HierarchyGrant>\n"
+          + "       <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
+          + "       </HierarchyGrant>\n"
+          + "     </CubeGrant>\n"
+          + "   </SchemaGrant>\n"
+          + " </Role>\n"
+          + "</Schema>";
+
+        */
+
+        public AccessControlTestModifier32(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart.DimAndMeasure.Role")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("WarehouseShared")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("warehouse_id")
+                                .relation(new TableR("warehouse"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("State Province")
+                                        .column("warehouse_state_province")
+                                        .uniqueMembers(true)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .column("warehouse_city")
+                                        .uniqueMembers(false)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Warehouse Name")
+                                        .column("warehouse_name")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Warehouse1")
+                        .fact(new TableR("inventory_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("WarehouseShared")
+                                .source("WarehouseShared")
+                                .foreignKey("warehouse_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Measure1_0")
+                                .column("warehouse_cost")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Measure1_1")
+                                .column("warehouse_sales")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .calculatedMembers(List.of(
+                            CalculatedMemberRBuilder.builder()
+                                .name("Calculated Measure1")
+                                .dimension("Measures")
+                                .formulaElement(FormulaRBuilder.builder()
+                                    .cdata("[Measures].[Measure1_1] / [Measures].[Measure1_0]")
+                                    .build())
+                                .calculatedMemberProperties(List.of(
+                                    CalculatedMemberPropertyRBuilder.builder()
+                                        .name("FORMAT_STRING")
+                                        .value("$#,##0.00")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("Warehouse2")
+                        .fact(new TableR("inventory_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("WarehouseShared")
+                                .source("WarehouseShared")
+                                .foreignKey("warehouse_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Measure2_0")
+                                .column("warehouse_cost")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Measure2_1")
+                                .column("warehouse_sales")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .calculatedMembers(List.of(
+                            CalculatedMemberRBuilder.builder()
+                                .name("Calculated Measure2")
+                                .dimension("Measures")
+                                .formulaElement(FormulaRBuilder.builder()
+                                    .cdata("[Measures].[Measure2_1] / [Measures].[Measure2_0]")
+                                    .build())
+                                .calculatedMemberProperties(List.of(
+                                    CalculatedMemberPropertyRBuilder.builder()
+                                        .name("FORMAT_STRING")
+                                        .value("$#,##0.00")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                    ))
+                .roles(List.of(
+                    RoleRBuilder.builder()
+                        .name("Administrator")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.NONE)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Warehouse1")
+                                        .access("custom")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[WarehouseShared]")
+                                                .access(AccessEnum.ALL)
+                                                .build(),
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[Measures]")
+                                                .access(AccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Warehouse2")
+                                        .access("custom")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[WarehouseShared]")
+                                                .access(AccessEnum.ALL)
+                                                .build(),
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[Measures]")
+                                                .access(AccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
         }
     }
 

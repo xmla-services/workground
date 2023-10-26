@@ -108,7 +108,7 @@ public class AggMeasureFactCountTestModifier extends RDbMappingSchemaModifier {
                         HierarchyRBuilder.builder()
                             .hasAll(false)
                             .primaryKey("time_id")
-                            .relation(new TableR("time_csv", getAggExcludes(), getAggTables()))
+                            .relation(new TableR("time_csv"))
                             .levels(List.of(
                                 LevelRBuilder.builder()
                                     .name("Year")
@@ -216,7 +216,7 @@ public class AggMeasureFactCountTestModifier extends RDbMappingSchemaModifier {
                 CubeRBuilder.builder()
                     .name("Sales")
                     .defaultMeasure("Unit Sales")
-                    .fact(new TableR("fact_csv_2016"))
+                    .fact(new TableR("fact_csv_2016", getAggExcludes(), getAggTables()))
                     .dimensionUsageOrDimensions(List.of(
                         DimensionUsageRBuilder.builder()
                             .name("Time")
