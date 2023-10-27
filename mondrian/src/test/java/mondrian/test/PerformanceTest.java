@@ -33,8 +33,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -594,36 +592,7 @@ public class PerformanceTest {
     //
     // jdk1.7 marmite   main 14770   30,857 ms
     // jdk1.7 marmite   main 14771   29,083 ms
-    String baseSchema = TestUtil.getRawSchema(context);
-    String schema = SchemaUtil.getSchema(baseSchema,
-        null, null, null, null, null,
-        "<Role name='Role1'>\n"
-          + "  <SchemaGrant access='none'>\n"
-          + "    <CubeGrant cube='Sales' access='all'>\n"
-          + "      <HierarchyGrant hierarchy='[Store Type]' access='custom' rollupPolicy='partial'>\n"
-          + "        <MemberGrant member='[Store Type].[All Store Types]' access='all'/>\n"
-          + "        <MemberGrant member='[Store Type].[Supermarket]' access='none'/>\n"
-          + "      </HierarchyGrant>\n"
-          + "      <HierarchyGrant hierarchy='[Customers]' access='custom' rollupPolicy='partial'>\n"
-          + "        <MemberGrant member='[Customers].[All Customers]' access='all'/>\n"
-          + "        <MemberGrant member='[Customers].[USA].[CA].[Los Angeles]' access='none'/>\n"
-          + "      </HierarchyGrant>\n"
-          + "      <HierarchyGrant hierarchy='[Product]' access='custom' rollupPolicy='partial'>\n"
-          + "        <MemberGrant member='[Product].[All Products]' access='all'/>\n"
-          + "        <MemberGrant member='[Product].[Drink]' access='none'/>\n"
-          + "      </HierarchyGrant>\n"
-          + "      <HierarchyGrant hierarchy='[Promotion Media]' access='custom' rollupPolicy='partial'>\n"
-          + "        <MemberGrant member='[Promotion Media].[All Media]' access='all'/>\n"
-          + "        <MemberGrant member='[Promotion Media].[TV]' access='none'/>\n"
-          + "      </HierarchyGrant>\n"
-          + "      <HierarchyGrant hierarchy='[Education Level]' access='custom' rollupPolicy='partial'>\n"
-          + "        <MemberGrant member='[Education Level].[All Education Levels]' access='all'/>\n"
-          + "        <MemberGrant member='[Education Level].[Graduate Degree]' access='none'/>\n"
-          + "      </HierarchyGrant>\n"
-          + "    </CubeGrant>\n"
-          + "  </SchemaGrant>\n"
-          + "</Role>\n" );
-    withSchema(context, schema);
+    withSchema(context.getContext(), SchemaModifiers.PerformanceTestModifier3::new);
     withRole(context, "Role1" );
     assertQueryReturns(context.createConnection(),
       "with member [Measures].[Foo] as\n"
@@ -651,14 +620,7 @@ public class PerformanceTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian1242(TestContextWrapper context) {
     propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
-    String baseSchema = TestUtil.getRawSchema(context);
-    String schema = SchemaUtil.getSchema(baseSchema,
-      null, null, null, null,
-      "<UserDefinedFunction name=\"StringMult\" className=\""
-        + CounterUdf.class.getName()
-        + "\"/>\n",
-      null );
-    withSchema(context, schema);
+    withSchema(context.getContext(), SchemaModifiers.PerformanceTestModifier4::new);
     // original test case for MONDRIAN-1242; ensures correct result
     Connection connection = context.createConnection();
     assertQueryReturns(connection,

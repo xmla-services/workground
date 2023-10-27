@@ -2896,6 +2896,11 @@ class TestAggregationManager extends BatchTestCase {
                             ))
                             .aggLevels(List.of(
                                 AggLevelRBuilder.builder()
+                                    .name("[Product].[Product Id]")
+                                    .column("product_id")
+                                    .collapsed(false)
+                                    .build(),
+                                AggLevelRBuilder.builder()
                                     .name("[Store].[Store Id]")
                                     .column("store_id")
                                     .collapsed(false)

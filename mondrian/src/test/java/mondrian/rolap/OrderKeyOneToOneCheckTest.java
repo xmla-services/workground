@@ -10,19 +10,19 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.withSchema;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 //Disabled by reason log4j. log4j is not using any more
 @Disabled
@@ -52,10 +52,11 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void prepareContext(TestContextWrapper context) {
+  public void prepareContext(TestContext context) {
     //TestContext testContext = super.getTestContext()
     //        .withFreshConnection();
-    flushSchemaCache(context.createConnection());
+    flushSchemaCache(context.getConnection());
+    /*
     withSchema(context,
             ""
                     + "<?xml version=\"1.0\"?>\n"
@@ -77,18 +78,20 @@ class OrderKeyOneToOneCheckTest {
                     + "      formatString=\"Standard\"/>\n"
                     + "</Cube>\n"
                     + "</Schema>");
+     */
+    withSchema(context, SchemaModifiers.OrderKeyOneToOneCheckTestModifier::new);
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberSource(TestContextWrapper context) {
+  void testMemberSource(TestContext context) {
     String mdx =
             "with member [Measures].[Count Month] as 'Count(Descendants(Time.CurrentMember, [Time].[Month]))' \n"
                     + "select [Measures].[Count Month] on 0,\n"
                     + "[Time].[1997] on 1 \n"
                     + "from [Sales]";
     prepareContext(context);
-    executeQuery(context.createConnection(), mdx);
+    executeQuery(context.getConnection(), mdx);
     fail("need slf4j implementation");
     //TODO need slf4j implementation
     //assertEquals(
@@ -103,13 +106,13 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSqlReader(TestContextWrapper context) {
+  void testSqlReader(TestContext context) {
     String mdx = ""
             + "select [Time].[Quarter].Members on 0"
             + "from [Sales]";
 
     prepareContext(context);
-    executeQuery(context.createConnection(), mdx);
+    executeQuery(context.getConnection(), mdx);
     fail("need slf4j implementation");
     //TODO need slf4j implementation
     //assertEquals(

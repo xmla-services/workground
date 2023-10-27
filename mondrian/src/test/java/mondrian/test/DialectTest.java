@@ -35,6 +35,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
@@ -711,29 +712,7 @@ class DialectTest {
       // the following test is specifically for Oracle.
       return;
     }
-    withSchema(context,
-            "<?xml version=\"1.0\"?>\n"
-                    + "<Schema name=\"FoodMart\">\n"
-                    + "  <Dimension  name=\"Time\" type=\"TimeDimension\">\n"
-                    + "    <Hierarchy hasAll='true' primaryKey=\"time_id\">\n"
-                    + "      <Table name=\"time_by_day\"/>\n"
-                    + "      <Level name=\"Day\"  type=\"Date\" uniqueMembers=\"true\"\n"
-                    + "          levelType=\"TimeYears\">\n"
-                    + "        <KeyExpression>\n"
-                    + "          <SQL>\n"
-                    + "            cast(\"the_date\" as DATE)\n"
-                    + "          </SQL>\n"
-                    + "        </KeyExpression>\n"
-                    + "      </Level>\n"
-                    + "    </Hierarchy>\n"
-                    + "  </Dimension>\n"
-                    + "  <Cube name=\"DateLiteralTest\" defaultMeasure=\"expression\">\n"
-                    + "    <Table name=\"sales_fact_1997\" />\n"
-                    + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>\n"
-                    + "    <Measure name=\"Unit Sales\" column=\"unit_sales\"  aggregator=\"sum\"\n"
-                    + "    formatString=\"Standard\" />\n"
-                    + "  </Cube>\n"
-                    + "</Schema>\n" );
+      withSchema(context.getContext(), SchemaModifiers.DialectTestModifier1::new);
     // if date literal is incorrect the following query will give the error
     // ORA-01861: literal does not match format string
     Result result = executeQuery(context.createConnection(),
@@ -756,43 +735,7 @@ class DialectTest {
       // Oracle and MySQL as well.
       return;
     }
-    withSchema(context,
-            "<?xml version=\"1.0\"?>\n"
-                    + "<Schema name=\"FoodMart\">\n"
-                    + "  <Dimension name=\"StoreSqft\">\n"
-                    + "    <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n"
-                    + "      <Table name=\"store\"  />\n"
-                    + "      <Level name=\"StoreSqft\"  type=\"Numeric\" uniqueMembers=\"true\">\n"
-                    + "         <KeyExpression>"
-                    + "          <SQL dialect='mysql'>\n"
-                    + "            cast(`store_sqft` as UNSIGNED INTEGER) + "
-                    + Integer.MAX_VALUE
-                    + "          </SQL>\n"
-                    + "          <SQL dialect='vertica'>\n"
-                    + "            cast(\"store_sqft\" as BIGINT) + "
-                    + Integer.MAX_VALUE
-                    + "          </SQL>\n"
-                    + "          <SQL dialect='oracle'>\n"
-                    + "            CAST(\"store_sqft\" + 2147483647 AS NUMBER(22))  "
-                    + "          </SQL>\n"
-                    + "         </KeyExpression>"
-                    + "      </Level>"
-                    + "    </Hierarchy>\n"
-                    + "  </Dimension>"
-                    + "  <Cube name=\"BigIntTest\" defaultMeasure=\"expression\">\n"
-                    + "    <Table name=\"sales_fact_1997\" />\n"
-                    + "    <DimensionUsage name=\"StoreSqft\" source=\"StoreSqft\" foreignKey=\"store_id\"/>\n"
-                    + "    <Measure name=\"Big Unit Sales\"   aggregator=\"sum\"\n"
-                    + "    formatString=\"Standard\" >\n"
-                    + "           <MeasureExpression>\n"
-                    + "      <SQL dialect=\"vertica\">\n"
-                    + "   CAST(\"unit_sales\" + 2147483647 AS NUMBER(22)) \n"
-                    + "      </SQL>\n"
-                    + "      </MeasureExpression>\n"
-                    + "      </Measure>\n"
-                    + "  <Measure name=\"Pass Agg enabled\" column=\"store_cost\" aggregator=\"sum\"/>\n"
-                    + "  </Cube>\n"
-                    + "</Schema>\n" );
+    withSchema(context.getContext(), SchemaModifiers.DialectTestModifier2::new);
     Result result = executeQuery(context.createConnection(),
             "select StoreSqft.[All StoreSqfts].children on 0 from BigIntTest" );
     RolapMember secondChild =
