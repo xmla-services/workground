@@ -16993,7 +16993,8 @@ public class SchemaModifiers {
                                 .foreignKey("store_id")
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
-                                        .hasAll(true).allMemberName("All Customers hierarchy name").primaryKey("customer_id")
+                                        .name("Stores")
+                                        .hasAll(true).primaryKey("store_id")
                                         .relation(new TableR("store"))
                                         .levels(List.of(
                                             LevelRBuilder.builder()
@@ -17046,6 +17047,7 @@ public class SchemaModifiers {
                                                 .column("the_year")
                                                 .type(TypeEnum.NUMERIC)
                                                 .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
                                                 .build(),
                                             LevelRBuilder.builder()
                                                 .name("Week")
@@ -17061,11 +17063,10 @@ public class SchemaModifiers {
                                                 .uniqueMembers(false)
                                                 .levelType(LevelTypeEnum.TIME_DAYS)
                                                 .build()
-
                                         ))
                                         .build(),
                                     HierarchyRBuilder.builder()
-                                        .hasAll(true).name("Time By Week").primaryKey("time_id")
+                                        .hasAll(false).name("Time2").primaryKey("time_id")
                                         .relation(new TableR("time_by_day"))
                                         .levels(List.of(
                                             LevelRBuilder.builder()
@@ -17105,7 +17106,6 @@ public class SchemaModifiers {
                                             new TableR("product"), new TableR("product_class")),
                                             null, "product_class_id",
                                             null, "product_class_id"))
-
                                         .levels(List.of(
                                             LevelRBuilder.builder()
                                                 .name("Product Family")
@@ -17246,13 +17246,13 @@ public class SchemaModifiers {
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
                                         .hasAll(true)
-                                        .allMemberName("All Customers")
                                         .primaryKey("store_id")
                                         .relation(new TableR("store"))
                                         .levels(List.of(
                                             LevelRBuilder.builder()
                                                 .name("Store Sqft")
                                                 .column("store_sqft")
+                                                .type(TypeEnum.NUMERIC)
                                                 .uniqueMembers(true)
                                                 .build()
                                         ))
