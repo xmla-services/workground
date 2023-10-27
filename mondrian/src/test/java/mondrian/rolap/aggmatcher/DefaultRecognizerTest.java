@@ -9,22 +9,22 @@
  */
 package mondrian.rolap.aggmatcher;
 
-import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.mysqlPattern;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.rolap.SchemaModifiers;
+import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.test.PropertySaver5;
+import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.mysqlPattern;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 class DefaultRecognizerTest {
 
@@ -55,9 +55,10 @@ class DefaultRecognizerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDefaultRecognizerWithFactAlias(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testDefaultRecognizerWithFactAlias(TestContext context) {
+        Connection connection = context.getConnection();
         flushSchemaCache(connection);
+        /*
         final String cube =
             "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\"> "
             // For this test, we use an alias on the fact table.
@@ -85,7 +86,7 @@ class DefaultRecognizerTest {
         + "</Dimension>";
         final String simpleSchema =
             "<Schema name=\"FoodMart\">" + dimension + cube + "</Schema>";
-
+        */
         final String query =
             "select "
             + "  NON EMPTY {[Measures].[Customer Count]} ON COLUMNS, "
@@ -108,8 +109,8 @@ class DefaultRecognizerTest {
             + "and\n"
             + "    `agg_c_10_sales_fact_1997`.`month_of_year` in (1, 2, 3)";
 
-        withSchema(context,simpleSchema);
-        assertQuerySqlOrNot(context.createConnection(),
+        withSchema(context, SchemaModifiers.DefaultRecognizerTestModifier::new);
+        assertQuerySqlOrNot(context.getConnection(),
             query,
             mysqlPattern(expectedSql),
             false, true, true);
@@ -117,9 +118,9 @@ class DefaultRecognizerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testTupleReaderWithDistinctCountMeasureInContext(TestContextWrapper context) {
-        Connection connection = context.createConnection();
-        flushSchemaCache(connection);        
+    void testTupleReaderWithDistinctCountMeasureInContext(TestContext context) {
+        Connection connection = context.getConnection();
+        flushSchemaCache(connection);
         // Validates that if a distinct count measure is in context
         // SqlTupleReader is able to find an appropriate agg table, if
         // available. MONDRIAN-2376

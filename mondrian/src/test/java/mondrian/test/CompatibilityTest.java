@@ -33,6 +33,7 @@ import org.olap4j.OlapException;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -346,10 +347,10 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCaseInsensitiveNullMember(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException {
-    	Connection connection = foodMartContext.createConnection();
+    void testCaseInsensitiveNullMember(TestContext foodMartContext) throws SQLException, OlapException, IOException {
+    	Connection connection = foodMartContext.getConnection();
         DataSource dataSource = connection.getDataSource();
-        final Dialect dialect = foodMartContext.getContext().getDialect();
+        final Dialect dialect = foodMartContext.getDialect();
         if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.LUCIDDB) {
             // TODO jvs 29-Nov-2006:  LucidDB is strict about
             // null literals (type can't be inferred in this context);
@@ -360,6 +361,7 @@ class CompatibilityTest {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
+        /*
         final String cubeName = "Sales_inline";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(
@@ -397,9 +399,9 @@ class CompatibilityTest {
             null,
             null,
             null);
-
-        TestUtil.withSchema(foodMartContext, schema);
-        connection = foodMartContext.createConnection();
+         */
+        TestUtil.withSchema(foodMartContext, SchemaModifiers.Ssas2005CompatibilityTestModifier4::new);
+        connection = foodMartContext.getConnection();
 
         // This test should work irrespective of the case-sensitivity setting.
         Util.discard(props.CaseSensitive.get());
@@ -516,10 +518,10 @@ class CompatibilityTest {
       */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testNullCollation(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException  {
-    	Connection connection = foodMartContext.createConnection();
+    void testNullCollation(TestContext foodMartContext) throws SQLException, OlapException, IOException  {
+    	Connection connection = foodMartContext.getConnection();
         DataSource dataSource = connection.getDataSource();
-        final Dialect dialect = foodMartContext.getContext().getDialect();
+        final Dialect dialect = foodMartContext.getDialect();
         if (dialect.supportsGroupByExpressions()) {
             // Derby does not support expressions in the GROUP BY clause,
             // therefore this testing strategy of using an expression for the
@@ -527,49 +529,8 @@ class CompatibilityTest {
             return;
         }
         final String cubeName = "Store_NullsCollation";
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(
-    		baseSchema,
-            null,
-            "<Cube name=\"" + cubeName + "\">\n"
-            + "  <Table name=\"store\"/>\n"
-            + "  <Dimension name=\"Store\" foreignKey=\"store_id\">\n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"store_id\">\n"
-            + "      <Level name=\"Store Name\" column=\"store_name\"  uniqueMembers=\"true\">\n"
-            + "       <OrdinalExpression>\n"
-            + "        <SQL dialect=\"access\">\n"
-            + "           Iif(store_name = 'HQ', null, store_name)\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"oracle\">\n"
-            + "           case \"store_name\" when 'HQ' then null else \"store_name\" end\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"hsqldb\">\n"
-            + "           case \"store_name\" when 'HQ' then null else \"store_name\" end\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"db2\">\n"
-            + "           case \"store\".\"store_name\" when 'HQ' then null else \"store\".\"store_name\" end\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"luciddb\">\n"
-            + "           case \"store_name\" when 'HQ' then null else \"store_name\" end\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"netezza\">\n"
-            + "           case \"store_name\" when 'HQ' then null else \"store_name\" end\n"
-            + "       </SQL>\n"
-            + "        <SQL dialect=\"generic\">\n"
-            + "           case store_name when 'HQ' then null else store_name end\n"
-            + "       </SQL>\n"
-            + "       </OrdinalExpression>\n"
-            + "        <Property name=\"Store Sqft\" column=\"store_sqft\" type=\"Numeric\"/>\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Measure name=\"Store Sqft\" column=\"store_sqft\" aggregator=\"sum\"\n"
-            + "      formatString=\"#,###\"/>\n"
-            + "</Cube>",
-            null, null, null, null);
-
-        TestUtil.withSchema(foodMartContext, schema);
-        connection = foodMartContext.createConnection();
+        TestUtil.withSchema(foodMartContext, SchemaModifiers.CompatibilityTestModifier2::new);
+        connection = foodMartContext.getConnection();
 
         TestUtil.assertQueryReturns(
     		connection,

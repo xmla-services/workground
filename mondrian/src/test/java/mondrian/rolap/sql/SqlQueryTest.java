@@ -1013,7 +1013,7 @@ class SqlQueryTest  extends BatchTestCase {
             + " ISNULL(`store`.`store_state`) ASC, `store`.`store_state` ASC";
         SqlPattern myPattern = new SqlPattern(MYSQL, mySql, mySql.length());
         SqlPattern[] patterns = {pgPattern, myPattern};
-        connection = context.createConnection();
+        connection = context.getContext().getConnection();
         executeQuery(mdx, connection);
         assertQuerySqlOrNot(connection, mdx, patterns, true, false, false);
     }
