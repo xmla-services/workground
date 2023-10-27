@@ -12,16 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 class DrillThroughExcludeFilterTest {
 
+    /*
     String schema = "<Schema name=\"MYFoodmart\">\n"
             + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Store\">\n"
             + "    <Hierarchy visible=\"true\" hasAll=\"true\" primaryKey=\"store_id\">\n"
@@ -62,18 +64,18 @@ class DrillThroughExcludeFilterTest {
             + "    <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\"/>\n"
             + "  </VirtualCube>  \n"
             + "</Schema>\n";
-
+    */
     // Test for VirtualCube DrillThrough with exclude filter
     // on level not present in report
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThroughExcludeFilter(TestContextWrapper context) throws Exception    {
+    void testDrillThroughExcludeFilter(TestContext context) throws Exception    {
         int expectedDrillThroughCountForCell0 = 3773;
         int expectedDrillThroughCountForCell1 = 78120;
 
-        withSchema(context, schema);
+        withSchema(context, SchemaModifiers.DrillThroughExcludeFilterTestModifier::new);
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         Result result = executeQuery(connection,
             "WITH"
             + "   SET [*NATIVE_CJ_SET_WITH_SLICER] "

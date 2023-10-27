@@ -427,6 +427,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                             .name("distributor")
                             .hasAll(true)
                             .allMemberName("All distributors")
+                            .primaryKey("line_id")
                             .primaryKeyTable("line")
                             .relation(new JoinR(List.of(
                                 new TableR("line"),

@@ -8118,7 +8118,6 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
     propSaver.set( propSaver.properties.QueryTimeout, 3 );
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
-        RolapSchemaPool.instance().clear();
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
 
             public TestFilterWillTimeoutModifier(MappingSchema mappingSchema) {
@@ -8145,8 +8144,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
           + "\"/>", null );
       TestUtil.withSchema(context, schema);
        */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestFilterWillTimeoutModifier(schema)));
+      withSchema(context, TestFilterWillTimeoutModifier::new);
       executeAxis(context.getConnection(),
         "Filter("
           + "Filter(CrossJoin([Customers].[Name].members, [Product].[Product Name].members), SleepUdf([Measures]"
@@ -9611,7 +9609,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
                           VirtualCubeMeasureRBuilder.builder()
                           .cubeName("HR")
                           .name("[Measures].[Org Salary]")
-                          .build()                		  
+                          .build()
                 		  ))
                   .build());
               return result;
@@ -9630,7 +9628,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
       null, null, null );
     TestUtil.withSchema(context, schema);
      */
-    TestUtil.withSchema(context, TestOrderTupleMultiKeyswithVCubeModifier::new);
+    withSchema(context, TestOrderTupleMultiKeyswithVCubeModifier::new);
     assertQueryReturns(context.getConnection(),
       "with \n"
         + "  set [CJ] as \n"

@@ -16,8 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -36,6 +39,18 @@ import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UnionRBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,7 +80,7 @@ import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
  * @since Feb 21, 2003
  */
 class AccessControlTest {
-
+    /*
     private static final String BiServer1574Role1 =
         "<Role name=\"role1\">\n"
         + " <SchemaGrant access=\"none\">\n"
@@ -80,7 +95,7 @@ class AccessControlTest {
         + "  </CubeGrant>\n"
         + " </SchemaGrant>\n"
         + "</Role>";
-
+    */
     private PropertySaver5 propSaver;
 
 	@BeforeEach
@@ -133,28 +148,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRestrictMeasures(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(
-			baseSchema, null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"all\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>"
-            + "<Role name=\"Role2\">\n"
-            + "  <SchemaGrant access=\"all\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"custom\">\n"
-            + "        <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier31::new);
 
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
@@ -196,58 +190,9 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRestrictMeasuresHierarchy_InTwoRoles(TestContextWrapper foodMartContext) {
-      String schema =
-          "<Schema name=\"FoodMart.DimAndMeasure.Role\">\n"
-          + " <Dimension name=\"WarehouseShared\">\n"
-          + "   <Hierarchy hasAll=\"true\" primaryKey=\"warehouse_id\">\n"
-          + "     <Table name=\"warehouse\"/>\n"
-          + "     <Level name=\"Country\" column=\"warehouse_country\" uniqueMembers=\"true\"/>\n"
-          + "     <Level name=\"State Province\" column=\"warehouse_state_province\"\n"
-          + "          uniqueMembers=\"true\"/>\n"
-          + "     <Level name=\"City\" column=\"warehouse_city\" uniqueMembers=\"false\"/>\n"
-          + "     <Level name=\"Warehouse Name\" column=\"warehouse_name\" uniqueMembers=\"true\"/>\n"
-          + "   </Hierarchy>\n"
-          + " </Dimension>\n"
-          + " <Cube name=\"Warehouse1\">\n"
-          + "   <Table name=\"inventory_fact_1997\"/>\n"
-          + "   <DimensionUsage name=\"WarehouseShared\" source=\"WarehouseShared\" foreignKey=\"warehouse_id\"/>\n"
-          + "   <Measure name=\"Measure1_0\" column=\"warehouse_cost\" aggregator=\"sum\"/>\n"
-          + "   <Measure name=\"Measure1_1\" column=\"warehouse_sales\" aggregator=\"sum\"/>\n"
-          + "   <CalculatedMember name=\"Calculated Measure1\" dimension=\"Measures\">\n"
-          + "     <Formula>[Measures].[Measure1_1] / [Measures].[Measure1_0]</Formula>\n"
-          + "     <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
-          + "   </CalculatedMember>\n"
-          + " </Cube>\n"
-          + " <Cube name=\"Warehouse2\">\n"
-          + "   <Table name=\"inventory_fact_1997\"/>\n"
-          + "   <DimensionUsage name=\"WarehouseShared\" source=\"WarehouseShared\" foreignKey=\"warehouse_id\"/>\n"
-          + "   <Measure name=\"Measure2_0\" column=\"warehouse_cost\" aggregator=\"sum\"/>\n"
-          + "   <Measure name=\"Measure2_1\" column=\"warehouse_sales\" aggregator=\"sum\"/>\n"
-          + "   <CalculatedMember name=\"Calculated Measure2\" dimension=\"Measures\">\n"
-          + "     <Formula>[Measures].[Measure2_1] / [Measures].[Measure2_0]</Formula>\n"
-          + "     <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
-          + "   </CalculatedMember>\n"
-          + " </Cube>\n"
-          + " <Role name=\"Administrator\">\n"
-          + "   <SchemaGrant access=\"none\">\n"
-          + "     <CubeGrant cube=\"Warehouse1\" access=\"custom\">\n"
-          + "       <HierarchyGrant hierarchy=\"[WarehouseShared]\" access=\"all\">\n"
-          + "       </HierarchyGrant>\n"
-          + "       <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
-          + "       </HierarchyGrant>\n"
-          + "     </CubeGrant>\n"
-          + "     <CubeGrant cube=\"Warehouse2\" access=\"custom\">\n"
-          + "       <HierarchyGrant hierarchy=\"[WarehouseShared]\" access=\"all\">\n"
-          + "       </HierarchyGrant>\n"
-          + "       <HierarchyGrant hierarchy=\"[Measures]\" access=\"all\">\n"
-          + "       </HierarchyGrant>\n"
-          + "     </CubeGrant>\n"
-          + "   </SchemaGrant>\n"
-          + " </Role>\n"
-          + "</Schema>";
 
       TestUtil.withRole(foodMartContext, "Administrator");
-      TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier32::new);
 
       Connection connection = foodMartContext.createConnection();
 
@@ -303,6 +248,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRestrictLevelsAnalyzer3283(TestContextWrapper foodMartContext) {
+        /*
         String dimensionsDef =
             "    <Dimension visible=\"true\" foreignKey=\"customer_id\" highCardinality=\"false\" name=\"Customers\">\n"
             + "      <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
@@ -403,7 +349,8 @@ class AccessControlTest {
             + "   <SchemaGrant access=\"none\">\n"
             + "   </SchemaGrant>\n"
             + "</Role>");
-        TestUtil.withSchema(foodMartContext, schema);
+         */
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier33::new);
         TestUtil.withRole(foodMartContext, "MR,DBPentUsers");
         Connection connection = foodMartContext.createConnection();
 
@@ -417,19 +364,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRoleMemberAccessNonExistentMemberFails(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[Non Existent]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier34::new);
     	TestUtil.withRole(foodMartContext, "Role1");
         TestUtil.assertQueryThrows(
         	foodMartContext,
@@ -736,42 +671,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_1201_MultipleMembersInRoleAccessControl(TestContextWrapper foodMartContext) {
-        String test_1201_Roles =
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n"
-            + "<Role name=\"Role2\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"full\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>";
-
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, test_1201_Roles);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier35::new);
         TestUtil.withRole(foodMartContext, "Role1");
 
         Connection connection = foodMartContext.createConnection();
@@ -831,9 +731,7 @@ class AccessControlTest {
             + "Row #0: 4,617\n"
             + "Row #1: 10,319\n");
 
-        schema = SchemaUtil.getSchema(baseSchema,
-                    null, null, null, null, null, test_1201_Roles);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier35::new);
         TestUtil.withRole(foodMartContext, "Role2");
 
         connection = foodMartContext.createConnection();
@@ -862,16 +760,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_2586_RaggedDimMembersShouldBeVisible(TestContextWrapper foodMartContext) {
-      String raggedUser =
-          "<Role name=\"Sales Ragged\">\n"
-          + "  <SchemaGrant access=\"none\">\n"
-          + "    <CubeGrant cube=\"Sales Ragged\" access=\"all\" />\n"
-          + "  </SchemaGrant>\n"
-          + "</Role>";
-      String baseSchema = TestUtil.getRawSchema(foodMartContext);
-      String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, raggedUser);
-      TestUtil.withSchema(foodMartContext, schema);
+      TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier38::new);
       TestUtil.withRole(foodMartContext, "Sales Ragged");
     //[Geography].[Country]
       Connection connection = foodMartContext.createConnection();
@@ -900,41 +789,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_1201_CacheAwareOfRoleAccessControl(TestContextWrapper foodMartContext) {
-        String test_1201_Roles =
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n"
-            + "<Role name=\"Role2\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[WA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Mexico].[DF]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Store].[Canada]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>";
-
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, test_1201_Roles);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier36::new);
         TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
 
@@ -956,9 +811,7 @@ class AccessControlTest {
             + "Row #0: 2,614\n"
             + "Row #1: 187\n");
 
-        schema = SchemaUtil.getSchema(baseSchema,
-                    null, null, null, null, null, test_1201_Roles);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier36::new);
         TestUtil.withRole(foodMartContext, "Role2");
         connection = foodMartContext.createConnection();
 
@@ -1265,23 +1118,7 @@ class AccessControlTest {
      * and cell values are rolled up with 'partial' policy.
      */
     private void setRollupTestContext(TestContextWrapper foodMartContext) {
-    	Connection connection = foodMartContext.createConnection();
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
-            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\"/>\n"
-            + "      <DimensionGrant dimension=\"[Gender]\" access=\"all\"/>\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier37::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     }
 
@@ -1411,23 +1248,9 @@ class AccessControlTest {
         String v2,
         String v3)
     {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\""
-                    + rollupPolicy
-                    + "\" bottomLevel=\"[Customers].[City]\">\n"
-                    + "        <MemberGrant member=\"[Customers].[USA]\" access=\"all\"/>\n"
-                    + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
-                    + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
-                    + "      </HierarchyGrant>\n"
-                    + "    </CubeGrant>\n"
-                    + "  </SchemaGrant>\n"
-                    + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier39(schema, rollupPolicy)));
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
         // All of the children of [San Francisco] are invisible, because [City]
@@ -1499,7 +1322,7 @@ class AccessControlTest {
                 + "    </CubeGrant>\n"
                 + "  </SchemaGrant>\n"
                 + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+    	TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier1::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	TestUtil.assertQueryThrows(
     			foodMartContext,
@@ -1527,23 +1350,11 @@ class AccessControlTest {
         String v1,
         String v2)
     {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\""
-                + policy
-                + "\">\n"
-                + "        <MemberGrant member=\"[Customers].[USA]\" access=\"all\"/>\n"
-                + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco].[Gladys Evans]\" access=\"none\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1");
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier40(schema, policy)));
+
+        TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
     	TestUtil.assertExprReturns(
@@ -1577,28 +1388,9 @@ class AccessControlTest {
         String v2,
         String v3)
     {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\""
-                + policy
-                + "\">\n"
-                + "        <MemberGrant member=\"[Customers].[USA]\" access=\"all\"/>\n"
-                + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco].[Gladys Evans]\" access=\"none\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\""
-                + policy
-                + "\">\n"
-                + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
-                + "        <MemberGrant member=\"[Store].[USA].[CA].[San Francisco].[Store 14]\" access=\"none\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier41(schema, policy)));
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
@@ -1628,6 +1420,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testUnionRole(TestContextWrapper foodMartContext) {
+    	/*
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -1659,7 +1452,8 @@ class AccessControlTest {
                 + "    </CubeGrant>\n"
                 + "  </SchemaGrant>\n"
                 + "</Role>\n");
-    	TestUtil.withSchema(foodMartContext, schema);
+        */
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier2::new);
 
         Connection connection;
 
@@ -1813,31 +1607,8 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testUnionOfUnionRole(TestContextWrapper foodMartContext) {
-        String roleDefs =
-            "<Role name=\"USA manager\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <DimensionGrant access=\"all\" dimension=\"[Measures]\"/>\n"
-            + "      <HierarchyGrant access=\"custom\" hierarchy=\"[Customers]\">\n"
-            + "        <MemberGrant access=\"all\" member=\"[Customers].[USA]\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n"
-            + "<Role name=\"parent of USA manager\">\n"
-            + "  <Union>\n"
-            + "    <RoleUsage roleName=\"USA manager\"/>\n"
-            + "  </Union>\n"
-            + "</Role>"
-            + "<Role name=\"grandparent of USA manager\">\n"
-            + "  <Union>\n"
-            + "    <RoleUsage roleName=\"parent of USA manager\"/>\n"
-            + "  </Union>\n"
-            + "</Role>";
 
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier3::new);
         TestUtil.withRole(foodMartContext, "grandparent of USA manager");
         Connection connection = foodMartContext.createConnection();
 
@@ -1869,23 +1640,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testUnionRoleHasInaccessibleDescendants(TestContextWrapper foodMartContext) throws Exception {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n"
-                + "<Role name=\"Role2\">\n"
-                + "  <SchemaGrant access=\"all\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-                + "        <MemberGrant member=\"[Customers].[USA].[OR]\" access=\"all\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier4::new);
     	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	Connection connection = foodMartContext.createConnection();
         final Cube cube =
@@ -1915,23 +1670,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRoleUnionWithLevelRestrictions(TestContextWrapper foodMartContext)  throws Exception {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"all\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"Partial\" topLevel=\"[Customers].[State Province]\" bottomLevel=\"[Customers].[State Province]\">\n"
-                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n"
-                + "<Role name=\"Role2\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier5::new);
     	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	Connection connection = foodMartContext.createConnection();
 
@@ -1999,19 +1738,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testNonEmptyAccess(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Product]\" access=\"custom\">\n"
-                + "        <MemberGrant member=\"[Product].[Drink]\" access=\"all\"/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier6::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2047,6 +1774,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testNonEmptyAccessLevelMembers(TestContextWrapper foodMartContext) {
+        /*
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2063,7 +1791,8 @@ class AccessControlTest {
             + "    </CubeGrant>\n"
             + "  </SchemaGrant>\n"
             + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+         */
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier6::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2205,22 +1934,9 @@ class AccessControlTest {
     }
 
     private static void setGoodmanContext(TestContextWrapper foodMartContext, final RollupPolicy policy) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"California manager\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" rollupPolicy=\""
-                + policy.name().toLowerCase()
-                + "\" access=\"custom\">\n"
-                + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
-                + "        <MemberGrant member=\"[Store].[USA].[OR].[Portland]\" access=\"all\"/>\n"
-                + "      </HierarchyGrant>"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier42(schema, policy)));
     	TestUtil.withRole(foodMartContext, "California manager");
     }
 
@@ -2233,20 +1949,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian402(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"California manager\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"none\" />\n"
-                + "    </CubeGrant>\n"
-                + "    <CubeGrant cube=\"Sales Ragged\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" />\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier7::new);
     	TestUtil.withRole(foodMartContext, "California manager");
     	Connection connection = foodMartContext.createConnection();
         assertHierarchyAccess(
@@ -2261,26 +1964,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testPartialRollupParentChildHierarchy(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Buggy Role\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"HR\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Employees]\" access=\"custom\"\n"
-            + "                      rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant\n"
-            + "            member=\"[Employees].[All Employees].[Sheri Nowmer].[Darren Stanz]\"\n"
-            + "            access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\"\n"
-            + "                      rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[All Stores].[USA].[CA]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier8::new);
     	TestUtil.withRole(foodMartContext, "Buggy Role");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2392,10 +2076,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugBiserver1574(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, BiServer1574Role1);
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier9::new);
     	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
         final String mdx =
@@ -2424,10 +2105,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian435(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, BiServer1574Role1);
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier9::new);
     	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2587,10 +2265,7 @@ class AccessControlTest {
     }
 
     private void checkBugMondrian436(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null, BiServer1574Role1);
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier9::new);
     	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2644,26 +2319,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testVirtualCube(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"VCRole\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\"\n"
-            + "          topLevel=\"[Customers].[State Province]\" bottomLevel=\"[Customers].[City]\">\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"none\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier10::new);
     	TestUtil.withRole(foodMartContext, "VCRole");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -2704,21 +2360,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugBiserver2491(TestContextWrapper foodMartContext) {
-        final String BiServer2491Role2 =
-            "<Role name=\"role2\">"
-            + " <SchemaGrant access=\"none\">"
-            + "  <CubeGrant cube=\"Sales\" access=\"all\">"
-            + "   <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">"
-            + "    <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>"
-            + "    <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"none\"/>"
-            + "   </HierarchyGrant>"
-            + "  </CubeGrant>"
-            + " </SchemaGrant>"
-            + "</Role>";
-
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, BiServer2491Role2);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier11::new);
         TestUtil.withRole(foodMartContext, "role2");
         Connection connection = foodMartContext.createConnection();
 
@@ -2774,6 +2416,8 @@ class AccessControlTest {
         final Result result = TestUtil.executeQuery(
     		connection,
             "select [Customers].[City].Members on 0 from [Sales]");
+        List<MappingRole> roles = new ArrayList<>();
+        List<MappingRoleUsage> roleUsages = new ArrayList<>();
         for (Position position : result.getAxes()[0].getPositions()) {
             Member member = position.get(0);
             String name = member.getParentMember().getName()
@@ -2788,60 +2432,72 @@ class AccessControlTest {
             // e.g. "[Customers3].[State Province].[BC].[Burnaby]"
             String uniqueName3 =
                 uniqueName.replace("Customers", "Customers3");
-            buf.append(
-                "  <Role name=\"" + name + "\"> \n"
-                + "    <SchemaGrant access=\"none\"> \n"
-                + "      <CubeGrant access=\"all\" cube=\"" + cubeName
-                + "\"> \n"
-                + "        <HierarchyGrant access=\"custom\" hierarchy=\"[Customers]\" rollupPolicy=\"partial\"> \n"
-                + "          <MemberGrant access=\"all\" member=\""
-                + uniqueName + "\"/> \n"
-                + "        </HierarchyGrant> \n"
-                + "        <HierarchyGrant access=\"custom\" hierarchy=\"[Customers2]\" rollupPolicy=\"partial\"> \n"
-                + "          <MemberGrant access=\"all\" member=\""
-                + uniqueName2 + "\"/> \n"
-                + "        </HierarchyGrant> \n"
-                + "        <HierarchyGrant access=\"custom\" hierarchy=\"[Customers3]\" rollupPolicy=\"partial\"> \n"
-                + "          <MemberGrant access=\"all\" member=\""
-                + uniqueName3 + "\"/> \n"
-                + "        </HierarchyGrant> \n"
-                + "      </CubeGrant> \n"
-                + "    </SchemaGrant> \n"
-                + "  </Role> \n");
+            roles.add(RoleRBuilder.builder()
+                .name(name)
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .access("all")
+                                .cube(cubeName)
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .access(AccessEnum.CUSTOM)
+                                        .hierarchy("[Customers]")
+                                        .rollupPolicy("partial")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .member(uniqueName)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .access(AccessEnum.CUSTOM)
+                                        .hierarchy("[Customers2]")
+                                        .rollupPolicy("partial")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .member(uniqueName2)
+                                                .build()
+                                        ))
+                                        .build(),
+                                    HierarchyGrantRBuilder.builder()
+                                        .access(AccessEnum.CUSTOM)
+                                        .hierarchy("[Customers3]")
+                                        .rollupPolicy("partial")
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .member(uniqueName3)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build()
+            );
 
-            buf2.append("    <RoleUsage roleName=\"" + name + "\"/>\n");
+            roleUsages.add(RoleUsageRBuilder.builder().roleName(name).build());
         }
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-            " <Dimension name=\"Customers\"> \n"
-            + "    <Hierarchy hasAll=\"true\" primaryKey=\"customer_id\"> \n"
-            + "      <Table name=\"customer\"/> \n"
-            + "      <Level name=\"Country\" column=\"country\" uniqueMembers=\"true\"/> \n"
-            + "      <Level name=\"State Province\" column=\"state_province\" uniqueMembers=\"true\"/> \n"
-            + "      <Level name=\"City\" column=\"city\" uniqueMembers=\"false\"/> \n"
-            + "      <Level name=\"Name\" column=\"customer_id\" type=\"Numeric\" uniqueMembers=\"true\"/> \n"
-            + "    </Hierarchy> \n"
-            + "  </Dimension> ",
-            "  <Cube name=\"" + cubeName + "\"> \n"
-            + "    <Table name=\"sales_fact_1997\"/> \n"
-            + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/> \n"
-            + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\"/> \n"
-            + "    <DimensionUsage name=\"Customers\" source=\"Customers\" foreignKey=\"customer_id\"/> \n"
-            + "    <DimensionUsage name=\"Customers2\" source=\"Customers\" foreignKey=\"customer_id\"/> \n"
-            + "    <DimensionUsage name=\"Customers3\" source=\"Customers\" foreignKey=\"customer_id\"/> \n"
-            + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/> \n"
-            + "  </Cube> \n",
-            null, null, null,
-            buf.toString()
-            + "  <Role name=\"Test\"> \n"
-            + "    <Union>\n"
-            + buf2.toString()
-            + "    </Union>\n"
-            + "  </Role>\n");
+        roles.add(RoleRBuilder.builder()
+            .name("Test")
+            .union(UnionRBuilder.builder()
+                .roleUsages(roleUsages)
+                .build())
+            .build());
+
         final long t0 = System.currentTimeMillis();
-        TestUtil.withSchema(foodMartContext, schema);
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+        foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier12(schema, roles)));
         TestUtil.withRole(foodMartContext, "Test");
-        connection = foodMartContext.createConnection();
+        connection = foodMartContext.getContext().getConnection();
         TestUtil.executeQuery(connection, "select from [" + cubeName + "]");
         final long t1 = System.currentTimeMillis();
 //      System.out.println("Elapsed=" + (t1 - t0) + " millis");
@@ -2863,22 +2519,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian694(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"REG1\"> \n"
-                + "  <SchemaGrant access=\"none\"> \n"
-                + "    <CubeGrant cube=\"HR\" access=\"all\"> \n"
-                + "      <HierarchyGrant hierarchy=\"Employees\" access=\"custom\" rollupPolicy=\"partial\"> \n"
-                + "        <MemberGrant member=\"[Employees].[All Employees]\" access=\"none\"/>\n"
-                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Steven Betsekas]\" access=\"all\"/> \n"
-                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Arvid Ziegler]\" access=\"all\"/> \n"
-                + "        <MemberGrant member=\"[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Ann Weyerhaeuser]\" access=\"all\"/> \n"
-                + "      </HierarchyGrant> \n"
-                + "    </CubeGrant> \n"
-                + "  </SchemaGrant> \n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier14::new);
     	TestUtil.withRole(foodMartContext, "REG1");
     	Connection connection = foodMartContext.createConnection();
 
@@ -2960,26 +2601,7 @@ class AccessControlTest {
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembers,
             true);
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"CTO\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\">\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[XX]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[XX].[Yyy Yyyyyyy]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Zzz Zzzz]\" access=\"none\"/>\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA].[San Francisco]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "      <HierarchyGrant hierarchy=\"[Gender]\" access=\"none\"/>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier15::new);
         TestUtil.withRole(foodMartContext, "CTO");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -3013,19 +2635,7 @@ class AccessControlTest {
     void testCalcMemberLevel(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkCalcMemberLevel(connection);
-
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"Partial\" topLevel=\"[Store].[Store State]\">\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n");
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier16::new);
         TestUtil.withRole(foodMartContext, "Role1");
         connection = foodMartContext.createConnection();
         checkCalcMemberLevel(connection);
@@ -3039,24 +2649,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian568(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Role1\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"none\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Measures]\" access=\"custom\">\n"
-                + "        <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\"/>\n"
-                + "      </HierarchyGrant>"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n"
-                + "<Role name=\"Role2\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales Ragged\" access=\"all\"/>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier17::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
         assertMemberAccess(
@@ -3102,27 +2695,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian935(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name='Role1'>\n"
-                + "  <SchemaGrant access='none'>\n"
-                + "    <CubeGrant cube='Sales' access='all'>\n"
-                + "      <HierarchyGrant hierarchy='[Store Type]' access='custom' rollupPolicy='partial'>\n"
-                + "        <MemberGrant member='[Store Type].[All Store Types]' access='none'/>\n"
-                + "        <MemberGrant member='[Store Type].[Supermarket]' access='all'/>\n"
-                + "      </HierarchyGrant>\n"
-                + "      <HierarchyGrant hierarchy='[Customers]' access='custom' rollupPolicy='partial' >\n"
-                + "        <MemberGrant member='[Customers].[All Customers]' access='none'/>\n"
-                + "        <MemberGrant member='[Customers].[USA].[WA]' access='all'/>\n"
-                + "        <MemberGrant member='[Customers].[USA].[CA]' access='none'/>\n"
-                + "        <MemberGrant member='[Customers].[USA].[CA].[Los Angeles]' access='all'/>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role>\n");
-
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier18::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -3144,36 +2717,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testDimensionGrant(TestContextWrapper foodMartContext) throws Exception {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
-            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\" />\n"
-            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
-            + "      <DimensionGrant dimension=\"[Gender]\" access=\"all\" />\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n"
-            + "<Role name=\"Role2\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
-            + "      <DimensionGrant dimension=\"[Measures]\" access=\"all\" />\n"
-            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
-            + "      <DimensionGrant dimension=\"[Customers]\" access=\"none\" />\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n"
-            + "<Role name=\"Role3\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"custom\">\n"
-            + "      <DimensionGrant dimension=\"[Education Level]\" access=\"all\" />\n"
-            + "      <DimensionGrant dimension=\"[Measures]\" access=\"custom\" />\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>\n");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier19::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertAxisReturns(
@@ -3313,31 +2857,8 @@ class AccessControlTest {
             + "[*BASE_MEMBERS_Measures] on columns,\n"
             + "Non Empty [*BASE_MEMBERS_Product] on rows\n"
             + "From [Sales] \n";
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                    null, null, null, null, null,
-                    "  <Role name=\"Role1\">\n"
-                    + "    <SchemaGrant access=\"all\">\n"
-                    + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                    + "        <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" topLevel=\"[Customers].[City]\" bottomLevel=\"[Customers].[City]\" rollupPolicy=\"partial\">\n"
-                    + "          <MemberGrant member=\"[City].[Coronado]\" access=\"all\">\n"
-                    + "          </MemberGrant>\n"
-                    + "        </HierarchyGrant>\n"
-                    + "      </CubeGrant>\n"
-                    + "    </SchemaGrant>\n"
-                    + "  </Role>\n"
-                    + "  <Role name=\"Role2\">\n"
-                    + "    <SchemaGrant access=\"all\">\n"
-                    + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                    + "        <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" topLevel=\"[Customers].[City]\" bottomLevel=\"[Customers].[City]\" rollupPolicy=\"partial\">\n"
-                    + "          <MemberGrant member=\"[City].[Burbank]\" access=\"all\">\n"
-                    + "          </MemberGrant>\n"
-                    + "        </HierarchyGrant>\n"
-                    + "      </CubeGrant>\n"
-                    + "    </SchemaGrant>\n"
-                    + "  </Role>\n");
         // Control tests
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier20::new);
         TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -3498,19 +3019,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian1030_2(TestContextWrapper foodMartContext) {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Bacon\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Customers]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Customers].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier21::new);
     	TestUtil.withRole(foodMartContext, "Bacon");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -3537,19 +3046,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1091(TestContextWrapper foodMartContext) throws Exception {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier22::new);
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -3611,28 +3108,7 @@ class AccessControlTest {
     void testMondrian1259(TestContextWrapper foodMartContext) throws Exception {
         final String mdx =
             "select non empty {[Store].Members} on columns from [Sales]";
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"Role1\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>"
-            + "<Role name=\"Role2\">\n"
-            + "  <SchemaGrant access=\"none\">\n"
-            + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "      <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\" rollupPolicy=\"partial\">\n"
-            + "        <MemberGrant member=\"[Store].[USA].[OR]\" access=\"all\"/>\n"
-            + "      </HierarchyGrant>\n"
-            + "    </CubeGrant>\n"
-            + "  </SchemaGrant>\n"
-            + "</Role>");
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier23::new);
         TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -3705,25 +3181,8 @@ class AccessControlTest {
             + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
             + "From [Sales]\n";
 
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Admin\">\n"
-                + "  <SchemaGrant access=\"none\">\n"
-                + "    <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "      <HierarchyGrant hierarchy=\"[Store]\" rollupPolicy=\"partial\" access=\"custom\">\n"
-                + "        <MemberGrant member=\"[Store].[USA].[CA]\" access=\"all\">\n"
-                + "        </MemberGrant>\n"
-                + "      </HierarchyGrant>\n"
-                + "      <HierarchyGrant hierarchy=\"[Customers]\" rollupPolicy=\"partial\" access=\"custom\">\n"
-                + "        <MemberGrant member=\"[Customers].[USA].[CA]\" access=\"all\">\n"
-                + "        </MemberGrant>\n"
-                + "      </HierarchyGrant>\n"
-                + "    </CubeGrant>\n"
-                + "  </SchemaGrant>\n"
-                + "</Role> \n");
-        TestUtil.withSchema(foodMartContext, schema);
-        Connection connection = foodMartContext.createConnection();
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier24::new);
+        Connection connection = foodMartContext.getContext().getConnection();
 
         // Control
         TestUtil
@@ -3764,31 +3223,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian936(TestContextWrapper foodMartContext) throws Exception {
-    	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema,
-            null, null, null, null, null,
-            "<Role name=\"test\">\n"
-            + " <SchemaGrant access=\"none\">\n"
-            + "   <CubeGrant cube=\"Sales\" access=\"all\">\n"
-            + "     <HierarchyGrant hierarchy=\"[Store]\" access=\"custom\"\n"
-            + "         topLevel=\"[Store].[Store Country]\" rollupPolicy=\"partial\">\n"
-            + "       <MemberGrant member=\"[Store].[All Stores]\" access=\"none\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[CA].[Los Angeles]\" access=\"all\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[CA].[Alameda]\" access=\"all\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[CA].[Beverly Hills]\"\n"
-            + "access=\"all\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[CA].[San Francisco]\"\n"
-            + "access=\"all\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[CA].[San Diego]\" access=\"all\"/>\n"
-            + "\n"
-            + "       <MemberGrant member=\"[Store].[USA].[OR].[Portland]\" access=\"all\"/>\n"
-            + "       <MemberGrant member=\"[Store].[USA].[OR].[Salem]\" access=\"all\"/>\n"
-            + "     </HierarchyGrant>\n"
-            + "   </CubeGrant>\n"
-            + " </SchemaGrant>\n"
-            + "</Role>");
-
-    	TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier25::new);
     	TestUtil.withRole(foodMartContext, "test");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -3847,47 +3282,14 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1434(TestContextWrapper foodMartContext) {
-        String roleDef =
-            "<Role name=\"dev\">"
-            + "    <SchemaGrant access=\"all\">"
-            + "      <CubeGrant cube=\"Sales\" access=\"all\">"
-            + "      </CubeGrant>"
-            + "      <CubeGrant cube=\"HR\" access=\"all\">"
-            + "      </CubeGrant>"
-            + "      <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">"
-            + "         <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">"
-            + "            <MemberGrant member=\"[Measures].[Warehouse Sales]\" access=\"all\">"
-            + "            </MemberGrant>"
-            + "         </HierarchyGrant>"
-            + "     </CubeGrant>"
-            + "  </SchemaGrant>"
-            + "</Role>";
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDef);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier26::new);
         TestUtil.withRole(foodMartContext, "dev");
         Connection connection = foodMartContext.createConnection();
         TestUtil.executeQuery(
     		connection,
             " select from [Sales] where {[Measures].[Unit Sales]}");
 
-        roleDef =
-            "<Role name=\"dev\">"
-            + "    <SchemaGrant access=\"all\">"
-            + "      <CubeGrant cube=\"Sales\" access=\"all\">"
-            + "         <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">"
-            + "            <MemberGrant member=\"[Measures].[Unit Sales]\" access=\"all\">"
-            + "            </MemberGrant>"
-            + "         </HierarchyGrant>"
-            + "      </CubeGrant>"
-            + "      <CubeGrant cube=\"HR\" access=\"all\">"
-            + "      </CubeGrant>"
-            + "      <CubeGrant cube=\"Warehouse and Sales\" access=\"all\">"
-            + "     </CubeGrant>"
-            + "  </SchemaGrant>"
-            + "</Role>";
-        schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDef);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier27::new);
         TestUtil.withRole(foodMartContext, "dev");
         connection = foodMartContext.createConnection();
         TestUtil.executeQuery(
@@ -3921,20 +3323,7 @@ class AccessControlTest {
             + "[*BASE_MEMBERS_Measures] on columns,\n"
             + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
             + "From [Sales]\n";
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema,
-                null, null, null, null, null,
-                "<Role name=\"Admin\">\n"
-                + "    <SchemaGrant access=\"none\">\n"
-                + "      <CubeGrant cube=\"Sales\" access=\"all\">\n"
-                + "        <HierarchyGrant hierarchy=\"[Gender]\" rollupPolicy=\"partial\" access=\"custom\">\n"
-                + "          <MemberGrant member=\"[Gender].[F]\" access=\"all\">\n"
-                + "          </MemberGrant>\n"
-                + "        </HierarchyGrant>\n"
-                + "      </CubeGrant>\n"
-                + "    </SchemaGrant>\n"
-                + "  </Role>\n");
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier28::new);
         TestUtil.withRole(foodMartContext, "Admin");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -3996,10 +3385,10 @@ class AccessControlTest {
             + "        </SchemaGrant>\n"
             + "    </Role> ";
 
-        String nonAllDefaultMem = "defaultMember=\"[Store2].[USA].[CA]\"";
+        String nonAllDefaultMem = "[Store2].[USA].[CA]";
 
         for (RollupPolicy policy : RollupPolicy.values()) {
-            for (String defaultMember : new String[]{nonAllDefaultMem, "" }) {
+            for (String defaultMember : new String[]{nonAllDefaultMem, null }) {
                 for (boolean hasAll : new Boolean[]{true, false}) {
                     // Results in this test should be the same regardless
                     // of rollupPolicy, default member, and whether there
@@ -4008,16 +3397,12 @@ class AccessControlTest {
                     // for [Store2].
                     // MONDRIAN-1568 showed different results with different
                     // rollup policies and different default members
-                	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-                	String schema = SchemaUtil.getSchema(baseSchema,
-                        // swap in hasAll and defaultMember
-                        String.format(dimension, hasAll, defaultMember),
-                        cube, null, null, null,
-                        // swap in policy
-                        String.format(roleDefs, policy));
                     // RolapNativeCrossjoin
-                	TestUtil.withSchema(foodMartContext, schema);
-                	TestUtil.withRole(foodMartContext, "test");
+                    RolapSchemaPool.instance().clear();
+                    MappingSchema schemaO = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+                    foodMartContext.getContext().setDatabaseMappingSchemaProviders(
+                        List.of(new SchemaModifiers.AccessControlTestModifier29(schemaO, hasAll, defaultMember, policy)));
+                    TestUtil.withRole(foodMartContext, "test");
                 	Connection connection = foodMartContext.createConnection();
                 	TestUtil.assertQueryReturns(
             			connection,
@@ -4025,7 +3410,7 @@ class AccessControlTest {
                             "Failure testing RolapNativeCrossJoin with "
                             + " rollupPolicy=%s, "
                             +   "defaultMember=%s, hasAll=%s",
-                            policy, defaultMember, hasAll),
+                            policy, defaultMember ==null, hasAll),
                         "select NonEmptyCrossJoin([Store2].[Store State].MEMBERS,"
                         + "[Product].[Product Family].MEMBERS) on 0 from tinysales",
                         "Axis #0:\n"
@@ -4097,19 +3482,7 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testValidMeasureWithRestrictedCubes(TestContextWrapper foodMartContext) {
         //http://jira.pentaho.com/browse/MONDRIAN-1616
-        final String roleDefs =
-            "<Role name=\"noBaseCubes\">\n"
-            + " <SchemaGrant access=\"all\">\n"
-            + "  <CubeGrant cube=\"Sales\" access=\"none\" />\n"
-            + "  <CubeGrant cube=\"Sales Ragged\" access=\"none\" />\n"
-            + "  <CubeGrant cube=\"Sales 2\" access=\"none\" />\n"
-            + "  <CubeGrant cube=\"Warehouse\" access=\"none\" />\n"
-            + " </SchemaGrant>\n"
-            + "</Role> ";
-
-        String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
-        TestUtil.withSchema(foodMartContext, schema);
+        TestUtil.withSchema(foodMartContext.getContext(), SchemaModifiers.AccessControlTestModifier30::new);
         TestUtil.withRole(foodMartContext, "noBaseCubes");
         Connection connection = foodMartContext.createConnection();
 
