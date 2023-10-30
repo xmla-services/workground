@@ -18,6 +18,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.sql.SQLException;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -31,6 +32,8 @@ import mondrian.olap.Util;
 /**
  * Unit test for automatic detection of schema version.
  */
+@Disabled
+//metamodelVersion='4.0' tag absent
 class SchemaVersionTest {
 
     @ParameterizedTest

@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -84,8 +85,8 @@ class EffectiveMemberCacheTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCachedChildMembers(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testCachedChildMembers(TestContext context) {
+        Connection connection = context.getConnection();
         clearCache(connection);
         // verify query for specific members can be fulfilled by members cached
         // from a child members query.
@@ -104,7 +105,7 @@ class EffectiveMemberCacheTest {
                 + "group by\n"
                 + "    `product`.`product_name`\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    ISNULL(`c0`) ASC, `c0` ASC"
                 : "    ISNULL(`product`.`product_name`) ASC, "
                 + "`product`.`product_name` ASC");

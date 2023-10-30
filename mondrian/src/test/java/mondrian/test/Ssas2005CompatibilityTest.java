@@ -397,7 +397,7 @@ class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalcMemberAmbiguousHierarchy(TestContextWrapper context) {
+    void testCalcMemberAmbiguousHierarchy(TestContext context) {
         String mdx =
             "WITH MEMBER [Measures].[ProfitPercent] AS\n"
             + "     '([Measures].[Store Sales]-[Measures].[Store Cost])/"
@@ -414,11 +414,11 @@ class Ssas2005CompatibilityTest {
             + " FROM [Sales]\n"
             + " WHERE ([Measures].[ProfitPercent])";
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            assertQueryThrows(context.createConnection(),
+            assertQueryThrows(context.getConnection(),
                 mdx,
                 "Hierarchy for calculated member '[Time].[First Half 97]' not found");
         } else {
-            assertQueryReturns(context.createConnection(), "Warehouse and Sales",
+            assertQueryReturns(context.getConnection(), "Warehouse and Sales",
                 mdx,
                 "Axis #0:\n"
                 + "{[Measures].[ProfitPercent]}\n"
@@ -980,10 +980,8 @@ class Ssas2005CompatibilityTest {
             + "</Dimension>",
             null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier1(schema)));
-
+    	withSchema(context, SchemaModifiers.Ssas2005CompatibilityTestModifier1::new);
+    	
         assertQueryReturns(context.getConnection(),
             "select [Store Type 2.Store Type 2].[Store Type].members ON columns "
             + "from [Sales] where [Time].[1997]",
@@ -1852,10 +1850,8 @@ class Ssas2005CompatibilityTest {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"));
     	 */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier3(schema)));
-        assertAxisReturns(context.createConnection(),
+    	withSchema(context.getContext(), SchemaModifiers.Ssas2005CompatibilityTestModifier3::new); 
+        assertAxisReturns(context.getContext().getConnection(),
             "head(\n"
             + "  filter(\n"
             + "    [Customer Last Name].[Last Name].Members,"

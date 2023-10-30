@@ -24,6 +24,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import java.util.List;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test case to
@@ -132,8 +133,7 @@ class IgnoreUnrelatedDimensionsTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier(schema)));
+    	withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier::new);
 
     }
 
@@ -193,8 +193,7 @@ class IgnoreUnrelatedDimensionsTest {
             null, cubeSales3, cubeWarehouseAndSales3, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1(schema)));
+    	withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1::new);
         assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Measures].[Total Sales] AS "
             + "'ValidMeasure(Measures.[Warehouse Sales]) + [Measures].[Unit Sales]',"
@@ -230,8 +229,7 @@ class IgnoreUnrelatedDimensionsTest {
             null, cubeSales3, cubeWarehouseAndSales3, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1::new);
         assertQueryReturns(context.getConnection(),
             "SELECT "
             + "{[Measures].[Warehouse Sales]} ON 0"
@@ -257,8 +255,7 @@ class IgnoreUnrelatedDimensionsTest {
             null, cubeSales3, cubeWarehouseAndSales3, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1::new);
         assertQueryReturns(context.getConnection(),
             "SELECT "
             + "{[Measures].[Warehouse Sales]} ON 0"
@@ -286,8 +283,7 @@ class IgnoreUnrelatedDimensionsTest {
             null, cubeSales3, cubeWarehouseAndSales3, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1::new);
         assertQueryReturns(context.getConnection(),
             "SELECT "
             + "{[Measures].[Warehouse Sales]} ON 0"
@@ -318,8 +314,7 @@ class IgnoreUnrelatedDimensionsTest {
             null, cubeSales3, cubeWarehouseAndSales3, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.IgnoreUnrelatedDimensionsTestModifier1::new);
         // Should equal the [Unit Sales] of [Graduate Degree] and
         // [High School Degree] (with default Gender.F),
         //  plus the total [warehouse sales].

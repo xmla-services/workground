@@ -46,6 +46,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.unfold;
 import static org.opencube.junit5.TestUtil.upgradeActual;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests for parent-child hierarchies.
@@ -88,9 +89,7 @@ class ParentChildHierarchyTest {
             + "      </Hierarchy>\n"
             + "  </Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier1(schema)));
+    	withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier1::new);
     }
 
     /**
@@ -191,9 +190,7 @@ class ParentChildHierarchyTest {
                 sharedClosureDimension, cube, null, null, null, null);
         withSchema(context, schema);
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier3(schema)));
+    	withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier3::new);
 
     }
 
@@ -225,9 +222,7 @@ class ParentChildHierarchyTest {
             + "</Dimension>",
             null));
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier4(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier4::new);
 
     }
 
@@ -251,10 +246,7 @@ class ParentChildHierarchyTest {
                 + "</Hierarchy>\n"
                 + "</Dimension>\n"));
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier5(schema)));
-
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier5::new);
         assertQueryReturns(context.getConnection(),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'Head(FILTER([*BASE_MEMBERS__EmployeesNoClosure_], NOT ISEMPTY ([Measures].[Count])), 5)'\n"

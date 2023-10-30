@@ -1034,6 +1034,42 @@ public class SchemaModifiers {
             super(mappingSchema);
         }
 
+        /*
+ 			"<VirtualCube name=\"Warehouse and Sales2\" defaultMeasure=\"Store Sales\">\n"
+            + "  <CubeUsages>"
+            + "   <CubeUsage cubeName=\"Sales\" ignoreUnrelatedDimensions=\"true\"/>\n"
+            + "   <CubeUsage cubeName=\"Warehouse\" ignoreUnrelatedDimensions=\"true\"/>\n"
+            + "  </CubeUsages>"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Customers\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Education Level\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Gender\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Marital Status\"/>\n"
+            + "  <VirtualCubeDimension name=\"Product\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Promotion Media\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Promotions\"/>\n"
+            + "  <VirtualCubeDimension name=\"Store\"/>\n"
+            + "  <VirtualCubeDimension name=\"Time\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Sales\" name=\"Yearly Income\"/>\n"
+            + "  <VirtualCubeDimension cubeName=\"Warehouse\" name=\"Warehouse\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Sales Count]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Store Cost]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Store Sales]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Unit Sales]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Profit]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Profit Growth]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Store Invoice]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Supply Time]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Units Ordered]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Units Shipped]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Cost]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Profit]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\"/>\n"
+            + "  <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Average Warehouse Sale]\"/>\n"
+            + "  <CalculatedMember name=\"Profit Per Unit Shipped\" dimension=\"Measures\">\n"
+            + "    <Formula>[Measures].[Profit] / [Measures].[Units Shipped]</Formula>\n"
+            + "  </CalculatedMember>\n"
+            + "</VirtualCube>", 
+         */
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
@@ -1074,7 +1110,7 @@ public class SchemaModifiers {
                         .build(),
                     VirtualCubeDimensionRBuilder.builder()
                         .cubeName("Sales")
-                        .name("Product")
+                        .name("Promotion Media")
                         .build(),
                     VirtualCubeDimensionRBuilder.builder()
                         .cubeName("Sales")
@@ -1110,7 +1146,7 @@ public class SchemaModifiers {
                         .build(),
                     VirtualCubeMeasureRBuilder.builder()
                         .cubeName("Sales")
-                        .name("Unit Sales")
+                        .name("[Measures].[Unit Sales]")
                         .build(),
                     VirtualCubeMeasureRBuilder.builder()
                         .cubeName("Sales")
@@ -1160,41 +1196,9 @@ public class SchemaModifiers {
                         .formulaElement(FormulaRBuilder.builder()
                             .cdata("[Measures].[Profit] / [Measures].[Units Shipped]").build())
                         .build()
-                ))
+                ))               
                 .build());
 
-            result.add(VirtualCubeRBuilder.builder()
-                .name("Warehouse and Sales3")
-                .defaultMeasure("Store Invoice")
-                .cubeUsages(List.of(
-                    CubeUsageRBuilder.builder()
-                        .cubeName("Sales")
-                        .ignoreUnrelatedDimensions(true)
-                        .build()
-                ))
-                .virtualCubeDimensions(List.of(
-                    VirtualCubeDimensionRBuilder.builder()
-                        .cubeName("Sales")
-                        .name("Gender")
-                        .build(),
-                    VirtualCubeDimensionRBuilder.builder()
-                        .name("Store")
-                        .build(),
-                    VirtualCubeDimensionRBuilder.builder()
-                        .name("Product")
-                        .build(),
-                    VirtualCubeDimensionRBuilder.builder()
-                        .cubeName("Warehouse")
-                        .name("Warehouse")
-                        .build()
-                ))
-                .virtualCubeMeasures(List.of(
-                    VirtualCubeMeasureRBuilder.builder()
-                        .cubeName("Sales")
-                        .name("[Measures].[Customer Count]")
-                        .build()
-                ))
-                .build());
             return result;
         }
     }
@@ -1391,6 +1395,8 @@ public class SchemaModifiers {
                     .name("Closure")
                     .type(TypeEnum.NUMERIC)
                     .uniqueMembers(false)
+                    .table("employee_closure")
+                    .column("supervisor_id")
                     .build();
                 MappingLevel level2 = LevelRBuilder
                     .builder()
@@ -1474,7 +1480,7 @@ public class SchemaModifiers {
                     .type(TypeEnum.NUMERIC)
                     .table("employee")
                     .uniqueMembers(true)
-                    .table("employee_closure")
+                    .table("employee")
                     .column("employee_id")
                     .parentColumn("supervisor_id")
                     .nameColumn("full_name")
@@ -1567,7 +1573,7 @@ public class SchemaModifiers {
             result.addAll(super.schemaCubes(schema));
             result.add(CubeRBuilder.builder()
                 .name("EmployeeSharedClosureCube")
-                .fact(new TableR(null, "salary", "sales_fact_1997", List.of()))
+                .fact(new TableR(null, "salary", "salary_closure", List.of()))
                 .dimensionUsageOrDimensions(List.of(
                     DimensionUsageRBuilder.builder()
                         .name("SharedEmployee")
@@ -1833,11 +1839,6 @@ public class SchemaModifiers {
                     .parentColumn("supervisor_id")
                     .nameColumn("full_name")
                     .nullParentValue("0")
-                    .closure(ClosureRBuilder.builder()
-                        .parentColumn("supervisor_id")
-                        .childColumn("employee_id")
-                        .table(new TableR("employee_closure"))
-                        .build())
                     .properties(List.of(
                         PropertyRBuilder.builder()
                             .name("Marital Status")
@@ -1877,7 +1878,7 @@ public class SchemaModifiers {
 
                 MappingCubeDimension dimension = PrivateDimensionRBuilder
                     .builder()
-                    .name("EmployeesNonClosure")
+                    .name("EmployeesNoClosure")
                     .foreignKey("employee_id")
                     .hierarchies(List.of(hierarchy))
                     .build();
@@ -7456,10 +7457,10 @@ public class SchemaModifiers {
                 result.add(MeasureRBuilder.builder()
                     .name("typeMeasure")
                     .aggregator(aggregator)
-                    .datatype(type != null ? MeasureDataTypeEnum.fromValue(type) : null)
-                    .column("unit_sales")
+                    .datatype(type != null ? MeasureDataTypeEnum.fromValue(type) : null)                    
                     .measureExpression(ExpressionViewRBuilder.builder()
                         .sqls(List.of(SQLRBuilder.builder()
+                        	.dialect("generic")
                             .content(expression)
                             .build()))
                         .build())
@@ -7865,7 +7866,7 @@ public class SchemaModifiers {
                             HierarchyRBuilder.builder()
                                 .name("Store Type 2")
                                 .hasAll(true)
-                                .primaryKey("store")
+                                .primaryKey("store_id")
                                 .relation(new TableR("store"))
                                 .levels(List.of(
                                     LevelRBuilder.builder()
@@ -11399,25 +11400,25 @@ public class SchemaModifiers {
                         .name("Apos in dq")
                         .dimension("Measures")
                         .visible(false)
-                        .formula(" &quot;an 'apos' in dq&quot; ")
+                        .formula(" \"an 'apos' in dq\" ")
                         .build(),
                     CalculatedMemberRBuilder.builder()
                         .name("Dq in dq")
                         .dimension("Measures")
                         .visible(false)
-                        .formula(" &quot;a &quot;&quot;dq&quot;&quot; in dq&quot; ")
+                        .formula(" \"a \"\"dq\"\" in dq\" ")
                         .build(),
                     CalculatedMemberRBuilder.builder()
                         .name("Apos in apos")
                         .dimension("Measures")
                         .visible(false)
-                        .formula(" &apos;an &apos;&apos;apos&apos;&apos; in apos&apos; ")
+                        .formula(" 'an ''apos'' in apos' ")
                         .build(),
                     CalculatedMemberRBuilder.builder()
                         .name("Dq in apos")
                         .dimension("Measures")
                         .visible(false)
-                        .formula(" &apos;a &quot;dq&quot; in apos&apos; ")
+                        .formula(" 'a \"dq\" in apos' ")
                         .build(),
                     CalculatedMemberRBuilder.builder()
                         .name("Colored Profit")
@@ -17207,7 +17208,7 @@ public class SchemaModifiers {
                                 .build(),
                             PrivateDimensionRBuilder.builder()
                                 .name("Customer")
-                                .foreignKey("Customer_id")
+                                .foreignKey("customer_id")
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
                                         .hasAll(true)
