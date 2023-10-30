@@ -218,6 +218,7 @@ public class ExplicitRecognizerTestModifier extends RDbMappingSchemaModifier {
                                             .column(getMonthCol())
                                             .captionColumn(getMonthCaptionCol())
                                             .ordinalColumn(getMonthOrdinalCol())
+                                            .nameColumn(getMonthNameCol())
                                             .uniqueMembers(false)
                                             .type(TypeEnum.NUMERIC)
                                             .levelType(LevelTypeEnum.TIME_MONTHS)
@@ -304,6 +305,10 @@ public class ExplicitRecognizerTestModifier extends RDbMappingSchemaModifier {
     }
 
     protected String getQuarterCol() {
+        return null;
+    }
+
+    protected String getMonthNameCol() {
         return null;
     }
 

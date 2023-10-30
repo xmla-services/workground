@@ -10,10 +10,32 @@
 */
 package mondrian.test;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
+import mondrian.rolap.RolapSchemaPool;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleUsageRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UnionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -22,6 +44,11 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
+
+import java.util.List;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withRole;
 
 /**
  * @author Andrey Khayrutdinov
@@ -65,58 +92,132 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
         propertySaver.reset();
     }
 
-    private String getSchemaWith(String roles) {
-        return String.format
-                (""
-                        + "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
-                        + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
-                        + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
-                        + "      <Table name=\"customer_w_ter\">\n"
-                        + "      </Table>\n"
-                        + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" "
-                        +        "caption=\"Address Line 1\">\n"
-                        + "      </Level>\n"
-                        + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" "
-                        + "      caption=\"Contact Last Name\">\n"
-                        + "      </Level>\n"
-                        + "    </Hierarchy>\n"
-                        + "  </Dimension>\n"
-                        + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
-                        + "     <Table name=\"orderfact\"> \n"
-                        + "     </Table> \n"
-                        + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
-                        + "     </DimensionUsage> \n"
-                        + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
-                        + "     </Measure> \n"
-                        + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
-                        + "     </Measure> \n"
-                        + " </Cube> \n"
-                        + "%s"
-                        + "</Schema>\n", roles);
+    private MappingSchema getSchemaWith(List<MappingRole> roles) {
+        return SchemaRBuilder.builder()
+            .name("SteelWheels")
+            .description("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
+            .dimensions(List.of(
+                PrivateDimensionRBuilder.builder()
+                    .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                    .visible(true)
+                    .highCardinality(false)
+                    .name("Customers Dimension")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .name("Customers Hierarchy")
+                            .visible(true)
+                            .hasAll(true)
+                            .primaryKey("CUSTOMERNUMBER")
+                            .caption("Customer Hierarchy")
+                            .relation(new TableR("customer_w_ter"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Address")
+                                    .visible(true)
+                                    .column("ADDRESSLINE1")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .caption("Address Line 1")
+                                    .build(),
+                                LevelRBuilder.builder()
+                                    .name("Name")
+                                    .visible(true)
+                                    .column("CONTACTLASTNAME")
+                                    .type(TypeEnum.STRING)
+                                    .uniqueMembers(false)
+                                    .levelType(LevelTypeEnum.REGULAR)
+                                    .hideMemberIf(HideMemberIfEnum.NEVER)
+                                    .caption("Contact Last Name")
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()
+            ))
+            .cubes(List.of(
+                CubeRBuilder.builder()
+                    .name("Customers Cube")
+                    .visible(true)
+                    .cache(true)
+                    .enabled(true)
+                    .fact(new TableR("orderfact"))
+                    .dimensionUsageOrDimensions(List.of(
+                        DimensionUsageRBuilder.builder()
+                            .source("Customers Dimension")
+                            .name("Customer_DimUsage")
+                            .visible(true)
+                            .foreignKey("CUSTOMERNUMBER")
+                            .highCardinality(false)
+                            .build()
+                    ))
+                    .measures(List.of(
+                        MeasureRBuilder.builder()
+                            .name("Price Each")
+                            .column("PRICEEACH")
+                            .aggregator("sum")
+                            .visible(true)
+                            .build(),
+                        MeasureRBuilder.builder()
+                            .name("Total Price")
+                            .column("TOTALPRICE")
+                            .aggregator("sum")
+                            .visible(true)
+                            .build()
+                    ))
+                    .build()
+            ))
+            .roles(roles)
+            .build();
+
     }
 
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregation(TestContextWrapper context) throws Exception {
-        final String schema = getSchemaWith
-                (""
-                        + " <Role name=\"Power User\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-                        + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-                        + "             </DimensionGrant>\n"
-                        + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" "
-                        + "                 rollupPolicy=\"partial\" access=\"custom\"> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine]\" access=\"none\"/> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\" /> \n"
-                        + "             </HierarchyGrant> \n"
-                        + "         </CubeGrant> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n");
-
-        getTestContext(context);
-        withSchema(context, schema);
+        final MappingSchema schema = getSchemaWith
+                (List.of(RoleRBuilder.builder()
+                    .name("Power User")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Customers Cube")
+                                    .access("all")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("Measures")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
+                                            .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                            .rollupPolicy("partial")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine]")
+                                                    .access(MemberGrantAccessEnum.NONE)
+                                                    .build(),
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build()));
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -124,23 +225,43 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationNoRestrictionsOnTopLevel(TestContextWrapper context) throws Exception {
-        final String schema = getSchemaWith
-                (""
-                        + " <Role name=\"Power User\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-                        + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-                        + "             </DimensionGrant>\n"
-                        + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" "
-                        + "                                                          rollupPolicy=\"Partial\" access=\"custom\"> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\" /> \n"
-                        + "             </HierarchyGrant> \n"
-                        + "         </CubeGrant> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n");
-
-        getTestContext(context);
-        withSchema(context, schema);
+        final MappingSchema schema = getSchemaWith
+            (List.of(RoleRBuilder.builder()
+                .name("Power User")
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .cube("Customers Cube")
+                                .access("all")
+                                .dimensionGrants(List.of(
+                                    DimensionGrantRBuilder.builder()
+                                        .dimension("Measures")
+                                        .access(AccessEnum.ALL)
+                                        .build()
+                                ))
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
+                                        .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                        .rollupPolicy("Partial")
+                                        .access(AccessEnum.CUSTOM)
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build()));
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context,"Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -149,34 +270,65 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     void testUnionWithAggregation(TestContextWrapper context) throws Exception {
-        final String schema = getSchemaWith
-                (""
-                        + " <Role name=\"Foo\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n"
-                        + " <Role name=\"Power User\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-                        + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-                        + "             </DimensionGrant>\n"
-                        + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" "
-                        + "                 rollupPolicy=\"partial\" access=\"custom\"> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-                        + "                 </MemberGrant> \n"
-                        + "             </HierarchyGrant> \n"
-                        + "         </CubeGrant> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n"
-                        + " <Role name=\"Power User Union\"> \n"
-                        + "     <Union> \n"
-                        + "         <RoleUsage roleName=\"Power User\"/> \n"
-                        + "         <RoleUsage roleName=\"Foo\"/> \n"
-                        + "     </Union> \n"
-                        + " </Role>\n");
-
-        getTestContext(context);
-        withSchema(context, schema);
+        final MappingSchema schema = getSchemaWith
+            (List.of(
+                RoleRBuilder.builder()
+                    .name("Foo")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .build()))
+                    .build(),
+                RoleRBuilder.builder()
+                .name("Power User")
+                .schemaGrants(List.of(
+                    SchemaGrantRBuilder.builder()
+                        .access(AccessEnum.NONE)
+                        .cubeGrants(List.of(
+                            CubeGrantRBuilder.builder()
+                                .cube("Customers Cube")
+                                .access("all")
+                                .dimensionGrants(List.of(
+                                    DimensionGrantRBuilder.builder()
+                                        .dimension("Measures")
+                                        .access(AccessEnum.ALL)
+                                        .build()
+                                ))
+                                .hierarchyGrants(List.of(
+                                    HierarchyGrantRBuilder.builder()
+                                        .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
+                                        .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                        .rollupPolicy("partial")
+                                        .access(AccessEnum.CUSTOM)
+                                        .memberGrants(List.of(
+                                            MemberGrantRBuilder.builder()
+                                                .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                .access(MemberGrantAccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build(),
+                RoleRBuilder.builder()
+                    .name("Power User Union")
+                    .union(UnionRBuilder.builder()
+                        .roleUsages(List.of(
+                            RoleUsageRBuilder.builder()
+                                .roleName("Power User")
+                                .build(),
+                            RoleUsageRBuilder.builder()
+                                .roleName("Foo")
+                                .build()
+                        ))
+                        .build())
+                    .build()
+            ));
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -185,43 +337,91 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationUnionRolesWithSameGrants(TestContextWrapper context) throws Exception {
-        final String schema = getSchemaWith
-                (""
-                        + " <Role name=\"Foo\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-                        + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-                        + "             </DimensionGrant>\n"
-                        + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" "
-                        + "               rollupPolicy=\"partial\" access=\"custom\"> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-                        + "                 </MemberGrant> \n"
-                        + "             </HierarchyGrant> \n"
-                        + "         </CubeGrant> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n"
-                        + " <Role name=\"Power User\"> \n"
-                        + "     <SchemaGrant access=\"none\"> \n"
-                        + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-                        + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-                        + "             </DimensionGrant>\n"
-                        + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" "
-                        +                   "rollupPolicy=\"partial\" access=\"custom\"> \n"
-                        + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-                        + "                 </MemberGrant> \n"
-                        + "             </HierarchyGrant> \n"
-                        + "         </CubeGrant> \n"
-                        + "     </SchemaGrant> \n"
-                        + " </Role>\n"
-                        + " <Role name=\"Power User Union\"> \n"
-                        + "     <Union> \n"
-                        + "         <RoleUsage roleName=\"Power User\"/> \n"
-                        + "         <RoleUsage roleName=\"Foo\"/> \n"
-                        + "     </Union> \n"
-                        + " </Role>\n");
-
-        getTestContext(context);
-        withSchema(context, schema);
+        final MappingSchema schema = getSchemaWith
+            (List.of(
+                RoleRBuilder.builder()
+                    .name("Foo")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Customers Cube")
+                                    .access("all")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("Measures")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
+                                            .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                            .rollupPolicy("partial")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()))
+                    .build(),
+        RoleRBuilder.builder()
+                    .name("Power User")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("Customers Cube")
+                                    .access("all")
+                                    .dimensionGrants(List.of(
+                                        DimensionGrantRBuilder.builder()
+                                            .dimension("Measures")
+                                            .access(AccessEnum.ALL)
+                                            .build()
+                                    ))
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
+                                            .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                            .rollupPolicy("partial")
+                                            .access(AccessEnum.CUSTOM)
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build(),
+                RoleRBuilder.builder()
+                    .name("Power User Union")
+                    .union(UnionRBuilder.builder()
+                        .roleUsages(List.of(
+                            RoleUsageRBuilder.builder()
+                                .roleName("Power User")
+                                .build(),
+                            RoleUsageRBuilder.builder()
+                                .roleName("Foo")
+                                .build()
+                        ))
+                        .build())
+                    .build()
+            ));
+        RolapSchemaPool.instance().clear();
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
