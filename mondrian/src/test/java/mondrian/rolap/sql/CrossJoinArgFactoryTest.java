@@ -8,13 +8,13 @@
 */
 package mondrian.rolap.sql;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * Tests for CrossJoinArgFactory
@@ -29,7 +29,7 @@ class CrossJoinArgFactoryTest {
      */
      @ParameterizedTest
      @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-     void testCrossJoinExample(TestContextWrapper context) {
+     void testCrossJoinExample(TestContext context) {
         String query =
                 "with "
                 + " member [Measures].[aa] as '([Measures].[Store Cost],[Gender].[M])'"
@@ -55,6 +55,6 @@ class CrossJoinArgFactoryTest {
                 + "Row #0: 15,941.98\n"
                 + "Row #1: 16,598.87\n"
                 + "Row #1: 15,649.64\n";
-        assertQueryReturns(context.createConnection(), query, expected);
+        assertQueryReturns(context.getConnection(), query, expected);
     }
 }

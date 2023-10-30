@@ -74,7 +74,7 @@ class InlineTableTest {
                             .name("Time")
                             .source("Time")
                             .foreignKey("time_id")
-                            .build(),
+                            .build(),                           
                         PrivateDimensionRBuilder.builder()
                             .name("Alternative Promotion")
                             .foreignKey("promotion_id")
@@ -83,6 +83,7 @@ class InlineTableTest {
                                     .hasAll(true)
                                     .primaryKey("promo_id")
                                     .relation(InlineTableRBuilder.builder()
+                                    	.alias("alt_promotion")
                                         .columnDefs(List.of(
                                             ColumnDefRBuilder.builder()
                                                 .name("promo_id")
@@ -133,10 +134,18 @@ class InlineTableTest {
                     ))
                     .measures(List.of(
                         MeasureRBuilder.builder()
-                            .name("Store Cost")
-                            .column("store_cost")
+                            .name("Unit Sales")
+                            .column("unit_sales")
                             .aggregator("sum")
-                            .build()
+                            .formatString("Standard")
+                            .visible(true)
+                            .build(),
+                        MeasureRBuilder.builder()
+                            .name("Store Sales")
+                            .column("store_sales")
+                            .aggregator("sum")
+                            .formatString("#,###.00")
+                            .build()     
                     ))
                     .build());
                 return result;
@@ -169,7 +178,7 @@ class InlineTableTest {
             + "      </InlineTable>\n"
             + "      <Level name=\"Alternative Promotion\" column=\"promo_id\" nameColumn=\"promo_name\" uniqueMembers=\"true\"/> \n"
             + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
+            + "  </Dimension>\n"            
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"Standard\" visible=\"false\"/>\n"
             + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
@@ -657,7 +666,7 @@ class InlineTableTest {
                             .name("Time")
                             .source("Time")
                             .foreignKey("time_id")
-                            .build(),
+                            .build(),                                                    
                         PrivateDimensionRBuilder.builder()
                             .name("Alternative Promotion")
                             .foreignKey("promotion_id")
@@ -686,7 +695,7 @@ class InlineTableTest {
                                                         .build(),
                                                     ValueRBuilder.builder()
                                                         .column("date")
-                                                        .content("2007-01-20")
+                                                        .content("2008-04-29")
                                                         .build()
                                                 ))
                                                 .build(),
@@ -713,7 +722,7 @@ class InlineTableTest {
                                             .uniqueMembers(true)
                                             .build()
                                     ))
-                                    .build()
+                                    .build()                                   
                             ))
                             .build()
                     ))

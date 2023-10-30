@@ -34,6 +34,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
@@ -491,12 +493,12 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                         .name("[TimeExtra].[Month]")
                         .column("testmonthname")
                         .nameColumn("testmonthcap")
-                        .properties(List.of(
+                        .properties(Stream.of(
                             AggLevelPropertyRBuilder.builder()
                                 .name("aProperty")
                                 .column("testmonprop1")
                                 .build()
-                        ))
+                        ).collect(Collectors.toList()))
                         .build()
                 ))
                 .build()
@@ -917,18 +919,22 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     {
         class ExplicitRecognizerTestModifierInner extends ExplicitRecognizerTestModifier {
 
+            @Override
             protected List<MappingProperty> getMonthProp() {
                 return monthProp;
             }
 
+            @Override
             protected String getMonthOrdinalCol() {
                 return monthOrdinalCol;
             }
 
+            @Override
             protected String getMonthNameCol() {
                 return monthNameCol;
             }
 
+            @Override
             protected String getMonthCaptionCol() {
                 return monthCaptionCol;
             }
@@ -937,26 +943,32 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 super(mappingSchema);
             }
 
+            @Override
             protected List<MappingAggTable> getAggTables() {
                 return aggTables;
             }
 
+            @Override
             protected List<MappingAggExclude> getAggExcludes() {
                 return List.of();
             }
 
+            @Override
             protected String getdefaultMeasure() {
                 return defaultMeasure;
             }
 
+            @Override
             protected String getQuarterCol() {
                 return qtrCol;
             }
 
+            @Override
             protected String getMonthCol() {
                 return monthCol;
             }
 
+            @Override
             protected String getYearCol() {
                 return yearCol;
             }
