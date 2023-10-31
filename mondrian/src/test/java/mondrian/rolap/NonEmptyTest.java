@@ -7579,9 +7579,7 @@ class NonEmptyTest extends BatchTestCase {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier5(schema)));
+      withSchema(context, SchemaModifiers.NonEmptyTestModifier5::new);
       assertQueryReturns(context.getConnection(),
       "with member measures.one as '1' select non empty store2.usa.[OR].children on 0, measures.one on 1 from sales",
       "Axis #0:\n"
@@ -7649,9 +7647,7 @@ class NonEmptyTest extends BatchTestCase {
           + "  </VirtualCube>"
           + "</Schema>" );
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier7(schema)));
+      withSchema(context.getContext(),  SchemaModifiers.NonEmptyTestModifier7::new);
       verifySameNativeAndNot(context.createConnection(),
       "select "
         + " [Measures].[dummyMeasure2] on COLUMNS, "

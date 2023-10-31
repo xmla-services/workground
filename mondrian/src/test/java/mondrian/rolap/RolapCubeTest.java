@@ -21,7 +21,6 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -128,12 +127,13 @@ class RolapCubeTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testGetCalculatedMembersForCaliforniaManager(TestContextWrapper context) {
+    	RolapSchemaPool.instance().clear();
         String[] expectedCalculatedMembers = new String[] {
             "[Measures].[Profit]", "[Measures].[Profit last Period]",
             "[Measures].[Profit Growth]"
         };
         withRole(context, "California manager");
-        Connection connection = context.createConnection();
+        Connection connection = context.getContext().getConnection();
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");
@@ -313,7 +313,7 @@ class RolapCubeTest {
 
 
         Connection connection1 = context.createConnection();
-        withSchema(context, null);
+        //withSchema(context, null);
         Connection connection2 = context.createConnection();
 
         try {
@@ -370,9 +370,7 @@ class RolapCubeTest {
             nonAccessibleMember
             + accessibleMember));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RolapCubeTestModifier1(schema)));
+    	withSchema(context.getContext(), SchemaModifiers.RolapCubeTestModifier1::new);
         withRole(context, "California manager");
     }
 

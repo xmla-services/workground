@@ -13,7 +13,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Bug;
@@ -26,7 +25,6 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -186,9 +184,7 @@ public class PerformanceTest {
         + "      <CalculatedMember dimension=\"Measures\" name=\"EXP2\" formula=\"IIf(0 &#60; [Measures].[EXP2_4], "
         + "[Measures].[EXP2_4], NULL)\"/>\n" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.PerformanceTestModifier1(schema)));
+      withSchema(context, SchemaModifiers.PerformanceTestModifier1::new);
   }
 
   /**
@@ -416,10 +412,7 @@ public class PerformanceTest {
             + "</Dimension>" ),
         null ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.PerformanceTestModifier2(schema)));
-
+      withSchema(context, SchemaModifiers.PerformanceTestModifier2::new);
       String mdx =
       "with "
         + " member [Measures].[one] as '1'"

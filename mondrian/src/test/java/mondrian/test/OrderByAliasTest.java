@@ -500,58 +500,16 @@ class OrderByAliasTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testVirtualCube(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testVirtualCube(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
-    withSchema(context,
-        "<?xml version=\"1.0\"?>\n"
-        + "<Schema name=\"FoodMart\">\n"
-        + "  <Dimension name=\"Time\" type=\"TimeDimension\">\n"
-        + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
-        + "      <Table name=\"time_by_day\" />\n"
-        + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\" "
-        + "levelType=\"TimeYears\" />\n"
-        + "      <Level name=\"Quarter\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" >\n"
-        + "        <KeyExpression><SQL>RTRIM(quarter)</SQL></KeyExpression>\n"
-        + "      </Level>\n"
-        + "    </Hierarchy>\n"
-        + "  </Dimension>\n"
-        + "  <Dimension name=\"Product\">\n"
-        + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
-        + "      <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
-        + "        <Table name=\"product\"/>\n"
-        + "        <Table name=\"product_class\"/>\n"
-        + "      </Join>\n"
-        + "      <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\" "
-        + "uniqueMembers=\"true\" />\n"
-        + "    </Hierarchy>\n"
-        + "  </Dimension>\n"
-        + "  <Cube name=\"Sales\">\n"
-        + "    <Table name=\"sales_fact_1997\" />\n"
-        + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
-        + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
-        + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\" />\n"
-        + "  </Cube>\n"
-        + "  <Cube name=\"Warehouse\">\n"
-        + "    <Table name=\"inventory_fact_1997\" />\n"
-        + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
-        + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
-        + "    <Measure name=\"Warehouse Sales\" column=\"warehouse_sales\" aggregator=\"sum\" "
-        + "formatString=\"Standard\" />\n"
-        + "  </Cube>\n"
-        + "  <VirtualCube name=\"Warehouse and Sales\">\n"
-        + "    <VirtualCubeDimension name=\"Time\" />\n"
-        + "    <VirtualCubeDimension name=\"Product\" />\n"
-        + "    <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Unit Sales]\" />\n"
-        + "    <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\" />\n"
-        + "  </VirtualCube>\n"
-        + "</Schema>");
+    withSchema(context, SchemaModifiers.OrderByAliasTestModifier4::new);
     assertQuerySql(
-        context.createConnection(),
+        context.getConnection(),
         "select non empty crossjoin( product.[product family].members, time.quarter.members) on 0 "
         + "from [warehouse and sales]",
         mysqlPattern(

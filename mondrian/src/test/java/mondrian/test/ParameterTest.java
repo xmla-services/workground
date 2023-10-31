@@ -10,6 +10,44 @@
 */
 package mondrian.test;
 
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ParameterRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eigenbase.util.property.Property;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.impl.Olap4jUtil;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,49 +63,6 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.checkThrowable;
 import static org.opencube.junit5.TestUtil.executeExpr;
 import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import mondrian.rolap.RolapSchemaPool;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ParameterRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.eigenbase.util.property.Property;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.impl.Olap4jUtil;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
 
 /**
  * A <code>ParameterTest</code> is a test suite for functionality relating to
@@ -1282,7 +1277,6 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaProp(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestSchemaPropModifier extends RDbMappingSchemaModifier {
 
             public TestSchemaPropModifier(MappingSchema mappingSchema) {
@@ -1311,8 +1305,7 @@ class ParameterTest {
             null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropModifier(schema)));
+        withSchema(context, TestSchemaPropModifier::new);
         assertExprReturns(context.getConnection(), "ParamRef(\"prop\")", "foo bar");
     }
 
@@ -1322,7 +1315,6 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropDupFails(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestSchemaPropDupFailsModifier extends RDbMappingSchemaModifier {
 
             public TestSchemaPropDupFailsModifier(MappingSchema mappingSchema) {
@@ -1364,8 +1356,7 @@ class ParameterTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropDupFailsModifier(schema)));
+        withSchema(context, TestSchemaPropDupFailsModifier::new);
         assertExprThrows(context,
             "ParamRef(\"foo\")",
             "Duplicate parameter 'foo' in schema");
@@ -1375,7 +1366,6 @@ class ParameterTest {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropIllegalTypeFails(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestSchemaPropIllegalTypeFailsModifier extends RDbMappingSchemaModifier {
 
             public TestSchemaPropIllegalTypeFailsModifier(MappingSchema mappingSchema) {
@@ -1405,8 +1395,7 @@ class ParameterTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropIllegalTypeFailsModifier(schema)));
+        withSchema(context, TestSchemaPropIllegalTypeFailsModifier::new);
         assertExprThrows(context,
             "1",
             "In Schema: In Parameter: "
@@ -1417,7 +1406,6 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropInvalidDefaultExpFails(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestSchemaPropInvalidDefaultExpFailsModifier extends RDbMappingSchemaModifier {
 
             public TestSchemaPropInvalidDefaultExpFailsModifier(MappingSchema mappingSchema) {
@@ -1447,8 +1435,7 @@ class ParameterTest {
             null);
         withSchema(context,schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropInvalidDefaultExpFailsModifier(schema)));
+        withSchema(context, TestSchemaPropInvalidDefaultExpFailsModifier::new);
         assertExprThrows(context.getConnection(),
             "ParamRef(\"Product Current Member\")",
             "No function matches signature '<Member>.Children(<Numeric Expression>)'");
@@ -1461,7 +1448,6 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropContext(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestSchemaPropContextModifier extends RDbMappingSchemaModifier {
 
             public TestSchemaPropContextModifier(MappingSchema mappingSchema) {
@@ -1491,8 +1477,7 @@ class ParameterTest {
             null);
         withSchema(context,schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSchemaPropContextModifier(schema)));
+        withSchema(context, TestSchemaPropContextModifier::new);
         assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' ParamRef(\"Customer Current Member\").Name '\n"
             + "select {[Measures].[Foo]} on columns\n"

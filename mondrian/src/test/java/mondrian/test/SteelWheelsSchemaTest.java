@@ -8,20 +8,13 @@
 */
 package mondrian.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.databaseIsValid;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.getRawSchema;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.io.InputStream;
-import java.util.Arrays;
-
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.RoleImpl;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Schema;
@@ -32,20 +25,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.RoleImpl;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
-import mondrian.util.Bug;
+import java.io.InputStream;
+import java.util.Arrays;
 
-class SteelWheelsSchemaTest extends SteelWheelsTestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.databaseIsValid;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+class SteelWheelsSchemaTest {
 
 	private PropertySaver5 propSaver;
 
@@ -63,9 +61,8 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * Sanity check, that enumerates the Measures dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMeasures(TestContextWrapper context) {
-        getTestContext(context);
         if (!TestUtil.databaseIsValid(context.createConnection())) {
             return;
         }
@@ -79,154 +76,8 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1273(TestContextWrapper context) {
-        final String schema =
-            "<Schema name=\"SteelWheels\">\n"
-            + "  <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
-            + "    <Table name=\"orderfact\">\n"
-            + "    </Table>\n"
-            + "    <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Markets\">\n"
-            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">\n"
-            + "        <Table name=\"customer_w_ter\">\n"
-            + "        </Table>\n"
-            + "        <Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "        </Level>\n"
-            + "        <Level name=\"Country\" column=\"COUNTRY\" levelType=\"Regular\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
-            + "            <Annotation name=\"Geo.Role\">country</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "        <Level name=\"State Province\" column=\"STATE\" type=\"String\" levelType=\"Regular\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
-            + "            <Annotation name=\"Geo.Role\">state</Annotation>\n"
-            + "            <Annotation name=\"Geo.RequiredParents\">country</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "        <Level name=\"City\" column=\"CITY\" type=\"String\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
-            + "            <Annotation name=\"Geo.Role\">city</Annotation>\n"
-            + "            <Annotation name=\"Geo.RequiredParents\">country,state</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "      </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
-            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
-            + "        <Table name=\"CUSTOMER_W_TER\">\n"
-            + "        </Table>\n"
-            + "        <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "          <Property name=\"Customer Number\" column=\"CUSTOMERNUMBER\" type=\"Numeric\"/>\n"
-            + "          <Property name=\"Contact First Name\" column=\"CONTACTFIRSTNAME\" type=\"String\"/>\n"
-            + "          <Property name=\"Contact Last Name\" column=\"CONTACTLASTNAME\" type=\"String\"/>\n"
-            + "          <Property name=\"Phone\" column=\"PHONE\" type=\"String\"/>\n"
-            + "          <Property name=\"Address\" column=\"ADDRESSLINE1\" type=\"String\"/>\n"
-            + "          <Property name=\"Credit Limit\" column=\"CREDITLIMIT\" type=\"Numeric\"/>\n"
-            + "        </Level>\n"
-            + "      </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Dimension foreignKey=\"PRODUCTCODE\" name=\"Product\">\n"
-            + "      <Hierarchy name=\"\" hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\" primaryKeyTable=\"PRODUCTS\"\n"
-            + "                 caption=\"\">\n"
-            + "        <Table name=\"PRODUCTS\">\n"
-            + "        </Table>\n"
-            + "        <Level name=\"Line\" table=\"PRODUCTS\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "        </Level>\n"
-            + "        <Level name=\"Vendor\" table=\"PRODUCTS\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\"\n"
-            + "               levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "        </Level>\n"
-            + "        <Level name=\"Product\" table=\"PRODUCTS\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\"\n"
-            + "               levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "          <Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\"/>\n"
-            + "          <Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\"/>\n"
-            + "          <Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\"/>\n"
-            + "        </Level>\n"
-            + "      </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Dimension type=\"TimeDimension\" foreignKey=\"TIME_ID\" name=\"Time\">\n"
-            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">\n"
-            + "        <Table name=\"DIM_TIME\">\n"
-            + "        </Table>\n"
-            + "        <Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\"\n"
-            + "               hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy]</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "        <Level name=\"Quarters\" column=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\"\n"
-            + "               levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy].['QTR'q]</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "        <Level name=\"Months\" column=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\"\n"
-            + "               levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
-            + "          <Annotations>\n"
-            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy].['QTR'q].[MMM]</Annotation>\n"
-            + "          </Annotations>\n"
-            + "        </Level>\n"
-            + "      </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Dimension foreignKey=\"STATUS\" name=\"Order Status\">\n"
-            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">\n"
-            + "        <Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "        </Level>\n"
-            + "      </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
-            + "      <Annotations>\n"
-            + "        <Annotation name=\"AnalyzerBusinessGroup\">Measures</Annotation>\n"
-            + "      </Annotations>\n"
-            + "    </Measure>\n"
-            + "    <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
-            + "      <Annotations>\n"
-            + "        <Annotation name=\"AnalyzerBusinessGroup\">Measures</Annotation>\n"
-            + "      </Annotations>\n"
-            + "    </Measure>\n"
-            + "  </Cube>\n"
-            + "  <Role name=\"dev\">\n"
-            + "    <SchemaGrant access=\"all\">\n"
-            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
-            + "        <HierarchyGrant hierarchy=\"[Markets]\" topLevel=\"[Markets].[Territory]\" bottomLevel=\"[Markets].[Country]\" rollupPolicy=\"Partial\" access=\"custom\">\n"
-            + "          <MemberGrant member=\"[Markets].[APAC]\" access=\"all\"> </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Markets].[APAC].[Australia]\" access=\"none\"> </MemberGrant>\n"
-            + "        </HierarchyGrant> \n"
-            + "      </CubeGrant>\n"
-            + "    </SchemaGrant>\n"
-            + "    <SchemaGrant access=\"all\">\n"
-            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
-            + "        <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">\n"
-            + "          <MemberGrant member=\"[Measures].[Quantity]\" access=\"none\"> </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Measures].[Sales]\" access=\"all\"> </MemberGrant>\n"
-            + "        </HierarchyGrant>\n"
-            + "      </CubeGrant>\n"
-            + "    </SchemaGrant>\n"
-            + "  </Role> \n"
-            + "  <Role name=\"cto\">\n"
-            + "    <SchemaGrant access=\"all\">\n"
-            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
-            + "        <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">\n"
-            + "          <MemberGrant member=\"[Measures].[Quantity]\" access=\"none\"> </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Measures].[Sales]\" access=\"all\"> </MemberGrant>\n"
-            + "        </HierarchyGrant>\n"
-            + "      </CubeGrant>\n"
-            + "    </SchemaGrant>\n"
-            + "  </Role> \n"
-            + "  <Role name=\"Admin\">\n"
-            + "    <SchemaGrant access=\"all\">\n"
-            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\"/>\n"
-            + "    </SchemaGrant>\n"
-            + "  </Role>\n"
-            + "</Schema>\n";
-
-        createContext(context, schema);
-        //withCube(context, "SteelWheelsSales");
+        //createContext(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier1::new);
         withRole(context, "dev");
         if (!databaseIsValid(context.createConnection())) {
             return;
@@ -257,12 +108,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * (We've since dropped 'All Xxx' from member unique names.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMarkets(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         assertQueryReturns(context.createConnection(),
             "select [Markets].[All Markets].[Japan] on 0 from [SteelWheelsSales]",
             "Axis #0:\n"
@@ -332,12 +182,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * MONDRIAN-755, "Getting drillthrough count results in exception"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian755(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //getTestContext(context);
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         // One-dimensional query, using set and trivial calc member.
         checkCellZero(
             context,
@@ -409,12 +259,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian756(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         context.setProperty(
             RolapConnectionProperties.DynamicSchemaProcessor.name(),
             Mondrian756SchemaProcessor.class.getName());
@@ -452,18 +301,13 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian756b(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        String schema = getRawSchema(context)
-            .replaceAll(
-                " hasAll=\"true\"",
-                " hasAll=\"false\"");
-        withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testBugMondrian756b(TestContext context) {
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier2::new);
+        assertQueryReturns(context.getConnection(),
             "select NON EMPTY {[Measures].[Quantity]} ON COLUMNS,\n"
             + "NON EMPTY {[Markets].[APAC]} ON ROWS\n"
             + "from [SteelWheelsSales]\n"
@@ -480,21 +324,13 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * "Two dimensions with hasAll=false fail"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian805(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        String schema = getRawSchema(context)
-            .replaceAll(
-                "<Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" ",
-                "<Hierarchy hasAll=\"false\" allMemberName=\"All Markets\" ")
-            .replaceAll(
-                "<Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" ",
-                "<Hierarchy hasAll=\"false\" allMemberName=\"All Status Types\" ");
-        withSchema(context, schema);
-        assertQueryReturns(context.createConnection(),
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testBugMondrian805(TestContext context) {
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier3::new);
+        assertQueryReturns(context.getConnection(),
             "select NON EMPTY {[Measures].[Quantity]} ON COLUMNS, \n"
             + "  NON EMPTY {([Markets].[APAC], [Customers].[All Customers], "
             + "[Product].[All Products], [Time].[All Years])} ON ROWS \n"
@@ -509,7 +345,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #0: 596\n");
 
         // same query, pivoted
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select NON EMPTY {[Measures].[Quantity]} ON COLUMNS, \n"
             + "  NON EMPTY {([Customers].[All Customers], "
             + "[Product].[All Products], "
@@ -527,125 +363,9 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrianBug476_770_957(TestContextWrapper context) throws Exception {
-            SteelWheelsTestCase.createContext(
-                context,
-                "<Schema name=\"test_namecolumn\">"
-                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Markets\">"
-                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">"
-                + "<Table name=\"CUSTOMER_W_TER\">\n"
-                + "</Table>"
-                + "<Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"Country\" column=\"COUNTRY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"State Province\" column=\"STATE\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"City\" column=\"CITY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "</Hierarchy>"
-                + "</Dimension>"
-                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Customers\">"
-                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">"
-                + "<Table name=\"CUSTOMER_W_TER\">\n"
-                + "</Table>"
-                + "<Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">"
-                + "<Property name=\"Customer Number\" column=\"CUSTOMERNUMBER\" type=\"Numeric\">\n"
-                + "</Property>"
-                + "<Property name=\"Contact First Name\" column=\"CONTACTFIRSTNAME\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Contact Last Name\" column=\"CONTACTLASTNAME\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Phone\" column=\"PHONE\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Address\" column=\"ADDRESSLINE1\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Credit Limit\" column=\"CREDITLIMIT\" type=\"Numeric\">\n"
-                + "</Property>"
-                + "</Level>"
-                + "</Hierarchy>"
-                + "</Dimension>"
-                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Product\">"
-                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">"
-                + "<Table name=\"PRODUCTS\">\n"
-                + "</Table>"
-                + "<Level name=\"Line\" table=\"PRODUCTS\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"Vendor\" table=\"PRODUCTS\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"Product\" table=\"PRODUCTS\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">"
-                + "<Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\">\n"
-                + "</Property>"
-                + "<Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\">\n"
-                + "</Property>"
-                + "</Level>"
-                + "</Hierarchy>"
-                + "</Dimension>"
-                + "<Dimension type=\"TimeDimension\" highCardinality=\"false\" name=\"Time\">"
-                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">"
-                + "<Table name=\"time\">\n"
-                + "</Table>"
-                + "<Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"Quarters\" column=\"QTR_ID\" nameColumn=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "<Level name=\"Months\" column=\"MONTH_ID\" nameColumn=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "</Hierarchy>"
-                + "</Dimension>"
-                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Order Status\">"
-                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">"
-                + "<Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "</Level>"
-                + "</Hierarchy>"
-                + "</Dimension>"
-                + "<Cube name=\"SteelWheelsSales1\" cache=\"true\" enabled=\"true\">"
-                + "<Table name=\"orderfact\">\n"
-                + "</Table>"
-                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n</DimensionUsage>"
-                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n</DimensionUsage>"
-                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n</DimensionUsage>"
-                + "<DimensionUsage source=\"Time\" usagePrefix=\"TR_\" name=\"Time\" foreignKey=\"ORDERDATE\" highCardinality=\"false\">\n</DimensionUsage>"
-                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n</Measure>"
-                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n</Measure>"
-                + "</Cube>"
-                + "<Cube name=\"SteelWheelsSales2\" cache=\"true\" enabled=\"true\">"
-                + "<Table name=\"orderfact\">\n"
-                + "</Table>"
-                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Time\" usagePrefix=\"TC_\" name=\"Time\" foreignKey=\"REQUIREDDATE\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n"
-                + "</Measure>"
-                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n"
-                + "</Measure>"
-                + "</Cube>"
-                + "<Cube name=\"SteelWheelsSales3\" cache=\"true\" enabled=\"true\">"
-                + "<Table name=\"orderfact\">\n"
-                + "</Table>"
-                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<DimensionUsage source=\"Time\" usagePrefix=\"TW_\" name=\"Time\" foreignKey=\"SHIPPEDDATE\" highCardinality=\"false\">\n"
-                + "</DimensionUsage>"
-                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n"
-                + "</Measure>"
-                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n"
-                + "</Measure>"
-                + "</Cube>"
-                + "</Schema>\n");
-            //withCube("SteelWheelsSales1");
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testMondrianBug476_770_957(TestContext context) throws Exception {
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier4::new);
         final String mdxQuery =
             "with set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Time], (NOT IsEmpty([Measures].[Price Each])))'\n"
             + "  set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], Ancestor([Time].CurrentMember, [Time].[Years]).OrderKey, BASC, [Time].CurrentMember.OrderKey, BASC)'\n"
@@ -657,10 +377,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "select [*BASE_MEMBERS_Measures] ON COLUMNS,\n"
             + "  [*SORTED_ROW_AXIS] ON ROWS\n"
             + "from [SteelWheelsSales2]\n";
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-       assertQueryReturns(context.createConnection(),
+       assertQueryReturns(context.getConnection(),
             mdxQuery,
             "Axis #0:\n"
             + "{}\n"
@@ -690,13 +407,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian935(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        assertQueryReturns(context.createConnection(),
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testBugMondrian935(TestContext context) {
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
+        assertQueryReturns(context.getConnection(),
             "with set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_Product]' \n"
             + "  set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], "
             + "[Product].CurrentMember.OrderKey, BASC)' \n"
@@ -742,42 +458,15 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * @throws Exception on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testPropertyWithParameterOfTimestampType(TestContextWrapper context) throws Exception {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testPropertyWithParameterOfTimestampType(TestContext context) throws Exception {
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
 
-        createContext(
-                context,
-                "<Schema name=\"FooBar\">\n"
-                + "    <Cube name=\"Foo\">\n"
-                + "        <Table name=\"orderfact\"></Table>\n"
-                + "        <Dimension foreignKey=\"ORDERNUMBER\" name=\"Orders\">\n"
-                + "            <Hierarchy hasAll=\"true\" allMemberName=\"All Orders\" primaryKey=\"ORDERNUMBER\">\n"
-                + "                <Table name=\"orders\">\n"
-                + "                </Table>\n"
-                + "                <Level name=\"Order\" column=\"ORDERNUMBER\" type=\"Integer\" uniqueMembers=\"true\">\n"
-                + "                    <Property name=\"OrderDate\" column=\"ORDERDATE\" type=\"Timestamp\"/>\n"
-                + "                </Level>\n"
-                + "            </Hierarchy>\n"
-                + "        </Dimension>\n"
-                + "        <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
-                + "            <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
-                + "                <Table name=\"customer_w_ter\">\n"
-                + "                </Table>\n"
-                + "                <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-                + "                </Level>\n"
-                + "            </Hierarchy>\n"
-                + "        </Dimension>\n"
-                + "        <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
-                + "        </Measure>\n"
-                + "        <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
-                + "        </Measure>\n"
-                + "    </Cube>\n"
-                + "</Schema>\n");
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier5::new);
+
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Date] as 'Format([Orders].CurrentMember.Properties(\"OrderDate\"), \"yyyy-mm-dd\")'\n"
             + "select {[Orders].[Order].[10421]} on rows,\n"
             + "{[Measures].[Date]} on columns from [Foo]",
@@ -796,12 +485,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * year_id order by year_id". It should definitely not join to fact table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testEsr1587(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         assertQueryReturns(context.createConnection(),
             "with set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_Time]'\n"
             + "  set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS], [Time].CurrentMember.OrderKey, BASC)'\n"
@@ -819,12 +507,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1133(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         executeQuery(context.createConnection(),
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Markets], Not IsEmpty ([Measures].[Sales]))'\n"
@@ -851,13 +538,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * every which way to verify the correct ordering.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1197(TestContextWrapper context) {
-        getTestContext(context);
 
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
 
         final String[] sortOrder =
             new String[] {
@@ -1293,12 +979,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * keys.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testRangeSortWithNullKeys(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         final String mdx =
             "With\n"
             + "Member [Measures].[*ZERO] as '0', SOLVE_ORDER=0\n"
@@ -1369,12 +1055,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * keys.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testBug1285(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         assertQueryReturns(context.createConnection(),
             "with set [*NATIVE_CJ_SET] as 'Filter(NonEmptyCrossJoin([*BASE_MEMBERS_Time], [*BASE_MEMBERS_Product]), (NOT IsEmpty([Measures].[Quantity])))'\n"
             + "  set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], [Product].CurrentMember.OrderKey, BASC)'\n"
@@ -1460,12 +1145,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testDoubleValueCanBeRankedAmongIntegers(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         assertQueryReturns(context.createConnection(),
             "with \n"
             + "  member [Product].[agg] as \n"
@@ -1502,84 +1186,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * dimension whose name is different from the dimension it is based on.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1360(TestContextWrapper context) {
-        getTestContext(context);
-        withSchema(context,
-            "<Schema name=\"SteelWheels\">\n"
-            + "    <Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Product\">\n"
-            + "        <Hierarchy hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">\n"
-            + "            <Table name=\"products\">\n"
-            + "            </Table>\n"
-            + "            <Level name=\"Line\" table=\"products\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "            </Level>\n"
-            + "            <Level name=\"Vendor\" table=\"products\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "            </Level>\n"
-            + "            <Level name=\"Product\" table=\"products\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "                <Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\">\n"
-            + "                </Property>\n"
-            + "                <Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\">\n"
-            + "                </Property>\n"
-            + "                <Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\">\n"
-            + "                </Property>\n"
-            + "            </Level>\n"
-            + "        </Hierarchy>\n"
-            + "    </Dimension>\n"
-            + "    <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
-            + "  <Table name=\"orderfact\">\n"
-            + "  </Table>\n"
-            + "  <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Markets\">\n"
-            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">\n"
-            + "    <Table name=\"customer_w_ter\">\n"
-            + "    </Table>\n"
-            + "    <Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "    <Level name=\"Country\" column=\"COUNTRY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "    <Level name=\"State Province\" column=\"STATE\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "    <Level name=\"City\" column=\"CITY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "   </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
-            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
-            + "    <Table name=\"customer_w_ter\">\n"
-            + "    </Table>\n"
-            + "    <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "   </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "        <DimensionUsage source=\"Product\" name=\"MyProduct\" foreignKey=\"PRODUCTCODE\">\n"
-            + "        </DimensionUsage>\n"
-            + "        <Dimension type=\"TimeDimension\" foreignKey=\"TIME_ID\" name=\"Time\">\n"
-            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">\n"
-            + "    <Table name=\"time\">\n"
-            + "    </Table>\n"
-            + "    <Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "    <Level name=\"Quarters\" column=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "    <Level name=\"Months\" column=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "   </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Dimension foreignKey=\"STATUS\" name=\"Order Status\">\n"
-            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">\n"
-            + "    <Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "    </Level>\n"
-            + "   </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
-            + "  </Measure>\n"
-            + "  <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
-            + "  </Measure>\n"
-            + " </Cube>\n"
-            + "</Schema>\n");
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        assertQueryReturns(context.createConnection(),
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testMondrian1360(TestContext context) {
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier6::new);
+
+        assertQueryReturns(context.getConnection(),
             "WITH \n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER([*BASE_MEMBERS_MyProduct], NOT ISEMPTY ([Measures].[Sales]))' \n"
             + "SET [*SORTED_ROW_AXIS] AS "
@@ -1617,12 +1228,11 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * Invalid filter SQL generated on numeric column
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1464(TestContextWrapper context) {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
         propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
@@ -1654,55 +1264,14 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * On .Members in NonEmpty, with mondrian.native.nonempty.enabled=true
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1252(TestContextWrapper context) throws Exception {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        final String roleDefs =
-            "  <Role name=\"CUBE_SCHEMA_ALL\">\n "
-            + "          <SchemaGrant access=\"all\" />\n "
-            + "  </Role>\n "
-            + "\n "
-            + "  <Role name=\"CUBE_SALES_MINIMAL\">\n "
-            + "          <SchemaGrant access=\"none\">\n "
-            + "                  <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n "
-            + "                          <HierarchyGrant hierarchy=\"[Markets]\" access=\"none\"  />\n "
-            + "                  </CubeGrant>\n "
-            + "          </SchemaGrant>\n "
-            + "  </Role>\n "
-            + "  <Role name='DIM_MARKETAREA_MARKET_800'>\n "
-            + "    <SchemaGrant access='none'>\n "
-            + "        <CubeGrant cube='SteelWheelsSales' access='none'>\n "
-            + "            <HierarchyGrant hierarchy='[Markets]'\n "
-            + "                            access='custom' rollupPolicy=\"partial\"\n "
-            + "                            topLevel='[Markets].[Territory]'>\n "
-            + "                <MemberGrant member='[Markets].[Territory].[APAC]' access='all' />\n "
-            + "            </HierarchyGrant>\n "
-            + "        </CubeGrant>\n "
-            + "    </SchemaGrant>\n "
-            + "  </Role>\n "
-            + "  <Role name='DIM_MARKETAREA_MARKET_850'>\n "
-            + "    <SchemaGrant access='none'>\n "
-            + "        <CubeGrant cube='SteelWheelsSales' access='none'>\n "
-            + "            <HierarchyGrant hierarchy='[Markets]'\n "
-            + "                            access='custom' rollupPolicy=\"partial\"\n "
-            + "                            topLevel='[Markets].[Territory]'>\n "
-            + "                <MemberGrant member='[Markets].[Territory].[EMEA]' access='all' />\n "
-            + "            </HierarchyGrant>\n "
-            + "        </CubeGrant>\n "
-            + "    </SchemaGrant>\n "
-            + "  </Role>\n ";
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
 
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier7::new);
 
-        // insert role definitions
-        String swSchema = getRawSchema(context);
-        int i = swSchema.indexOf("</Schema>");
-        swSchema = swSchema.substring(0, i)
-            + roleDefs
-            + swSchema.substring(i);
-        withSchema(context, swSchema);
         Schema schema = context.createConnection().getSchema();
 
         // get roles
@@ -1772,13 +1341,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * Compound slicer getting applied to CurrentDateMember
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1750(TestContextWrapper context) throws Exception {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        assertQueryReturns(context.createConnection(),
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    void testMondrian1750(TestContext context) throws Exception {
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[CYQ] as\n"
             + "'Aggregate(CurrentDateMember([Time],\"[Ti\\me]\\.[Year\\s]\\.[yyyy]\", BEFORE), [Quantity])'\n"
             + "select\n"
@@ -1811,57 +1379,10 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_1(TestContextWrapper context) throws Exception {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
         // Tests a user query followed by an admin query
-        final String schema =
-            "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
-            + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
-            + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
-            + "      <Table name=\"customer_w_ter\">\n"
-            + "      </Table>\n"
-            + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Address Line 1\">\n"
-            + "      </Level>\n"
-            + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Contact Last Name\">\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
-            + "     <Table name=\"orderfact\"> \n"
-            + "     </Table> \n"
-            + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
-            + "     </DimensionUsage> \n"
-            + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + " </Cube> \n"
-            + " <Role name=\"Administrator\"> \n"
-            + "     <SchemaGrant access=\"all\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role> \n"
-            + " <Role name=\"Power User\"> \n"
-            + "     <SchemaGrant access=\"none\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-            + "             </DimensionGrant>\n"
-            + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" rollupPolicy=\"partial\" access=\"custom\"> \n"
-            + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-            + "                 </MemberGrant> \n"
-            + "             </HierarchyGrant> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role>     \n"
-            + "</Schema>\n";
-        getTestContext(context);
-        withSchema(context, schema);
-
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
         withRole(context, "Power User");
         assertQueryReturns(context.createConnection(),
             "WITH\n"
@@ -2100,56 +1621,9 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_2(TestContextWrapper context) throws Exception {
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-        // Tests an admin query followed by a user query
-        final String schema =
-            "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
-            + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
-            + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
-            + "      <Table name=\"customer_w_ter\">\n"
-            + "      </Table>\n"
-            + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Address Line 1\">\n"
-            + "      </Level>\n"
-            + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Contact Last Name\">\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
-            + "     <Table name=\"orderfact\"> \n"
-            + "     </Table> \n"
-            + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
-            + "     </DimensionUsage> \n"
-            + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + " </Cube> \n"
-            + " <Role name=\"Administrator\"> \n"
-            + "     <SchemaGrant access=\"all\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role> \n"
-            + " <Role name=\"Power User\"> \n"
-            + "     <SchemaGrant access=\"none\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-            + "             </DimensionGrant>\n"
-            + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" rollupPolicy=\"partial\" access=\"custom\"> \n"
-            + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-            + "                 </MemberGrant> \n"
-            + "             </HierarchyGrant> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role>     \n"
-            + "</Schema>\n";
-        getTestContext(context);
-        withSchema(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
 
         withRole(context, "Administrator");
         assertQueryReturns(context.createConnection(),
@@ -2389,77 +1863,16 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_3(TestContextWrapper context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())
-                || (MondrianProperties.instance().UseAggregates.get()
+        if ((MondrianProperties.instance().UseAggregates.get()
                     && !Bug.BugMondrian2440Fixed))
         {
             return;
         }
-        final String schema =
-            "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
-            + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
-            + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
-            + "      <Table name=\"customer_w_ter\">\n"
-            + "      </Table>\n"
-            + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Address Line 1\">\n"
-            + "      </Level>\n"
-            + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Contact Last Name\">\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
-            + "     <Table name=\"orderfact\"> \n"
-            + "     </Table> \n"
-            + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
-            + "     </DimensionUsage> \n"
-            + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
-            + "     </Measure> \n"
-            + " </Cube> \n"
-            + " <Role name=\"Administrator\"> \n"
-            + "     <SchemaGrant access=\"all\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role> \n"
-            + " <Role name=\"Foo\"> \n"
-            + "     <SchemaGrant access=\"none\"> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role>\n"
-            + " <Role name=\"Power User\"> \n"
-            + "     <SchemaGrant access=\"none\"> \n"
-            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
-            + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
-            + "             </DimensionGrant>\n"
-            + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" rollupPolicy=\"partial\" access=\"custom\"> \n"
-            + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
-            + "                 </MemberGrant> \n"
-            + "             </HierarchyGrant> \n"
-            + "         </CubeGrant> \n"
-            + "     </SchemaGrant> \n"
-            + " </Role>\n"
-            + " <Role name=\"Administrator Union\"> \n"
-            + "     <Union> \n"
-            + "         <RoleUsage roleName=\"Administrator\"/> \n"
-            + "         <RoleUsage roleName=\"Foo\"/> \n"
-            + "     </Union> \n"
-            + " </Role>\n"
-            + " <Role name=\"Power User Union\"> \n"
-            + "     <Union> \n"
-            + "         <RoleUsage roleName=\"Power User\"/> \n"
-            + "         <RoleUsage roleName=\"Foo\"/> \n"
-            + "     </Union> \n"
-            + " </Role>\n"
-            + "</Schema>\n";
-        getTestContext(context);
-        withSchema(context, schema);
-
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier9::new);
         withRole(context, "Administrator Union");
         assertQueryReturns(context.createConnection(),
             "WITH\n"
@@ -2702,89 +2115,12 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * http://jira.pentaho.com/browse/Mondrian-2652
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2652(TestContextWrapper context) {
         // Check if there is a valid SteelWheels database.
-        getTestContext(context);
-        if (!databaseIsValid(context.createConnection())) {
-            return;
-        }
-
-        final String schema =
-            "<Schema name=\"rolesTest\">\n"
-            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Dimension1\">\n"
-            + "    <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">\n"
-            + "      <Table name=\"products\">\n"
-            + "      </Table>\n"
-            + "      <Level name=\"Level1\" visible=\"true\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Dimension2\">\n"
-            + "    <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
-            + "      <Table name=\"customer_w_ter\">\n"
-            + "      </Table>\n"
-            + "      <Level name=\"Level2\" visible=\"true\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
-            + "      </Level>\n"
-            + "    </Hierarchy>\n"
-            + "  </Dimension>\n"
-            + "  <Cube name=\"rolesTest1\" visible=\"true\" cache=\"true\" enabled=\"true\">\n"
-            + "    <Table name=\"orderfact\" alias=\"rolesTest1\">\n"
-            + "    </Table>\n"
-            + "    <DimensionUsage source=\"Dimension1\" name=\"Dimension1\" visible=\"true\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
-            + "    </DimensionUsage>\n"
-            + "    <DimensionUsage source=\"Dimension2\" name=\"Dimension2\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-            + "    </DimensionUsage>\n"
-            + "    <Measure name=\"Measure1\" column=\"QUANTITYORDERED\" aggregator=\"sum\">\n"
-            + "    </Measure>\n"
-            + "  </Cube>\n"
-            + "  <Cube name=\"rolesTest2\" visible=\"true\" cache=\"true\" enabled=\"true\">\n"
-            + "    <Table name=\"orderfact\" alias=\"rolesTest2\">\n"
-            + "    </Table>\n"
-            + "    <DimensionUsage source=\"Dimension2\" name=\"Dimension2\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
-            + "    </DimensionUsage>\n"
-            + "    <Measure name=\"Measure2:Internal\" column=\"TOTALPRICE\" aggregator=\"sum\">\n"
-            + "    </Measure>\n"
-            + "  </Cube>\n"
-            + "  <VirtualCube enabled=\"true\" name=\"rolesTest\" defaultMeasure=\"Quantity\" caption=\"Test\" visible=\"true\">\n"
-            + "    <CubeUsages>\n"
-            + "      <CubeUsage cubeName=\"rolesTest1\" ignoreUnrelatedDimensions=\"true\">\n"
-            + "      </CubeUsage>\n"
-            + "      <CubeUsage cubeName=\"rolesTest2\" ignoreUnrelatedDimensions=\"true\">\n"
-            + "      </CubeUsage>\n"
-            + "    </CubeUsages>\n"
-            + "    <VirtualCubeDimension cubeName=\"rolesTest1\" visible=\"true\" highCardinality=\"false\" name=\"Dimension1\">\n"
-            + "    </VirtualCubeDimension>\n"
-            + "    <VirtualCubeDimension cubeName=\"rolesTest1\" visible=\"true\" highCardinality=\"false\" name=\"Dimension2\">\n"
-            + "    </VirtualCubeDimension>\n"
-            + "    <VirtualCubeMeasure cubeName=\"rolesTest1\" name=\"[Measures].[Measure1]\" visible=\"true\">\n"
-            + "    </VirtualCubeMeasure>\n"
-            + "    <VirtualCubeMeasure cubeName=\"rolesTest2\" name=\"[Measures].[Measure2:Internal]\" visible=\"true\">\n"
-            + "    </VirtualCubeMeasure>\n"
-            + "    <CalculatedMember name=\"Measure2\" formula=\"ValidMeasure([Measures].[Measure2:Internal])\" dimension=\"Measures\">\n"
-            + "    </CalculatedMember>\n"
-            + "  </VirtualCube>\n"
-            + "  <Role name=\"Administrator\">\n"
-            + "    <SchemaGrant access=\"all\">\n"
-            + "    </SchemaGrant>\n"
-            + "  </Role>\n"
-            + "  <Role name=\"Report Author\">\n"
-            + "    <SchemaGrant access=\"custom\">\n"
-            + "      <CubeGrant cube=\"rolesTest\" access=\"all\">\n"
-            + "        <HierarchyGrant hierarchy=\"[Dimension2]\" topLevel=\"[Dimension2].[Level2]\" access=\"custom\">\n"
-            + "          <MemberGrant member=\"[Dimension2].[BG&#38;E Collectables]\" access=\"all\">\n"
-            + "          </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Dimension2].[Baane Mini Imports]\" access=\"all\">\n"
-            + "          </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Dimension2].[Blauer See Auto, Co.]\" access=\"all\">\n"
-            + "          </MemberGrant>\n"
-            + "          <MemberGrant member=\"[Dimension2].[Boards &#38; Toys Co.]\" access=\"all\">\n"
-            + "          </MemberGrant>\n"
-            + "        </HierarchyGrant>\n"
-            + "      </CubeGrant>\n"
-            + "    </SchemaGrant>\n"
-            + "  </Role>\n"
-            + "</Schema>\n";
+        //if (!databaseIsValid(context.createConnection())) {
+        //    return;
+        //}
 
         final String mdxQuery =
             "  WITH\n"
@@ -2801,7 +2137,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + " FROM [rolesTest]";
 
 
-        createContext(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
         //withCube("SteelWheelsSales");
         withRole(context, "Report Author");
 
@@ -2812,7 +2148,7 @@ class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     "MDX object '[Dimension2].[All Customers].[Alpha Cognac]' not found in cube 'rolesTest'");
 
 
-        createContext(context, schema);
+        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
         //withCube("SteelWheelsSales");
         withRole(context, "Administrator");
 

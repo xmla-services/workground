@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -852,30 +854,13 @@ class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testExecuteAliasWithSharedDimension(TestContextWrapper context)
+    void testExecuteAliasWithSharedDimension(TestContext context)
       throws Exception
     {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
-        String schema = ""
-            + "<?xml version=\"1.0\"?>\n"
-            + "<Schema name=\"foodmart-xmla-alias-bug\">\n"
-            + "  <Dimension name=\"Customers\">\n"
-            + "    <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
-            + "      <Table name=\"customer\"/>\n"
-            + "      <Level name=\"Country\" column=\"country\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
-            + "             hideMemberIf=\"Never\"/>\n"
-            + "    </Hierarchy>\n" + "  </Dimension>\n" + "\n"
-            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\" cache=\"true\" enabled=\"true\">\n"
-            + "  <Table name=\"sales_fact_1998\" />\n"
-            + "  <DimensionUsage source=\"Customers\" caption=\"Customers\" name=\"Customers-Alias\" visible=\"true\"\n"
-            + "                  foreignKey=\"customer_id\" />\n"
-            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
-            + "      formatString=\"Standard\"/>\n"
-            + "</Cube>\n" + "\n" + "</Schema>";
-
-        withSchema(context, schema);
-        doTest(requestType, props, context.createConnection());
+        withSchema(context, SchemaModifiers.XmlaBasicTestModifier::new);
+        doTest(requestType, props, context.getConnection());
     }
 
     @ParameterizedTest
