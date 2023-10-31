@@ -31,6 +31,7 @@ import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * <code>RaggedHierarchyTest</code> tests ragged hierarchies.
@@ -498,9 +499,7 @@ class RaggedHierarchyTest {
                     + "    </Hierarchy>\n"
                     + "  </Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.RaggedHierarchyTestModifier1::new);
 
         assertQueryReturns(context.getConnection(),
             " select {[Gender4].[Gender].members} "
@@ -531,10 +530,7 @@ class RaggedHierarchyTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier2(schema)));
-
+        withSchema(context, SchemaModifiers.RaggedHierarchyTestModifier2::new);
         assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "[Measures].[Unit Sales] ON COLUMNS\n"

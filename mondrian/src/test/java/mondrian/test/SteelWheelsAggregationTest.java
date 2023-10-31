@@ -10,7 +10,6 @@
 */
 package mondrian.test;
 
-import mondrian.rolap.RolapSchemaPool;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
@@ -49,11 +48,12 @@ import java.util.List;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * @author Andrey Khayrutdinov
  */
-class SteelWheelsAggregationTest extends SteelWheelsTestCase {
+class SteelWheelsAggregationTest {
 
     private static final String QUERY = ""
             + "WITH\n"
@@ -216,8 +216,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
                             .build()
                     ))
                     .build()));
-        RolapSchemaPool.instance().clear();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
+        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
         withRole(context, "Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -260,8 +259,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
                         .build()
                 ))
                 .build()));
-        RolapSchemaPool.instance().clear();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
+        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
         withRole(context,"Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -327,8 +325,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
                         .build())
                     .build()
             ));
-        RolapSchemaPool.instance().clear();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
+        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -420,8 +417,7 @@ class SteelWheelsAggregationTest extends SteelWheelsTestCase {
                         .build())
                     .build()
             ));
-        RolapSchemaPool.instance().clear();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
+        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }

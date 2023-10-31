@@ -14,7 +14,6 @@ package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -44,6 +43,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withSchema;
 import static org.opencube.junit5.TestUtil.withSchemaProcessor;
 
 /**
@@ -870,7 +870,6 @@ class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBadNamedSet(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestBadNamedSetModifier extends RDbMappingSchemaModifier {
 
             public TestBadNamedSetModifier(MappingSchema mappingSchema) {
@@ -899,8 +898,7 @@ class NamedSetTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBadNamedSetModifier(schema)));
+        withSchema(context, TestBadNamedSetModifier::new);
         assertQueryThrows(context,
             "SELECT {[Measures].[Store Sales]} on columns,\n"
             + " {[Bad]} on rows\n"

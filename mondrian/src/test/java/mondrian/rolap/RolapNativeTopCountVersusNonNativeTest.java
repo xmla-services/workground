@@ -40,6 +40,7 @@ import static mondrian.rolap.RolapNativeTopCountTestCases.TOPCOUNT_MIMICS_HEAD_W
 import static mondrian.rolap.RolapNativeTopCountTestCases.TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * @author Andrey Khayrutdinov
@@ -87,15 +88,14 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testTopCount_CountMeasure(TestContext context) throws Exception {
-       RolapSchemaPool.instance().clear();
+
        /*
        String baseSchema = TestUtil.getRawSchema(context);
        String schema = SchemaUtil.getSchema(baseSchema,null, CUSTOM_COUNT_MEASURE_CUBE, null, null, null, null);
        withSchema(context, schema);
        //withCube(CUSTOM_COUNT_MEASURE_CUBE_NAME);
        */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CustomCountMeasureCubeName(schema)));
+        withSchema(context, SchemaModifiers.CustomCountMeasureCubeName::new);
         assertResultsAreEqual(context.getConnection(),
             "Custom Count Measure", CUSTOM_COUNT_MEASURE_QUERY);
     }

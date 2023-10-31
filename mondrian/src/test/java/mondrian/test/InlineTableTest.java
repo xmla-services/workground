@@ -42,6 +42,7 @@ import java.util.List;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit test for the InlineTable element, defining tables whose values are held
@@ -55,7 +56,6 @@ class InlineTableTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTable(TestContext context) {
         final String cubeName = "Sales_inline";
-        RolapSchemaPool.instance().clear();
         class TestInlineTableModifier extends RDbMappingSchemaModifier {
 
             public TestInlineTableModifier(MappingSchema mappingSchema) {
@@ -74,7 +74,7 @@ class InlineTableTest {
                             .name("Time")
                             .source("Time")
                             .foreignKey("time_id")
-                            .build(),                           
+                            .build(),
                         PrivateDimensionRBuilder.builder()
                             .name("Alternative Promotion")
                             .foreignKey("promotion_id")
@@ -145,7 +145,7 @@ class InlineTableTest {
                             .column("store_sales")
                             .aggregator("sum")
                             .formatString("#,###.00")
-                            .build()     
+                            .build()
                     ))
                     .build());
                 return result;
@@ -178,7 +178,7 @@ class InlineTableTest {
             + "      </InlineTable>\n"
             + "      <Level name=\"Alternative Promotion\" column=\"promo_id\" nameColumn=\"promo_name\" uniqueMembers=\"true\"/> \n"
             + "    </Hierarchy>\n"
-            + "  </Dimension>\n"            
+            + "  </Dimension>\n"
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"Standard\" visible=\"false\"/>\n"
             + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
@@ -190,8 +190,7 @@ class InlineTableTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestInlineTableModifier(schema)));
+        withSchema(context, TestInlineTableModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Alternative Promotion].[All Alternative Promotions].children} ON COLUMNS\n"
             + "from [" + cubeName + "] ",
@@ -209,7 +208,6 @@ class InlineTableTest {
     void testInlineTableInSharedDim(TestContext context) {
         final String cubeName = "Sales_inline_shared";
 
-        RolapSchemaPool.instance().clear();
         class TestInlineTableInSharedDimModifier extends RDbMappingSchemaModifier {
 
             public TestInlineTableInSharedDimModifier(MappingSchema mappingSchema) {
@@ -356,8 +354,7 @@ class InlineTableTest {
             null);
         withSchema(context, schema);
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestInlineTableInSharedDimModifier(schema)));
+        withSchema(context, TestInlineTableInSharedDimModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Shared Alternative Promotion].[All Shared Alternative Promotions].children} ON COLUMNS\n"
             + "from [" + cubeName + "] ",
@@ -382,7 +379,6 @@ class InlineTableTest {
             return;
         }
         final String cubeName = "Sales_inline_snowflake";
-        RolapSchemaPool.instance().clear();
         class TestInlineTableSnowflakeModifier extends RDbMappingSchemaModifier {
 
             public TestInlineTableSnowflakeModifier(MappingSchema mappingSchema) {
@@ -569,8 +565,7 @@ class InlineTableTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestInlineTableSnowflakeModifier(schema)));
+        withSchema(context, TestInlineTableSnowflakeModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Store].children} ON COLUMNS\n"
             + "from [" + cubeName + "] ",
@@ -589,7 +584,6 @@ class InlineTableTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTableDate(TestContext context) {
         final String cubeName = "Sales_Inline_Date";
-        RolapSchemaPool.instance().clear();
         class TestInlineTableDateModifier extends RDbMappingSchemaModifier {
 
             public TestInlineTableDateModifier(MappingSchema mappingSchema) {
@@ -666,7 +660,7 @@ class InlineTableTest {
                             .name("Time")
                             .source("Time")
                             .foreignKey("time_id")
-                            .build(),                                                    
+                            .build(),
                         PrivateDimensionRBuilder.builder()
                             .name("Alternative Promotion")
                             .foreignKey("promotion_id")
@@ -722,7 +716,7 @@ class InlineTableTest {
                                             .uniqueMembers(true)
                                             .build()
                                     ))
-                                    .build()                                   
+                                    .build()
                             ))
                             .build()
                     ))
@@ -794,8 +788,7 @@ class InlineTableTest {
         if (MondrianProperties.instance().EnableGroupingSets.get()) {
             return;
         }
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestInlineTableDateModifier(schema)));
+        withSchema(context, TestInlineTableDateModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Alternative Promotion].Members} ON COLUMNS\n"
             + "from [" + cubeName + "] ",

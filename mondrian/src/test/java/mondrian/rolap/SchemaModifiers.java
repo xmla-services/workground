@@ -1068,7 +1068,7 @@ public class SchemaModifiers {
             + "  <CalculatedMember name=\"Profit Per Unit Shipped\" dimension=\"Measures\">\n"
             + "    <Formula>[Measures].[Profit] / [Measures].[Units Shipped]</Formula>\n"
             + "  </CalculatedMember>\n"
-            + "</VirtualCube>", 
+            + "</VirtualCube>",
          */
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
@@ -1196,7 +1196,7 @@ public class SchemaModifiers {
                         .formulaElement(FormulaRBuilder.builder()
                             .cdata("[Measures].[Profit] / [Measures].[Units Shipped]").build())
                         .build()
-                ))               
+                ))
                 .build());
 
             return result;
@@ -6443,6 +6443,185 @@ public class SchemaModifiers {
         }
     }
 
+    public static class OrderByAliasTestModifier4 extends RDbMappingSchemaModifier {
+
+        /*
+                "<?xml version=\"1.0\"?>\n"
+        + "<Schema name=\"FoodMart\">\n"
+        + "  <Dimension name=\"Time\" type=\"TimeDimension\">\n"
+        + "    <Hierarchy hasAll=\"false\" primaryKey=\"time_id\">\n"
+        + "      <Table name=\"time_by_day\" />\n"
+        + "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\" "
+        + "levelType=\"TimeYears\" />\n"
+        + "      <Level name=\"Quarter\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" >\n"
+        + "        <KeyExpression><SQL>RTRIM(quarter)</SQL></KeyExpression>\n"
+        + "      </Level>\n"
+        + "    </Hierarchy>\n"
+        + "  </Dimension>\n"
+        + "  <Dimension name=\"Product\">\n"
+        + "    <Hierarchy hasAll=\"true\" primaryKey=\"product_id\" primaryKeyTable=\"product\">\n"
+        + "      <Join leftKey=\"product_class_id\" rightKey=\"product_class_id\">\n"
+        + "        <Table name=\"product\"/>\n"
+        + "        <Table name=\"product_class\"/>\n"
+        + "      </Join>\n"
+        + "      <Level name=\"Product Family\" table=\"product_class\" column=\"product_family\" "
+        + "uniqueMembers=\"true\" />\n"
+        + "    </Hierarchy>\n"
+        + "  </Dimension>\n"
+        + "  <Cube name=\"Sales\">\n"
+        + "    <Table name=\"sales_fact_1997\" />\n"
+        + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
+        + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
+        + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\" />\n"
+        + "  </Cube>\n"
+        + "  <Cube name=\"Warehouse\">\n"
+        + "    <Table name=\"inventory_fact_1997\" />\n"
+        + "    <DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\" />\n"
+        + "    <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\" />\n"
+        + "    <Measure name=\"Warehouse Sales\" column=\"warehouse_sales\" aggregator=\"sum\" "
+        + "formatString=\"Standard\" />\n"
+        + "  </Cube>\n"
+        + "  <VirtualCube name=\"Warehouse and Sales\">\n"
+        + "    <VirtualCubeDimension name=\"Time\" />\n"
+        + "    <VirtualCubeDimension name=\"Product\" />\n"
+        + "    <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Unit Sales]\" />\n"
+        + "    <VirtualCubeMeasure cubeName=\"Warehouse\" name=\"[Measures].[Warehouse Sales]\" />\n"
+        + "  </VirtualCube>\n"
+        + "</Schema>");
+         */
+
+
+        public OrderByAliasTestModifier4(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FoodMart")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Time")
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(false)
+                                .primaryKey("time_id")
+                                .relation(new TableR("time_by_day"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Year")
+                                        .column("the_year")
+                                        .type(TypeEnum.NUMERIC)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarter")
+                                        .column("the_year")
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .keyExpression(
+                                            ExpressionViewRBuilder.builder()
+                                                .sqls(List.of(
+                                                    SQLRBuilder.builder()
+                                                        .content("RTRIM(quarter)")
+                                                        .build()
+                                                ))
+                                                .build())
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .name("Product")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .primaryKey("product_id")
+                                .primaryKeyTable("product")
+                                .relation(new JoinR(List.of(
+                                    new TableR("product"),
+                                    new TableR("product_class")),
+                                    null, "product_class_id", null, "product_class_id"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Product Family")
+                                        .table("product_class")
+                                        .column("product_family")
+                                        .uniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .fact(new TableR("sales_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Time").source("Time").foreignKey("time_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Product").source("Product").foreignKey("product_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("Warehouse")
+                        .fact(new TableR("inventory_fact_1997"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .name("Time").source("Time").foreignKey("time_id")
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .name("Product").source("Product").foreignKey("product_id")
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Warehouse Sales")
+                                .column("warehouse_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .virtualCubes(List.of(
+                    VirtualCubeRBuilder.builder()
+                        .name("Warehouse and Sales")
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder().name("Time").build(),
+                            VirtualCubeDimensionRBuilder.builder().name("Product").build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Sales")
+                                .name("[Measures].[Unit Sales]")
+                                .build(),
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("Warehouse")
+                                .name("[Measures].[Warehouse Sales]")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+
+        }
+    }
+
     public static class TestCalculatedMembersModifier1 extends RDbMappingSchemaModifier {
 
         /*
@@ -7457,7 +7636,7 @@ public class SchemaModifiers {
                 result.add(MeasureRBuilder.builder()
                     .name("typeMeasure")
                     .aggregator(aggregator)
-                    .datatype(type != null ? MeasureDataTypeEnum.fromValue(type) : null)                    
+                    .datatype(type != null ? MeasureDataTypeEnum.fromValue(type) : null)
                     .measureExpression(ExpressionViewRBuilder.builder()
                         .sqls(List.of(SQLRBuilder.builder()
                         	.dialect("generic")
@@ -17259,6 +17438,2476 @@ public class SchemaModifiers {
                                         ))
                                         .build()
                                 ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Unit Sales")
+                                .column("unit_sales")
+                                .aggregator("sum")
+                                .formatString("Standard")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier1 extends RDbMappingSchemaModifier {
+
+
+        public SteelWheelsSchemaTestModifier1(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+                    "<Schema name=\"SteelWheels\">\n"
+            + "  <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
+            + "    <Table name=\"orderfact\">\n"
+            + "    </Table>\n"
+            + "    <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Markets\">\n"
+            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">\n"
+            + "        <Table name=\"customer_w_ter\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Country\" column=\"COUNTRY\" levelType=\"Regular\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
+            + "            <Annotation name=\"Geo.Role\">country</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "        <Level name=\"State Province\" column=\"STATE\" type=\"String\" levelType=\"Regular\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
+            + "            <Annotation name=\"Geo.Role\">state</Annotation>\n"
+            + "            <Annotation name=\"Geo.RequiredParents\">country</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "        <Level name=\"City\" column=\"CITY\" type=\"String\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"Data.Role\">Geography</Annotation>\n"
+            + "            <Annotation name=\"Geo.Role\">city</Annotation>\n"
+            + "            <Annotation name=\"Geo.RequiredParents\">country,state</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
+            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
+            + "        <Table name=\"CUSTOMER_W_TER\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "          <Property name=\"Customer Number\" column=\"CUSTOMERNUMBER\" type=\"Numeric\"/>\n"
+            + "          <Property name=\"Contact First Name\" column=\"CONTACTFIRSTNAME\" type=\"String\"/>\n"
+            + "          <Property name=\"Contact Last Name\" column=\"CONTACTLASTNAME\" type=\"String\"/>\n"
+            + "          <Property name=\"Phone\" column=\"PHONE\" type=\"String\"/>\n"
+            + "          <Property name=\"Address\" column=\"ADDRESSLINE1\" type=\"String\"/>\n"
+            + "          <Property name=\"Credit Limit\" column=\"CREDITLIMIT\" type=\"Numeric\"/>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Dimension foreignKey=\"PRODUCTCODE\" name=\"Product\">\n"
+            + "      <Hierarchy name=\"\" hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\" primaryKeyTable=\"PRODUCTS\"\n"
+            + "                 caption=\"\">\n"
+            + "        <Table name=\"PRODUCTS\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Line\" table=\"PRODUCTS\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Vendor\" table=\"PRODUCTS\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\"\n"
+            + "               levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Product\" table=\"PRODUCTS\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\"\n"
+            + "               levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "          <Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\"/>\n"
+            + "          <Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\"/>\n"
+            + "          <Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\"/>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Dimension type=\"TimeDimension\" foreignKey=\"TIME_ID\" name=\"Time\">\n"
+            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">\n"
+            + "        <Table name=\"DIM_TIME\">\n"
+            + "        </Table>\n"
+            + "        <Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\"\n"
+            + "               hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy]</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Quarters\" column=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\"\n"
+            + "               levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy].['QTR'q]</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "        <Level name=\"Months\" column=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\"\n"
+            + "               levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
+            + "          <Annotations>\n"
+            + "            <Annotation name=\"AnalyzerDateFormat\">[yyyy].['QTR'q].[MMM]</Annotation>\n"
+            + "          </Annotations>\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Dimension foreignKey=\"STATUS\" name=\"Order Status\">\n"
+            + "      <Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">\n"
+            + "        <Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "        </Level>\n"
+            + "      </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
+            + "      <Annotations>\n"
+            + "        <Annotation name=\"AnalyzerBusinessGroup\">Measures</Annotation>\n"
+            + "      </Annotations>\n"
+            + "    </Measure>\n"
+            + "    <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
+            + "      <Annotations>\n"
+            + "        <Annotation name=\"AnalyzerBusinessGroup\">Measures</Annotation>\n"
+            + "      </Annotations>\n"
+            + "    </Measure>\n"
+            + "  </Cube>\n"
+            + "  <Role name=\"dev\">\n"
+            + "    <SchemaGrant access=\"all\">\n"
+            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
+            + "        <HierarchyGrant hierarchy=\"[Markets]\" topLevel=\"[Markets].[Territory]\" bottomLevel=\"[Markets].[Country]\" rollupPolicy=\"Partial\" access=\"custom\">\n"
+            + "          <MemberGrant member=\"[Markets].[APAC]\" access=\"all\"> </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Markets].[APAC].[Australia]\" access=\"none\"> </MemberGrant>\n"
+            + "        </HierarchyGrant> \n"
+            + "      </CubeGrant>\n"
+            + "    </SchemaGrant>\n"
+            + "    <SchemaGrant access=\"all\">\n"
+            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
+            + "        <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">\n"
+            + "          <MemberGrant member=\"[Measures].[Quantity]\" access=\"none\"> </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Measures].[Sales]\" access=\"all\"> </MemberGrant>\n"
+            + "        </HierarchyGrant>\n"
+            + "      </CubeGrant>\n"
+            + "    </SchemaGrant>\n"
+            + "  </Role> \n"
+            + "  <Role name=\"cto\">\n"
+            + "    <SchemaGrant access=\"all\">\n"
+            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n"
+            + "        <HierarchyGrant hierarchy=\"Measures\" access=\"custom\">\n"
+            + "          <MemberGrant member=\"[Measures].[Quantity]\" access=\"none\"> </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Measures].[Sales]\" access=\"all\"> </MemberGrant>\n"
+            + "        </HierarchyGrant>\n"
+            + "      </CubeGrant>\n"
+            + "    </SchemaGrant>\n"
+            + "  </Role> \n"
+            + "  <Role name=\"Admin\">\n"
+            + "    <SchemaGrant access=\"all\">\n"
+            + "      <CubeGrant cube=\"SteelWheelsSales\" access=\"all\"/>\n"
+            + "    </SchemaGrant>\n"
+            + "  </Role>\n"
+            + "</Schema>\n";
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("SteelWheels")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("SteelWheelsSales")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Markets")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Markets")
+                                        .primaryKey("CUSTOMERNUMBER")
+                                        .relation(new TableR("customer_w_ter"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Territory")
+                                                .column("TERRITORY")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Country")
+                                                .column("COUNTRY")
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Data.Role")
+                                                        .content("Geography")
+                                                        .build(),
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Geo.Role")
+                                                        .content("country")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("State Province")
+                                                .column("STATE")
+                                                .type(TypeEnum.STRING)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Data.Role")
+                                                        .content("Geography")
+                                                        .build(),
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Geo.Role")
+                                                        .content("state")
+                                                        .build(),
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Geo.Role")
+                                                        .content("country")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("City")
+                                                .column("CITY")
+                                                .type(TypeEnum.STRING)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Data.Role")
+                                                        .content("Geography")
+                                                        .build(),
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Geo.Role")
+                                                        .content("city")
+                                                        .build(),
+                                                    AnnotationRBuilder.builder()
+                                                        .name("Geo.RequiredParents")
+                                                        .content("country,state")
+                                                        .build()
+                                                ))
+                                                .build()
+
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .name("Customers")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Customers")
+                                        .primaryKey("CUSTOMERNUMBER")
+                                        .relation(new TableR("CUSTOMER_W_TER"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Customer")
+                                                .column("CUSTOMERNAME")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .properties(List.of(
+                                                    PropertyRBuilder.builder()
+                                                        .name("Customer Number")
+                                                        .column("CUSTOMERNUMBER")
+                                                        .type(PropertyTypeEnum.NUMERIC)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Contact First Name")
+                                                        .column("CONTACTFIRSTNAME")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Contact Last Name")
+                                                        .column("CONTACTLASTNAME")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Phone")
+                                                        .column("PHONE")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Address")
+                                                        .column("ADDRESSLINE1")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Credit Limit")
+                                                        .column("CREDITLIMIT")
+                                                        .type(PropertyTypeEnum.NUMERIC)
+                                                        .build()
+
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .name("Product")
+                                .foreignKey("PRODUCTCODE")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true).name("")
+                                        .allMemberName("All Products")
+                                        .primaryKey("PRODUCTCODE").primaryKeyTable("PRODUCTS")
+                                        .caption("")
+                                        .relation(new TableR("PRODUCTS"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Line")
+                                                .table("PRODUCTS")
+                                                .column("PRODUCTLINE")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Vendor")
+                                                .table("PRODUCTS")
+                                                .column("PRODUCTVENDOR")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Product")
+                                                .table("PRODUCTS")
+                                                .column("PRODUCTNAME")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .properties(List.of(
+                                                    PropertyRBuilder.builder()
+                                                        .name("Code")
+                                                        .column("PRODUCTCODE")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Vendor")
+                                                        .column("PRODUCTVENDOR")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build(),
+                                                    PropertyRBuilder.builder()
+                                                        .name("Description")
+                                                        .column("PRODUCTDESCRIPTION")
+                                                        .type(PropertyTypeEnum.STRING)
+                                                        .build()
+
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .name("Time")
+                                .foreignKey("TIME_ID")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Years")
+                                        .primaryKey("TIME_ID")
+                                        .relation(new TableR("DIM_TIME"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Years")
+                                                .column("YEAR_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("AnalyzerDateFormat")
+                                                        .content("[yyyy]")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarters")
+                                                .column("QTR_NAME")
+                                                .ordinalColumn("QTR_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("AnalyzerDateFormat")
+                                                        .content("[yyyy].['QTR'q]")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Months")
+                                                .column("MONTH_NAME")
+                                                .ordinalColumn("MONTH_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_MONTHS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .annotations(List.of(
+                                                    AnnotationRBuilder.builder()
+                                                        .name("AnalyzerDateFormat")
+                                                        .content("[yyyy].['QTR'q].[MMM]")
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .name("Order Status")
+                                .foreignKey("STATUS")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Status Types")
+                                        .primaryKey("STATUS")
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Type")
+                                                .column("STATUS")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Quantity")
+                                .column("QUANTITYORDERED")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .annotations(List.of(
+                                    AnnotationRBuilder.builder()
+                                        .name("AnalyzerBusinessGroup")
+                                        .content("Measures")
+                                        .build()
+                                ))
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Sales")
+                                .column("TOTALPRICE")
+                                .aggregator("sum")
+                                .formatString("#,###")
+                                .annotations(List.of(
+                                    AnnotationRBuilder.builder()
+                                        .name("AnalyzerBusinessGroup")
+                                        .content("Measures")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .roles(List.of(
+                    RoleRBuilder.builder()
+                        .name("dev")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("SteelWheelsSales")
+                                        .access("all")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[Markets]")
+                                                .topLevel("[Markets].[Territory]")
+                                                .bottomLevel("[Markets].[Country]")
+                                                .rollupPolicy("Partial")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Markets].[APAC]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Markets].[APAC].[Australia]")
+                                                        .access(MemberGrantAccessEnum.NONE)
+                                                        .build()
+
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("SteelWheelsSales")
+                                        .access("all")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("Measures")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Measures].[Quantity]")
+                                                        .access(MemberGrantAccessEnum.NONE)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Measures].[Sales]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("cto")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("SteelWheelsSales")
+                                        .access("all")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("Measures")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Measures].[Quantity]")
+                                                        .access(MemberGrantAccessEnum.NONE)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Measures].[Sales]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build()
+
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+
+                        ))
+                        .build(),
+                        RoleRBuilder.builder()
+                            .name("Admin")
+                            .schemaGrants(List.of(
+                                SchemaGrantRBuilder.builder()
+                                    .access(AccessEnum.ALL)
+                                    .cubeGrants(List.of(
+                                        CubeGrantRBuilder.builder()
+                                            .cube("SteelWheelsSales")
+                                            .access("all")
+                                            .build()
+                                    ))
+                                    .build()
+                                ))
+                            .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier2 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier2(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        protected boolean hierarchyHasAll(MappingHierarchy hierarchy) {
+            return false;
+        }
+    }
+
+    public static class SteelWheelsSchemaTestModifier3 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier3(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        protected boolean hierarchyHasAll(MappingHierarchy hierarchy) {
+
+            if ("All Markets".equals(hierarchy.allMemberName()) && hierarchy.hasAll()) {
+                return false;
+            }
+            if ("All Status Types".equals(hierarchy.allMemberName()) && hierarchy.hasAll()) {
+                return false;
+            }
+            return hierarchy.hasAll();
+        }
+    }
+
+    public static class SteelWheelsSchemaTestModifier4 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier4(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+                        "<Schema name=\"test_namecolumn\">"
+                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Markets\">"
+                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">"
+                + "<Table name=\"CUSTOMER_W_TER\">\n"
+                + "</Table>"
+                + "<Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"Country\" column=\"COUNTRY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"State Province\" column=\"STATE\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"City\" column=\"CITY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "</Hierarchy>"
+                + "</Dimension>"
+                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Customers\">"
+                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">"
+                + "<Table name=\"CUSTOMER_W_TER\">\n"
+                + "</Table>"
+                + "<Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">"
+                + "<Property name=\"Customer Number\" column=\"CUSTOMERNUMBER\" type=\"Numeric\">\n"
+                + "</Property>"
+                + "<Property name=\"Contact First Name\" column=\"CONTACTFIRSTNAME\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Contact Last Name\" column=\"CONTACTLASTNAME\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Phone\" column=\"PHONE\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Address\" column=\"ADDRESSLINE1\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Credit Limit\" column=\"CREDITLIMIT\" type=\"Numeric\">\n"
+                + "</Property>"
+                + "</Level>"
+                + "</Hierarchy>"
+                + "</Dimension>"
+                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Product\">"
+                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">"
+                + "<Table name=\"PRODUCTS\">\n"
+                + "</Table>"
+                + "<Level name=\"Line\" table=\"PRODUCTS\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"Vendor\" table=\"PRODUCTS\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"Product\" table=\"PRODUCTS\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">"
+                + "<Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\">\n"
+                + "</Property>"
+                + "<Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\">\n"
+                + "</Property>"
+                + "</Level>"
+                + "</Hierarchy>"
+                + "</Dimension>"
+                + "<Dimension type=\"TimeDimension\" highCardinality=\"false\" name=\"Time\">"
+                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">"
+                + "<Table name=\"time\">\n"
+                + "</Table>"
+                + "<Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"Quarters\" column=\"QTR_ID\" nameColumn=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "<Level name=\"Months\" column=\"MONTH_ID\" nameColumn=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "</Hierarchy>"
+                + "</Dimension>"
+                + "<Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Order Status\">"
+                + "<Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">"
+                + "<Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "</Level>"
+                + "</Hierarchy>"
+                + "</Dimension>"
+                + "<Cube name=\"SteelWheelsSales1\" cache=\"true\" enabled=\"true\">"
+                + "<Table name=\"orderfact\">\n"
+                + "</Table>"
+                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n</DimensionUsage>"
+                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n</DimensionUsage>"
+                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n</DimensionUsage>"
+                + "<DimensionUsage source=\"Time\" usagePrefix=\"TR_\" name=\"Time\" foreignKey=\"ORDERDATE\" highCardinality=\"false\">\n</DimensionUsage>"
+                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n</Measure>"
+                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n</Measure>"
+                + "</Cube>"
+                + "<Cube name=\"SteelWheelsSales2\" cache=\"true\" enabled=\"true\">"
+                + "<Table name=\"orderfact\">\n"
+                + "</Table>"
+                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Time\" usagePrefix=\"TC_\" name=\"Time\" foreignKey=\"REQUIREDDATE\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n"
+                + "</Measure>"
+                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n"
+                + "</Measure>"
+                + "</Cube>"
+                + "<Cube name=\"SteelWheelsSales3\" cache=\"true\" enabled=\"true\">"
+                + "<Table name=\"orderfact\">\n"
+                + "</Table>"
+                + "<DimensionUsage source=\"Markets\" name=\"Markets\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Customers\" name=\"Customers\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Product\" name=\"Product\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<DimensionUsage source=\"Time\" usagePrefix=\"TW_\" name=\"Time\" foreignKey=\"SHIPPEDDATE\" highCardinality=\"false\">\n"
+                + "</DimensionUsage>"
+                + "<Measure name=\"Price Each\" column=\"PRICEEACH\" formatString=\"#,###.0\" aggregator=\"sum\">\n"
+                + "</Measure>"
+                + "<Measure name=\"Total Price\" column=\"TOTALPRICE\" formatString=\"#,###.00\" aggregator=\"sum\">\n"
+                + "</Measure>"
+                + "</Cube>"
+                + "</Schema>\n");
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("test_namecolumn")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .highCardinality(false)
+                        .name("Markets")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Markets")
+                                .primaryKey("CUSTOMERNUMBER")
+                                .relation(new TableR("CUSTOMER_W_TER"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Territory")
+                                        .column("TERRITORY")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Country")
+                                        .column("COUNTRY")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("State Province")
+                                        .column("STATE")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("City")
+                                        .column("CITY")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .highCardinality(false)
+                        .name("Customers")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Customers")
+                                .primaryKey("CUSTOMERNUMBER")
+                                .relation(new TableR("CUSTOMER_W_TER"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Customer")
+                                        .column("CUSTOMERNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Customer Number")
+                                                .column("CUSTOMERNUMBER")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Contact First Name")
+                                                .column("CONTACTFIRSTNAME")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Contact Last Name")
+                                                .column("CONTACTLASTNAME")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Phone")
+                                                .column("PHONE")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Address")
+                                                .column("ADDRESSLINE1")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Credit Limit")
+                                                .column("CREDITLIMIT")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .highCardinality(false)
+                        .name("Product")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Products")
+                                .primaryKey("PRODUCTCODE")
+                                .relation(new TableR("PRODUCTS"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Line")
+                                        .table("PRODUCTS")
+                                        .column("PRODUCTLINE")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Line")
+                                        .table("PRODUCTS")
+                                        .column("PRODUCTVENDOR")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product")
+                                        .table("PRODUCTS")
+                                        .column("PRODUCTNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Code")
+                                                .column("PRODUCTCODE")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Vendor")
+                                                .column("PRODUCTVENDOR")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Description")
+                                                .column("PRODUCTDESCRIPTION")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build()
+                                        ))
+                                        .build()
+
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.TIME_DIMENSION)
+                        .highCardinality(false)
+                        .name("Time")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Years")
+                                .primaryKey("TIME_ID")
+                                .relation(new TableR("time"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Years")
+                                        .column("YEAR_ID")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.TIME_YEARS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Quarters")
+                                        .column("QTR_ID")
+                                        .ordinalColumn("QTR_ID")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Months")
+                                        .column("MONTH_ID")
+                                        .nameColumn("MONTH_NAME")
+                                        .ordinalColumn("MONTH_ID")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.TIME_MONTHS)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .highCardinality(false)
+                        .name("Order Status")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Status Types")
+                                .primaryKey("STATUS")
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Type")
+                                        .column("STATUS")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("SteelWheelsSales1")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Markets")
+                                .name("Markets")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers")
+                                .name("Customers")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Product")
+                                .name("Product")
+                                .foreignKey("PRODUCTCODE")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Time")
+                                .usagePrefix("TR_")
+                                .name("Time")
+                                .foreignKey("ORDERDATE")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Price Each")
+                                .column("PRICEEACH")
+                                .formatString("#,###.0")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Total Price")
+                                .column("TOTALPRICE")
+                                .formatString("#,###.00")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("SteelWheelsSales2")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Markets")
+                                .name("Markets")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers")
+                                .name("Customers")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Product")
+                                .name("Product")
+                                .foreignKey("PRODUCTCODE")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Time")
+                                .usagePrefix("TC_")
+                                .name("Time")
+                                .foreignKey("REQUIREDDATE")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Price Each")
+                                .column("PRICEEACH")
+                                .formatString("#,###.0")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Total Price")
+                                .column("TOTALPRICE")
+                                .formatString("#,###.00")
+                                .aggregator("sum")
+                                .build()
+
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("SteelWheelsSales3")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Markets")
+                                .name("Markets")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers")
+                                .name("Customers")
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Product")
+                                .name("Product")
+                                .foreignKey("PRODUCTCODE")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Time")
+                                .usagePrefix("TW_")
+                                .name("Time")
+                                .foreignKey("SHIPPEDDATE")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Price Each")
+                                .column("PRICEEACH")
+                                .formatString("#,###.0")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Total Price")
+                                .column("TOTALPRICE")
+                                .formatString("#,###.00")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier5 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier5(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+                "<Schema name=\"FooBar\">\n"
+                + "    <Cube name=\"Foo\">\n"
+                + "        <Table name=\"orderfact\"></Table>\n"
+                + "        <Dimension foreignKey=\"ORDERNUMBER\" name=\"Orders\">\n"
+                + "            <Hierarchy hasAll=\"true\" allMemberName=\"All Orders\" primaryKey=\"ORDERNUMBER\">\n"
+                + "                <Table name=\"orders\">\n"
+                + "                </Table>\n"
+                + "                <Level name=\"Order\" column=\"ORDERNUMBER\" type=\"Integer\" uniqueMembers=\"true\">\n"
+                + "                    <Property name=\"OrderDate\" column=\"ORDERDATE\" type=\"Timestamp\"/>\n"
+                + "                </Level>\n"
+                + "            </Hierarchy>\n"
+                + "        </Dimension>\n"
+                + "        <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
+                + "            <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
+                + "                <Table name=\"customer_w_ter\">\n"
+                + "                </Table>\n"
+                + "                <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+                + "                </Level>\n"
+                + "            </Hierarchy>\n"
+                + "        </Dimension>\n"
+                + "        <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
+                + "        </Measure>\n"
+                + "        <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
+                + "        </Measure>\n"
+                + "    </Cube>\n"
+                + "</Schema>\n");
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("FooBar")
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Foo")
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .foreignKey("ORDERNUMBER")
+                                .name("Orders")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Orders")
+                                        .primaryKey("ORDERNUMBER")
+                                        .relation(new TableR("orders"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Order")
+                                                .column("ORDERNUMBER")
+                                                .type(TypeEnum.INTEGER)
+                                                .uniqueMembers(true)
+                                                .properties(List.of(
+                                                    PropertyRBuilder.builder()
+                                                        .name("OrderDate")
+                                                        .column("ORDERDATE")
+                                                        .type(PropertyTypeEnum.TIMESTAMP)
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .foreignKey("CUSTOMERNUMBER")
+                                .name("Customers")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Customers")
+                                        .primaryKey("CUSTOMERNUMBER")
+                                        .relation(new TableR("customer_w_ter"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Customer")
+                                                .column("CUSTOMERNAME")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Quantity")
+                                .column("QUANTITYORDERED")
+                                .formatString("#,###")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Sales")
+                                .column("TOTALPRICE")
+                                .formatString("#,###")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier6 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier6(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+            "<Schema name=\"SteelWheels\">\n"
+            + "    <Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Product\">\n"
+            + "        <Hierarchy hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">\n"
+            + "            <Table name=\"products\">\n"
+            + "            </Table>\n"
+            + "            <Level name=\"Line\" table=\"products\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "            </Level>\n"
+            + "            <Level name=\"Vendor\" table=\"products\" column=\"PRODUCTVENDOR\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "            </Level>\n"
+            + "            <Level name=\"Product\" table=\"products\" column=\"PRODUCTNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "                <Property name=\"Code\" column=\"PRODUCTCODE\" type=\"String\">\n"
+            + "                </Property>\n"
+            + "                <Property name=\"Vendor\" column=\"PRODUCTVENDOR\" type=\"String\">\n"
+            + "                </Property>\n"
+            + "                <Property name=\"Description\" column=\"PRODUCTDESCRIPTION\" type=\"String\">\n"
+            + "                </Property>\n"
+            + "            </Level>\n"
+            + "        </Hierarchy>\n"
+            + "    </Dimension>\n"
+            + "    <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
+            + "  <Table name=\"orderfact\">\n"
+            + "  </Table>\n"
+            + "  <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Markets\">\n"
+            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Markets\" primaryKey=\"CUSTOMERNUMBER\">\n"
+            + "    <Table name=\"customer_w_ter\">\n"
+            + "    </Table>\n"
+            + "    <Level name=\"Territory\" column=\"TERRITORY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "    <Level name=\"Country\" column=\"COUNTRY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "    <Level name=\"State Province\" column=\"STATE\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "    <Level name=\"City\" column=\"CITY\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "   </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Dimension foreignKey=\"CUSTOMERNUMBER\" name=\"Customers\">\n"
+            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
+            + "    <Table name=\"customer_w_ter\">\n"
+            + "    </Table>\n"
+            + "    <Level name=\"Customer\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "   </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "        <DimensionUsage source=\"Product\" name=\"MyProduct\" foreignKey=\"PRODUCTCODE\">\n"
+            + "        </DimensionUsage>\n"
+            + "        <Dimension type=\"TimeDimension\" foreignKey=\"TIME_ID\" name=\"Time\">\n"
+            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Years\" primaryKey=\"TIME_ID\">\n"
+            + "    <Table name=\"time\">\n"
+            + "    </Table>\n"
+            + "    <Level name=\"Years\" column=\"YEAR_ID\" type=\"String\" uniqueMembers=\"true\" levelType=\"TimeYears\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "    <Level name=\"Quarters\" column=\"QTR_NAME\" ordinalColumn=\"QTR_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeQuarters\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "    <Level name=\"Months\" column=\"MONTH_NAME\" ordinalColumn=\"MONTH_ID\" type=\"String\" uniqueMembers=\"false\" levelType=\"TimeMonths\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "   </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Dimension foreignKey=\"STATUS\" name=\"Order Status\">\n"
+            + "   <Hierarchy hasAll=\"true\" allMemberName=\"All Status Types\" primaryKey=\"STATUS\">\n"
+            + "    <Level name=\"Type\" column=\"STATUS\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "    </Level>\n"
+            + "   </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Measure name=\"Quantity\" column=\"QUANTITYORDERED\" formatString=\"#,###\" aggregator=\"sum\">\n"
+            + "  </Measure>\n"
+            + "  <Measure name=\"Sales\" column=\"TOTALPRICE\" formatString=\"#,###\" aggregator=\"sum\">\n"
+            + "  </Measure>\n"
+            + " </Cube>\n"
+            + "</Schema>\n");
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("SteelWheels")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .highCardinality(false)
+                        .name("Product")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Products")
+                                .primaryKey("PRODUCTCODE")
+                                .relation(new TableR("products"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Line")
+                                        .table("PRODUCTS")
+                                        .column("PRODUCTLINE")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Vendor")
+                                        .table("products")
+                                        .column("PRODUCTVENDOR")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Product")
+                                        .table("PRODUCTS")
+                                        .column("PRODUCTNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Code")
+                                                .column("PRODUCTCODE")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Vendor")
+                                                .column("PRODUCTVENDOR")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Description")
+                                                .column("PRODUCTDESCRIPTION")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build()
+                                        ))
+                                        .build()
+
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("SteelWheelsSales")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .foreignKey("CUSTOMERNUMBER")
+                                .name("Markets")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Markets")
+                                        .primaryKey("CUSTOMERNUMBER")
+                                        .relation(new TableR("customer_w_ter"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Territory")
+                                                .column("TERRITORY")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Country")
+                                                .column("COUNTRY")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("State Province")
+                                                .column("STATE")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("City")
+                                                .column("CITY")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .foreignKey("CUSTOMERNUMBER")
+                                .name("Customers")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Customers")
+                                        .primaryKey("CUSTOMERNUMBER")
+                                        .relation(new TableR("customer_w_ter"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Customer")
+                                                .column("CUSTOMERNAME")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Product")
+                                .name("MyProduct")
+                                .foreignKey("PRODUCTCODE")
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .type(DimensionTypeEnum.TIME_DIMENSION)
+                                .highCardinality(false)
+                                .foreignKey("TIME_ID")
+                                .name("Time")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Years")
+                                        .primaryKey("TIME_ID")
+                                        .relation(new TableR("time"))
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Years")
+                                                .column("YEAR_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.TIME_YEARS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Quarters")
+                                                .column("QTR_NAME")
+                                                .ordinalColumn("QTR_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build(),
+                                            LevelRBuilder.builder()
+                                                .name("Months")
+                                                .column("MONTH_NAME")
+                                                .ordinalColumn("MONTH_ID")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(false)
+                                                .levelType(LevelTypeEnum.TIME_MONTHS)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build(),
+                            PrivateDimensionRBuilder.builder()
+                                .foreignKey("STATUS")
+                                .name("Order Status")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .allMemberName("All Status Types")
+                                        .primaryKey("STATUS")
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("Type")
+                                                .column("STATUS")
+                                                .type(TypeEnum.STRING)
+                                                .uniqueMembers(true)
+                                                .levelType(LevelTypeEnum.REGULAR)
+                                                .hideMemberIf(HideMemberIfEnum.NEVER)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Quantity")
+                                .column("QUANTITYORDERED")
+                                .formatString("#,###")
+                                .aggregator("sum")
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Sales")
+                                .column("TOTALPRICE")
+                                .formatString("#,###")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier7 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier7(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+                    "  <Role name=\"CUBE_SCHEMA_ALL\">\n "
+            + "          <SchemaGrant access=\"all\" />\n "
+            + "  </Role>\n "
+            + "\n "
+            + "  <Role name=\"CUBE_SALES_MINIMAL\">\n "
+            + "          <SchemaGrant access=\"none\">\n "
+            + "                  <CubeGrant cube=\"SteelWheelsSales\" access=\"all\">\n "
+            + "                          <HierarchyGrant hierarchy=\"[Markets]\" access=\"none\"  />\n "
+            + "                  </CubeGrant>\n "
+            + "          </SchemaGrant>\n "
+            + "  </Role>\n "
+            + "  <Role name='DIM_MARKETAREA_MARKET_800'>\n "
+            + "    <SchemaGrant access='none'>\n "
+            + "        <CubeGrant cube='SteelWheelsSales' access='none'>\n "
+            + "            <HierarchyGrant hierarchy='[Markets]'\n "
+            + "                            access='custom' rollupPolicy=\"partial\"\n "
+            + "                            topLevel='[Markets].[Territory]'>\n "
+            + "                <MemberGrant member='[Markets].[Territory].[APAC]' access='all' />\n "
+            + "            </HierarchyGrant>\n "
+            + "        </CubeGrant>\n "
+            + "    </SchemaGrant>\n "
+            + "  </Role>\n "
+            + "  <Role name='DIM_MARKETAREA_MARKET_850'>\n "
+            + "    <SchemaGrant access='none'>\n "
+            + "        <CubeGrant cube='SteelWheelsSales' access='none'>\n "
+            + "            <HierarchyGrant hierarchy='[Markets]'\n "
+            + "                            access='custom' rollupPolicy=\"partial\"\n "
+            + "                            topLevel='[Markets].[Territory]'>\n "
+            + "                <MemberGrant member='[Markets].[Territory].[EMEA]' access='all' />\n "
+            + "            </HierarchyGrant>\n "
+            + "        </CubeGrant>\n "
+            + "    </SchemaGrant>\n "
+            + "  </Role>\n ";
+
+         */
+        @Override
+        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+            List<MappingRole> result = new ArrayList<>();
+            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.add(
+                RoleRBuilder.builder()
+                    .name("CUBE_SCHEMA_ALL")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.ALL)
+                            .build()
+                    ))
+                    .build());
+            result.add(
+                RoleRBuilder.builder()
+                    .name("CUBE_SALES_MINIMAL")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("SteelWheelsSales")
+                                    .access("all")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Markets]")
+                                            .access(AccessEnum.NONE)
+                                            .rollupPolicy("partial")
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            result.add(
+                RoleRBuilder.builder()
+                    .name("DIM_MARKETAREA_MARKET_800")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("SteelWheelsSales")
+                                    .access("none")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Markets]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .topLevel("[Markets].[Territory]")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Markets].[Territory].[APAC]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+
+            result.add(
+                RoleRBuilder.builder()
+                    .name("DIM_MARKETAREA_MARKET_850")
+                    .schemaGrants(List.of(
+                        SchemaGrantRBuilder.builder()
+                            .access(AccessEnum.NONE)
+                            .cubeGrants(List.of(
+                                CubeGrantRBuilder.builder()
+                                    .cube("SteelWheelsSales")
+                                    .access("none")
+                                    .hierarchyGrants(List.of(
+                                        HierarchyGrantRBuilder.builder()
+                                            .hierarchy("[Markets]")
+                                            .access(AccessEnum.CUSTOM)
+                                            .rollupPolicy("partial")
+                                            .topLevel("[Markets].[Territory]")
+                                            .memberGrants(List.of(
+                                                MemberGrantRBuilder.builder()
+                                                    .member("[Markets].[Territory].[EMEA]")
+                                                    .access(MemberGrantAccessEnum.ALL)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            return result;
+        }
+    }
+
+    public static class SteelWheelsSchemaTestModifier8 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier8(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+            "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
+            + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
+            + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
+            + "      <Table name=\"customer_w_ter\">\n"
+            + "      </Table>\n"
+            + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Address Line 1\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Contact Last Name\">\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
+            + "     <Table name=\"orderfact\"> \n"
+            + "     </Table> \n"
+            + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
+            + "     </DimensionUsage> \n"
+            + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
+            + "     </Measure> \n"
+            + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
+            + "     </Measure> \n"
+            + " </Cube> \n"
+            + " <Role name=\"Administrator\"> \n"
+            + "     <SchemaGrant access=\"all\"> \n"
+            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
+            + "         </CubeGrant> \n"
+            + "     </SchemaGrant> \n"
+            + " </Role> \n"
+            + " <Role name=\"Power User\"> \n"
+            + "     <SchemaGrant access=\"none\"> \n"
+            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
+            + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
+            + "             </DimensionGrant>\n"
+            + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" rollupPolicy=\"partial\" access=\"custom\"> \n"
+            + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
+            + "                 </MemberGrant> \n"
+            + "             </HierarchyGrant> \n"
+            + "         </CubeGrant> \n"
+            + "     </SchemaGrant> \n"
+            + " </Role>     \n"
+            + "</Schema>\n";
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("SteelWheels")
+                .description("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Customers Dimension")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .name("Customers Hierarchy")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("CUSTOMERNUMBER")
+                                .caption("Customer Hierarchy")
+                                .relation(new TableR("customer_w_ter"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Address")
+                                        .visible(true)
+                                        .column("ADDRESSLINE1")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .caption("Address Line 1")
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Name")
+                                        .visible(true)
+                                        .column("CONTACTLASTNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .caption("Contact Last Name")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                    .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Customers Cube")
+                        .visible(true)
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers Dimension")
+                                .name("Customer_DimUsage")
+                                .visible(true)
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Price Each")
+                                .column("PRICEEACH")
+                                .aggregator("sum")
+                                .visible(true)
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Total Price")
+                                .column("TOTALPRICE")
+                                .visible(true)
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .roles(List.of(
+                    RoleRBuilder.builder()
+                        .name("Administrator")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Customers Cube")
+                                        .access("all")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Power User")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.NONE)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Customers Cube")
+                                        .access("all")
+                                        .dimensionGrants(List.of(
+                                            DimensionGrantRBuilder.builder()
+                                                .dimension("Measures")
+                                                .access(AccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                                .rollupPolicy("partial")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier9 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier9(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+            "<Schema name=\"SteelWheels\" description=\"1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2\"> \n"
+            + "  <Dimension type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" name=\"Customers Dimension\">\n"
+            + "    <Hierarchy name=\"Customers Hierarchy\" visible=\"true\" hasAll=\"true\" primaryKey=\"CUSTOMERNUMBER\" caption=\"Customer Hierarchy\">\n"
+            + "      <Table name=\"customer_w_ter\">\n"
+            + "      </Table>\n"
+            + "      <Level name=\"Address\" visible=\"true\" column=\"ADDRESSLINE1\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Address Line 1\">\n"
+            + "      </Level>\n"
+            + "      <Level name=\"Name\" visible=\"true\" column=\"CONTACTLASTNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\" caption=\"Contact Last Name\">\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + " <Cube name=\"Customers Cube\" visible=\"true\" cache=\"true\" enabled=\"true\"> \n"
+            + "     <Table name=\"orderfact\"> \n"
+            + "     </Table> \n"
+            + "     <DimensionUsage source=\"Customers Dimension\" name=\"Customer_DimUsage\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\"> \n"
+            + "     </DimensionUsage> \n"
+            + "     <Measure name=\"Price Each\" column=\"PRICEEACH\" aggregator=\"sum\" visible=\"true\"> \n"
+            + "     </Measure> \n"
+            + "     <Measure name=\"Total Price\" column=\"TOTALPRICE\" aggregator=\"sum\" visible=\"true\"> \n"
+            + "     </Measure> \n"
+            + " </Cube> \n"
+            + " <Role name=\"Administrator\"> \n"
+            + "     <SchemaGrant access=\"all\"> \n"
+            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
+            + "         </CubeGrant> \n"
+            + "     </SchemaGrant> \n"
+            + " </Role> \n"
+            + " <Role name=\"Foo\"> \n"
+            + "     <SchemaGrant access=\"none\"> \n"
+            + "     </SchemaGrant> \n"
+            + " </Role>\n"
+            + " <Role name=\"Power User\"> \n"
+            + "     <SchemaGrant access=\"none\"> \n"
+            + "         <CubeGrant cube=\"Customers Cube\" access=\"all\"> \n"
+            + "             <DimensionGrant dimension=\"Measures\" access=\"all\"> \n"
+            + "             </DimensionGrant>\n"
+            + "             <HierarchyGrant hierarchy=\"[Customer_DimUsage.Customers Hierarchy]\" topLevel=\"[Customer_DimUsage.Customers Hierarchy].[Name]\" rollupPolicy=\"partial\" access=\"custom\"> \n"
+            + "                 <MemberGrant member=\"[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]\" access=\"all\"> \n"
+            + "                 </MemberGrant> \n"
+            + "             </HierarchyGrant> \n"
+            + "         </CubeGrant> \n"
+            + "     </SchemaGrant> \n"
+            + " </Role>\n"
+            + " <Role name=\"Administrator Union\"> \n"
+            + "     <Union> \n"
+            + "         <RoleUsage roleName=\"Administrator\"/> \n"
+            + "         <RoleUsage roleName=\"Foo\"/> \n"
+            + "     </Union> \n"
+            + " </Role>\n"
+            + " <Role name=\"Power User Union\"> \n"
+            + "     <Union> \n"
+            + "         <RoleUsage roleName=\"Power User\"/> \n"
+            + "         <RoleUsage roleName=\"Foo\"/> \n"
+            + "     </Union> \n"
+            + " </Role>\n"
+            + "</Schema>\n";
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("SteelWheels")
+                .description("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .type(DimensionTypeEnum.STANDARD_DIMENSION)
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Customers Dimension")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .name("Customers Hierarchy")
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("CUSTOMERNUMBER")
+                                .caption("Customer Hierarchy")
+                                .relation(new TableR("customer_w_ter"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Address")
+                                        .visible(true)
+                                        .column("ADDRESSLINE1")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .caption("Address Line 1")
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Name")
+                                        .visible(true)
+                                        .column("CONTACTLASTNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .caption("Contact Last Name")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Customers Cube")
+                        .visible(true)
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("orderfact"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers Dimension")
+                                .name("Customer_DimUsage")
+                                .visible(true)
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Price Each")
+                                .column("PRICEEACH")
+                                .aggregator("sum")
+                                .visible(true)
+                                .build(),
+                            MeasureRBuilder.builder()
+                                .name("Total Price")
+                                .column("TOTALPRICE")
+                                .visible(true)
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .roles(List.of(
+                    RoleRBuilder.builder()
+                        .name("Administrator")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Customers Cube")
+                                        .access("all")
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Foo")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.NONE)
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Power User")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.NONE)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("Customers Cube")
+                                        .access("all")
+                                        .dimensionGrants(List.of(
+                                            DimensionGrantRBuilder.builder()
+                                                .dimension("Measures")
+                                                .access(AccessEnum.ALL)
+                                                .build()
+                                        ))
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
+                                                .rollupPolicy("partial")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Administrator Union")
+                        .union(UnionRBuilder.builder()
+                            .roleUsages(List.of(
+                                RoleUsageRBuilder.builder()
+                                    .roleName("Administrator")
+                                    .build(),
+                                RoleUsageRBuilder.builder()
+                                    .roleName("Foo")
+                                    .build()
+                            ))
+                            .build())
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Power User Union")
+                        .union(UnionRBuilder.builder()
+                            .roleUsages(List.of(
+                                RoleUsageRBuilder.builder()
+                                    .roleName("Power User")
+                                    .build(),
+                                RoleUsageRBuilder.builder()
+                                    .roleName("Foo")
+                                    .build()
+                            ))
+                            .build())
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class SteelWheelsSchemaTestModifier10 extends RDbMappingSchemaModifier {
+
+        public SteelWheelsSchemaTestModifier10(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+            "<Schema name=\"rolesTest\">\n"
+            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Dimension1\">\n"
+            + "    <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Products\" primaryKey=\"PRODUCTCODE\">\n"
+            + "      <Table name=\"products\">\n"
+            + "      </Table>\n"
+            + "      <Level name=\"Level1\" visible=\"true\" column=\"PRODUCTLINE\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Dimension2\">\n"
+            + "    <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"CUSTOMERNUMBER\">\n"
+            + "      <Table name=\"customer_w_ter\">\n"
+            + "      </Table>\n"
+            + "      <Level name=\"Level2\" visible=\"true\" column=\"CUSTOMERNAME\" type=\"String\" uniqueMembers=\"false\" levelType=\"Regular\" hideMemberIf=\"Never\">\n"
+            + "      </Level>\n"
+            + "    </Hierarchy>\n"
+            + "  </Dimension>\n"
+            + "  <Cube name=\"rolesTest1\" visible=\"true\" cache=\"true\" enabled=\"true\">\n"
+            + "    <Table name=\"orderfact\" alias=\"rolesTest1\">\n"
+            + "    </Table>\n"
+            + "    <DimensionUsage source=\"Dimension1\" name=\"Dimension1\" visible=\"true\" foreignKey=\"PRODUCTCODE\" highCardinality=\"false\">\n"
+            + "    </DimensionUsage>\n"
+            + "    <DimensionUsage source=\"Dimension2\" name=\"Dimension2\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+            + "    </DimensionUsage>\n"
+            + "    <Measure name=\"Measure1\" column=\"QUANTITYORDERED\" aggregator=\"sum\">\n"
+            + "    </Measure>\n"
+            + "  </Cube>\n"
+            + "  <Cube name=\"rolesTest2\" visible=\"true\" cache=\"true\" enabled=\"true\">\n"
+            + "    <Table name=\"orderfact\" alias=\"rolesTest2\">\n"
+            + "    </Table>\n"
+            + "    <DimensionUsage source=\"Dimension2\" name=\"Dimension2\" visible=\"true\" foreignKey=\"CUSTOMERNUMBER\" highCardinality=\"false\">\n"
+            + "    </DimensionUsage>\n"
+            + "    <Measure name=\"Measure2:Internal\" column=\"TOTALPRICE\" aggregator=\"sum\">\n"
+            + "    </Measure>\n"
+            + "  </Cube>\n"
+            + "  <VirtualCube enabled=\"true\" name=\"rolesTest\" defaultMeasure=\"Quantity\" caption=\"Test\" visible=\"true\">\n"
+            + "    <CubeUsages>\n"
+            + "      <CubeUsage cubeName=\"rolesTest1\" ignoreUnrelatedDimensions=\"true\">\n"
+            + "      </CubeUsage>\n"
+            + "      <CubeUsage cubeName=\"rolesTest2\" ignoreUnrelatedDimensions=\"true\">\n"
+            + "      </CubeUsage>\n"
+            + "    </CubeUsages>\n"
+            + "    <VirtualCubeDimension cubeName=\"rolesTest1\" visible=\"true\" highCardinality=\"false\" name=\"Dimension1\">\n"
+            + "    </VirtualCubeDimension>\n"
+            + "    <VirtualCubeDimension cubeName=\"rolesTest1\" visible=\"true\" highCardinality=\"false\" name=\"Dimension2\">\n"
+            + "    </VirtualCubeDimension>\n"
+            + "    <VirtualCubeMeasure cubeName=\"rolesTest1\" name=\"[Measures].[Measure1]\" visible=\"true\">\n"
+            + "    </VirtualCubeMeasure>\n"
+            + "    <VirtualCubeMeasure cubeName=\"rolesTest2\" name=\"[Measures].[Measure2:Internal]\" visible=\"true\">\n"
+            + "    </VirtualCubeMeasure>\n"
+            + "    <CalculatedMember name=\"Measure2\" formula=\"ValidMeasure([Measures].[Measure2:Internal])\" dimension=\"Measures\">\n"
+            + "    </CalculatedMember>\n"
+            + "  </VirtualCube>\n"
+            + "  <Role name=\"Administrator\">\n"
+            + "    <SchemaGrant access=\"all\">\n"
+            + "    </SchemaGrant>\n"
+            + "  </Role>\n"
+            + "  <Role name=\"Report Author\">\n"
+            + "    <SchemaGrant access=\"custom\">\n"
+            + "      <CubeGrant cube=\"rolesTest\" access=\"all\">\n"
+            + "        <HierarchyGrant hierarchy=\"[Dimension2]\" topLevel=\"[Dimension2].[Level2]\" access=\"custom\">\n"
+            + "          <MemberGrant member=\"[Dimension2].[BG&#38;E Collectables]\" access=\"all\">\n"
+            + "          </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Dimension2].[Baane Mini Imports]\" access=\"all\">\n"
+            + "          </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Dimension2].[Blauer See Auto, Co.]\" access=\"all\">\n"
+            + "          </MemberGrant>\n"
+            + "          <MemberGrant member=\"[Dimension2].[Boards &#38; Toys Co.]\" access=\"all\">\n"
+            + "          </MemberGrant>\n"
+            + "        </HierarchyGrant>\n"
+            + "      </CubeGrant>\n"
+            + "    </SchemaGrant>\n"
+            + "  </Role>\n"
+            + "</Schema>\n";
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("rolesTest")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Dimension1")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .name("Customers Hierarchy")
+                                .visible(true)
+                                .hasAll(true)
+                                .allMemberName("All Products")
+                                .primaryKey("products")
+                                .relation(new TableR("customer_w_ter"))
+
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Level1")
+                                        .visible(true)
+                                        .column("PRODUCTLINE")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Dimension2")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .visible(true)
+                                .hasAll(true)
+                                .allMemberName("All Customers")
+                                .primaryKey("CUSTOMERNUMBER")
+                                .relation(new TableR("customer_w_ter"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Level2")
+                                        .visible(true)
+                                        .column("CUSTOMERNAME")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("rolesTest1")
+                        .visible(true)
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR(null,"orderfact", "rolesTest1", List.of()))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Dimension1")
+                                .name("Dimension1")
+                                .visible(true)
+                                .foreignKey("PRODUCTCODE")
+                                .highCardinality(false)
+                                .build(),
+                            DimensionUsageRBuilder.builder()
+                                .source("Dimension2")
+                                .name("Dimension2")
+                                .visible(true)
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Measure1")
+                                .column("QUANTITYORDERED")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build(),
+                    CubeRBuilder.builder()
+                        .name("rolesTest2")
+                        .visible(true)
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR(null,"orderfact", "rolesTest2", List.of()))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Dimension2")
+                                .name("Dimension2")
+                                .visible(true)
+                                .foreignKey("CUSTOMERNUMBER")
+                                .highCardinality(false)
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("Measure2:Internal")
+                                .column("TOTALPRICE")
+                                .aggregator("sum")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .virtualCubes(List.of(
+                    VirtualCubeRBuilder.builder()
+                        .enabled(true)
+                        .name("rolesTest")
+                        .defaultMeasure("Quantity")
+                        .caption("Test")
+                        .visible(true)
+                        .cubeUsages(List.of(
+                            CubeUsageRBuilder.builder()
+                                .cubeName("rolesTest1")
+                                .ignoreUnrelatedDimensions(true)
+                                .build(),
+                            CubeUsageRBuilder.builder()
+                                .cubeName("rolesTest2")
+                                .ignoreUnrelatedDimensions(true)
+                                .build()
+                        ))
+                        .virtualCubeDimensions(List.of(
+                            VirtualCubeDimensionRBuilder.builder()
+                                .cubeName("rolesTest1").visible(true).highCardinality(false).name("Dimension1")
+                                .build(),
+                            VirtualCubeDimensionRBuilder.builder()
+                                .cubeName("rolesTest1").visible(true).highCardinality(false).name("Dimension2").build()
+                        ))
+                        .virtualCubeMeasures(List.of(
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("rolesTest1")
+                                .name("[Measures].[Measure1]")
+                                .visible(true)
+                                .build(),
+                            VirtualCubeMeasureRBuilder.builder()
+                                .cubeName("rolesTest2")
+                                .name("[Measures].[Measure2:Internal]")
+                                .visible(true)
+                                .build()
+                        ))
+                        .calculatedMembers(List.of(
+                            CalculatedMemberRBuilder.builder()
+                                .name("Measure2")
+                                .formula("ValidMeasure([Measures].[Measure2:Internal])")
+                                .dimension("Measures")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .roles(List.of(
+                    RoleRBuilder.builder()
+                        .name("Administrator")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.ALL)
+                                .build()
+                        ))
+                        .build(),
+                    RoleRBuilder.builder()
+                        .name("Report Author")
+                        .schemaGrants(List.of(
+                            SchemaGrantRBuilder.builder()
+                                .access(AccessEnum.CUSTOM)
+                                .cubeGrants(List.of(
+                                    CubeGrantRBuilder.builder()
+                                        .cube("rolesTest")
+                                        .access("all")
+                                        .hierarchyGrants(List.of(
+                                            HierarchyGrantRBuilder.builder()
+                                                .hierarchy("[Dimension2]")
+                                                .topLevel("[Dimension2].[Level2]")
+                                                .rollupPolicy("partial")
+                                                .access(AccessEnum.CUSTOM)
+                                                .memberGrants(List.of(
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Dimension2].[BG&E Collectables]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Dimension2].[Baane Mini Imports]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Dimension2].[Blauer See Auto, Co.]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build(),
+                                                    MemberGrantRBuilder.builder()
+                                                        .member("[Dimension2].[Boards & Toys Co.]")
+                                                        .access(MemberGrantAccessEnum.ALL)
+                                                        .build()
+                                                ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+
+    }
+
+    public static class XmlaBasicTestModifier extends RDbMappingSchemaModifier {
+
+        public XmlaBasicTestModifier(MappingSchema mappingSchema) {
+            super(mappingSchema);
+        }
+
+        /*
+            + "<?xml version=\"1.0\"?>\n"
+            + "<Schema name=\"foodmart-xmla-alias-bug\">\n"
+            + "  <Dimension name=\"Customers\">\n"
+            + "    <Hierarchy hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
+            + "      <Table name=\"customer\"/>\n"
+            + "      <Level name=\"Country\" column=\"country\" type=\"String\" uniqueMembers=\"true\" levelType=\"Regular\"\n"
+            + "             hideMemberIf=\"Never\"/>\n"
+            + "    </Hierarchy>\n" + "  </Dimension>\n" + "\n"
+            + "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\" cache=\"true\" enabled=\"true\">\n"
+            + "  <Table name=\"sales_fact_1998\" />\n"
+            + "  <DimensionUsage source=\"Customers\" caption=\"Customers\" name=\"Customers-Alias\" visible=\"true\"\n"
+            + "                  foreignKey=\"customer_id\" />\n"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
+            + "      formatString=\"Standard\"/>\n"
+            + "</Cube>\n" + "\n" + "</Schema>";
+
+         */
+        @Override
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name("foodmart-xmla-alias-bug")
+                .dimensions(List.of(
+                    PrivateDimensionRBuilder.builder()
+                        .name("Customers")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .hasAll(true)
+                                .allMemberName("All Customers")
+                                .primaryKey("customer_id")
+                                .relation(new TableR("customer"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Country")
+                                        .column("country")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                ))
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .defaultMeasure("Unit Sales")
+                        .cache(true)
+                        .enabled(true)
+                        .fact(new TableR("sales_fact_1998"))
+                        .dimensionUsageOrDimensions(List.of(
+                            DimensionUsageRBuilder.builder()
+                                .source("Customers")
+                                .caption("Customers")
+                                .name("Customers-Alias")
+                                .visible(true)
+                                .foreignKey("customer_id")
                                 .build()
                         ))
                         .measures(List.of(
