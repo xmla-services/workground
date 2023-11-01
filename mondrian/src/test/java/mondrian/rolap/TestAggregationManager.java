@@ -1495,6 +1495,7 @@ class TestAggregationManager extends BatchTestCase {
         // cardinality in cache.
         assertQuerySqlOrNot(
             connection, query2, patterns2, false, false, false);
+        RolapSchemaPool.instance().clear();
     }
 
     /**
@@ -2065,7 +2066,7 @@ class TestAggregationManager extends BatchTestCase {
          */
         RolapSchemaPool.instance().clear();
         schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier2(schema, colName)));
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier10(schema, colName)));
         assertQueryReturns(context.getConnection(),
             "select non empty{[Promotions].[All Promotions].Children} ON rows, "
             + "non empty {[Store].[All Stores]} ON columns "
@@ -2368,6 +2369,7 @@ class TestAggregationManager extends BatchTestCase {
             true,
             false,
             false);
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest
@@ -2584,6 +2586,7 @@ class TestAggregationManager extends BatchTestCase {
                     sqlMysql.length())
             },
             false, false, true);
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest
@@ -3521,6 +3524,7 @@ class TestAggregationManager extends BatchTestCase {
                     sqlMysqlTooLowSegmentQuery.length())
             },
             false, false, true);
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest
@@ -3798,6 +3802,7 @@ class TestAggregationManager extends BatchTestCase {
                     sqlOra,
                     sqlOra.length())},
             false, false, true);
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest

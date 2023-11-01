@@ -15,8 +15,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -93,8 +91,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
         withSchema(context, schema);
         //withCube(CUSTOM_COUNT_MEASURE_CUBE_NAME);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CustomCountMeasureCubeName(schema)));
+        withSchema(context, SchemaModifiers.CustomCountMeasureCubeName::new);
         assertQueryReturns(context.getConnection(),
             CUSTOM_COUNT_MEASURE_QUERY, CUSTOM_COUNT_MEASURE_RESULT);
     }

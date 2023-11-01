@@ -2110,8 +2110,8 @@ public class BasicQueryTest {
 
 
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier16::new);
-
     assertQueryReturns( context.getConnection(),mdx, result );
+    RolapSchemaPool.instance().clear();
   }
 
   @ParameterizedTest
@@ -4055,6 +4055,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testNullMember(TestContext context) {
+    RolapSchemaPool.instance().clear();
     if ( isDefaultNullMemberRepresentation() ) {
       assertQueryReturns( context.getConnection(),"SELECT \n" + "{[Measures].[Store Cost]} ON columns, \n"
           + "{[Store Size in SQFT].[All Store Size in SQFTs].[#null]} ON rows \n" + "FROM [Sales] \n"
