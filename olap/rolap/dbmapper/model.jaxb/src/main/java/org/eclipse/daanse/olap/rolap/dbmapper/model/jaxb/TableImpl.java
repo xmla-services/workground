@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
@@ -32,6 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExcludes", "aggTables", "hints" })
+@XmlRootElement(name = "Table")
 public class TableImpl implements MappingTable {
 
     @XmlElement(name = "SQL", type = SQLImpl.class)

@@ -4227,7 +4227,7 @@ public class SchemaModifiers {
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
                             .hasAll(true)
-                            .allMemberName("Example Hierarchy")
+                            .name("Example Hierarchy")
                             .visible(true)
                             .hasAll(true)
                             .allMemberName("All")
@@ -5100,7 +5100,7 @@ public class SchemaModifiers {
                                             AggMeasureRBuilder.builder()
                                                 .name("[Measures].[Unit Sales]")
                                                 .column("UNIT_SALES")
-                                                .rollupType("AvgFromAvg")
+                                                .rollupType("SumFromAvg")
                                                 .build()
                                         ))
                                         .aggLevels(List.of(
@@ -6854,7 +6854,8 @@ public class SchemaModifiers {
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
-            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube)
+                .stream().filter(d -> !"Promotions".equals(d.name())).toList());
             if ("Sales".equals(cube.name())) {
                 result.add(PrivateDimensionRBuilder.builder()
                     .name("Promotions")
@@ -6875,6 +6876,65 @@ public class SchemaModifiers {
                                         .sqls(List.of(
                                             SQLRBuilder.builder()
                                                 .content("ERROR_TEST_FUNCTION_NAME(" + colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class TestAggregationManagerModifier10 extends RDbMappingSchemaModifier {
+
+        /*
+            "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+            + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+            + "    <Table name=\"promotion\"/>\n"
+            + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+            + "      <KeyExpression><SQL>RTRIM("
+            + colName + ")</SQL></KeyExpression>\n"
+            + "    </Level>\n"
+            + "  </Hierarchy>\n"
+            + "</Dimension>", false));
+         */
+        private final StringBuilder colName;
+
+        public TestAggregationManagerModifier10(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube)
+                .stream().filter(d -> !"Promotions".equals(d.name())).toList());
+            if ("Sales".equals(cube.name())) {
+                result.add(PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .keyExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM(" + colName + ")")
                                                 .build()
                                         ))
                                         .build())
@@ -12598,7 +12658,6 @@ public class SchemaModifiers {
                                         .hierarchy("[Customers]")
                                         .access(AccessEnum.CUSTOM)
                                         .rollupPolicy("Partial")
-                                        .bottomLevel("[Customers].[City]")
                                         .memberGrants(List.of(
                                             MemberGrantRBuilder.builder()
                                                 .member("[Customers].[USA].[CA]")
@@ -14325,7 +14384,7 @@ public class SchemaModifiers {
                                             .rollupPolicy("partial")
                                             .memberGrants(List.of(
                                                 MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
+                                                    .member("[Customers].[USA].[CA]")
                                                     .access(MemberGrantAccessEnum.ALL)
                                                     .build()
                                             ))
@@ -14747,7 +14806,6 @@ public class SchemaModifiers {
                                             .hierarchy("[Customers]")
                                             .rollupPolicy(policy.name())
                                             .access(AccessEnum.CUSTOM)
-                                            .bottomLevel("[Customers].[City]")
                                             .memberGrants(List.of(
                                                 MemberGrantRBuilder.builder()
                                                     .member("[Customers].[USA]")
@@ -14804,7 +14862,8 @@ public class SchemaModifiers {
         @Override
         protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
             List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.addAll(super.schemaRoles(mappingSchemaOriginal).stream()
+                .filter(r -> !"Role1".equals(r.name())).toList());
             result.add(
                 RoleRBuilder.builder()
                     .name("Role1")
@@ -14837,11 +14896,11 @@ public class SchemaModifiers {
                                             .access(AccessEnum.CUSTOM)
                                             .memberGrants(List.of(
                                                 MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA]")
+                                                    .member("[Store].[USA].[CA]")
                                                     .access(MemberGrantAccessEnum.ALL)
                                                     .build(),
                                                 MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[San Francisco].[Gladys Evans]")
+                                                    .member("[Store].[USA].[CA].[San Francisco].[Store 14]")
                                                     .access(MemberGrantAccessEnum.NONE)
                                                     .build()
                                             ))
@@ -14960,7 +15019,8 @@ public class SchemaModifiers {
          */
         protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
             List<MappingCube> result = new ArrayList<>();
-            result.addAll(super.schemaCubes(mappingSchemaOriginal));
+            result.addAll(super.schemaCubes(mappingSchemaOriginal).stream()
+                .filter(c -> !"TinySales".equals(c.name())).toList());
             result.add(CubeRBuilder.builder()
                 .name("TinySales")
                 .fact(new TableR("sales_fact_1997"))
@@ -14987,16 +15047,27 @@ public class SchemaModifiers {
             return result;
         }
 
+        /*
+                     "<Dimension name=\"Store2\">\n"
+            + "  <Hierarchy hasAll=\"%s\" primaryKey=\"store_id\" %s >\n"
+            + "    <Table name=\"store\"/>\n"
+            + "    <Level name=\"Store Country\" column=\"store_country\" uniqueMembers=\"true\"/>\n"
+            + "    <Level name=\"Store State\" column=\"store_state\" uniqueMembers=\"true\"/>\n"
+            + "  </Hierarchy>\n"
+            + "</Dimension>\n";
+
+         */
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
             List<MappingPrivateDimension> result = new ArrayList<>();
-            result.addAll(super.schemaDimensions(mappingSchemaOriginal));
+            result.addAll(super.schemaDimensions(mappingSchemaOriginal).stream()
+                .filter(d -> !"Store2".equals(d.name())).toList());
             result.add(PrivateDimensionRBuilder.builder()
                 .name("Store2")
                 .hierarchies(List.of(
                     HierarchyRBuilder.builder()
                         .hasAll(hasAll)
-                        .primaryKeyTable("store_id")
                         .defaultMember(defaultMem)
+                        .primaryKey("store_id")
                         .relation(new TableR("store"))
                         .levels(List.of(
                             LevelRBuilder.builder()
@@ -15034,7 +15105,8 @@ public class SchemaModifiers {
         @Override
         protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
             List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+            result.addAll(super.schemaRoles(mappingSchemaOriginal)
+                .stream().filter(r -> !"test".equals(r.name())).toList());
             result.add(
                 RoleRBuilder.builder()
                     .name("test")
@@ -15314,6 +15386,7 @@ public class SchemaModifiers {
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
                 .name("Sales1")
+                .fact(new TableR("sales_fact_1997"))
                 .dimensionUsageOrDimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
@@ -15445,6 +15518,109 @@ public class SchemaModifiers {
                                         ))
                                         .build()
 
+                                ))
+                                .build()
+                        ))
+                        .build(),
+                    PrivateDimensionRBuilder.builder()
+                        .visible(true)
+                        .highCardinality(false)
+                        .name("Store")
+                        .foreignKey("store_id")
+                        .hierarchies(List.of(
+                            HierarchyRBuilder.builder()
+                                .visible(true)
+                                .hasAll(true)
+                                .primaryKey("store_id")
+                                .relation(new TableR("store"))
+                                .levels(List.of(
+                                    LevelRBuilder.builder()
+                                        .name("Store ID")
+                                        .visible(true)
+                                        .column("store_id")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Store Country")
+                                        .visible(true)
+                                        .column("store_country")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Store State")
+                                        .visible(true)
+                                        .column("store_state")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Store City")
+                                        .visible(true)
+                                        .column("store_city")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(false)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .build(),
+                                    LevelRBuilder.builder()
+                                        .name("Store Name")
+                                        .visible(true)
+                                        .column("store_name")
+                                        .type(TypeEnum.STRING)
+                                        .uniqueMembers(true)
+                                        .levelType(LevelTypeEnum.REGULAR)
+                                        .hideMemberIf(HideMemberIfEnum.NEVER)
+                                        .properties(List.of(
+                                            PropertyRBuilder.builder()
+                                                .name("Store Type")
+                                                .column("store_type")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Store Manager")
+                                                .column("store_manager")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Store Sqft")
+                                                .column("store_sqft")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Grocery Sqft")
+                                                .column("grocery_sqft")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Frozen Sqft")
+                                                .column("frozen_sqft")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Meat Sqft")
+                                                .column("meat_sqft")
+                                                .type(PropertyTypeEnum.NUMERIC)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Has coffee bar")
+                                                .column("coffee_bar")
+                                                .type(PropertyTypeEnum.BOOLEAN)
+                                                .build(),
+                                            PropertyRBuilder.builder()
+                                                .name("Street address")
+                                                .column("store_street_address")
+                                                .type(PropertyTypeEnum.STRING)
+                                                .build()
+                                        ))
+                                        .build()
                                 ))
                                 .build()
                         ))
@@ -15633,7 +15809,7 @@ public class SchemaModifiers {
                                         HierarchyGrantRBuilder.builder()
                                             .hierarchy("[Store]")
                                             .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("full")
+                                            .rollupPolicy("partial")
                                             .memberGrants(List.of(
                                                 MemberGrantRBuilder.builder()
                                                     .member("[Store].[USA].[WA]")

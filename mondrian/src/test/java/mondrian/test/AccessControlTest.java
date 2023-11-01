@@ -359,6 +359,7 @@ class AccessControlTest {
 
         assertEquals(2, hierarchyAccess.getTopLevelDepth());
         assertEquals(3, hierarchyAccess.getBottomLevelDepth());
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest
@@ -375,6 +376,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testRoleMemberAccess(TestContextWrapper foodMartContext) {
+    	RolapSchemaPool.instance().clear();
         final Connection connection = getRestrictedConnection(foodMartContext);
         // because CA has access
         assertMemberAccess(connection, Access.CUSTOM, "[Store].[USA]");
@@ -1392,7 +1394,7 @@ class AccessControlTest {
         MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
         foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier41(schema, policy)));
     	TestUtil.withRole(foodMartContext, "Role1");
-    	Connection connection = foodMartContext.createConnection();
+    	Connection connection = foodMartContext.getContext().getConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
     	TestUtil.assertExprReturns(
 			connection,
@@ -3410,7 +3412,7 @@ class AccessControlTest {
                             "Failure testing RolapNativeCrossJoin with "
                             + " rollupPolicy=%s, "
                             +   "defaultMember=%s, hasAll=%s",
-                            policy, defaultMember ==null, hasAll),
+                            policy, defaultMember, hasAll),
                         "select NonEmptyCrossJoin([Store2].[Store State].MEMBERS,"
                         + "[Product].[Product Family].MEMBERS) on 0 from tinysales",
                         "Axis #0:\n"

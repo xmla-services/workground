@@ -993,6 +993,7 @@ class DrillThroughTest {
             }
             olap4jConnection.close();
         }
+        RolapSchemaPool.instance().clear();
     }
 
     /**
@@ -1075,9 +1076,7 @@ class DrillThroughTest {
                 + "  </Dimension>\n"));
 
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.DrillThroughTestModifier2::new);
 
         Result result = executeQuery(context.getConnection(),
             "SELECT {[Measures].[Unit Sales]} on columns, "
@@ -1223,9 +1222,7 @@ class DrillThroughTest {
             + "  </Dimension>",
             null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier3(schema)));
+    	withSchema(context, SchemaModifiers.DrillThroughTestModifier3::new);
 
         Result result = executeQuery(context.getConnection(),
             "SELECT {[Measures].[Unit Sales]} on columns,\n"
@@ -1268,6 +1265,7 @@ class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void  testDrillThroughExprs(TestContextWrapper context) {
+    	RolapSchemaPool.instance().clear();
         Connection connection = context.createConnection();
         assertCanDrillThrough(connection,
             true,
@@ -2049,6 +2047,7 @@ class DrillThroughTest {
             if (rs != null) {
                 rs.close();
             }
+            RolapSchemaPool.instance().clear();
         }
     }
     /**

@@ -9,6 +9,7 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
@@ -114,6 +115,7 @@ class DefaultRecognizerTest {
             query,
             mysqlPattern(expectedSql),
             false, true, true);
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest
