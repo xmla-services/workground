@@ -540,10 +540,11 @@ class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {
+    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {    
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
+        RolapSchemaPool.instance().clear();
         // [dimension].members for a dimension with multiple hierarchies
         // SSAS2005 gives error:
         //    Query (1, 8) The 'Time' dimension contains more than one
@@ -1834,7 +1835,7 @@ class Ssas2005CompatibilityTest {
     {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
-    	prepareContext(context);
+    	//prepareContext(context);
     	/*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",

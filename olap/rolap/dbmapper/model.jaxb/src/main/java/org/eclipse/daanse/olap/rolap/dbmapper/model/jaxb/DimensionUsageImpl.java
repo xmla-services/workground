@@ -14,6 +14,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -23,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DimensionUsage", propOrder = {})
+@XmlRootElement(name = "DimensionUsage")
 public class DimensionUsageImpl extends AbstractMainElement implements MappingDimensionUsage {
 
 	@XmlAttribute(name = "source", required = true)

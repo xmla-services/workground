@@ -9,6 +9,8 @@
 
 package mondrian.test.clearview;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -16,6 +18,9 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.test.DiffRepository;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * <code>MiscTest</code> is a test suite which tests miscellaneous
@@ -48,6 +53,14 @@ public class MiscTest extends ClearViewBase {
             diffRepos.setCurrentTestCaseName(name);
             super.runTest(context);
         }
+    }
+
+    @Override
+    protected Optional<Function<MappingSchema, RDbMappingSchemaModifier>> getModifier(String currentTestCaseName) {
+        if (currentTestCaseName.equals("testSolveOrder")) {
+            return Optional.of(MiscTestModifier::new);
+        }
+        return Optional.empty();
     }
 
 }

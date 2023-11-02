@@ -8019,7 +8019,7 @@ public class SchemaModifiers {
                 result.add(CalculatedMemberRBuilder.builder()
                     .dimension("Measures")
                     .name("EXP2")
-                    .formula("IIf(0 &#60; [Measures].[EXP2_4], [Measures].[EXP2_4], NULL)")
+                    .formula("IIf(0 < [Measures].[EXP2_4], [Measures].[EXP2_4], NULL)")
                     .build());
             }
             return result;
@@ -11604,7 +11604,7 @@ public class SchemaModifiers {
                         .foreignKey("customer_id")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
-                                .hasAll(true)
+                                .hasAll(false)
                                 .primaryKey("customer_id")
                                 .relation(new TableR("customer"))
                                 .levels(List.of(

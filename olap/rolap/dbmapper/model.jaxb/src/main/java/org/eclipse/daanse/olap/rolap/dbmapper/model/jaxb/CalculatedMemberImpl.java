@@ -17,6 +17,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
@@ -30,6 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedMember", propOrder = { "calculatedMemberProperties", "cellFormatter", "formulaElement" })
+@XmlRootElement(name = "CalculatedMember")
 public class CalculatedMemberImpl extends AbstractMainElement implements MappingCalculatedMember {
 
 	@XmlAttribute(name = "formula")
