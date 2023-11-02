@@ -9,6 +9,8 @@
 
 package mondrian.test.clearview;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -16,6 +18,9 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.test.DiffRepository;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * <code>HangerDimensionTest</code> tests the extended syntax of Order
@@ -48,9 +53,13 @@ class HangerDimensionTest extends ClearViewBase {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);
-            diffRepos.setCurrentTestCaseName(name);            
+            diffRepos.setCurrentTestCaseName(name);
             super.runTest(context);
         }
+    }
+
+    protected Optional<Function<MappingSchema, RDbMappingSchemaModifier>> getModifier(String currentTestCaseName) {
+        return Optional.of(HangerDimensionTestModifiers.HangerDimensionTestModifier1::new);
     }
 
 }

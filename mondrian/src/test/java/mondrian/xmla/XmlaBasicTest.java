@@ -51,6 +51,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
 import mondrian.tui.XmlUtil;
@@ -379,6 +380,7 @@ class XmlaBasicTest extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMDFunction(TestContextWrapper context) throws Exception {
+    	RolapSchemaPool.instance().clear();
         String requestType = "MDSCHEMA_FUNCTIONS";
         String restrictionName = "FUNCTION_NAME";
         String restrictionValue = "Item";

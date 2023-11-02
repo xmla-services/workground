@@ -9,24 +9,21 @@
 */
 package mondrian.xmla.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
-import java.util.Properties;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Util;
+import mondrian.olap.Util.PropertyList;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.server.StringRepositoryContentFinder;
+import mondrian.xmla.Enumeration;
+import mondrian.xmla.XmlaHandler;
+import mondrian.xmla.XmlaRequest;
+import mondrian.xmla.XmlaResponse;
+import mondrian.xmla.XmlaUtil;
+import mondrian.xmla.impl.DefaultXmlaRequest;
+import mondrian.xmla.impl.DefaultXmlaResponse;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -40,19 +37,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlunit.matchers.CompareMatcher;
 
-import mondrian.olap.MondrianServer;
-import mondrian.olap.Util;
-import mondrian.olap.Util.PropertyList;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.server.StringRepositoryContentFinder;
-import mondrian.xmla.Enumeration;
-import mondrian.xmla.XmlaHandler;
-import mondrian.xmla.XmlaRequest;
-import mondrian.xmla.XmlaResponse;
-import mondrian.xmla.XmlaUtil;
-import mondrian.xmla.impl.DefaultXmlaRequest;
-import mondrian.xmla.impl.DefaultXmlaResponse;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Unit test for refined Mondrian's XML for Analysis API (package
@@ -101,7 +97,7 @@ class XmlaTest{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(TestContextWrapper context,ResourceTestCase testCase) throws Exception {
-    	java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+    	//java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
 
     	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
 

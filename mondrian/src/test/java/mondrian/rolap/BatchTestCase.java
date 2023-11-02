@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.upgradeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -23,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
@@ -34,8 +37,11 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.slf4j.LoggerFactory;
 
@@ -713,6 +719,17 @@ public class BatchTestCase{
         return request;
     }
 
+    protected void updateSchemaIfNeed(TestContext context, String currentTestCaseName){
+        Optional<Function<MappingSchema, RDbMappingSchemaModifier>> oModifier = getModifier(currentTestCaseName);
+        if (oModifier.isPresent()) {
+            withSchema(context, oModifier.get());
+        }
+    }
+
+    protected Optional<Function<MappingSchema, RDbMappingSchemaModifier>> getModifier(String currentTestCaseName) {
+        return Optional.empty();
+    }
+
     static CellRequestConstraint makeConstraintYearQuarterMonth(
         List<String[]> values)
     {
@@ -1252,6 +1269,7 @@ public class BatchTestCase{
             this.executeSql = true;
         }
     }
+
 }
 
 // End BatchTestCase.java
