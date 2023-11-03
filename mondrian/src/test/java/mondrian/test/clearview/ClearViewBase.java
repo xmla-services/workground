@@ -76,6 +76,7 @@ import mondrian.test.SqlPattern;
     protected void runTest(TestContextWrapper context) {
             DiffRepository diffRepos = getDiffRepos();
             // add calculated member to a cube if specified in the xml file
+            /*
             String cubeName = diffRepos.expand(null, "${modifiedCubeName}").trim();
             if (!(cubeName.equals("")
                     || cubeName.equals("${modifiedCubeName}"))) {
@@ -108,6 +109,8 @@ import mondrian.test.SqlPattern;
                         namedSets, false));
 
             }
+             */
+             updateSchemaIfNeed(context.getContext(), diffRepos.getCurrentTestCaseName(true));
 
             // Set some properties to match the way we configure them
             // for ClearView.

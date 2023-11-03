@@ -540,10 +540,11 @@ class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {
+    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {    
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
+        RolapSchemaPool.instance().clear();
         // [dimension].members for a dimension with multiple hierarchies
         // SSAS2005 gives error:
         //    Query (1, 8) The 'Time' dimension contains more than one
@@ -981,7 +982,7 @@ class Ssas2005CompatibilityTest {
             null));
          */
     	withSchema(context, SchemaModifiers.Ssas2005CompatibilityTestModifier1::new);
-    	
+
         assertQueryReturns(context.getConnection(),
             "select [Store Type 2.Store Type 2].[Store Type].members ON columns "
             + "from [Sales] where [Time].[1997]",
@@ -1791,10 +1792,7 @@ class Ssas2005CompatibilityTest {
              + " </Hierarchy>\n"
              + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Ssas2005CompatibilityTestModifier2(schema)));
-
+        withSchema(context.getContext(), SchemaModifiers.Ssas2005CompatibilityTestModifier2::new);
         org.olap4j.metadata.Member member = context.createOlap4jConnection()
             .getOlapSchema().getCubes().get("Sales").getDimensions()
             .get("SameName").getHierarchies().get("SameName").getLevels()
@@ -1837,7 +1835,7 @@ class Ssas2005CompatibilityTest {
     {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
-    	prepareContext(context);
+    	//prepareContext(context);
     	/*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
@@ -1850,7 +1848,7 @@ class Ssas2005CompatibilityTest {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"));
     	 */
-    	withSchema(context.getContext(), SchemaModifiers.Ssas2005CompatibilityTestModifier3::new); 
+    	withSchema(context.getContext(), SchemaModifiers.Ssas2005CompatibilityTestModifier3::new);
         assertAxisReturns(context.getContext().getConnection(),
             "head(\n"
             + "  filter(\n"

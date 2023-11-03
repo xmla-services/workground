@@ -173,7 +173,6 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .allMemberName("All Markets")
         .hasAll(true)
         .primaryKey("CUSTOMERNUMBER")
-        .primaryKeyTable("")
         .relation(TABLE_1)
         .levels(List.of(LEVEL_1_1, LEVEL_1_2, LEVEL_1_3, LEVEL_1_4))
         .build();
@@ -190,7 +189,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .hasAll(true)
         .allMemberName("All Products")
         .primaryKey("PRODUCTCODE")
-        .primaryKeyTable("product")
+        .primaryKeyTable("products")
         .caption("")
         .relation(TABLE_3)
         .levels(List.of(LEVEL_3_1, LEVEL_3_2, LEVEL_3_3))

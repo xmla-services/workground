@@ -147,6 +147,7 @@ import static org.opencube.junit5.TestUtil.checkThrowable;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 //import org.apache.logging.log4j.spi.LoggerContext;
 
@@ -232,7 +233,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSolveOrderInCalculatedMember(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestSolveOrderInCalculatedMemberModifier extends RDbMappingSchemaModifier{
             public TestSolveOrderInCalculatedMemberModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -289,11 +289,7 @@ class SchemaTest {
             	return cm;
             }
         }
-        context
-            .setDatabaseMappingSchemaProviders(
-                List.of(new TestSolveOrderInCalculatedMemberModifier(
-                    context.getDatabaseMappingSchemaProviders().get(0).get())));
-
+        withSchema(context, TestSolveOrderInCalculatedMemberModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[QuantumProfit]} on 0, {(Gender.foo)} on 1 from sales",
             "Axis #0:\n"
@@ -308,7 +304,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyDefaultMember(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyDefaultMemberModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -357,8 +352,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyDefaultMemberModifier(schema)));
+        withSchema(context, TestHierarchyDefaultMemberModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Gender with default]} on columns from [Sales]",
             "Axis #0:\n"
@@ -376,7 +370,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMemberName(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDefaultMemberNameModifier extends RDbMappingSchemaModifier {
             public TestDefaultMemberNameModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -456,8 +449,7 @@ class SchemaTest {
             + "  </Dimension>\n"));
         */
         // note that default member name has no 'all' and has a name not an id
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMemberNameModifier(schema)));
+        withSchema(context, TestDefaultMemberNameModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Product with no all]} on columns from [Sales]",
             "Axis #0:\n"
@@ -470,7 +462,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyAbbreviatedDefaultMember(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyAbbreviatedDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyAbbreviatedDefaultMemberModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -519,8 +510,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyAbbreviatedDefaultMemberModifier(schema)));
+        withSchema(context, TestHierarchyAbbreviatedDefaultMemberModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Gender with default]} on columns from [Sales]",
             "Axis #0:\n"
@@ -535,7 +525,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNoLevelsFails(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyNoLevelsFailsModifier extends RDbMappingSchemaModifier {
             public TestHierarchyNoLevelsFailsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -572,8 +561,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyNoLevelsFailsModifier(schema)));
+        withSchema(context, TestHierarchyNoLevelsFailsModifier::new);
         assertQueryThrows(context,
             "select {[Gender no levels]} on columns from [Sales]",
             "Hierarchy '[Gender no levels]' must have at least one level.");
@@ -582,7 +570,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNonUniqueLevelsFails(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyNonUniqueLevelsFailsModifier extends RDbMappingSchemaModifier {
             public TestHierarchyNonUniqueLevelsFailsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -634,8 +621,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyNonUniqueLevelsFailsModifier(schema)));
+        withSchema(context, TestHierarchyNonUniqueLevelsFailsModifier::new);
         assertQueryThrows(context,
             "select {[Gender dup levels]} on columns from [Sales]",
             "Level names within hierarchy '[Gender dup levels]' are not unique; there is more than one level with name 'Gender'.");
@@ -647,7 +633,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCountMeasure(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCountMeasureModifier extends RDbMappingSchemaModifier {
             public TestCountMeasureModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -674,8 +659,7 @@ class SchemaTest {
             null,
             "<Measure name=\"Fact Count\" aggregator=\"count\"/>\n"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCountMeasureModifier(schema)));
+        withSchema(context, TestCountMeasureModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Fact Count], [Measures].[Unit Sales]} on 0,\n"
             + "[Gender].members on 1\n"
@@ -2665,13 +2649,13 @@ class SchemaTest {
                             .builder()
                             .name("Supply Time")
                             .column("supply_time")
-                            .aggregator("sum")                            
+                            .aggregator("sum")
                             .build(),
                             MeasureRBuilder
                             .builder()
                             .name("Warehouse Cost")
                             .column("warehouse_cost")
-                            .aggregator("sum")                            
+                            .aggregator("sum")
                             .build()
                     ))
                     .build();

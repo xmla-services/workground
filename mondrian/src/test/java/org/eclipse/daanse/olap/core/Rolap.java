@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
@@ -37,11 +38,12 @@ class Rolap {
 		DataSource ds = mock(DataSource.class);
 
 		Context ctx = mock(Context.class);
-
+		Dialect dialect = mock(Dialect.class);
 		FoodMartRecordDbMappingSchemaProvider fsp = new FoodMartRecordDbMappingSchemaProvider();
 
 		when(ctx.getDatabaseMappingSchemaProviders()).thenReturn(List.of(fsp));
 		when(ctx.getDataSource()).thenReturn(ds);
+		when(ctx.getDialect()).thenReturn(dialect);
 
 		new RolapSchema(schemaKey, list, ctx);
 

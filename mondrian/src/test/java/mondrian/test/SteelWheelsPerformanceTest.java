@@ -9,16 +9,16 @@
 
 package mondrian.test;
 
-import static org.opencube.junit5.TestUtil.executeQuery;
-
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.opencube.junit5.TestUtil.executeQuery;
 
 /**
  * Those performance tests use the steel wheels schema
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * They must be deactivated by default.
  * @author LBoudreau
  */
-class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
+class SteelWheelsPerformanceTest {
     /**
      * Certain tests are enabled only if logging is enabled.
      */
@@ -41,11 +41,7 @@ class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    void testComplexFilters(TestContextWrapper context) throws Exception {
-        if (!LOGGER.isDebugEnabled()) {
-            return;
-        }
-        getTestContext(context);
+    void testComplexFilters(TestContext context) throws Exception {
         final String query =
             "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Product], NonEmptyCrossJoin([*BASE_MEMBERS_Markets], NonEmptyCrossJoin([*BASE_MEMBERS_Customers], NonEmptyCrossJoin([*BASE_MEMBERS_Time], [*BASE_MEMBERS_Order Status]))))'\n"
             + "  set [*METRIC_CJ_SET] as 'Filter(Filter([*NATIVE_CJ_SET], (([Measures].[*Sales_SEL~AGG] > 0.0) AND ([Measures].[*Quantity_SEL~AGG] > 0.0))), (NOT IsEmpty([Measures].[Quantity])))'\n"
@@ -92,7 +88,7 @@ class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
             + "from [SteelWheelsSales]\n"
             + "where ([Time].[*SLICER_MEMBER], [Order Status].[*SLICER_MEMBER])\n";
         long start = System.currentTimeMillis();
-        executeQuery(context.createConnection(), query);
+        executeQuery(context.getConnection(), query);
         printDuration("Complex filters query performance", start);
     }
 

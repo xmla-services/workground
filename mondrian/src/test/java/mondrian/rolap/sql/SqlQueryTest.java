@@ -704,7 +704,6 @@ class SqlQueryTest  extends BatchTestCase {
                 loadSqlLucidDB)
         };
 
-        RolapSchemaPool.instance().clear();
         class TestDoubleInListModifier extends RDbMappingSchemaModifier {
 
             public TestDoubleInListModifier(MappingSchema mappingSchema) {
@@ -771,8 +770,7 @@ class SqlQueryTest  extends BatchTestCase {
                 null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDoubleInListModifier(schema)));
+        withSchema(context, TestDoubleInListModifier::new);
         assertQuerySql(context.getConnection(), query, patterns);
     }
 
@@ -853,7 +851,6 @@ class SqlQueryTest  extends BatchTestCase {
                 MYSQL, forbiddenSqlMysql, null)
         };
 
-        RolapSchemaPool.instance().clear();
         class TestApproxRowCountOverridesCountModifier extends RDbMappingSchemaModifier {
 
             public TestApproxRowCountOverridesCountModifier(MappingSchema mappingSchema) {
@@ -910,8 +907,7 @@ class SqlQueryTest  extends BatchTestCase {
                 null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestApproxRowCountOverridesCountModifier(schema)));
+        withSchema(context, TestApproxRowCountOverridesCountModifier::new);
         assertQuerySqlOrNot(
         	context.getConnection(),
             mdxQuery,
@@ -928,7 +924,6 @@ class SqlQueryTest  extends BatchTestCase {
         prepareContext(connection);
         final String mdx =
             "select NON EMPTY { [Store].[Store].[Store State].members } on 0 from [Sales]";
-        RolapSchemaPool.instance().clear();
         class TestLimitedRollupMemberRetrievableFromCacheModifier extends RDbMappingSchemaModifier {
 
             public TestLimitedRollupMemberRetrievableFromCacheModifier(MappingSchema mappingSchema) {
@@ -1039,9 +1034,7 @@ class SqlQueryTest  extends BatchTestCase {
             null,
             null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SqlQueryTestModifier(schema)));
+        withSchema(context.getContext(), SchemaModifiers.SqlQueryTestModifier::new);
         String mdx = "select measures.[avg sales] on 0 from sales"
                        + " where { time.[1997].q1, time.[1997].q2.[4] }";
         assertQueryReturns(context.createConnection(),

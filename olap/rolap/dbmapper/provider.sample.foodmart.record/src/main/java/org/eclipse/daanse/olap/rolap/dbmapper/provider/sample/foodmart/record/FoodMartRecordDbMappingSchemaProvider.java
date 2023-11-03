@@ -1895,8 +1895,8 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .fact(CUBE3_TABLE)
         .dimensionUsageOrDimensions(List.of(
             DIMENSION_3_1,
-            DIMENSION_3_2,
-            DIMENSION_USAGE_3_1))
+            DIMENSION_USAGE_3_1,
+            DIMENSION_3_2))
         .measures(List.of(
             MEASURE_3_1,
             MEASURE_3_2))
@@ -1932,19 +1932,19 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
             MEASURE_5_4,
             MEASURE_5_5))
         .dimensionUsageOrDimensions(List.of(
-            DIMENSION_5_1,
-            DIMENSION_5_2,
-            DIMENSION_5_3,
-            DIMENSION_5_4,
-            DIMENSION_5_5,
-            DIMENSION_5_6,
-            DIMENSION_5_7,
-            DIMENSION_5_8,
-            DIMENSION_5_9,
-            DIMENSION_USAGE_2,
-            DIMENSION_USAGE_3,
-            DIMENSION_USAGE_4,
-            DIMENSION_USAGE_5))
+            DIMENSION_5_1, //Story
+            DIMENSION_5_2, //Geography
+            DIMENSION_USAGE_2, //Store Size in SQFT
+            DIMENSION_USAGE_3, // Store Type
+            DIMENSION_USAGE_4, // Time
+            DIMENSION_USAGE_5, //Product
+            DIMENSION_5_3, //Promotion Media
+            DIMENSION_5_4, //Promotion
+            DIMENSION_5_5, //Customers
+            DIMENSION_5_6, //Education Level
+            DIMENSION_5_7, //Gender
+            DIMENSION_5_8, //Marital Status
+            DIMENSION_5_9)) //Yearly Income
         .build();
     private static final CubeR CUBE_6 = CubeRBuilder
         .builder()

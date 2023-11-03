@@ -78,6 +78,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests mondrian's olap4j API.
@@ -628,7 +629,6 @@ class Olap4jTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1353(TestContextWrapper context) throws Exception {
-        RolapSchemaPool.instance().clear();
         class TestMondrian1353Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1353Modifier(MappingSchema mappingSchema) {
@@ -696,8 +696,7 @@ class Olap4jTest {
             null);
         withSchema(context,schema);
         */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestMondrian1353Modifier(schema)));
+        withSchema(context.getContext(), TestMondrian1353Modifier::new);
         final Member defaultMember =
             context.createOlap4jConnection()
                 .getOlapSchema()
@@ -765,9 +764,7 @@ class Olap4jTest {
                 null,
                 "<CalculatedMember name='H1 1997' formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' dimension='Time' />"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.Olap4jTestModifier(schema)));
+        withSchema(context.getContext(), SchemaModifiers.Olap4jTestModifier::new);
         final OlapConnection testContext = context.createOlap4jConnection();
         final Cube cube = testContext.getOlapSchema().getCubes().get("Sales");
         final List<Measure> measureList = cube.getMeasures();

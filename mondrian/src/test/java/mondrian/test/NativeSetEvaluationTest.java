@@ -63,6 +63,7 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test native evaluation of supported set operations.
@@ -1085,7 +1086,6 @@ protected void assertQuerySql(Connection connection,
         + "Mouthwash]}\n"
         + "Row #0: 51.60\n"
         + "Row #1: 28.96\n";
-      RolapSchemaPool.instance().clear();
       class TestMultipleAllWithInExprModifier extends RDbMappingSchemaModifier {
 
           public TestMultipleAllWithInExprModifier(MappingSchema mappingSchema) {
@@ -1201,8 +1201,7 @@ protected void assertQuerySql(Connection connection,
         null );
     withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestMultipleAllWithInExprModifier(schema)));
+      withSchema(context, TestMultipleAllWithInExprModifier::new);
     assertQueryReturns(context.getConnection(),
       mdx,
       result );
@@ -1573,7 +1572,6 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeVirtualRestrictedSet(TestContextWrapper context) throws Exception {
-      RolapSchemaPool.instance().clear();
       class TestNativeVirtualRestrictedSetModifier extends RDbMappingSchemaModifier {
 
           public TestNativeVirtualRestrictedSetModifier(MappingSchema mappingSchema) {
@@ -1645,8 +1643,7 @@ protected void assertQuerySql(Connection connection,
     withSchema(context, schema);
     */
     withRole(context, "F-MIS-BE-CLIENT" );
-    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-    context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestNativeVirtualRestrictedSetModifier(schema)));
+    withSchema(context.getContext(), TestNativeVirtualRestrictedSetModifier::new);
     Result result = executeQuery(
       "With\n"
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Store],[*BASE_MEMBERS_Warehouse])'\n"

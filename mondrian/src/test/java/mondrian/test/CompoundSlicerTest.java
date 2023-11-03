@@ -9,28 +9,24 @@
 */
 package mondrian.test;
 
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.List;
-
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync
@@ -236,9 +232,7 @@ class CompoundSlicerTest {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales", null, xmlMeasure, null, null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.CompoundSlicerTestModifier1::new);
 
         // the cell formatter for the measure should still be used
         assertQueryReturns(context.getConnection(),
@@ -807,9 +801,7 @@ class CompoundSlicerTest {
                 null,
                 null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.CompoundSlicerTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.CompoundSlicerTestModifier2::new);
         // basic query with avg
         assertQueryReturns(context.getConnection(),
                 "select from [Sales]\n"

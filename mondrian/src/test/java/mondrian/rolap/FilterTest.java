@@ -1311,8 +1311,8 @@ class FilterTest extends BatchTestCase {
     Connection connection = context.getConnection();
     assertQuerySqlOrNot(connection, mdx, badPatterns, true, true, true );
     TestUtil.flushSchemaCache(connection);
-    assertQuerySqlOrNot(context.getConnection(), mdx, goodPatterns, false, true, true );
-    assertQueryReturns(context.getConnection(),
+    assertQuerySqlOrNot(connection, mdx, goodPatterns, false, true, true );
+    assertQueryReturns(connection,
       mdx,
       "Axis #0:\n"
         + "{}\n"
