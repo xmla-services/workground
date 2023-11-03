@@ -229,7 +229,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithAggFlatSet(TestContextWrapper context) {
+  void testNativeTopCountWithAggFlatSet(TestContext context) {
     // Note: changed mdx and expected as a part of the fix for MONDRIAN-2202
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
@@ -249,7 +249,7 @@ protected void assertQuerySql(Connection connection,
         + "NON EMPTY {[Measures].[Store Sales], Measures.x1, Measures.x2, Measures.x3} ON 0\n"
         + "FROM [Sales] where [Time.Weekly].x";
 
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     SqlPattern mysqlPattern = useAgg
       ? new SqlPattern(
@@ -261,9 +261,9 @@ protected void assertQuerySql(Connection connection,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(), mdx, NativeTopCountWithAgg.result );
+    assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
   }
 
   /**
@@ -271,7 +271,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithAggMemberNamedSet(TestContextWrapper context) {
+  void testNativeTopCountWithAggMemberNamedSet(TestContext context) {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -285,7 +285,7 @@ protected void assertQuerySql(Connection connection,
         + " SELECT NON EMPTY products ON 1,\n"
         + "NON EMPTY {[Measures].[Store Sales], Measures.x1, Measures.x2, Measures.x3} ON 0\n"
         + "FROM [Sales] where [Time.Weekly].x";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     SqlPattern mysqlPattern = useAgg ? new SqlPattern(
       DatabaseProduct.MYSQL,
@@ -297,14 +297,14 @@ protected void assertQuerySql(Connection connection,
       NativeTopCountWithAgg.getMysql(connection));
     if ( propSaver.properties.EnableNativeTopCount.get()
       && propSaver.properties.EnableNativeNonEmpty.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(), mdx, NativeTopCountWithAgg.result );
+    assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithAggDescendants(TestContextWrapper context) {
+  void testNativeFilterWithAggDescendants(TestContext context) {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -365,7 +365,7 @@ protected void assertQuerySql(Connection connection,
         + ( useAgg ? "    (sum(`agg_c_14_sales_fact_1997`.`store_sales`) > 700)\n"
         : "    (sum(`sales_fact_1997`.`store_sales`) > 700)\n" )
         + "order by\n"
-        + (getDialect(context.createConnection()).requiresOrderByAlias()
+        + (getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
         + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -387,9 +387,9 @@ protected void assertQuerySql(Connection connection,
         mysqlQuery );
     if ( propSaver.properties.EnableNativeFilter.get()
       && propSaver.properties.EnableNativeNonEmpty.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[x]}\n"
@@ -413,7 +413,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithMemberOnlySlicer(TestContextWrapper context) {
+  void testNativeTopCountWithMemberOnlySlicer(TestContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -477,7 +477,7 @@ protected void assertQuerySql(Connection connection,
         + "    `product_class`.`product_department`,\n"
         + "    `product_class`.`product_category`\n"
         + "order by\n"
-        + (getDialect(context.createConnection()).requiresOrderByAlias()
+        + (getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c3` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
@@ -497,9 +497,9 @@ protected void assertQuerySql(Connection connection,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[Slicer], [Store Type].[Slicer]}\n"
@@ -517,7 +517,7 @@ protected void assertQuerySql(Connection connection,
   @Disabled("disabled for CI build") //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithParenthesesMemberSlicer(TestContextWrapper context) {
+  void testNativeTopCountWithParenthesesMemberSlicer(TestContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
 
     final boolean useAggregates =
@@ -582,7 +582,7 @@ protected void assertQuerySql(Connection connection,
         + "    `product_class`.`product_department`,\n"
         + "    `product_class`.`product_category`\n"
         + "order by\n"
-        + (getDialect(context.createConnection()).requiresOrderByAlias()
+        + (getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c3` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
@@ -602,10 +602,10 @@ protected void assertQuerySql(Connection connection,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      context.createConnection().getCacheControl(null).flushSchemaCache();
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      context.getConnection().getCacheControl(null).flushSchemaCache();
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[Slicer], [Store Type].[Slicer]}\n"
@@ -622,7 +622,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithMemberSumSlicer(TestContextWrapper context) {
+  void testNativeTopCountWithMemberSumSlicer(TestContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -687,7 +687,7 @@ protected void assertQuerySql(Connection connection,
         + "    `product_class`.`product_department`,\n"
         + "    `product_class`.`product_category`\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c3` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
@@ -707,9 +707,9 @@ protected void assertQuerySql(Connection connection,
           DatabaseProduct.MYSQL,
           mysqlQuery,
           mysqlQuery.indexOf( "(" ) );
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[Slicer], [Store Type].[Slicer]}\n"
@@ -725,7 +725,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggTCNoExplicitMeasure(TestContextWrapper context) {
+  void testAggTCNoExplicitMeasure(TestContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final String mdx =
       "WITH\n"
@@ -735,7 +735,7 @@ protected void assertQuerySql(Connection connection,
         + "  SELECT NON EMPTY [Measures].[Unit Sales] on 0,\n"
         + "    TC ON 1 \n"
         + "  FROM [Sales] WHERE [Store Type].[Slicer]\n";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Store Type].[Slicer]}\n"
@@ -748,13 +748,13 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggTCTwoArg(TestContextWrapper context) {
+  void testAggTCTwoArg(TestContext context) {
     // will throw an error if native eval is not used
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     // native should be used and Canada/Mexico should be returned
     // even though Canada and Mexico have no associated data.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select TopCount(Customers.Country.members, 2) "
         + "on 0 from Sales",
       "Axis #0:\n"
@@ -765,7 +765,7 @@ protected void assertQuerySql(Connection connection,
         + "Row #0: \n"
         + "Row #0: \n" );
     // TopCount should return in natural order, not order of measure val
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select TopCount(Product.Drink.Children, 2) "
         + "on 0 from Sales",
       "Axis #0:\n"
@@ -779,13 +779,13 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggTCTwoArgWithCrossjoinedSet(TestContextWrapper context) {
+  void testAggTCTwoArgWithCrossjoinedSet(TestContext context) {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       executeQuery(
         "select TopCount( CrossJoin(Gender.Gender.members, Product.Drink.Children), 2) "
@@ -799,13 +799,13 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggTCTwoArgWithCalcMemPresent(TestContextWrapper context) {
+  void testAggTCTwoArgWithCalcMemPresent(TestContext context) {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       executeQuery(
         "with member Gender.foo as '1'"
@@ -824,7 +824,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCJSameDimAsSlicerNamedSet(TestContextWrapper context) {
+  void testCJSameDimAsSlicerNamedSet(TestContext context) {
     String mdx =
       "WITH\n"
         + "SET ST AS 'TopCount([Store Type].[Store Type].CurrentMember, 5)'\n"
@@ -835,7 +835,7 @@ protected void assertQuerySql(Connection connection,
         + "SELECT NON EMPTY [Measures].[Unit Sales] on 0,\n"
         + "  NON EMPTY TOP_COUNTRY ON 1 \n"
         + "FROM [Sales] WHERE [Product].[Top Drinks]";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Product].[Top Drinks]}\n"
@@ -851,7 +851,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testLoopDetection(TestContextWrapper context) {
+  void testLoopDetection(TestContext context) {
     // Note that this test will fail if the query below is executed
     // non-natively, or if the level.members expressions are replaced
     // with enumerated sets.
@@ -870,7 +870,7 @@ protected void assertQuerySql(Connection connection,
         + "  SELECT NON EMPTY [Measures].[Unit Sales] on 0,\n"
         + "    TC ON 1 \n"
         + "  FROM [Sales] where [Time].[Slicer]\n";
-    assertQueryThrows(context.createConnection(), mdx, "evaluating itself" );
+    assertQueryThrows(context.getConnection(), mdx, "evaluating itself" );
   }
 
   /**
@@ -878,7 +878,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSlicerTuplesPartialCrossJoin(TestContextWrapper context) {
+  void testSlicerTuplesPartialCrossJoin(TestContext context) {
     final String mdx =
       "with\n"
         + "set TSET as {NonEmptyCrossJoin({[Time].[1997].[Q1], [Time].[1997].[Q2]}, {[Store Type].[Supermarket]}),\n"
@@ -904,7 +904,7 @@ protected void assertQuerySql(Connection connection,
         + "Row #0: 372.36\n"
         + "Row #1: 365.20\n";
 
-    assertQueryReturns(context.createConnection(), mdx, result );
+    assertQueryReturns(context.getConnection(), mdx, result );
   }
 
   /**
@@ -912,7 +912,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSlicerTuplesFullCrossJoin(TestContextWrapper context) {
+  void testSlicerTuplesFullCrossJoin(TestContext context) {
     if ( !MondrianProperties.instance().EnableNativeCrossJoin.get()
       && !Bug.BugMondrian2452Fixed ) {
       // The NonEmptyCrossJoin in the TSET named set below returns
@@ -945,7 +945,7 @@ protected void assertQuerySql(Connection connection,
         + "Row #0: 460.02\n"
         + "Row #1: 420.74\n";
 
-    assertQueryReturns(context.createConnection(), mdx, result );
+    assertQueryReturns(context.getConnection(), mdx, result );
   }
 
   /**
@@ -954,7 +954,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountWithAggregatedMemberAggStar(TestContextWrapper context) {
+  void testTopCountWithAggregatedMemberAggStar(TestContext context) {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -1000,7 +1000,7 @@ protected void assertQuerySql(Connection connection,
         + "    `product_class`.`product_family`,\n"
         + "    `product_class`.`product_department`\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c2` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC"
@@ -1015,11 +1015,11 @@ protected void assertQuerySql(Connection connection,
         mysql );
 
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      context.createConnection().getCacheControl(null).flushSchemaCache();
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      context.getConnection().getCacheControl(null).flushSchemaCache();
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time.Weekly].[x]}\n"
@@ -1097,11 +1097,11 @@ protected void assertQuerySql(Connection connection,
               List<MappingCube> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
               result.add(CubeRBuilder.builder()
-                  .name("AltStore")
+                  .name("3StoreHCube")
                   .fact(new TableR("sales_fact_1997"))
                   .dimensionUsageOrDimensions(List.of(
                       PrivateDimensionRBuilder.builder()
-                          .name("Cities")
+                          .name("AltStore")
                           .foreignKey("store_id")
                           .hierarchies(List.of(
                               HierarchyRBuilder.builder()
@@ -1209,7 +1209,7 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCompoundSlicerNativeEval(TestContextWrapper context) {
+  void testCompoundSlicerNativeEval(TestContext context) {
     // MONDRIAN-1404
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1257,7 +1257,7 @@ protected void assertQuerySql(Connection connection,
         + "    `customer`.`education`,\n"
         + "    `customer`.`yearly_income`\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c1`) ASC, `c1` ASC"
         :
         "    ISNULL(CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)) ASC, CONCAT(`customer`.`fname`, ' ', "
@@ -1269,10 +1269,10 @@ protected void assertQuerySql(Connection connection,
         mysql );
 
     if ( propSaver.properties.EnableNativeNonEmpty.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[1997].[Q1]}\n"
@@ -1297,7 +1297,7 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testSnowflakeDimInSlicerBug1407(TestContextWrapper context) {
+  void testSnowflakeDimInSlicerBug1407(TestContext context) {
     // MONDRIAN-1407
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1352,7 +1352,7 @@ protected void assertQuerySql(Connection connection,
         + "    `customer`.`education`,\n"
         + "    `customer`.`yearly_income`\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c10` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
@@ -1371,10 +1371,10 @@ protected void assertQuerySql(Connection connection,
         mysql );
 
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[1997], [Product].[Drink]}\n"
@@ -1394,7 +1394,7 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testCompoundSlicerNonUniqueMemberNames1413(TestContextWrapper context) {
+  void testCompoundSlicerNonUniqueMemberNames1413(TestContext context) {
     // MONDRIAN-1413
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1446,7 +1446,7 @@ protected void assertQuerySql(Connection connection,
         + "    `customer`.`education`,\n"
         + "    `customer`.`yearly_income`\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    `c10` DESC,\n"
         + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
@@ -1465,10 +1465,10 @@ protected void assertQuerySql(Connection connection,
         mysql );
 
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+      assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time.Weekly].[1997].[48].[17]}\n"
@@ -1490,9 +1490,9 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testConstraintCacheIncludesMultiPositionSlicer(TestContextWrapper context) {
+  void testConstraintCacheIncludesMultiPositionSlicer(TestContext context) {
     // MONDRIAN-2081
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select non empty [Customers].[USA].[WA].[Spokane].children  on 0, "
         + "Time.[1997].[Q1].[1] * [Store].[USA].[WA].[Spokane] * Gender.F * [Marital Status].M on 1 from sales where\n"
         + "{[Product].[Food].[Snacks].[Candy].[Gum].[Atomic].[Atomic Bubble Gum],\n"
@@ -1507,7 +1507,7 @@ protected void assertQuerySql(Connection connection,
         + "{[Time].[1997].[Q1].[1], [Store].[USA].[WA].[Spokane], [Gender].[F], [Marital Status].[M]}\n"
         + "Row #0: 4\n"
         + "Row #0: 3\n" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select non empty [Customers].[USA].[WA].[Spokane].children on 0, "
         + "Time.[1997].[Q1].[1] * [Store].[USA].[WA].[Spokane] * Gender.F *"
         + "[Marital Status].M on 1 from sales where "
@@ -1796,13 +1796,13 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithCompoundSlicer(TestContextWrapper context) {
+  void testNativeFilterWithCompoundSlicer(TestContext context) {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] "
         + "> 1000))'\n"
         + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 \n"
         + "FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[1997].[Q1]}\n"
@@ -1816,7 +1816,7 @@ protected void assertQuerySql(Connection connection,
         + "Row #0: 10,152\n"
         + "Row #1: 90,413\n"
         + "Row #2: 23,813\n" );
-    context.createConnection().getCacheControl(null).flushSchemaCache();
+    context.getConnection().getCacheControl(null).flushSchemaCache();
     if ( !MondrianProperties.instance().EnableNativeFilter.get() ) {
       return;
     }
@@ -1853,7 +1853,7 @@ protected void assertQuerySql(Connection connection,
       + "having\n"
       + "    (sum(`sales_fact_1997`.`unit_sales`) > 1000)\n"
       + "order by\n"
-      + ( getDialect(context.createConnection()).requiresOrderByAlias()
+      + ( getDialect(context.getConnection()).requiresOrderByAlias()
       ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
       + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
       + "    ISNULL(`c2`) ASC, `c2` ASC"
@@ -1888,7 +1888,7 @@ protected void assertQuerySql(Connection connection,
       + "having\n"
       + "    (sum(`agg_c_14_sales_fact_1997`.`unit_sales`) > 1000)\n"
       + "order by\n"
-      + ( getDialect(context.createConnection()).requiresOrderByAlias()
+      + ( getDialect(context.getConnection()).requiresOrderByAlias()
       ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
       + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
       + "    ISNULL(`c2`) ASC, `c2` ASC"
@@ -1897,7 +1897,7 @@ protected void assertQuerySql(Connection connection,
       + "    ISNULL(`store`.`store_city`) ASC, `store`.`store_city` ASC" );
     SqlPattern mysqlPattern =
       new SqlPattern( DatabaseProduct.MYSQL, mysql, null );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
   }
 
   /**
@@ -1905,7 +1905,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testOverridingCompoundFilter(TestContextWrapper context) {
+  void testOverridingCompoundFilter(TestContext context) {
     String mdx =
       "WITH MEMBER [Gender].[All Gender].[NoSlicer] AS '([Product].[All Products], [Time].[1997])', solve_order=1000\n "
         + "MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] <"
@@ -1915,7 +1915,7 @@ protected void assertQuerySql(Connection connection,
         + "WHERE {([Product].[Non-Consumable], [Time].[1997].[Q1]),([Product].[Drink], [Time].[1997].[Q2])}";
 
     //TestContext context = getTestContext().withFreshConnection();
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Product].[Non-Consumable], [Time].[1997].[Q1]}\n"
@@ -1939,7 +1939,7 @@ protected void assertQuerySql(Connection connection,
         + "Gender].[SomeSlicer]} on 1 from [Sales]\n"
         + "WHERE {([Product].[Non-Consumable], [Time].[1997].[Q1]),([Product].[Drink], [Time].[1997].[Q2])}";
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Product].[Non-Consumable], [Time].[1997].[Q1]}\n"
@@ -1958,14 +1958,14 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithCompoundSlicerCJ(TestContextWrapper context) {
+  void testNativeFilterWithCompoundSlicerCJ(TestContext context) {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter( {[Store].[Store City].members},[Measures].[Unit Sales]"
         + " > 1000))'\n"
         + "SELECT [Measures].[TotalVal] ON 0, [Gender].[All Gender].Children on 1 \n"
         + "FROM [Sales]\n"
         + "WHERE CrossJoin({ [Product].[Non-Consumable], [Product].[Drink] }, {[Time].[1997].[Q1],[Time].[1997].[Q2]})";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Product].[Non-Consumable], [Time].[1997].[Q1]}\n"
@@ -1983,14 +1983,14 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterWithDiffLevelCompoundSlicer(TestContextWrapper context) {
+  void testFilterWithDiffLevelCompoundSlicer(TestContext context) {
     // not supported in native, but detected
     // and skipped to regular evaluation
     String mdx =
       "SELECT [Measures].[Unit Sales] ON 0,\n"
         + " Filter({[Store].[Store City].members},[Measures].[Unit Sales] > 10000) on 1 \n"
         + "FROM [Sales] WHERE {[Time].[1997].[Q1], [Time].[1997].[Q2].[4]}";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{[Time].[1997].[Q1]}\n"
@@ -2006,8 +2006,8 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithCompoundSlicer2049(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testNativeFilterWithCompoundSlicer2049(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] < 200))' "
         + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)",
       "Axis #0:\n"
@@ -2025,12 +2025,12 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterTupleCompoundSlicer1861(TestContextWrapper context) {
+  void testNativeFilterTupleCompoundSlicer1861(TestContext context) {
     // Using a slicer list instead of tuples causes slicers with
     // tuples where not all combinations of their members are present to
     // fail when nativized.
     // MondrianProperties.instance().EnableNativeFilter.set(true);
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select [Measures].[Unit Sales] on columns, Filter([Time].[1997].Children, [Measures].[Unit Sales] < 12335) on "
         + "rows from [Sales] where {([Product].[Drink],[Store].[USA].[CA]),([Product].[Food],[Store].[USA].[OR])}",
       "Axis #0:\n"
@@ -2050,7 +2050,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeSetsCacheClearing(TestContextWrapper context) {
+  void testNativeSetsCacheClearing(TestContext context) {
     if ( MondrianProperties.instance().ReadAggregates.get()
       && MondrianProperties.instance().UseAggregates.get() ) {
       return;
@@ -2075,7 +2075,7 @@ protected void assertQuerySql(Connection connection,
       + "having\n"
       + "    (sum(`sales_fact_1997`.`unit_sales`) > 0)\n"
       + "order by\n"
-      + ( getDialect(context.createConnection()).requiresOrderByAlias()
+      + ( getDialect(context.getConnection()).requiresOrderByAlias()
       ? "    ISNULL(`c0`) ASC, `c0` ASC"
       : "    ISNULL(`customer`.`gender`) ASC, `customer`.`gender` ASC" );
 
@@ -2085,7 +2085,7 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         query,
         null );
-    Result rest = executeQuery( mdx, context.createConnection());
+    Result rest = executeQuery( mdx, context.getConnection());
     RolapCube cube = (RolapCube) rest.getQuery().getCube();
     RolapConnection con = (RolapConnection) rest.getQuery().getConnection();
     CacheControl cacheControl = con.getCacheControl( null );
@@ -2098,14 +2098,14 @@ protected void assertQuerySql(Connection connection,
     }
     SqlPattern[] patterns = new SqlPattern[] { mysqlPattern };
     if ( propSaver.properties.EnableNativeFilter.get() ) {
-      assertQuerySqlOrNot(context.createConnection(),
+      assertQuerySqlOrNot(context.getConnection(),
         mdx, patterns, false, false, false );
     }
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithLargeAggSetInSlicer(TestContextWrapper context) {
+  void testNativeFilterWithLargeAggSetInSlicer(TestContext context) {
     final String query = "with member customers.agg as "
       + "'Aggregate(Except(Customers.[Name].members,    "
       + "{[Customers].[USA].[OR].[Corvallis].[Judy Doolittle]}    ))' "
@@ -2114,12 +2114,12 @@ protected void assertQuerySql(Connection connection,
       + " where customers.agg";
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithLargeAggSetInSlicerTwoAggs(TestContextWrapper context) {
+  void testNativeFilterWithLargeAggSetInSlicerTwoAggs(TestContext context) {
     String query = "with \n"
       + "member \n"
       + "[Customers].[agg] as 'Aggregate({[Customers].[Country].Members})'\n"
@@ -2131,12 +2131,12 @@ protected void assertQuerySql(Connection connection,
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate(TestContextWrapper context) {
+  void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate(TestContext context) {
     final String query = "WITH member store.agg as "
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
@@ -2145,7 +2145,7 @@ protected void assertQuerySql(Connection connection,
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest
@@ -2156,9 +2156,7 @@ protected void assertQuerySql(Connection connection,
         "Sales",
         "<DimensionUsage name=\"PurchaseDate\" source=\"Time\" foreignKey=\"time_id\"/>" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NativeSetEvaluationTestModifier(schema)));
+	  withSchema(context.getContext(), SchemaModifiers.NativeSetEvaluationTestModifier::new);
 
       String mdx = ""
       + "with member Measures.q1Sales as '([PurchaseDate].[1997].[Q1], Measures.[Unit Sales])'\n"
@@ -2167,6 +2165,7 @@ protected void assertQuerySql(Connection connection,
     Result result = executeQuery(mdx, context.createConnection());
 
     checkNative(context, mdx, result);
+    RolapSchemaPool.instance().clear();
   }
 
   @ParameterizedTest
@@ -2184,8 +2183,8 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2575(TestContextWrapper context) {
-    assertQueriesReturnSimilarResults(context.createConnection(),
+  void testMondrian2575(TestContext context) {
+    assertQueriesReturnSimilarResults(context.getConnection(),
       String.format(
         "WITH member [Customers].[AggregatePageMembers] AS \n'Aggregate({[Customers].[USA].[CA].[Altadena].[Amy "
           + "Petranoff], [Customers].[USA].[CA].[Altadena].[Arvid Duran]})'\nmember [Measures].[test set] AS "
@@ -2202,9 +2201,9 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testResultLimitInNativeCJ(TestContextWrapper context) {
+  void testResultLimitInNativeCJ(TestContext context) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 400 );
-    assertAxisThrows(context.createConnection(), "NonEmptyCrossjoin({[Product].[All Products].Children}, "
+    assertAxisThrows(context.getConnection(), "NonEmptyCrossjoin({[Product].[All Products].Children}, "
         + "{ [Customers].[Name].members})",
       "exceeded limit (400)" );
   }

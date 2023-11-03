@@ -18,6 +18,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -418,15 +419,15 @@ class OrderByAliasTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyCrossJoin(TestContextWrapper context) {
-    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
+    void testNonEmptyCrossJoin(TestContext context) {
+    if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
-        || !getDialect(context.createConnection()).requiresOrderByAlias())
+        || !getDialect(context.getConnection()).requiresOrderByAlias())
     {
       return; // For MySQL 5.7+ only!
     }
     assertQuerySql(
-        context.createConnection(),
+        context.getConnection(),
         "with set necj as\n"
         + "NonEmptyCrossJoin([Customers].[Name].members,[Store].[Store Name].members)\n"
         + "select\n"
