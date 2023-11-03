@@ -42,6 +42,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessE
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
@@ -89,6 +90,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SchemaModifiers {
 
@@ -2954,24 +2956,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Store".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Store Type")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .name("Store Types Hierarchy")
-                            .allMemberName("All Store Types Member Name")
-                            .hasAll(true)
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Type")
-                                    .column("store_type")
-                                    .uniqueMembers(true)
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build());
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Store")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
@@ -3000,6 +2990,23 @@ public class SchemaModifiers {
                                     .type(TypeEnum.NUMERIC)
                                     .nameColumn("store_name")
                                     .uniqueMembers(false)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Store Type")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .name("Store Types Hierarchy")
+                            .allMemberName("All Store Types Member Name")
+                            .hasAll(true)
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Store Type")
+                                    .column("store_type")
+                                    .uniqueMembers(true)
                                     .build()
                             ))
                             .build()
@@ -6257,7 +6264,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Promotions")
                     .foreignKey("promotion_id")
                     .hierarchies(List.of(
@@ -6325,7 +6337,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("HR".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Employees")
                     .foreignKey("employee_id")
                     .hierarchies(List.of(
@@ -6360,7 +6377,7 @@ public class SchemaModifiers {
                                             .name("Marital Status").column("marital_status")
                                             .build(),
                                         PropertyRBuilder.builder()
-                                            .name("Position Title").column("position_titles")
+                                            .name("Position Title").column("position_title")
                                             .build(),
                                         PropertyRBuilder.builder()
                                             .name("Gender").column("gender")
@@ -7057,7 +7074,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+            	Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+            	int i = 0;
+            	if (o.isPresent()) {
+            	    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Store2")
                     .foreignKey("store_id")
                     .hierarchies(List.of(

@@ -14,6 +14,8 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapSchemaPool;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -1133,8 +1135,8 @@ class ParameterTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testParamSet(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testParamSet(TestContext context) {
+        Connection connection = context.getConnection();
         try {
             String mdx =
                 "select [Measures].[Unit Sales] on 0,\n"
@@ -1189,7 +1191,7 @@ class ParameterTest {
     void testConnectionPropsWhichShouldBeNull(TestContextWrapper context) {
         // properties which must always return null
         Connection connection = context.createConnection();
-        assertExprReturns(connection, "ParamRef(\"JdbcPassword\")", "");
+        assertExprThrows(connection, "ParamRef(\"JdbcPassword\")", "Unknown parameter 'JdbcPassword'"); // was deleted        
         assertExprReturns(connection, "ParamRef(\"CatalogContent\")", "");
     }
 
@@ -1290,7 +1292,7 @@ class ParameterTest {
                 result.add(ParameterRBuilder.builder()
                     .name("prop")
                     .type(ParameterTypeEnum.STRING)
-                    .defaultValue("foo bar")
+                    .defaultValue("'foo bar'")
                     .build());
                 return result;
             }
@@ -1360,6 +1362,7 @@ class ParameterTest {
         assertExprThrows(context,
             "ParamRef(\"foo\")",
             "Duplicate parameter 'foo' in schema");
+        RolapSchemaPool.instance().clear();
     }
 
     @ParameterizedTest

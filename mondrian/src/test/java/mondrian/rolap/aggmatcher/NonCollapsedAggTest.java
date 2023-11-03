@@ -319,7 +319,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
 
         // We expect the correct cell value + 1 if the agg table is used.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getContext().getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -334,7 +334,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
         final String mdx2 =
             "select {[Measures].[Unit Sales]} on columns, {[dimension.network].[line class].Members} on rows from [foo]";
         // We expect the correct cell value + 1 if the agg table is used.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getContext().getConnection(),
             mdx2,
             "Axis #0:\n"
             + "{}\n"

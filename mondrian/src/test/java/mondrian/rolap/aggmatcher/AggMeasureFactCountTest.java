@@ -791,10 +791,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 super(mappingSchema);
             }
 
+            @Override
             protected List<MappingAggTable> getAggTables() {
                 return aggTables;
             }
 
+            @Override
             protected List<MappingAggExclude> getAggExcludes() {
                 return aggExcludes;
             }
