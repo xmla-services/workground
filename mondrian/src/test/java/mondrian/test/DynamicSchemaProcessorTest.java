@@ -9,19 +9,30 @@
 
 package mondrian.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.withSchemaProcessor;
-
+import mondrian.olap.Util;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.spi.DynamicSchemaProcessor;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Util;
-import mondrian.spi.DynamicSchemaProcessor;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit test DynamicSchemaProcessor. Tests availability of properties that DSP's
@@ -59,6 +70,7 @@ class DynamicSchemaProcessorTest
             FRAGMENT_ONE
                     + "REPLACEME"
                     + FRAGMENT_TWO;
+    public static String RETURNTRUESTRING = "true";
 
     /**
      * Tests to make sure that our base DynamicSchemaProcessor works, with no
@@ -85,12 +97,68 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testFoodmartDsp(TestContextWrapper context) {
-        withSchemaProcessor(context, BaseDsp.class);
-        final Connection monConnection = context.createConnection();
+    void testFoodmartDsp(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new BaseDspModifier(schema, "REPLACEME")));
+        final Connection monConnection = context.getConnection();
         assertEquals(monConnection.getSchema().getName(), "REPLACEME");
     }
 
+    public static class BaseDspModifier extends RDbMappingSchemaModifier {
+
+        private final String name;
+
+        public BaseDspModifier(MappingSchema mappingSchema, String name) {
+            super(mappingSchema);
+            this.name = name;
+        }
+        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+            return SchemaRBuilder.builder()
+                .name(name)
+                .cubes(List.of(
+                    CubeRBuilder.builder()
+                        .name("Sales")
+                        .fact(new TableR("sales_fact_1997",
+                            List.of(
+                                AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_ll_01_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_lc_06_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_l_04_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
+                                AggExcludeRBuilder.builder().name("agg_c_10_sales_fact_1997").build()
+                            ),
+                            List.of()))
+                        .dimensionUsageOrDimensions(List.of(
+                            PrivateDimensionRBuilder.builder()
+                                .name("Fake")
+                                .hierarchies(List.of(
+                                    HierarchyRBuilder.builder()
+                                        .hasAll(true)
+                                        .levels(List.of(
+                                            LevelRBuilder.builder()
+                                                .name("blah")
+                                                .column("store_id")
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .measures(List.of(
+                            MeasureRBuilder.builder()
+                                .name("c")
+                                .column("store_id")
+                                .aggregator("count")
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+        }
+    }
     /**
      * Our base, token replacing schema processor.
      *
@@ -124,9 +192,11 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testProviderTestDSP(TestContextWrapper context) {
-        withSchemaProcessor(context, ProviderTestDSP.class);
-        Connection monConnection = context.createConnection();
+    void testProviderTestDSP(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new BaseDspModifier(schema, "mondrian")));
+        Connection monConnection = context.getConnection();
         assertEquals(monConnection.getSchema().getName(), "mondrian");
     }
 
@@ -154,9 +224,12 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testDBInfoDSP(TestContextWrapper context) {
-        withSchemaProcessor(context, FoodMartCatalogDsp.class);
-        final Connection monConnection = context.createConnection();
+    void testDBInfoDSP(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new BaseDspModifier(schema, "FoodmartFoundInCatalogProperty")));
+
+        final Connection monConnection = context.getConnection();
         assertEquals(monConnection.getSchema().getName(), "FoodmartFoundInCatalogProperty");
     }
 
@@ -189,10 +262,13 @@ class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    void testCheckJdbcPropertyDsp(TestContextWrapper context) {
-        withSchemaProcessor(context, CheckJdbcPropertyDsp.class);
-        Connection monConnection = context.createConnection();
-        assertEquals(monConnection.getSchema().getName(), CheckJdbcPropertyDsp.RETURNTRUESTRING);
+    void testCheckJdbcPropertyDsp(TestContext context) {
+        RolapSchemaPool.instance().clear();
+        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+        context.setDatabaseMappingSchemaProviders(List.of(new BaseDspModifier(schema, RETURNTRUESTRING)));
+
+        Connection monConnection = context.getConnection();
+        assertEquals(monConnection.getSchema().getName(), RETURNTRUESTRING);
     }
 
     /**

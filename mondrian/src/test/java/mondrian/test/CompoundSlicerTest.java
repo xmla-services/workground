@@ -840,7 +840,7 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian899(TestContextWrapper context) {
+    void testBugMondrian899(TestContext context) {
         final String expected =
                 "Axis #0:\n"
                         + "{[Time].[1997].[Q1].[2]}\n"
@@ -916,7 +916,7 @@ class CompoundSlicerTest {
                         + "Row #27: 248\n"
                         + "Row #28: 247\n"
                         + "Row #29: 247\n";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
                         + "  Subset(Order([Customers].[Name].Members, [Measures].[Unit Sales], BDESC), 10.0, 30.0) ON ROWS \n"
                         + "from [Sales] \n"
@@ -924,7 +924,7 @@ class CompoundSlicerTest {
                 expected);
 
         // Equivalent query.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
                         + "  Tail(\n"
                         + "    TopCount([Customers].[Name].Members, 40, [Measures].[Unit Sales]),\n"
