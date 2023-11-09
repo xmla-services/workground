@@ -45,6 +45,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -229,7 +230,8 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCountWithAggFlatSet(TestContext context) {
+  void testNativeTopCountWithAggFlatSet(TestContext context) {	  
+	RolapSchemaPool.instance().clear();  
     // Note: changed mdx and expected as a part of the fix for MONDRIAN-2202
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
@@ -272,6 +274,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithAggMemberNamedSet(TestContext context) {
+	RolapSchemaPool.instance().clear();
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -305,9 +308,10 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeFilterWithAggDescendants(TestContext context) {
+	  RolapSchemaPool.instance().clear();
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && MondrianProperties.instance().ReadAggregates.get();   
     final String mdx =
       "with\n"
         + "  set QUARTERS as Descendants([Time].[1997], [Time].[Time].[Quarter])\n"
@@ -414,6 +418,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberOnlySlicer(TestContext context) {
+	RolapSchemaPool.instance().clear();  
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -623,6 +628,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberSumSlicer(TestContext context) {
+	RolapSchemaPool.instance().clear();  
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -955,6 +961,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testTopCountWithAggregatedMemberAggStar(TestContext context) {
+	RolapSchemaPool.instance().clear();
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -1210,6 +1217,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCompoundSlicerNativeEval(TestContext context) {
+	RolapSchemaPool.instance().clear();  
     // MONDRIAN-1404
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1298,6 +1306,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testSnowflakeDimInSlicerBug1407(TestContext context) {
+	RolapSchemaPool.instance().clear();
     // MONDRIAN-1407
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1395,6 +1404,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCompoundSlicerNonUniqueMemberNames1413(TestContext context) {
+	RolapSchemaPool.instance().clear();
     // MONDRIAN-1413
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1797,6 +1807,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeFilterWithCompoundSlicer(TestContext context) {
+	RolapSchemaPool.instance().clear();
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] "
         + "> 1000))'\n"

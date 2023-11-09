@@ -12,6 +12,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.Bug;
@@ -260,14 +261,12 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
-    void testBugMondrian756(TestContextWrapper context) {
+    void testBugMondrian756(TestContext context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
         //}
-        context.setProperty(
-            RolapConnectionProperties.DynamicSchemaProcessor.name(),
-            Mondrian756SchemaProcessor.class.getName());
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier2::new);
+        assertQueryReturns(context.getConnection(),
             "select NON EMPTY {[Measures].[Quantity]} ON COLUMNS,\n"
             + "NON EMPTY {[Markets].[APAC]} ON ROWS\n"
             + "from [SteelWheelsSales]\n"
@@ -985,6 +984,7 @@ class SteelWheelsSchemaTest {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
         //}
+    	RolapSchemaPool.instance().clear();
         final String mdx =
             "With\n"
             + "Member [Measures].[*ZERO] as '0', SOLVE_ORDER=0\n"
@@ -2163,10 +2163,10 @@ class SteelWheelsSchemaTest {
             + "{[Measures].[Measure2]}\n"
             + "{[Measures].[Measure2:Internal]}\n"
             + "Axis #2:\n"
-            + "{[Dimension1].[Classic Cars], [Dimension2].[Alpha Cognac]}\n"
-            + "{[Dimension1].[Planes], [Dimension2].[Alpha Cognac]}\n"
-            + "{[Dimension1].[Ships], [Dimension2].[Alpha Cognac]}\n"
-            + "{[Dimension1].[Vintage Cars], [Dimension2].[Alpha Cognac]}\n"
+            + "{[Dimension1.Customers Hierarchy].[Classic Cars], [Dimension2].[Alpha Cognac]}\n"
+            + "{[Dimension1.Customers Hierarchy].[Planes], [Dimension2].[Alpha Cognac]}\n"
+            + "{[Dimension1.Customers Hierarchy].[Ships], [Dimension2].[Alpha Cognac]}\n"
+            + "{[Dimension1.Customers Hierarchy].[Vintage Cars], [Dimension2].[Alpha Cognac]}\n"
             + "Row #0: 126\n"
             + "Row #0: 70,488.44\n"
             + "Row #0: \n"
@@ -2179,5 +2179,6 @@ class SteelWheelsSchemaTest {
             + "Row #3: 96\n"
             + "Row #3: 70,488.44\n"
             + "Row #3: \n");
+        RolapSchemaPool.instance().clear();
     }
 }
