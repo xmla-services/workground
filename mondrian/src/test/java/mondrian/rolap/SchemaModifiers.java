@@ -595,7 +595,6 @@ public class SchemaModifiers {
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
-            result.addAll(super.schemaVirtualCubes(schema));
             result.add(VirtualCubeRBuilder.builder()
                 .name("Warehouse and Sales2")
                 .defaultMeasure("Store Sales")
@@ -659,6 +658,7 @@ public class SchemaModifiers {
                         .build()
                 ))
                 .build());
+            result.addAll(super.schemaVirtualCubes(schema));
             return result;
         }
     }
@@ -3194,7 +3194,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Product Ragged")
                     .foreignKey("product_id")
                     .hierarchies(List.of(
@@ -5827,17 +5832,20 @@ public class SchemaModifiers {
 
     public static class BasicQueryTestModifier27 extends RDbMappingSchemaModifier {
 
+        private final String defaultMeasure;
+
         /*
-                        "<Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time Error\">\n"
-                + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
-                + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
-                + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
-                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
-                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
-                + "aggregator=\"sum\"/>\n" + "</Cube>"
-            */
-        public BasicQueryTestModifier27(MappingSchema mappingSchema) {
+                                "<Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time Error\">\n"
+                        + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
+                        + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
+                        + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
+                        + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
+                        + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
+                        + "aggregator=\"sum\"/>\n" + "</Cube>"
+                    */
+        public BasicQueryTestModifier27(MappingSchema mappingSchema, String defaultMeasure) {
             super(mappingSchema);
+            this.defaultMeasure = defaultMeasure;
         }
 
         @Override
@@ -5846,7 +5854,7 @@ public class SchemaModifiers {
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
                 .name("DefaultMeasureTesting")
-                .defaultMeasure("Supply Time Error")
+                .defaultMeasure(defaultMeasure)
                 .fact(new TableR("inventory_fact_1997"))
                 .dimensionUsageOrDimensions(List.of(
                     DimensionUsageRBuilder.builder()
@@ -6239,7 +6247,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderByAliasTestModifier1 extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1KE extends RDbMappingSchemaModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6254,7 +6262,7 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1(MappingSchema mappingSchema, final StringBuilder colName) {
+        public OrderByAliasTestModifier1KE(MappingSchema mappingSchema, final StringBuilder colName) {
             super(mappingSchema);
             this.colName = colName;
         }
@@ -6285,6 +6293,247 @@ public class SchemaModifiers {
                                     .column("promotion_name")
                                     .uniqueMembers(true)
                                     .keyExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1OE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <OrdinalExpression><SQL>RTRIM("
+        + colName + ")</SQL></OrdinalExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1OE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .ordinalExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1ME extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <MeasureExpression><SQL>RTRIM("
+        + colName + ")</SQL></MeasureExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1ME(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1CE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <CaptionExpression><SQL>RTRIM("
+        + colName + ")</SQL></CaptionExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1CE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .captionExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1NE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <NameExpression><SQL>RTRIM("
+        + colName + ")</SQL></NameExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1NE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .nameExpression(ExpressionViewRBuilder.builder()
                                         .sqls(List.of(
                                             SQLRBuilder.builder()
                                                 .content("RTRIM("+ colName + ")")
