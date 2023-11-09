@@ -4810,7 +4810,9 @@ public class BasicQueryTest {
                 + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
                 + "aggregator=\"sum\"/>\n" + "</Cube>", null, null, null, null );
        */
-    TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier27::new);
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+    context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier27(schema, "Supply Time Error")));
     String queryWithoutFilter = "select store.members on 0 from " + "DefaultMeasureTesting";
     String queryWithFirstMeasure =
         "select store.members on 0 " + "from DefaultMeasureTesting where [measures].[Store Invoice]";
@@ -4830,7 +4832,10 @@ public class BasicQueryTest {
             + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
             + "aggregator=\"sum\"/>\n" + "</Cube>", null, null, null, null );
        */
-    TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier27::new);
+
+    RolapSchemaPool.instance().clear();
+    MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+    context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier27(schema, "SUPPLY TIME")));
     String queryWithoutFilter = "select store.members on 0 from " + "DefaultMeasureTesting";
     String queryWithFirstMeasure =
         "select store.members on 0 " + "from DefaultMeasureTesting where [measures].[Store Invoice]";

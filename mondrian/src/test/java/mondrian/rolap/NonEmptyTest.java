@@ -6520,6 +6520,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyAggregateSlicerIsNative(TestContextWrapper context)  {
+	RolapSchemaPool.instance().clear();
     final String mdx =
       "select NON EMPTY\n"
         + " Crossjoin([Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Portsmouth]\n"

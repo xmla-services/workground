@@ -177,8 +177,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
 
     @Override
     protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
+        List<MappingCube> result = new ArrayList<>();        
         result.add(CubeRBuilder.builder()
             .name("foo")
                 .fact(new TableR("foo_fact",
@@ -529,6 +528,7 @@ public class NonCollapsedAggTestModifier extends RDbMappingSchemaModifier {
                     .build()
             ))
             .build());
+        result.addAll(super.schemaCubes(mappingSchemaOriginal));
         return result;
 
     }
