@@ -13,6 +13,7 @@ import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.server.StringRepositoryContentFinder;
 import mondrian.xmla.Enumeration;
 import mondrian.xmla.XmlaHandler;
@@ -75,7 +76,7 @@ class XmlaTest{
     // implement TestCase
 
     protected void setUp(TestContextWrapper context) throws Exception {
-
+        RolapSchemaPool.instance().clear();
         server = MondrianServer.createWithRepository(
             new StringRepositoryContentFinder(
             		XmlaTestContext.getDataSourcesString(context)),

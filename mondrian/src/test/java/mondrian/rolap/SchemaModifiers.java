@@ -1075,7 +1075,6 @@ public class SchemaModifiers {
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
-            result.addAll(super.schemaVirtualCubes(schema));
             result.add(VirtualCubeRBuilder.builder()
                 .name("Warehouse and Sales2")
                 .defaultMeasure("Store Sales")
@@ -1200,7 +1199,7 @@ public class SchemaModifiers {
                         .build()
                 ))
                 .build());
-
+            result.addAll(super.schemaVirtualCubes(schema));
             return result;
         }
     }
@@ -18763,7 +18762,7 @@ public class SchemaModifiers {
                                         .hideMemberIf(HideMemberIfEnum.NEVER)
                                         .build(),
                                     LevelRBuilder.builder()
-                                        .name("Line")
+                                        .name("Vendor")
                                         .table("PRODUCTS")
                                         .column("PRODUCTVENDOR")
                                         .type(TypeEnum.STRING)
@@ -18824,12 +18823,13 @@ public class SchemaModifiers {
                                     LevelRBuilder.builder()
                                         .name("Quarters")
                                         .column("QTR_ID")
+                                        .nameColumn("QTR_NAME")
                                         .ordinalColumn("QTR_ID")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(false)
                                         .levelType(LevelTypeEnum.TIME_QUARTERS)
                                         .hideMemberIf(HideMemberIfEnum.NEVER)
-                                        .build(),
+                                        .build(),                                       
                                     LevelRBuilder.builder()
                                         .name("Months")
                                         .column("MONTH_ID")
@@ -19228,7 +19228,7 @@ public class SchemaModifiers {
                                 .levels(List.of(
                                     LevelRBuilder.builder()
                                         .name("Line")
-                                        .table("PRODUCTS")
+                                        .table("products")
                                         .column("PRODUCTLINE")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(false)
@@ -19246,7 +19246,7 @@ public class SchemaModifiers {
                                         .build(),
                                     LevelRBuilder.builder()
                                         .name("Product")
-                                        .table("PRODUCTS")
+                                        .table("products")
                                         .column("PRODUCTNAME")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(true)
@@ -19510,7 +19510,6 @@ public class SchemaModifiers {
                                         HierarchyGrantRBuilder.builder()
                                             .hierarchy("[Markets]")
                                             .access(AccessEnum.NONE)
-                                            .rollupPolicy("partial")
                                             .build()
                                     ))
                                     .build()
@@ -19739,7 +19738,7 @@ public class SchemaModifiers {
                                         ))
                                         .hierarchyGrants(List.of(
                                             HierarchyGrantRBuilder.builder()
-                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
                                                 .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
                                                 .rollupPolicy("partial")
                                                 .access(AccessEnum.CUSTOM)
@@ -19945,7 +19944,7 @@ public class SchemaModifiers {
                                         ))
                                         .hierarchyGrants(List.of(
                                             HierarchyGrantRBuilder.builder()
-                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
                                                 .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
                                                 .rollupPolicy("partial")
                                                 .access(AccessEnum.CUSTOM)
@@ -20092,9 +20091,8 @@ public class SchemaModifiers {
                                 .visible(true)
                                 .hasAll(true)
                                 .allMemberName("All Products")
-                                .primaryKey("products")
-                                .relation(new TableR("customer_w_ter"))
-
+                                .primaryKey("PRODUCTCODE")
+                                .relation(new TableR("products"))
                                 .levels(List.of(
                                     LevelRBuilder.builder()
                                         .name("Level1")

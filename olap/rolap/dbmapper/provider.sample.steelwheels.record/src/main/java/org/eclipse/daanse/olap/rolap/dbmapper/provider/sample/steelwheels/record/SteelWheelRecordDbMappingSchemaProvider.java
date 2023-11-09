@@ -80,7 +80,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .build();
     private static final LevelR LEVEL_3_1 = LevelRBuilder
         .builder()
-        .name("Linie")
+        .name("Line")
         .table(PRODUCTS)
         .column("PRODUCTLINE")
         .type(TypeEnum.STRING)
@@ -151,7 +151,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
     private static final TableR TABLE_2 = new TableR(null, "customer_w_ter", null, List.of());
     private static final TableR TABLE_3 = new TableR(null, PRODUCTS, null, List.of());
     private static final TableR TABLE_4 = new TableR(null, "time", null, List.of());
-    private static final TableR TABLE_CUBE = new TableR(null, "time", null, List.of());
+    private static final TableR TABLE_CUBE = new TableR(null, "orderfact", null, List.of());
 
     private static final MeasureR MEASURE_1 = MeasureRBuilder
         .builder()
@@ -180,7 +180,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .builder()
         .hasAll(true)
         .allMemberName("All Customers")
-        .primaryKey("CUSTOMMERNUMBER")
+        .primaryKey("CUSTOMERNUMBER")
         .relation(TABLE_2)
         .levels(List.of(LEVEL_2))
         .build();
@@ -218,7 +218,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
     private static final PrivateDimensionR DIMENSION_2 = PrivateDimensionRBuilder
         .builder()
         .name("Customers")
-        .foreignKey("CUSTOMMERNUMBER")
+        .foreignKey("CUSTOMERNUMBER")
         .hierarchies(List.of(HIERARCHY_2))
         .build();
     private static final PrivateDimensionR DIMENSION_3 = PrivateDimensionRBuilder
