@@ -1394,7 +1394,7 @@ class AccessControlTest {
         MappingSchema schema = foodMartContext.getContext().getDatabaseMappingSchemaProviders().get(0).get();
         foodMartContext.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier41(schema, policy)));
     	TestUtil.withRole(foodMartContext, "Role1");
-    	Connection connection = foodMartContext.getContext().getConnection();
+    	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
     	TestUtil.assertExprReturns(
 			connection,

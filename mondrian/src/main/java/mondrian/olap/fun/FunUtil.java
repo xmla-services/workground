@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.DataType;
@@ -86,7 +85,7 @@ public class FunUtil extends Util {
    * Special value which indicates that a {@code double} computation has returned the MDX null value. See {@link
    * DoubleCalc}.
    */
-  public static final double DOUBLE_NULL = 0.000000012345;
+  public static final Double DOUBLE_NULL = Double.valueOf(0.000000012345);
 
   /**
    * Special value which indicates that a {@code double} computation has returned the MDX EMPTY value. See {@link
@@ -1278,7 +1277,7 @@ public class FunUtil extends Util {
     return result;
   }
 
-  
+
 
   /**
    * Compares two members which are known to have the same parent.

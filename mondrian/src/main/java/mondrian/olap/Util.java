@@ -52,7 +52,6 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -147,8 +146,6 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapCubeDimension;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
@@ -175,7 +172,7 @@ public class Util extends XOMUtil {
     /**
      * Placeholder which indicates a value NULL.
      */
-    public static final Object nullValue = Double.valueOf(DOUBLE_NULL);
+    public static final Object nullValue = DOUBLE_NULL;
 
     /**
      * Placeholder which indicates an EMPTY value.
@@ -1463,7 +1460,7 @@ public class Util extends XOMUtil {
         return buf.toString();
     }
 
- 
+
     /**
      * Returns whether a collection contains precisely one distinct element.
      * Returns false if the collection is empty, or if it contains elements
@@ -3039,7 +3036,7 @@ public class Util extends XOMUtil {
         }
     }
 
- 
+
 
     /**
      * Returns the contents of a URL, substituting tokens.
@@ -3284,7 +3281,7 @@ public class Util extends XOMUtil {
         return true;
     }
 
- 
+
 
     /**
      * Looks up an enumeration by name, returning null if null or not valid.
@@ -3566,9 +3563,9 @@ public class Util extends XOMUtil {
         return role;
     }
 
-  
 
-   
+
+
 
     public abstract static class AbstractFlatList<T>
         implements List<T>, RandomAccess
