@@ -11,7 +11,6 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
@@ -1265,14 +1264,14 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1252(TestContextWrapper context) throws Exception {
+    void testMondrian1252(TestContext context) throws Exception {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
         //}
 
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier7::new);
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier7::new);
 
-        Schema schema = context.createConnection().getSchema();
+        Schema schema = context.getConnection().getSchema();
 
         // get roles
         Role minimal = schema.lookupRole("CUBE_SALES_MINIMAL");
@@ -1303,8 +1302,9 @@ class SteelWheelsSchemaTest {
             + "from [SteelWheelsSales]";
 
         // [Markets].[Territory].Members would get cached after role filter..
-        context.createConnection().setRole(market_800);
-        assertQueryReturns(context.createConnection(),
+        Connection connection = context.getConnection();
+        connection.setRole(market_800);
+        assertQueryReturns(connection,
             nonEmptyMembersQuery,
             "Axis #0:\n"
             + "{}\n"
@@ -1316,7 +1316,7 @@ class SteelWheelsSchemaTest {
             + "Row #0: 3,411\n"
             + "Row #0: 337,018\n");
         // ..and prevent EMEA from appearing in the results
-        Connection connection = context.createConnection();
+        connection = context.getConnection();
         connection.setRole(market_800_850);
         assertQueryReturns(connection,
             nonEmptyMembersQuery,

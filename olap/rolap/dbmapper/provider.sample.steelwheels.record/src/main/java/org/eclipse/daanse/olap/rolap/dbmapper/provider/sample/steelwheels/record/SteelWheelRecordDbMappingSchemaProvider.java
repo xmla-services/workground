@@ -92,7 +92,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .builder()
         .name("Vendor")
         .table(PRODUCTS)
-        .column("PRODUCTVENTOR")
+        .column("PRODUCTVENDOR")
         .type(TypeEnum.STRING)
         .uniqueMembers(false)
         .levelType(LevelTypeEnum.REGULAR)
@@ -129,7 +129,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .build();
     private static final LevelR LEVEL_4_3 = LevelRBuilder
         .builder()
-        .name("Month")
+        .name("Months")
         .column("MONTH_NAME")
         .ordinalColumn("MONTH_ID")
         .type(TypeEnum.STRING)

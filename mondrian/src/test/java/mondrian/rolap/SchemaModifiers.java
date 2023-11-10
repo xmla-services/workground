@@ -7373,7 +7373,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Education Level2")
                     .foreignKey("customer_id")
                     .hierarchies(List.of(
@@ -7913,6 +7918,13 @@ public class SchemaModifiers {
                     .build());
             }
             return result;
+        }
+
+        protected String virtualCubeDefaultMeasure(MappingVirtualCube virtualCube) {
+            if ("Warehouse and Sales".equals(virtualCube.name())) {
+                return "Warehouse Sales";
+            }
+            return virtualCube.defaultMeasure();
         }
 
         @Override
@@ -18829,7 +18841,7 @@ public class SchemaModifiers {
                                         .uniqueMembers(false)
                                         .levelType(LevelTypeEnum.TIME_QUARTERS)
                                         .hideMemberIf(HideMemberIfEnum.NEVER)
-                                        .build(),                                       
+                                        .build(),
                                     LevelRBuilder.builder()
                                         .name("Months")
                                         .column("MONTH_ID")
