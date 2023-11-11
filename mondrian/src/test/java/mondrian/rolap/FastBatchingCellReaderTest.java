@@ -62,6 +62,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test for <code>FastBatchingCellReader</code>.
@@ -1007,7 +1008,6 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "    [Measures].[Count All of Warehouses (Large Independent)],"
             + "    [Measures].[Count Distinct Store+Warehouse]," + "    [Measures].[Count All Store+Warehouse],"
             + "    [Measures].[Store Count]} on columns " + "from [Warehouse2]";
-      RolapSchemaPool.instance().clear();
       class TestLoadDistinctSqlMeasureModifier extends RDbMappingSchemaModifier {
 
           public TestLoadDistinctSqlMeasureModifier(MappingSchema mappingSchema) {
@@ -1112,9 +1112,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             null, cube, null, null, null, null );
     withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(
-          List.of(new TestLoadDistinctSqlMeasureModifier(schema)));
+      withSchema(context, TestLoadDistinctSqlMeasureModifier::new);
       String desiredResult =
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Count Distinct of Warehouses (Large Owned)]}\n"
             + "{[Measures].[Count Distinct of Warehouses (Large Independent)]}\n"
@@ -1551,7 +1549,6 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     // tests that Aggregate( <set>, <count-distinct measure>) aggregates
     // the correct measure when a *different* count-distinct measure is
     // in context (MONDRIAN-2128)
-      RolapSchemaPool.instance().clear();
       class TestCountDistinctAggWithOtherCountDistinctInContextModifier extends RDbMappingSchemaModifier {
 
           public TestCountDistinctAggWithOtherCountDistinctInContextModifier(MappingSchema mappingSchema) {
@@ -1618,8 +1615,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "aggregator=\"sum\"/>\n" + "</Cube>", null, null, null, null );
     withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestCountDistinctAggWithOtherCountDistinctInContextModifier(schema)));
+      withSchema(context, TestCountDistinctAggWithOtherCountDistinctInContextModifier::new);
       // We should get the same answer whether the default [Store Count]
     // measure is in context or [Unit Sales]. The measure specified in the
     // second param of Aggregate() should be used.

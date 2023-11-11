@@ -50,6 +50,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test case for pushing MDX filter conditions down to SQL.
@@ -332,7 +333,6 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "        </SchemaGrant>\n"
             + "    </Role> ";
 
-        RolapSchemaPool.instance().clear();
         class TestCachedNativeFilterModifier extends RDbMappingSchemaModifier {
 
             public TestCachedNativeFilterModifier(MappingSchema mappingSchema) {
@@ -449,8 +449,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             roleDefs);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestCachedNativeFilterModifier(schema)));
+        withSchema(context.getContext(), TestCachedNativeFilterModifier::new);
         withRole(context, "test");
         Connection connection = context.createConnection();
         verifySameNativeAndNot(connection,

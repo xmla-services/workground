@@ -10,7 +10,6 @@
 */
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
@@ -18,9 +17,8 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.List;
-
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit test for shared dimensions.
@@ -367,7 +365,6 @@ class SharedDimensionTest  {
         // Schema has two cubes sharing a dimension, and a virtual cube built
         // over these two cubes.
         // Query from the virtual cube.
-        RolapSchemaPool.instance().clear();
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -379,8 +376,7 @@ class SharedDimensionTest  {
                 null);
         withSchema(context, schema);
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier(schema)));
+        withSchema(context, SchemaModifiers.SharedDimensionTestModifier::new);
 
         assertQueryReturns(context.getConnection(), queryVirtualCube, resultVirtualCube);
     }
@@ -470,10 +466,7 @@ class SharedDimensionTest  {
             null,
             null);
         withSchema(context, schema);*/
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier(schema)));
-
+        withSchema(context, SchemaModifiers.SharedDimensionTestModifier::new);
     }
 
     private void getTestContextForSharedDimCubeAltSales(TestContext context) {
@@ -488,9 +481,6 @@ class SharedDimensionTest  {
             null);
         withSchema(context, schema);
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SharedDimensionTestModifier1(schema)));
-
+        withSchema(context, SchemaModifiers.SharedDimensionTestModifier1::new);
     }
 }

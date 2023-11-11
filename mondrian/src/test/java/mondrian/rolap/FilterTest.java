@@ -651,7 +651,6 @@ class FilterTest extends BatchTestCase {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
-      RolapSchemaPool.instance().clear();
       class TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier extends RDbMappingSchemaModifier {
 
           public TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier(MappingSchema mappingSchema) {
@@ -725,8 +724,7 @@ class FilterTest extends BatchTestCase {
         null );
     withSchema(context, schema);
     */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier(schema)));
+      withSchema(context, TestNotInMultiLevelMemberConstraintMixedNullNonNullParentModifier::new);
       assertQuerySql(context.getConnection(), query, patterns );
   }
 
@@ -823,7 +821,6 @@ class FilterTest extends BatchTestCase {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
-      RolapSchemaPool.instance().clear();
       class TestNotInMultiLevelMemberConstraintSingleNullParentModifier extends RDbMappingSchemaModifier {
 
           public TestNotInMultiLevelMemberConstraintSingleNullParentModifier(MappingSchema mappingSchema) {
@@ -897,8 +894,7 @@ class FilterTest extends BatchTestCase {
         null );
     withSchema(context, schema);
     */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestNotInMultiLevelMemberConstraintSingleNullParentModifier(schema)));
+      withSchema(context, TestNotInMultiLevelMemberConstraintSingleNullParentModifier::new);
       assertQuerySql(context.getConnection(), query, patterns);
   }
 

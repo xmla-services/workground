@@ -733,7 +733,6 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testStrMeasure(TestContext context) {
-      RolapSchemaPool.instance().clear();
       class TestStrMeasureModifier extends RDbMappingSchemaModifier {
           public TestStrMeasureModifier(MappingSchema mappingSchema) {
               super(mappingSchema);
@@ -794,8 +793,7 @@ class NonEmptyTest extends BatchTestCase {
       null );
     withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestStrMeasureModifier(schema)));
+      withSchema(context, TestStrMeasureModifier::new);
       assertQueryReturns(context.getConnection(),
       "select {[Measures].[Media]} on columns " + "from [StrMeasure]",
       "Axis #0:\n"
@@ -3827,9 +3825,7 @@ class NonEmptyTest extends BatchTestCase {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier4(schema)));
+      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier4::new);
     // Check that the grand total is different than when [Time].[1997] is
     // the default member.
     assertQueryReturns(context.createConnection(),

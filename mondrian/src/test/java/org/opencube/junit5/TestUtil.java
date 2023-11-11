@@ -1315,7 +1315,7 @@ public class TestUtil {
 			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
 		}
 
-	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {
+	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {          
           RolapSchemaPool.instance().clear();
           MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
           context.setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));

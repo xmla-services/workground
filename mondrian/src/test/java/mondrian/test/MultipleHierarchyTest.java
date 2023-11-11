@@ -11,10 +11,8 @@ package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -29,6 +27,7 @@ import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Tests multiple hierarchies within the same dimension.
@@ -225,9 +224,7 @@ class MultipleHierarchyTest {
             + "</Hierarchy>\n"
             + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MultipleHierarchyTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.MultipleHierarchyTestModifier1::new);
 
         final String nuStore = hierarchyName("NuStore", "NuStore");
         assertQueryReturns(context.getConnection(),
@@ -383,9 +380,7 @@ class MultipleHierarchyTest {
             + "</Hierarchy>\n"
             + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MultipleHierarchyTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.MultipleHierarchyTestModifier2::new);
         final String nuStore = hierarchyName("NuStore", "NuStore");
 
         assertQueryReturns(context.getConnection(),

@@ -153,7 +153,7 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
 				Axis (ROWS):
 				mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<MemberType<member=[Product].[Drink]>, MemberType<hierarchy=[Marital Status]>>>, resultStyle=ITERABLE, callCount=0, callMillis=0)
 				    mondrian.mdx.NamedSetExpressionImpl$1(type=SetType<MemberType<member=[Product].[Drink]>>, resultStyle=ITERABLE, callCount=0, callMillis=0)
-				    mondrian.olap.fun.BuiltinFunTable$22$1(type=SetType<MemberType<hierarchy=[Marital Status]>>, resultStyle=MUTABLE_LIST, callCount=0, callMillis=0)
+				    mondrian.olap.fun.BuiltinFunTable$21$1(type=SetType<MemberType<hierarchy=[Marital Status]>>, resultStyle=MUTABLE_LIST, callCount=0, callMillis=0)
 				        org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc(type=HierarchyType<hierarchy=[Marital Status]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
 
 				""";

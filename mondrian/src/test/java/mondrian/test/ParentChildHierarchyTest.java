@@ -12,7 +12,6 @@
 */
 package mondrian.test;
 
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.Connection;
@@ -24,7 +23,6 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -128,9 +126,7 @@ class ParentChildHierarchyTest {
             + "</Hierarchy>"
             + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier2::new);
 
     }
 
@@ -806,9 +802,7 @@ class ParentChildHierarchyTest {
         withSchema(context,schema);
          */
         // On a cube with fewer dimensions, this gave a false failure.
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier6(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier6::new);
 
         assertQueryReturns(context.getConnection(),
             "SELECT {[Employees].[All Employees].Children} on columns,\n"
@@ -1156,9 +1150,7 @@ class ParentChildHierarchyTest {
             null);
         withSchema(context, schema);
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier7(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier7::new);
 
         // Make sure <Member>.CHILDREN is sorted.
         assertQueryReturns(context.getConnection(),
@@ -1272,9 +1264,7 @@ class ParentChildHierarchyTest {
             null);
         withSchema(context, schema);
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier8(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier8::new);
         assertQueryReturns(context.getConnection(),
             "select "
             + "[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki].Children"
@@ -1330,9 +1320,7 @@ class ParentChildHierarchyTest {
                 null, cubestart + closure + cubeend, null, null, null, null);
         withSchema(context, schema);
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier9(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier9::new);
 
         String mdx;
         String expected;
@@ -1383,9 +1371,7 @@ class ParentChildHierarchyTest {
                 null, cubestart + cubeend, null, null, null, null);
         withSchema(context, schema);
          */
-        RolapSchemaPool.instance().clear();
-        schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier10(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier10::new);
 
         // Need to unfold because 'expect' has platform-specific line-endings,
         // yet assertQueryReturns assumes that it contains linefeeds.
@@ -1504,9 +1490,7 @@ class ParentChildHierarchyTest {
             + "  </Cube>\n"
             + "</Schema>");
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ParentChildHierarchyTestModifier11(schema)));
+        withSchema(context, SchemaModifiers.ParentChildHierarchyTestModifier11::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " NON EMPTY {[Measures].[Store Sales]} ON COLUMNS,\n"
