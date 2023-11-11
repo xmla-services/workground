@@ -27,7 +27,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -269,7 +268,6 @@ class NonCollapsedAggTest extends AggTableTestCase {
 	protected void prepareContext(TestContextWrapper context) {
         try {
             super.prepareContext(context);
-            TestUtil.withSchema(context.getContext(), getModifierFunction());
         }
         catch (Exception e) {
             throw  new RuntimeException("Prepare context for csv tests failed");

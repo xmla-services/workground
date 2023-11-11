@@ -48,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit-test for non cacheable elementos of high dimensions.
@@ -266,7 +267,6 @@ class HighDimensionsTest {
         // Both involve an attempt to modify the list backing
         // HighCardSqlTupleReader when handling null values.
         // Requires use of a dim flagged as high card which has null members
-        RolapSchemaPool.instance().clear();
         class TestMondrian1488Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1488Modifier(MappingSchema mappingSchema) {
@@ -334,8 +334,7 @@ class HighDimensionsTest {
         withSchema(context, schema);
          */
         // this will throw an exception if .remove is called on the HCSTR list
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1488Modifier(schema)));
+        withSchema(context, TestMondrian1488Modifier::new);
         executeQuery(context.getConnection(),
             "select NON EMPTY filter([StoreSize].[Sqft].members, 1=1) on 0 from highCard");
     }
@@ -360,7 +359,6 @@ class HighDimensionsTest {
         throws Exception
     {
         propSaver.set(MondrianProperties.instance().ResultLimit, resultLimit);
-        RolapSchemaPool.instance().clear();
         class ExecHighCardTestModifier extends RDbMappingSchemaModifier {
 
             public ExecHighCardTestModifier(MappingSchema mappingSchema) {
@@ -411,8 +409,7 @@ class HighDimensionsTest {
                 + "    </Hierarchy>"
                 + "</Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new ExecHighCardTestModifier(schema)));
+        withSchema(context, ExecHighCardTestModifier::new);
         final Connection connection = context.getConnection();
         final QueryImpl query = connection.parseQuery(queryString);
         query.setResultStyle(ResultStyle.ITERABLE);

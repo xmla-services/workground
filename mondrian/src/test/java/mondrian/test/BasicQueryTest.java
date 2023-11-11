@@ -1817,9 +1817,7 @@ public class BasicQueryTest {
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>", null ));
      */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.BasicQueryTestModifier1::new);
         Connection connection = context.getConnection();
     if ( !TestUtil.getDialect(connection).allowsFromQuery() ) {
       return;
@@ -1849,9 +1847,7 @@ public class BasicQueryTest {
                 + "      <Level name=\"Product Category\" table=\"product_class\" column=\"product_category\"\n"
                 + "          uniqueMembers=\"false\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n", null ));
        */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier2(schema)));
+      withSchema(context, SchemaModifiers.BasicQueryTestModifier2::new);
     // These two references should resolve
     // to the same member whether used in the WITH block or on an axis
     String[] alternateReferences =
@@ -1922,9 +1918,7 @@ public class BasicQueryTest {
                 + "       <Level name=\"Product Name\" column=\"product_name\" uniqueMembers=\"true\"/>\n"
                 + "   </Hierarchy>\n" + "</Dimension>" ));
              */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier3(schema)));
+        withSchema(context, SchemaModifiers.BasicQueryTestModifier3::new);
 
         assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales]} on columns,\n"
         + " {[ProductView].[Drink].[Beverages].children} on rows\n" + "from Sales",
@@ -3767,9 +3761,7 @@ public class BasicQueryTest {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales",
             "<DimensionUsage name=\"Other Store\" source=\"Store\" foreignKey=\"unit_sales\" />" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier4(schema)));
+      withSchema(context, SchemaModifiers.BasicQueryTestModifier4::new);
 
       Axis axis = executeAxis(connection, "[Other Store].members" );
     assertEquals( 63, axis.getPositions().size() );
@@ -3885,9 +3877,7 @@ public class BasicQueryTest {
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>" ));
       */
-    RolapSchemaPool.instance().clear();
-    MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-    context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier5(schema)));
+    withSchema(context, SchemaModifiers.BasicQueryTestModifier5::new);
 
     String mdx = "select {[Gender3].[All Gender]} on columns from Sales";
     Result result = executeQuery(context.getConnection(), mdx);
@@ -3909,9 +3899,7 @@ public class BasicQueryTest {
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>" ));
        */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier10(schema)));
+        withSchema(context, SchemaModifiers.BasicQueryTestModifier10::new);
         String mdx = "select {[Gender4].[All Gender]} on columns from Sales";
     Result result = executeQuery(context.getConnection(), mdx );
     Axis axis0 = result.getAxes()[0];
@@ -4263,9 +4251,7 @@ public class BasicQueryTest {
                 + "          column=\"position_title\" ordinalColumn=\"position_id\"/>\n" + " </Hierarchy>\n"
                 + "</Dimension>" ));
      */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier6(schema)));
+        withSchema(context, SchemaModifiers.BasicQueryTestModifier6::new);
 
         // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
@@ -4936,9 +4922,7 @@ public class BasicQueryTest {
                 + "    </Hierarchy>\n" + "  </Dimension>" ));
 
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier11(schema)));
+        withSchema(context, SchemaModifiers.BasicQueryTestModifier11::new);
 
     Result result =
         executeQuery(context.getConnection(), "WITH SET [#DataSet#] AS "
@@ -5229,9 +5213,7 @@ public class BasicQueryTest {
             + "  <MeasureExpression>\n" + "  <SQL dialect='generic'>\n" + "    0"
             + "  </SQL></MeasureExpression></Measure>", null, null ));
        */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier12(schema)));
+      withSchema(context, SchemaModifiers.BasicQueryTestModifier12::new);
       assertQueryReturns(context.getConnection(),"select " + "Crossjoin([Gender].[Gender].Members, [Measures].[zero]) ON COLUMNS\n"
         + "from [Sales] " + "  \n", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Gender].[F], [Measures].[zero]}\n"
             + "{[Gender].[M], [Measures].[zero]}\n" + "Row #0: 0\n" + "Row #0: 0\n" );
@@ -5406,9 +5388,7 @@ public class BasicQueryTest {
             "<CalculatedMember dimension=\"Gender\" visible=\"true\" name=\"last\">"
                 + "<Formula>([Gender].LastChild)</Formula>" + "</CalculatedMember>" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier9(schema)));
+      withSchema(context, SchemaModifiers.BasicQueryTestModifier9::new);
       assertQueryReturns( context.getConnection(),"select {[Gender].[M]} on 0 from sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
         + "{[Gender].[M]}\n" + "Row #0: 135,215\n" );
   }
@@ -5823,6 +5803,7 @@ public class BasicQueryTest {
       lambda.run( exec, q1, fail, success, r1, r2 );
     } finally {
       exec.shutdownNow();
+      connection.getCacheControl(null).flushSchemaCache();
     }
   }
 

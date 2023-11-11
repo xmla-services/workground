@@ -44,6 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit test for {@link SchemaReader}.
@@ -164,7 +165,6 @@ class RolapSchemaReaderTest {
             hierarchyName("Time", "Weekly");
         final String timeTime =
             hierarchyName("Time", "Time");
-        RolapSchemaPool.instance().clear();
         class TestGetCubeDimensionsModifier extends RDbMappingSchemaModifier {
 
             public TestGetCubeDimensionsModifier(MappingSchema mappingSchema) {
@@ -228,8 +228,7 @@ class RolapSchemaReaderTest {
         withSchema(context, schema);
          */
         withRole(context, "REG1");
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestGetCubeDimensionsModifier(schema)));
+        withSchema(context.getContext(), TestGetCubeDimensionsModifier::new);
         Connection connection = context.createConnection();
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();

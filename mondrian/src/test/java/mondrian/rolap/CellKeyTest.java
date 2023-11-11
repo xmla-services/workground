@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test that the implementations of the CellKey interface are correct.
@@ -385,7 +386,6 @@ class CellKeyTest  {
         propSaver.set(
             MondrianProperties.instance().ExpandNonNative,
             false);
-        RolapSchemaPool.instance().clear();
         class TestCellLookupModifier extends RDbMappingSchemaModifier {
 
             public TestCellLookupModifier(MappingSchema mappingSchema) {
@@ -476,8 +476,7 @@ class CellKeyTest  {
                 null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCellLookupModifier(schema)));
+        withSchema(context, TestCellLookupModifier::new);
         assertQueryReturns(context.getConnection(), query, result);
     }
 

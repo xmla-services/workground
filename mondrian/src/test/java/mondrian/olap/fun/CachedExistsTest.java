@@ -33,6 +33,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.opencube.junit5.TestUtil.withSchema;
+
 /**
  * Tests the CachedExists function.
  *
@@ -435,9 +437,7 @@ class CachedExistsTest{
                 return result;
             }
         }
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian2704Modifier(schema)));
+        withSchema(context, TestMondrian2704Modifier::new);
 
 
 

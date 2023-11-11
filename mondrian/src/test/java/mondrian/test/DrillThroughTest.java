@@ -30,7 +30,6 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -897,9 +896,7 @@ class DrillThroughTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.DrillThroughTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.DrillThroughTestModifier1::new);
 
         Result result = executeQuery(context.getConnection(),
             "SELECT {[Store2].[Store Id].Members} on columns,\n"

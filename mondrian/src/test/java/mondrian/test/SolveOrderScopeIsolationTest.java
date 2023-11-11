@@ -12,9 +12,7 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -24,13 +22,12 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.List;
-
 import static mondrian.olap.SolveOrderMode.ABSOLUTE;
 import static mondrian.olap.SolveOrderMode.SCOPED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * <code>SolveOrderScopeIsolationTest</code> Test conformance to SSAS2005 solve
@@ -117,9 +114,7 @@ class SolveOrderScopeIsolationTest {
             "Sales", null, memberDefs));
 
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.SolveOrderScopeIsolationTestModifier(schema)));
+        withSchema(context.getContext(), SchemaModifiers.SolveOrderScopeIsolationTestModifier::new);
 
     }
 

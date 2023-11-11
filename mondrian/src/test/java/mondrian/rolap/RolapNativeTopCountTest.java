@@ -10,7 +10,6 @@
 package mondrian.rolap;
 
 import mondrian.test.PropertySaver5;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,8 +18,6 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import java.util.List;
 
 import static mondrian.rolap.RolapNativeTopCountTestCases.CUSTOM_COUNT_MEASURE_QUERY;
 import static mondrian.rolap.RolapNativeTopCountTestCases.CUSTOM_COUNT_MEASURE_RESULT;
@@ -138,7 +135,6 @@ class RolapNativeTopCountTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testRoleRestrictionWorks_ForRowWithData(TestContextWrapper context) throws Exception {
-        RolapSchemaPool.instance().clear();
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -147,9 +143,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
         withSchema(context, schema);
          */
         withRole(context, ROLE_RESTRICTION_WORKS_WA_ROLE_NAME);
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(
-            List.of(new SchemaModifiers.RoleRestrictionWorksWaRoleDef(schema)));
+        withSchema(context.getContext(), SchemaModifiers.RoleRestrictionWorksWaRoleDef::new);
         assertQueryReturns(context.createConnection(),
             ROLE_RESTRICTION_WORKS_WA_QUERY,
             ROLE_RESTRICTION_WORKS_WA_RESULT);
@@ -158,7 +152,6 @@ class RolapNativeTopCountTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testRoleRestrictionWorks_ForRowWithOutData(TestContextWrapper context) throws Exception {
-        RolapSchemaPool.instance().clear();
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -167,9 +160,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
         withSchema(context, schema);
          */
         withRole(context, ROLE_RESTRICTION_WORKS_DF_ROLE_NAME);
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(
-            List.of(new SchemaModifiers.RoleRestrictionWorksDfRoleDef(schema)));
+        withSchema(context.getContext(), SchemaModifiers.RoleRestrictionWorksDfRoleDef::new);
         assertQueryReturns(context.createConnection(),
             ROLE_RESTRICTION_WORKS_DF_QUERY,
             ROLE_RESTRICTION_WORKS_DF_RESULT);

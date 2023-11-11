@@ -13,7 +13,6 @@
 package mondrian.olap;
 
 import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -51,6 +50,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 class HierarchyBugTest {
 	private PropertySaver5 propSaver;
@@ -367,9 +367,7 @@ TestUtil.flushSchemaCache(conn);
        /*
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new VerifyMemberLevelNamesIdentityOlap4jDateDimModifier(schema)));
+        withSchema(context.getContext(), VerifyMemberLevelNamesIdentityOlap4jDateDimModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 	@ParameterizedTest
@@ -470,9 +468,7 @@ TestUtil.flushSchemaCache(conn);
                 return result;
             }
         }
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier(schema)));
+        withSchema(context.getContext(), VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 

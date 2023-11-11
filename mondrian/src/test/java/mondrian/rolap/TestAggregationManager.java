@@ -51,7 +51,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -1100,9 +1099,7 @@ class TestAggregationManager extends BatchTestCase {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier1(schema)));
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier1::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns, "
             + "Filter ({ "

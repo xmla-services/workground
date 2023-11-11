@@ -44,8 +44,6 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
-import mondrian.rolap.RolapSchemaPool;
-
 import java.util.List;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
@@ -261,8 +259,7 @@ class SteelWheelsAggregationTest {
                         .build()
                 ))
                 .build()));
-        RolapSchemaPool.instance().clear();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
+        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
         withRole(context,"Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
