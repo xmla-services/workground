@@ -41,9 +41,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -73,6 +75,11 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class NativeSetEvaluationTest extends BatchTestCase {
 
   private PropertySaver5 propSaver;
+
+  @BeforeAll
+  public static void beforeAll() {
+      ContextArgumentsProvider.dockerWasChanged = true;
+  }
 
   @BeforeEach
   public void beforeEach() {
