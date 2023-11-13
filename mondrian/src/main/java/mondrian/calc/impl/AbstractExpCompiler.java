@@ -364,7 +364,10 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 			return new UnknownToIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0),calc);
 		}
 
-        return (IntegerCalc) calc;
+		if (calc instanceof IntegerCalc) {
+            return (IntegerCalc) calc;
+        }
+        return new UnknownToIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0),calc);
     }
 
 	@Override

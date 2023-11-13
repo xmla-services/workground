@@ -8611,7 +8611,7 @@ class SchemaTest {
                             .foreignKey("time_id")
                             .hierarchies(List.of(
                                 HierarchyRBuilder.builder()
-                                    .hasAll(true)
+                                    .hasAll(false)
                                     .primaryKey("time_id")
                                     .relation(new TableR("time_by_day"))
                                     .levels(List.of(
@@ -8620,6 +8620,7 @@ class SchemaTest {
                                             .column("the_year")
                                             .type(TypeEnum.NUMERIC)
                                             .uniqueMembers(true)
+                                            .levelType(LevelTypeEnum.TIME_YEARS)
                                             .build(),
                                         LevelRBuilder.builder()
                                             .name("Quarter")
@@ -10589,11 +10590,13 @@ class SchemaTest {
                 result.addAll(super.cubeDimensionUsageOrDimensions(cube));
                 if ("HR".equals(cube.name())) {
                     List<MappingPrivateDimension> dimensions = new ArrayList<>();
-                    for ( int i = 0; i < n; i++ ) {
-                        MappingSQL sql = new SQLR("`position_title` + " + i,
+                        MappingSQL sql = new SQLR("`position_title` + " + n,
                             "generic");
                         MappingExpressionView ex = ExpressionViewRBuilder.builder().sqls(List.of(sql)).build();
                         MappingLevel level = LevelRBuilder.builder()
+                        	.name("Position Title")
+                        	.uniqueMembers(false)
+                        	.ordinalColumn("position_id")
                             .keyExpression(ex).build();
                         MappingHierarchy hierarchy = HierarchyRBuilder
                             .builder()
@@ -10606,12 +10609,11 @@ class SchemaTest {
                         dimensions.add(
                             PrivateDimensionRBuilder
                                 .builder()
-                                .name("Position" + i)
+                                .name("Position" + n)
                                 .foreignKey("employee_id")
                                 .hierarchies(List.of(hierarchy))
                                 .build()
                         );
-                    }
                     result.addAll(dimensions);
                 }
                 return result;
