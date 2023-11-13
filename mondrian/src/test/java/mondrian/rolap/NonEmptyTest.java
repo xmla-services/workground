@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
@@ -1857,8 +1858,12 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
      */
-      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier2::new);
-    // [Product Name] can be hidden if it is blank, but native evaluation
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_BLANK_NAME)));
+
+      // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     checkNative(context,
       0,
@@ -1890,8 +1895,12 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
      */
-	withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier2::new);
-    // [Product Name] can be hidden if it it matches its parent name, so
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_PARENTS_NAME)));
+
+      // [Product Name] can be hidden if it it matches its parent name, so
     // native evaluation can not handle this query.
     checkNotNative(context,
       67,
@@ -1988,8 +1997,12 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
       */
-      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier2::new);
-    // [Product Name] can be hidden if it is blank, but native evaluation
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_BLANK_NAME)));
+
+      // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     // Note there's an existing bug with result ordering in native
     // non-empty evaluation of enumerations. This test intentionally
