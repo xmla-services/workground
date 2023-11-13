@@ -12,10 +12,8 @@ package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,8 +22,6 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import java.util.List;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
@@ -585,9 +581,7 @@ class RaggedHierarchyTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.RaggedHierarchyTestModifier2(schema)));
+        withSchema(context,  SchemaModifiers.RaggedHierarchyTestModifier2::new);
 
         assertQueryReturns(context.getConnection(),
             "SELECT\n"

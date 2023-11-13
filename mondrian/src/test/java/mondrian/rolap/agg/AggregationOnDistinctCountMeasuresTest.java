@@ -720,8 +720,7 @@ class AggregationOnDistinctCountMeasuresTest {
           }
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
-              List<MappingPrivateDimension> result = new ArrayList<>();
-              result.addAll(super.schemaDimensions(schema));
+              List<MappingPrivateDimension> result = new ArrayList<>();              
               result.add(PrivateDimensionRBuilder.builder()
                   .name("Warehouse2")
                   .hierarchies(List.of(
@@ -754,13 +753,13 @@ class AggregationOnDistinctCountMeasuresTest {
                           .build()
                   ))
                   .build());
+              result.addAll(super.schemaDimensions(schema));
               return result;
           }
 
           @Override
           protected List<MappingCube> schemaCubes(MappingSchema schema) {
-              List<MappingCube> result = new ArrayList<>();
-              result.addAll(super.schemaCubes(schema));
+              List<MappingCube> result = new ArrayList<>();              
               result.add(CubeRBuilder.builder()
                   .name("Warehouse2")
                   .fact(new TableR("inventory_fact_1997"))
@@ -784,6 +783,7 @@ class AggregationOnDistinctCountMeasuresTest {
                           .build()
                   ))
                   .build());
+              result.addAll(super.schemaCubes(schema));
               return result;
           }
       }

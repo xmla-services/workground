@@ -18,15 +18,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import java.util.List;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
@@ -81,7 +80,7 @@ class OrderByAliasTest extends BatchTestCase {
      */
       RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1KE(schema, colName)));
 
       assertQuerySql(context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
@@ -128,7 +127,7 @@ class OrderByAliasTest extends BatchTestCase {
      */
          RolapSchemaPool.instance().clear();
          MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1NE(schema, colName)));
          assertQuerySql(
         context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
@@ -177,7 +176,7 @@ class OrderByAliasTest extends BatchTestCase {
      */
          RolapSchemaPool.instance().clear();
          MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1CE(schema, colName)));
          assertQuerySql(
         context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
@@ -226,7 +225,7 @@ class OrderByAliasTest extends BatchTestCase {
      */
          RolapSchemaPool.instance().clear();
          MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+         context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1OE(schema, colName)));
          assertQuerySql(
         context.getConnection(),
         "select non empty{[Promotions].[All Promotions].Children} ON rows, "
@@ -378,6 +377,7 @@ class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
+    flushSchemaCache(context.getConnection());
     final StringBuilder colName = getDialect(context.getConnection())
         .quoteIdentifier("promotion_name");
     /*
@@ -395,7 +395,7 @@ class OrderByAliasTest extends BatchTestCase {
      */
         RolapSchemaPool.instance().clear();
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1(schema, colName)));
+        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.OrderByAliasTestModifier1ME(schema, colName)));
 
         assertQuerySql(
         context.getConnection(),

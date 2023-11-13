@@ -2505,9 +2505,7 @@ class FunctionTest {//extends FoodMartTestCase {
               return result;
           }
       }
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMemberModifier(schema)));
+      withSchema(context, TestDefaultMemberModifier::new);
 
       // In this variant of the schema, Time2.Weekly has an explicit default
     // member.
@@ -14218,9 +14216,7 @@ Intel platforms):
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testComplexSlicer_Calc(TestContext context) {
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
       /*
       ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -14269,9 +14265,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14313,9 +14307,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
     */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14357,9 +14349,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
       */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
       String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
@@ -14390,9 +14380,7 @@ Intel platforms):
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />"));
        */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier2::new);
 
       String query =
       "SELECT "
@@ -14509,9 +14497,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
       */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14539,9 +14525,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
     */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14573,9 +14557,7 @@ Intel platforms):
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />" ));
       */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier2::new);
       String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
@@ -14602,9 +14584,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
     */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14656,9 +14636,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
 
       String query =
       "SELECT "
@@ -14687,10 +14665,7 @@ Intel platforms):
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
-
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
       String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0 "
@@ -14725,9 +14700,7 @@ Intel platforms):
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />" ));
       */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier2(schema)));
+      withSchema(context, SchemaModifiers.FunctionTestModifier2::new);
 
       String query =
       "SELECT "
@@ -14761,10 +14734,7 @@ Intel platforms):
         + "formula='([Time].[1997].[Q1] - [Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.FunctionTestModifier(schema)));
-
+      withSchema(context, SchemaModifiers.FunctionTestModifier::new);
       String query =
       "SELECT "
         + "{[Measures].[Customer Count]} ON 0, "

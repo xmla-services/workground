@@ -218,7 +218,8 @@ class SteelWheelsAggregationTest {
                             .build()
                     ))
                     .build()));
-        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
+        RolapSchemaPool.instance().clear();        
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -260,8 +261,8 @@ class SteelWheelsAggregationTest {
                         ))
                         .build()
                 ))
-                .build()));
-        RolapSchemaPool.instance().clear();
+                .build()));       
+        RolapSchemaPool.instance().clear();        
         context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context,"Power User");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
@@ -328,7 +329,8 @@ class SteelWheelsAggregationTest {
                         .build())
                     .build()
             ));
-        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
+        RolapSchemaPool.instance().clear();        
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
@@ -420,7 +422,8 @@ class SteelWheelsAggregationTest {
                         .build())
                     .build()
             ));
-        withSchema(context.getContext(), RDbMappingSchemaModifier::new);
+        RolapSchemaPool.instance().clear();        
+        context.getContext().setDatabaseMappingSchemaProviders(List.of(new RDbMappingSchemaModifier(schema)));
         withRole(context, "Power User Union");
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }

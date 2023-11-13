@@ -52,7 +52,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -106,20 +105,6 @@ class TestAggregationManager extends BatchTestCase {
         aggMgr = null;
     }
 
-
-    private void prepareContext(TestContextWrapper context) {
-        final Statement statement =
-            ((RolapConnection) context.createConnection())
-                .getInternalStatement();
-        execution = new Execution(statement, 0);
-        aggMgr =
-            execution.getMondrianStatement()
-                .getMondrianConnection()
-                .getServer().getAggregationManager();
-        locus = new Locus(execution, "TestAggregationManager", null);
-        Locus.push(locus);
-    }
-
     private void prepareContext(TestContext context) {
         final Statement statement =
             ((RolapConnection) context.getConnection())
@@ -135,9 +120,9 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFemaleUnitSales(TestContextWrapper context) {
+    void testFemaleUnitSales(TestContext context) {
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final FastBatchingCellReader fbcr =
             new FastBatchingCellReader(execution, getCube(connection,"Sales"), aggMgr);
         CellRequest request = createRequest(connection,
@@ -153,12 +138,12 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void  testFemaleCustomerCount(TestContextWrapper context) {
+    void  testFemaleCustomerCount(TestContext context) {
         prepareContext(context);
         final FastBatchingCellReader fbcr =
-            new FastBatchingCellReader(execution, getCube(context.createConnection(), "Sales"), aggMgr);
+            new FastBatchingCellReader(execution, getCube(context.getConnection(), "Sales"), aggMgr);
         CellRequest request =
-            createRequest(context.createConnection(),
+            createRequest(context.getConnection(),
                 "Sales", "[Measures].[Customer Count]",
                 "customer", "gender", "F");
         Object value = aggMgr.getCellFromCache(request);
@@ -172,7 +157,7 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void  testFemaleCustomerCountWithConstraints(TestContextWrapper context) {
+    void  testFemaleCustomerCountWithConstraints(TestContext context) {
         prepareContext(context);
         List<String[]> Q1M1 = new ArrayList<> ();
         Q1M1.add(new String[] {"1997", "Q1", "1"});
@@ -183,7 +168,7 @@ class TestAggregationManager extends BatchTestCase {
         List<String[]> Q1M1Q2M5 = new ArrayList<> ();
         Q1M1Q2M5.add(new String[] {"1997", "Q1", "1"});
         Q1M1Q2M5.add(new String[] {"1997", "Q2", "5"});
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 =
             createRequest(connection,
                 "Sales", "[Measures].[Customer Count]",
@@ -233,14 +218,14 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testFemaleUnitSalesSql(TestContextWrapper context) {
+    void testFemaleUnitSalesSql(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
         {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Unit Sales]", "customer", "gender", "F");
 
@@ -264,9 +249,9 @@ class TestAggregationManager extends BatchTestCase {
      *
      * TODO: Enable this test.
      */
-    private void _testFemaleUnitSalesSql_withAggs(TestContextWrapper context) {
+    private void _testFemaleUnitSalesSql_withAggs(TestContext context) {
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Unit Sales]", "customer", "gender", "F");
 
@@ -294,14 +279,14 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testMultipleMeasures(TestContextWrapper context) {
+    void testMultipleMeasures(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
         {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest[] requests = new CellRequest[] {
             createRequest(connection,
                 "Sales",
@@ -351,9 +336,9 @@ class TestAggregationManager extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     @SuppressWarnings("java:S5810")
-    private void _testMultipleMeasures_withAgg(TestContextWrapper context) {
+    private void _testMultipleMeasures_withAgg(TestContext context) {
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest[] requests = new CellRequest[] {
             createRequest(connection,
                 "Sales",
@@ -398,14 +383,14 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void createMultipleMeasureCellRequest(TestContextWrapper context) {
+    void createMultipleMeasureCellRequest(TestContext context) {
         prepareContext(context);
         String cube = "Sales";
         String measure = "[Measures].[Unit Sales]";
         String table = "store";
         String column = "store_state";
         String value = "CA";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final boolean fail = true;
         Cube salesCube = connection.getSchema().lookupCube(cube, fail);
         Member storeSqftMeasure =
@@ -438,7 +423,8 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testUniqueMembers(TestContextWrapper context) {
+    void testUniqueMembers(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
         // [Store].[Store State] is unique, so we don't expect to see any
         // references to country.
@@ -521,7 +507,7 @@ class TestAggregationManager extends BatchTestCase {
                     DatabaseProduct.DERBY, derbySql, derbySql)
             };
         }
-        assertQuerySql(context.createConnection(), mdxQuery, patterns);
+        assertQuerySql(context.getConnection(), mdxQuery, patterns);
     }
 
     /**
@@ -532,11 +518,12 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyCrossJoinLoneAxis(TestContextWrapper context) {
+    void testNonEmptyCrossJoinLoneAxis(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
         // Not sure what this test is checking.
         // For now, only run it for derby.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final Dialect dialect = getDialect(connection);
         if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.DERBY) {
             return;
@@ -596,9 +583,10 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testHierarchyInFactTable(TestContextWrapper context) {
+    void testHierarchyInFactTable(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Store",
             "[Measures].[Store Sqft]",
@@ -634,9 +622,10 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctAggMiss(TestContextWrapper context) {
+    void testCountDistinctAggMiss(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales",
             "[Measures].[Customer Count]",
@@ -701,14 +690,14 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctAggMatch(TestContextWrapper context) {
+    void testCountDistinctAggMatch(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
         {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] { "time_by_day", "time_by_day", "time_by_day" },
@@ -736,12 +725,13 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctCannotRollup(TestContextWrapper context) {
+    void testCountDistinctCannotRollup(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
         // Summary "agg_g_ms_pcat_sales_fact_1997" doesn't match,
         // because we'd need to roll-up the distinct-count measure over
         // "month_of_year".
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] { "time_by_day", "time_by_day", "product_class" },
@@ -826,7 +816,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctRollupAlongDim(TestContextWrapper context) {
+    void testCountDistinctRollupAlongDim(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
@@ -847,7 +837,7 @@ class TestAggregationManager extends BatchTestCase {
         //
         // Because [Gender] and [Marital Status] come from the [Customer]
         // table (the same as the distinct-count measure), we can roll up.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] {
@@ -892,14 +882,14 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctRollup2(TestContextWrapper context) {
+    void testCountDistinctRollup2(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
         {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] {
@@ -952,7 +942,8 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctBatchLoading(TestContextWrapper context) {
+    void testCountDistinctBatchLoading(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
         List<String[]> compoundMembers = new ArrayList<>();
         compoundMembers.add(new String[] {"1997", "Q1", "1"});
@@ -960,7 +951,7 @@ class TestAggregationManager extends BatchTestCase {
 
         CellRequestConstraint aggConstraint =
             makeConstraintYearQuarterMonth(compoundMembers);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] {"product_class"},
@@ -1013,7 +1004,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggMembers(TestContextWrapper context) {
+    void testAggMembers(TestContext context) {
         prepareContext(context);
         if (MondrianProperties.instance().TestExpDependencies.get() > 0) {
             return;
@@ -1048,7 +1039,7 @@ class TestAggregationManager extends BatchTestCase {
                 + "group by `store`.`store_country` "
                 + "order by ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC",
                 26)};
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQuerySql(connection,
             "select NON EMPTY {[Customers].[USA]} ON COLUMNS,\n"
             + "       NON EMPTY Crossjoin(Hierarchize(Union({[Store].[All Stores]},\n"
@@ -1066,9 +1057,10 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggChildMembersOfLeaf(TestContextWrapper context) {
+    void testAggChildMembersOfLeaf(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
             "select NON EMPTY {[Time].[1997]} ON COLUMNS,\n"
             + "       NON EMPTY Crossjoin(Hierarchize(Union({[Store].[All Stores]},\n"
@@ -1107,9 +1099,7 @@ class TestAggregationManager extends BatchTestCase {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestAggregationManagerModifier1(schema)));
+        withSchema(context, SchemaModifiers.TestAggregationManagerModifier1::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns, "
             + "Filter ({ "
@@ -1134,7 +1124,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testColumnCadinalityCache(TestContextWrapper context) {
+    void testColumnCadinalityCache(TestContext context) {
         prepareContext(context);
         String query1 =
             "select "
@@ -1173,7 +1163,7 @@ class TestAggregationManager extends BatchTestCase {
             };
 
         //final TestContext context = getTestContext().withFreshConnection();
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         try {
             // This MDX gets the [Product].[Product Family] cardinality
             // from the DB.
@@ -1503,7 +1493,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCountDistinctWithConstraintAggMiss(TestContextWrapper context) {
+    void testCountDistinctWithConstraintAggMiss(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
               && MondrianProperties.instance().ReadAggregates.get()))
@@ -1537,7 +1527,7 @@ class TestAggregationManager extends BatchTestCase {
 
         List<String[]> compoundMembers = new ArrayList<> ();
         compoundMembers.add(new String[] {"1997", "Q1", "1"});
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request = createRequest(connection,
             "Sales", "[Measures].[Customer Count]",
             new String[] { "product_class", "product_class", "product_class" },
@@ -1835,7 +1825,7 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggregatingTuples(TestContextWrapper context) {
+    void testAggregatingTuples(TestContext context) {
         prepareContext(context);
         propSaver.set(propSaver.properties.LevelPreCacheThreshold, 1);
         if (!(MondrianProperties.instance().UseAggregates.get()
@@ -1847,7 +1837,7 @@ class TestAggregationManager extends BatchTestCase {
             return;
         }
         // flush cache, to be sure sql is executed
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         flushSchemaCache(connection);
 
         // This first query verifies that simple collapsed levels in aggregate
@@ -1951,7 +1941,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testCollapsedChildren(TestContextWrapper context) {
+    void testCollapsedChildren(TestContext context) {
         prepareContext(context);
         if (!(MondrianProperties.instance().UseAggregates.get()
                 && MondrianProperties.instance().ReadAggregates.get()))
@@ -1961,7 +1951,7 @@ class TestAggregationManager extends BatchTestCase {
         if (!(MondrianProperties.instance().EnableNativeCrossJoin.get())) {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         // flush cache to be sure sql is executed
         flushSchemaCache(connection);
 
@@ -3807,16 +3797,17 @@ class TestAggregationManager extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testDisabledReadAggregatesIgnoresDefaultRules(TestContextWrapper context)
+    void testDisabledReadAggregatesIgnoresDefaultRules(TestContext context)
         throws Exception
     {
+    	RolapSchemaPool.instance().clear();
         prepareContext(context);
         propSaver.set(propSaver.properties.ReadAggregates, false);
         propSaver.set(propSaver.properties.UseAggregates, true);
         String sql =
             "select count(*) as `c0` from `agg_c_10_sales_fact_1997` as `agg_c_10_sales_fact_1997`";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             "select from sales",
             new SqlPattern[]{
                 new SqlPattern(

@@ -9,10 +9,8 @@
 
 package mondrian.test;
 
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.AllocationPolicy;
@@ -30,7 +28,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,6 +38,7 @@ import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.checkThrowable;
 import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Test for writeback functionality.
@@ -252,9 +250,7 @@ class ScenarioTest {
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
         */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ScenarioTestModifier1(schema)));
+        withSchema(context.getContext(),  SchemaModifiers.ScenarioTestModifier1::new);
 
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());
@@ -441,9 +437,7 @@ class ScenarioTest {
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.ScenarioTestModifier1(schema)));
+        withSchema(context.getContext(),  SchemaModifiers.ScenarioTestModifier1::new);
 
         final OlapConnection connection = context.createOlap4jConnection();
         connection.setScenario(connection.createScenario());

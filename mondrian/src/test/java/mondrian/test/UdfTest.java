@@ -69,6 +69,7 @@ import static org.opencube.junit5.TestUtil.executeExpr;
 import static org.opencube.junit5.TestUtil.executeExprRaw;
 import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
 import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 //import org.apache.logging.log4j.ThreadContext;
 
@@ -117,9 +118,7 @@ public class UdfTest {
      * @return Test context
      */
     private void updateTestContext(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));
+        withSchema(context, f);
     }
 
     private void updateTestContext(TestContext context, RDbMappingSchemaModifier m) {

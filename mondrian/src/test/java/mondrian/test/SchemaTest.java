@@ -688,7 +688,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyTableNotFound(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestHierarchyTableNotFoundModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -733,8 +732,7 @@ class SchemaTest {
             + "</Dimension>"));
         */
         // FIXME: This should validate the schema, and fail.
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyTableNotFoundModifier(schema)));
+        withSchema(context, TestHierarchyTableNotFoundModifier::new);
         assertSimpleQuery(context.getConnection());
         // FIXME: Should give better error.
         assertQueryThrows(context,
@@ -745,7 +743,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testPrimaryKeyTableNotFound(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestPrimaryKeyTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestPrimaryKeyTableNotFoundModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -790,8 +787,7 @@ class SchemaTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestPrimaryKeyTableNotFoundModifier(schema)));
+        withSchema(context, TestPrimaryKeyTableNotFoundModifier::new);
         assertQueryThrows(context,
             "select from [Sales]",
             "no table 'customer_not_found' found in hierarchy [Yearly Income4]");
@@ -800,7 +796,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableNotFound(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestLevelTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestLevelTableNotFoundModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -846,8 +841,7 @@ class SchemaTest {
             + "</Dimension>"));
 
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestLevelTableNotFoundModifier(schema)));
+        withSchema(context, TestLevelTableNotFoundModifier::new);
         assertQueryThrows(context,
             "select from [Sales]",
             "Table 'customer_not_found' not found");
@@ -856,7 +850,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyBadDefaultMember(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestHierarchyBadDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyBadDefaultMemberModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -904,8 +897,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyBadDefaultMemberModifier(schema)));
+        withSchema(context, TestHierarchyBadDefaultMemberModifier::new);
         assertQueryThrows(context,
             "select {[Gender with default]} on columns from [Sales]",
             "Can not find Default Member with name \"[Gender with default].[Non].[Existent]\" in Hierarchy \"Gender with default\"");
@@ -924,7 +916,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAlias(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDuplicateTableAliasModifier extends RDbMappingSchemaModifier {
             public TestDuplicateTableAliasModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -968,8 +959,7 @@ class SchemaTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDuplicateTableAliasModifier(schema)));
+        withSchema(context, TestDuplicateTableAliasModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Yearly Income2]} on columns, {[Measures].[Unit Sales]} on rows from [Sales]",
             "Axis #0:\n"
@@ -989,7 +979,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAliasSameForeignKey(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDuplicateTableAliasSameForeignKeyModifier extends RDbMappingSchemaModifier {
             public TestDuplicateTableAliasSameForeignKeyModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1032,8 +1021,7 @@ class SchemaTest {
             + "    <Level name=\"Yearly Income\" column=\"yearly_income\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>")); */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDuplicateTableAliasSameForeignKeyModifier(schema)));
+        withSchema(context, TestDuplicateTableAliasSameForeignKeyModifier::new);
         assertQueryReturns(context.getConnection(),
             "select from [Sales]",
             "Axis #0:\n"
@@ -1060,7 +1048,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTable(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareTableModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1105,8 +1092,7 @@ class SchemaTest {
             + "</Dimension>"));
         */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareTableModifier(schema)));
+        withSchema(context, TestDimensionsShareTableModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Yearly Income].[$10K - $30K]} on columns,"
             + "{[Yearly Income2].[$150K +]} on rows from [Sales]",
@@ -1266,7 +1252,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableNativeNonEmptyCrossJoin(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareTableNativeNonEmptyCrossJoinModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableNativeNonEmptyCrossJoinModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1310,8 +1295,7 @@ class SchemaTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareTableNativeNonEmptyCrossJoinModifier(schema)));
+        withSchema(context, TestDimensionsShareTableNativeNonEmptyCrossJoinModifier::new);
         assertQueryReturns(context.getConnection(),
             "select NonEmptyCrossJoin({[Yearly Income2].[All Yearly Income2s]},{[Customers].[All Customers]}) on rows,"
             + "NON EMPTY {[Measures].[Unit Sales]} on columns"
@@ -1332,7 +1316,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableSameForeignKeys(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1376,8 +1359,7 @@ class SchemaTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareTableSameForeignKeysModifier(schema)));
+        withSchema(context, TestDimensionsShareTableSameForeignKeysModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Yearly Income].[$10K - $30K]} on columns,"
             + "{[Yearly Income2].[$150K +]} on rows from [Sales]",
@@ -1433,7 +1415,6 @@ class SchemaTest {
         {
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestSnowflakeHierarchyValidationNotNeededModifier extends RDbMappingSchemaModifier{
             public TestSnowflakeHierarchyValidationNotNeededModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1664,8 +1645,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSnowflakeHierarchyValidationNotNeededModifier(schema)));
+        withSchema(context, TestSnowflakeHierarchyValidationNotNeededModifier::new);
         assertQueryReturns(context.getConnection(),
             "select  {[Store.MyHierarchy].[Mexico]} on rows,"
             + "{[Customers].[USA].[South West]} on columns"
@@ -1688,7 +1668,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSnowflakeHierarchyValidationNotNeeded2(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestSnowflakeHierarchyValidationNotNeeded2Modifier extends RDbMappingSchemaModifier {
             public TestSnowflakeHierarchyValidationNotNeeded2Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -1919,8 +1898,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestSnowflakeHierarchyValidationNotNeeded2Modifier(schema)));
+        withSchema(context, TestSnowflakeHierarchyValidationNotNeeded2Modifier::new);
         assertQueryReturns(context.getConnection(),
             "select  {[Store.MyHierarchy].[USA].[South West]} on rows,"
             + "{[Customers].[USA].[South West]} on columns"
@@ -1944,7 +1922,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTable(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareJoinTableModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2128,8 +2105,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareJoinTableModifier(schema)));
+        withSchema(context, TestDimensionsShareJoinTableModifier::new);
         assertQueryReturns(context.getConnection(),
             "select  {[Store].[USA].[South West]} on rows,"
             + "{[Customers].[USA].[South West]} on columns"
@@ -2151,7 +2127,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableOneAlias(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareJoinTableOneAliasModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableOneAliasModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2337,8 +2312,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareJoinTableOneAliasModifier(schema)));
+        withSchema(context, TestDimensionsShareJoinTableOneAliasModifier::new);
         assertQueryReturns(context.getConnection(),
             "select  {[Store].[USA].[South West]} on rows,"
             + "{[Customers].[USA].[South West]} on columns"
@@ -2360,7 +2334,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableTwoAliases(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionsShareJoinTableTwoAliasesModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableTwoAliasesModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2546,8 +2519,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionsShareJoinTableTwoAliasesModifier(schema)));
+        withSchema(context, TestDimensionsShareJoinTableTwoAliasesModifier::new);
         assertQueryReturns(context.getConnection(),
             "select  {[Store].[USA].[South West]} on rows,"
             + "{[Customers].[USA].[South West]} on columns"
@@ -2569,7 +2541,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTable(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestTwoAliasesDimensionsShareTableModifier extends RDbMappingSchemaModifier {
             public TestTwoAliasesDimensionsShareTableModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2698,8 +2669,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestTwoAliasesDimensionsShareTableModifier(schema)));
+        withSchema(context, TestTwoAliasesDimensionsShareTableModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[StoreA].[USA]} on rows,"
             + "{[StoreB].[USA]} on columns"
@@ -2721,7 +2691,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTableSameForeignKeys(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestTwoAliasesDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
             public TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2850,8 +2819,7 @@ class SchemaTest {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(schema)));
+        withSchema(context, TestTwoAliasesDimensionsShareTableSameForeignKeysModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[StoreA].[USA]} on rows,"
             + "{[StoreB].[USA]} on columns"
@@ -2872,7 +2840,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionUsages(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
             public TestMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -2948,8 +2915,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMultipleDimensionUsagesModifier(schema)));
+        withSchema(context, TestMultipleDimensionUsagesModifier::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Time2].[1997]} on columns,\n"
@@ -2972,7 +2938,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionHierarchyCaptionUsages(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestMultipleDimensionHierarchyCaptionUsagesModifier extends RDbMappingSchemaModifier {
             public TestMultipleDimensionHierarchyCaptionUsagesModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3050,8 +3015,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMultipleDimensionHierarchyCaptionUsagesModifier(schema)));
+        withSchema(context, TestMultipleDimensionHierarchyCaptionUsagesModifier::new);
         String query =
             "select\n"
             + " {[Time2].[1997]} on columns,\n"
@@ -3082,7 +3046,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionCreation(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionCreationModifier extends RDbMappingSchemaModifier {
             public TestDimensionCreationModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3139,8 +3102,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionCreationModifier(schema)));
+        withSchema(context, TestDimensionCreationModifier::new);
         Cube cube = context.getConnection().getSchema().lookupCube(
             "Sales Create Dimension", true);
 
@@ -3179,7 +3141,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionUsageLevel(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDimensionUsageLevelModifier extends RDbMappingSchemaModifier {
             public TestDimensionUsageLevelModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3235,8 +3196,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionUsageLevelModifier(schema)));
+        withSchema(context, TestDimensionUsageLevelModifier::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Store].[Store State].members} on columns \n"
@@ -3285,7 +3245,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberMultipleDimensionUsages(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestAllMemberMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
             public TestAllMemberMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3368,8 +3327,7 @@ class SchemaTest {
             MondrianProperties.instance().SsasCompatibleNaming.get()
                 ? "[Store2].[All Stores]"
                 : "[Store2].[All Store2s]";
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestAllMemberMultipleDimensionUsagesModifier(schema)));
+        withSchema(context, TestAllMemberMultipleDimensionUsagesModifier::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Store].[Store].[All Stores]} on columns,\n"
@@ -3401,7 +3359,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testNonAliasedDimensionUsage(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestNonAliasedDimensionUsageModifier extends RDbMappingSchemaModifier {
             public TestNonAliasedDimensionUsageModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3464,8 +3421,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNonAliasedDimensionUsageModifier(schema)));
+        withSchema(context, TestNonAliasedDimensionUsageModifier::new);
         final String query = "select\n"
                              + " {[Time].[1997]} on columns \n"
                              + "From [Sales Two Dimensions]";
@@ -3493,7 +3449,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testViewDegenerateDims(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestViewDegenerateDimsModifier extends RDbMappingSchemaModifier {
             public TestViewDegenerateDimsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3626,8 +3581,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestViewDegenerateDimsModifier(schema)));
+        withSchema(context, TestViewDegenerateDimsModifier::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " NON EMPTY {[Time].[1997], [Time].[1997].[Q3]} on columns,\n"
@@ -3649,7 +3603,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestViewFactTableModifier extends RDbMappingSchemaModifier {
             public TestViewFactTableModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3785,8 +3738,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestViewFactTableModifier(schema)));
+        withSchema(context, TestViewFactTableModifier::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Time].[1997], [Time].[1997].[Q3]} on columns,\n"
@@ -3817,7 +3769,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable2(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestViewFactTable2Modifier extends RDbMappingSchemaModifier {
             public TestViewFactTable2Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3915,8 +3866,7 @@ class SchemaTest {
             + "</Cube>", null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestViewFactTable2Modifier(schema)));
+        withSchema(context, TestViewFactTable2Modifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Store Type].Children} on columns from [Store2]",
             "Axis #0:\n"
@@ -3944,7 +3894,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDeprecatedDistinctCountAggregator(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestDeprecatedDistinctCountAggregatorModifier extends RDbMappingSchemaModifier{
             public TestDeprecatedDistinctCountAggregatorModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -3985,9 +3934,7 @@ class SchemaTest {
                 return result;
             }
         }
-        context.setDatabaseMappingSchemaProviders(
-        		List.of(new TestDeprecatedDistinctCountAggregatorModifier(
-        				context.getDatabaseMappingSchemaProviders().get(0).get())));
+        withSchema(context, TestDeprecatedDistinctCountAggregatorModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales],"
             + "    [Measures].[Customer Count], "
@@ -4028,7 +3975,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidAggregator(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestInvalidAggregatorModifier extends RDbMappingSchemaModifier{
             public TestInvalidAggregatorModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4082,8 +4028,7 @@ class SchemaTest {
             + "      formula=\"[Measures].[Customer Count2] / 2\">\n"
             + "  </CalculatedMember>"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestInvalidAggregatorModifier(schema)));
+        withSchema(context, TestInvalidAggregatorModifier::new);
         assertQueryThrows(context,
             "select from [Sales]",
             "Unknown aggregator 'invalidAggregator'; valid aggregators are: 'sum', 'count', 'min', 'max', 'avg', 'distinct-count'");
@@ -4097,7 +4042,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestUnknownUsagesModifier extends RDbMappingSchemaModifier {
             public TestUnknownUsagesModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4272,8 +4216,7 @@ class SchemaTest {
                 + "</Cube>\n"
                 + "</Schema>");
          */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestUnknownUsagesModifier(schema)));
+            withSchema(context, TestUnknownUsagesModifier::new);
             assertQueryReturns(context.getConnection(),
                 "select from [Sales Degen]",
                 "Axis #0:\n"
@@ -4296,7 +4239,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages1(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestUnknownUsages1Modifier extends RDbMappingSchemaModifier {
             public TestUnknownUsages1Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4520,8 +4462,7 @@ class SchemaTest {
                 + "</Cube>\n"
                 + "</Schema>");
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestUnknownUsages1Modifier(schema)));
+            withSchema(context, TestUnknownUsages1Modifier::new);
             assertQueryReturns(context.getConnection(),
                 "select from [Denormalized Sales]",
                 "Axis #0:\n"
@@ -4539,7 +4480,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatter(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestPropertyFormatterModifier extends RDbMappingSchemaModifier {
             public TestPropertyFormatterModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4606,8 +4546,7 @@ class SchemaTest {
                 + "  </Dimension>\n"));
          */
         try {
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestPropertyFormatterModifier(schema)));
+            withSchema(context, TestPropertyFormatterModifier::new);
             assertSimpleQuery(context.getConnection());
             fail("expected exception");
         } catch (RuntimeException e) {
@@ -4632,7 +4571,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian233(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestBugMondrian233Modifier extends RDbMappingSchemaModifier {
             public TestBugMondrian233Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4678,10 +4616,7 @@ class SchemaTest {
                 return result;
             }
         }
-        context.setDatabaseMappingSchemaProviders(
-            List.of(
-                new TestBugMondrian233Modifier(context.getDatabaseMappingSchemaProviders().get(0).get())
-            ));
+        withSchema(context, TestBugMondrian233Modifier::new);
         // With bug, and with aggregates enabled, query against Sales returns
         // 565,238, which is actually the total for [Store Sales]. I think the
         // aggregate tables are getting crossed.
@@ -4706,7 +4641,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian303(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestBugMondrian303Modifier extends RDbMappingSchemaModifier {
             public TestBugMondrian303Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4771,10 +4705,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
          */
-        context.setDatabaseMappingSchemaProviders(
-            List.of(
-                new TestBugMondrian303Modifier(context.getDatabaseMappingSchemaProviders().get(0).get())
-            ));
+        withSchema(context, TestBugMondrian303Modifier::new);
         // In the query below Mondrian (prior to the fix) would
         // return the store name instead of the store type.
         assertQueryReturns(context.getConnection(),
@@ -4835,7 +4766,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionOneMeasure(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeWithOneDimensionOneMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneDimensionOneMeasureModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4902,8 +4832,7 @@ class SchemaTest {
             null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCubeWithOneDimensionOneMeasureModifier(schema)));
+        withSchema(context, TestCubeWithOneDimensionOneMeasureModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Promotion Media]} on columns from [OneDim]",
             "Axis #0:\n"
@@ -4916,7 +4845,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionUsageOneMeasure(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeWithOneDimensionUsageOneMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneDimensionUsageOneMeasureModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -4964,8 +4892,7 @@ class SchemaTest {
             null, null, null, null);
         withSchema(context, schema);
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCubeWithOneDimensionUsageOneMeasureModifier(schema)));
+        withSchema(context, TestCubeWithOneDimensionUsageOneMeasureModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Product].Children} on columns from [OneDimUsage]",
             "Axis #0:\n"
@@ -4982,7 +4909,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeHasFact(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeHasFactModifier extends RDbMappingSchemaModifier {
             public TestCubeHasFactModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5009,8 +4935,7 @@ class SchemaTest {
             null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCubeHasFactModifier(schema)));
+        withSchema(context, TestCubeHasFactModifier::new);
         Throwable throwable = null;
         try {
             assertSimpleQuery(context.getConnection());
@@ -5025,7 +4950,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeCaption(TestContextWrapper context) throws SQLException {
-    	RolapSchemaPool.instance().clear();
         class TestCubeCaptionModifier extends RDbMappingSchemaModifier {
             public TestCubeCaptionModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5077,8 +5001,7 @@ class SchemaTest {
             null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestCubeCaptionModifier(schema)));
+        withSchema(context.getContext(), TestCubeCaptionModifier::new);
         final NamedList<org.olap4j.metadata.Cube> cubes =
             context.createOlap4jConnection().getOlapSchema().getCubes();
         final org.olap4j.metadata.Cube cube = cubes.get("Cube with caption");
@@ -5091,7 +5014,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoDimensions(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeWithNoDimensionsModifier extends RDbMappingSchemaModifier {
             public TestCubeWithNoDimensionsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5119,7 +5041,7 @@ class SchemaTest {
                 return result;
             }
         }
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCubeWithNoDimensionsModifier(context.getDatabaseMappingSchemaProviders().get(0).get())));
+        withSchema(context, TestCubeWithNoDimensionsModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns from [NoDim]",
             "Axis #0:\n"
@@ -5132,7 +5054,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoMeasuresFails(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeWithNoMeasuresFailsModifier extends RDbMappingSchemaModifier {
             public TestCubeWithNoMeasuresFailsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5197,8 +5118,7 @@ class SchemaTest {
             null, null, null, null);
         withSchema(context, schema);
          */
-        context.setDatabaseMappingSchemaProviders(
-            List.of(new TestCubeWithNoMeasuresFailsModifier(context.getDatabaseMappingSchemaProviders().get(0).get())));
+        withSchema(context, TestCubeWithNoMeasuresFailsModifier::new);
         // Does not fail with
         //    "Hierarchy '[Measures]' is invalid (has no members)"
         // because of the implicit [Fact Count] measure.
@@ -5208,7 +5128,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneCalcMeasure(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCubeWithOneCalcMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneCalcMeasureModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5277,8 +5196,7 @@ class SchemaTest {
         withSchema(context, schema);
         */
 
-        context.setDatabaseMappingSchemaProviders(
-            List.of(new TestCubeWithOneCalcMeasureModifier(context.getDatabaseMappingSchemaProviders().get(0).get())));
+        withSchema(context, TestCubeWithOneCalcMeasureModifier::new);
         // Because there are no explicit stored measures, the default measure is
         // the implicit stored measure, [Fact Count]. Stored measures, even
         // non-visible ones, come before calculated measures.
@@ -5301,7 +5219,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMemberInCube(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCalcMemberInCubeModifier1 extends RDbMappingSchemaModifier {
             public TestCalcMemberInCubeModifier1(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5342,8 +5259,7 @@ class SchemaTest {
                 + "</CalculatedMember>",
                 null, false));
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier1(schema)));
+        withSchema(context, TestCalcMemberInCubeModifier1::new);
         // Because there are no explicit stored measures, the default measure is
         // the implicit stored measure, [Fact Count]. Stored measures, even
         // non-visible ones, come before calculated measures.
@@ -5369,7 +5285,6 @@ class SchemaTest {
 
         // Test where hierarchy & dimension both specified. should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier2 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier2(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5412,8 +5327,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier2(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier2::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5431,7 +5345,6 @@ class SchemaTest {
 
         // test where hierarchy is not uname of valid hierarchy. should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier3 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier3(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5472,8 +5385,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier3(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier3::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5491,7 +5403,6 @@ class SchemaTest {
 
         // test where formula is invalid. should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier4 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier4(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5531,8 +5442,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier4(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier4::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5549,7 +5459,6 @@ class SchemaTest {
 
         // Test where parent is invalid. should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier5 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier5(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5590,8 +5499,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier5(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier5::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5610,7 +5518,6 @@ class SchemaTest {
 
         // test where parent is not in same hierarchy as hierarchy. should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier6 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier6(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5651,8 +5558,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier6(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier6::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5672,7 +5578,6 @@ class SchemaTest {
         // test where calc member has no formula (formula attribute or
         //   embedded element); should fail
         try {
-        	RolapSchemaPool.instance().clear();
             class TestCalcMemberInCubeModifier7 extends RDbMappingSchemaModifier {
                 public TestCalcMemberInCubeModifier7(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5711,8 +5616,7 @@ class SchemaTest {
                     + "</CalculatedMember>",
                     null, false));
              */
-            schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCalcMemberInCubeModifier7(schema)));
+            withSchema(context, TestCalcMemberInCubeModifier7::new);
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5735,7 +5639,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAggTableSupportOfSharedDims(TestContext context) {
         if (Bug.BugMondrian361Fixed) {
-        	RolapSchemaPool.instance().clear();
             class TestAggTableSupportOfSharedDimsModifier extends RDbMappingSchemaModifier {
                 public TestAggTableSupportOfSharedDimsModifier(MappingSchema mappingSchema) {
                     super(mappingSchema);
@@ -5806,8 +5709,7 @@ class SchemaTest {
 
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestAggTableSupportOfSharedDimsModifier(schema)));
+            withSchema(context, TestAggTableSupportOfSharedDimsModifier::new);
             assertQueryReturns(context.getConnection(),
                 "select\n"
                 + " {[Time2].[1997]} on columns,\n"
@@ -5842,7 +5744,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableAttributeAsView(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestLevelTableAttributeAsViewModifier extends RDbMappingSchemaModifier {
             public TestLevelTableAttributeAsViewModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5959,8 +5860,7 @@ class SchemaTest {
         withSchema(context, schema);
          */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestLevelTableAttributeAsViewModifier(schema)));
+        withSchema(context, TestLevelTableAttributeAsViewModifier::new);
         if (!getDialect(context.getConnection()).allowsFromQuery()) {
             return;
         }
@@ -5979,7 +5879,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidSchemaAccess(TestContextWrapper context) {
-    	RolapSchemaPool.instance().clear();
         class TestInvalidSchemaAccess extends RDbMappingSchemaModifier {
             public TestInvalidSchemaAccess(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6004,8 +5903,7 @@ class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestInvalidSchemaAccess(schema)));
+        withSchema(context.getContext(), TestInvalidSchemaAccess::new);
         withRole(context, "Role1");
         assertQueryThrows(context,
             "select from [Sales]",
@@ -6015,7 +5913,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberNoStringReplace(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestAllMemberNoStringReplaceModifier extends RDbMappingSchemaModifier {
             public TestAllMemberNoStringReplaceModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6072,8 +5969,7 @@ class SchemaTest {
             }
         }
 
-        context.setDatabaseMappingSchemaProviders(List.of(new TestAllMemberNoStringReplaceModifier(
-            context.getDatabaseMappingSchemaProviders().get(0).get())));
+        withSchema(context, TestAllMemberNoStringReplaceModifier::new);
         assertQueryReturns(context.getConnection(),
             "select [TIME.CALENDAR].[All TIME(CALENDAR)] on columns\n"
             + "from [Sales Special Time]",
@@ -6144,8 +6040,7 @@ class SchemaTest {
             + "</Role>\n");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestUnionRoleModifier(schema)));
+        withSchema(context.getContext(), TestUnionRoleModifier::new);
         withRole(context, "Role1Plus2Plus1");
         assertQueryReturns(context.createConnection(),
             "select from [Sales]",
@@ -6157,7 +6052,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRoleContainsGrants(TestContextWrapper context) {
-    	RolapSchemaPool.instance().clear();
         class TestUnionRoleContainsGrantsModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleContainsGrantsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6197,8 +6091,7 @@ class SchemaTest {
             + "</Role>\n");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestUnionRoleContainsGrantsModifier(schema)));
+        withSchema(context.getContext(), TestUnionRoleContainsGrantsModifier::new);
         withRole(context, "Role1Plus2");
         assertQueryThrows(context,
             "select from [Sales]", "Union role must not contain grants");
@@ -6247,8 +6140,7 @@ class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestUnionRoleIllegalForwardRefModifier(schema)));
+        withSchema(context.getContext(), TestUnionRoleIllegalForwardRefModifier::new);
         withRole(context, "Role1Plus2");
         assertQueryThrows(context,
             "select from [Sales]", "Unknown role 'Role2'");
@@ -6257,7 +6149,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchema(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestVirtualCubeNamedSetSupportInSchemaModifier extends RDbMappingSchemaModifier {
             public TestVirtualCubeNamedSetSupportInSchemaModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6279,8 +6170,7 @@ class SchemaTest {
             "<NamedSet name=\"Non CA State Stores\" "
             + "formula=\"EXCEPT({[Store].[Store Country].[USA].children},{[Store].[Store Country].[USA].[CA]})\"/>"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeNamedSetSupportInSchemaModifier(schema)));
+        withSchema(context, TestVirtualCubeNamedSetSupportInSchemaModifier::new);
         assertQueryReturns(context.getConnection(),
             "WITH "
             + "SET [Non CA State Stores] AS 'EXCEPT({[Store].[Store Country].[USA].children},"
@@ -6320,7 +6210,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchemaError(TestContextWrapper context) {
-    	RolapSchemaPool.instance().clear();
         class TestVirtualCubeNamedSetSupportInSchemaErrorModifier extends RDbMappingSchemaModifier {
             public TestVirtualCubeNamedSetSupportInSchemaErrorModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6349,8 +6238,7 @@ class SchemaTest {
          */
 
         try {
-            MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-            context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeNamedSetSupportInSchemaErrorModifier(schema)));
+            withSchema(context.getContext(), TestVirtualCubeNamedSetSupportInSchemaErrorModifier::new);
             assertQueryReturns(context.createConnection(),
                 "WITH "
                 + "SET [Non CA State Stores] AS 'EXCEPT({[Store].[Store Country].[USA].children},"
@@ -6424,8 +6312,7 @@ class SchemaTest {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>"));
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestValidatorFindsNumericLevelModifier(schema)));
+        withSchema(context.getContext(), TestValidatorFindsNumericLevelModifier::new);
         final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "todo xxxxx");
     }
@@ -6433,7 +6320,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidRoleError(TestContextWrapper context) {
-    	RolapSchemaPool.instance().clear();
         class TestInvalidRoleErrorModifier extends RDbMappingSchemaModifier {
             public TestInvalidRoleErrorModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6456,8 +6342,7 @@ class SchemaTest {
                 "<Schema name=\"FoodMart\" defaultRole=\"Unknown\"");
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestInvalidRoleErrorModifier(schema)));
+        withSchema(context.getContext(), TestInvalidRoleErrorModifier::new);
         final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "Role 'Unknown' not found");
     }
@@ -6481,7 +6366,6 @@ class SchemaTest {
             // therefore experiences bug MONDRIAN-413.
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestBinaryLevelKeyModifier extends RDbMappingSchemaModifier {
             public TestBinaryLevelKeyModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6591,8 +6475,7 @@ class SchemaTest {
             + "  </Dimension>\n"));
          */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBinaryLevelKeyModifier(schema)));
+        withSchema(context, TestBinaryLevelKeyModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Binary].members} on 0 from [Sales]",
             "Axis #0:\n"
@@ -6634,7 +6517,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelInternalType(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         // One of the keys is larger than Integer.MAX_VALUE (2 billion), so
         // will only work if we use long values.
         class TestLevelInternalTypeModifier extends RDbMappingSchemaModifier {
@@ -6731,8 +6613,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestLevelInternalTypeModifier(schema)));
+        withSchema(context, TestLevelInternalTypeModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Big numbers].members} on 0 from [Sales]",
             "Axis #0:\n"
@@ -6755,7 +6636,6 @@ class SchemaTest {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelInternalTypeErr(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestLevelInternalTypeErrModifier extends RDbMappingSchemaModifier {
             public TestLevelInternalTypeErrModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6838,8 +6718,7 @@ class SchemaTest {
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestLevelInternalTypeErrModifier(schema)));
+        withSchema(context, TestLevelInternalTypeErrModifier::new);
         assertQueryThrows(context,
             "select {[Big numbers].members} on 0 from [Sales]",
         		"Illegal value 'char'.  Legal values: {int, long, Object, String}");
@@ -6895,7 +6774,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testScdJoin(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestScdJoinModifier extends RDbMappingSchemaModifier {
             public TestScdJoinModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6941,8 +6819,7 @@ class SchemaTest {
                 return result;
             }
         }
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestScdJoinModifier(schema)));
+        withSchema(context, TestScdJoinModifier::new);
         assertQueryReturns(context.getConnection(),
             "select non empty {[Measures].[Unit Sales]} on 0,\n"
             + " non empty Filter({[Product truncated].Members}, [Measures].[Unit Sales] > 10000) on 1\n"
@@ -7027,8 +6904,7 @@ class SchemaTest {
                 + "  </Dimension>\n",
                 null, null, null));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNonUniqueAliasModifier(schema)));
+        withSchema(context, TestNonUniqueAliasModifier::new);
         Throwable throwable = null;
         try {
             assertSimpleQuery(context.getConnection());
@@ -7062,7 +6938,6 @@ class SchemaTest {
         if (MondrianProperties.instance().UseAggregates.booleanValue()) {
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestBugMondrian482Modifier extends RDbMappingSchemaModifier {
             public TestBugMondrian482Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -7143,8 +7018,7 @@ class SchemaTest {
         withSchema(context, schema);
          */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian482Modifier(schema)));
+        withSchema(context, TestBugMondrian482Modifier::new);
         // First query all children of the USA. This should only return CA since
         // all the other states were filtered out. CA will be put in the member
         // cache
@@ -7303,6 +7177,7 @@ class SchemaTest {
         MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
         context.setDatabaseMappingSchemaProviders(
             List.of(new CheckBugMondrian355Modifier1(schema)));
+        withSchema(context, CheckBugMondrian355Modifier1::new);
         assertQueryReturns(context.getConnection(),
             "select Head([Time2].[Quarter hours].Members, 3) on columns\n"
             + "from [Sales]",
@@ -7360,7 +7235,6 @@ class SchemaTest {
         final String salesCubeName = "DescSales";
         final String virtualCubeName = "DescWarehouseAndSales";
         final String warehouseCubeName = "Warehouse";
-        RolapSchemaPool.instance().clear();
         class TestCaptionDescriptionAndAnnotationModifier extends RDbMappingSchemaModifier {
             public TestCaptionDescriptionAndAnnotationModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -7800,9 +7674,7 @@ class SchemaTest {
             + "</VirtualCube>"
             + "</Schema>");
          */
-        MappingSchema sch = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(
-            List.of(new TestCaptionDescriptionAndAnnotationModifier(sch)));
+        withSchema(context, TestCaptionDescriptionAndAnnotationModifier::new);
         final Result result =
             executeQuery(context.getConnection(), "select from [" + salesCubeName + "]");
         final Cube cube = result.getQuery().getCube();
@@ -8019,7 +7891,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCaption(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestCaptionModifier extends RDbMappingSchemaModifier {
 
             public TestCaptionModifier(MappingSchema mappingSchema) {
@@ -8072,9 +7943,7 @@ class SchemaTest {
             + "  </Dimension>"));
          */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(
-            List.of(new TestCaptionModifier(schema)));
+        withSchema(context, TestCaptionModifier::new);
 
 
         switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
@@ -8133,7 +8002,7 @@ class SchemaTest {
         default:
             return;
         }
-        RolapSchemaPool.instance().clear();
+
         class TestBugMondrian747Modifier extends RDbMappingSchemaModifier {
 
             public TestBugMondrian747Modifier(MappingSchema mappingSchema) {
@@ -8369,8 +8238,7 @@ class SchemaTest {
             return;
         }
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian747Modifier(schema)));
+        withSchema(context, TestBugMondrian747Modifier::new);
 
         // [Store].[All Stores] and [Store].[USA] should be 266,773. A higher
         // value would indicate that there is a cartesian product going on --
@@ -8525,7 +8393,6 @@ class SchemaTest {
             // we get wild stuff because of referential integrity.
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestBugMondrian463Modifier1 extends RDbMappingSchemaModifier {
 
             public TestBugMondrian463Modifier1(MappingSchema mappingSchema) {
@@ -8651,8 +8518,7 @@ class SchemaTest {
                 + "  </Hierarchy>\n"
                 + "</Dimension>"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian463Modifier1(schema)));
+        withSchema(context, TestBugMondrian463Modifier1::new);
         checkBugMondrian463(context);
         // As above, but using shared dimension.
         if (MondrianProperties.instance().ReadAggregates.get()
@@ -8745,7 +8611,7 @@ class SchemaTest {
                             .foreignKey("time_id")
                             .hierarchies(List.of(
                                 HierarchyRBuilder.builder()
-                                    .hasAll(true)
+                                    .hasAll(false)
                                     .primaryKey("time_id")
                                     .relation(new TableR("time_by_day"))
                                     .levels(List.of(
@@ -8754,6 +8620,7 @@ class SchemaTest {
                                             .column("the_year")
                                             .type(TypeEnum.NUMERIC)
                                             .uniqueMembers(true)
+                                            .levelType(LevelTypeEnum.TIME_YEARS)
                                             .build(),
                                         LevelRBuilder.builder()
                                             .name("Quarter")
@@ -8846,8 +8713,7 @@ class SchemaTest {
                 + "</Cube>\n"
                 + "</Schema>");
          */
-        schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian463Modifier2(schema)));
+        withSchema(context, TestBugMondrian463Modifier2::new);
         checkBugMondrian463(context);
     }
 
@@ -8891,7 +8757,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLeftDeepJoinFails(TestContext context) {
-    	RolapSchemaPool.instance().clear();
         class TestLeftDeepJoinFailsModifier extends RDbMappingSchemaModifier {
 
             public TestLeftDeepJoinFailsModifier(MappingSchema mappingSchema) {
@@ -9005,8 +8870,7 @@ class SchemaTest {
             + "</Dimension>"));
          */
         try {
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestLeftDeepJoinFailsModifier(schema)));
+            withSchema(context, TestLeftDeepJoinFailsModifier::new);
             assertSimpleQuery(context.getConnection());
             fail("expected error");
         } catch (MondrianException e) {
@@ -9075,8 +8939,7 @@ class SchemaTest {
                 + "  </Hierarchy>\n"
                 + "</Dimension>\n"));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCaptionWithOrdinalColumnModifier(schema)));
+        withSchema(context, TestCaptionWithOrdinalColumnModifier::new);
 
         String mdxQuery =
             "WITH SET [#DataSet#] as '{Descendants([Position].[All Position], 2)}' "
@@ -9108,7 +8971,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian923(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         class TestBugMondrian923Modifier extends RDbMappingSchemaModifier {
 
             public TestBugMondrian923Modifier(MappingSchema mappingSchema) {
@@ -9170,8 +9032,7 @@ class SchemaTest {
                 + "<CalculatedMember name=\"Style Unit Sales\" dimension=\"Measures\"><Formula>[Measures].[Unit Sales]</Formula><CalculatedMemberProperty name=\"FORMAT_STRING\" expression=\"IIf([Measures].[Unit Sales] > 100000,'|#,###|style=green',IIf([Measures].[Unit Sales] > 50000,'|#,###|style=yellow','|#,###|style=red'))\"/></CalculatedMember>",
                 null));
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian923Modifier(schema)));
+        withSchema(context, TestBugMondrian923Modifier::new);
         for (Cube cube
                 : context.getConnection().getSchemaReader().getCubes())
         {
@@ -9210,7 +9071,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
-        	RolapSchemaPool.instance().clear();
             class TestCubesVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestCubesVisibilityModifier(MappingSchema mappingSchema) {
@@ -9274,8 +9134,7 @@ class SchemaTest {
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestCubesVisibilityModifier(schema)));
+            withSchema(context, TestCubesVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9287,7 +9146,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
-        	RolapSchemaPool.instance().clear();
             class TestVirtualCubesVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestVirtualCubesVisibilityModifier(MappingSchema mappingSchema) {
@@ -9332,8 +9190,7 @@ class SchemaTest {
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubesVisibilityModifier(schema)));
+            withSchema(context, TestVirtualCubesVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9345,7 +9202,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
-        	RolapSchemaPool.instance().clear();
             class TestDimensionVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestDimensionVisibilityModifier(MappingSchema mappingSchema) {
@@ -9409,8 +9265,7 @@ class SchemaTest {
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionVisibilityModifier(schema)));
+            withSchema(context, TestDimensionVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9429,7 +9284,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
-        	RolapSchemaPool.instance().clear();
             class TestVirtualDimensionVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestVirtualDimensionVisibilityModifier(MappingSchema mappingSchema) {
@@ -9474,8 +9328,7 @@ class SchemaTest {
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualDimensionVisibilityModifier(schema)));
+            withSchema(context, TestVirtualDimensionVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9493,7 +9346,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionUsageVisibility(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestDimensionUsageVisibilityModifier extends RDbMappingSchemaModifier {
 
@@ -9554,8 +9406,7 @@ class SchemaTest {
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestDimensionUsageVisibilityModifier(schema)));
+            withSchema(context, TestDimensionUsageVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9646,8 +9497,7 @@ class SchemaTest {
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestHierarchyVisibilityModifier(schema)));
+            withSchema(context, TestHierarchyVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9673,7 +9523,6 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
-        	RolapSchemaPool.instance().clear();
             class TestLevelVisibilityModifier extends RDbMappingSchemaModifier {
 
                 public TestLevelVisibilityModifier(MappingSchema mappingSchema) {
@@ -9738,8 +9587,7 @@ class SchemaTest {
                     null, cubeDef, null, null, null, null);
             withSchema(context, schema);
              */
-            MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-            context.setDatabaseMappingSchemaProviders(List.of(new TestLevelVisibilityModifier(schema)));
+            withSchema(context, TestLevelVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
                     .lookupCube("Foo", true);
@@ -9941,8 +9789,7 @@ class SchemaTest {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNonCollapsedAggregateModifier(schema)));
+        withSchema(context, TestNonCollapsedAggregateModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Axis #0:\n"
@@ -9968,7 +9815,6 @@ class SchemaTest {
         {
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier extends RDbMappingSchemaModifier {
 
             public TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(MappingSchema mappingSchema) {
@@ -10138,8 +9984,7 @@ class SchemaTest {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(schema)));
+        withSchema(context, TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier::new);
         assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "mondrian.olap.MondrianException: Mondrian Error:Too many errors, '1', while loading/reloading aggregates.");
@@ -10153,7 +9998,6 @@ class SchemaTest {
         {
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestTwoNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
 
             public TestTwoNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
@@ -10367,8 +10211,7 @@ class SchemaTest {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestTwoNonCollapsedAggregateModifier(schema)));
+        withSchema(context, TestTwoNonCollapsedAggregateModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {Crossjoin([Product].[Product Family].Members, [Store].[Store Id].Members)} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Axis #0:\n"
@@ -10536,7 +10379,6 @@ class SchemaTest {
         {
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestCollapsedErrorModifier extends RDbMappingSchemaModifier {
 
             public TestCollapsedErrorModifier(MappingSchema mappingSchema) {
@@ -10705,8 +10547,7 @@ class SchemaTest {
                 null, cube, null, null, null, null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCollapsedErrorModifier(schema)));
+        withSchema(context, TestCollapsedErrorModifier::new);
         assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Too many errors, '1', while loading/reloading aggregates.");
@@ -10749,11 +10590,13 @@ class SchemaTest {
                 result.addAll(super.cubeDimensionUsageOrDimensions(cube));
                 if ("HR".equals(cube.name())) {
                     List<MappingPrivateDimension> dimensions = new ArrayList<>();
-                    for ( int i = 0; i < n; i++ ) {
-                        MappingSQL sql = new SQLR("`position_title` + " + i,
+                        MappingSQL sql = new SQLR("`position_title` + " + n,
                             "generic");
                         MappingExpressionView ex = ExpressionViewRBuilder.builder().sqls(List.of(sql)).build();
                         MappingLevel level = LevelRBuilder.builder()
+                        	.name("Position Title")
+                        	.uniqueMembers(false)
+                        	.ordinalColumn("position_id")
                             .keyExpression(ex).build();
                         MappingHierarchy hierarchy = HierarchyRBuilder
                             .builder()
@@ -10766,19 +10609,17 @@ class SchemaTest {
                         dimensions.add(
                             PrivateDimensionRBuilder
                                 .builder()
-                                .name("Position" + i)
+                                .name("Position" + n)
                                 .foreignKey("employee_id")
                                 .hierarchies(List.of(hierarchy))
                                 .build()
                         );
-                    }
                     result.addAll(dimensions);
                 }
                 return result;
             }
         }
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new CheckBugMondrian1047Modifier(schema)));
+        withSchema(context, CheckBugMondrian1047Modifier::new);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",
@@ -10817,7 +10658,6 @@ class SchemaTest {
         default:
             return;
         }
-        RolapSchemaPool.instance().clear();
         class TestBugMondrian1065Modifier extends RDbMappingSchemaModifier{
             public TestBugMondrian1065Modifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -10956,8 +10796,7 @@ class SchemaTest {
             + "  </Dimension>\n"));
          */
 
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian1065Modifier(schema)));
+        withSchema(context, TestBugMondrian1065Modifier::new);
         assertQueryReturns(context.getConnection(),
             "select non empty crossjoin({[PandaSteak].[Level3].[level 3 - 1], [PandaSteak].[Level3].[level 3 - 2]}, {[Measures].[Unit Sales], [Measures].[Store Cost]}) on columns, {[Product].[Product Family].Members} on rows from [Sales]",
             "Axis #0:\n"
@@ -11038,7 +10877,6 @@ class SchemaTest {
     void testMondrian1499(TestContext context) throws Exception {
         propSaver.set(propSaver.properties.UseAggregates, false);
         propSaver.set(propSaver.properties.ReadAggregates, false);
-        RolapSchemaPool.instance().clear();
         class TestMondrian1499Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1499Modifier(MappingSchema mappingSchema) {
@@ -11380,8 +11218,7 @@ class SchemaTest {
                 + "</Cube>\n"
                 + "</Schema>");
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1499Modifier(schema)));
+        withSchema(context, TestMondrian1499Modifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary]} on columns,\n"
             + "{[Store].[Store Country].Members} on rows from [HR]",
@@ -11406,7 +11243,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1073(TestContext context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         class TestMondrian1073Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1073Modifier(MappingSchema mappingSchema) {
@@ -11485,8 +11321,7 @@ class SchemaTest {
                     null, null, null, null);
         withSchema(context, schema);
         */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMondrian1073Modifier(schema)));
+        withSchema(context, TestMondrian1073Modifier::new);
         assertQueryReturns(context.getConnection(), "CubeB",
             "SELECT [Measures].[Fantastic Count for Different Types of Promotion] ON COLUMNS\n"
             + "FROM [CubeB]",
@@ -11500,7 +11335,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMultiByteSchemaReadFromFile(TestContext context) throws IOException {
-    	RolapSchemaPool.instance().clear();
         //String rawSchema = TestContext.getRawFoodMartSchema().replace(
         class TestMultiByteSchemaReadFromFile extends RDbMappingSchemaModifier {
 
@@ -11539,8 +11373,7 @@ class SchemaTest {
         context.setProperty(RolapConnectionProperties.Catalog.name(),
                 schemaFile.getAbsolutePath());
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMultiByteSchemaReadFromFile(schema)));
+        withSchema(context, TestMultiByteSchemaReadFromFile::new);
         assertQueryReturns(context.getConnection(),
             "select [Gender].members on 0 from sales",
             "Axis #0:\n"
@@ -11557,7 +11390,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMonrian2528(TestContextWrapper context) {
-    	RolapSchemaPool.instance().clear();
         class TestBugMonrian2528Modifier extends RDbMappingSchemaModifier {
 
             public TestBugMonrian2528Modifier(MappingSchema mappingSchema) {
@@ -11651,8 +11483,7 @@ class SchemaTest {
           + "</Role>\n");
         withSchema(context, schema);
        */
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new TestBugMonrian2528Modifier(schema)));
+        withSchema(context.getContext(), TestBugMonrian2528Modifier::new);
         withRole(context, "dev");
 
       assertQueryReturns(context.createConnection(),
@@ -11677,7 +11508,6 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1275(TestContextWrapper context) throws Exception {
-    	RolapSchemaPool.instance().clear();
         class TestMondrian1275Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1275Modifier(MappingSchema mappingSchema) {
@@ -11766,11 +11596,7 @@ class SchemaTest {
                                         + "</Cube>\n"
                                         + "</Schema>\n");
         */
-        context.getContext().setDatabaseMappingSchemaProviders(
-            List.of(
-                new TestMondrian1275Modifier(context.getContext().getDatabaseMappingSchemaProviders().get(0).get())
-            )
-        );
+        withSchema(context.getContext(), TestMondrian1275Modifier::new);
         final RolapConnection rolapConn = context.createOlap4jConnection().unwrap(RolapConnection.class);
         final SchemaReader schemaReader = rolapConn.getSchemaReader();
         final RolapSchema schema = schemaReader.getSchema();

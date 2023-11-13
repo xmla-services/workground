@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
@@ -733,7 +734,6 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testStrMeasure(TestContext context) {
-      RolapSchemaPool.instance().clear();
       class TestStrMeasureModifier extends RDbMappingSchemaModifier {
           public TestStrMeasureModifier(MappingSchema mappingSchema) {
               super(mappingSchema);
@@ -794,8 +794,7 @@ class NonEmptyTest extends BatchTestCase {
       null );
     withSchema(context, schema);
      */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestStrMeasureModifier(schema)));
+      withSchema(context, TestStrMeasureModifier::new);
       assertQueryReturns(context.getConnection(),
       "select {[Measures].[Media]} on columns " + "from [StrMeasure]",
       "Axis #0:\n"
@@ -916,9 +915,7 @@ class NonEmptyTest extends BatchTestCase {
       null );
     withSchema(context, schema);
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestBug1515302Modifier(schema)));
+    withSchema(context, TestBug1515302Modifier::new);
     assertQueryReturns(context.getConnection(),
       "select {[Measures].[Unit Sales]} on columns, "
         + "non empty crossjoin({[Promotions].[Big Promo]}, "
@@ -1828,9 +1825,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
       */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier(schema)));
+    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier::new);
     // No 'all' level, and ragged because [Product Name] is hidden if
     // blank.  Native evaluation should be able to handle this query.
     checkNative(context,
@@ -1865,8 +1860,10 @@ class NonEmptyTest extends BatchTestCase {
      */
       RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema)));
-    // [Product Name] can be hidden if it is blank, but native evaluation
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_BLANK_NAME)));
+
+      // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     checkNative(context,
       0,
@@ -1898,8 +1895,12 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
      */
-	withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier2::new);
-    // [Product Name] can be hidden if it it matches its parent name, so
+      RolapSchemaPool.instance().clear();
+      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_PARENTS_NAME)));
+
+      // [Product Name] can be hidden if it it matches its parent name, so
     // native evaluation can not handle this query.
     checkNotNative(context,
       67,
@@ -1930,9 +1931,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
      */
-    RolapSchemaPool.instance().clear();
-    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier3(schema)));
+    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier3::new);
     // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
@@ -1965,9 +1964,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
     */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier3(schema)));
+      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier3::new);
       // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
@@ -2002,8 +1999,10 @@ class NonEmptyTest extends BatchTestCase {
       */
       RolapSchemaPool.instance().clear();
       MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema)));
-    // [Product Name] can be hidden if it is blank, but native evaluation
+      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+          HideMemberIfEnum.IF_BLANK_NAME)));
+
+      // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
     // Note there's an existing bug with result ordering in native
     // non-empty evaluation of enumerations. This test intentionally
@@ -2448,7 +2447,6 @@ class NonEmptyTest extends BatchTestCase {
         + "    ISNULL(`warehouse`.`wa_address1`) ASC, `warehouse`.`wa_address1` ASC,\n"
         + "    ISNULL(`warehouse`.`warehouse_name`) ASC, `warehouse`.`warehouse_name` ASC,\n"
         + "    ISNULL(`product_class`.`product_family`) ASC, `product_class`.`product_family` ASC" );
-      RolapSchemaPool.instance().clear();
       class TestMultiLevelMemberConstraintNullParentModifier extends RDbMappingSchemaModifier {
 
           public TestMultiLevelMemberConstraintNullParentModifier(MappingSchema mappingSchema) {
@@ -2540,8 +2538,7 @@ class NonEmptyTest extends BatchTestCase {
         null );
     withSchema(context, schema);
     */
-    MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-    context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMemberConstraintNullParentModifier(schema)));
+    withSchema(context, TestMultiLevelMemberConstraintNullParentModifier::new);
     SqlPattern[] patterns = {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
@@ -2719,10 +2716,7 @@ class NonEmptyTest extends BatchTestCase {
         null );
     withSchema(context, schema);
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(
-          List.of(new TestMultiLevelMemberConstraintMixedNullNonNullParentModifier(schema)));
+      withSchema(context, TestMultiLevelMemberConstraintMixedNullNonNullParentModifier::new);
       SqlPattern[] patterns = {
       new SqlPattern(
         DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
@@ -2909,9 +2903,7 @@ class NonEmptyTest extends BatchTestCase {
         null );
     withSchema(context, schema);
     */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier(schema)));
+      withSchema(context, TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier::new);
     SqlPattern[] patterns = {
       new SqlPattern(
         DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
@@ -3846,9 +3838,7 @@ class NonEmptyTest extends BatchTestCase {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
      */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier4(schema)));
+      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier4::new);
     // Check that the grand total is different than when [Time].[1997] is
     // the default member.
     assertQueryReturns(context.createConnection(),
@@ -5526,7 +5516,6 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testContextAtAllWorksWithConstraint(TestContext context)  {
-      RolapSchemaPool.instance().clear();
       class TestContextAtAllWorksWithConstraintModifier extends RDbMappingSchemaModifier {
 
           public TestContextAtAllWorksWithConstraintModifier(MappingSchema mappingSchema) {
@@ -5592,8 +5581,7 @@ class NonEmptyTest extends BatchTestCase {
       null );
     withSchema(context, schema);
     */
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(List.of(new TestContextAtAllWorksWithConstraintModifier(schema)));
+      withSchema(context, TestContextAtAllWorksWithConstraintModifier::new);
       String mdx =
       " select "
         + " NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -5623,7 +5611,6 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException(TestContext context)  {
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
-      RolapSchemaPool.instance().clear();
       class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends RDbMappingSchemaModifier {
 
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(MappingSchema mappingSchema) {
@@ -5797,10 +5784,7 @@ class NonEmptyTest extends BatchTestCase {
           + "  </VirtualCube>"
           + "</Schema>" );
        */
-      RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-      context.setDatabaseMappingSchemaProviders(
-          List.of(new TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(schema)));
+    withSchema(context, TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier::new);
     assertQueryReturns(context.getConnection(),
       "select "
         + " [Measures].[Unit Sales] on COLUMNS, "
@@ -6299,8 +6283,7 @@ class NonEmptyTest extends BatchTestCase {
     };
 
     RolapSchemaPool.instance().clear();
-    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier6(schema)));
+    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier6::new );
     //withSchema(context, schema );
 
     // The filter condition does not require a join to the fact table.
@@ -6494,10 +6477,7 @@ class NonEmptyTest extends BatchTestCase {
         oracleWithFactJoin, oracleWithFactJoin )
     };
 
-    RolapSchemaPool.instance().clear();
-    MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-    context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier6(schema)));
-    //withSchema(context, schema );
+    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier6::new );
 
     // The filter condition does not require a join to the fact table.
     assertQuerySql(context.createConnection(), query, patterns );
@@ -6520,6 +6500,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyAggregateSlicerIsNative(TestContextWrapper context)  {
+	RolapSchemaPool.instance().clear();
     final String mdx =
       "select NON EMPTY\n"
         + " Crossjoin([Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Portsmouth]\n"

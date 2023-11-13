@@ -595,7 +595,6 @@ public class SchemaModifiers {
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
-            result.addAll(super.schemaVirtualCubes(schema));
             result.add(VirtualCubeRBuilder.builder()
                 .name("Warehouse and Sales2")
                 .defaultMeasure("Store Sales")
@@ -659,6 +658,7 @@ public class SchemaModifiers {
                         .build()
                 ))
                 .build());
+            result.addAll(super.schemaVirtualCubes(schema));
             return result;
         }
     }
@@ -1075,7 +1075,6 @@ public class SchemaModifiers {
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
-            result.addAll(super.schemaVirtualCubes(schema));
             result.add(VirtualCubeRBuilder.builder()
                 .name("Warehouse and Sales2")
                 .defaultMeasure("Store Sales")
@@ -1200,7 +1199,7 @@ public class SchemaModifiers {
                         .build()
                 ))
                 .build());
-
+            result.addAll(super.schemaVirtualCubes(schema));
             return result;
         }
     }
@@ -3173,20 +3172,23 @@ public class SchemaModifiers {
 
     public static class NonEmptyTestModifier2 extends RDbMappingSchemaModifier {
 
-        /*
-              "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
-        + "  <Hierarchy hasAll=\"true\" primaryKey=\"product_id\">\n"
-        + "    <Table name=\"product\"/>\n"
-        + "    <Level name=\"Brand Name\" table=\"product\" column=\"brand_name\" uniqueMembers=\"false\"/>\n"
-        + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\" uniqueMembers=\"true\"\n"
-        + "        hideMemberIf=\"IfBlankName\""
-        + "        />\n"
-        + "  </Hierarchy>\n"
-        + "</Dimension>" ) );
+        private final HideMemberIfEnum hideMemberIf;
 
-         */
-        public NonEmptyTestModifier2(MappingSchema mappingSchema) {
+        /*
+                      "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
+                + "  <Hierarchy hasAll=\"true\" primaryKey=\"product_id\">\n"
+                + "    <Table name=\"product\"/>\n"
+                + "    <Level name=\"Brand Name\" table=\"product\" column=\"brand_name\" uniqueMembers=\"false\"/>\n"
+                + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\" uniqueMembers=\"true\"\n"
+                + "        hideMemberIf=\"IfBlankName\""
+                + "        />\n"
+                + "  </Hierarchy>\n"
+                + "</Dimension>" ) );
+
+                 */
+        public NonEmptyTestModifier2(MappingSchema mappingSchema, HideMemberIfEnum hideMemberIf) {
             super(mappingSchema);
+            this.hideMemberIf = hideMemberIf;
         }
 
         @Override
@@ -3194,7 +3196,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Product Ragged")
                     .foreignKey("product_id")
                     .hierarchies(List.of(
@@ -3214,7 +3221,7 @@ public class SchemaModifiers {
                                     .table("product")
                                     .column("product_name")
                                     .uniqueMembers(true)
-                                    .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
+                                    .hideMemberIf(hideMemberIf)
                                     .build()
                             ))
                             .build()
@@ -5827,17 +5834,20 @@ public class SchemaModifiers {
 
     public static class BasicQueryTestModifier27 extends RDbMappingSchemaModifier {
 
+        private final String defaultMeasure;
+
         /*
-                        "<Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time Error\">\n"
-                + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
-                + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
-                + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
-                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
-                + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
-                + "aggregator=\"sum\"/>\n" + "</Cube>"
-            */
-        public BasicQueryTestModifier27(MappingSchema mappingSchema) {
+                                "<Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time Error\">\n"
+                        + "  <Table name=\"inventory_fact_1997\"/>\n" + "  <DimensionUsage name=\"Store\" source=\"Store\" "
+                        + "foreignKey=\"store_id\"/>\n" + "  <DimensionUsage name=\"Store Type\" source=\"Store Type\" "
+                        + "foreignKey=\"store_id\"/>\n" + "  <Measure name=\"Store Invoice\" column=\"store_invoice\" "
+                        + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Supply Time\" column=\"supply_time\" "
+                        + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
+                        + "aggregator=\"sum\"/>\n" + "</Cube>"
+                    */
+        public BasicQueryTestModifier27(MappingSchema mappingSchema, String defaultMeasure) {
             super(mappingSchema);
+            this.defaultMeasure = defaultMeasure;
         }
 
         @Override
@@ -5846,7 +5856,7 @@ public class SchemaModifiers {
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
                 .name("DefaultMeasureTesting")
-                .defaultMeasure("Supply Time Error")
+                .defaultMeasure(defaultMeasure)
                 .fact(new TableR("inventory_fact_1997"))
                 .dimensionUsageOrDimensions(List.of(
                     DimensionUsageRBuilder.builder()
@@ -6239,7 +6249,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderByAliasTestModifier1 extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1KE extends RDbMappingSchemaModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6254,7 +6264,7 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1(MappingSchema mappingSchema, final StringBuilder colName) {
+        public OrderByAliasTestModifier1KE(MappingSchema mappingSchema, final StringBuilder colName) {
             super(mappingSchema);
             this.colName = colName;
         }
@@ -6285,6 +6295,247 @@ public class SchemaModifiers {
                                     .column("promotion_name")
                                     .uniqueMembers(true)
                                     .keyExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1OE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <OrdinalExpression><SQL>RTRIM("
+        + colName + ")</SQL></OrdinalExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1OE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .ordinalExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1ME extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <MeasureExpression><SQL>RTRIM("
+        + colName + ")</SQL></MeasureExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1ME(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1CE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <CaptionExpression><SQL>RTRIM("
+        + colName + ")</SQL></CaptionExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1CE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .captionExpression(ExpressionViewRBuilder.builder()
+                                        .sqls(List.of(
+                                            SQLRBuilder.builder()
+                                                .content("RTRIM("+ colName + ")")
+                                                .build()
+                                        ))
+                                        .build())
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build());
+            }
+            return result;
+        }
+    }
+
+    public static class OrderByAliasTestModifier1NE extends RDbMappingSchemaModifier {
+
+        /*
+        "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
+        + "  <Hierarchy hasAll=\"true\" allMemberName=\"All Promotions\" primaryKey=\"promotion_id\" defaultMember=\"[All Promotions]\">\n"
+        + "    <Table name=\"promotion\"/>\n"
+        + "    <Level name=\"Promotion Name\" column=\"promotion_name\" uniqueMembers=\"true\">\n"
+        + "      <NameExpression><SQL>RTRIM("
+        + colName + ")</SQL></NameExpression>\n"
+        + "    </Level>\n"
+        + "  </Hierarchy>\n"
+        + "</Dimension>"));
+         */
+
+        private StringBuilder colName;
+        public OrderByAliasTestModifier1NE(MappingSchema mappingSchema, final StringBuilder colName) {
+            super(mappingSchema);
+            this.colName = colName;
+        }
+
+        @Override
+        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+            List<MappingCubeDimension> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionUsageOrDimensions(cube));
+            if ("Sales".equals(cube.name())) {
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
+                    .name("Promotions")
+                    .foreignKey("promotion_id")
+                    .hierarchies(List.of(
+                        HierarchyRBuilder.builder()
+                            .hasAll(true)
+                            .allMemberName("All Promotions")
+                            .primaryKey("promotion_id")
+                            .defaultMember("[All Promotions]")
+                            .relation(new TableR("promotion"))
+                            .levels(List.of(
+                                LevelRBuilder.builder()
+                                    .name("Promotion Name")
+                                    .column("promotion_name")
+                                    .uniqueMembers(true)
+                                    .nameExpression(ExpressionViewRBuilder.builder()
                                         .sqls(List.of(
                                             SQLRBuilder.builder()
                                                 .content("RTRIM("+ colName + ")")
@@ -7125,7 +7376,12 @@ public class SchemaModifiers {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube));
             if ("Sales".equals(cube.name())) {
-                result.add(PrivateDimensionRBuilder.builder()
+                Optional<MappingCubeDimension> o = result.stream().filter(d -> d instanceof PrivateDimensionR).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, PrivateDimensionRBuilder.builder()
                     .name("Education Level2")
                     .foreignKey("customer_id")
                     .hierarchies(List.of(
@@ -7665,6 +7921,13 @@ public class SchemaModifiers {
                     .build());
             }
             return result;
+        }
+
+        protected String virtualCubeDefaultMeasure(MappingVirtualCube virtualCube) {
+            if ("Warehouse and Sales".equals(virtualCube.name())) {
+                return "Warehouse Sales";
+            }
+            return virtualCube.defaultMeasure();
         }
 
         @Override
@@ -18514,7 +18777,7 @@ public class SchemaModifiers {
                                         .hideMemberIf(HideMemberIfEnum.NEVER)
                                         .build(),
                                     LevelRBuilder.builder()
-                                        .name("Line")
+                                        .name("Vendor")
                                         .table("PRODUCTS")
                                         .column("PRODUCTVENDOR")
                                         .type(TypeEnum.STRING)
@@ -18575,6 +18838,7 @@ public class SchemaModifiers {
                                     LevelRBuilder.builder()
                                         .name("Quarters")
                                         .column("QTR_ID")
+                                        .nameColumn("QTR_NAME")
                                         .ordinalColumn("QTR_ID")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(false)
@@ -18979,7 +19243,7 @@ public class SchemaModifiers {
                                 .levels(List.of(
                                     LevelRBuilder.builder()
                                         .name("Line")
-                                        .table("PRODUCTS")
+                                        .table("products")
                                         .column("PRODUCTLINE")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(false)
@@ -18997,7 +19261,7 @@ public class SchemaModifiers {
                                         .build(),
                                     LevelRBuilder.builder()
                                         .name("Product")
-                                        .table("PRODUCTS")
+                                        .table("products")
                                         .column("PRODUCTNAME")
                                         .type(TypeEnum.STRING)
                                         .uniqueMembers(true)
@@ -19261,7 +19525,6 @@ public class SchemaModifiers {
                                         HierarchyGrantRBuilder.builder()
                                             .hierarchy("[Markets]")
                                             .access(AccessEnum.NONE)
-                                            .rollupPolicy("partial")
                                             .build()
                                     ))
                                     .build()
@@ -19490,7 +19753,7 @@ public class SchemaModifiers {
                                         ))
                                         .hierarchyGrants(List.of(
                                             HierarchyGrantRBuilder.builder()
-                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
                                                 .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
                                                 .rollupPolicy("partial")
                                                 .access(AccessEnum.CUSTOM)
@@ -19696,7 +19959,7 @@ public class SchemaModifiers {
                                         ))
                                         .hierarchyGrants(List.of(
                                             HierarchyGrantRBuilder.builder()
-                                                .hierarchy("Customer_DimUsage.Customers Hierarchy]")
+                                                .hierarchy("[Customer_DimUsage.Customers Hierarchy]")
                                                 .topLevel("[Customer_DimUsage.Customers Hierarchy].[Name]")
                                                 .rollupPolicy("partial")
                                                 .access(AccessEnum.CUSTOM)
@@ -19843,9 +20106,8 @@ public class SchemaModifiers {
                                 .visible(true)
                                 .hasAll(true)
                                 .allMemberName("All Products")
-                                .primaryKey("products")
-                                .relation(new TableR("customer_w_ter"))
-
+                                .primaryKey("PRODUCTCODE")
+                                .relation(new TableR("products"))
                                 .levels(List.of(
                                     LevelRBuilder.builder()
                                         .name("Level1")

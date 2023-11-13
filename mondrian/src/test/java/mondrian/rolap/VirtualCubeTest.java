@@ -85,7 +85,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testNoTimeDimension(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestNoTimeDimensionModifier extends RDbMappingSchemaModifier {
 
             public TestNoTimeDimensionModifier(MappingSchema mappingSchema) {
@@ -132,15 +131,13 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestNoTimeDimensionModifier(schema)));
+        withSchema(context, TestNoTimeDimensionModifier::new);
         checkXxx(context.getConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCalculatedMeasureAsDefaultMeasureInVC(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestCalculatedMeasureAsDefaultMeasureInVCModifier extends RDbMappingSchemaModifier {
 
             public TestCalculatedMeasureAsDefaultMeasureInVCModifier(MappingSchema mappingSchema) {
@@ -192,8 +189,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestCalculatedMeasureAsDefaultMeasureInVCModifier(schema)));
+        withSchema(context, TestCalculatedMeasureAsDefaultMeasureInVCModifier::new);
         String query1 = "select from [Sales vs Warehouse]";
         String query2 =
             "select from [Sales vs Warehouse] where measures.profit";
@@ -203,7 +199,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureInVCForIncorrectMeasureName(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestDefaultMeasureInVCForIncorrectMeasureNameModifier extends RDbMappingSchemaModifier {
 
             public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(MappingSchema mappingSchema) {
@@ -260,8 +255,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasureInVCForIncorrectMeasureNameModifier(schema)));
+        withSchema(context, TestDefaultMeasureInVCForIncorrectMeasureNameModifier::new);
         String query1 = "select from [Sales vs Warehouse]";
         String query2 =
             "select from [Sales vs Warehouse] "
@@ -272,7 +266,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeMeasureInvalidCubeName(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestVirtualCubeMeasureInvalidCubeNameModifier extends RDbMappingSchemaModifier {
 
             public TestVirtualCubeMeasureInvalidCubeNameModifier(MappingSchema mappingSchema) {
@@ -322,8 +315,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeMeasureInvalidCubeNameModifier(schema)));
+        withSchema(context, TestVirtualCubeMeasureInvalidCubeNameModifier::new);
         assertQueryThrows(context,
             "select from [Sales vs Warehouse]",
             "Cube 'Bad cube' not found");
@@ -332,7 +324,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureInVCForCaseSensitivity(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestDefaultMeasureInVCForCaseSensitivityModifier extends RDbMappingSchemaModifier {
 
             public TestDefaultMeasureInVCForCaseSensitivityModifier(MappingSchema mappingSchema) {
@@ -388,8 +379,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasureInVCForCaseSensitivityModifier(schema)));
+        withSchema(context, TestDefaultMeasureInVCForCaseSensitivityModifier::new);
         String queryWithoutFilter = "select from [Sales vs Warehouse]";
         String queryWithFirstMeasure =
             "select from [Sales vs Warehouse] "
@@ -411,7 +401,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testWithTimeDimension(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestWithTimeDimensionModifier extends RDbMappingSchemaModifier {
 
             public TestWithTimeDimensionModifier(MappingSchema mappingSchema) {
@@ -462,8 +451,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestWithTimeDimensionModifier(schema)));
+        withSchema(context, TestWithTimeDimensionModifier::new);
         checkXxx(context.getConnection());
     }
 
@@ -552,7 +540,6 @@ class VirtualCubeTest extends BatchTestCase {
      *     Warehouse dimension is USA
      */
     private void createContextWithNonDefaultAllMember(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class CreateContextWithNonDefaultAllMemberModifier extends RDbMappingSchemaModifier {
 
             public CreateContextWithNonDefaultAllMemberModifier(MappingSchema mappingSchema) {
@@ -750,14 +737,12 @@ class VirtualCubeTest extends BatchTestCase {
             null, null, null);
             withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new CreateContextWithNonDefaultAllMemberModifier(schema)));
+        withSchema(context, CreateContextWithNonDefaultAllMemberModifier::new);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberVisibility(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestMemberVisibilityModifier extends RDbMappingSchemaModifier {
 
             public TestMemberVisibilityModifier(MappingSchema mappingSchema) {
@@ -847,8 +832,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestMemberVisibilityModifier(schema)));
+        withSchema(context, TestMemberVisibilityModifier::new);
         Result result = executeQuery(
             "select {[Measures].[Sales Count],\n"
             + " [Measures].[Store Cost],\n"
@@ -910,7 +894,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testFormatStringExpressionCubeNoCache(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestFormatStringExpressionCubeNoCacheModifier extends RDbMappingSchemaModifier {
 
             public TestFormatStringExpressionCubeNoCacheModifier(MappingSchema mappingSchema) {
@@ -1033,8 +1016,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestFormatStringExpressionCubeNoCacheModifier(schema)));
+        withSchema(context, TestFormatStringExpressionCubeNoCacheModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Profit Per Unit Shipped]} ON COLUMNS, "
             + "{[Store].[All Stores].[USA].[CA], [Store].[All Stores].[USA].[OR], [Store].[All Stores].[USA].[WA]} ON ROWS "
@@ -1345,9 +1327,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"#.0%\"/>\n"
             + "  </CalculatedMember>\n"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.VirtualCubeTestModifier1(schema)));
+        withSchema(context, SchemaModifiers.VirtualCubeTestModifier1::new);
         assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Measures].[Unit Sales], \n"
@@ -1449,7 +1429,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testOrdinalColumn(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestOrdinalColumnModifier extends RDbMappingSchemaModifier {
 
             public TestOrdinalColumnModifier(MappingSchema mappingSchema) {
@@ -1496,8 +1475,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestOrdinalColumnModifier(schema)));
+        withSchema(context, TestOrdinalColumnModifier::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary]} on columns, "
             + "non empty "
@@ -1531,7 +1509,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureProperty(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestDefaultMeasurePropertyModifier extends RDbMappingSchemaModifier {
 
             public TestDefaultMeasurePropertyModifier(MappingSchema mappingSchema) {
@@ -1588,8 +1565,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestDefaultMeasurePropertyModifier(schema)));
+        withSchema(context, TestDefaultMeasurePropertyModifier::new);
         String queryWithoutFilter =
             "select"
             + " from [Sales vs Warehouse]";
@@ -1729,7 +1705,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian322(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestBugMondrian322Modifier extends RDbMappingSchemaModifier {
 
             public TestBugMondrian322Modifier(MappingSchema mappingSchema) {
@@ -1788,8 +1763,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian322Modifier(schema)));
+        withSchema(context, TestBugMondrian322Modifier::new);
 
 //       This test case does not actually reject the dimension constraint from
 //       an unrelated base cube. The reason is that the constraint contains an
@@ -1814,7 +1788,7 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian322a(TestContext context) {     
+    void testBugMondrian322a(TestContext context) {
         class TestBugMondrian322aModifier extends RDbMappingSchemaModifier {
 
             public TestBugMondrian322aModifier(MappingSchema mappingSchema) {
@@ -1873,9 +1847,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestBugMondrian322aModifier(schema)));
+        withSchema(context, TestBugMondrian322aModifier::new);
         assertQueryReturns(context.getConnection(),
             "with member [Warehouse].[x] as 'Aggregate({[Warehouse].[Canada], [Warehouse].[USA]})'\n"
             + "member [Measures].[foo] AS '([Warehouse].[x],[Measures].[Customer Count])'\n"
@@ -1894,7 +1866,6 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeMeasureCaption(TestContext context) {
-        RolapSchemaPool.instance().clear();
         class TestVirtualCubeMeasureCaptionModifier extends RDbMappingSchemaModifier {
 
             public TestVirtualCubeMeasureCaptionModifier(MappingSchema mappingSchema) {
@@ -1944,7 +1915,7 @@ class VirtualCubeTest extends BatchTestCase {
                 List<MappingVirtualCube> result = new ArrayList<>();
                 result.addAll(super.schemaVirtualCubes(schema));
                 result.add(VirtualCubeRBuilder.builder()
-                    .name("VirtualTestStore")                   
+                    .name("VirtualTestStore")
                     .virtualCubeDimensions(List.of(
                         VirtualCubeDimensionRBuilder.builder()
                             .cubeName("TestStore")
@@ -1986,8 +1957,7 @@ class VirtualCubeTest extends BatchTestCase {
             null);
         withSchema(context, schema);
          */
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new TestVirtualCubeMeasureCaptionModifier(schema)));
+        withSchema(context, TestVirtualCubeMeasureCaptionModifier::new);
         Result result = executeQuery(
             "select {[Measures].[Store Sqft]} ON COLUMNS,"
             + "{[HCB]} ON ROWS "
@@ -2532,9 +2502,7 @@ class VirtualCubeTest extends BatchTestCase {
                 null,
                 null));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.VirtualCubeTestModifier2(schema)));
+        withSchema(context, SchemaModifiers.VirtualCubeTestModifier2::new);
 
         assertQueryReturns(context.getConnection(),
             "WITH member measures.ratio as 'measures.[Store Cost]/measures.[warehouse cost]' "

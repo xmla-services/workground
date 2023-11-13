@@ -61,6 +61,7 @@ import static org.opencube.junit5.TestUtil.assertExprReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.flushCache;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit tests for flushing member cache and editing cached member properties.
@@ -137,9 +138,7 @@ class MemberCacheControlTest {
             + "    </Hierarchy>\n"
             + "   </Dimension>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-        context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.MemberCacheControlTestModifier(schema)));
+        withSchema(context.getContext(), SchemaModifiers.MemberCacheControlTestModifier::new);
 
     }
 

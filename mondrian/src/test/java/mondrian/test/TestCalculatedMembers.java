@@ -15,7 +15,6 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -24,7 +23,6 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,8 +32,6 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opentest4j.AssertionFailedError;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -137,9 +133,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "  dimension='Measures'"
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]'/>"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier1(schema)));
+        withSchema(context, SchemaModifiers.TestCalculatedMembersModifier1::new);
         Cell s = executeExprRaw(context.getConnection(), "Warehouse and Sales", "[Measures].[Profit With Spaces]");
         assertEquals("339,610.90", s.getFormattedValue());
     }
@@ -1135,9 +1129,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "\"/>\n"
             + "</CalculatedMember>\n"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier2(schema)));
+        withSchema(context, SchemaModifiers.TestCalculatedMembersModifier2::new);
         assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales], [Measures].[Profit Formatted]} on 0,\n"
             + " {[Store].Children} on rows\n"
@@ -1177,9 +1169,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
                 + "  <CalculatedMemberProperty name=\"CELL_FORMATTER\" value=\"mondrian.test.NonExistentCellFormatter\"/>\n"
                 + "</CalculatedMember>\n"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier4(schema)));
+        withSchema(context, SchemaModifiers.TestCalculatedMembersModifier4::new);
         assertQueryThrows(context,
             "select {[Measures].[Unit Sales], [Measures].[Profit Formatted]} on 0,\n"
             + " {[Store].Children} on rows\n"
@@ -1205,9 +1195,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
                 + "    visible=\"false\"\n"
                 + "    formula=\"StrToTuple('([Gender].[M], [Marital Status].[S])', [Gender], [Marital Status])\"/>\n"));
          */
-        RolapSchemaPool.instance().clear();
-        MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
-        context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.TestCalculatedMembersModifier3(schema)));
+        withSchema(context, SchemaModifiers.TestCalculatedMembersModifier3::new);
         String desiredResult =
             "Axis #0:\n"
             + "{}\n"
