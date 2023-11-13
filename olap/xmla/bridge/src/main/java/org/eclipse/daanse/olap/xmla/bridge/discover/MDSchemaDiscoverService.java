@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaCubesResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaDimensionsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaHierarchiesResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaLevelsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasureGroupsResponseRow;
@@ -83,11 +84,32 @@ public class MDSchemaDiscoverService {
 	}
 
     public List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+        List<MdSchemaDimensionsResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oDimensionName = request.restrictions().dimensionName();
+        Optional<String> oDimensionUniqueName = request.restrictions().dimensionUniqueName();
+        Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
+        Optional<VisibilityEnum> oDimensionVisibility = request.restrictions().dimensionVisibility();
+        Optional<Boolean> deep = request.properties().deep();
+        if (oCatalogName.isPresent()) {
+            Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                result.addAll(getMdSchemaDimensionsResponseRow(context, oSchemaName, oCubeName, oDimensionName, oDimensionUniqueName,
+                    cubeSource, oDimensionVisibility, deep));
+            }
+        } else {
+            result.addAll(contextsListSupplyer.get().stream()
+                .map(c -> getMdSchemaDimensionsResponseRow(c, oSchemaName, oCubeName, oDimensionName, oDimensionUniqueName,
+                    cubeSource, oDimensionVisibility, deep))
+                .flatMap(Collection::stream).toList());
+        }
+        return result;
 	}
 
-	public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request) {
+    public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}

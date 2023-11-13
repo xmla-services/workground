@@ -37,6 +37,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
@@ -49,6 +51,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSource
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
@@ -59,6 +62,7 @@ import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSch
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresResponseRowR;
@@ -670,6 +674,170 @@ public class Utils {
             .flatMap(Collection::stream).toList();
     }
 
+    static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(
+        Context context,
+        Optional<String> oSchemaName,
+        Optional<String> oCubeName,
+        Optional<String> oDimensionName,
+        Optional<String> oDimensionUniqueName,
+        Optional<CubeSourceEnum> cubeSource,
+        Optional<VisibilityEnum> oDimensionVisibility,
+        Optional<Boolean> deep
+    ) {
+        List<Schema> schemas = context.getConnection().getSchemas();
+        if (schemas != null) {
+            return getSchemasWithFilter(schemas, oSchemaName).stream()
+                .map(s -> getMdSchemaDimensionsResponseRow(context.getName(), s, oCubeName
+                    , oDimensionName, oDimensionUniqueName, cubeSource, oDimensionVisibility, deep))
+                .flatMap(Collection::stream)
+                .toList();
+        }
+        return List.of();
+    }
+
+    private static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(
+        String catalogName,
+        Schema schema,
+        Optional<String> oCubeName,
+        Optional<String> oDimensionName,
+        Optional<String> oDimensionUniqueName,
+        Optional<CubeSourceEnum> cubeSource,
+        Optional<VisibilityEnum> oDimensionVisibility,
+        Optional<Boolean> deep
+    ) {
+        List<Cube> cubes = schema.getCubes() == null ? List.of() : Arrays.asList(schema.getCubes());
+        return getCubesWithFilter(cubes, oCubeName).stream().
+            map(c -> MdSchemaDimensionsResponseRow(catalogName, schema.getName(), c, oDimensionName,
+                oDimensionUniqueName, cubeSource, oDimensionVisibility, deep)).
+            flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaDimensionsResponseRow> MdSchemaDimensionsResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Optional<String> oDimensionName,
+        Optional<String> oDimensionUniqueName,
+        Optional<CubeSourceEnum> cubeSource,
+        Optional<VisibilityEnum> oDimensionVisibility,
+        Optional<Boolean> deep
+    ) {
+        List<Dimension> dimensions = cube.getDimensions() == null ? List.of() : Arrays.asList(cube.getDimensions());
+        return getDimensionsWithFilterByName(
+            getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName), oDimensionName)
+            .stream()
+            .map(d -> getMdSchemaDimensionsResponseRow(catalogName, schemaName, cube, d, cubeSource,
+                oDimensionVisibility, deep))
+            .toList();
+
+    }
+
+    private static MdSchemaDimensionsResponseRow getMdSchemaDimensionsResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Dimension dimension,
+        Optional<CubeSourceEnum> cubeSource,
+        Optional<VisibilityEnum> oDimensionVisibility,
+        Optional<Boolean> deep
+    ) {
+        String cubeName = cube.getName();
+        String desc = dimension.getDescription();
+        if (desc == null) {
+            desc =
+                cube.getName() + " Cube - "
+                    + dimension.getName() + " Dimension";
+        }
+        List<Dimension> dimensions = cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of();
+        //Is this the number of primaryKey members there are??
+        // According to microsoft this is:
+        //    "The number of members in the key attribute."
+        // There may be a better way of doing this but
+        // this is what I came up with. Note that I need to
+        // add '1' to the number inorder for it to match
+        // match what microsoft SQL Server is producing.
+        // The '1' might have to do with whether or not the
+        // hierarchy has a 'all' member or not - don't know yet.
+        // large data set total for Orders cube 0m42.923s
+
+        String firstHierarchyUniqueName = null;
+        Level lastLevel = null;
+        if (dimension.getHierarchies() != null && dimension.getHierarchies().length > 0) {
+            Hierarchy firstHierarchy = dimension.getHierarchies()[0];
+            firstHierarchyUniqueName = firstHierarchy.getUniqueName();
+            if (firstHierarchy.getLevels() != null && firstHierarchy.getLevels().length > 0) {
+                lastLevel = firstHierarchy.getLevels()[firstHierarchy.getLevels().length - 1];
+            }
+        }
+            /*
+            if override config setting is set
+                if approxRowCount has a value
+                    use it
+            else
+                                    do default
+            */
+
+        // Added by TWI to returned cached row numbers
+
+        //int n = getExtra(connection).getLevelCardinality(lastLevel);
+        int n = lastLevel.getCardinality();
+        int dimensionCardinality = n + 1;
+        boolean isVirtual = false;
+        // SQL Server always returns false
+        boolean isReadWrite = false;
+
+        // TODO: don't know what to do here
+        // Are these the levels with uniqueMembers == true?
+        // How are they mapped to specific column numbers?
+        //but was 0
+        DimensionUniqueSettingEnum dimensionUniqueSetting = DimensionUniqueSettingEnum.MEMBER_KEY;
+
+        if (deep.isPresent() && deep.get()) {
+            //TODO add MdSchemaHierarchiesResponse to response
+            getMdSchemaHierarchiesResponseRow(catalogName,
+                schemaName,
+                cubeName,
+                dimension,
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()
+            );
+        }
+
+        return new MdSchemaDimensionsResponseRowR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(dimension.getName()),
+            Optional.ofNullable(dimension.getUniqueName()),
+            Optional.empty(),
+            Optional.ofNullable(dimension.getCaption()),
+            Optional.ofNullable(dimensions.indexOf(dimension)),
+            Optional.ofNullable(getDimensionType(dimension)),
+            Optional.of(dimensionCardinality),
+            Optional.of(firstHierarchyUniqueName),
+            Optional.of(desc),
+            Optional.of(isVirtual),
+            Optional.of(isReadWrite),
+            Optional.ofNullable(dimensionUniqueSetting),
+            Optional.empty(),
+            Optional.ofNullable(dimension.isVisible())
+        );
+
+    }
+
+    static DimensionTypeEnum getDimensionType(Dimension dim) {
+        switch (dim.getDimensionType()) {
+            case MEASURES_DIMENSION:
+                return DimensionTypeEnum.MEASURE;
+            case TIME_DIMENSION:
+                return DimensionTypeEnum.TIME;
+            default:
+                return DimensionTypeEnum.OTHER;
+        }
+    }
+
     private static List<Schema> getSchemasWithFilter(List<Schema> schemas, Optional<String> oSchemaName) {
         if (oSchemaName.isPresent()) {
             schemas.stream().filter(s -> oSchemaName.get().equals(s.getName())).toList();
@@ -721,7 +889,7 @@ public class Utils {
         Optional<VisibilityEnum> oLevelVisibility
     ) {
         List<Dimension> dimensions = cube.getDimensions() == null ? List.of() : Arrays.asList(cube.getDimensions());
-        return getDimensionsWithFilter(dimensions, oDimensionUniqueName)
+        return getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName)
             .stream()
             .map(d -> getMdSchemaLevelsResponseRow(catalogName, schemaName, cube.getName(), d, oHierarchyUniqueName,
                 oLevelName, oLevelUniqueName,
@@ -729,9 +897,22 @@ public class Utils {
             .flatMap(Collection::stream).toList();
     }
 
-    private static List<Dimension> getDimensionsWithFilter(List<Dimension> dimensions, Optional<String> oDimensionUniqueName) {
+    private static List<Dimension> getDimensionsWithFilterByUniqueName(
+        List<Dimension> dimensions,
+        Optional<String> oDimensionUniqueName
+    ) {
         if (oDimensionUniqueName.isPresent()) {
             dimensions.stream().filter(d -> oDimensionUniqueName.get().equals(d.getUniqueName())).toList();
+        }
+        return dimensions;
+    }
+
+    private static List<Dimension> getDimensionsWithFilterByName(
+        List<Dimension> dimensions,
+        Optional<String> oDimensionName
+    ) {
+        if (oDimensionName.isPresent()) {
+            dimensions.stream().filter(d -> oDimensionName.get().equals(d.getName())).toList();
         }
         return dimensions;
     }
@@ -746,7 +927,8 @@ public class Utils {
         Optional<String> oLevelUniqueName,
         Optional<VisibilityEnum> oLevelVisibility
     ) {
-        List<Hierarchy> hierarchies =  dimension.getHierarchies() == null ? List.of() : Arrays.asList(dimension.getHierarchies());
+        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() :
+            Arrays.asList(dimension.getHierarchies());
         return getHierarchiesWithFilter1(hierarchies, oHierarchyUniqueName)
             .stream().map(h -> getMdSchemaLevelsResponseRow(
                 catalogName,
@@ -759,7 +941,10 @@ public class Utils {
                 oLevelVisibility)).flatMap(Collection::stream).toList();
     }
 
-    private static List<Hierarchy> getHierarchiesWithFilter1(List<Hierarchy> hierarchies, Optional<String> oHierarchyUniqueName) {
+    private static List<Hierarchy> getHierarchiesWithFilter1(
+        List<Hierarchy> hierarchies,
+        Optional<String> oHierarchyUniqueName
+    ) {
         if (oHierarchyUniqueName.isPresent()) {
             hierarchies.stream().filter(h -> oHierarchyUniqueName.get().equals(h.getUniqueName())).toList();
         }
@@ -801,7 +986,7 @@ public class Utils {
                 //int levelCardinality = extra.getLevelCardinality(level); //TODO
                 int levelCardinality = 1; //TODO
 
-                return (MdSchemaLevelsResponseRow)new MdSchemaLevelsResponseRowR(
+                return (MdSchemaLevelsResponseRow) new MdSchemaLevelsResponseRowR(
                     Optional.ofNullable(catalogName),
                     Optional.ofNullable(schemaName),
                     Optional.ofNullable(cubeName),
@@ -955,7 +1140,10 @@ public class Utils {
         return dimensions;
     }
 
-    static List<DbSchemaSourceTablesResponseRow> getDbSchemaSourceTablesResponseRow(Context context, List<String> tableTypeList) {
+    static List<DbSchemaSourceTablesResponseRow> getDbSchemaSourceTablesResponseRow(
+        Context context,
+        List<String> tableTypeList
+    ) {
         List<DbSchemaSourceTablesResponseRow> result = new ArrayList<>();
         try (java.sql.Connection sqlConnection = context.getDataSource().getConnection()) {
 
@@ -999,16 +1187,16 @@ public class Utils {
     ) {
         return getSchemasWithFilter(context.getConnection().getSchemas(), oSchemaName)
             .stream().map(s -> getMdSchemaHierarchiesResponseRow(
-            context.getName(),
-            s,
-            oCubeName,
-            oCubeSource,
-            oDimensionUniqueName,
-            oHierarchyName,
-            oHierarchyUniqueName,
-            oHierarchyVisibility,
-            oHierarchyOrigin
-        )).flatMap(Collection::stream).toList();
+                context.getName(),
+                s,
+                oCubeName,
+                oCubeSource,
+                oDimensionUniqueName,
+                oHierarchyName,
+                oHierarchyUniqueName,
+                oHierarchyVisibility,
+                oHierarchyOrigin
+            )).flatMap(Collection::stream).toList();
     }
 
     private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(
@@ -1022,7 +1210,7 @@ public class Utils {
         Optional<VisibilityEnum> oHierarchyVisibility,
         Optional<Integer> oHierarchyOrigin
     ) {
-        List<Cube> cubes = s.getCubes() == null ? List.of() :  Arrays.asList(s.getCubes());
+        List<Cube> cubes = s.getCubes() == null ? List.of() : Arrays.asList(s.getCubes());
         return getCubesWithFilter(cubes, oCubeName).stream()
             .map(c -> getMdSchemaHierarchiesResponseRow(
                 catalogName,
@@ -1047,7 +1235,7 @@ public class Utils {
         Optional<Integer> oHierarchyOrigin
     ) {
         List<Dimension> dimensions = c.getDimensions() == null ? List.of() : Arrays.asList(c.getDimensions());
-        return getDimensionsWithFilter(dimensions, oDimensionUniqueName)
+        return getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName)
             .stream()
             .map(d -> getMdSchemaHierarchiesResponseRow(
                 catalogName,
@@ -1074,21 +1262,37 @@ public class Utils {
         return List.of(); //TODO
     }
 
-    static List<MdSchemaMeasureGroupsResponseRow> getMdSchemaMeasureGroupsResponseRow(Context context, Optional<String> oSchemaName, Optional<String> oCubeName, Optional<String> oMeasureGroupName) {
-        return getDatabaseMappingSchemaProviderWithFilter(context.getDatabaseMappingSchemaProviders(),oSchemaName)
+    static List<MdSchemaMeasureGroupsResponseRow> getMdSchemaMeasureGroupsResponseRow(
+        Context context,
+        Optional<String> oSchemaName,
+        Optional<String> oCubeName,
+        Optional<String> oMeasureGroupName
+    ) {
+        return getDatabaseMappingSchemaProviderWithFilter(context.getDatabaseMappingSchemaProviders(), oSchemaName)
             .stream().filter(dmsp -> (dmsp != null && dmsp.get() != null))
-            .map(dmsp -> getMdSchemaMeasureGroupsResponseRow(context.getName(), dmsp.get(), oCubeName, oMeasureGroupName))
+            .map(dmsp -> getMdSchemaMeasureGroupsResponseRow(context.getName(), dmsp.get(), oCubeName,
+                oMeasureGroupName))
             .flatMap(Collection::stream).toList();
 
     }
 
-    private static List<MdSchemaMeasureGroupsResponseRow> getMdSchemaMeasureGroupsResponseRow(String catalogName, MappingSchema schema, Optional<String> oCubeName, Optional<String> oMeasureGroupName) {
+    private static List<MdSchemaMeasureGroupsResponseRow> getMdSchemaMeasureGroupsResponseRow(
+        String catalogName,
+        MappingSchema schema,
+        Optional<String> oCubeName,
+        Optional<String> oMeasureGroupName
+    ) {
         return getMappingCubeWithFilter(schema.cubes(), oCubeName).stream()
             .map(c -> getMdSchemaMeasureGroupsResponseRow(catalogName, schema.name(), c, oMeasureGroupName))
             .toList();
     }
 
-    private static MdSchemaMeasureGroupsResponseRow getMdSchemaMeasureGroupsResponseRow(String catalogName, String schemaName, MappingCube c, Optional<String> oMeasureGroupName) {
+    private static MdSchemaMeasureGroupsResponseRow getMdSchemaMeasureGroupsResponseRow(
+        String catalogName,
+        String schemaName,
+        MappingCube c,
+        Optional<String> oMeasureGroupName
+    ) {
         return new MdSchemaMeasureGroupsResponseRowR(
             Optional.ofNullable(catalogName),
             Optional.ofNullable(schemaName),
@@ -1100,22 +1304,48 @@ public class Utils {
         );
     }
 
-    static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(Context context, Optional<String> oSchemaName, Optional<String> oCubeName, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
+    static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(
+        Context context,
+        Optional<String> oSchemaName,
+        Optional<String> oCubeName,
+        Optional<String> oMeasureName,
+        Optional<String> oMeasureUniqueName,
+        Optional<String> oMeasureGroupName,
+        boolean shouldEmitInvisibleMembers
+    ) {
         return getSchemasWithFilter(context.getConnection().getSchemas(), oSchemaName)
             .stream().filter(s -> s != null)
-            .map(s -> getMdSchemaMeasuresResponseRow(context.getName(), s, oCubeName, oMeasureName, oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
+            .map(s -> getMdSchemaMeasuresResponseRow(context.getName(), s, oCubeName, oMeasureName,
+                oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
             .flatMap(Collection::stream).toList();
 
     }
 
-    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(String catalogName, Schema schema, Optional<String> oCubeName, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
-        List<Cube> cubes = schema.getCubes() == null ? List.of() :  Arrays.asList(schema.getCubes());
+    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(
+        String catalogName,
+        Schema schema,
+        Optional<String> oCubeName,
+        Optional<String> oMeasureName,
+        Optional<String> oMeasureUniqueName,
+        Optional<String> oMeasureGroupName,
+        boolean shouldEmitInvisibleMembers
+    ) {
+        List<Cube> cubes = schema.getCubes() == null ? List.of() : Arrays.asList(schema.getCubes());
         return getCubesWithFilter(cubes, oCubeName).stream()
-            .map(c -> getMdSchemaMeasuresResponseRow(catalogName, schema.getName(), c, oMeasureName, oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
+            .map(c -> getMdSchemaMeasuresResponseRow(catalogName, schema.getName(), c, oMeasureName,
+                oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
             .flatMap(Collection::stream).toList();
     }
 
-    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(String catalogName, String schemaName, Cube cube, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
+    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Optional<String> oMeasureName,
+        Optional<String> oMeasureUniqueName,
+        Optional<String> oMeasureGroupName,
+        boolean shouldEmitInvisibleMembers
+    ) {
         List<MdSchemaMeasuresResponseRow> result = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         int j = 0;
@@ -1135,13 +1365,24 @@ public class Utils {
         }
         String levelListStr = builder.toString();
         List<org.eclipse.daanse.olap.api.element.Member> measures =
-            getMeasureWithFilterByUniqueName(getMeasureWithFilterByName(cube.getMeasures(), oMeasureName), oMeasureUniqueName);
-        measures.stream().filter(m -> !m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName, cube.getName(), levelListStr, shouldEmitInvisibleMembers, m,result ));
-        measures.stream().filter(m -> m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName, cube.getName(), null, shouldEmitInvisibleMembers, m,result ));
+            getMeasureWithFilterByUniqueName(getMeasureWithFilterByName(cube.getMeasures(), oMeasureName),
+                oMeasureUniqueName);
+        measures.stream().filter(m -> !m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,
+            cube.getName(), levelListStr, shouldEmitInvisibleMembers, m, result));
+        measures.stream().filter(m -> m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,
+            cube.getName(), null, shouldEmitInvisibleMembers, m, result));
         return result;
     }
 
-    private static void populateMeasures(String catalogName, String schemaName, String cubeName, String levelListStr, boolean shouldEmitInvisibleMembers, Member m, List<MdSchemaMeasuresResponseRow> result) {
+    private static void populateMeasures(
+        String catalogName,
+        String schemaName,
+        String cubeName,
+        String levelListStr,
+        boolean shouldEmitInvisibleMembers,
+        Member m,
+        List<MdSchemaMeasuresResponseRow> result
+    ) {
         Boolean visible =
             (Boolean) m.getPropertyValue(Property.StandardMemberProperty.$visible.getName());
         if (visible == null) {
@@ -1198,16 +1439,24 @@ public class Utils {
                 Optional.ofNullable(formatString))
             );
         }
-    };
+    }
 
-private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByName(List<org.eclipse.daanse.olap.api.element.Member> measures, Optional<String> oMeasureName) {
+    ;
+
+    private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByName(
+        List<org.eclipse.daanse.olap.api.element.Member> measures,
+        Optional<String> oMeasureName
+    ) {
         if (oMeasureName.isPresent()) {
             return measures.stream().filter(m -> oMeasureName.get().equals(m.getName())).toList();
         }
         return measures;
     }
 
-    private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByUniqueName(List<org.eclipse.daanse.olap.api.element.Member> measures, Optional<String> oMeasureUniqueName) {
+    private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByUniqueName(
+        List<org.eclipse.daanse.olap.api.element.Member> measures,
+        Optional<String> oMeasureUniqueName
+    ) {
         if (oMeasureUniqueName.isPresent()) {
             return measures.stream().filter(m -> oMeasureUniqueName.get().equals(m.getUniqueName())).toList();
         }
