@@ -42,6 +42,7 @@ public abstract class LevelBase
     protected final LevelType levelType;
     protected MemberFormatter memberFormatter;
     protected int  approxRowCount;
+    protected int cardinality = 0;
 
     protected LevelBase(
         Hierarchy hierarchy,

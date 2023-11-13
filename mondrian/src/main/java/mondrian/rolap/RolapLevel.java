@@ -518,6 +518,12 @@ public class RolapLevel extends LevelBase {
         return approxRowCount;
     }
 
+    @Override
+    public int getCardinality() {
+        //TODO
+        return cardinality;
+    }
+
     private static final Map<String, BestFitColumnType> VALUES =
         UnmodifiableArrayMap.of(
             "int", BestFitColumnType.INT,

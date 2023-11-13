@@ -33,4 +33,5 @@ public interface Properties {
 
     Optional<AxisFormat> axisFormat();
 
+    Optional<Boolean> deep();
 }
