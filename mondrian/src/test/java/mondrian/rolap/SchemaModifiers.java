@@ -3172,20 +3172,23 @@ public class SchemaModifiers {
 
     public static class NonEmptyTestModifier2 extends RDbMappingSchemaModifier {
 
-        /*
-              "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
-        + "  <Hierarchy hasAll=\"true\" primaryKey=\"product_id\">\n"
-        + "    <Table name=\"product\"/>\n"
-        + "    <Level name=\"Brand Name\" table=\"product\" column=\"brand_name\" uniqueMembers=\"false\"/>\n"
-        + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\" uniqueMembers=\"true\"\n"
-        + "        hideMemberIf=\"IfBlankName\""
-        + "        />\n"
-        + "  </Hierarchy>\n"
-        + "</Dimension>" ) );
+        private final HideMemberIfEnum hideMemberIf;
 
-         */
-        public NonEmptyTestModifier2(MappingSchema mappingSchema) {
+        /*
+                      "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
+                + "  <Hierarchy hasAll=\"true\" primaryKey=\"product_id\">\n"
+                + "    <Table name=\"product\"/>\n"
+                + "    <Level name=\"Brand Name\" table=\"product\" column=\"brand_name\" uniqueMembers=\"false\"/>\n"
+                + "    <Level name=\"Product Name\" table=\"product\" column=\"product_name\" uniqueMembers=\"true\"\n"
+                + "        hideMemberIf=\"IfBlankName\""
+                + "        />\n"
+                + "  </Hierarchy>\n"
+                + "</Dimension>" ) );
+
+                 */
+        public NonEmptyTestModifier2(MappingSchema mappingSchema, HideMemberIfEnum hideMemberIf) {
             super(mappingSchema);
+            this.hideMemberIf = hideMemberIf;
         }
 
         @Override
@@ -3218,7 +3221,7 @@ public class SchemaModifiers {
                                     .table("product")
                                     .column("product_name")
                                     .uniqueMembers(true)
-                                    .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
+                                    .hideMemberIf(hideMemberIf)
                                     .build()
                             ))
                             .build()
