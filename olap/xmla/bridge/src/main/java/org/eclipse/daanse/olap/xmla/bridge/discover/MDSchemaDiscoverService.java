@@ -1,21 +1,23 @@
 /*
-* Copyright (c) 2022 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
@@ -52,23 +54,27 @@ import java.util.Optional;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaCubesResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaDimensionsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaHierarchiesResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaKpisResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaLevelsResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasureGroupDimensionsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasureGroupsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasuresResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMembersResponseRow;
 
 public class MDSchemaDiscoverService {
-	private ContextListSupplyer contextsListSupplyer;
 
-	public MDSchemaDiscoverService(ContextListSupplyer contextsListSupplyer) {
-		this.contextsListSupplyer = contextsListSupplyer;
-	}
+    private ContextListSupplyer contextsListSupplyer;
 
-	public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public MDSchemaDiscoverService(ContextListSupplyer contextsListSupplyer) {
+        this.contextsListSupplyer = contextsListSupplyer;
+    }
 
-	public List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest request) {
+    public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest request) {
         String catalogName = request.restrictions().catalogName();
         Optional<String> cubeName = request.restrictions().cubeName();
         Optional<String> schemaName = request.restrictions().schemaName();
@@ -80,8 +86,8 @@ public class MDSchemaDiscoverService {
             Context context = oContext.get();
             return getMdSchemaCubesResponseRow(context, schemaName, cubeName, baseCubeName, cubeSource);
         }
-		return List.of();
-	}
+        return List.of();
+    }
 
     public List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest request) {
         List<MdSchemaDimensionsResponseRow> result = new ArrayList<>();
@@ -97,24 +103,26 @@ public class MDSchemaDiscoverService {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
                 Context context = oContext.get();
-                result.addAll(getMdSchemaDimensionsResponseRow(context, oSchemaName, oCubeName, oDimensionName, oDimensionUniqueName,
+                result.addAll(getMdSchemaDimensionsResponseRow(context, oSchemaName, oCubeName, oDimensionName,
+                    oDimensionUniqueName,
                     cubeSource, oDimensionVisibility, deep));
             }
         } else {
             result.addAll(contextsListSupplyer.get().stream()
-                .map(c -> getMdSchemaDimensionsResponseRow(c, oSchemaName, oCubeName, oDimensionName, oDimensionUniqueName,
+                .map(c -> getMdSchemaDimensionsResponseRow(c, oSchemaName, oCubeName, oDimensionName,
+                    oDimensionUniqueName,
                     cubeSource, oDimensionVisibility, deep))
                 .flatMap(Collection::stream).toList());
         }
         return result;
-	}
+    }
 
     public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request) {
+    public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request) {
         List<MdSchemaHierarchiesResponseRow> result = new ArrayList<>();
         Optional<String> oCatalogName = request.restrictions().catalogName();
         Optional<String> oSchemaName = request.restrictions().schemaName();
@@ -129,24 +137,42 @@ public class MDSchemaDiscoverService {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
                 Context context = oContext.get();
-                result.addAll(getMdSchemaHierarchiesResponseRow(context, oSchemaName, oCubeName, oCubeSource, oDimensionUniqueName,
+                result.addAll(getMdSchemaHierarchiesResponseRow(context, oSchemaName, oCubeName, oCubeSource,
+                    oDimensionUniqueName,
                     oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin));
             }
         } else {
             result.addAll(contextsListSupplyer.get().stream()
-                .map(c -> getMdSchemaHierarchiesResponseRow(c, oSchemaName, oCubeName, oCubeSource, oDimensionUniqueName,
+                .map(c -> getMdSchemaHierarchiesResponseRow(c, oSchemaName, oCubeName, oCubeSource,
+                    oDimensionUniqueName,
                     oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin))
                 .flatMap(Collection::stream).toList());
         }
         return result;
-	}
+    }
 
     public List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        List<MdSchemaKpisResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oKpiName = request.restrictions().kpiName();
+        Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
+        if (oCatalogName.isPresent()) {
+            Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                result.addAll(getMdSchemaKpisResponseRow(context, oSchemaName, oCubeName, oKpiName));
+            }
+        } else {
+            result.addAll(contextsListSupplyer.get().stream()
+                .map(c -> getMdSchemaKpisResponseRow(c, oSchemaName, oCubeName, oKpiName))
+                .flatMap(Collection::stream).toList());
+        }
+        return result;
+    }
 
-	public List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest request) {
+    public List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest request) {
         List<MdSchemaLevelsResponseRow> result = new ArrayList<>();
         Optional<String> oCatalogName = request.restrictions().catalogName();
         Optional<String> oSchemaName = request.restrictions().schemaName();
@@ -170,16 +196,36 @@ public class MDSchemaDiscoverService {
                 .flatMap(Collection::stream).toList());
         }
         return result;
-	}
+    }
 
     public List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(
-			MdSchemaMeasureGroupDimensionsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        MdSchemaMeasureGroupDimensionsRequest request
+    ) {
+        List<MdSchemaMeasureGroupDimensionsResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oMeasureGroupName = request.restrictions().measureGroupName();
+        Optional<String> oDimensionUniqueName = request.restrictions().dimensionUniqueName();
+        Optional<VisibilityEnum> oDimensionVisibility = request.restrictions().dimensionVisibility();
+        if (oCatalogName.isPresent()) {
+            Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                result.addAll(getMdSchemaMeasureGroupDimensionsResponseRow(context, oSchemaName, oCubeName,
+                    oMeasureGroupName, oDimensionUniqueName, oDimensionVisibility));
+            }
+        } else {
+            result.addAll(contextsListSupplyer.get().stream()
+                .map(c -> getMdSchemaMeasureGroupDimensionsResponseRow(c, oSchemaName, oCubeName, oMeasureGroupName,
+                    oDimensionUniqueName, oDimensionVisibility))
+                .flatMap(Collection::stream).toList());
+        }
+        return result;
+    }
 
-	public List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request) {
-	    List<MdSchemaMeasureGroupsResponseRow> result = new ArrayList<>();
+    public List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request) {
+        List<MdSchemaMeasureGroupsResponseRow> result = new ArrayList<>();
         Optional<String> oCatalogName = request.restrictions().catalogName();
         Optional<String> oSchemaName = request.restrictions().schemaName();
         Optional<String> oCubeName = request.restrictions().cubeName();
@@ -197,7 +243,7 @@ public class MDSchemaDiscoverService {
         }
 
         return result;
-	}
+    }
 
     public List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest request) {
         List<MdSchemaMeasuresResponseRow> result = new ArrayList<>();
@@ -208,36 +254,69 @@ public class MDSchemaDiscoverService {
         Optional<String> oMeasureUniqueName = request.restrictions().measureUniqueName();
         Optional<String> oMeasureGroupName = request.restrictions().measureGroupName();
         Optional<VisibilityEnum> oMeasureVisibility = request.restrictions().measureVisibility();
-        boolean shouldEmitInvisibleMembers = oMeasureVisibility.isPresent() && VisibilityEnum.NOT_VISIBLE.equals(oMeasureVisibility.get());
+        boolean shouldEmitInvisibleMembers =
+            oMeasureVisibility.isPresent() && VisibilityEnum.NOT_VISIBLE.equals(oMeasureVisibility.get());
         if (oCatalogName.isPresent()) {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
                 Context context = oContext.get();
-                result.addAll(getMdSchemaMeasuresResponseRow(context, oSchemaName, oCubeName, oMeasureName, oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers));
+                result.addAll(getMdSchemaMeasuresResponseRow(context, oSchemaName, oCubeName, oMeasureName,
+                    oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers));
             }
         } else {
             result.addAll(contextsListSupplyer.get().stream()
-                .map(c -> getMdSchemaMeasuresResponseRow(c, oSchemaName, oCubeName, oMeasureName, oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
+                .map(c -> getMdSchemaMeasuresResponseRow(c, oSchemaName, oCubeName, oMeasureName, oMeasureUniqueName,
+                    oMeasureGroupName, shouldEmitInvisibleMembers))
                 .flatMap(Collection::stream).toList());
         }
 
         return result;
 
 
-	}
+    }
 
     public List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        List<MdSchemaMembersResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oDimensionUniqueName = request.restrictions().dimensionUniqueName();
+        Optional<String> oHierarchyUniqueName = request.restrictions().hierarchyUniqueName();
+        Optional<String> oLevelUniqueName = request.restrictions().levelUniqueName();
+        Optional<Integer> oLevelNumber = request.restrictions().levelNumber();
+        Optional<String> oMemberName = request.restrictions().memberName();
+        Optional<String> oMemberUniqueName = request.restrictions().memberUniqueName();
+        Optional<MemberTypeEnum> oMemberType = request.restrictions().memberType();
+        Optional<String> oMemberCaption = request.restrictions().memberCaption();
+        Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
+        Optional<TreeOpEnum> treeOp = request.restrictions().treeOp();
+        Optional<Boolean> emitInvisibleMembers = request.properties().emitInvisibleMembers();
+        if (oCatalogName.isPresent()) {
+            Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                result.addAll(getMdSchemaMembersResponseRow(context, oSchemaName, oCubeName, oDimensionUniqueName,
+                    oHierarchyUniqueName, oLevelUniqueName, oLevelNumber, oMemberName, oMemberUniqueName, oMemberType
+                    , oMemberCaption, cubeSource, treeOp, emitInvisibleMembers));
+            }
+        } else {
+            result.addAll(contextsListSupplyer.get().stream()
+                .map(c -> getMdSchemaMembersResponseRow(c, oSchemaName, oCubeName, oDimensionUniqueName,
+                    oHierarchyUniqueName, oLevelUniqueName, oLevelNumber, oMemberName, oMemberUniqueName, oMemberType
+                    , oMemberCaption, cubeSource, treeOp, emitInvisibleMembers))
+                .flatMap(Collection::stream).toList());
+        }
 
-	public List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return result;
+    }
 
-	public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
