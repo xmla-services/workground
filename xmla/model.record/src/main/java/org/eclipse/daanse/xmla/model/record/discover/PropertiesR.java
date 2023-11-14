@@ -263,6 +263,8 @@ public class PropertiesR implements Properties {
 
     protected Optional<Boolean> deep = Optional.of(false);
 
+    protected Optional<Boolean> emitInvisibleMembers = Optional.of(false);
+
     public void addProperty(PropertyListElementDefinition property, String value) {
 
         switch (property) {
@@ -1290,6 +1292,10 @@ public class PropertiesR implements Properties {
 
     public Optional<Boolean> deep() {
         return deep;
+    }
+
+    public Optional<Boolean> emitInvisibleMembers() {
+        return emitInvisibleMembers;
     }
 
     public void setDeep(Optional<Boolean> deep) {

@@ -19,10 +19,13 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
+
+import java.util.List;
 
 /**
  * Skeleton implementation of {@link Level}.
@@ -43,6 +46,7 @@ public abstract class LevelBase
     protected MemberFormatter memberFormatter;
     protected int  approxRowCount;
     protected int cardinality = 0;
+    protected List<Member> members;
 
     protected LevelBase(
         Hierarchy hierarchy,

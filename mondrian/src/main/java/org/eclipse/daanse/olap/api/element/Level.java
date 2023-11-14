@@ -19,6 +19,8 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import mondrian.olap.Property;
 import mondrian.spi.MemberFormatter;
 
+import java.util.List;
+
 /**
  * A <code>Level</code> is a group of {@link Member}s in a {@link Hierarchy},
  * all with the same attributes and at the same depth in the hierarchy.
@@ -65,4 +67,6 @@ public interface Level extends OlapElement, MetaElement {
     int getApproxRowCount();
 
     int getCardinality();
+
+    List<Member> getMembers();
 }
