@@ -17,6 +17,9 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
@@ -60,6 +63,9 @@ import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeas
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasureGroupsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMeasuresResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaMembersResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaPropertiesResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaPropertiesResponseRowCell;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaSetsResponseRow;
 
 public class MDSchemaDiscoverService {
 
@@ -311,12 +317,93 @@ public class MDSchemaDiscoverService {
     }
 
     public List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request) {
-        // TODO Auto-generated method stub
-        return null;
+        List<MdSchemaPropertiesResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oDimensionUniqueName = request.restrictions().dimensionUniqueName();
+        Optional<String> oHierarchyUniqueName = request.restrictions().hierarchyUniqueName();
+        Optional<String> oLevelUniqueName = request.restrictions().levelUniqueName();
+        Optional<String> oMemberUniqueName = request.restrictions().memberUniqueName();
+        Optional<PropertyTypeEnum> oPropertyType = request.restrictions().propertyType();
+        Optional<String> oPropertyName = request.restrictions().propertyName();
+        Optional<PropertyOriginEnum> oPropertyOrigin = request.restrictions().propertyOrigin();
+        Optional<CubeSourceEnum> oCubeSource = request.restrictions().cubeSource();
+        Optional<VisibilityEnum> oPropertyVisibility = request.restrictions().propertyVisibility();
+        PropertyTypeEnum propertyType = PropertyTypeEnum.PROPERTY_MEMBER;
+        if (oPropertyType.isPresent()) {
+            propertyType = oPropertyType.get();
+        }
+        switch (propertyType) {
+            case PROPERTY_MEMBER:
+                if (oCatalogName.isPresent()) {
+                    Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+                    if (oContext.isPresent()) {
+                        Context context = oContext.get();
+                        result.addAll(getMdSchemaPropertiesResponseRow(
+                            context,
+                            oSchemaName,
+                            oCubeName,
+                            oDimensionUniqueName,
+                            oHierarchyUniqueName,
+                            oLevelUniqueName,
+                            oMemberUniqueName,
+                            oPropertyName,
+                            oPropertyOrigin,
+                            oCubeSource,
+                            oPropertyVisibility
+                        ));
+                    }
+                } else {
+                    result.addAll(contextsListSupplyer.get().stream()
+                        .map(c -> getMdSchemaPropertiesResponseRow(
+                            c,
+                            oSchemaName,
+                            oCubeName,
+                            oDimensionUniqueName,
+                            oHierarchyUniqueName,
+                            oLevelUniqueName,
+                            oMemberUniqueName,
+                            oPropertyName,
+                            oPropertyOrigin,
+                            oCubeSource,
+                            oPropertyVisibility))
+                        .flatMap(Collection::stream).toList());
+                }
+                break;
+            case PROPERTY_CELL:
+                result.addAll(getMdSchemaPropertiesResponseRowCell());
+                break;
+            case INTERNAL_PROPERTY, BLOB_PROPERTY:
+            default:
+        }
+
+        return result;
     }
 
     public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request) {
-        // TODO Auto-generated method stub
-        return null;
+        List<MdSchemaSetsResponseRow> result = new ArrayList<>();
+        Optional<String> oCatalogName = request.restrictions().catalogName();
+        Optional<String> oSchemaName = request.restrictions().schemaName();
+        Optional<String> oCubeName = request.restrictions().cubeName();
+        Optional<String> oSetName = request.restrictions().setName();
+        Optional<ScopeEnum> oScope = request.restrictions().scope();
+        Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
+        Optional<String> oHierarchyUniqueName = request.restrictions().hierarchyUniqueName();
+        if (oCatalogName.isPresent()) {
+            Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                result.addAll(getMdSchemaSetsResponseRow(context, oSchemaName, oCubeName, oSetName, oScope, cubeSource,
+                    oHierarchyUniqueName));
+            }
+        } else {
+            result.addAll(contextsListSupplyer.get().stream()
+                .map(c -> getMdSchemaSetsResponseRow(c, oSchemaName, oCubeName, oSetName, oScope, cubeSource,
+                    oHierarchyUniqueName))
+                .flatMap(Collection::stream).toList());
+        }
+        return result;
     }
+
 }

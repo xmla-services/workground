@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
@@ -45,6 +46,11 @@ import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
@@ -62,6 +68,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSc
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRowR;
@@ -74,6 +82,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimens
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsResponseRowR;
 import org.olap4j.metadata.Property;
 import org.olap4j.metadata.XmlaConstants;
 import org.slf4j.Logger;
@@ -404,7 +414,6 @@ public class Utils {
         String schemaName,
         MappingCube cube
     ) {
-        List<MdSchemaCubesResponseRow> result = new ArrayList<>();
         if (cube != null) {
             if (cube.visible()) {
                 String desc = cube.description();
@@ -415,7 +424,7 @@ public class Utils {
                         .append(" Cube")
                         .toString();
                 }
-                new MdSchemaCubesResponseRowR(
+                return List.of(new MdSchemaCubesResponseRowR(
                     catalogName,
                     Optional.of(schemaName),
                     Optional.of(cube.name()),
@@ -434,7 +443,7 @@ public class Utils {
                     Optional.of(cube.caption()),
                     Optional.empty(),
                     Optional.of(CubeSourceEnum.CUBE),
-                    Optional.empty()
+                    Optional.empty())
                 );
             }
         }
@@ -770,7 +779,102 @@ public class Utils {
         return List.of();
     }
 
-    private static List<MdSchemaKpisResponseRow> getMdSchemaKpisResponseRow(String name, Schema s, Optional<String> oCubeName, Optional<String> oKpiName) {
+    static List<MdSchemaSetsResponseRow> getMdSchemaSetsResponseRow(
+        Context context,
+        Optional<String> oSchemaName,
+        Optional<String> oCubeName,
+        Optional<String> oSetName,
+        Optional<ScopeEnum> oScope,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<String> oHierarchyUniqueName
+    ) {
+        List<Schema> schemas = context.getConnection().getSchemas();
+        if (schemas != null) {
+            return getSchemasWithFilter(schemas, oSchemaName).stream()
+                .map(s -> getMdSchemaSetsResponseRow(context.getName(), s, oCubeName, oSetName, oScope, oCubeSource,
+                    oHierarchyUniqueName))
+                .flatMap(Collection::stream)
+                .toList();
+        }
+        return List.of();
+    }
+
+    private static List<MdSchemaSetsResponseRow> getMdSchemaSetsResponseRow(
+        String catalogName,
+        Schema schema,
+        Optional<String> oCubeName,
+        Optional<String> oSetName,
+        Optional<ScopeEnum> oScope,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<String> oHierarchyUniqueName
+    ) {
+        List<Cube> cubes = schema.getCubes() == null ? List.of() : Arrays.asList(schema.getCubes());
+        return getCubesWithFilter(cubes, oCubeName).stream().
+            map(c -> getMdSchemaSetsResponseRow(catalogName, schema.getName(), c,
+                oSetName, oScope, oCubeSource,
+                oHierarchyUniqueName)).
+            flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaSetsResponseRow> getMdSchemaSetsResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Optional<String> oSetName,
+        Optional<ScopeEnum> oScope,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<String> oHierarchyUniqueName
+    ) {
+        List<NamedSet> sets = cube.getNamedSets() == null ? List.of() : Arrays.asList(cube.getNamedSets());
+        return getNamedSetsWithFilter(sets, oSetName).stream().
+            map(s -> getMdSchemaSetsResponseRow(catalogName, schemaName, cube.getName(), s,
+                oScope, oCubeSource,
+                oHierarchyUniqueName))
+            .toList();
+
+    }
+
+    private static MdSchemaSetsResponseRow getMdSchemaSetsResponseRow(
+        String catalogName,
+        String schemaName,
+        String cubeName,
+        NamedSet set,
+        Optional<ScopeEnum> oScope,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<String> oHierarchyUniqueName
+    ) {
+
+        String dimensions = set.getHierarchies()
+            .stream().map(it -> it.getUniqueName()).collect(Collectors.joining(","));
+
+        return new MdSchemaSetsResponseRowR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(set.getName()),
+            Optional.of(ScopeEnum.GLOBAL),
+            Optional.ofNullable(set.getDescription()),
+            Optional.ofNullable(set.getExp() != null ? set.getExp().toString() : null),
+            Optional.ofNullable(dimensions),
+            Optional.ofNullable(set.getCaption()),
+            Optional.ofNullable(set.getDisplayFolder()),
+            Optional.of(SetEvaluationContextEnum.STATIC)
+        );
+    }
+
+    private static List<NamedSet> getNamedSetsWithFilter(List<NamedSet> sets, Optional<String> oSetName) {
+        if (oSetName.isPresent()) {
+            return sets.stream().filter(s -> oSetName.get().equals(s.getName())).toList();
+        }
+        return sets;
+    }
+
+    private static List<MdSchemaKpisResponseRow> getMdSchemaKpisResponseRow(
+        String catalogName,
+        Schema schema,
+        Optional<String> oCubeName,
+        Optional<String> oKpiName
+    ) {
         return List.of();
     }
 
@@ -1689,6 +1793,274 @@ public class Utils {
             Optional.of(c.name())
         );
     }
+    static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRowCell() {
+        List<MdSchemaPropertiesResponseRow> result = new ArrayList<>();
+        for (Property.StandardCellProperty property
+            : Property.StandardCellProperty.values())
+        {
+
+            int type = Property.TypeFlag.getDictionary()
+                    .toMask(
+                        property.getType());
+            int dataType = property.getDatatype().xmlaOrdinal();
+
+            result.add(new MdSchemaPropertiesResponseRowR(
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.ofNullable(PropertyTypeEnum.fromValue(String.valueOf(type))),
+                Optional.ofNullable(property.name()),
+                Optional.ofNullable(property.getCaption()),
+                Optional.ofNullable(LevelDbTypeEnum.fromValue(String.valueOf(dataType))),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()
+            ));
+        }
+        return result;
+    }
+
+    static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow(
+        Context context,
+        Optional<String> oSchemaName,
+        Optional<String> oCubeName,
+        Optional<String> oDimensionUniqueName,
+        Optional<String> oHierarchyUniqueName,
+        Optional<String> oLevelUniqueName,
+        Optional<String> oMemberUniqueName,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        return getSchemasWithFilter(context.getConnection().getSchemas(), oSchemaName)
+            .stream().map(s -> getMdSchemaPropertiesResponseRow(
+                context.getName(),
+                s,
+                oCubeName,
+                oDimensionUniqueName,
+                oHierarchyUniqueName,
+                oLevelUniqueName,
+                oMemberUniqueName,
+                oPropertyName,
+                oPropertyOrigin,
+                oCubeSource,
+                oPropertyVisibility
+            )).flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow(
+        String catalogName,
+        Schema schema,
+        Optional<String> oCubeName,
+        Optional<String> oDimensionUniqueName,
+        Optional<String> oHierarchyUniqueName,
+        Optional<String> oLevelUniqueName,
+        Optional<String> oMemberUniqueName,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        List<Cube> cubes = schema.getCubes() == null ? List.of() : Arrays.asList(schema.getCubes());
+        return getCubesWithFilter(cubes, oCubeName).stream()
+            .map(c -> getMdSchemaPropertiesResponseRow(catalogName, schema.getName(), c, oDimensionUniqueName,
+                oHierarchyUniqueName,
+                oLevelUniqueName,
+                oPropertyName,
+                oPropertyOrigin,
+                oCubeSource,
+                oPropertyVisibility
+            ))
+            .flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Optional<String> oDimensionUniqueName,
+        Optional<String> oHierarchyUniqueName,
+        Optional<String> oLevelUniqueName,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        if (oLevelUniqueName.isPresent()) {
+            // Note: If the LEVEL_UNIQUE_NAME has been specified, then
+            // the dimension and hierarchy are specified implicitly.
+            String levelUniqueName = oLevelUniqueName.get();
+            if (levelUniqueName == null) {
+                // The query specified two or more unique names
+                // which means that nothing will match.
+                return List.of();
+            }
+            Optional<Level> oLevel = lookupLevel(cube, levelUniqueName);
+            if (!oLevel.isPresent()) {
+                return List.of();
+            }
+            return getMdSchemaPropertiesResponseRow(
+                catalogName,
+                schemaName,
+                cube,
+                oLevel.get(),
+                oPropertyName,
+                oPropertyOrigin,
+                oCubeSource,
+                oPropertyVisibility);
+        } else {
+            List<Dimension> dimensions = cube.getDimensions() == null ? List.of() : Arrays.asList(cube.getDimensions());
+            return getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName)
+                .stream().filter(d -> d != null)
+                .map(d -> getMdSchemaMeasuresResponseRow(catalogName, schemaName, cube, d,
+                    oHierarchyUniqueName,
+                    oPropertyName,
+                    oPropertyOrigin,
+                    oCubeSource,
+                    oPropertyVisibility))
+                .flatMap(Collection::stream).toList();
+        }
+
+    }
+
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaMeasuresResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Dimension dimension,
+        Optional<String> oHierarchyUniqueName,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() : Arrays.asList(dimension.getHierarchies());
+        return getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyUniqueName)
+            .stream().filter(h -> h != null)
+            .map(h -> getMdSchemaPropertiesResponseRow1(catalogName, schemaName, cube, h,
+                oPropertyName,
+                oPropertyOrigin,
+                oCubeSource,
+                oPropertyVisibility))
+            .flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow1(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Hierarchy hierarchy,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        List<Level> levels =  hierarchy.getLevels() == null ? List.of() : Arrays.asList( hierarchy.getLevels());
+        return levels.stream().map(l -> getMdSchemaPropertiesResponseRow(catalogName,
+            schemaName, cube, l, oPropertyName, oPropertyOrigin, oCubeSource, oPropertyVisibility))
+            .flatMap(Collection::stream).toList();
+    }
+
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Level level,
+        Optional<String> oPropertyName,
+        Optional<PropertyOriginEnum> oPropertyOrigin,
+        Optional<CubeSourceEnum> oCubeSource,
+        Optional<VisibilityEnum> oPropertyVisibility
+    ) {
+        List<mondrian.olap.Property> properties = level.getProperties() == null ? List.of() : Arrays.asList(level.getProperties());
+        return getPropertiesWithFilterByUniqueName(properties, oPropertyName)
+            .stream().filter(p -> p != null)
+            .map(p -> getMdSchemaPropertiesResponseRow(catalogName, schemaName, cube, level, p))
+            .toList();
+    }
+
+    private static List<mondrian.olap.Property> getPropertiesWithFilterByUniqueName(List<mondrian.olap.Property> properties, Optional<String> oPropertyName) {
+        if (oPropertyName.isPresent()) {
+            properties.stream().filter(p -> oPropertyName.get().equals(p.getName())).toList();
+        }
+        return properties;
+    }
+
+    private static MdSchemaPropertiesResponseRow getMdSchemaPropertiesResponseRow(
+        String catalogName,
+        String schemaName,
+        Cube cube,
+        Level level,
+        mondrian.olap.Property property
+    ) {
+        Hierarchy hierarchy = level.getHierarchy();
+        Dimension dimension = hierarchy.getDimension();
+        String propertyName = property.getName();
+        LevelDbTypeEnum dbType = getDBTypeFromProperty(property);
+
+        String desc =
+            cube.getName() + " Cube - "
+                + getHierarchyName(hierarchy.getName(), dimension.getName()) + " Hierarchy - "
+                + level.getName() + " Level - "
+                + property.getName() + " Property";
+
+        return new MdSchemaPropertiesResponseRowR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cube.getName()),
+            Optional.ofNullable(dimension.getUniqueName()),
+            Optional.ofNullable(hierarchy.getUniqueName()),
+            Optional.ofNullable(level.getUniqueName()),
+            //TODO: what is the correct value here? ""?
+            Optional.empty(),
+            Optional.of(PropertyTypeEnum.PROPERTY_MEMBER),
+            Optional.ofNullable(propertyName),
+            Optional.ofNullable(property.getCaption()),
+            Optional.of(dbType),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.ofNullable(desc),
+            Optional.of(PropertyContentTypeEnum.REGULAR),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()
+        );
+
+    }
+
+    private static LevelDbTypeEnum getDBTypeFromProperty(mondrian.olap.Property prop) {
+        switch (prop.getType()) {
+            case TYPE_STRING:
+                return LevelDbTypeEnum.DBTYPE_WSTR;
+            case TYPE_INTEGER, TYPE_LONG, TYPE_NUMERIC:
+                return LevelDbTypeEnum.DBTYPE_R8;
+            case TYPE_BOOLEAN:
+                return LevelDbTypeEnum.DBTYPE_BOOL;
+            default:
+                // TODO: what type is it really, its not a string
+                return LevelDbTypeEnum.DBTYPE_WSTR;
+        }
+    }
 
     static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(
         Context context,
@@ -1826,8 +2198,6 @@ public class Utils {
             );
         }
     }
-
-    ;
 
     private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByName(
         List<org.eclipse.daanse.olap.api.element.Member> measures,

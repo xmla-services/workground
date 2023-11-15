@@ -1513,7 +1513,7 @@ public enum RowsetDefinition {
         writer.endElement(); // xsd:schema
     }
 
-    enum Type {
+    public enum Type {
         STRING("string","xsd:string"),
         STRING_ARRAY("StringArray","xsd:string"),
         ARRAY("Array","xsd:string"),
