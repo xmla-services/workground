@@ -14,7 +14,9 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restriction;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -41,7 +43,7 @@ public class DiscoverSchemaRowsetsResponseRowXml extends Row implements Serializ
     private String schemaGuid;
 
     @XmlElement(name = "Restrictions")
-    private String restrictions;
+    private List<Restriction> restrictions;
 
     @XmlElement(name = "Description")
     private String description;
@@ -65,11 +67,11 @@ public class DiscoverSchemaRowsetsResponseRowXml extends Row implements Serializ
         this.schemaGuid = schemaGuid;
     }
 
-    public String getRestrictions() {
+    public List<Restriction> getRestrictions() {
         return restrictions;
     }
 
-    public void setRestrictions(String restrictions) {
+    public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
     }
 

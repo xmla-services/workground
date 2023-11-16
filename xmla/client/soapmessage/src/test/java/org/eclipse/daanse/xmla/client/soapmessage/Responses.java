@@ -150,7 +150,10 @@ public class Responses {
                 xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
                 <SchemaName>SchemaName</SchemaName>
                 <SchemaGuid>SchemaGuid</SchemaGuid>
-                <Restrictions>Restrictions</Restrictions>
+                <Restrictions>
+                    <Name>TABLE_SCHEMA</Name>
+                    <Type>xsd:string</Type>
+                </Restrictions>
                 <Description>Description</Description>
                 <RestrictionsMask>100</RestrictionsMask>
               </row>

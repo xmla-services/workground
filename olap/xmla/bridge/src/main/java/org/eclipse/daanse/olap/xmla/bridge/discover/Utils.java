@@ -967,15 +967,13 @@ public class Utils {
             int levelNumber = oLevelNumber.get();
             if (levelNumber == -1) {
                 LOGGER.warn(
-                    "RowsetDefinition.populateHierarchy: "
-                        + "LevelNumber invalid");
+                    "LevelNumber invalid");
                 return List.of();
             }
             Level[] levels = hierarchy.getLevels();
             if (levelNumber >= levels.length) {
                 LOGGER.warn(
-                    "RowsetDefinition.populateHierarchy: "
-                        + "LevelNumber ("
+                        "LevelNumber ("
                         + levelNumber
                         + ") is greater than number of levels ("
                         + levels.length

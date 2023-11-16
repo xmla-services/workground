@@ -475,6 +475,7 @@ public class Constants {
     public static final String LITERAL_NAME_VALUE = "LiteralNameValue";
     public static final String ID = "ID";
     public static final String NAME_LC = "Name";
+    public static final String TYPE_LC = "Type";
     public static final String CONTEXTUAL_NAME_RULE = "ContextualNameRule";
     public static final String DEFAULT_DETAILS_POSITION = "DefaultDetailsPosition";
     public static final String SORT_PROPERTIES_POSITION = "SortPropertiesPosition";
