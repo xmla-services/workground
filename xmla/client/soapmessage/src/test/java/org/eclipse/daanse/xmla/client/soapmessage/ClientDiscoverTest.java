@@ -509,7 +509,11 @@ class ClientDiscoverTest {
 
         assertThat(r.schemaName()).isEqualTo("SchemaName");
         assertThat(r.schemaGuid()).isPresent().contains("SchemaGuid");
-        assertThat(r.restrictions()).isPresent().contains("Restrictions");
+        assertThat(r.restrictions()).isPresent();
+        assertThat(r.restrictions().get()).hasSize(1);
+        assertThat(r.restrictions().get().get(0)).isNotNull();
+        assertThat(r.restrictions().get().get(0).name()).isEqualTo("TABLE_SCHEMA");
+        assertThat(r.restrictions().get().get(0).type()).isEqualTo("xsd:string");
         assertThat(r.description()).isPresent().contains("Description");
         assertThat(r.restrictionsMask()).isPresent().contains(100l);
 

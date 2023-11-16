@@ -99,6 +99,7 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaM
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -402,7 +403,8 @@ class DiscoverResponseTest {
         TransformerException {
 
         DiscoverSchemaRowsetsResponseRowR row = new DiscoverSchemaRowsetsResponseRowR(SCHEMA_NAME_LOW,
-            Optional.of("schemaGuid"), Optional.of("restrictions"), Optional.of(DESCRIPTION_LOW), Optional.of(10l));
+            Optional.of("schemaGuid"), Optional.of(List.of(new RestrictionR("name", "type")))
+            , Optional.of(DESCRIPTION_LOW), Optional.of(10l));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.discoverSchemaRowsets(any())).thenReturn(List.of(row));
@@ -416,7 +418,6 @@ class DiscoverResponseTest {
         checkRowValues(xmlAssert, Map.of(
             "SchemaName", SCHEMA_NAME_LOW,
             "SchemaGuid", "schemaGuid",
-            "Restrictions", "restrictions",
             "Description", DESCRIPTION_LOW,
             "RestrictionsMask", "10"
         ));
