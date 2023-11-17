@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DBSCHEMA_TABLES_INFO", guid="c8b522e0-5cf3-11ce-ade5-00aa0044773d")
 public interface DbSchemaTablesInfoRequest {
 
     Properties properties();

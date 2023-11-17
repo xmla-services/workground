@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.demensions;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="MDSCHEMA_DIMENSIONS", guid="C8B522D9-5CF3-11CE-ADE5-00AA0044773D")
 public interface MdSchemaDimensionsRequest {
 
     Properties properties();

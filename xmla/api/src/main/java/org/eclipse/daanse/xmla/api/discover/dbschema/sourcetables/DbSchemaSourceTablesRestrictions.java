@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 
 public interface DbSchemaSourceTablesRestrictions {
@@ -28,17 +29,20 @@ public interface DbSchemaSourceTablesRestrictions {
      * @return Catalog name. NULL if the provider does not support
      * catalogs.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_CATALOG, type = "xsd:string")
     Optional<String> catalogName();
 
     /**
      * @return Unqualified schema name. NULL if the provider does not
      * support schemas.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
     Optional<String> schemaName();
 
     /**
      * @return Table name
      */
+    @Restriction(name = RESTRICTIONS_TABLE_NAME, type = "xsd:string")
     String tableName();
 
     /**
@@ -46,5 +50,6 @@ public interface DbSchemaSourceTablesRestrictions {
      * value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
      * TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW
      */
+    @Restriction(name = RESTRICTIONS_TABLE_TYPE, type = "xsd:string")
     TableTypeEnum tableType();
 }

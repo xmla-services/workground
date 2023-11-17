@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.kpis;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 
 public interface MdSchemaKpisRestrictions {
@@ -28,23 +29,27 @@ public interface MdSchemaKpisRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = "xsd:string")
     Optional<String> cubeName();
 
     /**
      * The name of the set, as specified in the CREATE SET
      * statement.
      */
+    @Restriction(name = RESTRICTIONS_KPI_NAME, type = "xsd:string")
     Optional<String> kpiName();
 
     /**
@@ -53,5 +58,6 @@ public interface MdSchemaKpisRestrictions {
      * 0x02 - Dimension
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = "xsd:int")
     Optional<CubeSourceEnum> cubeSource();
 }

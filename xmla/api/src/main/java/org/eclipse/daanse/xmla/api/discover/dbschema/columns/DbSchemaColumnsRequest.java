@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.columns;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DBSCHEMA_COLUMNS", guid="C8B52214-5CF3-11CE-ADE5-00AA0044773D")
 public interface DbSchemaColumnsRequest {
 
     Properties properties();

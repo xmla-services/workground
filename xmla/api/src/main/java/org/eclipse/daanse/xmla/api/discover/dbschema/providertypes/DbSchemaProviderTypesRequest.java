@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.providertypes;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DBSCHEMA_PROVIDER_TYPES", guid="C8B5222C-5CF3-11CE-ADE5-00AA0044773D")
 public interface DbSchemaProviderTypesRequest {
 
     Properties properties();

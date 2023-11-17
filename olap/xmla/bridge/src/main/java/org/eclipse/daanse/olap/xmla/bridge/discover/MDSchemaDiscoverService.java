@@ -76,7 +76,8 @@ public class MDSchemaDiscoverService {
     }
 
     public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request) {
-        // TODO Auto-generated method stub
+        // mondrian doesn't support actions. It's not an error to ask for
+        // them, there just aren't any
         return null;
     }
 

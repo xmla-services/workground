@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.tables;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
+
 import java.util.Optional;
 
 public interface DbSchemaTablesRestrictions {
@@ -24,16 +26,19 @@ public interface DbSchemaTablesRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_CATALOG, type = "xsd:string")
     Optional<String> tableCatalog();
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_SCHEMA, type = "xsd:string")
     Optional<String> tableSchema();
 
     /**
      * @return The name of the table.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_NAME, type = "xsd:string")
     Optional<String> tableName();
 
     /**
@@ -42,6 +47,7 @@ public interface DbSchemaTablesRestrictions {
      * SYSTEM TABLE for dimension.
      * SCHEMA for schema rowset table.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_TYPE, type = "xsd:string")
     Optional<String> tableType();
 
 }

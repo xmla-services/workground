@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.measures;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 
@@ -33,33 +34,39 @@ public interface MdSchemaMeasuresRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = "xsd:string")
     Optional<String> cubeName();
 
     /**
      * @return The name of the measure.
      */
+    @Restriction(name = RESTRICTIONS_MEASURE_NAME, type = "xsd:string")
     Optional<String> measureName();
 
     /**
      * The unique name of the measure
      */
+    @Restriction(name = RESTRICTIONS_MEASURE_UNIQUE_NAME, type = "xsd:string")
     Optional<String> measureUniqueName();
 
     /**
      * The name of the measure group to which the
      * measure belongs.
      */
+    @Restriction(name = RESTRICTIONS_MEASUREGROUP_NAME, type = "xsd:string")
     Optional<String> measureGroupName();
 
     /**
@@ -68,6 +75,7 @@ public interface MdSchemaMeasuresRestrictions {
      * 0x02 - Dimension
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = "xsd:int")
     Optional<CubeSourceEnum> cubeSource();
 
     /**
@@ -76,5 +84,6 @@ public interface MdSchemaMeasuresRestrictions {
      * 0x02 - Not Visible
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_MEASURE_VISIBILITY, type = "xsd:int")
     Optional<VisibilityEnum> measureVisibility();
 }
