@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DISCOVER_XML_METADATA", guid="3444B255-171E-4CB9-AD98-19E57888A75F")
 public interface DiscoverXmlMetaDataRequest {
 
     Properties properties();

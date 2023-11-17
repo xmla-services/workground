@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.members;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
@@ -38,48 +39,57 @@ public interface MdSchemaMembersRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = "xsd:string")
     Optional<String> cubeName();
 
     /**
      * The unique name of the dimension.
      */
+    @Restriction(name = RESTRICTIONS_DIMENSION_UNIQUE_NAME, type = "xsd:string")
     Optional<String> dimensionUniqueName();
 
     /**
      * The unique name of the hierarchy.
      */
+    @Restriction(name = RESTRICTIONS_HIERARCHY_UNIQUE_NAME, type = "xsd:string")
     Optional<String> hierarchyUniqueName();
 
     /**
      * The unique name of the level.
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_UNIQUE_NAME, type = "xsd:string")
     Optional<String> levelUniqueName();
 
     /**
      * The distance of the member from the root of the
      * hierarchy. The root level is zero (0).
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_NUMBER, type = "xsd:string")
     Optional<Integer> levelNumber();
 
     /**
      * @return The name of the member.
      */
+    @Restriction(name = RESTRICTIONS_MEMBER_NAME, type = "xsd:string")
     Optional<String> memberName();
 
     /**
      * @return The unique name of the member.
      */
+    @Restriction(name = RESTRICTIONS_MEMBER_UNIQUE_NAME, type = "xsd:string")
     Optional<String> memberUniqueName();
 
     /**
@@ -90,11 +100,13 @@ public interface MdSchemaMembersRestrictions {
      * 4 - Is a formula.
      * 0 - Is of unknown type.
      */
+    @Restriction(name = RESTRICTIONS_MEMBER_TYPE, type = "xsd:string")
     Optional<MemberTypeEnum> memberType();
 
     /**
      * @return The caption of the member.
      */
+    @Restriction(name = RESTRICTIONS_MEMBER_CAPTION, type = "xsd:string")
     Optional<String> memberCaption();
 
     /**
@@ -103,6 +115,7 @@ public interface MdSchemaMembersRestrictions {
      * 0x02 - Dimension
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = "xsd:int")
     Optional<CubeSourceEnum> cubeSource();
 
     /**
@@ -114,5 +127,6 @@ public interface MdSchemaMembersRestrictions {
      * 0x08 – Returns only itself.
      * 0x10 - Returns all of the descendants.
      */
+    @Restriction(name = RESTRICTIONS_TREE_OP, type = "xsd:int")
     Optional<TreeOpEnum> treeOp();
 }

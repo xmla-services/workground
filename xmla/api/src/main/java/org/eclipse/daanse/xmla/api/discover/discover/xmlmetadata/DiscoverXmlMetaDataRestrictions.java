@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
 
 public interface DiscoverXmlMetaDataRestrictions {
@@ -44,106 +45,127 @@ public interface DiscoverXmlMetaDataRestrictions {
     /**
      * @return The database ID.
      */
+    @Restriction(name = RESTRICTIONS_DATABASE_ID, type = "xsd:string")
     Optional<String> databaseId();
 
     /**
      * @return The dimension ID.
      */
+    @Restriction(name = RESTRICTIONS_DIMENSION_ID, type = "xsd:string")
     Optional<String> dimensionId();
 
     /**
      * @return The cube ID.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_ID, type = "xsd:string")
     Optional<String> cubeId();
 
     /**
      * @return The measure group ID.
      */
+    @Restriction(name = RESTRICTIONS_MEASURE_GROUP_ID, type = "xsd:string")
     Optional<String> measureGroupId();
 
     /**
      * @return The partition ID.
      */
+    @Restriction(name = RESTRICTIONS_PARTITION_ID, type = "xsd:string")
     Optional<String> partitionId();
 
     /**
      * @return The perspective ID.
      */
+    @Restriction(name = RESTRICTIONS_PERSPECTIVE_ID, type = "xsd:string")
     Optional<String> perspectiveId();
 
     /**
      * @return The dimension permission ID.
      */
+    @Restriction(name = RESTRICTIONS_PERMISSION_ID, type = "xsd:string")
     Optional<String> dimensionPermissionId();
 
     /**
      * @return The role ID.
      */
+    @Restriction(name = RESTRICTIONS_ROLE_ID, type = "xsd:string")
     Optional<String> roleId();
 
     /**
      * @return The database permission ID.
      */
+    @Restriction(name = RESTRICTIONS_PERMISSION_ID, type = "xsd:string")
     Optional<String> databasePermissionId();
 
     /**
      * @return The mining model ID.
      */
+    @Restriction(name = RESTRICTIONS_MINING_MODEL_ID, type = "xsd:string")
     Optional<String> miningModelId();
 
     /**
      * @return The mining model permission ID.
      */
+    @Restriction(name = RESTRICTIONS_MINING_MODEL_PERMISSION_ID, type = "xsd:string")
     Optional<String> miningModelPermissionId();
 
     /**
      * @return The data source ID.
      */
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_ID, type = "xsd:string")
     Optional<String> dataSourceId();
 
     /**
      * @return The mining structure ID.
      */
+    @Restriction(name = RESTRICTIONS_MINING_STRUCTURE_ID, type = "xsd:string")
     Optional<String> miningStructureId();
 
     /**
      * @return The aggregation design ID.
      */
+    @Restriction(name = RESTRICTIONS_AGGREGATION_DESIGN_ID, type = "xsd:string")
     Optional<String> aggregationDesignId();
 
     /**
      * @return The trace ID.
      */
+    @Restriction(name = RESTRICTIONS_TRACE_ID, type = "xsd:string")
     Optional<String> traceId();
 
     /**
      * @return The mining structure permission ID.
      */
+    @Restriction(name = RESTRICTIONS_MINING_STRUCTURE_PERMISSION_ID, type = "xsd:string")
     Optional<String> miningStructurePermissionId();
 
     /**
      * @return The cube permission ID.
      */
+    @Restriction(name = RESTRICTIONS_PERMISSION_ID, type = "xsd:string")
     Optional<String> cubePermissionId();
 
     /**
      * @return The assembly ID.
      */
+    @Restriction(name = RESTRICTIONS_ASSEMBLY_ID, type = "xsd:string")
     Optional<String> assemblyId();
 
     /**
      * @return The MDX script ID.
      */
+    @Restriction(name = RESTRICTIONS_MDX_SCRIPT_ID, type = "xsd:string")
     Optional<String> mdxScriptId();
 
     /**
      * @return The data source view ID.
      */
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_VIEW_ID, type = "xsd:string")
     Optional<String> dataSourceViewId();
 
     /**
      * @return The data source permission ID.
      */
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_PERMISSION_ID, type = "xsd:string")
     Optional<String> dataSourcePermissionId();
 
     /**
@@ -160,5 +182,6 @@ public interface DiscoverXmlMetaDataRestrictions {
      * ExpandFull - Fully expands the requested object recursively to
      * the bottom of every contained object.
      */
+    @Restriction(name = RESTRICTIONS_OBJECT_EXPANSION, type = "xsd:string")
     Optional<ObjectExpansionEnum> objectExpansion();
 }

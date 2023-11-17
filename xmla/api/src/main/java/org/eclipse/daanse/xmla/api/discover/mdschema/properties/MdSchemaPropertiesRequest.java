@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.properties;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="MDSCHEMA_PROPERTIES", guid="C8B522DD-5CF3-11CE-ADE5-00AA0044773D")
 public interface MdSchemaPropertiesRequest {
 
     Properties properties();

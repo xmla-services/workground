@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.enumerators;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DISCOVER_ENUMERATORS", guid="55A9E78B-ACCB-45B4-95A6-94C5065617A7")
 public interface DiscoverEnumeratorsRequest {
 
     Properties properties();

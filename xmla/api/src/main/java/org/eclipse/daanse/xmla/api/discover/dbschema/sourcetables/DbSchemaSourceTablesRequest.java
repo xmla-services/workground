@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DBSCHEMA_SOURCE_TABLES", guid="8c3f5858-2742-4976-9d65-eb4d493c693e")
 public interface DbSchemaSourceTablesRequest {
 
     Properties properties();

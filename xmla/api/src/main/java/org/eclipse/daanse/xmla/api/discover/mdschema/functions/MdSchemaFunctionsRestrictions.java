@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.functions;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
 
@@ -31,6 +32,7 @@ public interface MdSchemaFunctionsRestrictions {
      * (0x3) RELATIONAL
      * (0x4) SCALAR
      */
+    @Restriction(name = RESTRICTIONS_ORIGIN, type = "xsd:int")
     Optional<OriginEnum> origin();
 
     /**
@@ -40,10 +42,12 @@ public interface MdSchemaFunctionsRestrictions {
      * LOGICAL
      * FILTER
      */
+    @Restriction(name = RESTRICTIONS_INTERFACE_NAME, type = "xsd:string")
     Optional<InterfaceNameEnum> interfaceName();
 
     /**
      * @return The library that implements the function.
      */
+    @Restriction(name = RESTRICTIONS_LIBRARY_NAME, type = "xsd:string")
     Optional<String> libraryName();
 }

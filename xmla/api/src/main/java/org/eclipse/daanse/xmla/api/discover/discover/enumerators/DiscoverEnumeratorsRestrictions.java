@@ -13,14 +13,17 @@
  */
 package org.eclipse.daanse.xmla.api.discover.discover.enumerators;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
+
 import java.util.Optional;
 
 public interface DiscoverEnumeratorsRestrictions {
-    public static final String RESTRICTIONS_ENUM_NAME = "EnumName";
+    String RESTRICTIONS_ENUM_NAME = "EnumName";
 
     /**
      * @return The name of the enumerator that contains a set of values.
      */
+    @Restriction(name = RESTRICTIONS_ENUM_NAME, type = "xsd:string")
     Optional<String> enumName();
 
 }

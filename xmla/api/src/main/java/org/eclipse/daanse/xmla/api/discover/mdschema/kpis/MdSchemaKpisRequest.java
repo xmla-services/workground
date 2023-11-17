@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.kpis;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="MDSCHEMA_KPIS", guid="2AE44109-ED3D-4842-B16F-B694D1CB0E3F")
 public interface MdSchemaKpisRequest {
 
     Properties properties();

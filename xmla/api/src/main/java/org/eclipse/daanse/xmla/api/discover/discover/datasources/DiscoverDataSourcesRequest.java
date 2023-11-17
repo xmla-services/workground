@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.datasources;
 
+import org.eclipse.daanse.xmla.api.annotations.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+@Operation(name ="DISCOVER_DATASOURCES", guid="06C03D41-F66D-49F3-B1B8-987F7AF4CF18")
 public interface DiscoverDataSourcesRequest {
 
     Properties properties();
