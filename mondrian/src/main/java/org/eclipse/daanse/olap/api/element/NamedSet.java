@@ -18,6 +18,8 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
 
+import java.util.List;
+
 /**
  * A named set of members or tuples.
  *
@@ -69,4 +71,8 @@ public interface NamedSet extends OlapElement, MetaElement {
      * @return Whether this named set is dynamic
      */
     boolean isDynamic();
+
+    List<Hierarchy> getHierarchies();
+
+    String getDisplayFolder();
 }

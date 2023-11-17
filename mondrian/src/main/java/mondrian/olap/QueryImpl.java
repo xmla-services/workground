@@ -1466,11 +1466,11 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         final Validator validator,
         List<ResultStyle> resultStyleList)
     {
- 
+
 		ExpressionCompilerFactory factory = statement.getMondrianConnection().getContext()
 				.getExpressionCompilerFactory();
 		ExpressionCompiler compiler = factory.createExpressionCompiler(evaluator, validator, resultStyleList);
-         
+
         final int expDeps =
             MondrianProperties.instance().TestExpDependencies.get();
         final ProfileHandler profileHandler = statement.getProfileHandler();
@@ -2179,6 +2179,16 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
 		public boolean isDynamic() {
             return true;
+        }
+
+        @Override
+        public List<Hierarchy> getHierarchies() {
+            return List.of();
+        }
+
+        @Override
+        public String getDisplayFolder() {
+            return null;
         }
 
         @Override

@@ -33,4 +33,7 @@ public interface Properties {
 
     Optional<AxisFormat> axisFormat();
 
+    Optional<Boolean> deep();
+
+    Optional<Boolean> emitInvisibleMembers();
 }

@@ -352,4 +352,16 @@ public enum PropertyDefinition {
     public String getDescription() {
         return description;
     }
+
+    public RowsetDefinition.Type getType() {
+        return type;
+    }
+
+    public XmlaConstants.Access getAccess() {
+        return access;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

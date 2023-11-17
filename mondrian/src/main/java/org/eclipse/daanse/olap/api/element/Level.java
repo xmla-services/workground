@@ -7,7 +7,7 @@
  * Copyright (C) 1999-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *  SmartCity Jena - refactor, clean API
  */
@@ -18,6 +18,8 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 
 import mondrian.olap.Property;
 import mondrian.spi.MemberFormatter;
+
+import java.util.List;
 
 /**
  * A <code>Level</code> is a group of {@link Member}s in a {@link Hierarchy},
@@ -63,4 +65,8 @@ public interface Level extends OlapElement, MetaElement {
      * {@link Integer#MIN_VALUE} if no approximation is known.
      */
     int getApproxRowCount();
+
+    int getCardinality();
+
+    List<Member> getMembers();
 }

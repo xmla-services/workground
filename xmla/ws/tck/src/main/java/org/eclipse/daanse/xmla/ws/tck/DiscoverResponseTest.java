@@ -65,6 +65,7 @@ import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.ParameterInfo;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
@@ -97,6 +98,7 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaM
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -403,7 +405,8 @@ class DiscoverResponseTest {
         TransformerException {
 
         DiscoverSchemaRowsetsResponseRowR row = new DiscoverSchemaRowsetsResponseRowR(SCHEMA_NAME_LOW,
-            Optional.of("schemaGuid"), Optional.of("restrictions"), Optional.of(DESCRIPTION_LOW), Optional.of(10l));
+            Optional.of("schemaGuid"), Optional.of(List.of(new RestrictionR("name", "type")))
+            , Optional.of(DESCRIPTION_LOW), Optional.of(10l));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.discoverSchemaRowsets(any())).thenReturn(List.of(row));
@@ -417,7 +420,6 @@ class DiscoverResponseTest {
         checkRowValues(xmlAssert, Map.of(
             "SchemaName", SCHEMA_NAME_LOW,
             "SchemaGuid", "schemaGuid",
-            "Restrictions", "restrictions",
             "Description", DESCRIPTION_LOW,
             "RestrictionsMask", "10"
         ));
@@ -1331,6 +1333,7 @@ class DiscoverResponseTest {
             Optional.of("measureNameSqlColumnName"),
             Optional.of("measureUnqualifiedCaption"),
             Optional.of(MEASURE_GROUP_NAME),
+            Optional.of("measureDisplayFolder"),
             Optional.of("defaultFormatString")
         );
 
@@ -1368,7 +1371,8 @@ class DiscoverResponseTest {
             Map.entry("MEASURE_NAME_SQL_COLUMN_NAME", "measureNameSqlColumnName"),
             Map.entry("MEASURE_UNQUALIFIED_CAPTION", "measureUnqualifiedCaption"),
             Map.entry(MEASUREGROUP_NAME, MEASURE_GROUP_NAME),
-            Map.entry("DEFAULT_FORMAT_STRING", "defaultFormatString")
+            Map.entry("DEFAULT_FORMAT_STRING", "defaultFormatString"),
+            Map.entry("MEASURE_DISPLAY_FOLDER", "measureDisplayFolder")
         ));
     }
 

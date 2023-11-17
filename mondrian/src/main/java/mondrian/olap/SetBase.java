@@ -123,10 +123,12 @@ public class SetBase extends OlapElementBase implements NamedSet {
         return description;
     }
 
+    @Override
     public String getDisplayFolder() {
         return displayFolder;
     }
 
+    @Override
     public List<Hierarchy> getHierarchies() {
         return ((SetType)exp.getType()).getHierarchies();
     }

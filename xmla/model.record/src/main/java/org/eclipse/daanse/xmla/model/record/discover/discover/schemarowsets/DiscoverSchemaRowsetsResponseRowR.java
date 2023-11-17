@@ -13,13 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
+import org.eclipse.daanse.xmla.api.xmla.Restriction;
 
 public record DiscoverSchemaRowsetsResponseRowR(String schemaName,
                                                 Optional<String> schemaGuid,
-                                                Optional<String> restrictions,
+                                                Optional<List<Restriction>> restrictions,
                                                 Optional<String> description,
                                                 Optional<Long> restrictionsMask)
     implements DiscoverSchemaRowsetsResponseRow {

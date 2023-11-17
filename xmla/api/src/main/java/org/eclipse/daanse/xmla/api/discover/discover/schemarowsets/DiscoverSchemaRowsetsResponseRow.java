@@ -13,6 +13,9 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.schemarowsets;
 
+import org.eclipse.daanse.xmla.api.xmla.Restriction;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,7 +37,7 @@ public interface DiscoverSchemaRowsetsResponseRow {
     /**
      * @return  The restrictions supported by the Discover request.
      */
-    Optional<String> restrictions();
+    Optional<List<Restriction>> restrictions();
 
     /**
      * @return The description of the Discover request.

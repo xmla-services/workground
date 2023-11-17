@@ -95,6 +95,7 @@ import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 import org.eclipse.daanse.xmla.api.mddataset.Type;
+import org.eclipse.daanse.xmla.api.xmla.Restriction;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.MeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.discover.ParameterInfoR;
@@ -156,6 +157,7 @@ import org.eclipse.daanse.xmla.model.record.mddataset.MembersTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoCubeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
+import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -341,6 +343,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASUREGROUP_
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASUREGROUP_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_AGGREGATOR;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_DISPLAY_FOLDER;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_GROUP_DIMENSION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_GUID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_IS_VISIBLE;
@@ -360,6 +363,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MESSAGES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MIME_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MINIMUM_SCALE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NAME_LC;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NUMERIC_PRECISION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NUMERIC_SCALE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.OBJECT;
@@ -412,6 +416,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_VERSION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_LC;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_LIB;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.UNSIGNED_ATTRIBUTE;
@@ -606,6 +611,7 @@ class Convertor {
                 Optional.ofNullable(m.get(MEASURE_NAME_SQL_COLUMN_NAME)),
                 Optional.ofNullable(m.get(MEASURE_UNQUALIFIED_CAPTION)),
                 Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
+                Optional.ofNullable(m.get(MEASURE_DISPLAY_FOLDER)),
                 Optional.ofNullable(m.get(DEFAULT_FORMAT_STRING))
             )
         ).toList();
@@ -818,16 +824,22 @@ class Convertor {
     }
 
     static List<DiscoverSchemaRowsetsResponseRow> convertToDiscoverSchemaRowsetsResponseRow(SOAPBody b) {
-        List<Map<String, String>> l = getMapValuesList(b);
-        return l.stream().map(m ->
-            (DiscoverSchemaRowsetsResponseRow) new DiscoverSchemaRowsetsResponseRowR(
-                m.get(SCHEMA_NAME1),
-                Optional.ofNullable(m.get(SCHEMA_GUID)),
-                Optional.ofNullable(m.get(RESTRICTIONS)),
-                Optional.ofNullable(m.get(DESCRIPTION1)),
-                Optional.ofNullable(getLong(m.get(RESTRICTIONS_MASK)))
-            )
-        ).toList();
+        List<DiscoverSchemaRowsetsResponseRow> result = new ArrayList<>();
+        NodeList nodeList = b.getElementsByTagName(ROW);
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList nl = nodeList.item(i).getChildNodes();
+                Map<String, String> m = getMapValues(nl);
+                result.add(new DiscoverSchemaRowsetsResponseRowR(
+                    m.get(SCHEMA_NAME1),
+                    Optional.ofNullable(m.get(SCHEMA_GUID)),
+                    Optional.ofNullable(convertToRestrictionList(nodeList.item(i))),
+                    Optional.ofNullable(m.get(DESCRIPTION1)),
+                    Optional.ofNullable(getLong(m.get(RESTRICTIONS_MASK)))
+                ));
+            }
+        }
+        return result;
     }
 
     static List<DiscoverLiteralsResponseRow> convertToDiscoverLiteralsResponseRow(SOAPBody b) {
@@ -1542,6 +1554,24 @@ class Convertor {
                             getBoolean(m.get(OPTIONAL)),
                             getBoolean(m.get(REPEATABLE)),
                             getInt(m.get(REPEATGROUP)))
+                    );
+                }
+            }
+        }
+        return result;
+    }
+
+    private static List<Restriction> convertToRestrictionList(Node node) {
+        List<Restriction> result = new ArrayList<>();
+        NodeList nl = node.getChildNodes();
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node n = nl.item(i);
+                if (RESTRICTIONS.equals(n.getNodeName())) {
+                    Map<String, String> m = getMapValues(n.getChildNodes());
+                    result.add(
+                        new RestrictionR(m.get(NAME_LC),
+                            m.get(TYPE_LC))
                     );
                 }
             }

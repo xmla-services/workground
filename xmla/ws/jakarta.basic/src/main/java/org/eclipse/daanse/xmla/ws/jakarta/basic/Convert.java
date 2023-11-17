@@ -137,6 +137,7 @@ import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
 import org.eclipse.daanse.xmla.api.xmla.ClearCache;
+import org.eclipse.daanse.xmla.api.xmla.Restriction;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
@@ -199,6 +200,7 @@ import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
+import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
@@ -443,13 +445,27 @@ public class Convert {
         apiRow.schemaGuid()
             .ifPresent(row::setSchemaGuid);
         apiRow.restrictions()
-            .ifPresent(row::setRestrictions);
+            .ifPresent(r -> row.setRestrictions(convertRestrictionList(r)));
         apiRow.description()
             .ifPresent(row::setDescription);
         apiRow.restrictionsMask()
             .ifPresent(row::setRestrictionsMask);
 
         return row;
+    }
+
+    public static List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restriction> convertRestrictionList(List<Restriction> restrictionList) {
+        if (restrictionList == null) {
+            return List.of();
+        }
+        return restrictionList.stream().map(Convert::convertRestriction).toList();
+    }
+
+    public static org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restriction convertRestriction(Restriction restriction) {
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restriction r = new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restriction();
+        r.setName(restriction.name());
+        r.setType(restriction.type());
+        return r;
     }
 
     private static DiscoverSchemaRowsetsRestrictionsR discoverSchemaRowsetsRestrictions(Discover requestWs) {
