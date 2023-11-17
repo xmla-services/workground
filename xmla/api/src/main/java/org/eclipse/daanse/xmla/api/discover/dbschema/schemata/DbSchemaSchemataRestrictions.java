@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.schemata;
 
+import org.eclipse.daanse.xmla.api.annotations.Restriction;
+
 public interface DbSchemaSchemataRestrictions {
 
     String RESTRICTIONS_CATALOG_NAME = "CATALOG_NAME";
@@ -22,15 +24,18 @@ public interface DbSchemaSchemataRestrictions {
     /**
      * @return Catalog name
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
     String catalogName();
 
     /**
      * Schema name
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
     String schemaName();
 
     /**
      * @return Schema owner
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_OWNER, type = "xsd:string")
     String schemaOwner();
 }
