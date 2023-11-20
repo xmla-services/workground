@@ -12,6 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 package org.eclipse.daanse.xmla.api.discover.discover.properties;
+import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public interface DiscoverPropertiesResponseRow {
      * @return The access for the property. The value can be Read, Write, or
      * ReadWrite.
      */
-    String propertyAccessType();
+    AccessEnum propertyAccessType();
 
     /**
      * @return When true, indicates that a property is required; otherwise

@@ -75,8 +75,8 @@ public class ContextGroupXmlaService implements XmlaService {
 			contexts = contextGroup.getValidContexts();
 		}
 		ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contexts);
-		executeService = new OlapExecuteService(contextsListSupplyer);
-		discoverService = new DelegatingDiscoverService(contextsListSupplyer);
+		executeService = new OlapExecuteService(contextsListSupplyer, config);
+		discoverService = new DelegatingDiscoverService(contextsListSupplyer, config);
 	}
 
 	void unbindContext(ContextGroup contextGroup) {

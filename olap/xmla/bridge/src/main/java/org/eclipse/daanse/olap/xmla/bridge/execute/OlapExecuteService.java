@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
+import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
@@ -27,9 +28,11 @@ import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 public class OlapExecuteService implements ExecuteService {
 
 	private ContextListSupplyer contextsListSupplyer;
+    private ContextGroupXmlaServiceConfig config;
 
-	public OlapExecuteService(ContextListSupplyer contextsListSupplyer) {
+	public OlapExecuteService(ContextListSupplyer contextsListSupplyer, ContextGroupXmlaServiceConfig config) {
 		this.contextsListSupplyer=contextsListSupplyer;
+        this.config = config;
 	}
 
 	@Override
