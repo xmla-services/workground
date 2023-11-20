@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
@@ -82,10 +83,10 @@ public class DelegatingDiscoverService implements DiscoverService {
 	private MDSchemaDiscoverService mdSchemaService;
 	private OtherDiscoverService otherSchemaService;
 
-	public DelegatingDiscoverService(ContextListSupplyer contextsListSupplyer) {
+	public DelegatingDiscoverService(ContextListSupplyer contextsListSupplyer, ContextGroupXmlaServiceConfig config) {
 		this.dbSchemaService = new DBSchemaDiscoverService(contextsListSupplyer);
 		this.mdSchemaService = new MDSchemaDiscoverService(contextsListSupplyer);
-		this.otherSchemaService = new OtherDiscoverService(contextsListSupplyer);
+		this.otherSchemaService = new OtherDiscoverService(contextsListSupplyer, config);
 	}
 
 	@Override

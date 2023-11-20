@@ -202,8 +202,8 @@ import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
-import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AccessEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
@@ -353,7 +353,8 @@ public class Convert {
 
         // Mandatory
         row.setPropertyName(apiRow.propertyName());
-        row.setPropertyAccessType(apiRow.propertyAccessType());
+        row.setPropertyAccessType(apiRow.propertyAccessType() == null ?
+            null : AccessEnum.fromValue(apiRow.propertyAccessType().getValue()));
 
         // Optional
         apiRow.propertyDescription()

@@ -29,6 +29,7 @@ import java.util.Optional;
 import jakarta.xml.soap.SOAPException;
 import org.assertj.core.api.Condition;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
@@ -66,7 +67,6 @@ import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.ParameterInfo;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
@@ -359,7 +359,7 @@ class DiscoverResponseTest {
 
         DiscoverPropertiesResponseRowR row = new DiscoverPropertiesResponseRowR("DbpropMsmdSubqueries",
             Optional.of("An enumeration value that determines the behavior of subqueries."), Optional.of("Integer"),
-            "ReadWrite", Optional.of(false), Optional.of("1"));
+            AccessEnum.READ_WRITE, Optional.of(false), Optional.of("1"));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.discoverProperties(any())).thenReturn(List.of(row));

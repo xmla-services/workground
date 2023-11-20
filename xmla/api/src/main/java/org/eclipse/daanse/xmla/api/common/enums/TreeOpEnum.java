@@ -13,11 +13,14 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import org.eclipse.daanse.xmla.api.annotation.Enumerator;
+
 import java.util.stream.Stream;
 
 /**
  * Applies only to a single member:
  */
+@Enumerator(name = "TREE_OP")
 public enum TreeOpEnum {
 
     /**

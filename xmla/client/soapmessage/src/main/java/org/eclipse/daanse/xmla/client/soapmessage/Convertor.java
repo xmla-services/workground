@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.client.soapmessage;
 
 import jakarta.xml.soap.SOAPBody;
+import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
@@ -822,7 +823,7 @@ class Convertor {
                 m.get(PROPERTY_NAME1),
                 Optional.ofNullable(m.get("PropertyDescription")),
                 Optional.ofNullable(m.get("PropertyType")),
-                m.get("PropertyAccessType"),
+                AccessEnum.fromValue(m.get("PropertyAccessType")),
                 Optional.ofNullable(getBoolean(m.get("IsRequired"))),
                 Optional.ofNullable(m.get("Value"))
             )

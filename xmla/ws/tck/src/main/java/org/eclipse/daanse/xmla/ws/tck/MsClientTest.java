@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.ws.tck;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesResponseRowR;
@@ -76,9 +77,9 @@ class MsClientTest {
 
         List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
         result.add(new DiscoverPropertiesResponseRowR("MyPopertyName1", Optional.of("MyPopertyDescription"),
-                Optional.of("string"), "Read", Optional.of(false), Optional.of("v")));
+                Optional.of("string"), AccessEnum.READ, Optional.of(false), Optional.of("v")));
         result.add(new DiscoverPropertiesResponseRowR("MyPopertyName2", Optional.of("MyPopertyDescription1"),
-                Optional.of("string"), "Read", Optional.of(false), Optional.of("v")));
+                Optional.of("string"), AccessEnum.READ, Optional.of(false), Optional.of("v")));
 
         DiscoverService discoverService = xmlaService.discover();
 
