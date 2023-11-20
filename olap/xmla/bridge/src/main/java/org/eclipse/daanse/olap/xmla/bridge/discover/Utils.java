@@ -17,7 +17,10 @@ import mondrian.olap.DimensionType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapLevel;
+import mondrian.xmla.RowsetDefinition;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -25,6 +28,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -41,11 +45,14 @@ import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DirectQueryPushableEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
@@ -61,6 +68,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRespon
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
@@ -77,6 +85,7 @@ import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTab
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRowR;
@@ -392,6 +401,85 @@ public class Utils {
                 .toList();
         }
         return List.of();
+    }
+
+    static List<MdSchemaFunctionsResponseRow> getMdSchemaFunctionsResponseRow(Context c,
+                                                                              Optional<String> oLibraryName,
+                                                                              Optional<InterfaceNameEnum> oInterfaceName,
+                                                                              Optional<OriginEnum> oOrigin) {
+        List<MdSchemaFunctionsResponseRow> result = new ArrayList<>();
+        List<FunctionMetaData> fmList = c.getConnection().getSchema().getFunTable().getFunctionMetaDatas();
+        StringBuilder buf = new StringBuilder(50);
+        for (FunctionMetaData fm : fmList) {
+            if (Syntax.Empty.equals(fm.functionAtom().syntax())
+                || Syntax.Internal.equals(fm.functionAtom().syntax())
+                || Syntax.Parentheses.equals(fm.functionAtom().syntax())) {
+                continue;
+            }
+
+            DataType[] paramCategories = fm.parameterDataTypes();
+            DataType returnCategory = fm.returnCategory();
+
+            // Convert Windows newlines in 'description' to UNIX format.
+            String description = fm.description();
+            if (description != null) {
+                description = fm.description().replace(
+                    "\r",
+                    "");
+            }
+            if ((paramCategories == null)
+                || (paramCategories.length == 0))
+            {
+                result.add(
+                    new MdSchemaFunctionsResponseRowR(
+                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(description),
+                        "(none)",
+                        Optional.of(1),
+                        Optional.of(OriginEnum.MSOLAP),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.empty(),
+                        Optional.empty()));
+            } else {
+
+
+                buf.setLength(0);
+                for (int j = 0; j < paramCategories.length; j++) {
+                    DataType v = paramCategories[j];
+                    if (j > 0) {
+                        buf.append(", ");
+                    }
+                    buf.append(v.getPrittyName());
+                }
+
+                RowsetDefinition.MdschemaFunctionsRowset.VarType varType =
+                    RowsetDefinition.MdschemaFunctionsRowset.VarType
+                        .forCategory(returnCategory);
+                result.add(
+                    new MdSchemaFunctionsResponseRowR(
+                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(description),
+                        buf.toString(),
+                        Optional.of(varType.ordinal()),
+                        Optional.of(OriginEnum.MSOLAP),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.empty(),
+                        Optional.empty()));
+            }
+        }
+        return result;
     }
 
     private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(

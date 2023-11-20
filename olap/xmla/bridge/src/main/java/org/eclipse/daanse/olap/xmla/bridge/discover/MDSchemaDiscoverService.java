@@ -16,7 +16,9 @@ package org.eclipse.daanse.olap.xmla.bridge.discover;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
@@ -56,6 +58,7 @@ import java.util.Optional;
 
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaCubesResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaDimensionsResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaFunctionsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaHierarchiesResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaKpisResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getMdSchemaLevelsResponseRow;
@@ -125,8 +128,13 @@ public class MDSchemaDiscoverService {
     }
 
     public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request) {
-        // TODO Auto-generated method stub
-        return null;
+        Optional<String> oLibraryName = request.restrictions().libraryName();
+        Optional<InterfaceNameEnum> oInterfaceName = request.restrictions().interfaceName();
+        Optional<OriginEnum> oOrigin = request.restrictions().origin();
+        return contextsListSupplyer.get().stream()
+            .map(c -> getMdSchemaFunctionsResponseRow(c, oLibraryName, oInterfaceName, oOrigin))
+            .flatMap(Collection::stream).toList();
+
     }
 
     public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request) {
