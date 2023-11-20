@@ -94,6 +94,8 @@ import jakarta.xml.ws.Holder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.*;
+
 public class ApiXmlaWsAdapter implements WsAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiXmlaWsAdapter.class);
 	XmlaService xmlaService;
@@ -102,33 +104,6 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 		this.xmlaService = xmlaService;
 	}
 
-	private static final String MDSCHEMA_FUNCTIONS = "MDSCHEMA_FUNCTIONS";
-	private static final String MDSCHEMA_DIMENSIONS = "MDSCHEMA_DIMENSIONS";
-	private static final String MDSCHEMA_CUBES = "MDSCHEMA_CUBES";
-	private static final String MDSCHEMA_ACTIONS = "MDSCHEMA_ACTIONS";
-	private static final String DBSCHEMA_TABLES = "DBSCHEMA_TABLES";
-	private static final String DISCOVER_LITERALS = "DISCOVER_LITERALS";
-	private static final String DISCOVER_KEYWORDS = "DISCOVER_KEYWORDS";
-	private static final String DISCOVER_ENUMERATORS = "DISCOVER_ENUMERATORS";
-	private static final String DISCOVER_SCHEMA_ROWSETS = "DISCOVER_SCHEMA_ROWSETS";
-	private static final String DISCOVER_PROPERTIES = "DISCOVER_PROPERTIES";
-	private static final String DBSCHEMA_CATALOGS = "DBSCHEMA_CATALOGS";
-	private static final String DISCOVER_DATASOURCES = "DISCOVER_DATASOURCES";
-	private static final String DISCOVER_XML_METADATA = "DISCOVER_XML_METADATA";
-	private static final String DBSCHEMA_COLUMNS = "DBSCHEMA_COLUMNS";
-	private static final String DBSCHEMA_PROVIDER_TYPES = "DBSCHEMA_PROVIDER_TYPES";
-	private static final String DBSCHEMA_SCHEMATA = "DBSCHEMA_SCHEMATA";
-	private static final String DBSCHEMA_SOURCE_TABLES = "DBSCHEMA_SOURCE_TABLES";
-	private static final String DBSCHEMA_TABLES_INFO = "DBSCHEMA_TABLES_INFO";
-	private static final String MDSCHEMA_HIERARCHIES = "MDSCHEMA_HIERARCHIES";
-	private static final String MDSCHEMA_LEVELS = "MDSCHEMA_LEVELS";
-	private static final String MDSCHEMA_MEASUREGROUP_DIMENSIONS = "MDSCHEMA_MEASUREGROUP_DIMENSIONS";
-	private static final String MDSCHEMA_MEASURES = "MDSCHEMA_MEASURES";
-	private static final String MDSCHEMA_MEMBERS = "MDSCHEMA_MEMBERS";
-	private static final String MDSCHEMA_PROPERTIES = "MDSCHEMA_PROPERTIES";
-	private static final String MDSCHEMA_SETS = "MDSCHEMA_SETS";
-	private static final String MDSCHEMA_KPIS = "MDSCHEMA_KPIS";
-	private static final String MDSCHEMA_MEASUREGROUPS = "MDSCHEMA_MEASUREGROUPS";
 
 	@Override
 	public AuthenticateResponse authenticate(Authenticate authenticate) {

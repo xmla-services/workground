@@ -15,9 +15,11 @@ package org.eclipse.daanse.xmla.api.discover.discover.datasources;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface DiscoverDataSourcesRestrictions {
     String RESTRICTIONS_DATA_SOURCE_NAME = "DataSourceName";
@@ -31,13 +33,13 @@ public interface DiscoverDataSourcesRestrictions {
     /**
      * @return The name of the data source.
      */
-    @Restriction(name = RESTRICTIONS_DATA_SOURCE_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_NAME, type = XSD_STRING)
     String dataSourceName();
 
     /**
      * @return The description of the data source.
      */
-    @Restriction(name = RESTRICTIONS_DATA_SOURCE_DESCRIPTION, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_DESCRIPTION, type = XSD_STRING)
     Optional<String> dataSourceDescription();
 
     /**
@@ -49,13 +51,13 @@ public interface DiscoverDataSourcesRestrictions {
      * @return A string that contains any additional information required to
      * connect to the data source.
      */
-    @Restriction(name = RESTRICTIONS_DATA_SOURCE_INFO, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_DATA_SOURCE_INFO, type = XSD_STRING)
     Optional<String> dataSourceInfo();
 
     /**
      * @return The name of the provider for the data source.
      */
-    @Restriction(name = RESTRICTIONS_PROVIDER_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_PROVIDER_NAME, type = XSD_STRING)
     String providerName();
 
     /**
@@ -66,7 +68,7 @@ public interface DiscoverDataSourcesRestrictions {
      * DMP: data mining provider (implements the OLE for DB
      * for Data Mining specification).
      */
-    @Restriction(name = RESTRICTIONS_PROVIDER_TYPE, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_PROVIDER_TYPE, type = XSD_STRING)
     Optional<ProviderTypeEnum> providerType();
 
     /**
@@ -80,6 +82,6 @@ public interface DiscoverDataSourcesRestrictions {
      * Integrated: The data source uses the underlying
      * security to determine authorization.
      */
-    @Restriction(name = RESTRICTIONS_AUTHENTICATION_MODE, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_AUTHENTICATION_MODE, type = XSD_STRING)
     Optional<AuthenticationModeEnum> authenticationMode();
 }

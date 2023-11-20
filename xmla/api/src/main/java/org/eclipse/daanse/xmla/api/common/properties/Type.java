@@ -14,24 +14,24 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 enum Type {
-    STRING("string", Types.XSD_STRING),
-    STRING_ARRAY("StringArray", Types.XSD_STRING),
-    ARRAY("Array", Types.XSD_STRING),
-    ENUMERATION("Enumeration", Types.XSD_STRING),
-    ENUMERATION_ARRAY("EnumerationArray", Types.XSD_STRING),
-    ENUM_STRING("EnumString", Types.XSD_STRING),
-    BOOLEAN("Boolean", "xsd:boolean"),
-    STRING_SOMETIMES_ARRAY("StringSometimesArray", Types.XSD_STRING),
-    INTEGER("Integer", "xsd:int"),
-    UNSIGNED_INTEGER("UnsignedInteger", "xsd:unsignedInt"),
-    DOUBLE("Double", "xsd:double"),
-    DATE_TIME("DateTime", "xsd:dateTime"),
+    STRING("string", XsdType.XSD_STRING),
+    STRING_ARRAY("StringArray", XsdType.XSD_STRING),
+    ARRAY("Array", XsdType.XSD_STRING),
+    ENUMERATION("Enumeration", XsdType.XSD_STRING),
+    ENUMERATION_ARRAY("EnumerationArray", XsdType.XSD_STRING),
+    ENUM_STRING("EnumString", XsdType.XSD_STRING),
+    BOOLEAN("Boolean", XsdType.XSD_BOOLEAN),
+    STRING_SOMETIMES_ARRAY("StringSometimesArray", XsdType.XSD_STRING),
+    INTEGER("Integer", XsdType.XSD_INTEGER),
+    UNSIGNED_INTEGER("UnsignedInteger", XsdType.XSD_UNSIGNED_INTEGER),
+    DOUBLE("Double", XsdType.XSD_DOUBLE),
+    DATE_TIME("DateTime", XsdType.XSD_DATE_TIME),
     ROW_SET("Rowset", null),
-    SHORT("Short", "xsd:short"),
-    UUID("UUID", "uuid"),
-    UNSIGNED_SHORT("UnsignedShort", "xsd:unsignedShort"),
-    LONG("Long", "xsd:long"),
-    UNSIGNED_LONG("UnsignedLong", "xsd:unsignedLong");
+    SHORT("Short", XsdType.XSD_SHORT),
+    UUID("UUID", XsdType.UUID),
+    UNSIGNED_SHORT("UnsignedShort", XsdType.XSD_UNSIGNED_SHORT),
+    LONG("Long", XsdType.XSD_LONG),
+    UNSIGNED_LONG("UnsignedLong", XsdType.XSD_UNSIGNED_LONG);
 
     public final String columnType;
     public final String nameValue;
@@ -49,8 +49,4 @@ enum Type {
         return nameValue;
     }
 
-    private static class Types {
-
-        public static final String XSD_STRING = "xsd:string";
-    }
 }

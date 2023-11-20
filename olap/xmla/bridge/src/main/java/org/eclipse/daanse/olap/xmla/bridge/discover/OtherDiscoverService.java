@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.jaxb.SerializerModifier;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
-import org.eclipse.daanse.xmla.api.annotations.Operation;
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.common.enums.LiteralNameEnumValueEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
@@ -216,9 +216,9 @@ public class OtherDiscoverService {
                         Class cl = method.getReturnType();
                         Method[] restrictionMethods = cl.getMethods();
                         for (Method m : restrictionMethods) {
-                            if (m.isAnnotationPresent(org.eclipse.daanse.xmla.api.annotations.Restriction.class)) {
-                                org.eclipse.daanse.xmla.api.annotations.Restriction restriction =
-                                    m.getAnnotation(org.eclipse.daanse.xmla.api.annotations.Restriction.class);
+                            if (m.isAnnotationPresent(org.eclipse.daanse.xmla.api.annotation.Restriction.class)) {
+                                org.eclipse.daanse.xmla.api.annotation.Restriction restriction =
+                                    m.getAnnotation(org.eclipse.daanse.xmla.api.annotation.Restriction.class);
                                 restrictions.add(new RestrictionR(restriction.name(), restriction.type()));
                             }
                         }

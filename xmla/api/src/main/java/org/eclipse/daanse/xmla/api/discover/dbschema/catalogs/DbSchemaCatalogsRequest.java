@@ -13,10 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.annotations.Operation;
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
-@Operation(name ="DBSCHEMA_CATALOGS", guid="C8B52211-5CF3-11CE-ADE5-00AA0044773D")
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.DBSCHEMA_CATALOGS;
+
+@Operation(name =DBSCHEMA_CATALOGS, guid="C8B52211-5CF3-11CE-ADE5-00AA0044773D")
 public interface DbSchemaCatalogsRequest {
     Properties properties();
 

@@ -13,13 +13,15 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.properties;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 
 import java.util.Optional;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface DiscoverPropertiesRestrictions {
     String RESTRICTIONS_PROPERTY_NAME = "PropertyName";
 
-    @Restriction(name = RESTRICTIONS_PROPERTY_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_PROPERTY_NAME, type = XSD_STRING)
     Optional<String> propertyName();
 }
