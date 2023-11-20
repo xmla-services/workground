@@ -13,9 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.discover.discover.keywords;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 
 import java.util.Optional;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface DiscoverKeywordsRestrictions {
     String RESTRICTIONS_KEYWORD = "Keyword";
@@ -23,7 +25,7 @@ public interface DiscoverKeywordsRestrictions {
     /**
      * @return The keyword string.
      */
-    @Restriction(name = RESTRICTIONS_KEYWORD, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_KEYWORD, type = XSD_STRING)
     Optional<String> keyword();
 
 }

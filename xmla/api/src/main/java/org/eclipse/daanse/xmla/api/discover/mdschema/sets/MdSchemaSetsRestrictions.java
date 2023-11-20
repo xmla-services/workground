@@ -15,9 +15,11 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.sets;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaSetsRestrictions {
 
@@ -32,27 +34,27 @@ public interface MdSchemaSetsRestrictions {
     /**
      * @return The name of the database.
      */
-    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
-    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
-    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     Optional<String> cubeName();
 
     /**
      * The name of the set, as specified in the CREATE SET
      * statement.
      */
-    @Restriction(name = RESTRICTIONS_SET_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_SET_NAME, type = XSD_STRING)
     Optional<String> setName();
 
     /**
@@ -77,6 +79,6 @@ public interface MdSchemaSetsRestrictions {
     /**
      * The unique name of the hierarchy that contains the set.
      */
-    @Restriction(name = RESTRICTIONS_HIERARCHY_UNIQUE_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_HIERARCHY_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> hierarchyUniqueName();
 }

@@ -15,8 +15,10 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.kpis;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaKpisRestrictions {
 
@@ -29,7 +31,7 @@ public interface MdSchemaKpisRestrictions {
     /**
      * @return The name of the database.
      */
-    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
 

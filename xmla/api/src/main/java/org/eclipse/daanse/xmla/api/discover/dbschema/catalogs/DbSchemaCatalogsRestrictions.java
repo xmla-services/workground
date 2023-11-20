@@ -13,9 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.annotations.Restriction;
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 
 import java.util.Optional;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface DbSchemaCatalogsRestrictions {
     String RESTRICTIONS_CATALOG_NAME = "CATALOG_NAME";
@@ -23,6 +25,6 @@ public interface DbSchemaCatalogsRestrictions {
     /**
      * @return The catalog name.
      */
-    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = "xsd:string")
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 }

@@ -13,10 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.literals;
 
-import org.eclipse.daanse.xmla.api.annotations.Operation;
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
-@Operation(name ="DISCOVER_LITERALS", guid="C3EF5ECB-0A07-4665-A140-B075722DBDC2")
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.DISCOVER_LITERALS;
+
+@Operation(name =DISCOVER_LITERALS, guid="C3EF5ECB-0A07-4665-A140-B075722DBDC2")
 public interface DiscoverLiteralsRequest {
 
     Properties properties();

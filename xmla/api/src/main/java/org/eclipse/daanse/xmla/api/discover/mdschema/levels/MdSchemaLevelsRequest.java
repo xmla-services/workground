@@ -13,10 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.levels;
 
-import org.eclipse.daanse.xmla.api.annotations.Operation;
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
-@Operation(name ="MDSCHEMA_LEVELS", guid="C8B522DB-5CF3-11CE-ADE5-00AA0044773D")
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.MDSCHEMA_LEVELS;
+
+@Operation(name =MDSCHEMA_LEVELS, guid="C8B522DB-5CF3-11CE-ADE5-00AA0044773D")
 public interface MdSchemaLevelsRequest {
 
     Properties properties();
