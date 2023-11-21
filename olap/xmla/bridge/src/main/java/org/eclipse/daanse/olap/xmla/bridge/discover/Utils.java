@@ -514,8 +514,8 @@ public class Utils {
                 }
                 return List.of(new MdSchemaCubesResponseRowR(
                     catalogName,
-                    Optional.of(schemaName),
-                    Optional.of(cube.name()),
+                    Optional.ofNullable(schemaName),
+                    Optional.ofNullable(cube.name()),
                     Optional.of(CubeTypeEnum.CUBE), //TODO get cube type from olap
                     Optional.empty(),
                     Optional.empty(),
@@ -523,12 +523,12 @@ public class Utils {
                     Optional.empty(),
                     Optional.of(LocalDateTime.now()),
                     Optional.empty(),
-                    Optional.of(desc),
+                    Optional.ofNullable(desc),
                     Optional.of(true),
                     Optional.of(false),
                     Optional.of(false),
                     Optional.of(false),
-                    Optional.of(cube.caption()),
+                    Optional.ofNullable(cube.caption()),
                     Optional.empty(),
                     Optional.of(CubeSourceEnum.CUBE),
                     Optional.empty())
@@ -558,11 +558,10 @@ public class Utils {
         Optional<String> oTableName,
         Optional<String> oTableType
     ) {
-        getDatabaseMappingSchemaProviderWithFilter(context.getDatabaseMappingSchemaProviders(), oTableSchema)
+        return getDatabaseMappingSchemaProviderWithFilter(context.getDatabaseMappingSchemaProviders(), oTableSchema)
             .stream().filter(dmsp -> dmsp != null && dmsp.get() != null)
             .map(dmsp -> getDbSchemaTablesResponseRow(context.getName(), dmsp.get(), oTableName, oTableType))
-            .flatMap(Collection::stream).toList();
-        return List.of();
+            .flatMap(Collection::stream).toList();        
     }
 
     private static List<DbSchemaTablesResponseRow> getDbSchemaTablesResponseRow(
@@ -1354,7 +1353,7 @@ public class Utils {
         // Added by TWI to returned cached row numbers
 
         //int n = getExtra(connection).getLevelCardinality(lastLevel);
-        int n = lastLevel.getCardinality();
+        int n = lastLevel == null ? 0 : lastLevel.getCardinality();
         int dimensionCardinality = n + 1;
         boolean isVirtual = false;
         // SQL Server always returns false
@@ -1390,7 +1389,7 @@ public class Utils {
             Optional.ofNullable(dimensions.indexOf(dimension)),
             Optional.ofNullable(getDimensionType(dimension.getDimensionType())),
             Optional.of(dimensionCardinality),
-            Optional.of(firstHierarchyUniqueName),
+            Optional.ofNullable(firstHierarchyUniqueName),
             Optional.of(desc),
             Optional.of(isVirtual),
             Optional.of(isReadWrite),
@@ -1402,16 +1401,19 @@ public class Utils {
     }
 
     private static DimensionTypeEnum getDimensionType(DimensionType dimensionType) {
-        switch (dimensionType) {
-            case STANDARD_DIMENSION:
-                return DimensionTypeEnum.OTHER;
-            case MEASURES_DIMENSION:
-                return DimensionTypeEnum.MEASURE;
-            case TIME_DIMENSION:
-                return DimensionTypeEnum.TIME;
-            default:
-                throw new RuntimeException("Wrong dimension type");
-        }
+    	if (dimensionType != null) {
+    		switch (dimensionType) {
+            	case STANDARD_DIMENSION:
+            		return DimensionTypeEnum.OTHER;
+            	case MEASURES_DIMENSION:
+            		return DimensionTypeEnum.MEASURE;
+            	case TIME_DIMENSION:
+            		return DimensionTypeEnum.TIME;
+            	default:
+            		throw new RuntimeException("Wrong dimension type");
+    		}
+    	}
+    	return null;
     }
 
     private static List<Schema> getSchemasWithFilter(List<Schema> schemas, Optional<String> oSchemaName) {
