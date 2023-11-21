@@ -14,19 +14,30 @@
 
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.xmla.bridge.ContextsSupplyerImpl;
-import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
@@ -45,18 +56,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MDSchemaDiscoverServiceTest {
@@ -103,10 +102,10 @@ class MDSchemaDiscoverServiceTest {
     private Dimension dimension2;
 
     @Mock
-    private MappingHierarchy hierarchy1;
+    private Hierarchy hierarchy1;
 
     @Mock
-    private MappingHierarchy hierarchy2;
+    private Hierarchy hierarchy2;
 
     @Mock
     private MappingMeasure measure;
@@ -215,13 +214,18 @@ class MDSchemaDiscoverServiceTest {
 
         when(schema2.getName()).thenReturn("schema2Name");
 
+        when(hierarchy1.getUniqueName()).thenReturn("hierarchy1UniqueName");
+        //when(hierarchy2.getUniqueName()).thenReturn("hierarchy1UniqueName");
+
         when(dimension1.getName()).thenReturn("dimension1Name");
         when(dimension1.getUniqueName()).thenReturn("dimension1UniqueName");
         when(dimension1.getCaption()).thenReturn("dimension1Caption");
+        when(dimension1.getHierarchies()).thenAnswer(setupDummyArrayAnswer(hierarchy1, hierarchy2));
+
         when(dimension2.getName()).thenReturn("dimension2Name");
         when(dimension2.getUniqueName()).thenReturn("dimension2UniqueName");
         when(dimension2.getCaption()).thenReturn("dimension2Caption");
-
+        when(dimension2.getHierarchies()).thenAnswer(setupDummyArrayAnswer(hierarchy1, hierarchy2));
 
         when(cube1.getName()).thenReturn("cube1Name");
         when(cube2.getName()).thenReturn("cube2Name");
@@ -256,7 +260,7 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.dimensionOptional()).contains(0);
         assertThat(row.dimensionType()).isEmpty();
         assertThat(row.dimensionCardinality()).contains(1);
-        assertThat(row.defaultHierarchy()).contains("dimension1DefaultHierarchy");
+        assertThat(row.defaultHierarchy()).contains("hierarchy1UniqueName");
         assertThat(row.description()).contains("cube1Name Cube - dimension1Name Dimension");
 
         row = rows.get(1);
