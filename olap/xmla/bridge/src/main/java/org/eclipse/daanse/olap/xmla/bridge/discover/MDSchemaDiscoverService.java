@@ -148,19 +148,20 @@ public class MDSchemaDiscoverService {
         Optional<String> oHierarchyUniqueName = request.restrictions().hierarchyUniqueName();
         Optional<VisibilityEnum> oHierarchyVisibility = request.restrictions().hierarchyVisibility();
         Optional<Integer> oHierarchyOrigin = request.restrictions().hierarchyOrigin();
+        Optional<Boolean> deep = request.properties().deep();
         if (oCatalogName.isPresent()) {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
                 Context context = oContext.get();
                 result.addAll(getMdSchemaHierarchiesResponseRow(context, oSchemaName, oCubeName, oCubeSource,
                     oDimensionUniqueName,
-                    oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin));
+                    oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin, deep));
             }
         } else {
             result.addAll(contextsListSupplyer.get().stream()
                 .map(c -> getMdSchemaHierarchiesResponseRow(c, oSchemaName, oCubeName, oCubeSource,
                     oDimensionUniqueName,
-                    oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin))
+                    oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin, deep))
                 .flatMap(Collection::stream).toList());
         }
         return result;

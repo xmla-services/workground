@@ -19,9 +19,13 @@ import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.resource.MondrianResource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Skeleton implementation for {@link Hierarchy}.
@@ -56,6 +60,8 @@ public abstract class HierarchyBase
     protected final boolean hasAll;
     protected String allMemberName;
     protected String allLevelName;
+    protected String origin = "1";
+    protected List<Member> members = new ArrayList<>();
 
     protected HierarchyBase(
         Dimension dimension,
@@ -227,5 +233,14 @@ public abstract class HierarchyBase
      */
     public String getAllLevelName() {
         return allLevelName;
+    }
+
+    public String origin() {
+        return origin;
+        //TODO
+    }
+
+    public List<Member> getRootMembers() {
+        return members;
     }
 }
