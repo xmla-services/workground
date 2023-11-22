@@ -20,7 +20,6 @@ import mondrian.xmla.XmlaConstants;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.jaxb.SerializerModifier;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.annotation.Enumerator;
@@ -293,12 +292,12 @@ public class OtherDiscoverService {
                 Context context = oContext.get();
                 for (DatabaseMappingSchemaProvider p : context.getDatabaseMappingSchemaProviders()) {
                     MappingSchema schema = p.get();
-                    SerializerModifier serializerModifier = new SerializerModifier(schema);
-                    try {
-                        result.add(new DiscoverXmlMetaDataResponseRowR(serializerModifier.getXML()));
-                    } catch (JAXBException e) {
-                        e.printStackTrace();
-                    }
+                    //SerializerModifier serializerModifier = new SerializerModifier(schema);
+                    //try {
+                        result.add(new DiscoverXmlMetaDataResponseRowR(""));
+                    //} catch (JAXBException e) {
+                    //    e.printStackTrace();
+                    //}
                 }
             }
         }
