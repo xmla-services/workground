@@ -42,12 +42,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CustomRollupSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.HierarchyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
@@ -1516,7 +1518,7 @@ public class Utils {
                 catalogName,
                 schemaName,
                 cubeName,
-                dimension.getName(),
+                dimension.getUniqueName(),
                 h,
                 oLevelName,
                 oLevelUniqueName,
@@ -1559,7 +1561,7 @@ public class Utils {
                 if (level.isAll()) {
                     uniqueSettings |= 2;
                 }
-                if (level instanceof RolapLevel rolapLevel && rolapLevel.isUnique()) {
+                if (level.isUnique()) {
                     uniqueSettings |= 1;
                 }
                 // Get level cardinality
@@ -1573,7 +1575,7 @@ public class Utils {
                     Optional.ofNullable(schemaName),
                     Optional.ofNullable(cubeName),
                     Optional.ofNullable(dimensionUniqueName),
-                    Optional.ofNullable(h.getName()),
+                    Optional.ofNullable(h.getUniqueName()),
                     Optional.ofNullable(level.getName()),
                     Optional.ofNullable(level.getUniqueName()),
                     Optional.empty(),
@@ -1582,7 +1584,7 @@ public class Utils {
                     Optional.of(levelCardinality),
                     Optional.of(getLevelType(level)),
                     Optional.ofNullable(desc),
-                    Optional.empty(),//TODO need 0 in old implementation but 0 is absent in enum
+                    Optional.of(CustomRollupSettingEnum.NONE),
                     Optional.of(LevelUniqueSettingsEnum.fromValue(String.valueOf(uniqueSettings))),
                     Optional.ofNullable(level.isVisible()),
                     Optional.empty(),
@@ -1593,7 +1595,7 @@ public class Utils {
                     Optional.empty(),
                     Optional.empty(),
                     Optional.empty(),
-                    Optional.empty() //TODO need 0 in old imlpementation but 0 absent in enum
+                    Optional.of(LevelOriginEnum.NONE)
                 );
             }).toList();
     }
@@ -1858,12 +1860,12 @@ public class Utils {
         List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() : Arrays.asList(dimension.getHierarchies());
 
         return getHierarchiesWithFilterByName(getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyName), oHierarchyName)
-            .stream().map(h -> getMdSchemaHierarchiesResponseRow1(
+            .stream().map(h -> getMdSchemaHierarchiesResponseRow(
                 catalogName,
                 schemaName,
                 cubeName,
                 dimension,
-                ordinal,
+                ordinal + hierarchies.indexOf(h),
                 h,
                 oHierarchyVisibility,
                 oHierarchyOrigin, deep))
@@ -1871,7 +1873,7 @@ public class Utils {
 
     }
 
-    private static MdSchemaHierarchiesResponseRow getMdSchemaHierarchiesResponseRow1(
+    private static MdSchemaHierarchiesResponseRow getMdSchemaHierarchiesResponseRow(
         String catalogName,
         String schemaName,
         String cubeName,
@@ -2327,10 +2329,10 @@ public class Utils {
         StringBuilder builder = new StringBuilder();
         int j = 0;
         for (Dimension dimension : cube.getDimensions()) {
-            if (!dimension.getDimensionType().equals(DimensionType.MEASURES_DIMENSION)) {
+            if (!DimensionType.MEASURES_DIMENSION.equals(dimension.getDimensionType())) {
                 for (Hierarchy hierarchy : dimension.getHierarchies()) {
                     Level[] levels = hierarchy.getLevels();
-                    if (levels.length > 0) {
+                    if (levels != null && levels.length > 0) {
                         Level lastLevel = levels[levels.length - 1];
                         if (j++ > 0) {
                             builder.append(',');

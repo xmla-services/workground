@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 @XmlEnum
 public enum LevelOriginEnum {
 
+    @XmlEnumValue("0x0000")
+    NONE(0x0000),
+
     /**
      * Identifies levels
      * in a user defined
