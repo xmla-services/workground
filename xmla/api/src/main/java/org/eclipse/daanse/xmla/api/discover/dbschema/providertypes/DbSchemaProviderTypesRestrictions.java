@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.api.discover.dbschema.providertypes;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.properties.XsdType;
 
 public interface DbSchemaProviderTypesRestrictions {
 
@@ -155,6 +157,7 @@ public interface DbSchemaProviderTypesRestrictions {
      * identify rows in a child
      * rowset.
      */
+    @Restriction(name = RESTRICTIONS_DATA_TYPE, type = XsdType.XSD_UNSIGNED_SHORT)
     Optional<LevelDbTypeEnum> dataType();
 
     /**
@@ -171,6 +174,7 @@ public interface DbSchemaProviderTypesRestrictions {
      * DATA_TYPE column is the same, the BEST_MATCH
      * column is set to true in only one row.
      */
+    @Restriction(name = RESTRICTIONS_BEST_MATCH, type = XsdType.XSD_BOOLEAN)
     Optional<Boolean> bestMatch();
 
 }

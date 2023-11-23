@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.api.discover.dbschema.columns;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.api.common.properties.XsdType;
 
 public interface DbSchemaColumnsRestrictions {
     String RESTRICTIONS_TABLE_CATALOG = "TABLE_CATALOG";
@@ -27,22 +29,26 @@ public interface DbSchemaColumnsRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_CATALOG, type = XsdType.XSD_STRING)
     Optional<String> tableCatalog();
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_SCHEMA, type = XsdType.XSD_STRING)
     Optional<String> tableSchema();
 
     /**
      * @return The name of the table.
      */
+    @Restriction(name = RESTRICTIONS_TABLE_NAME, type = XsdType.XSD_STRING)
     Optional<String> tableName();
 
     /**
      * The name of the attribute hierarchy or
      * measure.
      */
+    @Restriction(name = RESTRICTIONS_COLUMN_NAME, type = XsdType.XSD_STRING)
     Optional<String> columnName();
 
     /**
@@ -54,5 +60,6 @@ public interface DbSchemaColumnsRestrictions {
      * SCHEMA indicates that the object is a
      * column in a schema rowset table.
      */
+    @Restriction(name = RESTRICTIONS_COLUMN_OLAP_TYPE, type = XsdType.XSD_STRING)
     Optional<ColumnOlapTypeEnum> columnOlapType();
 }

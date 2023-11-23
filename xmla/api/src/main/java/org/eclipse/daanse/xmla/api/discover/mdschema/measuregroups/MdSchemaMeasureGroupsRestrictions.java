@@ -13,7 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
+
 import java.util.Optional;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaMeasureGroupsRestrictions {
 
@@ -25,22 +29,25 @@ public interface MdSchemaMeasureGroupsRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     Optional<String> cubeName();
 
     /**
      * The name of the measure group.
      */
+    @Restriction(name = RESTRICTIONS_MEASUREGROUP_NAME, type = XSD_STRING)
     Optional<String> measureGroupName();
-
 }

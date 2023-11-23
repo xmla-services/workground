@@ -15,10 +15,14 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.actions;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaActionsRestrictions {
 
@@ -35,21 +39,25 @@ public interface MdSchemaActionsRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     String cubeName();
 
     /**
      * @return The name of this action.
      */
+    @Restriction(name = RESTRICTIONS_ACTION_NAME, type = XSD_STRING)
     Optional<String> actionName();
 
     /**
@@ -66,6 +74,7 @@ public interface MdSchemaActionsRestrictions {
      * If the action is PROPRIETARY (0x40), then a value MUST be
      * provided in the APPLICATION column.
      */
+    @Restriction(name = RESTRICTIONS_ACTION_TYPE, type = XSD_INTEGER)
     Optional<ActionTypeEnum> actionType();
 
     /**
@@ -74,6 +83,7 @@ public interface MdSchemaActionsRestrictions {
      * The COORDINATE MUST resolve to the object specified in
      * COORDINATE_TYPE.
      */
+    @Restriction(name = RESTRICTIONS_COORDINATE, type = XSD_STRING)
     Optional<String> coordinate();
 
     /**
@@ -86,6 +96,7 @@ public interface MdSchemaActionsRestrictions {
      * 5 - Action coordinate refers to a set.
      * 6 - Action coordinate refers to a cell.
      */
+    @Restriction(name = RESTRICTIONS_COORDINATE_TYPE, type = XSD_INTEGER)
     CoordinateTypeEnum coordinateType();
 
     /**
@@ -97,6 +108,7 @@ public interface MdSchemaActionsRestrictions {
      * 4 - Indicates that the action is performed as part of a batch
      * operation.
      */
+    @Restriction(name = RESTRICTIONS_INVOCATION, type = XSD_INTEGER)
     InvocationEnum invocation();
 
     /**
@@ -105,5 +117,6 @@ public interface MdSchemaActionsRestrictions {
      * 0x02 - Dimension
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = XSD_INTEGER)
     Optional<CubeSourceEnum> cubeSource();
 }

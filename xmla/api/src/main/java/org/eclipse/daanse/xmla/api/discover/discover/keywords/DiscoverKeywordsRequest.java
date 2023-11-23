@@ -13,8 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.keywords;
 
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.DISCOVER_KEYWORDS;
+
+@Operation(name =DISCOVER_KEYWORDS, guid="1426C443-4CDD-4A40-8F45-572FAB9BBAA1")
 public interface DiscoverKeywordsRequest {
 
     Properties properties();

@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 import java.io.Serializable;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AccessEnum;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -40,7 +41,7 @@ public class DiscoverPropertiesResponseRowXml extends Row implements Serializabl
     private String propertyType;
 
     @XmlElement(name = "PropertyAccessType", required = true)
-    private String propertyAccessType;
+    private AccessEnum propertyAccessType;
 
     @XmlElement(name = "IsRequired", required = false)
     private Boolean required;
@@ -72,11 +73,11 @@ public class DiscoverPropertiesResponseRowXml extends Row implements Serializabl
         this.propertyType = propertyType;
     }
 
-    public String getPropertyAccessType() {
+    public AccessEnum getPropertyAccessType() {
         return propertyAccessType;
     }
 
-    public void setPropertyAccessType(String propertyAccessType) {
+    public void setPropertyAccessType(AccessEnum propertyAccessType) {
         this.propertyAccessType = propertyAccessType;
     }
 

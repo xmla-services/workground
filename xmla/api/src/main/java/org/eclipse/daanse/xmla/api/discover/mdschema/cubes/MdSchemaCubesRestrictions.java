@@ -15,7 +15,11 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.cubes;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaCubesRestrictions {
 
@@ -28,22 +32,26 @@ public interface MdSchemaCubesRestrictions {
     /**
      * @return The catalog name.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     String catalogName();
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     Optional<String> cubeName();
 
     /**
      * @return The name of the source cube if this cube is
      * a perspective cube.
      */
+    @Restriction(name = RESTRICTIONS_BASE_CUBE_NAME, type = XSD_STRING)
     Optional<String> baseCubeName();
 
     /**
@@ -51,5 +59,6 @@ public interface MdSchemaCubesRestrictions {
      * 0x01-Cube
      * 0x02-Dimension
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = XSD_INTEGER)
     Optional<CubeSourceEnum> cubeSource();
 }

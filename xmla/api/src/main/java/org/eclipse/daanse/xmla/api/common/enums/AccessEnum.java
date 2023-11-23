@@ -17,33 +17,32 @@ import org.eclipse.daanse.xmla.api.annotation.Enumerator;
 
 import java.util.stream.Stream;
 
-@Enumerator(name = "ProviderType")
-public enum ProviderTypeEnum {
+@Enumerator(name = "Access")
+public enum AccessEnum {
+    READ("Read"),
+    WRITE("Write"),
+    READ_WRITE("ReadWrite");
 
-    /**
-     * multidimensional data provider.
-     */
-    MDP,
+    private final String value;
 
-    /**
-     * tabular data provider.
-     */
-    TDP,
+    AccessEnum(String v) {
+        this.value = v;
+    }
 
-    /**
-     * data mining provider (implements the OLE for DB for Data Mining specification)
-     */
-    DMP;
+    public String getValue() {
+        return value;
+    }
 
-    public static ProviderTypeEnum fromValue(String v) {
+    public static AccessEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
-        return Stream.of(ProviderTypeEnum.values())
-            .filter(e -> (e.name().equals(v)))
+
+        return Stream.of(AccessEnum.values())
+            .filter(e -> (e.getValue().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
-                new StringBuilder("ProviderTypeEnum Illegal argument ").append(v)
+                new StringBuilder("Access Illegal argument ").append(v)
                     .toString())
             );
     }

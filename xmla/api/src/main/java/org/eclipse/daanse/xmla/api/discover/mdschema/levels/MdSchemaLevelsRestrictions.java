@@ -15,8 +15,12 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.levels;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaLevelsRestrictions {
 
@@ -33,39 +37,46 @@ public interface MdSchemaLevelsRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     Optional<String> cubeName();
 
     /**
      * @return The unique name of the
      * dimension.
      */
+    @Restriction(name = RESTRICTIONS_DIMENSION_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> dimensionUniqueName();
 
     /**
      * @return The unique name of the
      * hierarchy.
      */
+    @Restriction(name = RESTRICTIONS_HIERARCHY_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> hierarchyUniqueName();
 
     /**
      * The name of the level.
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_NAME, type = XSD_STRING)
     Optional<String> levelName();
 
     /**
      * The unique name of the level.
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> levelUniqueName();
 
     /**
@@ -74,6 +85,7 @@ public interface MdSchemaLevelsRestrictions {
      * 0x02 - Dimension<218>
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = XSD_INTEGER)
     Optional<CubeSourceEnum> cubeSource();
 
     /**
@@ -82,6 +94,7 @@ public interface MdSchemaLevelsRestrictions {
      * 0x02 - Not Visible
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_VISIBILITY, type = XSD_INTEGER)
     Optional<VisibilityEnum> levelVisibility();
 
 }

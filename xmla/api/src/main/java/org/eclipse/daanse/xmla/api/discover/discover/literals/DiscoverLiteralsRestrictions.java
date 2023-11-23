@@ -13,14 +13,19 @@
  */
 package org.eclipse.daanse.xmla.api.discover.discover.literals;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
+
 import java.util.Optional;
 
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
+
 public interface DiscoverLiteralsRestrictions {
-    public static final String RESTRICTIONS_LITERAL_NAME = "LiteralName";
+    String RESTRICTIONS_LITERAL_NAME = "LiteralName";
 
     /**
      * @return The name of the literal.
      */
+    @Restriction(name = RESTRICTIONS_LITERAL_NAME, type = XSD_STRING)
     Optional<String> literalName();
 
 }

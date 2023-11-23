@@ -15,12 +15,13 @@ package org.eclipse.daanse.xmla.model.record.discover.discover.properties;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 
 public record DiscoverPropertiesResponseRowR(String propertyName,
                                              Optional<String> propertyDescription,
                                              Optional<String> propertyType,
-                                             String propertyAccessType,
+                                             AccessEnum propertyAccessType,
                                              Optional<Boolean> required,
                                              Optional<String> value)
         implements DiscoverPropertiesResponseRow {

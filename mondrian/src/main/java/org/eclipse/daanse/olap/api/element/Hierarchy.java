@@ -18,6 +18,8 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 
 import mondrian.olap.MondrianProperties;
 
+import java.util.List;
+
 /**
  * A <code>Hierarchy</code> is a set of members, organized into levels.
  */
@@ -84,4 +86,8 @@ public interface Hierarchy extends OlapElement, MetaElement {
 	String getUniqueNameSsas();
 
     String getDisplayFolder();
+
+    String origin();
+
+    List<Member> getRootMembers();
 }

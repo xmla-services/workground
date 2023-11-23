@@ -15,10 +15,15 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.properties;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.annotation.Restriction;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
+
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_SHORT;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 
 public interface MdSchemaPropertiesRestrictions {
 
@@ -38,37 +43,44 @@ public interface MdSchemaPropertiesRestrictions {
     /**
      * @return The name of the database.
      */
+    @Restriction(name = RESTRICTIONS_CATALOG_NAME, type = XSD_STRING)
     Optional<String> catalogName();
 
 
     /**
      * @return The name of the schema.
      */
+    @Restriction(name = RESTRICTIONS_SCHEMA_NAME, type = XSD_STRING)
     Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_NAME, type = XSD_STRING)
     Optional<String> cubeName();
 
     /**
      * The unique name of the dimension.
      */
+    @Restriction(name = RESTRICTIONS_DIMENSION_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> dimensionUniqueName();
 
     /**
      * The unique name of the hierarchy.
      */
+    @Restriction(name = RESTRICTIONS_HIERARCHY_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> hierarchyUniqueName();
 
     /**
      * The unique name of the level.
      */
+    @Restriction(name = RESTRICTIONS_LEVEL_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> levelUniqueName();
 
     /**
      * @return The unique name of the member.
      */
+    @Restriction(name = RESTRICTIONS_MEMBER_UNIQUE_NAME, type = XSD_STRING)
     Optional<String> memberUniqueName();
 
     /**
@@ -85,11 +97,13 @@ public interface MdSchemaPropertiesRestrictions {
      * which contains a binary
      * large object (BLOB).
      */
+    @Restriction(name = RESTRICTIONS_PROPERTY_TYPE, type = XSD_SHORT)
     Optional<PropertyTypeEnum> propertyType();
 
     /**
      * @return The name of the property.
      */
+    @Restriction(name = RESTRICTIONS_PROPERTY_NAME, type = XSD_STRING)
     Optional<String> propertyName();
 
     /**
@@ -109,6 +123,7 @@ public interface MdSchemaPropertiesRestrictions {
      * is on an attribute hierarchy
      * that is not enabled.
      */
+    @Restriction(name = RESTRICTIONS_PROPERTY_ORIGIN, type = XSD_INTEGER)
     Optional<PropertyOriginEnum> propertyOrigin();
 
     /**
@@ -117,6 +132,7 @@ public interface MdSchemaPropertiesRestrictions {
      * 0x02 - Dimension
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_CUBE_SOURCE, type = XSD_INTEGER)
     Optional<CubeSourceEnum> cubeSource();
 
     /**
@@ -125,5 +141,6 @@ public interface MdSchemaPropertiesRestrictions {
      * 0x02 - Not Visible
      * The default restriction is a value of 1.
      */
+    @Restriction(name = RESTRICTIONS_PROPERTY_VISIBILITY, type = XSD_INTEGER)
     Optional<VisibilityEnum> propertyVisibility();
 }

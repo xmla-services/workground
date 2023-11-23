@@ -13,8 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies;
 
+import org.eclipse.daanse.xmla.api.annotation.Operation;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 
+import static org.eclipse.daanse.xmla.api.common.properties.OperationNames.MDSCHEMA_HIERARCHIES;
+
+@Operation(name =MDSCHEMA_HIERARCHIES, guid="C8B522DA-5CF3-11CE-ADE5-00AA0044773D")
 public interface MdSchemaHierarchiesRequest {
 
     Properties properties();

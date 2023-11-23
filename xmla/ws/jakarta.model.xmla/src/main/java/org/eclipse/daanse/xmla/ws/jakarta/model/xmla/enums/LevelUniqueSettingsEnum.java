@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 @XmlEnum
 public enum LevelUniqueSettingsEnum {
 
+    @XmlEnumValue("0x00000000")
+    NONE(0x00000000),
+
     /**
     * Member
     * key columns establish
@@ -37,7 +40,15 @@ public enum LevelUniqueSettingsEnum {
      * uniqueness.
      */
     @XmlEnumValue("0x00000002")
-    NAME_COLUMNS(0x00000002);
+    NAME_COLUMNS(0x00000002),
+
+    /**
+     * Member
+     * name columns establish
+     * uniqueness.
+     */
+    @XmlEnumValue("0x00000003")
+    KEY_NAME_COLUMNS(0x00000003);
 
     private final int value;
 
