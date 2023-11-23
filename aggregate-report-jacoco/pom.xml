@@ -93,7 +93,6 @@
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.unparser.simple</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.impl.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.xml</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>

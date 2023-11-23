@@ -31,11 +31,6 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.odf.model.record</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
-    </dependency>
+
   </dependencies>
 </project>
