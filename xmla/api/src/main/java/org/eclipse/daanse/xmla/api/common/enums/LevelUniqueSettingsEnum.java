@@ -18,6 +18,11 @@ import java.util.stream.Stream;
 public enum LevelUniqueSettingsEnum {
 
     /**
+     * None
+     */
+    NONE(0x00000000),
+
+    /**
     * Member
     * key columns establish
     * uniqueness.
@@ -29,7 +34,14 @@ public enum LevelUniqueSettingsEnum {
      * name columns establish
      * uniqueness.
      */
-    NAME_COLUMNS(0x00000002);
+    NAME_COLUMNS(0x00000002),
+
+    /**
+     * Member
+     * key and name columns establish
+     * uniqueness.
+     */
+    KEY_NAME_COLUMNS(0x00000003);
 
     private final int value;
 

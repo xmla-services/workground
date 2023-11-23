@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 @XmlEnum
 public enum CustomRollupSettingEnum {
 
+    @XmlEnumValue("0x00")
+    NONE(0x00),
     /**
      * Indicates that a
      * custom rollup expression

@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 public enum CustomRollupSettingEnum {
 
+    NONE(0x00),
     /**
      * Indicates that a
      * custom rollup expression

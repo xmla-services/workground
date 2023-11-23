@@ -69,4 +69,6 @@ public interface Level extends OlapElement, MetaElement {
     int getCardinality();
 
     List<Member> getMembers();
+
+    boolean isUnique();
 }
