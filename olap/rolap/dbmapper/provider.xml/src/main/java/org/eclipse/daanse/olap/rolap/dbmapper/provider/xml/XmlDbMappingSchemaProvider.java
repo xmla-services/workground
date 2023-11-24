@@ -20,6 +20,8 @@ import java.net.URL;
 @Designate(ocd = Config.class, factory = true)
 public class XmlDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlDbMappingSchemaProvider.class);
+	 static final String PID = "org.eclipse.daanse.olap.rolap.dbmapper.provider.xml.XmlDbMappingSchemaProvider";
+
 
 	@ObjectClassDefinition
 	@interface Config {
