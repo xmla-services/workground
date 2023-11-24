@@ -61,17 +61,7 @@ public class RolapSchemaPool {
         return INSTANCE;
     }
 
-    RolapSchema get(
-        final String catalogUrl,
-        final String connectionKey,
-        final Util.PropertyList connectInfo)
-    {
-        return get(
-            catalogUrl,
-            connectionKey,
-            null,
-            connectInfo);
-    }
+
 
     RolapSchema get(
         final String catalogUrl,

@@ -569,16 +569,7 @@ public class TestUtil {
 		return stmt.executeQuery( queryString );
 	}
 
-	/**
-	 * Returns a connection to the FoodMart database with a dynamic schema processor and disables use of RolapSchema
-	 * Pool.
-	 */
-	public static void withSchemaProcessor(TestContextWrapper context,
-			Class<? extends DynamicSchemaProcessor> dynProcClass ) {
-		final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
-		context.setProperty(RolapConnectionProperties.DynamicSchemaProcessor.name(), dynProcClass.getName());
-		context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), "false");
-	}
+
 
 
 

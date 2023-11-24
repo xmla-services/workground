@@ -3340,16 +3340,6 @@ public class Util extends XOMUtil {
         return compatible.quotePattern(s);
     }
 
-    /**
-     * Generates a unique id.
-     *
-     * <p>From JDK 1.5 onwards, uses a {@code UUID}.
-     *
-     * @return A unique id
-     */
-    public static String generateUuidString() {
-        return compatible.generateUuidString();
-    }
 
     /**
      * Compiles a script to yield a Java interface.

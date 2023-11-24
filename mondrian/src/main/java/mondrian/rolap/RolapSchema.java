@@ -31,8 +31,6 @@ package mondrian.rolap;
 
 import static mondrian.rolap.util.NamedSetUtil.getFormula;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -45,11 +43,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 
-import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
@@ -265,7 +262,7 @@ public class RolapSchema implements Schema {
         final Util.PropertyList connectInfo,
         final Context context)
     {
-        this.id = Util.generateUuidString();
+        this.id = UUID.randomUUID().toString();
         this.key = key;
 
 
@@ -294,8 +291,8 @@ public class RolapSchema implements Schema {
         SchemaKey key,
         RolapConnection internalConnection)
     {
-        this.id = Util.generateUuidString();
-        this.key = key;
+    	this.id = UUID.randomUUID().toString();
+    	this.key = key;
         this.defaultRole = Util.createRootRole(this);
         this.internalConnection = internalConnection;
     }
