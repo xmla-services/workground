@@ -407,10 +407,12 @@ public class Utils {
         return List.of();
     }
 
-    static List<MdSchemaFunctionsResponseRow> getMdSchemaFunctionsResponseRow(Context c,
-                                                                              Optional<String> oLibraryName,
-                                                                              Optional<InterfaceNameEnum> oInterfaceName,
-                                                                              Optional<OriginEnum> oOrigin) {
+    static List<MdSchemaFunctionsResponseRow> getMdSchemaFunctionsResponseRow(
+        Context c,
+        Optional<String> oLibraryName,
+        Optional<InterfaceNameEnum> oInterfaceName,
+        Optional<OriginEnum> oOrigin
+    ) {
         List<MdSchemaFunctionsResponseRow> result = new ArrayList<>();
         List<FunctionMetaData> fmList = c.getConnection().getSchema().getFunTable().getFunctionMetaDatas();
         StringBuilder buf = new StringBuilder(50);
@@ -432,8 +434,7 @@ public class Utils {
                     "");
             }
             if ((paramCategories == null)
-                || (paramCategories.length == 0))
-            {
+                || (paramCategories.length == 0)) {
                 result.add(
                     new MdSchemaFunctionsResponseRowR(
                         Optional.ofNullable(fm.functionAtom().name()),
@@ -451,7 +452,6 @@ public class Utils {
                         Optional.empty(),
                         Optional.empty()));
             } else {
-
 
                 buf.setLength(0);
                 for (int j = 0; j < paramCategories.length; j++) {
@@ -1064,7 +1064,7 @@ public class Utils {
             Level[] levels = hierarchy.getLevels();
             if (levelNumber >= levels.length) {
                 LOGGER.warn(
-                        "LevelNumber ("
+                    "LevelNumber ("
                         + levelNumber
                         + ") is greater than number of levels ("
                         + levels.length
@@ -1110,20 +1110,23 @@ public class Utils {
     }
 
     private static MemberTypeEnum getMemberTypeEnum(Member.MemberType memberType) {
-        switch (memberType) {
-            case REGULAR:
-                return MemberTypeEnum.REGULAR_MEMBER;
-            case ALL:
-                return MemberTypeEnum.ALL_MEMBER;
-            case MEASURE:
-                return MemberTypeEnum.MEASURE;
-            case FORMULA:
-                return MemberTypeEnum.FORMULA;
-            case UNKNOWN:
-                return MemberTypeEnum.UNKNOWN;
-            default:
-                return MemberTypeEnum.REGULAR_MEMBER;
+        if (memberType != null) {
+            switch (memberType) {
+                case REGULAR:
+                    return MemberTypeEnum.REGULAR_MEMBER;
+                case ALL:
+                    return MemberTypeEnum.ALL_MEMBER;
+                case MEASURE:
+                    return MemberTypeEnum.MEASURE;
+                case FORMULA:
+                    return MemberTypeEnum.FORMULA;
+                case UNKNOWN:
+                    return MemberTypeEnum.UNKNOWN;
+                default:
+                    return MemberTypeEnum.REGULAR_MEMBER;
+            }
         }
+        return MemberTypeEnum.REGULAR_MEMBER;
     }
 
     private static List<Member> getMembersWithFilterByUniqueName(
@@ -1407,19 +1410,19 @@ public class Utils {
     }
 
     private static DimensionTypeEnum getDimensionType(DimensionType dimensionType) {
-    	if (dimensionType != null) {
-    		switch (dimensionType) {
-            	case STANDARD_DIMENSION:
-            		return DimensionTypeEnum.OTHER;
-            	case MEASURES_DIMENSION:
-            		return DimensionTypeEnum.MEASURE;
-            	case TIME_DIMENSION:
-            		return DimensionTypeEnum.TIME;
-            	default:
-            		throw new RuntimeException("Wrong dimension type");
-    		}
-    	}
-    	return null;
+        if (dimensionType != null) {
+            switch (dimensionType) {
+                case STANDARD_DIMENSION:
+                    return DimensionTypeEnum.OTHER;
+                case MEASURES_DIMENSION:
+                    return DimensionTypeEnum.MEASURE;
+                case TIME_DIMENSION:
+                    return DimensionTypeEnum.TIME;
+                default:
+                    throw new RuntimeException("Wrong dimension type");
+            }
+        }
+        return null;
     }
 
     private static List<Schema> getSchemasWithFilter(List<Schema> schemas, Optional<String> oSchemaName) {
@@ -1850,16 +1853,18 @@ public class Utils {
         String schemaName,
         String cubeName,
         Dimension dimension,
-        int  ordinal,
+        int ordinal,
         Optional<String> oHierarchyName,
         Optional<String> oHierarchyUniqueName,
         Optional<VisibilityEnum> oHierarchyVisibility,
         Optional<Integer> oHierarchyOrigin,
         Optional<Boolean> deep
     ) {
-        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() : Arrays.asList(dimension.getHierarchies());
+        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() :
+            Arrays.asList(dimension.getHierarchies());
 
-        return getHierarchiesWithFilterByName(getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyName), oHierarchyName)
+        return getHierarchiesWithFilterByName(getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyName),
+oHierarchyName)
             .stream().map(h -> getMdSchemaHierarchiesResponseRow(
                 catalogName,
                 schemaName,
@@ -1900,17 +1905,15 @@ public class Utils {
         // MD_ORIGIN_KEY_ATTRIBUTE 0x00000004
         // MD_ORIGIN_INTERNAL 0x00000008
         int hierarchyOrigin;
-        if(dimension.getUniqueName().equals(org.eclipse.daanse.olap.api.element.Dimension.MEASURES_UNIQUE_NAME)){
+        if (dimension.getUniqueName().equals(org.eclipse.daanse.olap.api.element.Dimension.MEASURES_UNIQUE_NAME)) {
             hierarchyOrigin = 6;
-        }
-        else {
+        } else {
             hierarchyOrigin = hierarchy.origin() != null ? Integer.parseInt(hierarchy.origin()) : 1;
         }
 
-
         //String displayFolder = mondrianOlap4jHierarchy.getDisplayFolder();
         String displayFolder = hierarchy.getDisplayFolder();
-        if(displayFolder == null) {
+        if (displayFolder == null) {
             displayFolder = "";
         }
 
@@ -1939,7 +1942,8 @@ public class Utils {
             Optional.ofNullable(hierarchy.getCaption()),
             Optional.ofNullable(getDimensionType(dimension.getDimensionType())),
             Optional.of(getHierarchyCardinality(hierarchy)),
-            Optional.ofNullable(hierarchy.getDefaultMember() == null ? null : hierarchy.getDefaultMember().getUniqueName()),
+            Optional.ofNullable(hierarchy.getDefaultMember() == null ? null :
+                hierarchy.getDefaultMember().getUniqueName()),
             Optional.ofNullable(hierarchy.hasAll() ? hierarchy.getRootMembers().get(0).getUniqueName() : null),
             Optional.ofNullable(desc),
             Optional.of(StructureEnum.HIERARCHY_FULLY_BALANCED),
@@ -1965,13 +1969,12 @@ public class Utils {
     private static int getHierarchyCardinality(Hierarchy hierarchy) {
         int cardinality = 0;
         if (hierarchy.getLevels() != null) {
-        	for (Level level : hierarchy.getLevels()) {
-        		cardinality += level.getCardinality();
-        	}
+            for (Level level : hierarchy.getLevels()) {
+                cardinality += level.getCardinality();
+            }
         }
         return cardinality;
     }
-
 
     static List<MdSchemaMeasureGroupsResponseRow> getMdSchemaMeasureGroupsResponseRow(
         Context context,
@@ -2014,15 +2017,15 @@ public class Utils {
             Optional.of(c.name())
         );
     }
+
     static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRowCell() {
         List<MdSchemaPropertiesResponseRow> result = new ArrayList<>();
         for (Property.StandardCellProperty property
-            : Property.StandardCellProperty.values())
-        {
+            : Property.StandardCellProperty.values()) {
 
             int type = Property.TypeFlag.getDictionary()
-                    .toMask(
-                        property.getType());
+                .toMask(
+                    property.getType());
             int dataType = property.getDatatype().xmlaOrdinal();
 
             result.add(new MdSchemaPropertiesResponseRowR(
@@ -2170,10 +2173,11 @@ public class Utils {
         Optional<CubeSourceEnum> oCubeSource,
         Optional<VisibilityEnum> oPropertyVisibility
     ) {
-        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() : Arrays.asList(dimension.getHierarchies());
+        List<Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of() :
+            Arrays.asList(dimension.getHierarchies());
         return getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyUniqueName)
             .stream().filter(h -> h != null)
-            .map(h -> getMdSchemaPropertiesResponseRow1(catalogName, schemaName, cube, h,
+            .map(h -> getMdSchemaPropertiesResponseRow(catalogName, schemaName, cube, h,
                 oPropertyName,
                 oPropertyOrigin,
                 oCubeSource,
@@ -2181,7 +2185,7 @@ public class Utils {
             .flatMap(Collection::stream).toList();
     }
 
-    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow1(
+    private static List<MdSchemaPropertiesResponseRow> getMdSchemaPropertiesResponseRow(
         String catalogName,
         String schemaName,
         Cube cube,
@@ -2191,7 +2195,7 @@ public class Utils {
         Optional<CubeSourceEnum> oCubeSource,
         Optional<VisibilityEnum> oPropertyVisibility
     ) {
-        List<Level> levels =  hierarchy.getLevels() == null ? List.of() : Arrays.asList( hierarchy.getLevels());
+        List<Level> levels = hierarchy.getLevels() == null ? List.of() : Arrays.asList(hierarchy.getLevels());
         return levels.stream().map(l -> getMdSchemaPropertiesResponseRow(catalogName,
             schemaName, cube, l, oPropertyName, oPropertyOrigin, oCubeSource, oPropertyVisibility))
             .flatMap(Collection::stream).toList();
@@ -2207,14 +2211,18 @@ public class Utils {
         Optional<CubeSourceEnum> oCubeSource,
         Optional<VisibilityEnum> oPropertyVisibility
     ) {
-        List<mondrian.olap.Property> properties = level.getProperties() == null ? List.of() : Arrays.asList(level.getProperties());
+        List<mondrian.olap.Property> properties = level.getProperties() == null ? List.of() :
+         Arrays.asList(level.getProperties());
         return getPropertiesWithFilterByUniqueName(properties, oPropertyName)
             .stream().filter(p -> p != null)
             .map(p -> getMdSchemaPropertiesResponseRow(catalogName, schemaName, cube, level, p))
             .toList();
     }
 
-    private static List<mondrian.olap.Property> getPropertiesWithFilterByUniqueName(List<mondrian.olap.Property> properties, Optional<String> oPropertyName) {
+    private static List<mondrian.olap.Property> getPropertiesWithFilterByUniqueName(
+        List<mondrian.olap.Property> properties,
+        Optional<String> oPropertyName
+    ) {
         if (oPropertyName.isPresent()) {
             properties.stream().filter(p -> oPropertyName.get().equals(p.getName())).toList();
         }
@@ -2270,6 +2278,7 @@ public class Utils {
     }
 
     private static LevelDbTypeEnum getDBTypeFromProperty(mondrian.olap.Property prop) {
+    	if (prop.getType() != null) {
         switch (prop.getType()) {
             case TYPE_STRING:
                 return LevelDbTypeEnum.DBTYPE_WSTR;
@@ -2281,6 +2290,8 @@ public class Utils {
                 // TODO: what type is it really, its not a string
                 return LevelDbTypeEnum.DBTYPE_WSTR;
         }
+    	}
+    	return LevelDbTypeEnum.DBTYPE_WSTR;
     }
 
     static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(

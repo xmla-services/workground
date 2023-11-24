@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
-import jakarta.xml.bind.JAXBException;
 import mondrian.olap.MondrianServer;
 import mondrian.xmla.PropertyDefinition;
 import mondrian.xmla.XmlaConstants;
