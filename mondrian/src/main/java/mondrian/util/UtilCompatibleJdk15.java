@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.Timer;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -87,12 +86,6 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         return defaultValue;
     }
 
-    @Override
-	public String generateUuidString() {
-        return UUID.randomUUID().toString();
-    }
-
-    @Override
 	public <T> T compileScript(
         Class<T> iface,
         String script,

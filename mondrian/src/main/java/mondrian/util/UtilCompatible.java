@@ -42,7 +42,6 @@ public interface UtilCompatible {
     <T> T getAnnotation(
         Method method, String annotationClassName, T defaultValue);
 
-    String generateUuidString();
 
     /**
      * Cancels and closes a SQL Statement object. If errors are encountered,
