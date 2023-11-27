@@ -2,7 +2,6 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,29 +25,31 @@ class OSGiServiceTest {
 
 	@TempDir
 	Path path;
-	
-	
-String XML="""
-<?xml version="1.0" encoding="UTF-8"?>
-<Schema name="X">
 
-<Cube name="Population" description = "Population cube">
-  <Table name="population"/>
-</Cube>
+	String XML = """
+			<?xml version="1.0" encoding="UTF-8"?>
+			<Schema name="X">
 
-</Schema>
-""";
+			<Cube name="Population" description = "Population cube">
+			  <Table name="population"/>
+			</Cube>
+
+			</Schema>
+			""";
 
 	@org.junit.jupiter.api.Test
 	void testDbMappingSchemaProvider(
 			@InjectService(cardinality = 0) ServiceAware<DatabaseMappingSchemaProvider> provider) throws Exception {
 
+		System.out.println(path);
 		init();
 		assertThat(provider.getServiceReferences()).isEmpty();
-		
-	Path f=	Files.createTempFile("schemaMapping", ".xml");
-	Files.writeString(f, XML);
-	
+		Thread.sleep(100);
+
+		Path f = Files.createTempFile(path, "schemaMapping", ".xml");
+		Files.writeString(f, XML);
+
+		Thread.sleep(1000000);
 
 	}
 

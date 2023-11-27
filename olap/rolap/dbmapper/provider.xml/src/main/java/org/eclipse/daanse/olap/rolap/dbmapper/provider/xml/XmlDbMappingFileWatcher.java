@@ -36,7 +36,7 @@ import jakarta.xml.bind.JAXBException;
 @Component()
 @Designate(ocd = XmlDbMappingFileWatcher.Config.class, factory = true)
 public class XmlDbMappingFileWatcher {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(XmlDbMappingFileWatcher.class);
 	static final String PID = "org.eclipse.daanse.olap.rolap.dbmapper.provider.xml.XmlDbMappingFileWatcher";
 
@@ -46,7 +46,6 @@ public class XmlDbMappingFileWatcher {
 
 	@Reference
 	ConfigurationAdmin ca;
-
 
 	private WatchRunner watchRunner;
 
@@ -61,6 +60,9 @@ public class XmlDbMappingFileWatcher {
 	public void activate(Config config) throws IOException, JAXBException, InterruptedException {
 
 		basePath = Paths.get(config.path());
+		if (!Files.isDirectory(basePath)) {
+			throw new RuntimeException("path does not exist: "+basePath);
+		}
 
 		watchRunner = new WatchRunner();
 		Executors.newCachedThreadPool().execute(watchRunner);
@@ -86,6 +88,8 @@ public class XmlDbMappingFileWatcher {
 	}
 
 	protected void addSchema(Path path) {
+		
+		path.endsWith(".xml");
 		String uuid = UUID.randomUUID().toString();
 
 		try {
@@ -95,7 +99,7 @@ public class XmlDbMappingFileWatcher {
 			String sUrl = url.toString();
 			Dictionary<String, Object> ht = new Hashtable<>();
 			ht.put("url", sUrl);
-			ht.put("sample.name", url);
+			ht.put("sample.name", sUrl);
 			ht.put("sample.type", "xml");
 			c.update(ht);
 
@@ -118,6 +122,7 @@ public class XmlDbMappingFileWatcher {
 			try {
 
 				watchService = FileSystems.getDefault().newWatchService();
+
 				basePath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
 						StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
 
@@ -129,6 +134,13 @@ public class XmlDbMappingFileWatcher {
 
 						String eventType = event.kind().name();
 						String fileName = event.context().toString();
+						
+						if(!fileName.endsWith(".xml")){
+							
+							System.out.println("ignoded: "+fileName);
+							continue;
+						}
+
 
 						Path eventPath = basePath.resolve(fileName).toAbsolutePath();
 						System.out.println("File " + fileName + ", EventKind : " + eventType);
