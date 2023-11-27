@@ -631,6 +631,4 @@ class DbSchemaDiscoverServiceTest {
         };
         return answer;
     }
-
-
 }
