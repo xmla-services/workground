@@ -6,6 +6,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition()
 public interface ContextGroupXmlaServiceConfig {
 
+	
+	// TODO:  do not use configs for i18n in this way
     @AttributeDefinition(name = "%DBSCHEMA_CATALOGS", required = false)
     default String dbSchemaCatalogsDescription() {
         return null;

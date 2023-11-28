@@ -992,6 +992,7 @@
 		<module>xmla</module>
 		<module>odf</module>
 		<module>aggregate-report-jacoco</module>
+		<module>demo</module>
 	</modules>
 	<profiles>
 		<profile>

@@ -13,7 +13,7 @@
 
 
 -runrequires: \
-	bnd.identity;id='org.eclipse.daanse.xmla.demo.server',\
+	bnd.identity;id='org.eclipse.daanse.demo.server.play',\
 	bnd.identity;id='org.eclipse.daanse.xmla.ws.jakarta.basic',\
 	bnd.identity;id='org.eclipse.daanse.ws.handler',\
 	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard',\
@@ -23,7 +23,9 @@
 	bnd.identity;id='com.sun.xml.messaging.saaj.impl',\
 	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle',\
 	bnd.identity;id='org.apache.felix.webconsole',\
-	bnd.identity;id='org.apache.felix.webconsole.plugins.ds'
+	bnd.identity;id='org.apache.felix.webconsole.plugins.ds',\
+	bnd.identity;id='org.eclipse.daanse.db.datasource.sqlite',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.sqlite'
 
 
 
@@ -35,7 +37,6 @@
 
 -runbundles: \
 	com.fasterxml.woodstox.woodstox-core;version='[6.2.6,6.2.7)',\
-	com.sun.istack.commons-runtime;version='[4.0.1,4.0.2)',\
 	com.sun.xml.bind.jaxb-core;version='[3.0.2,3.0.3)',\
 	com.sun.xml.bind.jaxb-impl;version='[3.0.2,3.0.3)',\
 	com.sun.xml.fastinfoset.FastInfoset;version='[2.0.0,2.0.1)',\
@@ -49,20 +50,25 @@
 	jakarta.xml.soap-api;version='[2.0.1,2.0.2)',\
 	jakarta.xml.ws-api;version='[3.0.1,3.0.2)',\
 	org.apache.aries.spifly.dynamic.bundle;version='[1.3.6,1.3.7)',\
-	org.apache.commons.commons-fileupload;version='[1.4.0,1.4.1)',\
-	org.apache.commons.io;version='[2.2.0,2.2.1)',\
+	org.apache.commons.commons-fileupload;version='[1.5.0,1.5.1)',\
+	org.apache.commons.io;version='[2.6.0,2.6.1)',\
 	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
-	org.apache.felix.http.jetty;version='[5.0.0,5.0.1)',\
+	org.apache.felix.http.jetty;version='[5.1.2,5.1.3)',\
 	org.apache.felix.http.servlet-api;version='[2.1.0,2.1.1)',\
-	org.apache.felix.inventory;version='[1.1.0,1.1.1)',\
+	org.apache.felix.inventory;version='[2.0.0,2.0.1)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
-	org.apache.felix.webconsole;version='[4.8.4,4.8.5)',\
-	org.apache.felix.webconsole.plugins.ds;version='[2.2.0,2.2.1)',\
+	org.apache.felix.webconsole;version='[4.9.6,4.9.7)',\
+	org.apache.felix.webconsole.plugins.ds;version='[2.3.0,2.3.1)',\
+	org.eclipse.daanse.db.datasource.common;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.datasource.sqlite;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.sqlite;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.demo.server.play;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.handler;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.httpwhiteboard;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.registrar;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.xmla.demo.server;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.basic;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.model.xmla;version='[0.0.1,0.0.2)',\
@@ -79,8 +85,11 @@
 	org.objectweb.asm.tree.analysis;version='[9.4.0,9.4.1)',\
 	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
+	org.osgi.service.http.whiteboard;version='[1.1.0,1.1.1)',\
 	org.osgi.util.function;version='[1.2.0,1.2.1)',\
 	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
+	org.owasp.encoder;version='[1.2.3,1.2.4)',\
+	org.xerial.sqlite-jdbc;version='[3.36.0,3.36.1)',\
 	slf4j.api;version='[2.0.4,2.0.5)',\
 	slf4j.simple;version='[2.0.4,2.0.5)',\
 	stax2-api;version='[4.2.1,4.2.2)'
