@@ -22,7 +22,6 @@
   <modules>
   	<module>api</module>
   	<module>xml</module>
-  	<module>model.record</module>
   	<module>impl.basic</module>
   </modules>
 </project>

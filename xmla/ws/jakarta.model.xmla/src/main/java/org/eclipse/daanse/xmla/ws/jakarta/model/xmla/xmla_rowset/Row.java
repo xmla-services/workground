@@ -65,7 +65,9 @@ import jakarta.xml.bind.annotation.XmlType;
     MdSchemaMeasuresResponseRowXml.class,
     MdSchemaMembersResponseRowXml.class,
     MdSchemaPropertiesResponseRowXml.class,
-    MdSchemaSetsResponseRowXml.class
+    MdSchemaSetsResponseRowXml.class,
+    //statement
+    StatementRowXml.class
 })
 public abstract class Row {
 }

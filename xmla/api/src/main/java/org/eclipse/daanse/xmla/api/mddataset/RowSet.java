@@ -11,11 +11,10 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.model.record.execute.statement;
+package org.eclipse.daanse.xmla.api.mddataset;
 
-import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
-import org.eclipse.daanse.xmla.model.record.mddataset.MddatasetR;
-import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
+import java.util.List;
 
-public record StatementResponseR(MddatasetR mdDataSet, RowSetR rowSet) implements StatementResponse {
+public interface RowSet {
+    List<RowSetRow> rowSetRows();
 }
