@@ -37,6 +37,7 @@ public class DataSourceService extends AbstractDelegateDataSource<SQLiteDataSour
     public DataSourceService(SqliteConfig config) throws SQLException {
 
         this.ds = new SQLiteDataSource(Util.transformConfig(config));
+        ds.setUrl(config.url());
         this.config = config;
     }
     // no @Modified to force consumed Services get new configured connections.

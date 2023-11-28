@@ -38,6 +38,7 @@ public class ConnectionPoolDataSourceService
     public ConnectionPoolDataSourceService(SqliteConfig config) throws SQLException {
 
         this.ds = new SQLiteConnectionPoolDataSource(Util.transformConfig(config));
+        ds.setUrl(config.url());
         this.config = config;
     }
 

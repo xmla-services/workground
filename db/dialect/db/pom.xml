@@ -39,6 +39,7 @@
 		<module>postgresql</module>
 		<module>redshift</module>
 		<module>snowflake</module>
+		<module>sqlite</module>
 		<module>sqlstream</module>
 		<module>sybase</module>
 		<module>teradata</module>

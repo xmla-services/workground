@@ -32,6 +32,15 @@ import org.sqlite.SQLiteOpenMode;
 @ObjectClassDefinition()
 public interface SqliteConfig {
 
+	
+	
+
+    @AttributeDefinition(description = "url", required = true)
+    default String url() {
+        return null;
+    }
+    
+    
     @AttributeDefinition(description = "username")
     default String username() {
         return null;
