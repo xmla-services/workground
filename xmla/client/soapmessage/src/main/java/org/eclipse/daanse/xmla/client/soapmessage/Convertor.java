@@ -17,6 +17,7 @@ import jakarta.xml.soap.SOAPBody;
 import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -95,6 +96,8 @@ import org.eclipse.daanse.xmla.api.mddataset.CellTypeError;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.api.mddataset.Type;
 import org.eclipse.daanse.xmla.api.xmla.Restriction;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
@@ -157,6 +160,9 @@ import org.eclipse.daanse.xmla.model.record.mddataset.MemberTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.MembersTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoCubeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowItemR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowR;
 import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
@@ -1030,6 +1036,7 @@ class Convertor {
         NodeList cellDataNl = soapBody.getElementsByTagName("CellData");
         NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
         NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
+        NodeList rowNl = soapBody.getElementsByTagName(ROW);
 
         OlapInfoR olapInfo = getOlapInfo(olapInfoNl);
         AxesR axes = getAxes(axesNl);
@@ -1037,14 +1044,56 @@ class Convertor {
         ExceptionR exception = getException(exceptionNl);
         MessagesR messages = getMessages(messagesNl);
 
-        MddatasetR mdDataSet = new MddatasetR(
-            olapInfo,
-            axes,
-            cellData,
-            exception,
-            messages
-        );
-        return new StatementResponseR(mdDataSet);
+        MddatasetR mdDataSet = null;
+        RowSetR rowSet = null;
+        if (olapInfo != null
+            || axes != null
+            || cellData != null
+            || exception != null
+            || messages != null
+        ) {
+            mdDataSet = new MddatasetR(
+                olapInfo,
+                axes,
+                cellData,
+                exception,
+                messages
+            );
+        }
+        rowSet = getRowSet(rowNl);
+        return new StatementResponseR(mdDataSet, rowSet);
+    }
+    private static RowSetR getRowSet(NodeList nl) {
+        if (nl != null && nl.getLength() > 0) {
+            List<RowSetRow> rowSetRows = getRowSetRowList(nl);
+            return new RowSetR(rowSetRows);
+        }
+        return null;
+    }
+
+    private static List<RowSetRow> getRowSetRowList(NodeList nl) {
+        if (nl != null && nl.getLength() > 0) {
+            List<RowSetRow> list = new ArrayList<>();
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                list.add(convertRowSetRow(node.getChildNodes()));
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private static RowSetRowR convertRowSetRow(NodeList nl) {
+        List<RowSetRowItem> list = new ArrayList<>();
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                list.add(new RowSetRowItemR(node.getNodeName(),
+                    node.getTextContent(),
+                    Optional.ofNullable(ItemTypeEnum.fromValue(getAttribute(node.getAttributes(), "xsi:type")))));
+            }
+        }
+        return new RowSetRowR(list);
     }
 
     static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
@@ -1307,7 +1356,9 @@ class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
                 if (node != null && "Value".equals(node.getNodeName())) {
-                    return new ValueR(getCellTypeErrorList(node.getChildNodes()));
+                    String value = node.getTextContent();
+                    ItemTypeEnum cellType = ItemTypeEnum.fromValue(getAttribute(node.getAttributes(), "xsi:type"));
+                    return new ValueR(value, cellType, getCellTypeErrorList(node.getChildNodes()));
                 }
             }
         }
