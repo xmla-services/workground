@@ -4,6 +4,8 @@ public interface Property {
 
     String getName();
 
+    Datatype getDatatype();
+
     enum StandardMemberProperty implements Property {
 
         /**
@@ -172,12 +174,86 @@ public interface Property {
          */
         VALUE;
 
+        public String getName() {
+            return name();
+        }
+
+        @Override
+        public Datatype getDatatype() {
+            return null;
+        }
+    }
+
+    enum StandardCellProperty implements Property {
+        BACK_COLOR,
+
+        CELL_EVALUATION_LIST,
+
+        CELL_ORDINAL,
+
+        FORE_COLOR,
+
+        FONT_NAME,
+
+        FONT_SIZE,
+
+        FONT_FLAGS,
+
+        /**
+         * Definition of the property which
+         * holds the formatted value of a cell.
+         */
+        FORMATTED_VALUE,
+
+        /**
+         * Definition of the property which
+         * holds the format string used to format cell values.
+         */
+        FORMAT_STRING,
+
+        NON_EMPTY_BEHAVIOR,
+
+        /**
+         * Definition of the property which
+         * determines the solve order of a calculated member with respect to
+         * other calculated members.
+         */
+        SOLVE_ORDER,
+
+        /**
+         * Definition of the property which
+         * holds the value of a cell. Is usually numeric (since most measures
+         * are numeric) but is occasionally another type.
+         */
+        VALUE,
+
+        /**
+         * Definition of the property which
+         * holds the datatype of a cell. Valid values are "String",
+         * "Numeric", "Integer". The property's value derives from the
+         * "datatype" attribute of the "Measure" element; if the
+         * datatype attribute is not specified, the datatype is
+         * "Numeric" by default, except measures whose aggregator is
+         * "Count", whose datatype is "Integer".
+         */
+        DATATYPE,
+
+        LANGUAGE,
+
+        ACTION_TYPE,
+
+        UPDATEABLE;
 
 
         public String getName() {
             return name();
         }
 
-
+        @Override
+        public Datatype getDatatype() {
+            return null;
+            //TODO
+        }
     }
+
 }
