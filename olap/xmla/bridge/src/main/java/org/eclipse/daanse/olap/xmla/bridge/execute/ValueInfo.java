@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
 import mondrian.olap.Util;
+import org.eclipse.daanse.xmla.api.common.properties.XsdType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -36,33 +37,8 @@ import java.math.BigInteger;
  */
 class ValueInfo {
 
-    //
-    // Some xml schema data types.
-    //
-    public static final String XSD_BOOLEAN = "xsd:boolean";
-    public static final String XSD_STRING = "xsd:string";
-
-
-    public static final String XSD_BYTE = "xsd:byte";
-
-    public static final String XSD_SHORT = "xsd:short";
-
-    public static final String XSD_INT = "xsd:int";
     public static final int XSD_INT_MAX_INCLUSIVE = 2147483647;
     public static final int XSD_INT_MIN_INCLUSIVE = -2147483648;
-
-    public static final String XSD_LONG = "xsd:long";
-
-    // xsd:double: IEEE 64-bit floating-point
-    public static final String XSD_DOUBLE = "xsd:double";
-
-    public static final String XSD_FLOAT = "xsd:float";
-
-    // xsd:decimal: Decimal numbers (BigDecimal)
-    public static final String XSD_DECIMAL = "xsd:decimal";
-
-    // xsd:integer: Signed integers of arbitrary length (BigInteger)
-    public static final String XSD_INTEGER = "xsd:integer";
 
     /**
      * Returns XSD_INT, XSD_DOUBLE, XSD_STRING or null.
@@ -73,10 +49,10 @@ class ValueInfo {
     static String getValueTypeHint(final String dataType) {
         if (dataType != null) {
             return (dataType.equals("Integer"))
-                ? XSD_INT
+                ? XsdType.XSD_INTEGER
                 : ((dataType.equals("Numeric"))
-                ? XSD_DOUBLE
-                : XSD_STRING);
+                ? XsdType.XSD_DOUBLE
+                : XsdType.XSD_STRING);
         } else {
             return null;
         }
@@ -102,13 +78,13 @@ class ValueInfo {
             // converted to the data type without precision loss, ok;
             // otherwise value data type must be adjusted.
 
-            if (valueTypeHint.equals(XSD_STRING)) {
+            if (valueTypeHint.equals(XsdType.XSD_STRING)) {
                 // For String types, nothing to do.
                 this.valueType = valueTypeHint;
                 this.value = inputValue;
                 this.isDecimal = false;
 
-            } else if (valueTypeHint.equals(XSD_INT)) {
+            } else if (valueTypeHint.equals(XsdType.XSD_INTEGER)) {
                 // If valueTypeHint is XSD_INT, then see if value can be
                 // converted to (first choice) integer, (second choice),
                 // long and (last choice) BigInteger - otherwise must
@@ -123,12 +99,12 @@ class ValueInfo {
                     this.isDecimal = false;
 
                 } else if (inputValue instanceof Byte) {
-                    this.valueType = XSD_BYTE;
+                    this.valueType = XsdType.XSD_BYTE;
                     this.value = inputValue;
                     this.isDecimal = false;
 
                 } else if (inputValue instanceof Short) {
-                    this.valueType = XSD_SHORT;
+                    this.valueType = XsdType.XSD_SHORT;
                     this.value = inputValue;
                     this.isDecimal = false;
 
@@ -146,7 +122,7 @@ class ValueInfo {
                         setValueAndType(lval);
                     } else {
                         // It can not be converted to a long.
-                        this.valueType = XSD_INTEGER;
+                        this.valueType = XsdType.XSD_INTEGER_LONG;
                         this.value = inputValue;
                         this.isDecimal = false;
                     }
@@ -161,7 +137,7 @@ class ValueInfo {
 
                     } else {
                         // It can not be converted to a long.
-                        this.valueType = XSD_FLOAT;
+                        this.valueType = XsdType.XSD_FLOAT;
                         this.value = inputValue;
                         this.isDecimal = true;
                     }
@@ -176,7 +152,7 @@ class ValueInfo {
 
                     } else {
                         // It can not be converted to a long.
-                        this.valueType = XSD_DOUBLE;
+                        this.valueType = XsdType.XSD_DOUBLE;
                         this.value = inputValue;
                         this.isDecimal = true;
                     }
@@ -197,12 +173,12 @@ class ValueInfo {
                         try {
                             // Can it be an integer
                             BigInteger bi = bd.toBigIntegerExact();
-                            this.valueType = XSD_INTEGER;
+                            this.valueType = XsdType.XSD_INTEGER_LONG;
                             this.value = bi;
                             this.isDecimal = false;
                         } catch (ArithmeticException ex1) {
                             // OK, its a decimal
-                            this.valueType = XSD_DECIMAL;
+                            this.valueType = XsdType.XSD_DECIMAL;
                             this.value = inputValue;
                             this.isDecimal = true;
                         }
@@ -223,7 +199,7 @@ class ValueInfo {
                     this.isDecimal = false;
                 }
 
-            } else if (valueTypeHint.equals(XSD_DOUBLE)) {
+            } else if (valueTypeHint.equals(XsdType.XSD_DOUBLE)) {
                 // The desired type is double.
 
                 // Most of the time value ought to be an Double so
@@ -246,7 +222,7 @@ class ValueInfo {
 
                 } else if (inputValue instanceof Float) {
                     this.value = inputValue;
-                    this.valueType = XSD_FLOAT;
+                    this.valueType = XsdType.XSD_FLOAT;
                     this.isDecimal = true;
 
                 } else if (inputValue instanceof BigDecimal bd) {
@@ -258,14 +234,14 @@ class ValueInfo {
                         // Can it be a double
                         // Must use compareTo - see BigDecimal.equals
                         if (bd.compareTo(bd2) == 0) {
-                            this.valueType = XSD_DOUBLE;
+                            this.valueType = XsdType.XSD_DOUBLE;
                             this.value = dval;
                         } else {
-                            this.valueType = XSD_DECIMAL;
+                            this.valueType = XsdType.XSD_DECIMAL;
                             this.value = inputValue;
                         }
                     } catch (NumberFormatException ex) {
-                        this.valueType = XSD_DECIMAL;
+                        this.valueType = XsdType.XSD_DECIMAL;
                         this.value = inputValue;
                     }
                     this.isDecimal = true;
@@ -279,7 +255,7 @@ class ValueInfo {
                         setValueAndType(lval);
                     } else {
                         // It can not be converted to a long.
-                        this.valueType = XSD_INTEGER;
+                        this.valueType = XsdType.XSD_INTEGER_LONG;
                         this.value = inputValue;
                         this.isDecimal = true;
                     }
@@ -302,22 +278,22 @@ class ValueInfo {
         } else {
             // There is no valueType "hint", so just get it from the value.
             if (inputValue instanceof String) {
-                this.valueType = XSD_STRING;
+                this.valueType = XsdType.XSD_STRING;
                 this.value = inputValue;
                 this.isDecimal = false;
 
             } else if (inputValue instanceof Integer) {
-                this.valueType = XSD_INT;
+                this.valueType = XsdType.XSD_INTEGER;
                 this.value = inputValue;
                 this.isDecimal = false;
 
             } else if (inputValue instanceof Byte b) {
-                this.valueType = XSD_BYTE;
+                this.valueType = XsdType.XSD_BYTE;
                 this.value = b.intValue();
                 this.isDecimal = false;
 
             } else if (inputValue instanceof Short s) {
-                this.valueType = XSD_SHORT;
+                this.valueType = XsdType.XSD_SHORT;
                 this.value = s.intValue();
                 this.isDecimal = false;
 
@@ -334,18 +310,18 @@ class ValueInfo {
                     setValueAndType(lval);
                 } else {
                     // It can not be converted to a long.
-                    this.valueType = XSD_INTEGER;
+                    this.valueType = XsdType.XSD_INTEGER_LONG;
                     this.value = inputValue;
                     this.isDecimal = false;
                 }
 
             } else if (inputValue instanceof Float) {
-                this.valueType = XSD_FLOAT;
+                this.valueType = XsdType.XSD_FLOAT;
                 this.value = inputValue;
                 this.isDecimal = true;
 
             } else if (inputValue instanceof Double) {
-                this.valueType = XSD_DOUBLE;
+                this.valueType = XsdType.XSD_DOUBLE;
                 this.value = inputValue;
                 this.isDecimal = true;
 
@@ -358,14 +334,14 @@ class ValueInfo {
                     // Can it be a double
                     // Must use compareTo - see BigDecimal.equals
                     if (bd.compareTo(bd2) == 0) {
-                        this.valueType = XSD_DOUBLE;
+                        this.valueType = XsdType.XSD_DOUBLE;
                         this.value = dval;
                     } else {
-                        this.valueType = XSD_DECIMAL;
+                        this.valueType = XsdType.XSD_DECIMAL;
                         this.value = inputValue;
                     }
                 } catch (NumberFormatException ex) {
-                    this.valueType = XSD_DECIMAL;
+                    this.valueType = XsdType.XSD_DECIMAL;
                     this.value = inputValue;
                 }
                 this.isDecimal = true;
@@ -374,17 +350,17 @@ class ValueInfo {
                 // Don't know what Number type we have here.
                 // Note: this could result in precision loss.
                 this.value = ((Number) inputValue).longValue();
-                this.valueType = XSD_LONG;
+                this.valueType = XsdType.XSD_LONG;
                 this.isDecimal = false;
 
             } else if (inputValue instanceof Boolean) {
                 this.value = inputValue;
-                this.valueType = XSD_BOOLEAN;
+                this.valueType = XsdType.XSD_BOOLEAN;
                 this.isDecimal = false;
             } else {
                 // Who knows what we are dealing with,
                 // hope for the best?!?
-                this.valueType = XSD_STRING;
+                this.valueType = XsdType.XSD_STRING;
                 this.value = inputValue;
                 this.isDecimal = false;
             }
@@ -393,11 +369,11 @@ class ValueInfo {
     private void setValueAndType(long lval) {
         if (! isValidXsdInt(lval)) {
             // No, it can not be a integer, must be a long
-            this.valueType = XSD_LONG;
+            this.valueType = XsdType.XSD_LONG;
             this.value = lval;
         } else {
             // Its an integer.
-            this.valueType = XSD_INT;
+            this.valueType = XsdType.XSD_INTEGER;
             this.value = (int) lval;
         }
         this.isDecimal = false;
