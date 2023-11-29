@@ -17,6 +17,7 @@ public class XsdType {
     public static final String XSD_STRING = "xsd:string";
     public static final String XSD_BOOLEAN = "xsd:boolean";
     public static final String XSD_INTEGER = "xsd:int";
+    public static final String XSD_INTEGER_LONG = "xsd:integer";
     public static final String XSD_UNSIGNED_INTEGER = "xsd:unsignedInt";
     public static final String XSD_DOUBLE = "xsd:double";
     public static final String XSD_DATE_TIME = "xsd:dateTime";
@@ -25,4 +26,7 @@ public class XsdType {
     public static final String XSD_UNSIGNED_SHORT = "xsd:unsignedShort";
     public static final String XSD_LONG = "xsd:long";
     public static final String XSD_UNSIGNED_LONG = "xsd:unsignedLong";
+    public static final String XSD_FLOAT = "xsd:float";
+    public static final String XSD_DECIMAL = "xsd:decimal";
+    public static final String XSD_BYTE = "xsd:byte";
 }
