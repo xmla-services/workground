@@ -117,7 +117,6 @@
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.runtime.registrar</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.client.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.demo.server</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
