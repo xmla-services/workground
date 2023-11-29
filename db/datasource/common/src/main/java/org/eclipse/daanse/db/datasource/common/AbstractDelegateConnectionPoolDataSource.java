@@ -24,7 +24,7 @@ import javax.sql.PooledConnection;
 import javax.sql.PooledConnectionBuilder;
 
 public abstract class AbstractDelegateConnectionPoolDataSource<D extends ConnectionPoolDataSource>
-        implements ConnectionPoolDataSource {
+        implements ConnectionPoolDataSource{
 
     protected abstract D delegate();
 

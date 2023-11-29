@@ -20,7 +20,7 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-@ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx")
+@ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx", factoryPid =  BasicContext.PID)
 public interface BasicContextConfig {
 
     @AttributeDefinition(name = "%name.name", description = "%name.description", required = false)
@@ -39,11 +39,6 @@ public interface BasicContextConfig {
         return 40;
     }
 
-    //Property containing a list of JDBC drivers to load automatically. Must be a comma-separated list of class names, and the classes must be on the class path.
-    @AttributeDefinition(name = "%jdbcDrivers.name", description = "%jdbcDrivers.description", type = AttributeType.STRING)
-    default String jdbcDrivers() {
-        return "sun.jdbc.odbc.JdbcOdbcDriver,org.hsqldb.jdbcDriver,oracle.jdbc.OracleDriver,com.mysql.jdbc.Driver";
-    }
 
     //Integer property that, if set to a value greater than zero, sets a hard limit on the number of cells that are batched together when building segments.
     @AttributeDefinition(name = "%cellBatchSize.name", description = "%cellBatchSize.description", type = AttributeType.INTEGER)
@@ -63,29 +58,7 @@ public interface BasicContextConfig {
         return 1;
     }
 
-    //<p>String property that determines which tests are run.</p> <p>This is a regular expression as defined by {@link java.util.regex.Pattern}. If this property is specified, only tests whose names match the pattern in its entirety will be run.</p> @see #TestClass
-    @AttributeDefinition(name = "%testName.name", description = "%testName.description", type = AttributeType.STRING)
-    default String testName() {
-        return null;
-    }
 
-    //<p>String property that determines which test class to run.</p> <p>This is the name of the class. It must either implement {@code junit.framework.Test} or have a method {@code public [static] junit.framework.Test suite()}.</p> <p>Example:</p> <blockquote><code>mondrian.test.Class=mondrian.test.FoodMartTestCase</code></blockquote> @see #TestName
-    @AttributeDefinition(name = "%testClass.name", description = "%testClass.description", type = AttributeType.STRING)
-    default String testClass() {
-        return null;
-    }
-
-    //<p>Property containing the connect string which regression tests should use to connect to the database.</p> <p>Format is specified in {@link Util#parseConnectString(String)}.</p>
-    @AttributeDefinition(name = "%testConnectString.name", description = "%testConnectString.description", type = AttributeType.STRING)
-    default String testConnectString() {
-        return null;
-    }
-
-    //Property containing a list of dimensions in the Sales cube that should be treated as high-cardinality dimensions by the testing infrastructure. This allows us to run the full suite of tests with high-cardinality functionality enabled.
-    @AttributeDefinition(name = "%testHighCardinalityDimensionList.name", description = "%testHighCardinalityDimensionList.description", type = AttributeType.STRING)
-    default String testHighCardinalityDimensionList() {
-        return null;
-    }
 
     /*
     <p>Property containing the JDBC URL of the FoodMart database. The default value is to connect to an ODBC data source called "MondrianFoodMart".</p>
@@ -240,22 +213,10 @@ public interface BasicContextConfig {
     mondrian.jdbcDrivers=com.ingres.jdbc.IngresDriver <br/>
     driver.classpath=/some/path/iijdbc.jar</code></blockquote>
      */
-    @AttributeDefinition(name = "%foodmartJdbcURL.name", description = "%foodmartJdbcURL.description", type = AttributeType.STRING)
-    default String foodmartJdbcURL() {
-        return "jdbc:odbc:MondrianFoodMart";
-    }
 
-    //Property containing the JDBC user of a test database. The default value is null, to cope with DBMSs that don't need this.
-    @AttributeDefinition(name = "%testJdbcUser.name", description = "%testJdbcUser.description", type = AttributeType.STRING)
-    default String testJdbcUser() {
-        return null;
-    }
 
-    //Property containing the JDBC password of a test database. The default value is null, to cope with DBMSs that don't need this.
-    @AttributeDefinition(name = "%testJdbcPassword.name", description = "%testJdbcPassword.description", type = AttributeType.STRING)
-    default String testJdbcPassword() {
-        return null;
-    }
+
+
 
     //Property which turns on or off the in-memory rollup of segment data. Defaults to true.
     @AttributeDefinition(name = "%enableInMemoryRollup.name", description = "%enableInMemoryRollup.description", type = AttributeType.BOOLEAN)
@@ -625,13 +586,6 @@ public interface BasicContextConfig {
     @AttributeDefinition(name = "%webappDeploy.name", description = "%webappDeploy.description", type = AttributeType.STRING)
     default String webappDeploy() { return null; }
 
-    //<p>Connect string for the webapp. (Used by the webapp only.)</p> <p>To achieve access control, append say <code>;Role='California manager'</code> to the connect string.</p>
-    @AttributeDefinition(name = "%webappConnectString.name", description = "%webappConnectString.description", type = AttributeType.STRING)
-    default String webappConnectStrinexecutionHistorySizeg() { return "Provider=mondrian;Jdbc=jdbc:odbc:MondrianFoodMart;Catalog=/WEB-INF/queries/FoodMart.xml;JdbcDrivers=sun.jdbc.odbc.JdbcOdbcDriver"; }
-
-    //<p>Set mondrian logging information if not provided by containing application.</p> <p>Examples:</p>log4j.configuration=file://full/path/log4j.xml log4j.configuration=file:log4j.properties
-    @AttributeDefinition(name = "%log4jConfiguration.name", description = "%log4jConfiguration.description", type = AttributeType.STRING)
-    default String log4jConfiguration() { return null; }
 
     //<p>The server will close a session if it is not in use for the specified timeout. Default value is 3600 seconds.</p>
     @AttributeDefinition(name = "%idleOrphanSessionTimeout.name", description = "%idleOrphanSessionTimeout.description", type = AttributeType.INTEGER)
