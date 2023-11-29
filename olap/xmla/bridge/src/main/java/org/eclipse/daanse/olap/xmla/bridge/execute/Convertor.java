@@ -30,6 +30,7 @@ import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
 import org.eclipse.daanse.xmla.api.mddataset.CellType;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
+import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 import org.eclipse.daanse.xmla.api.mddataset.TuplesType;
@@ -332,7 +333,7 @@ public class Convertor {
             List<Hierarchy> hierarchies = slicerAxisHierarchies;
             List<Type> setTypes = new ArrayList<>();
             List<TupleType> tuples = new ArrayList<>();
-            List<MemberTypeR> mem = new ArrayList<>();
+            List<MemberType> mem = new ArrayList<>();
             tuples.add(new TupleTypeR(mem));
             setTypes.add(new TuplesTypeR(tuples));
             new AxisR(setTypes, "SlicerAxis");
@@ -538,7 +539,7 @@ public class Convertor {
     private static Axis getAxis(CellSet cellSet, CellSetAxis axis, List<Property> props, String name) {
         List<Type> setType = new ArrayList<>();
 
-        List<MemberTypeR> memberList = new ArrayList<>();
+        List<MemberType> memberList = new ArrayList<>();
         TupleType tupleType = new TupleTypeR(memberList);
         List<TupleType> tuples = new ArrayList<>();
         tuples.add(tupleType);

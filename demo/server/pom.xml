@@ -8,6 +8,6 @@
   <artifactId>org.eclipse.daanse.demo.server</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>org.eclipse.daanse.demo.server.play</module>
+  	<module>play</module>
   </modules>
 </project>

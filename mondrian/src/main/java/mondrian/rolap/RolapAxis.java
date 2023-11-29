@@ -116,5 +116,11 @@ public class RolapAxis implements Axis {
 		public int size() {
             return tupleList.getArity();
         }
+
+        @Override
+        public List<Member> getMembers() {
+            return null;
+            //TODO
+        }
     }
 }
