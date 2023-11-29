@@ -25,7 +25,12 @@
 	bnd.identity;id='org.apache.felix.webconsole',\
 	bnd.identity;id='org.apache.felix.webconsole.plugins.ds',\
 	bnd.identity;id='org.eclipse.daanse.db.datasource.sqlite',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.sqlite'
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.sqlite',\
+	bnd.identity;id='org.eclipse.daanse.db.statistics.metadata',\
+	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record',\
+	bnd.identity;id='org.apache.felix.metatype',\
+	bnd.identity;id='org.eclipse.daanse.emondrian',\
+	bnd.identity;id='org.osgi.util.converter'
 
 
 
@@ -37,6 +42,7 @@
 
 -runbundles: \
 	com.fasterxml.woodstox.woodstox-core;version='[6.2.6,6.2.7)',\
+	com.github.ben-manes.caffeine;version='[3.1.2,3.1.3)',\
 	com.sun.xml.bind.jaxb-core;version='[3.0.2,3.0.3)',\
 	com.sun.xml.bind.jaxb-impl;version='[3.0.2,3.0.3)',\
 	com.sun.xml.fastinfoset.FastInfoset;version='[2.0.0,2.0.1)',\
@@ -49,22 +55,48 @@
 	jakarta.xml.bind-api;version='[3.0.1,3.0.2)',\
 	jakarta.xml.soap-api;version='[2.0.1,2.0.2)',\
 	jakarta.xml.ws-api;version='[3.0.1,3.0.2)',\
+	net.hydromatic.eigenbase-xom;version='[1.3.7,1.3.8)',\
 	org.apache.aries.spifly.dynamic.bundle;version='[1.3.6,1.3.7)',\
+	org.apache.commons.collections;version='[3.2.2,3.2.3)',\
 	org.apache.commons.commons-fileupload;version='[1.5.0,1.5.1)',\
 	org.apache.commons.io;version='[2.6.0,2.6.1)',\
+	org.apache.commons.lang3;version='[3.12.0,3.12.1)',\
+	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
+	org.apache.commons.math3;version='[3.6.1,3.6.2)',\
+	org.apache.commons.vfs2;version='[2.9.0,2.9.1)',\
 	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
 	org.apache.felix.http.jetty;version='[5.1.2,5.1.3)',\
 	org.apache.felix.http.servlet-api;version='[2.1.0,2.1.1)',\
 	org.apache.felix.inventory;version='[2.0.0,2.0.1)',\
+	org.apache.felix.metatype;version='[1.2.4,1.2.5)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
 	org.apache.felix.webconsole;version='[4.9.6,4.9.7)',\
 	org.apache.felix.webconsole.plugins.ds;version='[2.3.0,2.3.1)',\
+	org.apache.geronimo.specs.geronimo-stax-api_1.2_spec;version='[1.2.0,1.2.1)',\
+	org.apache.logging.log4j.api;version='[2.17.2,2.17.3)',\
+	org.apache.servicemix.bundles.dom4j;version='[2.1.3,2.1.4)',\
+	org.apache.servicemix.bundles.xerces;version='[2.12.2,2.12.3)',\
+	org.apache.servicemix.bundles.xmlresolver;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.db.datasource.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.datasource.sqlite;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.sqlite;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.statistics.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.statistics.metadata;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.demo.server.play;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.repackage.eigenbase.properties;version='[1.1.6,1.1.7)',\
+	org.eclipse.daanse.repackage.eigenbase.resgen;version='[1.3.7,1.3.8)',\
+	org.eclipse.daanse.repackage.olap4j;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.repackage.olap4j.xmla;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.repackage.rhino.engine;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.handler;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.httpwhiteboard;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.registrar;version='[0.0.1,0.0.2)',\
@@ -86,6 +118,7 @@
 	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
 	org.osgi.service.http.whiteboard;version='[1.1.0,1.1.1)',\
+	org.osgi.util.converter;version='[1.0.9,1.0.10)',\
 	org.osgi.util.function;version='[1.2.0,1.2.1)',\
 	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
 	org.owasp.encoder;version='[1.2.3,1.2.4)',\

@@ -83,7 +83,7 @@
 		<slf4j.version>2.0.4</slf4j.version>
 		<asm.version>9.4</asm.version>
 		<spifly.version>1.3.6</spifly.version>
-		<bnd.version>6.4.0</bnd.version>
+		<bnd.version>7.0.0</bnd.version>
 		<junit-jupiter.version>5.9.2</junit-jupiter.version>
 		<junit-platform.version>1.9.2</junit-platform.version>
 		<assertj.version>3.24.2</assertj.version>

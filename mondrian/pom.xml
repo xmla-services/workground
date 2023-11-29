@@ -519,62 +519,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>xml-maven-plugin</artifactId>
-				<version>1.0.1</version>
-				<executions>
-					<execution>
-						<phase>site</phase>
-						<goals>
-							<goal>transform</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<transformationSets>
-						<transformationSet>
-							<dir>${project.build.sourceDirectory}/mondrian/olap</dir>
-							<includes>Mondrian.xml</includes>
-							<stylesheet>src/site/xsl/Meta.xsl</stylesheet>
-							<outputDir>${project.build.directory}/site/doc</outputDir>
-							<fileMappers>
-								<fileMapper
-									implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-									<pattern>Mondrian.xml</pattern>
-									<replacement>xml_schema.html</replacement>
-								</fileMapper>
-							</fileMappers>
-						</transformationSet>
-					</transformationSets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M6</version>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-				</executions>
-
-				<configuration>
-					<includes>
-						<include>Main.java</include>
-					</includes>
-					<systemPropertyVariables>
-						<mondrian.foodmart.jdbcURL>${mondrian.foodmart.jdbcURL}</mondrian.foodmart.jdbcURL>
-						<mondrian.foodmart.jdbcUser>
-							${mondrian.foodmart.jdbcUser}</mondrian.foodmart.jdbcUser>
-						<mondrian.foodmart.jdbcPassword>
-							${mondrian.foodmart.jdbcPassword}</mondrian.foodmart.jdbcPassword>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
+		
+		
 			<plugin>
 				<groupId>biz.aQute.bnd</groupId>
 				<artifactId>bnd-maven-plugin</artifactId>

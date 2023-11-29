@@ -23,8 +23,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample" +
-    ".name=SteelWheels",
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=SteelWheels",
     "sample.type=record"})
 public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 

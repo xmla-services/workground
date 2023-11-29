@@ -26,8 +26,10 @@ public class DemoSetup {
 
 	public static final String PID_CONTEXT = "org.eclipse.daanse.olap.core.BasicContext";
 	
-	public static final String PID_DS = "org.eclipse.daanse.db.datasource.sqlite.ConnectionPoolDataSourceService";
+	public static final String PID_DS = "org.eclipse.daanse.db.datasource.sqlite.SqliteConnectionPoolDataSource";
+	public static final String PID_SATATISTICS = "org.eclipse.daanse.db.statistics.metadata.JdbcStatisticsProvider";
 
+	public static final String PID_EXP_COMP_FAC="org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
     @Reference
     ConfigurationAdmin configurationAdmin;
     private Configuration cXmlaEndpoint;
@@ -58,20 +60,19 @@ public class DemoSetup {
 		cDs = configurationAdmin.getFactoryConfiguration(PID_DS, "1", "?");
 
 		Dictionary<String, Object> propsDS = new Hashtable<>();
+		propsDS.put("ds", "1");
 		propsDS.put("url", "myNewDB.sqlite");
 		cDs.update(propsDS);
 
 		
-		
-		
-		
+	
 		
         Dictionary<String, Object> props = new Hashtable<>();
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
-        props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(df=2)");
-        props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(sp=3)");
-        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(ecf=1)");
-        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
+        props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(database.dialect.type=SQLITE)");
+        props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(service.pid="+PID_SATATISTICS+"~1)");
+        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(service.pid="+PID_EXP_COMP_FAC+"~1)");
+        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(&(sample.name=SteelWheels)(sample.type=record))");
         //        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 
         String theName = "theName";

@@ -15,6 +15,7 @@ package org.eclipse.daanse.db.datasource.sqlite;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -24,39 +25,44 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 import org.sqlite.SQLiteDataSource;
 
 @Designate(ocd = SqliteConfig.class, factory = true)
 @Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
-public class DataSourceService extends AbstractDelegateDataSource<SQLiteDataSource> {
+public class SqliteDataSource extends AbstractDelegateDataSource<SQLiteDataSource> {
+	private static final Converter CONVERTER = Converters.standardConverter();
 
-    private SqliteConfig config;
-    private SQLiteDataSource ds;
+	public static final String PID = "org.eclipse.daanse.db.datasource.sqlite.SqliteDataSource";
 
-    @Activate
-    public DataSourceService(SqliteConfig config) throws SQLException {
+	private SqliteConfig config;
+	private SQLiteDataSource ds;
 
-        this.ds = new SQLiteDataSource(Util.transformConfig(config));
-        ds.setUrl(config.url());
-        this.config = config;
-    }
-    // no @Modified to force consumed Services get new configured connections.
+	@Activate
+	public SqliteDataSource(Map<String, Object> properties) throws SQLException {
+		config = CONVERTER.convert(properties).to(SqliteConfig.class);
 
-    @Deactivate
-    public void deactivate() {
+		this.ds = new SQLiteDataSource(Util.transformConfig(config));
+		ds.setUrl(config.url());
+	}
+	// no @Modified to force consumed Services get new configured connections.
 
-        config = null;
-    }
+	@Deactivate
+	public void deactivate() {
 
-    @Override
-    public Connection getConnection() throws SQLException {
+		config = null;
+	}
 
-        return super.getConnection(config.username(), config._password());
-    }
+	@Override
+	public Connection getConnection() throws SQLException {
 
-    @Override
-    protected SQLiteDataSource delegate() {
-        return ds;
-    }
+		return super.getConnection(config.username(), config._password());
+	}
+
+	@Override
+	protected SQLiteDataSource delegate() {
+		return ds;
+	}
 
 }
