@@ -5,6 +5,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.eclipse.daanse.olap.core.BasicContext;
+import org.eclipse.daanse.olap.core.BasicContextGroup;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -30,7 +31,10 @@ public class DemoSetup {
 	public static final String PID_SATATISTICS = "org.eclipse.daanse.db.statistics.metadata.JdbcStatisticsProvider";
 
 	public static final String PID_EXP_COMP_FAC="org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
-    @Reference
+   
+	
+	public static final String PID_CONTEXT_GROUP = "org.eclipse.daanse.olap.core.BasicContextGroup";
+	@Reference
     ConfigurationAdmin configurationAdmin;
     private Configuration cXmlaEndpoint;
     private Configuration cLoggingHandler;
@@ -39,6 +43,8 @@ public class DemoSetup {
     private Configuration cContext;
 
 	private Configuration cDs;
+
+	private Configuration cCG;
 
 
     @Activate
@@ -64,14 +70,19 @@ public class DemoSetup {
 		propsDS.put("url", "myNewDB.sqlite");
 		cDs.update(propsDS);
 
+		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
+
+		Dictionary<String, Object> propsCG = new Hashtable<>();
+		propsCG.put("cg", "1");
+		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS, "(service.pid=*)");
 		
-	
+		cCG.update(propsDS);
 		
         Dictionary<String, Object> props = new Hashtable<>();
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
         props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(database.dialect.type=SQLITE)");
-        props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(service.pid="+PID_SATATISTICS+"~1)");
-        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(service.pid="+PID_EXP_COMP_FAC+"~1)");
+        props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(component.name="+PID_SATATISTICS+")");
+        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(component.name="+PID_EXP_COMP_FAC+")");
         props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(&(sample.name=SteelWheels)(sample.type=record))");
         //        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 

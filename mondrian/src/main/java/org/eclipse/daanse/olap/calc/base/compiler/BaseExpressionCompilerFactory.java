@@ -23,13 +23,13 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.component.annotations.Component;
-import aQute.bnd.component.annotations.ServiceScope;
 import mondrian.calc.impl.BetterExpCompiler;
 import mondrian.util.CreationException;
 
-@Component(scope = ServiceScope.SINGLETON, service = ExpressionCompilerFactory.class, configurationPid =  BaseExpressionCompilerFactory.PID)
+@Component(scope = ServiceScope.SINGLETON, service = ExpressionCompilerFactory.class)
 public class BaseExpressionCompilerFactory implements ExpressionCompilerFactory {
 
 	public BaseExpressionCompilerFactory() {
