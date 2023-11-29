@@ -9,5 +9,5 @@ public interface CellSetAxisMetaData {
 
     List<Hierarchy> getHierarchies();
 
-    //List<Property> getProperties();
+    List<Property> getProperties();
 }
