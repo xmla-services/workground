@@ -14,6 +14,8 @@
 package org.eclipse.daanse.ws.handler;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -105,6 +107,9 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
         SOAPMessage message = smc.getMessage();
         try {
+        	 Map<String, List<String>> headers = (Map<String, List<String>>) smc
+                     .get(MessageContext.HTTP_REQUEST_HEADERS);
+        	 System.out.println(headers);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             message.writeTo(baos);
             System.out.println(new String(baos.toByteArray()));

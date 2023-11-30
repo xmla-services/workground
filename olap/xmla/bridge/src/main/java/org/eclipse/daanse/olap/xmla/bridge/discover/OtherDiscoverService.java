@@ -213,7 +213,7 @@ public class OtherDiscoverService {
     }
 
     public List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request) {
-        Optional<String> propertyName = request.restrictions().propertyName();
+        Optional<String> propertyName = request.restrictions()==null? Optional.empty():request.restrictions().propertyName();
         Optional<String> properetyCatalog = request.properties().catalog();
         List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
         for (PropertyDefinition propertyDefinition

@@ -62,12 +62,13 @@ import jakarta.xml.ws.WebServiceContext;
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.ObjectFactory.class,
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine100_100.ObjectFactory.class,
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200_200.ObjectFactory.class })
-@Component(service = MsXmlAnalysisSoap.class, name = "org.eclipse.daanse.msxmlanalysisservice")
+@Component(service = MsXmlAnalysisSoap.class, name = MsXmlAnalysisSoap.PID)
 @RequireSoapWhiteboard
 @Designate(factory = true, ocd = MsXmlAnalysisSoap.Config.class)
 @SOAPWhiteboardEndpoint(contextpath = "/xmla")
 public class MsXmlAnalysisSoap {
 
+	public static final String PID="org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
     @ObjectClassDefinition()
     @interface Config {
 
