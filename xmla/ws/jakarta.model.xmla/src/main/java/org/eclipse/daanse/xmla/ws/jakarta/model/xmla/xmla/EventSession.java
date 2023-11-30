@@ -31,16 +31,16 @@ import jakarta.xml.bind.annotation.XmlType;
 public class EventSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @XmlElement(name = "templateCategory")
+    @XmlAttribute(name = "templateCategory")
     protected String templateCategory;
-    @XmlElement(name = "templateName")
+    @XmlAttribute(name = "templateName")
     protected String templateName;
-    @XmlElement(name = "templateDescription")
+    @XmlAttribute(name = "templateDescription")
     protected String templateDescription;
     @XmlElement(name = "event")
-    protected List<java.lang.Object> event;
+    protected List<Event2> event;
     @XmlElement(name = "target")
-    protected List<java.lang.Object> target;
+    protected List<Event2> target;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "maxMemory")
@@ -83,11 +83,11 @@ public class EventSession implements Serializable {
         this.templateDescription = value;
     }
 
-    public List<java.lang.Object> getEvent() {
+    public List<Event2> getEvent() {
         return this.event;
     }
 
-    public List<java.lang.Object> getTarget() {
+    public List<Event2> getTarget() {
         return this.target;
     }
 
@@ -167,11 +167,11 @@ public class EventSession implements Serializable {
         this.trackCausality = value;
     }
 
-    public void setEvent(List<java.lang.Object> event) {
+    public void setEvent(List<Event2> event) {
         this.event = event;
     }
 
-    public void setTarget(List<java.lang.Object> target) {
+    public void setTarget(List<Event2> target) {
         this.target = target;
     }
 
