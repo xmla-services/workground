@@ -20,6 +20,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
@@ -36,10 +37,10 @@ public class EventSession implements Serializable {
     protected String templateName;
     @XmlAttribute(name = "templateDescription")
     protected String templateDescription;
-    @XmlAttribute(name = "event")
-    protected List<java.lang.Object> event;
-    @XmlAttribute(name = "target")
-    protected List<java.lang.Object> target;
+    @XmlElement(name = "event")
+    protected List<Event2> event;
+    @XmlElement(name = "target")
+    protected List<Event2> target;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "maxMemory")
@@ -82,11 +83,11 @@ public class EventSession implements Serializable {
         this.templateDescription = value;
     }
 
-    public List<java.lang.Object> getEvent() {
+    public List<Event2> getEvent() {
         return this.event;
     }
 
-    public List<java.lang.Object> getTarget() {
+    public List<Event2> getTarget() {
         return this.target;
     }
 
@@ -166,11 +167,11 @@ public class EventSession implements Serializable {
         this.trackCausality = value;
     }
 
-    public void setEvent(List<java.lang.Object> event) {
+    public void setEvent(List<Event2> event) {
         this.event = event;
     }
 
-    public void setTarget(List<java.lang.Object> target) {
+    public void setTarget(List<Event2> target) {
         this.target = target;
     }
 

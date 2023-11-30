@@ -26,7 +26,7 @@ public interface EventSession {
 
     List<Object> event();
 
-    List<java.lang.Object> target();
+    List<Object> target();
 
     String name();
 
