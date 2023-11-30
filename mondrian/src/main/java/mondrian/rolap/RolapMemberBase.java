@@ -651,6 +651,7 @@ public class RolapMemberBase
                 || Util.isBlank(name);
         }
 
+        //TODO:: IfParentsProperty and additional attribute that is by default the name, or a property that is switch
         case IfParentsName:
         {
             final Member parentMember = getParentMember();

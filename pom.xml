@@ -80,7 +80,7 @@
 			${maven.multiModuleProjectDirectory}/aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
 		<sonar.junit.reportPaths>${project.basedir}/target/test-reports/test/</sonar.junit.reportPaths>
-		<slf4j.version>2.0.4</slf4j.version>
+		<slf4j.version>2.0.9</slf4j.version>
 		<asm.version>9.4</asm.version>
 		<spifly.version>1.3.6</spifly.version>
 		<bnd.version>7.0.0</bnd.version>
@@ -399,7 +399,7 @@
 			<dependency>
 				<groupId>biz.aQute</groupId>
 				<artifactId>biz.aQute.gogo.commands.provider</artifactId>
-				<version>1.8.0</version>
+				<version>1.10.0</version>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>

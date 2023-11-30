@@ -106,7 +106,7 @@ public class DemoSetup {
 		cXmlaEndpoint = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP , "1", "?");
 
         Dictionary<String, Object> dict = new Hashtable<>();
-        dict.put("xmlaService.target", "(service.vendor=demo)");
+        dict.put("xmlaService.target", "(service.pid=*)");
         dict.put( "osgi.soap.endpoint.contextpath","/xmla");
 
         cXmlaEndpoint.update(dict);
