@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.r
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
@@ -33,13 +33,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=ExpressiveNames",
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=ExpressiveNames",
     "sample.type=record"})
-public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
+public class ExpressiveNamesRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 	private static final String SCHEMA_NAME = "ExpressiveNames";
 
 	private static final String CUBE_1_NAME = "Cube1";
@@ -70,7 +70,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
     private static final TableR TABLE6 = new TableR("D3H3L3Table");
     private static final TableR TABLE7 = new TableR("D3H3L2Table");
     private static final TableR TABLE8 = new TableR("D3H3L1Table");
-    private static final Join JOIN1 = new JoinR(List.of(TABLE7, TABLE8),
+    private static final MappingJoin JOIN1 = new JoinR(List.of(TABLE7, TABLE8),
         null,
         "D3H3L1_id",
         null,
@@ -276,21 +276,21 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .hierarchies(List.of(HIERARCHY31, HIERARCHY32, HIERARCHY33))
         .build();
 
-    private static final DimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
         .builder()
         .name(DIMENSION_1)
         .source(DIMENSION_1)
         .foreignKey("D1")
         .build();
 
-    private static final DimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
         .builder()
         .name(DIMENSION_2)
         .source(DIMENSION_2)
         .foreignKey("D2")
         .build();
 
-    private static final DimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
         .builder()
         .name(DIMENSION_3)
         .source(DIMENSION_3)
@@ -305,7 +305,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .formatString("Standard")
         .build();
 
-    private static final Cube CUBE = CubeRBuilder
+    private static final MappingCube CUBE = CubeRBuilder
         .builder()
         .name(CUBE_1_NAME)
         .description("Test Cube")
@@ -317,7 +317,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .measures(List.of(MEASURE_1_1))
         .build();
 
-    private static final Schema
+    private static final MappingSchema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
         .dimensions(List.of(
@@ -329,7 +329,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .build();
 
     @Override
-    public Schema get() {
+    public MappingSchema get() {
         return SCHEMA;
     }
 

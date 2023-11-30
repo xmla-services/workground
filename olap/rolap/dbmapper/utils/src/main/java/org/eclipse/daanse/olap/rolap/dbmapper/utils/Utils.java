@@ -4,18 +4,19 @@ import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class Utils {
         // constructor
     }
 
-    public static DBStructure getDBStructure(Schema schema) {
+    public static DBStructure getDBStructure(MappingSchema schema) {
 
         String schemaName = schema.name();
         Map<String, Table> tables = new HashMap<>();
@@ -46,7 +47,7 @@ public class Utils {
         return new DBStructure(schemaName, tList);
     }
 
-    private static void processingCube(Cube cube, Map<String, Table> tables, String schemaName) {
+    private static void processingCube(MappingCube cube, Map<String, Table> tables, String schemaName) {
         if (cube != null) {
             String tableName = null;
             if (cube.fact() != null) {
@@ -63,7 +64,7 @@ public class Utils {
         }
     }
 
-    private static void processingMeasure(Measure m, Map<String, Table> tables, String tableName, String schemaName) {
+    private static void processingMeasure(MappingMeasure m, Map<String, Table> tables, String tableName, String schemaName) {
 
         if (m.column() != null) {
             String columnName = m.column();
@@ -75,8 +76,8 @@ public class Utils {
         }
     }
 
-    private static void processingDimension(CubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
-        if (d instanceof PrivateDimension privateDimension && privateDimension.hierarchies() != null) {
+    private static void processingDimension(MappingCubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
+        if (d instanceof MappingPrivateDimension privateDimension && privateDimension.hierarchies() != null) {
             privateDimension.hierarchies().forEach(h -> processingHierarchy(h, tables, schemaName));
         }
         if (tableName != null) {
@@ -89,7 +90,7 @@ public class Utils {
         }
     }
 
-    private static void processingHierarchy(Hierarchy h, Map<String, Table> tables, String schemaName) {
+    private static void processingHierarchy(MappingHierarchy h, Map<String, Table> tables, String schemaName) {
         if (h.relation() != null) {
             String tName = processingRelation(h.relation(), tables, schemaName);
             if (h.levels() != null) {
@@ -104,20 +105,20 @@ public class Utils {
         }
     }
 
-    private static String processingRelation(RelationOrJoin relation, Map<String, Table> tables, String schemaName) {
-        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table) {
+    private static String processingRelation(MappingRelationOrJoin relation, Map<String, Table> tables, String schemaName) {
+        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table) {
             return processingTable(table, tables, schemaName);
         }
-        if (relation instanceof Join join) {
+        if (relation instanceof MappingJoin join) {
             return processingJoin(join, tables, schemaName);
         }
-        if (relation instanceof InlineTable inlineTable) {
+        if (relation instanceof MappingInlineTable inlineTable) {
             return processingInlineTable(inlineTable, tables, schemaName);
         }
         return null;
     }
 
-    private static String processingInlineTable(InlineTable table, Map<String, Table> tables, String schemaName) {
+    private static String processingInlineTable(MappingInlineTable table, Map<String, Table> tables, String schemaName) {
         if (table.alias() != null) {
             Table t = getTableOrCreateNew(tables, table.alias(), schemaName);
             if (table.columnDefs() != null) {
@@ -128,14 +129,14 @@ public class Utils {
         return null;
     }
 
-    private static void processingColumnDef(ColumnDef c, Map<String, Column> columns) {
+    private static void processingColumnDef(MappingColumnDef c, Map<String, Column> columns) {
         if (!columns.containsKey(c.name())) {
             columns.put(c.name(), new Column(c.name(), Type.fromName(c.type() != null ? c.type().name() : null)));
         }
     }
 
     private static String processingTable(
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table,
         Map<String, Table> tables,
         String schemaName
     ) {
@@ -146,7 +147,7 @@ public class Utils {
         return null;
     }
 
-    private static String processingJoin(Join relation, Map<String, Table> tables, String schemaName) {
+    private static String processingJoin(MappingJoin relation, Map<String, Table> tables, String schemaName) {
         String name = null;
         if (relation.relations() != null) {
             for (int i = 0; i < relation.relations().size(); i++) {
@@ -165,7 +166,7 @@ public class Utils {
         return name;
     }
 
-    private static void processingLevel(Level level, Map<String, Table> tables, String tableName, String schema) {
+    private static void processingLevel(MappingLevel level, Map<String, Table> tables, String tableName, String schema) {
         String tName = level.table() != null ? level.table() : tableName;
         if (tName != null) {
             Table t = getTableOrCreateNew(tables, tName, schema);
@@ -192,7 +193,7 @@ public class Utils {
 
     }
 
-    private static void processingProperty(Property property, Map<String, Table> tables, String tableName, String schema) {
+    private static void processingProperty(MappingProperty property, Map<String, Table> tables, String tableName, String schema) {
         if (property.column() != null) {
             String columnName = property.column();
             if (tableName != null) {

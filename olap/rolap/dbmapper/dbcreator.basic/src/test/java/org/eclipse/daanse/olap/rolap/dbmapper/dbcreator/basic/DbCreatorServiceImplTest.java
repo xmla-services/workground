@@ -525,7 +525,7 @@ class DbCreatorServiceImplTest {
     @SuppressWarnings("java:S5961")
     void testCreatorForExpressiveNamesSchema(
         @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
-        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=ExpressiveNames))") DbMappingSchemaProvider provider
+        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=ExpressiveNames))") DatabaseMappingSchemaProvider provider
     ) throws SQLException {
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
@@ -760,7 +760,7 @@ class DbCreatorServiceImplTest {
     @Test
     @SuppressWarnings("java:S5961")
     void testCreatorForMinimalSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
-                                             @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Minimal))") DbMappingSchemaProvider provider) throws SQLException {
+                                             @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Minimal))") DatabaseMappingSchemaProvider provider) throws SQLException {
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
 

@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.minimal.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
@@ -31,13 +31,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=Minimal",
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=Minimal",
     "sample.type=record"})
-public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
+public class MinimalRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 	private static final String SCHEMA_NAME = "Minimal";
 	private static final String CUBE_NAME = "OnlyCube";
 	private static final TableR CUBE_TABLE_FACT = new TableR("Cube1Fact");
@@ -77,7 +77,7 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
         .hierarchies(List.of(HIERARCHY))
         .build();
 
-    private static final DimensionUsage DIMENSION_USAGE = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE = DimensionUsageRBuilder
         .builder()
         .name(ONLY_DIMENSION)
         .source(ONLY_DIMENSION)
@@ -102,7 +102,7 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
         .build();
 
 
-    private static final Cube CUBE = CubeRBuilder
+    private static final MappingCube CUBE = CubeRBuilder
         .builder()
         .name(CUBE_NAME)
         .fact(CUBE_TABLE_FACT)
@@ -111,7 +111,7 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
         .measures(List.of(MEASURE1, MEASURE2))
         .build();
 
-    private static final Schema
+    private static final MappingSchema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
         .dimensions(List.of(DIMENSION_SCHEMA))
@@ -119,7 +119,7 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
         .build();
 
     @Override
-    public Schema get() {
+    public MappingSchema get() {
         return SCHEMA;
     }
 

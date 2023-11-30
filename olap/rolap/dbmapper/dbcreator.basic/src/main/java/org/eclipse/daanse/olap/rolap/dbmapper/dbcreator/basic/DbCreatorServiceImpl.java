@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic;
 import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorService;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
 
 import javax.sql.DataSource;
@@ -33,7 +33,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     @Override
-    public DBStructure createSchema(Schema schema) throws SQLException {
+    public DBStructure createSchema(MappingSchema schema) throws SQLException {
         DBStructure dbStructure = Utils.getDBStructure(schema);
         databaseCreatorService.createDatabaseSchema(dataSource, dbStructure);
         return dbStructure;

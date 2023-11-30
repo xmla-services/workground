@@ -14,13 +14,14 @@
 package org.opencube.junit5.dataloader;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
 import org.opencube.junit5.Constants;
 
+import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 public class ExpressiveNamesDataLoader implements DataLoader {
     public static List<DataLoaderUtil.Table> expressiveNamesTables = List.of(
@@ -126,10 +127,10 @@ public class ExpressiveNamesDataLoader implements DataLoader {
     );
 
     @Override
-    public boolean loadData(Context context) throws Exception {
-        try (Connection connection = context.getDataSource().getConnection()) {
+    public boolean loadData(Map.Entry<DataSource, Dialect> dataBaseInfo) throws Exception {
+        try (Connection connection = dataBaseInfo.getKey().getConnection()) {
 
-            Dialect dialect = context.getDialect();
+            Dialect dialect = dataBaseInfo.getValue();
 
             List<String> dropTableSQLs = dropTableSQLs(dialect);
             DataLoaderUtil.executeSql(connection, dropTableSQLs,true);
@@ -142,7 +143,7 @@ public class ExpressiveNamesDataLoader implements DataLoader {
 
             Path dir= Paths.get(Constants.TESTFILES_DIR+"loader/expressivenames/data");
 
-            DataLoaderUtil.importCSV(context.getDataSource(), dialect, expressiveNamesTables, dir);
+            DataLoaderUtil.importCSV(dataBaseInfo.getKey(), dialect, expressiveNamesTables, dir);
 
 
         }
