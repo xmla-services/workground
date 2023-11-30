@@ -88,6 +88,7 @@ import org.eclipse.daanse.xmla.api.msxmla.MemberRef;
 import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuplesType;
+import org.eclipse.daanse.xmla.api.xmla.Restriction;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -443,9 +444,24 @@ public class SoapUtil {
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "SchemaName", prefix, r.schemaName());
         r.schemaGuid().ifPresent(v -> addChildElement(row, "SchemaGuid", prefix, v));
-        r.restrictions().ifPresent(v -> addChildElement(row, "Restrictions", prefix, v));
+        r.restrictions().ifPresent(v -> addRestrictionList(row, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION, prefix, v));
         r.restrictionsMask().ifPresent(v -> addChildElement(row, "RestrictionsMask", prefix, String.valueOf(v)));
+    }
+
+    private static void addRestrictionList(SOAPElement el, List<Restriction> list) {
+        String prefix = ROWSET;
+        SOAPElement e = addChildElement(el, "Restrictions", ROWSET);
+        if (list != null) {
+            list.forEach(it -> addRestriction(e, it));
+        }
+    }
+
+    private static void addRestriction(SOAPElement e, Restriction it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, it.name(), null);
+            el.setTextContent(it.type());
+        }
     }
 
     private static void addDbSchemaCatalogsResponseRow(SOAPElement root, DbSchemaCatalogsResponseRow r) {
@@ -932,7 +948,7 @@ public class SoapUtil {
         addChildElement(row, "PropertyName", prefix, r.propertyName());
         r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyDescription", prefix, v));
         r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyType", prefix, v));
-        addChildElement(row, "PropertyAccessType", prefix, r.propertyAccessType());
+        addChildElement(row, "PropertyAccessType", prefix, r.propertyAccessType().getValue());
         r.required().ifPresent(v -> addChildElement(row, "IsRequired", prefix, String.valueOf(v)));
         r.value().ifPresent(v -> addChildElement(row, "Value", prefix, v));
     }

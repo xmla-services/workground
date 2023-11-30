@@ -15,7 +15,7 @@ package mondrian.test;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.ExpressiveNamesDataLoader;
 import org.opencube.junit5.propupdator.AppandExpressiveNamesCatalogAsFile;
 
@@ -31,8 +31,8 @@ class DemoTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandExpressiveNamesCatalogAsFile.class, dataloader = ExpressiveNamesDataLoader.class )
-    void testSample0(TestingContext context) {
-        assertQueryReturns(context.createConnection(), sampleQueries[0].query, sampleQueries[0].result );
+    void testSample0(TestContext context) {
+        assertQueryReturns(context.getConnection(), sampleQueries[0].query, sampleQueries[0].result );
     }
 
 }

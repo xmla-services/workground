@@ -19,7 +19,7 @@ import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.db.jdbc.util.impl.Table;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.api.TemplateCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
 import org.osgi.service.component.annotations.Activate;
@@ -61,7 +61,7 @@ public class OdsTemplateCreatorServiceImpl implements TemplateCreatorService {
     }
 
     @Override
-    public void createTemplate(Schema schema) {
+    public void createTemplate(MappingSchema schema) {
         LOGGER.debug("createTemplate started");
         DBStructure dbStructure =  Utils.getDBStructure(schema);
 

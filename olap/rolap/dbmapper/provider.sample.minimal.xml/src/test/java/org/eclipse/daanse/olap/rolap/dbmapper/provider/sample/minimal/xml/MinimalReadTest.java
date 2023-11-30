@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.minimal.xml;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
@@ -30,10 +30,10 @@ class MinimalReadTest {
 
 	@Test
 	void test_ExpressiveNames(
-			@InjectService(timeout = 100000,filter = "(&(sample.type=xml)(sample.name=Minimal))") DbMappingSchemaProvider provider)
+			@InjectService(timeout = 100000,filter = "(&(sample.type=xml)(sample.name=Minimal))") DatabaseMappingSchemaProvider provider)
 			{
 
-		Schema schema = provider.get();
+		MappingSchema schema = provider.get();
 		assertThat(schema).isNotNull();
 		assertEquals("Minimal", schema.name());
 		assertNotNull(schema.dimensions());

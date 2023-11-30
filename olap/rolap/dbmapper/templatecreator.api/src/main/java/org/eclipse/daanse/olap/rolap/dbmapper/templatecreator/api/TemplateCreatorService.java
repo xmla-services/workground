@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.api;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 public interface TemplateCreatorService {
 
-    void createTemplate(Schema schema);
+    void createTemplate(MappingSchema schema);
 }

@@ -1222,7 +1222,7 @@ class MDSchemaDiscoverServiceTest {
         String memberName,
         String memberUniqueName,
         MemberTypeEnum memberType,
-        String measureCaption,
+        String memberCaption,
         int childrenCardinality,
         int parentLevel,
         Optional<String> oParentUniqueName,
@@ -1241,7 +1241,7 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.memberName()).contains(memberName);
         assertThat(row.memberUniqueName()).contains(memberUniqueName);
         assertThat(row.memberType()).contains(memberType);
-        assertThat(row.measureCaption()).contains(measureCaption);
+        assertThat(row.memberCaption()).contains(memberCaption);
         assertThat(row.childrenCardinality()).contains(childrenCardinality);
         assertThat(row.parentLevel()).contains(parentLevel);
         assertThat(row.parentUniqueName()).isEqualTo(oParentUniqueName);

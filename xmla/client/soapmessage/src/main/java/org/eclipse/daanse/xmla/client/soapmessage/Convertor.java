@@ -17,7 +17,6 @@ import jakarta.xml.soap.SOAPBody;
 import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.CellTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;

@@ -114,7 +114,7 @@ INJECT CompoundId :
         };
     }
 
-    public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
+    public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
         if (Type.PROPERTY.equals(type()) && isChildrenHaveQuoted()) {
             CompoundId compoundId = new CompoundId();
             List<ObjectIdentifier> list = childrenOfType(ObjectIdentifier.class);
@@ -386,7 +386,7 @@ INJECT FunctionCall :
     }
 
     public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
-        List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
+        List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.MdxExpression.class);
         if (Type.METHOD.equals(type())) {
             List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> res = new ArrayList<>();
             for (org.eclipse.daanse.mdx.model.api.expression.MdxExpression ex : result) {
@@ -528,7 +528,7 @@ INJECT CaseExpression :
    implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
    public String name() {
-      return (getChild(1) instanceof org.eclipse.daanse.mdx.model.api.expression.Expression) ? "_CaseMatch" : "_CaseTest";
+      return (getChild(1) instanceof org.eclipse.daanse.mdx.model.api.expression.MdxExpression) ? "_CaseMatch" : "_CaseTest";
    }
 
    public Type type() {

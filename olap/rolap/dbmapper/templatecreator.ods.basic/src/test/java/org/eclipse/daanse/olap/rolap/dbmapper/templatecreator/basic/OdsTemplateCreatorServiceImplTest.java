@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.basic;
 
 import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.api.TemplateCreatorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +50,7 @@ class OdsTemplateCreatorServiceImplTest {
     @Test
     @SuppressWarnings("java:S5961")
     void testTemplateForPopulationSchema(
-        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider,
+        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=Population))") DatabaseMappingSchemaProvider provider,
         @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<TemplateCreatorService> odsTemplateCreatorServiceAware
         ) throws InterruptedException, IOException {
         setupOdsDataLoadServiceImpl(path, "test", ".ods", "UTF-8");
