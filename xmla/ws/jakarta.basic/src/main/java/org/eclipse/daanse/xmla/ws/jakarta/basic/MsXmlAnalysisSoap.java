@@ -71,9 +71,6 @@ public class MsXmlAnalysisSoap {
     @ObjectClassDefinition()
     @interface Config {
 
-        @AttributeDefinition(name = "XMLA-Service Filter", required = true)
-        String xmlaServiceTarget() default "(&(must.be.configured=*)(!(must.not.configured=*)))";
-
         @AttributeDefinition(required = true)
         String osgiSoapEndpointContextPath();
     }

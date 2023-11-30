@@ -66,6 +66,7 @@ public class HttpWhiteboardPublisher {
 			logger.debug(">>> HttpWhiteboardPublisher register service");
 			httpContext.register(bundleContext);
 		} catch (RuntimeException e) {
+			e.printStackTrace();
 			logger.error("HttpWhiteboardPublisher publishEndpoint error", e);
 		}
 	}
