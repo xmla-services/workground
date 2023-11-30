@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.olap.api;
 
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 
 public interface Statement  {
@@ -29,4 +30,6 @@ public interface Statement  {
      *
      */
     Result executeSelct(String mdx) throws Exception;
-    }
+
+    CellSet executeQuery(String statement);
+}
