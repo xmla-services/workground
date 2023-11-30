@@ -813,7 +813,7 @@ public class Responses {
                 <MEMBER_UNIQUE_NAME>MemberUniqueName</MEMBER_UNIQUE_NAME>
                 <MEMBER_TYPE>1</MEMBER_TYPE>
                 <MEMBER_GUID>12</MEMBER_GUID>
-                <MEMBER_CAPTION>MeasureCaption</MEMBER_CAPTION>
+                <MEMBER_CAPTION>MemberCaption</MEMBER_CAPTION>
                 <CHILDREN_CARDINALITY>14</CHILDREN_CARDINALITY>
                 <PARENT_LEVEL>15</PARENT_LEVEL>
                 <PARENT_UNIQUE_NAME>ParentUniqueName</PARENT_UNIQUE_NAME>

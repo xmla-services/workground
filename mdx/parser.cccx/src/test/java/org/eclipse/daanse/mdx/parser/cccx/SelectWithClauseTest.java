@@ -106,9 +106,11 @@ class SelectWithClauseTest {
 
 		@Test
 		void testMeasureBodyClause() throws MdxParserException {
-			SelectWithClause selectWithClause = new MdxParserWrapper("CELL CALCULATION NOT NOT NOT NOT NOT NOT NOT")
-					.parseSelectWithClause();
-			assertThat(selectWithClause).isNull();
+            SelectWithClause selectWithClause = new MdxParserWrapper("MEASURE NOT NOT NOT NOT NOT NOT NOT")
+                .parseSelectWithClause();
+            assertThat(selectWithClause).isNotNull().isInstanceOf(MeasureBodyClause.class);
+            MeasureBodyClause measureBodyClause = (MeasureBodyClause) selectWithClause;
+            assertThat(measureBodyClause).isNotNull();
 		}
 	}
 

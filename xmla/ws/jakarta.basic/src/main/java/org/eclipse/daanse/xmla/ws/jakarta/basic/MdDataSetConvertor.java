@@ -32,6 +32,7 @@ import org.eclipse.daanse.xmla.api.mddataset.Value;
 import org.eclipse.daanse.xmla.api.msxmla.MemberRef;
 import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CellTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTupleSet;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTuplesType;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.Axes;
@@ -116,6 +117,8 @@ public class MdDataSetConvertor {
         if (value != null) {
             CellType.Value res = new CellType.Value();
             res.setError(convertCellTypeErrorList(value.error()));
+            res.setType(CellTypeEnum.fromValue(value.type() != null ? value.type().getValue() : null ));
+            res.setValue(value.value() != null ? List.of(value.value()) : null);
             return res;
         }
         return null;

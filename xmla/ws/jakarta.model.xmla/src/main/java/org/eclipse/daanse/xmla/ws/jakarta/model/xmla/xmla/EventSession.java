@@ -31,11 +31,11 @@ import jakarta.xml.bind.annotation.XmlType;
 public class EventSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @XmlAttribute(name = "templateCategory")
+    @XmlElement(name = "templateCategory")
     protected String templateCategory;
-    @XmlAttribute(name = "templateName")
+    @XmlElement(name = "templateName")
     protected String templateName;
-    @XmlAttribute(name = "templateDescription")
+    @XmlElement(name = "templateDescription")
     protected String templateDescription;
     @XmlElement(name = "event")
     protected List<Event2> event;

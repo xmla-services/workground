@@ -43,8 +43,8 @@ INJECT PARSER_CLASS :
               ++numQuoteChars;
               if (numQuoteChars % 2 == 1) buf.append(quoteChar);
             }
-            s = buf.toString();
          }
+         s = buf.toString();
       }
       return s;
 	  }
@@ -144,6 +144,7 @@ TOKEN #Keyword:
 | < CHAPTERS : "CHAPTERS" >
 | < COLUMNS : "COLUMNS" >
 | < CUBE : "CUBE" >
+| < CURRENTCUBE : "CURRENTCUBE" >
 | < DIMENSION : "DIMENSION" >
 | < DRILLTHROUGH : "DRILLTHROUGH" >
 | < ELSE : "ELSE" >
