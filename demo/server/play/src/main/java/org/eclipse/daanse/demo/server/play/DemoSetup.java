@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
 public class DemoSetup {
 	private static final String TARGET_EXT = ".target";
 
-    public static final String PID_MS_SOAP = "org.eclipse.daanse.msxmlanalysisservice";
+    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
     
     public static final String PID_XMLA_SERVICE = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
 
