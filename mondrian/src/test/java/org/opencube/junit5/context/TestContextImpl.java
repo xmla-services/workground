@@ -18,6 +18,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.DriverManager;
+import org.olap4j.Scenario;
 
 public class TestContextImpl implements TestContext {
 
@@ -89,7 +90,12 @@ public class TestContextImpl implements TestContext {
 		return DriverManager.getConnection(null, null, this);
 	}
 
-	@Override
+    @Override
+    public Scenario createScenario() {
+        return null;
+    }
+
+    @Override
 	public String getName() {
 		return name;
 	}

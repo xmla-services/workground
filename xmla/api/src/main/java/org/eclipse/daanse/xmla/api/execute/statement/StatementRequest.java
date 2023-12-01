@@ -26,4 +26,6 @@ public interface StatementRequest {
     List<ExecuteParameter> parameters();
 
     Statement command();
+
+    String sessionId();
 }

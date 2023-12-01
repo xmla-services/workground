@@ -23,6 +23,7 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
+import org.olap4j.Scenario;
 
 /**
  * The {@link Context} gives access to all resources and configurations that are needed
@@ -83,12 +84,12 @@ public interface Context {
 	Optional<String> getDescription();
 
 	ExpressionCompilerFactory getExpressionCompilerFactory();
-	
+
 	/*
 	 * Gives access to the {@link Connection}.
 	 *TODO: Currently just null implementations.- must see how to implement later. create or get an access...
 	 */
 	Connection getConnection();
 
-
+    Scenario createScenario();
 }

@@ -36,4 +36,8 @@ public interface Properties {
     Optional<Boolean> deep();
 
     Optional<Boolean> emitInvisibleMembers();
+
+    Optional<String> tableFields();
+
+    Optional<Boolean> advancedFlag();
 }

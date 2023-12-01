@@ -26,6 +26,7 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
+import org.olap4j.Scenario;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -139,4 +140,11 @@ public class BasicContext implements Context {
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
 		return null;
 	}
+
+    @Override
+    public Scenario createScenario() {
+	    //TODO
+        return null;
+    }
+
 }

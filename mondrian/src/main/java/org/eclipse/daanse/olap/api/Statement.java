@@ -13,7 +13,11 @@
 */
 package org.eclipse.daanse.olap.api;
 
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
+
+import java.sql.ResultSet;
+import java.util.Optional;
 
 public interface Statement  {
 
@@ -29,4 +33,8 @@ public interface Statement  {
      *
      */
     Result executeSelct(String mdx) throws Exception;
-    }
+
+    CellSet executeQuery(String statement);
+
+    ResultSet executeQuery(String statement, Optional<Boolean> advanced, Optional<String> tabFields, int[] rowCountSlot);
+}

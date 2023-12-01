@@ -22,5 +22,6 @@ import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 
 public record StatementRequestR(PropertiesR properties,
                                 List<ExecuteParameter> parameters,
-                                StatementR command) implements StatementRequest {
+                                StatementR command,
+                                String sessionId) implements StatementRequest {
 }

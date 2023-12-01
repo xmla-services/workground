@@ -2282,7 +2282,7 @@ public class Convert {
         PropertiesR properties = discoverProperties(propertyList(requestWs));
         StatementR command = new StatementR(requestWs.getCommand().getStatement());
         List<ExecuteParameter> parameters = parameters(requestWs);
-        return new StatementRequestR(properties, parameters, command);
+        return new StatementRequestR(properties, parameters, command, null);
     }
 
     public static ExecuteResponse toStatement(StatementResponse responseApi) throws JAXBException, IOException {

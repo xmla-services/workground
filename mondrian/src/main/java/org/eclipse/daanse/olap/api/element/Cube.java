@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.query.component.Formula;
 
 /**
  * Cube.
@@ -123,4 +124,8 @@ public interface Cube extends OlapElement, MetaElement {
      * @return Set of dimensions that do not exist (non joining) in this cube
      */
     Set<Dimension> nonJoiningDimensions(Set<Dimension> otherDims);
+
+    Member createCalculatedMember(Formula formula);
+
+    void createNamedSet(Formula formula);
 }
