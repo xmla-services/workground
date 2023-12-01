@@ -265,6 +265,10 @@ public class PropertiesR implements Properties {
 
     protected Optional<Boolean> emitInvisibleMembers = Optional.of(false);
 
+    protected Optional<String> tableFields = Optional.empty();
+
+    protected Optional<Boolean> advancedFlag = Optional.of(false);
+
     public void addProperty(PropertyListElementDefinition property, String value) {
 
         switch (property) {
@@ -1296,6 +1300,16 @@ public class PropertiesR implements Properties {
 
     public Optional<Boolean> emitInvisibleMembers() {
         return emitInvisibleMembers;
+    }
+
+    @Override
+    public Optional<String> tableFields() {
+        return tableFields;
+    }
+
+    @Override
+    public Optional<Boolean> advancedFlag() {
+        return advancedFlag;
     }
 
     public void setDeep(Optional<Boolean> deep) {

@@ -317,7 +317,7 @@ class ClientExecuteTest {
         StatementR command = new StatementR("select [Measures].[Sales Count] on 0, non empty [Store].[Store State]" +
             ".members on 1 from [Sales]");
 
-        StatementRequest statementRequest = new StatementRequestR(properties, parameters, command);
+        StatementRequest statementRequest = new StatementRequestR(properties, parameters, command, null);
 
         StatementResponse response = client.execute()
             .statement(statementRequest);

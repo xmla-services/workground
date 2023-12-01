@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Axis;
 import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
@@ -65,6 +66,10 @@ import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.time.Instant;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -79,6 +84,11 @@ import java.util.Optional;
 import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_CODE;
 import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_FAULT_FS;
 import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DECIMAL;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DOUBLE;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER_LONG;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 import static org.eigenbase.xom.XOMUtil.discard;
 
 public class Convertor {
@@ -127,6 +137,70 @@ public class Convertor {
     private static long DEFAULT_LONG;
     private static float DEFAULT_FLOAT;
     private static double DEFAULT_DOUBLE;
+
+    public static StatementResponse toStatementResponseRowSet(ResultSet rs,
+                                                              int totalCount) throws SQLException {
+        List<RowSetRow> rowSetRows = new ArrayList<>();
+        RowSetR rowSet = new RowSetR(rowSetRows);
+        List<SqlColumn> columns = new ArrayList<>();
+        List<Object[]> rows;
+        ResultSetMetaData md = rs.getMetaData();
+        int columnCount = md.getColumnCount();
+
+        // populate column defs
+        for (int i = 0; i < columnCount; i++) {
+            columns.add(
+                new SqlColumn(
+                    md.getColumnLabel(i + 1),
+                    md.getColumnType(i + 1),
+                    md.getScale(i + 1)));
+        }
+
+        // Populate data; assume that SqlStatement is already positioned
+        // on first row (or isDone() is true), and assume that the
+        // number of rows returned is limited.
+        rows = new ArrayList<>();
+        while (rs.next()) {
+            Object[] row = new Object[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = rs.getObject(i + 1);
+            }
+            rows.add(row);
+        }
+
+        if (totalCount >= 0) {
+            String countStr = Integer.toString(totalCount);
+            List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
+            for (SqlColumn column : columns) {
+                rowSetRowItem.add(new RowSetRowItemR(
+                    column.encodedName,
+                    countStr,
+                    Optional.empty())
+                );
+            }
+            rowSetRows.add(new RowSetRowR(rowSetRowItem));
+        }
+
+        for (Object[] row : rows) {
+            List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
+            for (int i = 0; i < row.length; i++) {
+                Object value = row[i];
+                if(value != null) {
+                    String valueString = value.toString();
+                    if (value instanceof Number) {
+                        valueString =
+                            XmlaUtil.normalizeNumericString(valueString);
+                    }
+                    rowSetRowItem.add(new RowSetRowItemR(
+                            columns.get(i).encodedName,
+                            valueString,
+                            Optional.of(ItemTypeEnum.fromValue(columns.get(i).xsdType))));
+                }
+            }
+            rowSetRows.add(new RowSetRowR(rowSetRowItem));
+        }
+        return new StatementResponseR(null, rowSet);
+    }
 
     public static StatementResponse toStatementResponseMddataset(
         CellSet cellSet,
@@ -1037,6 +1111,11 @@ public class Convertor {
         return false;
     }
 
+    public static RowSetR DbSchemaColumnsResponseRowToRowSet(List<DbSchemaColumnsResponseRow> dbSchemaColumns) {
+        //TODO
+        return null;
+    }
+
     static class CellProperty {
 
         String name;
@@ -1079,6 +1158,45 @@ public class Convertor {
         };
     }
 
+    /**
+     * Converts a SQL type to XSD type.
+     *
+     * @param sqlType SQL type
+     * @return XSD type
+     */
+    private static String sqlToXsdType(final int sqlType, final int scale) {
+        switch (sqlType) {
+            // Integer
+            case Types.INTEGER:
+            case Types.SMALLINT:
+            case Types.TINYINT:
+                return XSD_INTEGER;
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                // Oracle reports all numbers as NUMERIC. We check
+                // the scale of the column and pick the right XSD type.
+                if (scale == 0) {
+                    return XSD_INTEGER;
+                } else {
+                    return XSD_DECIMAL;
+                }
+            case Types.BIGINT:
+                return XSD_INTEGER_LONG;
+            // Real
+            case Types.DOUBLE:
+            case Types.FLOAT:
+                return XSD_DOUBLE;
+            // Date and time
+            case Types.TIME:
+            case Types.TIMESTAMP:
+            case Types.DATE:
+                return XSD_STRING;
+            // Other
+            default:
+                return XSD_STRING;
+        }
+    }
+
     static abstract class Column {
 
         protected final String name;
@@ -1092,6 +1210,24 @@ public class Convertor {
 
         public abstract List<RowSetRowItem> getRowSetRowItems(Cell cell, Member[] members);
     }
+
+    static class SqlColumn {
+        private final String name;
+        private final String encodedName;
+        private final String xsdType;
+
+        SqlColumn(String name, int type, int scale) {
+            this.name = name;
+
+            // replace invalid XML element name, like " ", with "_x0020_" in
+            // column headers, otherwise will generate a badly-formatted xml
+            // doc.
+            this.encodedName =
+                XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
+            this.xsdType = sqlToXsdType(type, scale);
+        }
+    }
+
 
     static class CellColumn extends Column {
 

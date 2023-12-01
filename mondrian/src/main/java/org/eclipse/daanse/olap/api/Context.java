@@ -84,14 +84,12 @@ public interface Context {
 	Optional<String> getDescription();
 
 	ExpressionCompilerFactory getExpressionCompilerFactory();
-	
+
 	/*
 	 * Gives access to the {@link Connection}.
 	 *TODO: Currently just null implementations.- must see how to implement later. create or get an access...
 	 */
 	Connection getConnection();
-
-    String getSessionId();
 
     Scenario createScenario();
 }

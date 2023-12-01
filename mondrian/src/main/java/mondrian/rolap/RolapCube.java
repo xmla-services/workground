@@ -3134,6 +3134,7 @@ public class RolapCube extends CubeBase {
         }
     }
 
+    @Override
     public void createNamedSet(
             Formula formula)
     {

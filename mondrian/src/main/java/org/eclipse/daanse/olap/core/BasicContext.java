@@ -142,12 +142,6 @@ public class BasicContext implements Context {
 	}
 
     @Override
-    public String getSessionId() {
-        //TODO
-        return null;
-    }
-
-    @Override
     public Scenario createScenario() {
 	    //TODO
         return null;

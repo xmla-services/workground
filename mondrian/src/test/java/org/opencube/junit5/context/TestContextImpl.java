@@ -91,11 +91,6 @@ public class TestContextImpl implements TestContext {
 	}
 
     @Override
-    public String getSessionId() {
-        return null;
-    }
-
-    @Override
     public Scenario createScenario() {
         return null;
     }
