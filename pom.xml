@@ -993,6 +993,7 @@
 		<module>odf</module>
 		<module>aggregate-report-jacoco</module>
 		<module>demo</module>
+		<module>util</module>
 	</modules>
 	<profiles>
 		<profile>
