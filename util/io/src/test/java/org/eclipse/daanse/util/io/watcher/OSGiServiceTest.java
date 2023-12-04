@@ -9,7 +9,6 @@ import java.nio.file.StandardWatchEventKinds;
 import java.util.Map;
 
 import org.eclipse.daanse.util.io.watcher.api.PathListener;
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,8 +40,7 @@ class OSGiServiceTest {
 		Path f = Files.createTempFile(path, "pre_exist1", ".txt");
 		Files.writeString(f, "1");
 
-		Map<String, Object> map = Map.of(PathListenerConfig.PREFIX_ + "paths",
-				new String[] { path.toAbsolutePath().toString() });
+		Map<String, Object> map = Map.of("pathListener.paths", new String[] { path.toAbsolutePath().toString() });
 
 		bc.registerService(PathListener.class, pathListener, asDictionary(map));
 
@@ -50,26 +48,25 @@ class OSGiServiceTest {
 		assertThat(pathListener.getInitialPaths()).hasSize(1);
 		assertThat(pathListener.getInitialPaths().poll()).isEqualTo(f);
 
-		Path f2 = Files.createTempFile(path, "created1", ".txt");//create
-		Files.writeString(f2, "2");//modify
-		Files.delete(f);//delete
-		Files.delete(f2);//delete
+		Path f2 = Files.createTempFile(path, "created1", ".txt");// create
+		Files.writeString(f2, "2");// modify
+		Files.delete(f);// delete
+		Files.delete(f2);// delete
 
 		Thread.sleep(100);
 
 		assertThat(pathListener.getEvents()).hasSize(4);
 		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f2);
 		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_CREATE);
-		
+
 		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f2);
 		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_MODIFY);
-		
+
 		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f);
 		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_DELETE);
-		
+
 		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f2);
 		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_DELETE);
-
 
 		Thread.sleep(1000);
 

@@ -33,17 +33,12 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.dataloader.api.DataLoadService;
-import org.eclipse.daanse.db.jdbc.util.impl.Column;
-import org.eclipse.daanse.db.jdbc.util.impl.Table;
-import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +51,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
-import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
 
@@ -84,7 +78,7 @@ class CsvDataLoadServiceImplTest {
 
 	@BeforeEach
 	void beforeEach() throws SQLException, IOException {
-		copy("test.csv");
+
 
 		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("ds", "1"));
 		when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
@@ -110,13 +104,13 @@ class CsvDataLoadServiceImplTest {
 	}
 
 	@Test
-	void testBatch(
-			@InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME
-					+ ")") ServiceAware<DataLoadService> csvDataLoadServiceAware)
+	void testBatch()
 			throws IOException, URISyntaxException, SQLException, InterruptedException {
 
 		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", path, ".csv", "", "UTF-8", true, true);
 
+		
+		copy("test.csv");
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
@@ -127,15 +121,8 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 		when(dialect.supportBatchOperations()).thenReturn(true);
 
-		List<Column> list = List.of(new Column("id", Type.INTEGER), new Column("testLong", Type.LONG),
-				new Column("testBoolean", Type.BOOLEAN), new Column("testDate", Type.DATE),
-				new Column("testInteger", Type.INTEGER), new Column("testNumeric", Type.NUMERIC),
-				new Column("testSmallInt", Type.SMALLINT), new Column("testTimeStamp", Type.TIMESTAMP),
-				new Column("testString", Type.STRING));
-		Table t = new Table("test", "test", List.of(), list);
-		List<Table> tables = List.of(t);
 		//
-		csvDataLoadServiceAware.waitForService(1000).loadData(dataSource, tables);
+//		csvDataLoadServiceAware.waitForService(1000).loadData(dataSource, tables);
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
@@ -196,10 +183,9 @@ class CsvDataLoadServiceImplTest {
 	}
 
 	@Test
-	void testWithoutBach(
-			@InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME
-					+ ")") ServiceAware<DataLoadService> csvDataLoadServiceAware)
+	void testWithoutBach()
 			throws IOException, URISyntaxException, SQLException, InterruptedException {
+		copy("test.csv");
 		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", path, ".csv", "", "UTF-8", true, true);
 
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
@@ -212,15 +198,11 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 		when(dialect.supportBatchOperations()).thenReturn(false);
 
-		List<Column> list = List.of(new Column("id", Type.INTEGER), new Column("testLong", Type.LONG),
-				new Column("testBoolean", Type.BOOLEAN), new Column("testDate", Type.DATE),
-				new Column("testInteger", Type.INTEGER), new Column("testNumeric", Type.NUMERIC),
-				new Column("testSmallInt", Type.SMALLINT), new Column("testTimeStamp", Type.TIMESTAMP),
-				new Column("testString", Type.STRING));
-		Table t = new Table("test", "test", List.of(), list);
-		List<Table> tables = List.of(t);
+
 		//
-		csvDataLoadServiceAware.waitForService(1000).loadData(dataSource, tables);
+
+		
+		
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());

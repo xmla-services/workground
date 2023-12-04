@@ -991,9 +991,9 @@
 		<module>ws</module>
 		<module>xmla</module>
 		<module>odf</module>
-		<module>aggregate-report-jacoco</module>
-		<module>demo</module>
 		<module>util</module>
+		<module>demo</module>
+		<module>aggregate-report-jacoco</module>
 	</modules>
 	<profiles>
 		<profile>

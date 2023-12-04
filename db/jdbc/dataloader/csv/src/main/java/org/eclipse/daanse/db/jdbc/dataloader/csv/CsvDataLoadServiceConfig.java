@@ -2,11 +2,12 @@ package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition
-public interface CsvDataLoadServiceConfig {
+public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
 
     /**
      * @return Line Separator Detection Enabled

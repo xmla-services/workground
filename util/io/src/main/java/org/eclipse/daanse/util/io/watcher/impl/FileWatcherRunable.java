@@ -45,11 +45,12 @@ public class FileWatcherRunable implements Runnable {
 
 		FileSystem fs = FileSystems.getDefault();
 
-		String sPattern = config.pattern();
-		oPattern = sPattern.isBlank() ? Optional.empty() : Optional.of(Pattern.compile(sPattern));
+		String sPattern = config.pathListener_pattern();
+		boolean emptyPattern=sPattern==null ||sPattern.isBlank() ;
+		oPattern = emptyPattern? Optional.empty() : Optional.of(Pattern.compile(sPattern));
 
-		paths = Stream.of(this.config.paths()).map(sPath -> fs.getPath(sPath)).toList();
-		EventKind[] eventKinds = config.kind();
+		paths = Stream.of(this.config.pathListener_paths()).map(sPath -> fs.getPath(sPath)).toList();
+		EventKind[] eventKinds = config.pathListener_kinds();
 		kinds = new WatchEvent.Kind<?>[eventKinds.length];
 
 		for (int i = 0; i < eventKinds.length; i++) {
@@ -63,7 +64,7 @@ public class FileWatcherRunable implements Runnable {
 
 		for (Path path : paths) {
 
-			if (config.listInitialFiles()) {
+			if (config.pathListener_initialFiles()) {
 				List<Path> currentPaths = Files.list(path).toList();
 				listener.handleInitialPaths(currentPaths);
 			}

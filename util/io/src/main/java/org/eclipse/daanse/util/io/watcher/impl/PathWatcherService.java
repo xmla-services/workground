@@ -35,6 +35,12 @@ public class PathWatcherService {
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	public void bindPathListener(PathListener handler, Map<String, Object> map) throws IOException {
 		PathListenerConfig config = CONVERTER.convert(map).to(PathListenerConfig.class);
+
+		if (!config.pathListener_enabled()) {
+			return;
+		}
+		System.out.println(config.pathListener_paths());
+		
 		FileWatcherRunable fwt = new FileWatcherRunable(handler, config);
 		executorService.execute(fwt);
 		listenerMap.put(handler, fwt);

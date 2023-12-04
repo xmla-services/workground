@@ -13,27 +13,6 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
-import com.github.miachm.sods.Range;
-import com.github.miachm.sods.Sheet;
-import com.github.miachm.sods.SpreadSheet;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.dataloader.api.OdsDataLoadService;
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
-import org.eclipse.daanse.db.jdbc.util.impl.Type;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
-import org.osgi.service.metatype.annotations.Designate;
-import org.osgi.util.converter.Converter;
-import org.osgi.util.converter.Converters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,13 +31,37 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectResolver;
+import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
+import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
+import org.eclipse.daanse.db.jdbc.util.impl.Type;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.miachm.sods.Range;
+import com.github.miachm.sods.Sheet;
+import com.github.miachm.sods.SpreadSheet;
+
 @Designate(ocd = OdsDataLoadServiceConfig.class, factory = true)
-@Component(service = OdsDataLoadService.class, scope = ServiceScope.SINGLETON)
-public class OdsDataLoadServiceImpl implements OdsDataLoadService {
+@Component( scope = ServiceScope.SINGLETON)
+public class OdsDataLoadServiceImpl  {
     private static final Logger LOGGER = LoggerFactory.getLogger(OdsDataLoadServiceImpl.class);
     public static final Converter CONVERTER = Converters.standardConverter();
     @Reference
     private DialectResolver dialectResolver;
+    @Reference
+    private DataSource dataSource;
 
     @Reference
     private JdbcMetaDataServiceFactory jmdsf;
@@ -77,7 +80,7 @@ public class OdsDataLoadServiceImpl implements OdsDataLoadService {
         config = null;
     }
 
-    public void loadData(DataSource dataSource) {
+    public void loadData() {
         try {
             Path p = Paths.get(config.odsFolderPath()).resolve(new StringBuilder().append(config.odsFilePrefix())
                 .append(config.odsFileName()).append(config.odsFileSuffix()).toString());
@@ -293,4 +296,6 @@ public class OdsDataLoadServiceImpl implements OdsDataLoadService {
         Object value = range.getValue();
         return  value != null && !value.toString().isEmpty();
     }
+
+
 }

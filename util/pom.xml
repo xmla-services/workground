@@ -5,7 +5,6 @@
     <artifactId>org.eclipse.daanse.pom.parent</artifactId>
     <version>${revision}</version>
   </parent>
-  <groupId>org.eclipse.daanse.util</groupId>
   <artifactId>org.eclipse.daanse.util</artifactId>
   <packaging>pom</packaging>
   <modules>

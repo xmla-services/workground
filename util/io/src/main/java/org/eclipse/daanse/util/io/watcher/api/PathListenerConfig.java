@@ -4,27 +4,42 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition
-public @interface PathListenerConfig {
+public interface PathListenerConfig {
+	
 
-	public static final String PREFIX_ = "org.eclipse.daanse.util.io.watcher.";
+	public static final EventKind[] DEFAULT_KINDS = new EventKind[] { EventKind.ENTRY_CREATE, EventKind.ENTRY_DELETE,
+			EventKind.ENTRY_MODIFY };
 
 	@AttributeDefinition(required = true)
-	String[] paths();
+	default String[] pathListener_paths() {
+		return null;
+	}
+	
+	@AttributeDefinition(required = true,defaultValue = "true")
+	default boolean pathListener_enabled() {
+		return true;
+	}
 
 	@AttributeDefinition
+	default String pathListener_pattern() {
+		return null;
+	}
 
-	String pattern() default "";
+	@AttributeDefinition(defaultValue = { "ENTRY_CREATE", "ENTRY_DELETE", "ENTRY_MODIFY" })
+	default EventKind[] pathListener_kinds() {
+		return DEFAULT_KINDS;
+	}
 
-	@AttributeDefinition
+	@AttributeDefinition(defaultValue = "true")
 
-	EventKind[] kind() default { EventKind.ENTRY_CREATE, EventKind.ENTRY_DELETE, EventKind.ENTRY_MODIFY };
+	default boolean pathListener_initialFiles() {
+		return true;
+	}
 
-	@AttributeDefinition
+	@AttributeDefinition(defaultValue = "true")
 
-	boolean listInitialFiles() default true;
-
-	@AttributeDefinition
-
-	boolean recursive() default false;
+	default boolean pathListener_recursive() {
+		return false;
+	}
 
 }
