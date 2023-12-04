@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
 import mondrian.olap.MondrianProperties;
@@ -25,7 +38,6 @@ import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
-import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Axis;
 import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
@@ -84,9 +96,9 @@ import java.util.Optional;
 import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_CODE;
 import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_FAULT_FS;
 import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DECIMAL;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DOUBLE;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER_LONG;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
 import static org.eigenbase.xom.XOMUtil.discard;
@@ -95,11 +107,12 @@ public class Convertor {
 
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Convertor.class);
+    public static final String SLICER_AXIS = "SlicerAxis";
     private static XmlaUtil.ElementNameEncoder encoder =
         XmlaUtil.ElementNameEncoder.INSTANCE;
 
     protected static final Map<String, Property.StandardMemberProperty> longProps =
-        new HashMap();
+        new HashMap<>();
 
     static {
         longProps.put("UName", Property.StandardMemberProperty.MEMBER_UNIQUE_NAME);
@@ -111,14 +124,22 @@ public class Convertor {
 
     protected static Map<String, CellProperty> cellPropertyMap = new HashMap<>();
 
+    public static final String CELL_ORDINAL = "CELL_ORDINAL";
+
+    public static final String VALUE = "VALUE";
+
+    public static final String FORMATTED_VALUE = "FORMATTED_VALUE";
+
+    public static final String XSD_UNSIGNED_INT = "xsd:unsignedInt";
+
     static {
-        cellPropertyMap.put("CELL_ORDINAL", new CellProperty("CELL_ORDINAL", "CellOrdinal", "xsd:unsignedInt"));
-        cellPropertyMap.put("VALUE", new CellProperty("VALUE", "Value", null));
-        cellPropertyMap.put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
+        cellPropertyMap.put(CELL_ORDINAL, new CellProperty(CELL_ORDINAL, "CellOrdinal", XSD_UNSIGNED_INT));
+        cellPropertyMap.put(VALUE, new CellProperty(VALUE, "Value", null));
+        cellPropertyMap.put(FORMATTED_VALUE, new CellProperty(FORMATTED_VALUE, "FmtValue", "xsd:string"));
         cellPropertyMap.put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
-        cellPropertyMap.put("LANGUAGE", new CellProperty("LANGUAGE", "Language", "xsd:unsignedInt"));
-        cellPropertyMap.put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", "xsd:unsignedInt"));
-        cellPropertyMap.put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", "xsd:unsignedInt"));
+        cellPropertyMap.put("LANGUAGE", new CellProperty("LANGUAGE", "Language", XSD_UNSIGNED_INT));
+        cellPropertyMap.put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", XSD_UNSIGNED_INT));
+        cellPropertyMap.put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", XSD_UNSIGNED_INT));
         cellPropertyMap.put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
     }
 
@@ -137,6 +158,10 @@ public class Convertor {
     private static long DEFAULT_LONG;
     private static float DEFAULT_FLOAT;
     private static double DEFAULT_DOUBLE;
+
+    private Convertor() {
+        //constructor
+    }
 
     public static StatementResponse toStatementResponseRowSet(ResultSet rs,
                                                               int totalCount) throws SQLException {
@@ -406,7 +431,7 @@ public class Convertor {
 
     private static List<Hierarchy> getSlicerAxisHierarchies(CellSet cellSet, boolean omitDefaultSlicerInfo) {
         Cube cube = cellSet.getMetaData().getCube();
-        List<Hierarchy> hierarchies = new ArrayList();
+        List<Hierarchy> hierarchies = new ArrayList<>();
         final List<CellSetAxis> axes = cellSet.getAxes();
         List<Hierarchy> axisHierarchyList = new ArrayList<>();
         axes.stream().forEach(a -> axisHierarchyList.addAll(getHierarchies(a)));
@@ -444,8 +469,8 @@ public class Convertor {
             queryCellPropertyNames.add(propertyName);
         }
         if (queryCellPropertyNames.isEmpty()) {
-            queryCellPropertyNames.add("VALUE");
-            queryCellPropertyNames.add("FORMATTED_VALUE");
+            queryCellPropertyNames.add(VALUE);
+            queryCellPropertyNames.add(FORMATTED_VALUE);
         }
         return queryCellPropertyNames;
     }
@@ -515,7 +540,7 @@ public class Convertor {
         for (String propertyName : queryCellPropertyNames) {
             if (propertyName != null) {
                 propertyName = propertyName.toUpperCase();
-                if (propertyName.equals("CELL_ORDINAL")) {
+                if (propertyName.equals(CELL_ORDINAL)) {
                     continue;
                 }
             }
@@ -591,7 +616,7 @@ public class Convertor {
                 axisList.add(getAxis(cellSet,
                     slicerAxis,
                     getProps(slicerAxis.getAxisMetaData()),
-                    "SlicerAxis"));
+                    SLICER_AXIS));
             }
         } else {
             List<Hierarchy> hierarchies = slicerAxisHierarchies;
@@ -600,7 +625,7 @@ public class Convertor {
             List<MemberType> mem = new ArrayList<>();
             tuples.add(new TupleTypeR(mem));
             setTypes.add(new TuplesTypeR(tuples));
-            new AxisR(setTypes, "SlicerAxis");
+            new AxisR(setTypes, SLICER_AXIS);
 
             Map<String, Integer> memberMap = new HashMap<>();
             Member positionMember;
@@ -811,9 +836,7 @@ public class Convertor {
         for (Position p : axis.getPositions()) {
             for (Member member : p.getMembers()) {
                 Level level = member.getLevel();
-                if (!levelMembers.containsKey(level)) {
-                    levelMembers.put(level, new ArrayList<Member>());
-                }
+                levelMembers.computeIfAbsent(level, k -> new ArrayList<Member>());
                 levelMembers.get(level)
                     .add(((MondrianOlap4jMember) member).getOlapMember());
             }
@@ -968,7 +991,7 @@ public class Convertor {
         List<Hierarchy> hierarchies = new ArrayList<>();
         CellSetAxis slicerAxis = cellSet.getFilterAxis();
         if (omitDefaultSlicerInfo) {
-            axisInfo.add(getAxisInfo(slicerAxis, "SlicerAxis"));
+            axisInfo.add(getAxisInfo(slicerAxis, SLICER_AXIS));
             hierarchies.addAll(getHierarchies(slicerAxis));
         } else {
             // The slicer axes contains the default hierarchy
@@ -984,7 +1007,7 @@ public class Convertor {
                     hierarchies.add(hierarchy);
                 }
             }
-            axisInfo.add(new AxisInfoR(getHierarchyInfoList(hierarchies, getProps(slicerAxis.getAxisMetaData())), "SlicerAxis"));
+            axisInfo.add(new AxisInfoR(getHierarchyInfoList(hierarchies, getProps(slicerAxis.getAxisMetaData())), SLICER_AXIS));
         }
         //slicerAxisHierarchies = hierarchies;
         return new AxesInfoR(axisInfo);
@@ -1111,11 +1134,6 @@ public class Convertor {
         return false;
     }
 
-    public static RowSetR DbSchemaColumnsResponseRowToRowSet(List<DbSchemaColumnsResponseRow> dbSchemaColumns) {
-        //TODO
-        return null;
-    }
-
     static class CellProperty {
 
         String name;
@@ -1197,7 +1215,7 @@ public class Convertor {
         }
     }
 
-    static abstract class Column {
+    abstract static class Column {
 
         protected final String name;
         protected final String encodedName;
