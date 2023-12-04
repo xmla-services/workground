@@ -629,7 +629,7 @@ public class XmlaApiAdapter {
                                      SOAPBody responseBody) {
         StatementRequest statementRequest = new StatementRequestR(properties,
             parameters,
-            statement);
+            statement, null);
         StatementResponse statementResponse = xmlaService.execute().statement(statementRequest);
         SoapUtil.toStatementResponse(statementResponse, responseBody);
     }
