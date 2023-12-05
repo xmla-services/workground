@@ -23,6 +23,8 @@ public class DemoSetup {
 
     public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
     
+    
+    public static final String PID_MS_SOAP_MSG ="org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.XmlaWebserviceProvider";   
     public static final String PID_XMLA_SERVICE = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
 
 	public static final String PID_CONTEXT = "org.eclipse.daanse.olap.core.BasicContext";
@@ -45,6 +47,8 @@ public class DemoSetup {
 	private Configuration cDs;
 
 	private Configuration cCG;
+
+	private Configuration cXmlaEndpoint2;
 
 
     @Activate
@@ -107,9 +111,18 @@ public class DemoSetup {
 
         Dictionary<String, Object> dict = new Hashtable<>();
         dict.put("xmlaService.target", "(service.pid=*)");
-        dict.put( "osgi.soap.endpoint.contextpath","/xmla");
-
+        dict.put( "osgi.soap.endpoint.contextpath","/xmla1");
+        
         cXmlaEndpoint.update(dict);
+        
+		cXmlaEndpoint2 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG , "2", "?");
+
+		dict = new Hashtable<>();
+        dict.put("xmlaService.target", "(service.pid=*)");
+        dict.put( "osgi.soap.endpoint.contextpath","/xmla2");
+
+
+        cXmlaEndpoint2.update(dict);
 
         cLoggingHandler = configurationAdmin
                 .getFactoryConfiguration("org.eclipse.daanse.ws.handler.SOAPLoggingHandler","1", "?");

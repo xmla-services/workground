@@ -41,7 +41,7 @@ import java.io.IOException;
 @WebServiceProvider()
 @ServiceMode(value = Service.Mode.MESSAGE)
 @RequireSoapWhiteboard
-@Component(service = Provider.class, name = "org.eclipse.daanse.msxmlanalysisservice")
+@Component(service = Provider.class)
 @Designate(factory = true, ocd = XmlaWebserviceProvider.Config.class)
 @SOAPWhiteboardEndpoint(contextpath = "xmla")
 public class XmlaWebserviceProvider implements Provider<SOAPMessage> {

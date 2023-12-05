@@ -55,7 +55,7 @@
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage</artifactId>
 			<version>${revision}</version>

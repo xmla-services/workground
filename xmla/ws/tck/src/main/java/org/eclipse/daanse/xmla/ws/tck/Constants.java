@@ -32,5 +32,6 @@ public class Constants {
     public static final String SOAP_ENDPOINT_URL = "http://localhost:" + SERVER_PORT_WHITEBOARD + WS_PATH;
     public static final String SOAP_ACTION_DISCOVER = URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS + ":Discover";
     public static final String SOAP_ACTION_EXECUTE = URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS + ":Execute";
-    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
+//    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
+    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.XmlaWebserviceProvider";
 }
