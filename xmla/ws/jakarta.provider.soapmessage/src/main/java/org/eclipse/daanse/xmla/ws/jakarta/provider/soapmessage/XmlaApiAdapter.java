@@ -193,23 +193,23 @@ public class XmlaApiAdapter {
     private static final String MDSCHEMA_MEASUREGROUPS = "MDSCHEMA_MEASUREGROUPS";
 
 
-    public SOAPMessage handleRequest(SOAPMessage m) {
+    public SOAPMessage handleRequest(SOAPMessage messageRequest) {
         try {
-            SOAPMessage message = MessageFactory.newInstance().createMessage();
-            SOAPPart soapPart = message.getSOAPPart();
-            SOAPEnvelope envelope = soapPart.getEnvelope();
-            envelope.addNamespaceDeclaration("msxmla", "urn:schemas-microsoft-com:xml-analysis");
-            envelope.addNamespaceDeclaration("rowset", "urn:schemas-microsoft-com:xml-analysis:rowset");
-            envelope.addNamespaceDeclaration("mddataset", "urn:schemas-microsoft-com:xml-analysis:mddataset");
-            envelope.addNamespaceDeclaration("engine", "http://schemas.microsoft.com/analysisservices/2003/engine");
-            envelope.addNamespaceDeclaration("engine200", "http://schemas.microsoft.com/analysisservices/2010/engine/200");
-            envelope.addNamespaceDeclaration("empty", "urn:schemas-microsoft-com:xml-analysis:empty");
-            envelope.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            SOAPMessage messageResponse = MessageFactory.newInstance().createMessage();
+            SOAPPart soapPartResponse = messageResponse.getSOAPPart();
+            SOAPEnvelope envelopeResponse = soapPartResponse.getEnvelope();
+            envelopeResponse.addNamespaceDeclaration("msxmla", "urn:schemas-microsoft-com:xml-analysis");
+            envelopeResponse.addNamespaceDeclaration("rowset", "urn:schemas-microsoft-com:xml-analysis:rowset");
+            envelopeResponse.addNamespaceDeclaration("mddataset", "urn:schemas-microsoft-com:xml-analysis:mddataset");
+            envelopeResponse.addNamespaceDeclaration("engine", "http://schemas.microsoft.com/analysisservices/2003/engine");
+            envelopeResponse.addNamespaceDeclaration("engine200", "http://schemas.microsoft.com/analysisservices/2010/engine/200");
+            envelopeResponse.addNamespaceDeclaration("empty", "urn:schemas-microsoft-com:xml-analysis:empty");
+            envelopeResponse.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-            SOAPBody responseBody = envelope.getBody();
+            SOAPBody bodyResponse = envelopeResponse.getBody();
 
-            handleBody(m.getSOAPBody(), responseBody);
-            return message;
+            handleBody(messageRequest.getSOAPBody(), bodyResponse);
+            return messageResponse;
         } catch (SOAPException e) {
             LOGGER.error("handleRequest error", e);
         }
