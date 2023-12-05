@@ -754,6 +754,8 @@ public interface Dialect {
 
     void clearTable(Connection connection, String schemaName, String tableName);
 
+    void deleteTable(Connection connection, String schemaName, String tableName);
+
     boolean supportParallelLoading();
 
     boolean supportBatchOperations();
