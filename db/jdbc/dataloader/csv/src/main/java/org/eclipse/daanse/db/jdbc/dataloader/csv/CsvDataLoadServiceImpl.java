@@ -283,7 +283,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
         List<Entry<String, Type>> result = new ArrayList<>();
         for (int i=0; i< headers.length; i++) {
                try {
-                   result.add(new AbstractMap.SimpleEntry<>(headers[i], Type.fromName(types[0])));
+                   result.add(new AbstractMap.SimpleEntry<>(headers[i], Type.fromName(types[i])));
                }
                catch (Exception e) {
                    LOGGER.error("Load data error: Create data type for Csv loader error", e);

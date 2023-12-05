@@ -81,8 +81,8 @@ class CsvDataLoadServiceImplTest {
 	void beforeEach() throws SQLException, IOException {
 
 
-		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
-        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
+		//bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
+        //bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
 		when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
 		when(dialect.getDialectName()).thenReturn("MYSQL");
 		when(dataSource.getConnection()).thenReturn(connection);
@@ -112,11 +112,15 @@ class CsvDataLoadServiceImplTest {
 
 		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
         CsvDataLoadServiceImpl csvDataLoadService = new CsvDataLoadServiceImpl();
+        when(dialect.supportBatchOperations()).thenReturn(true);
+		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
+        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
+        
         bc.registerService(PathListener.class, csvDataLoadService, conf.getProperties());
 
 		copy("test.csv");
-		Thread.sleep(100000);		
-		/*
+		Thread.sleep(2000);
+
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
@@ -124,24 +128,23 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);
 		ArgumentCaptor<Double> doubleCaptor = ArgumentCaptor.forClass(Double.class);
 		ArgumentCaptor<Short> shortCaptor = ArgumentCaptor.forClass(Short.class);
-		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
-		when(dialect.supportBatchOperations()).thenReturn(true);
+		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);		
 
-		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
+		verify(connection, (times(2))).prepareStatement(stringCaptor.capture());
 
-		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
-		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
-		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
-		verify(preparedStatement, (times(2))).setDate(integerCaptor.capture(), dateCaptor.capture());
-		verify(preparedStatement, (times(2))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
-		verify(preparedStatement, (times(2))).setShort(integerCaptor.capture(), shortCaptor.capture());
-		verify(preparedStatement, (times(2))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
-		verify(preparedStatement, (times(2))).setString(integerCaptor.capture(), stringCaptor.capture());
+		verify(preparedStatement, (times(8))).setInt(integerCaptor.capture(), integerCaptor.capture());
+		verify(preparedStatement, (times(4))).setLong(integerCaptor.capture(), longCaptor.capture());
+		verify(preparedStatement, (times(4))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
+		verify(preparedStatement, (times(4))).setDate(integerCaptor.capture(), dateCaptor.capture());
+		verify(preparedStatement, (times(4))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
+		verify(preparedStatement, (times(4))).setShort(integerCaptor.capture(), shortCaptor.capture());
+		verify(preparedStatement, (times(4))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
+		verify(preparedStatement, (times(4))).setString(integerCaptor.capture(), stringCaptor.capture());
 
-		verify(preparedStatement, (times(2))).addBatch();
-		verify(preparedStatement, (times(1))).executeBatch();
-		*/
-		
+		verify(preparedStatement, (times(4))).addBatch();
+		verify(preparedStatement, (times(2))).executeBatch();
+
+
 	}
 
 	private void setupCsvDataLoadServiceImpl(Boolean lineSeparatorDetectionEnabled, String nullValue,
@@ -184,9 +187,12 @@ class CsvDataLoadServiceImplTest {
 			throws IOException, URISyntaxException, SQLException, InterruptedException {
 		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
         CsvDataLoadServiceImpl csvDataLoadService = new CsvDataLoadServiceImpl();
+        when(dialect.supportBatchOperations()).thenReturn(false);
+		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
+        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
         bc.registerService(PathListener.class, csvDataLoadService, conf.getProperties());
         copy("test.csv");
-
+        Thread.sleep(2000);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
@@ -194,21 +200,20 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);
 		ArgumentCaptor<Double> doubleCaptor = ArgumentCaptor.forClass(Double.class);
 		ArgumentCaptor<Short> shortCaptor = ArgumentCaptor.forClass(Short.class);
-		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
-		when(dialect.supportBatchOperations()).thenReturn(false);
+		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);		
 
-		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
+		verify(connection, (times(2))).prepareStatement(stringCaptor.capture());
 
-		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
-		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
-		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
-		verify(preparedStatement, (times(2))).setDate(integerCaptor.capture(), dateCaptor.capture());
-		verify(preparedStatement, (times(2))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
-		verify(preparedStatement, (times(2))).setShort(integerCaptor.capture(), shortCaptor.capture());
-		verify(preparedStatement, (times(2))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
-		verify(preparedStatement, (times(2))).setString(integerCaptor.capture(), stringCaptor.capture());
+		verify(preparedStatement, (times(8))).setInt(integerCaptor.capture(), integerCaptor.capture());
+		verify(preparedStatement, (times(4))).setLong(integerCaptor.capture(), longCaptor.capture());
+		verify(preparedStatement, (times(4))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
+		verify(preparedStatement, (times(4))).setDate(integerCaptor.capture(), dateCaptor.capture());
+		verify(preparedStatement, (times(4))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
+		verify(preparedStatement, (times(4))).setShort(integerCaptor.capture(), shortCaptor.capture());
+		verify(preparedStatement, (times(4))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
+		verify(preparedStatement, (times(4))).setString(integerCaptor.capture(), stringCaptor.capture());
 
-		verify(preparedStatement, (times(2))).executeUpdate();
+		verify(preparedStatement, (times(4))).executeUpdate();
 	}
 
 }
