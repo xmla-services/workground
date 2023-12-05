@@ -2,10 +2,8 @@ package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.dataloader.api.OdsDataLoadService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
-import org.eclipse.daanse.db.jdbc.metadata.impl.JdbcMetaDataServiceFactoryLiveImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,14 +116,14 @@ class OdsDataLoadServiceImplTest {
 
     @Test
     void testBatch(
-        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadService> odsDataLoadServiceAware
+        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadServiceImpl> odsDataLoadServiceAware
     ) throws IOException, SQLException, InterruptedException {
         setupOdsDataLoadServiceImpl(path, "test", ".ods", "", "UTF-8", true);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         when(dialect.supportBatchOperations()).thenReturn(true);
-        OdsDataLoadService odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
+        OdsDataLoadServiceImpl odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
         //odsDataLoadService.setJmdsf(jmdsf);
-        odsDataLoadService.loadData(dataSource);
+        odsDataLoadService.loadData();
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
         verify(preparedStatement, (times(6))).addBatch();
@@ -134,14 +132,14 @@ class OdsDataLoadServiceImplTest {
 
     @Test
     void test(
-        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadService> odsDataLoadServiceAware
+        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadServiceImpl> odsDataLoadServiceAware
     ) throws IOException, SQLException, InterruptedException {
         setupOdsDataLoadServiceImpl(path, "test", ".ods", "", "UTF-8", true);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         when(dialect.supportBatchOperations()).thenReturn(false);
-        OdsDataLoadService odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
+        OdsDataLoadServiceImpl odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
         //odsDataLoadService.setJmdsf(jmdsf);
-        odsDataLoadService.loadData(dataSource);
+        odsDataLoadService.loadData();
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
         verify(preparedStatement, (times(5))).executeUpdate();
@@ -170,6 +168,7 @@ class OdsDataLoadServiceImplTest {
         if (clearTableBeforeLoad != null) {
             dict.put("clearTableBeforeLoad", clearTableBeforeLoad);
         }
+        dict.put("pathListener.paths", clearTableBeforeLoad);
         conf.update(dict);
     }
 

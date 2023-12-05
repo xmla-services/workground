@@ -77,4 +77,10 @@ public interface OdsDataLoadServiceConfig {
             return "test";
     }
 
+
+    @AttributeDefinition(description = "pathListener.paths")
+    default String[] paths() {
+        return new String[] {""};
+    }
+
 }

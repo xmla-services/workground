@@ -50,30 +50,6 @@ public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
     }
 
     /**
-     * @return CSV Folder Files Path
-     */
-    @AttributeDefinition(description = "csvFolderPath")
-    default String csvFolderPath() {
-        return "/";
-    }
-
-    /**
-     * @return CSV File Suffix
-     */
-    @AttributeDefinition(description = "csvFileSuffix")
-    default String csvFileSuffix() {
-        return ".csv";
-    }
-
-    /**
-     * @return CSV File Prefix
-     */
-    @AttributeDefinition(description = "csvFilePrefix")
-    default String csvFilePrefix() {
-        return "";
-    }
-
-    /**
      * @return Encoding default UTF-8
      */
     @AttributeDefinition(description = "encoding")
@@ -103,5 +79,13 @@ public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
     @AttributeDefinition(description = "batchSize")
     default int batchSize() {
         return 1000;
+    }
+
+    /**
+     * @return Database schema name
+     */
+    @AttributeDefinition(description = "dbSchema")
+    default String dbSchema() {
+        return null;
     }
 }
