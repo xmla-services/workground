@@ -14,7 +14,6 @@
 package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,13 +38,14 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.util.io.watcher.api.PathListener;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -57,21 +57,30 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
+@ExtendWith(MockitoExtension.class)
 @RequireConfigurationAdmin
 class CsvDataLoadServiceImplTest {
 
+	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoadServiceImpl";
 	@TempDir
 	Path path;
-	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoadServiceImpl";
+
+	@Mock
+	DialectResolver dialectResolver;
+	@Mock
+	Dialect dialect;
+	@Mock
+	Connection connection;
+	@Mock
+	Statement statement;
+	@Mock
+	PreparedStatement preparedStatement;
+	@Mock
+	DataSource dataSource;
+
 	@InjectBundleContext
 	BundleContext bc;
-	DialectResolver dialectResolver = mock(DialectResolver.class);
-	Dialect dialect = mock(Dialect.class);
-	Connection connection = mock(Connection.class);
-	Statement statement = mock(Statement.class);
-	PreparedStatement preparedStatement = mock(PreparedStatement.class);
 
-	DataSource dataSource = mock(DataSource.class);
 	@InjectService
 	ConfigurationAdmin ca;
 
@@ -80,15 +89,12 @@ class CsvDataLoadServiceImplTest {
 	@BeforeEach
 	void beforeEach() throws SQLException, IOException {
 
-
-		//bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
-        //bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
 		when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
-		when(dialect.getDialectName()).thenReturn("MYSQL");
 		when(dataSource.getConnection()).thenReturn(connection);
 		when(connection.prepareStatement(any())).thenReturn(preparedStatement);
 		when(connection.createStatement()).thenReturn(statement);
-		when(preparedStatement.getConnection()).thenReturn(connection);
+		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
+		bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
 	}
 
 	private void copy(String... files) throws IOException {
@@ -106,50 +112,9 @@ class CsvDataLoadServiceImplTest {
 		}
 	}
 
-	@Test
-	void testBatch()
-			throws IOException, URISyntaxException, SQLException, InterruptedException {
-
-		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
-        CsvDataLoadServiceImpl csvDataLoadService = new CsvDataLoadServiceImpl();
-        when(dialect.supportBatchOperations()).thenReturn(true);
-		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
-        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
-        
-        bc.registerService(PathListener.class, csvDataLoadService, conf.getProperties());
-
-		copy("test.csv");
-		Thread.sleep(2000);
-
-		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
-		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
-		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
-		ArgumentCaptor<Date> dateCaptor = ArgumentCaptor.forClass(Date.class);
-		ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);
-		ArgumentCaptor<Double> doubleCaptor = ArgumentCaptor.forClass(Double.class);
-		ArgumentCaptor<Short> shortCaptor = ArgumentCaptor.forClass(Short.class);
-		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);		
-
-		verify(connection, (times(2))).prepareStatement(stringCaptor.capture());
-
-		verify(preparedStatement, (times(8))).setInt(integerCaptor.capture(), integerCaptor.capture());
-		verify(preparedStatement, (times(4))).setLong(integerCaptor.capture(), longCaptor.capture());
-		verify(preparedStatement, (times(4))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
-		verify(preparedStatement, (times(4))).setDate(integerCaptor.capture(), dateCaptor.capture());
-		verify(preparedStatement, (times(4))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
-		verify(preparedStatement, (times(4))).setShort(integerCaptor.capture(), shortCaptor.capture());
-		verify(preparedStatement, (times(4))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
-		verify(preparedStatement, (times(4))).setString(integerCaptor.capture(), stringCaptor.capture());
-
-		verify(preparedStatement, (times(4))).addBatch();
-		verify(preparedStatement, (times(2))).executeBatch();
-
-
-	}
-
 	private void setupCsvDataLoadServiceImpl(Boolean lineSeparatorDetectionEnabled, String nullValue,
-			Character quoteEscape, Character quote, String delimiter, String encoding, Boolean quoteDetectionEnabled, Boolean clearTableBeforeLoad)
-			throws IOException {
+			Character quoteEscape, Character quote, String delimiter, String encoding, Boolean quoteDetectionEnabled,
+			Boolean clearTableBeforeLoad) throws IOException {
 		conf = ca.getFactoryConfiguration(CsvDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
 		Dictionary<String, Object> dict = new Hashtable<>();
 		if (lineSeparatorDetectionEnabled != null) {
@@ -178,42 +143,73 @@ class CsvDataLoadServiceImplTest {
 		if (quoteDetectionEnabled != null) {
 			dict.put("clearTableBeforeLoad", quoteDetectionEnabled);
 		}
-        dict.put("pathListener.paths", new String[] { path.toAbsolutePath().toString() });
+		dict.put("pathListener.paths", new String[] { path.toAbsolutePath().toString() });
 		conf.update(dict);
 	}
 
 	@Test
-	void testWithoutBach()
-			throws IOException, URISyntaxException, SQLException, InterruptedException {
+	void testBatch() throws IOException, URISyntaxException, SQLException, InterruptedException {
+
 		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
-        CsvDataLoadServiceImpl csvDataLoadService = new CsvDataLoadServiceImpl();
-        when(dialect.supportBatchOperations()).thenReturn(false);
-		bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "1"));
-        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
-        bc.registerService(PathListener.class, csvDataLoadService, conf.getProperties());
-        copy("test.csv");
-        Thread.sleep(2000);
-        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+
+		when(dialect.supportBatchOperations()).thenReturn(true);
+
+		copy("test.csv");
+		Thread.sleep(2000);
+
+		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
 		ArgumentCaptor<Date> dateCaptor = ArgumentCaptor.forClass(Date.class);
 		ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);
 		ArgumentCaptor<Double> doubleCaptor = ArgumentCaptor.forClass(Double.class);
 		ArgumentCaptor<Short> shortCaptor = ArgumentCaptor.forClass(Short.class);
-		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);		
+		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 
-		verify(connection, (times(2))).prepareStatement(stringCaptor.capture());
+		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
-		verify(preparedStatement, (times(8))).setInt(integerCaptor.capture(), integerCaptor.capture());
-		verify(preparedStatement, (times(4))).setLong(integerCaptor.capture(), longCaptor.capture());
-		verify(preparedStatement, (times(4))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
-		verify(preparedStatement, (times(4))).setDate(integerCaptor.capture(), dateCaptor.capture());
-		verify(preparedStatement, (times(4))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
-		verify(preparedStatement, (times(4))).setShort(integerCaptor.capture(), shortCaptor.capture());
-		verify(preparedStatement, (times(4))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
-		verify(preparedStatement, (times(4))).setString(integerCaptor.capture(), stringCaptor.capture());
+		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
+		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
+		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
+		verify(preparedStatement, (times(2))).setDate(integerCaptor.capture(), dateCaptor.capture());
+		verify(preparedStatement, (times(2))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
+		verify(preparedStatement, (times(2))).setShort(integerCaptor.capture(), shortCaptor.capture());
+		verify(preparedStatement, (times(2))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
+		verify(preparedStatement, (times(2))).setString(integerCaptor.capture(), stringCaptor.capture());
 
-		verify(preparedStatement, (times(4))).executeUpdate();
+		verify(preparedStatement, (times(2))).addBatch();
+		verify(preparedStatement, (times(1))).executeBatch();
+
+	}
+
+	@Test
+	void testWithoutBach() throws IOException, URISyntaxException, SQLException, InterruptedException {
+		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
+		when(dialect.supportBatchOperations()).thenReturn(false);
+
+		copy("test.csv");
+		Thread.sleep(2000);
+		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
+		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
+		ArgumentCaptor<Date> dateCaptor = ArgumentCaptor.forClass(Date.class);
+		ArgumentCaptor<Integer> integerCaptor = ArgumentCaptor.forClass(Integer.class);
+		ArgumentCaptor<Double> doubleCaptor = ArgumentCaptor.forClass(Double.class);
+		ArgumentCaptor<Short> shortCaptor = ArgumentCaptor.forClass(Short.class);
+		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
+
+		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
+
+		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
+		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
+		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
+		verify(preparedStatement, (times(2))).setDate(integerCaptor.capture(), dateCaptor.capture());
+		verify(preparedStatement, (times(2))).setDouble(integerCaptor.capture(), doubleCaptor.capture());
+		verify(preparedStatement, (times(2))).setShort(integerCaptor.capture(), shortCaptor.capture());
+		verify(preparedStatement, (times(2))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
+		verify(preparedStatement, (times(2))).setString(integerCaptor.capture(), stringCaptor.capture());
+
+		verify(preparedStatement, (times(2))).executeUpdate();
 	}
 
 }

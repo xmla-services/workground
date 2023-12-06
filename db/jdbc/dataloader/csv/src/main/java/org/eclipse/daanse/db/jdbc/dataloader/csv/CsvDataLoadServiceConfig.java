@@ -9,6 +9,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition
 public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
 
+	
     /**
      * @return Line Separator Detection Enabled
      */

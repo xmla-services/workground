@@ -53,16 +53,15 @@ import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 @Designate(ocd = CsvDataLoadServiceConfig.class, factory = true)
-@Component( scope = ServiceScope.SINGLETON)
-
+@Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
 public class CsvDataLoadServiceImpl implements PathListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsvDataLoadServiceImpl.class);
 	public static final Converter CONVERTER = Converters.standardConverter();
 
-    private Queue<Path> initialPaths = new ArrayDeque<>();
+	private Queue<Path> initialPaths = new ArrayDeque<>();
 
-    @Reference
+	@Reference
 	private DialectResolver dialectResolver;
 
 	@Reference
@@ -70,9 +69,18 @@ public class CsvDataLoadServiceImpl implements PathListener {
 
 	private CsvDataLoadServiceConfig config;
 
+	private CsvParserSettings settings;
+
 	@Activate
 	public void activate(Map<String, Object> configMap) {
 		this.config = CONVERTER.convert(configMap).to(CsvDataLoadServiceConfig.class);
+		settings = Csv.parseRfc4180();
+		settings.setLineSeparatorDetectionEnabled(this.config.lineSeparatorDetectionEnabled());
+		settings.setNullValue(config.nullValue());
+		settings.getFormat().setQuoteEscape(config.quoteEscape());
+		settings.getFormat().setQuote(config.quote());
+		settings.getFormat().setDelimiter(config.delimiter());
+		settings.setQuoteDetectionEnabled(config.quoteDetectionEnabled());
 	}
 
 	@Deactivate
@@ -80,71 +88,66 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		config = null;
 	}
 
-    private void loadData(Path path) {
-        Optional<Dialect> dialectOptional = this.dialectResolver.resolve(dataSource);
-        if (dialectOptional.isPresent()) {
-            Dialect dialect = dialectOptional.get();
-            CsvParserSettings settings = Csv.parseRfc4180();
-            settings.setLineSeparatorDetectionEnabled(this.config.lineSeparatorDetectionEnabled());
-            settings.setNullValue(config.nullValue());
-            settings.getFormat().setQuoteEscape(config.quoteEscape());
-            settings.getFormat().setQuote(config.quote());
-            settings.getFormat().setDelimiter(config.delimiter());
+	private void loadData(Path path) {
+		Optional<Dialect> dialectOptional = this.dialectResolver.resolve(dataSource);
+		if (dialectOptional.isPresent()) {
+			Dialect dialect = dialectOptional.get();
 
-            settings.setQuoteDetectionEnabled(config.quoteDetectionEnabled());
-            try (Connection connection = dataSource.getConnection()) {
-                loadTable(connection, dialect, settings, path);
-            } catch (SQLException e) {
-                LOGGER.error("Database connection error", e);
-            }
-        } else {
-            LOGGER.error("Database dialect did not determinate");
-        }
+			try (Connection connection = dataSource.getConnection()) {
+				loadTable(connection, dialect, settings, path);
+			} catch (SQLException e) {
+				LOGGER.error("Database connection error", e);
+			}
+		} else {
+			LOGGER.error("Database dialect did not determinate");
+		}
 
-    }
+	}
 
-    private void loadTable(Connection connection, Dialect dialect, CsvParserSettings settings, Path path) {
-        String tableName = getFileNameWithoutExtension(path.getFileName().toString());
-        LOGGER.debug("Load table {}", tableName);
-        if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
-            dialect.clearTable(connection, config.dbSchema(), tableName);
-        }
-        if (!path.toFile().exists()) {
+	private void loadTable(Connection connection, Dialect dialect, CsvParserSettings settings, Path path) {
+		String tableName = getFileNameWithoutExtension(path.getFileName().toString());
+		LOGGER.debug("Load table {}", tableName);
+		if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
+			dialect.clearTable(connection, config.dbSchema(), tableName);
+		}
+		if (!path.toFile().exists()) {
 
-            LOGGER.warn("File does not exist - {}", tableName);
-            return;
-        }
+			LOGGER.warn("File does not exist - {}", tableName);
+			return;
+		}
 
-        com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
-        parser.beginParsing(path.toFile(), config.encoding());
-        parser.parseNext();
-        String[] headers = parser.getRecordMetadata().headers();
-        String[] types = parser.parseNext();
-        List<Map.Entry<String, Type>> headersTypeList = getHeadersTypeList(headers, types);
-        if (!headersTypeList.isEmpty()) {
-            createTable(connection, headersTypeList, tableName);
-            StringBuilder b = new StringBuilder();
-            b.append("INSERT INTO ");
-            b.append(dialect.quoteIdentifier(config.dbSchema(), tableName));
-            b.append(" ( ");
-            b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.getKey())).collect(Collectors.joining(",")));
-            b.append(" ) VALUES ");
-            b.append(" ( ");
-            b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
-            b.append(" ) ");
-            try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
-                if (dialect.supportBatchOperations()) {
-                    batchExecute(ps, parser, headersTypeList);
-                } else {
-                    execute(ps, parser, headersTypeList);
-                }
-            } catch (SQLException e) {
-                throw new CsvDataLoadException("Load data error", e);
-            }
-        }
-    }
+		com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
+		parser.beginParsing(path.toFile(), config.encoding());
+		parser.parseNext();
+		String[] headers = parser.getRecordMetadata().headers();
+		String[] types = parser.parseNext();
+		List<Map.Entry<String, Type>> headersTypeList = getHeadersTypeList(headers, types);
+		if (!headersTypeList.isEmpty()) {
+			createTable(connection, headersTypeList, tableName);
+			StringBuilder b = new StringBuilder();
+			b.append("INSERT INTO ");
+			b.append(dialect.quoteIdentifier(config.dbSchema(), tableName));
+			b.append(" ( ");
+			b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.getKey()))
+					.collect(Collectors.joining(",")));
+			b.append(" ) VALUES ");
+			b.append(" ( ");
+			b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
+			b.append(" ) ");
+			try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
+				if (dialect.supportBatchOperations()) {
+					batchExecute(connection, ps, parser, headersTypeList);
+				} else {
+					execute(ps, parser, headersTypeList);
+				}
+			} catch (SQLException e) {
+				throw new CsvDataLoadException("Load data error", e);
+			}
+		}
+	}
 
-	private void execute(PreparedStatement ps, CsvParser parser,  List<Map.Entry<String, Type>> headersTypeList) throws SQLException {
+	private void execute(PreparedStatement ps, CsvParser parser, List<Map.Entry<String, Type>> headersTypeList)
+			throws SQLException {
 		boolean first = true;
 		long start = System.currentTimeMillis();
 		com.univocity.parsers.common.record.Record r;
@@ -168,12 +171,11 @@ public class CsvDataLoadServiceImpl implements PathListener {
 
 	}
 
-	private void batchExecute(PreparedStatement ps, com.univocity.parsers.csv.CsvParser parser,
-                              List<Map.Entry<String, Type>> headersTypeList)
-			throws SQLException {
+	private void batchExecute(Connection connection, PreparedStatement ps, com.univocity.parsers.csv.CsvParser parser,
+			List<Map.Entry<String, Type>> headersTypeList) throws SQLException {
 
 		boolean first = true;
-		ps.getConnection().setAutoCommit(false);
+		connection.setAutoCommit(false);
 		long start = System.currentTimeMillis();
 		com.univocity.parsers.common.record.Record r;
 		int count = 0;
@@ -205,12 +207,13 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		ps.executeBatch();
 		LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
 
-		ps.getConnection().commit();
+		connection.commit();
 		LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - start));
-		ps.getConnection().setAutoCommit(true);
+		connection.setAutoCommit(true);
 	}
 
-	private void processingTypeValues(PreparedStatement ps, String columnName, Type type, Record r, int i) throws SQLException {
+	private void processingTypeValues(PreparedStatement ps, String columnName, Type type, Record r, int i)
+			throws SQLException {
 		if (r.getString(columnName) == null || r.getString(columnName).equals("NULL")) {
 			ps.setObject(i, null);
 		} else if (type.equals(Type.LONG)) {
@@ -239,99 +242,99 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		}
 	}
 
-    private void createTable(Connection connection, List<Entry<String, Type>> headersTypeList, String tableName) {
-        try(Statement stmt = connection.createStatement();
-        ) {
-            StringBuilder sb = new StringBuilder("CREATE TABLE ")
-                .append(tableName).append(" ( ");
-            headersTypeList.stream().map( e -> {
-                StringBuilder s =new StringBuilder();
-                s.append(e.getKey()).append(" ").append(getStringType(e.getValue()));
-                return s.toString();
-            }).collect( Collectors.joining( ", " ) );
-            stmt.executeUpdate(sb.toString());
-            LOGGER.debug("Created table in given database...");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+	private void createTable(Connection connection, List<Entry<String, Type>> headersTypeList, String tableName) {
+		try (Statement stmt = connection.createStatement();) {
+			StringBuilder sb = new StringBuilder("CREATE TABLE ").append(tableName).append(" ( ");
+			headersTypeList.stream().map(e -> {
+				StringBuilder s = new StringBuilder();
+				s.append(e.getKey()).append(" ").append(getStringType(e.getValue()));
+				return s.toString();
+			}).collect(Collectors.joining(", "));
+			stmt.executeUpdate(sb.toString());
+			LOGGER.debug("Created table in given database...");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
-    private String getStringType(Type value) {
-	    switch (value) {
-            case INTEGER:
-            case SMALLINT:
-                return "INTEGER";
-            case NUMERIC:
-                return "REAL";
-            case BOOLEAN:
-                return "BOOLEAN";
-            case LONG:
-                return "BIGINT";
-            case DATE:
-                return "DATE";
-            case TIMESTAMP:
-                return "TIMESTAMP";
-            case TIME:
-                return "TIME";
-            case STRING:
-            default:
-                return "VARCHAR(255)";
-        }
-    }
+	private String getStringType(Type value) {
+		switch (value) {
+		case INTEGER:
+		case SMALLINT:
+			return "INTEGER";
+		case NUMERIC:
+			return "REAL";
+		case BOOLEAN:
+			return "BOOLEAN";
+		case LONG:
+			return "BIGINT";
+		case DATE:
+			return "DATE";
+		case TIMESTAMP:
+			return "TIMESTAMP";
+		case TIME:
+			return "TIME";
+		case STRING:
+		default:
+			return "VARCHAR(255)";
+		}
+	}
 
-    private List<Entry<String, Type>> getHeadersTypeList(String[] headers, String[] types) {
-        List<Entry<String, Type>> result = new ArrayList<>();
-        for (int i=0; i< headers.length; i++) {
-               try {
-                   result.add(new AbstractMap.SimpleEntry<>(headers[i], Type.fromName(types[i])));
-               }
-               catch (Exception e) {
-                   LOGGER.error("Load data error: Create data type for Csv loader error", e);
-               }
-        }
-        return result;
-    }
+	private List<Entry<String, Type>> getHeadersTypeList(String[] headers, String[] types) {
+		List<Entry<String, Type>> result = new ArrayList<>();
+		for (int i = 0; i < headers.length; i++) {
+			try {
+				result.add(new AbstractMap.SimpleEntry<>(headers[i], Type.fromName(types[i])));
+			} catch (Exception e) {
+				LOGGER.error("Load data error: Create data type for Csv loader error", e);
+			}
+		}
+		return result;
+	}
 
-    private String getFileNameWithoutExtension(String fileName) {
-        if (fileName.indexOf(".") > 0) {
-            return fileName.substring(0, fileName.lastIndexOf("."));
-        } else {
-            return fileName;
-        }
+	private String getFileNameWithoutExtension(String fileName) {
+		if (fileName.indexOf(".") > 0) {
+			return fileName.substring(0, fileName.lastIndexOf("."));
+		} else {
+			return fileName;
+		}
 
-    }
+	}
 
-    private void delete(Path path) {
-        String tableName = getFileNameWithoutExtension(path.getFileName().toString());
-        LOGGER.debug("Drop table {}", tableName);
-        Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
-        if (dialectOptional.isPresent()) {
-            Dialect dialect = dialectOptional.get();
-            try (Connection connection = dataSource.getConnection()) {
-                dialect.deleteTable(connection, config.dbSchema(), tableName);
-            } catch (SQLException e) {
-                LOGGER.error("Database connection error", e);
-            }
-        } else {
-            LOGGER.error("Database dialect did not determinate");
-        }
-    }
+	private void delete(Path path) {
+		String tableName = getFileNameWithoutExtension(path.getFileName().toString());
+		LOGGER.debug("Drop table {}", tableName);
+		Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
+		if (dialectOptional.isPresent()) {
+			Dialect dialect = dialectOptional.get();
+			try (Connection connection = dataSource.getConnection()) {
+				dialect.deleteTable(connection, config.dbSchema(), tableName);
+			} catch (SQLException e) {
+				LOGGER.error("Database connection error", e);
+			}
+		} else {
+			LOGGER.error("Database dialect did not determinate");
+		}
+	}
 
-    @Override
-    public void handleInitialPaths(List<Path> initialPaths) {
-        this.initialPaths.addAll(initialPaths);
+	@Override
+	public void handleInitialPaths(List<Path> initialPaths) {
+		this.initialPaths.addAll(initialPaths);
+		for (Path path : initialPaths) {
+			loadData(path);
+		}
 
-    }
+	}
 
 	@Override
 	public void handlePathEvent(Path path, Kind<Path> kind) {
-        if ((kind.name().equals(StandardWatchEventKinds.ENTRY_CREATE.name()))
-            ||  (kind.name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name()))) {
-            loadData(path);
-        }
-        if (kind.name().equals(StandardWatchEventKinds.ENTRY_DELETE.name())) {
-            delete(path);
-        }
+		if ((kind.name().equals(StandardWatchEventKinds.ENTRY_CREATE.name()))
+				|| (kind.name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name()))) {
+			loadData(path);
+		}
+		if (kind.name().equals(StandardWatchEventKinds.ENTRY_DELETE.name())) {
+			delete(path);
+		}
 	}
 
 }
