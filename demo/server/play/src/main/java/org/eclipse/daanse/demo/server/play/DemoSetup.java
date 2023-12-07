@@ -29,7 +29,7 @@ public class DemoSetup {
 
 	public static final String PID_CONTEXT = "org.eclipse.daanse.olap.core.BasicContext";
 	
-	public static final String PID_DS = "org.eclipse.daanse.db.datasource.sqlite.SqliteConnectionPoolDataSource";
+	public static final String PID_DS = "org.eclipse.daanse.db.datasource.h2.H2DataSource";
 	public static final String PID_SATATISTICS = "org.eclipse.daanse.db.statistics.metadata.JdbcStatisticsProvider";
 
 	public static final String PID_EXP_COMP_FAC="org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
@@ -71,7 +71,7 @@ public class DemoSetup {
 
 		Dictionary<String, Object> propsDS = new Hashtable<>();
 		propsDS.put("ds", "1");
-		propsDS.put("url", "jdbc:sqlite:myNewDB.sqlite:memory:");
+		propsDS.put("url", "jdbc:h2:mem:test_mem");
 		cDs.update(propsDS);
 
 		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
@@ -83,7 +83,7 @@ public class DemoSetup {
 		
         Dictionary<String, Object> props = new Hashtable<>();
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
-        props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(database.dialect.type=SQLITE)");
+        props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(database.dialect.type=H2)");
         props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(component.name="+PID_SATATISTICS+")");
         props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(component.name="+PID_EXP_COMP_FAC+")");
         props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(&(sample.name=SteelWheels)(sample.type=record))");

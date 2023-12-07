@@ -28,5 +28,6 @@
     <module>clickhouse</module>
     <module>mysql</module>
     <module>postgresql</module>
+    <module>h2</module>
   </modules>
 </project>
