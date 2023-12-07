@@ -241,7 +241,7 @@ public class OtherDiscoverService {
             result.add(new DiscoverPropertiesResponseRowR(
                 propertyDefinition.name(),
                 Optional.ofNullable(propertyDefinition.getDescription()),
-                Optional.of(propertyDefinition.getType().name()),
+                Optional.of(propertyDefinition.getType().value),
                 AccessEnum.fromValue(propertyDefinition.getAccess().name()),
                 Optional.of(false),
                 Optional.ofNullable(propertyValue)));

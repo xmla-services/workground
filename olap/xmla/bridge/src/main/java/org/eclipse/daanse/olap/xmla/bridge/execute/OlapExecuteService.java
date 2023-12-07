@@ -256,7 +256,7 @@ public class OlapExecuteService implements ExecuteService {
                 return executeQuery(context, statementRequest);
             }
         }
-        return null;
+        return new StatementResponseR(null, null);
     }
 
     private StatementResponse executeQuery(Context context, StatementRequest statementRequest) {

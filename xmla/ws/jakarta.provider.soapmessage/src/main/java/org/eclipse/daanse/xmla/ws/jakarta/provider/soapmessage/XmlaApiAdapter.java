@@ -19,6 +19,8 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPHeader;
+import jakarta.xml.soap.SOAPHeaderElement;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -152,6 +154,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.namespace.QName;
 import java.util.Iterator;
 import java.util.List;
 
@@ -207,6 +210,11 @@ public class XmlaApiAdapter {
             envelopeResponse.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
             SOAPBody bodyResponse = envelopeResponse.getBody();
+            //TODO real session id
+            SOAPHeader header = envelopeResponse.getHeader();
+            QName session = new QName("urn:schemas-microsoft-com:xml-analysis", "Session");
+            SOAPHeaderElement sessionElement = header.addHeaderElement(session);
+            sessionElement.addAttribute(new QName("SessionId"), "29fvrtwjn9hx");
 
             handleBody(messageRequest.getSOAPBody(), bodyResponse);
             return messageResponse;
