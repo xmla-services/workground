@@ -18,22 +18,21 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextGroup;
 
 public class ContextsSupplyerImpl implements ContextListSupplyer {
 
-	private final List<Context> contexts;
+	private final ContextGroup contextsGroup;
 
 	// Accepts Null as Empty List
-	public ContextsSupplyerImpl(List<Context> contexts) {
-		if (contexts == null) {
-			contexts = List.of();
-		}
-		this.contexts = contexts;
+	public ContextsSupplyerImpl(ContextGroup contextsGroup) {
+
+		this.contextsGroup = contextsGroup;
 	}
 
 	@Override
 	public List<Context> get() {
-		return contexts;
+		return contextsGroup.getValidContexts();
 	}
 
 	@Override

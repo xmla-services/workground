@@ -1,34 +1,24 @@
 package org.eclipse.daanse.olap.xmla.bridge;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.ContextGroup;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
  class ContextsSupplyerImplTest {
 
-	
+	    @Mock
+	    private ContextGroup contextGroup;
 		
 		@Test
 		void get_Empty() throws Exception {
-			ContextsSupplyerImpl csi= new ContextsSupplyerImpl(List.of());
+			when(contextGroup.getValidContexts()).thenReturn(List.of());
+			ContextsSupplyerImpl csi= new ContextsSupplyerImpl(contextGroup);
 			assertThat(csi.get()).isNotNull().isEmpty();
 		}
 		
-		@Test
-		void get_Null() throws Exception {
-			ContextsSupplyerImpl csi= new ContextsSupplyerImpl(null);
-			assertThat(csi.get()).isNotNull().isEmpty();
-		}
-		
-		
-		
-		@Test
-		void get_1() throws Exception {
-			ContextsSupplyerImpl csi= new ContextsSupplyerImpl(null);
-			
-//			Predicate<Context> p=null;
-//			csi.get(p);
-		}
 }

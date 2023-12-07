@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
@@ -119,6 +120,8 @@ class OtherDiscoverServiceTest {
 
     @Mock
     private Connection connection;
+    @Mock
+    private ContextGroup contextGroup;
 
     private OtherDiscoverService service;
 
@@ -128,7 +131,7 @@ class OtherDiscoverServiceTest {
 
     @BeforeEach
     void setup() {
-        cls = Mockito.spy(new ContextsSupplyerImpl(List.of()));
+        cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
         config = mock(ContextGroupXmlaServiceConfig.class);
 
         service = new OtherDiscoverService(cls, config);

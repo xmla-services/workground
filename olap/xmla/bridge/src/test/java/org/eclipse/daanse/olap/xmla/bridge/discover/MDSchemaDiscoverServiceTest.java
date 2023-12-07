@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -171,6 +172,8 @@ class MDSchemaDiscoverServiceTest {
 
     @Mock
     private Connection connection;
+    @Mock
+    private ContextGroup contextGroup;
 
     private MDSchemaDiscoverService service;
 
@@ -183,7 +186,7 @@ class MDSchemaDiscoverServiceTest {
          * when(cls.get()).thenReturn(List.of(context1,context2));`
          */
 
-        cls = Mockito.spy(new ContextsSupplyerImpl(List.of()));
+        cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
         service = new MDSchemaDiscoverService(cls);
     }
 

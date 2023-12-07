@@ -78,7 +78,7 @@ public class DemoSetup {
 
 		Dictionary<String, Object> propsCG = new Hashtable<>();
 		propsCG.put("cg", "1");
-		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS, "(service.pid=*)");
+		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS+ TARGET_EXT, "(service.pid=*)");
 		
 		cCG.update(propsCG);
 		

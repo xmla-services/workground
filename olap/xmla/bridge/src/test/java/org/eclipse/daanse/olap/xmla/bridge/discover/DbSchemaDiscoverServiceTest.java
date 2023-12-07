@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
@@ -127,6 +128,8 @@ class DbSchemaDiscoverServiceTest {
 
     @Mock
     private Connection connection;
+    @Mock
+    private ContextGroup contextGroup;
 
     private DBSchemaDiscoverService service;
 
@@ -139,7 +142,7 @@ class DbSchemaDiscoverServiceTest {
          * when(cls.get()).thenReturn(List.of(context1,context2));`
          */
 
-        cls = Mockito.spy(new ContextsSupplyerImpl(List.of()));
+        cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
         service = new DBSchemaDiscoverService(cls);
     }
 

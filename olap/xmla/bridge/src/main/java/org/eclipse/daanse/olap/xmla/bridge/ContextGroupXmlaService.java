@@ -13,10 +13,8 @@
 */
 package org.eclipse.daanse.olap.xmla.bridge;
 
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.xmla.bridge.discover.DelegatingDiscoverService;
 import org.eclipse.daanse.olap.xmla.bridge.execute.OlapExecuteService;
@@ -40,49 +38,34 @@ public class ContextGroupXmlaService implements XmlaService {
 	private static final Converter CONVERTER = Converters.standardConverter();
 	private ContextGroupXmlaServiceConfig config;
 
+	public ContextGroupXmlaService() {
+
+	}
+	
 	@Activate
-	public ContextGroupXmlaService(Map<String, Object> props) {
-		this(CONVERTER.convert(props).to(ContextGroupXmlaServiceConfig.class));
+	 void activate(Map<String, Object> props) {
+		this.config = CONVERTER.convert(props).to(ContextGroupXmlaServiceConfig.class);
+		 ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contextGroup);
+		 executeService = new OlapExecuteService(contextsListSupplyer, config);
+		 discoverService = new DelegatingDiscoverService(contextsListSupplyer, config);
+
 	}
 
-	public ContextGroupXmlaService(ContextGroupXmlaServiceConfig config) {
-		this.config = config;
-		reInit();
-	}
+
 
 	public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
 	public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
 
 	private ExecuteService executeService;
 	private DiscoverService discoverService;
-	private ContextGroup contextGroup = null;
+	private ContextGroup contextGroup;
 
 	/*
 	 * target must be configured. no auto fetch of a ContextGroup
 	 */
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC, name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-	void bindContext(ContextGroup contextGroup) {
+	@Reference(cardinality = ReferenceCardinality.MANDATORY,  name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	void bindContextGroup(ContextGroup contextGroup) {
 		this.contextGroup = contextGroup;
-		reInit();
-	}
-
-	private void reInit() {
-
-		List<Context> contexts;
-		if (contextGroup == null) {
-			contexts = List.of();
-		} else {
-			contexts = contextGroup.getValidContexts();
-		}
-		ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contexts);
-		executeService = new OlapExecuteService(contextsListSupplyer, config);
-		discoverService = new DelegatingDiscoverService(contextsListSupplyer, config);
-	}
-
-	void unbindContext(ContextGroup contextGroup) {
-		this.contextGroup = null;
-		reInit();
-
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class BasicContextGroup implements ContextGroup {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContextGroup.class);
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContextGroup";
-	public static final String REF_NAME_CONTEXTS = "contexts";
+	public static final String REF_NAME_CONTEXTS = "context";
 
 	private static final Converter CONVERTER = Converters.standardConverter();
 
