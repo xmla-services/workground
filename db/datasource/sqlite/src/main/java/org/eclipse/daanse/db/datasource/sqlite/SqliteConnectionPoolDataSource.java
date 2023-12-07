@@ -57,7 +57,7 @@ public class SqliteConnectionPoolDataSource
 
 	@Override
 	public PooledConnection getPooledConnection() throws SQLException {
-		return super.getPooledConnection(config.username(), config._password());
+		return delegate().getPooledConnection(config.username(), config._password());
 	}
 
 	@Override

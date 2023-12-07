@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.sqlite.JDBC;
 import org.sqlite.SQLiteConfig.DateClass;
 import org.sqlite.SQLiteConfig.DatePrecision;
 import org.sqlite.SQLiteConfig.Encoding;
@@ -31,7 +32,7 @@ import org.sqlite.SQLiteOpenMode;
 @ObjectClassDefinition()
 public interface SqliteConfig {
 
-	@AttributeDefinition(description = "url", required = true)
+	@AttributeDefinition(description = "url must start with "+JDBC.PREFIX, required = true)
 	default String url() {
 		return null;
 	}

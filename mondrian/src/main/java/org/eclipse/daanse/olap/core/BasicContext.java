@@ -82,10 +82,10 @@ public class BasicContext implements Context {
 
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
-		activate(CONVERTER.convert(coniguration).to(BasicContextConfig.class));
+		activate1(CONVERTER.convert(coniguration).to(BasicContextConfig.class));
 	}
 
-	public void activate(BasicContextConfig configuration) throws Exception {
+	public void activate1(BasicContextConfig configuration) throws Exception {
 
 		this.config = configuration;
 

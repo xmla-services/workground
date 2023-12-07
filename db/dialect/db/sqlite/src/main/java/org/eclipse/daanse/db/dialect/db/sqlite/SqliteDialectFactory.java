@@ -32,7 +32,7 @@ public class SqliteDialectFactory extends AbstractDialectFactory<SqliteDialect> 
 
     @Override
     public boolean isSupportedProduct(String productName, String productVersion, Connection connection) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productName);
     }
 
     @Override

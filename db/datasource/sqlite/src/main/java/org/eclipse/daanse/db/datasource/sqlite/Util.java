@@ -60,7 +60,7 @@ public class Util {
         setValueIfNotNull(c::setTempStoreDirectory, config.tempStoreDirectory());
         setValueIfNotNull(c::setTransactionMode, config.transactionMode());
         setValueIfNotNull(c::setUserVersion, config.userVersion());
-        if (config.datePrecision() == null) {
+        if (config.datePrecision() != null) {
             c.setDatePrecision(config.datePrecision().toString());
         }
         return c;

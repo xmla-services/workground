@@ -4,7 +4,9 @@
 
 -runproperties: \
     org.slf4j.simpleLogger.defaultLogLevel=debug,\
-	org.osgi.service.http.port=8090
+	org.osgi.service.http.port=8090,\
+    osgi.console=,\
+    osgi.console.enable.builtin=true
 	
 	
 -runee: JavaSE-20

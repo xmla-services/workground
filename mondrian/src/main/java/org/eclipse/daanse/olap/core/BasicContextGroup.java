@@ -54,23 +54,24 @@ public class BasicContextGroup implements ContextGroup {
 
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
-		activate(CONVERTER.convert(coniguration).to(BasicContextGroupConfig.class));
+		activateI(CONVERTER.convert(coniguration).to(BasicContextGroupConfig.class));
 	}
 
-	public void activate(BasicContextGroupConfig coniguration)  {
+	public void activateI(BasicContextGroupConfig coniguration) {
 		this.config = coniguration;
 		createUniqueCheckedLists();
 
 	}
 
-	@Reference(name = REF_NAME_CONTEXTS, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	void bindContext(Context context) {
+//	
+	@Reference(name = REF_NAME_CONTEXTS,cardinality = ReferenceCardinality.MULTIPLE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, policy = ReferencePolicy.DYNAMIC)
+	public void bindContext(Context context) {
 		contexts.add(context);
 		createUniqueCheckedLists();
 
 	}
 
-	void unbindContext(Context context) {
+	public void unbindContext(Context context) {
 		contexts.remove(context);
 		createUniqueCheckedLists();
 

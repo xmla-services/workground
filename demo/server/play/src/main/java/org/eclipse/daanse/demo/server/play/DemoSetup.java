@@ -71,7 +71,7 @@ public class DemoSetup {
 
 		Dictionary<String, Object> propsDS = new Hashtable<>();
 		propsDS.put("ds", "1");
-		propsDS.put("url", "myNewDB.sqlite");
+		propsDS.put("url", "jdbc:sqlite:myNewDB.sqlite:memory:");
 		cDs.update(propsDS);
 
 		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
@@ -79,7 +79,6 @@ public class DemoSetup {
 		Dictionary<String, Object> propsCG = new Hashtable<>();
 		propsCG.put("cg", "1");
 		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS+ TARGET_EXT, "(service.pid=*)");
-		
 		cCG.update(propsCG);
 		
         Dictionary<String, Object> props = new Hashtable<>();
