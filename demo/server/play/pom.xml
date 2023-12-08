@@ -19,6 +19,7 @@
 					<bndruns>
 						<bndrun>xmla.demo.server.bndrun</bndrun>
 					</bndruns>
+					<exporter>bnd.executablejar</exporter>
 					<includeDependencyManagement>true</includeDependencyManagement>
 					<reportOptional>false</reportOptional>
 					<scopes>

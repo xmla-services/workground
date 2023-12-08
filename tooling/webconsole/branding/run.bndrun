@@ -50,5 +50,5 @@
 	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
 	org.osgi.util.pushstream;version='[1.0.2,1.0.3)',\
 	org.owasp.encoder;version='[1.2.3,1.2.4)',\
-	slf4j.api;version='[2.0.4,2.0.5)',\
-	slf4j.simple;version='[2.0.4,2.0.5)'
+	slf4j.api;version='[2.0.9,2.0.10)',\
+	slf4j.simple;version='[2.0.9,2.0.10)'

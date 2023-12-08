@@ -80,7 +80,7 @@
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>
       <version>${revision}</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>

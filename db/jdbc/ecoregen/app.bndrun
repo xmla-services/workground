@@ -19,4 +19,5 @@
 	org.osgi.util.converter;version='[1.0.9,1.0.10)',\
 	org.eclipse.daanse.db.datasource.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.datasource.postgresql;version='[0.0.1,0.0.2)',\
-	org.postgresql.jdbc;version='[42.6.0,42.6.1)'
+	org.postgresql.jdbc;version='[42.6.0,42.6.1)',\
+	biz.aQute.api.scheduler;version='[1.10.0,1.10.1)'
