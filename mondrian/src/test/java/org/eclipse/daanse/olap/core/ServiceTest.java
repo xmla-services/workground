@@ -116,7 +116,7 @@ class ServiceTest {
 
         String theName = "theName";
         String theDescription = "theDescription";
-        
+
         props.put("name", theName);
         props.put("description", theDescription);
         c.update(props);
@@ -125,7 +125,7 @@ class ServiceTest {
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
                 .isEqualTo(1);
-
+        assertThat(ctx.getConnection()).isNotNull();
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
             assertThat(x.getDescription()
