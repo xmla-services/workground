@@ -155,11 +155,12 @@ public class SoapUtil {
     }
 
     public static void toMdSchemaCubes(List<MdSchemaCubesResponseRow> rows, SOAPBody body) {
-        SOAPElement root = addDiscoverPropertiesRoot(body);
+        SOAPElement root = addMdSchemaCubesRoot(body);
         rows.forEach(r ->
             addMdSchemaCubesResponseRow(root, r)
         );
     }
+
     public static void toMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> rows, SOAPBody body) {
         SOAPElement root = addDiscoverPropertiesRoot(body);
         rows.forEach(r ->
@@ -1735,6 +1736,136 @@ public class SoapUtil {
         se9.setAttribute("name", "DATE_MODIFIED");
         se9.setAttribute("type", "xsd:dateTime");
         se9.setAttribute("minOccurs", "0");
+
+        return root;
+    }
+
+    private static SOAPElement addMdSchemaCubesRoot(SOAPBody body) {
+        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", ROWSET);
+        SOAPElement schema = fillRoot(root);
+
+        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        ct.setAttribute("name", "row");
+        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+
+        SOAPElement se1  = addChildElement(s, "element", "xsd");
+        se1.setAttribute("sql:field", "CATALOG_NAME");
+        se1.setAttribute("name", "CATALOG_NAME");
+        se1.setAttribute("type", "xsd:string");
+        se1.setAttribute("minOccurs", "0");
+
+        SOAPElement se2  = addChildElement(s, "element", "xsd");
+        se2.setAttribute("sql:field", "SCHEMA_NAME");
+        se2.setAttribute("name", "SCHEMA_NAME");
+        se2.setAttribute("type", "xsd:string");
+        se2.setAttribute("minOccurs", "0");
+
+        SOAPElement se3  = addChildElement(s, "element", "xsd");
+        se3.setAttribute("sql:field", "CUBE_NAME");
+        se3.setAttribute("name", "CUBE_NAME");
+        se3.setAttribute("type", "xsd:string");
+
+        SOAPElement se4  = addChildElement(s, "element", "xsd");
+        se4.setAttribute("sql:field", "CUBE_TYPE");
+        se4.setAttribute("name", "CUBE_TYPE");
+        se4.setAttribute("type", "xsd:string");
+
+        SOAPElement se5  = addChildElement(s, "element", "xsd");
+        se5.setAttribute("sql:field", "CUBE_GUID");
+        se5.setAttribute("name", "CUBE_GUID");
+        se5.setAttribute("type", "xsd:string");
+        se2.setAttribute("minOccurs", "0");
+
+        SOAPElement se6  = addChildElement(s, "element", "xsd");
+        se6.setAttribute("sql:field", "CREATED_ON");
+        se6.setAttribute("name", "CREATED_ON");
+        se6.setAttribute("type", "xsd:dateTime");
+        se6.setAttribute("minOccurs", "0");
+
+        SOAPElement se7  = addChildElement(s, "element", "xsd");
+        se7.setAttribute("sql:field", "LAST_SCHEMA_UPDATE");
+        se7.setAttribute("name", "LAST_SCHEMA_UPDATE");
+        se7.setAttribute("type", "xsd:dateTime");
+        se7.setAttribute("minOccurs", "0");
+
+        SOAPElement se8  = addChildElement(s, "element", "xsd");
+        se8.setAttribute("sql:field", "SCHEMA_UPDATED_BY");
+        se8.setAttribute("name", "SCHEMA_UPDATED_BY");
+        se8.setAttribute("type", "xsd:string");
+        se8.setAttribute("minOccurs", "0");
+
+        SOAPElement se9  = addChildElement(s, "element", "xsd");
+        se9.setAttribute("sql:field", "LAST_DATA_UPDATE");
+        se9.setAttribute("name", "LAST_DATA_UPDATE");
+        se9.setAttribute("type", "xsd:dateTime");
+        se9.setAttribute("minOccurs", "0");
+
+        SOAPElement se10  = addChildElement(s, "element", "xsd");
+        se10.setAttribute("sql:field", "DATA_UPDATED_BY");
+        se10.setAttribute("name", "DATA_UPDATED_BY");
+        se10.setAttribute("type", "xsd:string");
+        se10.setAttribute("minOccurs", "0");
+
+        SOAPElement se11  = addChildElement(s, "element", "xsd");
+        se11.setAttribute("sql:field", "DESCRIPTION");
+        se11.setAttribute("name", "DESCRIPTION");
+        se11.setAttribute("type", "xsd:string");
+        se11.setAttribute("minOccurs", "0");
+
+        SOAPElement se12  = addChildElement(s, "element", "xsd");
+        se12.setAttribute("sql:field", "IS_DRILLTHROUGH_ENABLED");
+        se12.setAttribute("name", "IS_DRILLTHROUGH_ENABLED");
+        se12.setAttribute("type", "xsd:boolean");
+
+        SOAPElement se13  = addChildElement(s, "element", "xsd");
+        se13.setAttribute("sql:field", "IS_LINKABLE");
+        se13.setAttribute("name", "IS_LINKABLE");
+        se13.setAttribute("type", "xsd:boolean");
+
+        SOAPElement se14  = addChildElement(s, "element", "xsd");
+        se14.setAttribute("sql:field", "IS_WRITE_ENABLED");
+        se14.setAttribute("name", "IS_WRITE_ENABLED");
+        se14.setAttribute("type", "xsd:boolean");
+
+        SOAPElement se15  = addChildElement(s, "element", "xsd");
+        se15.setAttribute("sql:field", "IS_SQL_ENABLED");
+        se15.setAttribute("name", "IS_SQL_ENABLED");
+        se15.setAttribute("type", "xsd:boolean");
+
+        SOAPElement se16  = addChildElement(s, "element", "xsd");
+        se16.setAttribute("sql:field", "CUBE_CAPTION");
+        se16.setAttribute("name", "CUBE_CAPTION");
+        se16.setAttribute("type", "xsd:string");
+        se16.setAttribute("minOccurs", "0");
+
+        SOAPElement se17  = addChildElement(s, "element", "xsd");
+        se17.setAttribute("sql:field", "BASE_CUBE_NAME");
+        se17.setAttribute("name", "BASE_CUBE_NAME");
+        se17.setAttribute("type", "xsd:string");
+        se17.setAttribute("minOccurs", "0");
+
+        SOAPElement se18  = addChildElement(s, "element", "xsd");
+        se18.setAttribute("sql:field", "DIMENSIONS");
+        se18.setAttribute("name", "DIMENSIONS");
+        se18.setAttribute("minOccurs", "0");
+
+        SOAPElement se19  = addChildElement(s, "element", "xsd");
+        se19.setAttribute("sql:field", "SETS");
+        se19.setAttribute("name", "SETS");
+        se19.setAttribute("minOccurs", "0");
+
+        SOAPElement se20  = addChildElement(s, "element", "xsd");
+        se20.setAttribute("sql:field", "MEASURES");
+        se20.setAttribute("name", "MEASURES");
+        se20.setAttribute("minOccurs", "0");
+
+        SOAPElement se21  = addChildElement(s, "element", "xsd");
+        se21.setAttribute("sql:field", "CUBE_SOURCE");
+        se21.setAttribute("name", "CUBE_SOURCE");
+        se17.setAttribute("type", "xsd:int");
+        se21.setAttribute("minOccurs", "0");
 
         return root;
     }

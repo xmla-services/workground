@@ -91,10 +91,16 @@ public class MDSchemaDiscoverService {
         Optional<String> baseCubeName = request.restrictions().baseCubeName();
         Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
 
-        Optional<Context> oContext = contextsListSupplyer.tryGetFirstByName(catalogName);
-        if (oContext.isPresent()) {
-            Context context = oContext.get();
-            return getMdSchemaCubesResponseRow(context, schemaName, cubeName, baseCubeName, cubeSource);
+        if (catalogName != null) {
+            Optional<Context> oContext = contextsListSupplyer.tryGetFirstByName(catalogName);
+            if (oContext.isPresent()) {
+                Context context = oContext.get();
+                return getMdSchemaCubesResponseRow(context, schemaName, cubeName, baseCubeName, cubeSource);
+            }
+        } else {
+            return contextsListSupplyer.get().stream().map(c ->
+                getMdSchemaCubesResponseRow(c, schemaName, cubeName, baseCubeName, cubeSource)
+            ).flatMap(Collection::stream).toList();
         }
         return List.of();
     }
