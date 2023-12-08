@@ -98,6 +98,6 @@ public abstract class ConnectionBase implements Connection {
 
     @Override
     public List<Schema> getSchemas() {
-        return List.of();
+        return List.of(getSchema());
     }
 }

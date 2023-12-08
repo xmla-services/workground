@@ -487,7 +487,8 @@ public class Convert {
             Optional.ofNullable(m.get(MEASURE_NAME)),
             Optional.ofNullable(m.get(MEASURE_UNIQUE_NAME)),
             Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.empty(),
+            //TODO  Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(MEASURE_VISIBILITY)))
         );
     }
@@ -531,7 +532,8 @@ public class Convert {
             Optional.ofNullable(m.get(HIERARCHY_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(toInteger(m.get(HIERARCHY_ORIGIN))),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.empty(),
+            //TODO Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(HIERARCHY_VISIBILITY)))
         );
     }

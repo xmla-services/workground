@@ -1944,7 +1944,7 @@ oHierarchyName)
             Optional.of(getHierarchyCardinality(hierarchy)),
             Optional.ofNullable(hierarchy.getDefaultMember() == null ? null :
                 hierarchy.getDefaultMember().getUniqueName()),
-            Optional.ofNullable(hierarchy.hasAll() ? hierarchy.getRootMembers().get(0).getUniqueName() : null),
+            Optional.ofNullable((hierarchy.hasAll() && hierarchy.getRootMembers() != null && hierarchy.getRootMembers().size() > 0) ? hierarchy.getRootMembers().get(0).getUniqueName() : null),
             Optional.ofNullable(desc),
             Optional.of(StructureEnum.HIERARCHY_FULLY_BALANCED),
             Optional.of(false),
@@ -2426,7 +2426,9 @@ oHierarchyName)
                 Optional.empty(),
                 Optional.ofNullable(cubeName),
                 Optional.ofNullable(displayFolder),
-                Optional.ofNullable(formatString))
+                Optional.ofNullable(formatString),
+                Optional.empty(),
+                Optional.of(VisibilityEnum.VISIBLE))
             );
         }
     }

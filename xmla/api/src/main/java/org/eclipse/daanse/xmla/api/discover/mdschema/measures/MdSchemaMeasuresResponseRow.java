@@ -15,8 +15,10 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.measures;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 
 /**
  * This schema rowset describes each measure.
@@ -196,5 +198,22 @@ public interface MdSchemaMeasuresResponseRow {
      * @return The default format string for the measure.
      */
     Optional<String> defaultFormatString();
+
+    /**
+     * @return bitmask with one of these valid values:
+     * 0x01 - Cube
+     * 0x02 - Dimension
+     * The default restriction is a value of 1.
+     */
+    Optional<CubeSourceEnum> cubeSource();
+
+    /**
+     * @return A bitmask with one of these valid values:
+     * 0x01 - Visible
+     * 0x02 - Not Visible
+     * The default restriction is a value of 1.
+     */
+    Optional<VisibilityEnum> measureVisibility();
+
 
 }
