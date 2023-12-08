@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import aQute.bnd.metatype.annotations.Designate;
+import mondrian.olap.DriverManager;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
@@ -138,7 +139,7 @@ public class BasicContext implements Context {
 
 	@Override
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
-		return null;
+		return DriverManager.getConnection(null, null, this);
 	}
 
     @Override
