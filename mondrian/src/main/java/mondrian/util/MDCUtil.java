@@ -26,17 +26,18 @@ public class MDCUtil {
 
   /**
    * Constructor is called on parent thread so a snapshot of the MDC context is saved here.
-   * 
+   *
    */
   public MDCUtil() {
-    if ( ThreadContext.getContext() != null ) {
-      this.mdc.putAll( ThreadContext.getContext() );
-    }
+      //TODO
+    //if ( ThreadContext.getContext() != null ) {
+      //this.mdc.putAll( ThreadContext.getContext() );
+    //}
   }
 
   /**
    * This is called on the child thread so the saved MDC context is copied into the child thread.
-   * 
+   *
    */
   public void setContextMap() {
     final Map<String, String> old = ThreadContext.getContext();

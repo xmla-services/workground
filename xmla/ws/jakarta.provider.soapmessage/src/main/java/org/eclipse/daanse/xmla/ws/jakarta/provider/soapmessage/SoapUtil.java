@@ -196,7 +196,7 @@ public class SoapUtil {
     }
 
     public static void toMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> rows, SOAPBody body) {
-        SOAPElement root = addDiscoverPropertiesRoot(body);
+        SOAPElement root = addMdSchemaMeasuresRoot(body);
         rows.forEach(r ->
             addMdSchemaMeasuresResponseRow(root, r)
         );
@@ -218,7 +218,7 @@ public class SoapUtil {
     }
 
     public static void toMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> rows, SOAPBody body) {
-        SOAPElement root = addDiscoverPropertiesRoot(body);
+        SOAPElement root = addMdSchemaHierarchiesRoot(body);
         rows.forEach(r ->
             addMdSchemaHierarchiesResponseRow(root, r)
         );
@@ -724,6 +724,8 @@ public class SoapUtil {
         r.measureUnqualifiedCaption().ifPresent(v -> addChildElement(row, "MEASURE_UNQUALIFIED_CAPTION", prefix, v));
         r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.defaultFormatString().ifPresent(v -> addChildElement(row, "DEFAULT_FORMAT_STRING", prefix, v));
+        r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", prefix, String.valueOf(v.getValue())));
+        r.measureVisibility().ifPresent(v -> addChildElement(row, "MEASURE_VISIBILITY", prefix, String.valueOf(v.getValue())));
     }
 
     private static void addMdSchemaMembersResponseRow(SOAPElement root, MdSchemaMembersResponseRow r) {
@@ -1623,7 +1625,7 @@ public class SoapUtil {
         SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
         SOAPElement ret = addChildElement(response, "return", MSXMLA);
         SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(body);
+        SOAPElement schema = fillRoot(root);
 
         SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
@@ -1640,7 +1642,7 @@ public class SoapUtil {
         SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
         SOAPElement ret = addChildElement(response, "return", MSXMLA);
         SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(body);
+        SOAPElement schema = fillRoot(root);
 
         SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
@@ -1864,12 +1866,89 @@ public class SoapUtil {
         SOAPElement se21  = addChildElement(s, "element", "xsd");
         se21.setAttribute("sql:field", "CUBE_SOURCE");
         se21.setAttribute("name", "CUBE_SOURCE");
-        se17.setAttribute("type", "xsd:int");
+        se21.setAttribute("type", "xsd:int");
         se21.setAttribute("minOccurs", "0");
 
         return root;
     }
 
+    private static SOAPElement addMdSchemaHierarchiesRoot(SOAPBody body) {
+        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", ROWSET);
+        SOAPElement schema = fillRoot(root);
+        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        ct.setAttribute("name", "row");
+        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME","xsd:string","0");
+        addElement(s, "SCHEMA_NAME", "xsd:string", "0");
+        addElement(s, "CUBE_NAME", "xsd:string", null);
+        addElement(s, "DIMENSION_UNIQUE_NAME","xsd:string", null);
+        addElement(s, "HIERARCHY_NAME", "xsd:string", null);
+        addElement(s, "HIERARCHY_UNIQUE_NAME", "xsd:string", null);
+        addElement(s, "HIERARCHY_GUID", "uuid", "0");
+        addElement(s, "HIERARCHY_CAPTION", "xsd:string", null);
+        addElement(s, "DIMENSION_TYPE", "xsd:short", null);
+        addElement(s, "HIERARCHY_CARDINALITY", "xsd:unsignedInt", null);
+        addElement(s, "DEFAULT_MEMBER", "xsd:string", "0");
+        addElement(s, "ALL_MEMBER", "xsd:string", "0");
+        addElement(s, "DESCRIPTION", "xsd:string", "0");
+        addElement(s, "STRUCTURE", "xsd:short", null);
+        addElement(s, "IS_VIRTUAL", "xsd:boolean", null);
+        addElement(s, "IS_READWRITE", "xsd:boolean", null);
+        addElement(s, "DIMENSION_UNIQUE_SETTINGS", "xsd:int", null);
+        addElement(s, "DIMENSION_IS_VISIBLE", "xsd:boolean", null);
+        addElement(s, "HIERARCHY_ORDINAL", "xsd:unsignedInt", null);
+        addElement(s, "DIMENSION_IS_SHARED", "xsd:boolean", null);
+        addElement(s, "HIERARCHY_IS_VISIBLE", "xsd:boolean", null);
+        addElement(s, "HIERARCHY_ORIGIN", "xsd:unsignedShort", "0");
+        addElement(s, "HIERARCHY_DISPLAY_FOLDER", "xsd:string", "0");
+        addElement(s, "CUBE_SOURCE", "xsd:unsignedShort", "0");
+        addElement(s, "HIERARCHY_VISIBILITY", "xsd:unsignedShort", "0");
+        addElement(s, "PARENT_CHILD", "xsd:boolean", "0");
+        addElement(s, "LEVELS", null, "0");
+        return root;
+    }
+
+    private static SOAPElement addMdSchemaMeasuresRoot(SOAPBody body) {
+        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", ROWSET);
+        SOAPElement schema = fillRoot(root);
+        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        ct.setAttribute("name", "row");
+        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME","xsd:string","0");
+        addElement(s, "SCHEMA_NAME", "xsd:string", "0");
+        addElement(s, "CUBE_NAME", "xsd:string", null);
+        addElement(s, "MEASURE_NAME", "xsd:string", null);
+        addElement(s, "MEASURE_UNIQUE_NAME", "xsd:string", null);
+        addElement(s, "MEASURE_CAPTION", "xsd:string", null);
+        addElement(s, "MEASURE_GUID", "uuid", "0");
+        addElement(s, "MEASURE_AGGREGATOR", "xsd:int", null);
+        addElement(s, "DATA_TYPE", "xsd:unsignedShort", null);
+        addElement(s, "MEASURE_IS_VISIBLE", "xsd:boolean", null);
+        addElement(s, "LEVELS_LIST", "xsd:string", "0");
+        addElement(s, "DESCRIPTION", "xsd:string", "0");
+        addElement(s, "MEASUREGROUP_NAME", "xsd:string", "0");
+        addElement(s, "MEASURE_DISPLAY_FOLDER", "xsd:string", "0");
+        addElement(s, "DEFAULT_FORMAT_STRING", "xsd:string","0");
+        addElement(s, "CUBE_SOURCE", "xsd:unsignedShort", "0");
+        addElement(s, "MEASURE_VISIBILITY", "xsd:unsignedShort", "0");
+        return root;
+    }
+
+    private static void addElement(SOAPElement s, String name, String type, String minOccurs) {
+        SOAPElement se  = addChildElement(s, "element", "xsd");
+        se.setAttribute("sql:field", name);
+        se.setAttribute("name", name);
+        if (type != null) {
+            se.setAttribute("type", type);
+        }
+        if (minOccurs != null) {
+            se.setAttribute("minOccurs", minOccurs);
+        }
+    }
 
     private static SOAPElement fillRoot(SOAPElement root) {
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");

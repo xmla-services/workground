@@ -55,6 +55,7 @@ import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
@@ -619,8 +620,10 @@ class Convertor {
                 Optional.ofNullable(m.get(MEASURE_UNQUALIFIED_CAPTION)),
                 Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
                 Optional.ofNullable(m.get(MEASURE_DISPLAY_FOLDER)),
-                Optional.ofNullable(m.get(DEFAULT_FORMAT_STRING))
-            )
+                Optional.ofNullable(m.get(DEFAULT_FORMAT_STRING)),
+                Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+                Optional.ofNullable(VisibilityEnum.fromValue(m.get(CUBE_SOURCE)))
+        )
         ).toList();
     }
 

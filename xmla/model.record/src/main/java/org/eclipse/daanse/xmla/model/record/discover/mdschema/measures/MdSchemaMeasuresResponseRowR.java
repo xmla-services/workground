@@ -13,8 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measures;
 
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 
 import java.util.Optional;
@@ -39,7 +41,9 @@ public record MdSchemaMeasuresResponseRowR(Optional<String> catalogName,
                                            Optional<String> measureUnqualifiedCaption,
                                            Optional<String> measureGroupName,
                                            Optional<String> measureDisplayFolder,
-                                           Optional<String> defaultFormatString)
+                                           Optional<String> defaultFormatString,
+                                           Optional<CubeSourceEnum> cubeSource,
+                                           Optional<VisibilityEnum> measureVisibility)
     implements MdSchemaMeasuresResponseRow {
 
 }

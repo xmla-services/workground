@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 public enum HierarchyOriginEnum {
 
+	NONE(0x0000),
     /**
      * Identifies user-defined hierarchies.
      */
@@ -36,6 +37,8 @@ public enum HierarchyOriginEnum {
      * Identifies attributes with no attribute hierarchies.
      */
     WITH_NO_ATTRIBUTE(0x0008),
+
+    USER_ATTRIBUTE_AND_KEY(0x0006),
 
     /**
      * The default restriction
