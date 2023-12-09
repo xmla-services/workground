@@ -18,6 +18,7 @@
 					<failOnChanges>false</failOnChanges>
 					<bndruns>
 						<bndrun>xmla.demo.server.bndrun</bndrun>
+						<bndrun>xmla.demo.server.min.bndrun</bndrun>
 					</bndruns>
 					<exporter>bnd.executablejar</exporter>
 					<includeDependencyManagement>true</includeDependencyManagement>
@@ -52,16 +53,26 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>
+			<artifactId>org.eclipse.daanse.xmla.server.jakarta.jws</artifactId>
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage</artifactId>
+			<artifactId>
+				org.eclipse.daanse.xmla.server.jakarta.xml.ws.provider.soapmessage</artifactId>
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.xmla.server.jakarta.saaj</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.ws.runtime.httpwhiteboard</artifactId>
@@ -103,28 +114,29 @@
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.olap.xmla.bridge</artifactId>
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-				<dependency>
+
+		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>
+			<artifactId>
+				org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>
 			<version>${revision}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.util.converter</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 
 	</dependencies>
 </project>

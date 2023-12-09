@@ -10,19 +10,25 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
-    <version>${revision}</version>
-  </parent>
-  <artifactId>org.eclipse.daanse.xmla</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-    <module>api</module>
-    <module>ws</module>
-    <module>model.record</module>
-    <module>client</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.daanse</groupId>
+		<artifactId>org.eclipse.daanse.pom.parent</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>org.eclipse.daanse.xmla</artifactId>
+	<packaging>pom</packaging>
+	<modules>
+		<module>api</module>
+		<module>model.record</module>
+		<module>model.jakarta.xml.bind.xsd</module>
+		<module>model.jakarta.xml.bind.xmla</module>
+		<module>client</module>
+		<module>server</module>
+	</modules>
 </project>
+
+

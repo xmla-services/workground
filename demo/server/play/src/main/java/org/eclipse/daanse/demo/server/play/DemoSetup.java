@@ -21,10 +21,15 @@ import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
 public class DemoSetup {
 	private static final String TARGET_EXT = ".target";
 
-    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.ws.jakarta.basic.MsXmlAnalysisSoap";
+	
+
+    public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.server.jakarta.jws.MsXmlAnalysisSoap";
+      
+    public static final String PID_MS_SOAP_MSG_WS ="org.eclipse.daanse.xmla.server.jakarta.xml.ws.provider.soapmessage.XmlaWebserviceProvider";   
+    public static final String PID_MS_SOAP_MSG_SAAJ ="org.eclipse.daanse.xmla.server.jakarta.saaj.XmlaServlet";   
+ 
     
     
-    public static final String PID_MS_SOAP_MSG ="org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.XmlaWebserviceProvider";   
     public static final String PID_XMLA_SERVICE = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
 
 	public static final String PID_CONTEXT = "org.eclipse.daanse.olap.core.BasicContext";
@@ -49,6 +54,10 @@ public class DemoSetup {
 	private Configuration cCG;
 
 	private Configuration cXmlaEndpoint2;
+
+
+
+	private Configuration cXmlaEndpoint3;
 
 
     @Activate
@@ -114,7 +123,7 @@ public class DemoSetup {
         
         cXmlaEndpoint.update(dict);
         
-		cXmlaEndpoint2 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG , "2", "?");
+		cXmlaEndpoint2 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG_WS , "2", "?");
 
 		dict = new Hashtable<>();
         dict.put("xmlaService.target", "(service.pid=*)");
@@ -122,6 +131,17 @@ public class DemoSetup {
 
 
         cXmlaEndpoint2.update(dict);
+        
+        
+        
+		cXmlaEndpoint3 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG_SAAJ , "3", "?");
+
+		dict = new Hashtable<>();
+        dict.put("xmlaService.target", "(service.pid=*)");
+        dict.put( "osgi.soap.endpoint.contextpath","/xmla3");
+
+
+        cXmlaEndpoint3.update(dict);
 
         cLoggingHandler = configurationAdmin
                 .getFactoryConfiguration("org.eclipse.daanse.ws.handler.SOAPLoggingHandler","1", "?");
