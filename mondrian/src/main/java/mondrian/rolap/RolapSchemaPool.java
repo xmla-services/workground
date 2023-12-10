@@ -30,9 +30,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.JdbcSchema;
-import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.util.ByteString;
-import mondrian.util.ClassResolver;
 import mondrian.util.ExpiringReference;
 
 /**
@@ -249,11 +247,8 @@ public class RolapSchemaPool {
     {
         // We will return the first of the following:
         //  1. CatalogContent property if set
-        //  2. DynamicSchemaProcessor#processSchema if set
         //  3. Util.readVirtualFileAsString(catalogUrl)
 
-        // check for a DynamicSchemaProcessor
-        String dynProcName = connectInfo.get( RolapConnectionProperties.DynamicSchemaProcessor.name() );
         String catalogStr = connectInfo.get( RolapConnectionProperties.CatalogContent.name() );
 
         if (Util.isEmpty(catalogStr)) {
@@ -263,9 +258,7 @@ public class RolapSchemaPool {
                         RolapConnectionProperties.CatalogContent.name());
             }
 
-            if (!Util.isEmpty(dynProcName)) {
-                catalogStr = processDynamicSchema( dynProcName, catalogUrl, null, connectInfo);
-            }
+
 
             if (Util.isEmpty(catalogStr)) {
                 // read schema from file
@@ -276,46 +269,13 @@ public class RolapSchemaPool {
                 }
             }
         }
-        else {
-            if (!Util.isEmpty(dynProcName)) {
-                catalogStr = processDynamicSchema( dynProcName, null, catalogStr, connectInfo );
-            }
-        }
+
 
         return catalogStr;
     }
 
-    private static String processDynamicSchema(
-      final String dynProcName,
-      final String catalogUrl,
-      final String catalogStr,
-      final Util.PropertyList connectInfo )
-    {
-        if (RolapSchema.LOGGER.isDebugEnabled()) {
-            RolapSchema.LOGGER.debug(
-                new StringBuilder("Pool.get: create schema \"").append(catalogUrl)
-                .append("\" using dynamic processor").toString());
-        }
-        try {
-            final DynamicSchemaProcessor dynProc =
-                ClassResolver.INSTANCE.instantiateSafe(dynProcName);
 
-            if( catalogUrl != null ) {
-                return dynProc.processSchema(catalogUrl, connectInfo);
-            }
 
-            if( catalogStr != null ) {
-                return dynProc.processCatalog( catalogStr, connectInfo);
-            }
-
-            throw new IllegalArgumentException( "At least one of catalogUrl and catalogStr should not be null" );
-
-        } catch (Exception e) {
-            throw Util.newError(
-                e,
-                "loading DynamicSchemaProcessor " + dynProcName);
-        }
-    }
 
     void remove(
         final String catalogUrl,

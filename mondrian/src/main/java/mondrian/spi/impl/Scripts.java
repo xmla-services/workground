@@ -11,7 +11,6 @@ package mondrian.spi.impl;
 
 import mondrian.olap.Util;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.UserDefinedFunction;
@@ -108,21 +107,8 @@ public class Scripts {
 
 
 
-    /**
-     * Creates an implementation of the {@link DynamicSchemaProcessor} SPI based
-     * on a script.
-     *
-     * @param script Script
-     * @return dynamic schema processor
-     */
-    public static DynamicSchemaProcessor dynamicSchemaProcessor(
-        ScriptDefinition script)
-    {
-        return create(
-            script,
-            DynamicSchemaProcessor.class,
-            simple(script, "processSchema(schemaUrl, connectInfo)"));
-    }
+
+
 
     /**
      * Creates an implementation of the {@link UserDefinedFunction} SPI based on

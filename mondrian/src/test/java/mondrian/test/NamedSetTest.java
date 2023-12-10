@@ -12,9 +12,19 @@
 */
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
@@ -35,19 +45,8 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
 
 /**
  * Unit-test for named sets, in all their various forms: <code>WITH SET</code>,
@@ -1348,26 +1347,7 @@ class NamedSetTest {
         }
     }
 
-    public static class NamedSetsInCubeProcessor
-        extends FilterDynamicSchemaProcessor
-    {
-        @Override
-		public String filter(
-            String schemaUrl,
-            Util.PropertyList connectInfo,
-            InputStream stream) throws Exception
-        {
-            String s = super.filter(schemaUrl, connectInfo, stream);
-            int i = s.indexOf("</Cube>");
-            return
-                s.substring(0, i) + "\n"
-                + "<NamedSet name=\"CA Cities\" formula=\"{[Store].[USA].[CA].Children}\"/>\n"
-                + "<NamedSet name=\"Top CA Cities\">\n"
-                + "  <Formula>TopCount([CA Cities], 2, [Measures].[Unit Sales])</Formula>\n"
-                + "</NamedSet>\n"
-                + s.substring(i);
-        }
-    }
+
 
 
     public static class NamedSetsInCubeAndSchemaModifier extends RDbMappingSchemaModifier {
@@ -1403,45 +1383,8 @@ class NamedSetTest {
         }
     }
 
-    /**
-     * Dynamic schema processor which adds two named sets to a the first cube
-     * in a schema.
-     */
-    public static class NamedSetsInCubeAndSchemaProcessor
-        extends FilterDynamicSchemaProcessor
-    {
-        @Override
-		protected String filter(
-            String schemaUrl,
-            Util.PropertyList connectInfo,
-            InputStream stream) throws Exception
-        {
-            String s = super.filter(schemaUrl, connectInfo, stream);
-            int i = s.indexOf("</Cube>");
-            s =
-                s.substring(0, i) + "\n"
-                + "<NamedSet name=\"CA Cities\" formula=\"{[Store].[USA].[CA].Children}\"/>\n"
-                + "<NamedSet name=\"Top CA Cities\">\n"
-                + "  <Formula>TopCount([CA Cities], 2, [Measures].[Unit Sales])</Formula>\n"
-                + "</NamedSet>\n"
-                + s.substring(i);
-            // Schema-level named sets occur after <Cube> and <VirtualCube> and
-            // before <Role> elements.
-            i = s.indexOf("<Role");
-            if (i < 0) {
-                i = s.indexOf("</Schema>");
-            }
-            s =
-                s.substring(0, i)
-                + "\n"
-                + "<NamedSet name=\"CA Cities\" formula=\"{[Store].[USA].[WA].Children}\"/>\n"
-                + "<NamedSet name=\"Top USA Stores\">\n"
-                + "  <Formula>TopCount(Descendants([Store].[USA]), 7)</Formula>\n"
-                + "</NamedSet>\n"
-                + s.substring(i);
-            return s;
-        }
-    }
+
+
 
 
     public static class MixedNamedSetSchemaModifier extends RDbMappingSchemaModifier {
@@ -1489,42 +1432,6 @@ class NamedSetTest {
         }
     }
 
-    /**
-     * Dynamic schema processor which adds a named set which has a syntax
-     * error.
-     */
-    public static class MixedNamedSetSchemaProcessor
-        extends FilterDynamicSchemaProcessor
-    {
-        @Override
-		protected String filter(
-            String schemaUrl,
-            Util.PropertyList connectInfo,
-            InputStream stream) throws Exception
-        {
-            String s = super.filter(schemaUrl, connectInfo, stream);
-            // Declare mutually dependent named sets and calculated members
-            // at the end of a cube:
-            //   m2 references s1
-            //   s1 references s0 and m1 and m0
-            int i = s.indexOf("</Cube>");
-            s = s.substring(0, i) + "\n"
-                // member [CA City Sales] references set [CA Cities]
-                + "  <CalculatedMember\n"
-                + "      name=\"CA City Sales\"\n"
-                + "      dimension=\"Measures\"\n"
-                + "      visible=\"false\"\n"
-                + "      formula=\"Aggregate([CA Cities], [Measures].[Unit Sales])\">\n"
-                + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.0\"/>\n"
-                + "  </CalculatedMember>\n"
+   
 
-                // set [Top Products In CA] references member [CA City Sales]
-                + "<NamedSet name=\"Top Products In CA\">\n"
-                + "  <Formula>TopCount([Product].[Product Department].MEMBERS, 3, ([Time].[1997].[Q3], [Measures].[CA City Sales]))</Formula>\n"
-                + "</NamedSet>\n"
-                + "<NamedSet name=\"CA Cities\" formula=\"{[Store].[USA].[CA].Children}\"/>\n"
-                + s.substring(i);
-            return s;
-        }
-    }
 }

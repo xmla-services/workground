@@ -37,12 +37,9 @@ public class SchemaContentKey extends StringKey {
     {
         final String catalogContentProp =
             RolapConnectionProperties.CatalogContent.name();
-        final String dynamicSchemaProp =
-            RolapConnectionProperties.DynamicSchemaProcessor.name();
 
         StringBuilder buf = new StringBuilder();
-        if (!Util.isEmpty(connectInfo.get(catalogContentProp))
-            || !Util.isEmpty(connectInfo.get(dynamicSchemaProp)))
+        if (!Util.isEmpty(connectInfo.get(catalogContentProp)))
         {
             ConnectionKey.attributeValue(buf, "catalogStr", catalogContents);
         } else {

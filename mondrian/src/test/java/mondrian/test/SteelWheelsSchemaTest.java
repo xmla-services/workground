@@ -8,13 +8,18 @@
 */
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.RoleImpl;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.databaseIsValid;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.Arrays;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Schema;
@@ -30,18 +35,11 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
-import java.io.InputStream;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.databaseIsValid;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.RoleImpl;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.util.Bug;
 
 class SteelWheelsSchemaTest {
 
@@ -276,20 +274,7 @@ class SteelWheelsSchemaTest {
             + "Axis #2:\n");
     }
 
-    public static class Mondrian756SchemaProcessor
-        extends FilterDynamicSchemaProcessor
-    {
-        @Override
-        public String filter(
-            String schemaUrl,
-            Util.PropertyList connectInfo,
-            InputStream stream) throws Exception
-        {
-            String schema = super.filter(schemaUrl, connectInfo, stream);
-            return schema.replace(
-                " hasAll=\"true\"", " hasAll=\"false\"");
-        }
-    }
+
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-756">

@@ -11,10 +11,8 @@ package mondrian.rolap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.Constants.PROJECT_DIR;
-import static org.opencube.junit5.TestUtil.getDefaultConnectString;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -26,7 +24,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
-import mondrian.spi.DynamicSchemaProcessor;
 
 /**
  * Test for {@link RolapSchemaPool}.
@@ -76,14 +73,5 @@ class RolapSchemaPoolTest {
         }
     }
 
-    public static class NotReallyDynamicSchemaProcessor
-        implements DynamicSchemaProcessor
-    {
-        @Override
-		public String processSchema(String schemaUrl, PropertyList connectInfo)
-            throws Exception
-        {
-            return Util.readVirtualFileAsString(schemaUrl);
-        }
-    }
+
 }

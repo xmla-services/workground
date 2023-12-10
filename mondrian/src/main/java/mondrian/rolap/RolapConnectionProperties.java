@@ -85,13 +85,8 @@ public enum RolapConnectionProperties {
    */
   UseSchemaPool,
 
-  /**
-   * The name of a class implementing the
-   * {@link mondrian.spi.DynamicSchemaProcessor} interface.
-   * A dynamic schema processor is called at runtime in order to modify the
-   * schema content.
-   */
-  DynamicSchemaProcessor,
+
+
 
   /**
    * The "Locale" property is the requested Locale for the
