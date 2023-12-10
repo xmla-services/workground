@@ -40,13 +40,13 @@ public class MDCUtil {
    *
    */
   public void setContextMap() {
-    final Map<String, String> old = ThreadContext.getContext();
-    if ( old != null ) {
-      old.clear();
-    }
-    for ( Entry<String, String> entry : mdc.entrySet() ) {
-      ThreadContext.put( entry.getKey(), entry.getValue() );
-    }
+//    final Map<String, String> old = ThreadContext.getContext();
+//    if ( old != null ) {
+//      old.clear();
+//    }
+//    for ( Entry<String, String> entry : mdc.entrySet() ) {
+//      ThreadContext.put( entry.getKey(), entry.getValue() );
+//    }
   }
 
 }
