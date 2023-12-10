@@ -27,8 +27,10 @@ public enum VisibilityEnum {
     VISIBLE(0x01),
 
     @XmlEnumValue("0x02")
-    NOT_VISIBLE(0x02);
+    NOT_VISIBLE(0x02),
 
+    @XmlEnumValue("0x03")
+    ALL(0x03);
 
     private final int value;
 

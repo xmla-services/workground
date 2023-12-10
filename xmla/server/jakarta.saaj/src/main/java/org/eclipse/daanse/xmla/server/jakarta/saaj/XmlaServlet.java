@@ -19,7 +19,7 @@ import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPHeaderElement;
 import jakarta.xml.soap.SOAPMessage;
 
-@HttpWhiteboardServletPattern("/xmla")
+@HttpWhiteboardServletPattern("/xmla3")
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 public class XmlaServlet extends AbstractSAAJServlet {
 

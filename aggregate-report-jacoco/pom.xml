@@ -118,11 +118,11 @@
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.client.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xsd</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>       <version>${revision}</version>       <scope>test</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.server.jakarta.jws</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.model.jakarta.xml.bind.xmla</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.model.jakarta.xml.bind.xsd</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.server.jakarta.xml.ws.provider.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.server.tck</artifactId>       <version>${revision}</version>       <scope>test</scope>     </dependency>
 
 
 
