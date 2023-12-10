@@ -10,19 +10,24 @@
 */
 package mondrian.rolap;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.NativeEvaluationUnsupportedException;
-import mondrian.rolap.RolapConnection.NonEmptyResult;
-import mondrian.rolap.RolapNative.Listener;
-import mondrian.rolap.RolapNative.NativeEvent;
-import mondrian.rolap.RolapNative.TupleEvent;
-import mondrian.rolap.sql.MemberChildrenConstraint;
-import mondrian.rolap.sql.TupleConstraint;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.util.Bug;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -64,24 +69,19 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static mondrian.test.FoodmartTestContextImpl.levelName;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluationUnsupportedException;
+import mondrian.rolap.RolapConnection.NonEmptyResult;
+import mondrian.rolap.RolapNative.Listener;
+import mondrian.rolap.RolapNative.NativeEvent;
+import mondrian.rolap.RolapNative.TupleEvent;
+import mondrian.rolap.sql.MemberChildrenConstraint;
+import mondrian.rolap.sql.TupleConstraint;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.Bug;
 
 /**
  * Tests for NON EMPTY Optimization, includes SqlConstraint type hierarchy and RolapNative classes.
@@ -90,6 +90,17 @@ import static org.opencube.junit5.TestUtil.withSchema;
  * @since Nov 21, 2005
  */
 class NonEmptyTest extends BatchTestCase {
+
+
+	public static String hierarchyName(String dimension, String hierarchy) {
+		return MondrianProperties.instance().SsasCompatibleNaming.get() ? "[" + dimension + "].[" + hierarchy + "]"
+				: (hierarchy.equals(dimension) ? "[" + dimension + "]" : "[" + dimension + "." + hierarchy + "]");
+	}
+
+	public static String levelName(String dimension, String hierarchy, String level) {
+		return hierarchyName(dimension, hierarchy) + ".[" + level + "]";
+	}
+
   SqlConstraintFactory scf = SqlConstraintFactory.instance();
 
   private static final String STORE_TYPE_LEVEL =

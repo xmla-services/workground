@@ -18,30 +18,32 @@
  */
 package org.opencube.junit5;
 
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.Util;
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap4j.MondrianOlap4jConnection;
-import mondrian.rolap.MemberCacheHelper;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.RolapUtil;
-import mondrian.rolap.SmartMemberReader;
-import mondrian.server.Execution;
-import mondrian.server.Statement;
-import mondrian.spi.DynamicSchemaProcessor;
-import mondrian.test.FoodmartTestContextImpl;
-import mondrian.test.NotUseOldTestContext;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.util.DelegatingInvocationHandler;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.Constants.PROJECT_DIR;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Proxy;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Formatter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
@@ -75,31 +77,27 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.Constants.PROJECT_DIR;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.Util;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap4j.MondrianOlap4jConnection;
+import mondrian.rolap.MemberCacheHelper;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SmartMemberReader;
+import mondrian.server.Execution;
+import mondrian.server.Statement;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.DelegatingInvocationHandler;
 
 //import mondrian.spi.DialectManager;
 
@@ -639,12 +637,12 @@ public class TestUtil {
 	public static Dialect getFakeDialect( DatabaseProduct product ) {
 		final DatabaseMetaData metaData =
 				(DatabaseMetaData) Proxy.newProxyInstance(
-						NotUseOldTestContext.class.getClassLoader(),
+						TestUtil.class.getClassLoader(),
 						new Class<?>[] { DatabaseMetaData.class },
 						new DatabaseMetaDataInvocationHandler( product ) );
 		final java.sql.Connection connection =
 				(java.sql.Connection) Proxy.newProxyInstance(
-						NotUseOldTestContext.class.getClassLoader(),
+						TestUtil.class.getClassLoader(),
 						new Class<?>[] { java.sql.Connection.class },
 						new ConnectionInvocationHandler( metaData ) );
         //TODO Commented by reason context implementation
@@ -1011,6 +1009,7 @@ public class TestUtil {
 		return buf.toString();
 	}
 
+	
 	public static String toString( CellSet cellSet ) {
 		final StringWriter sw = new StringWriter();
 		new TraditionalCellSetFormatter().format(
@@ -1551,11 +1550,12 @@ public class TestUtil {
 		String resultString1 =
 				toString(executeQuery(connection, query1));
 		String resultString2 =
-				FoodmartTestContextImpl.toString(executeQuery(connection, query2));
+				TestUtil.toString(executeQuery(connection, query2));
 		assertEquals(
 				measureValues(resultString1),
 				measureValues(resultString2));
 	}
+	
 
 	/**
 	 * Truncates the query result to return only measure values.
@@ -1589,30 +1589,16 @@ public class TestUtil {
 	public static Util.PropertyList getConnectionProperties() {
 		final Util.PropertyList propertyList =
 				Util.parseConnectString( getDefaultConnectString() );
-		if ( MondrianProperties.instance().TestHighCardinalityDimensionList
-				.get() != null
-				&& propertyList.get(
-				RolapConnectionProperties.DynamicSchemaProcessor.name() )
-				== null ) {
-			propertyList.put(
-					RolapConnectionProperties.DynamicSchemaProcessor.name(),
-					FoodmartTestContextImpl.HighCardDynamicSchemaProcessor.class.getName() );
-		}
+	
+
 		return propertyList;
 	}
 
 	public static Util.PropertyList getConnectionProperties(Connection connection) {
 		final Util.PropertyList propertyList =
 				Util.parseConnectString(((RolapConnection)connection).getConnectInfo().toString());
-		if ( MondrianProperties.instance().TestHighCardinalityDimensionList
-				.get() != null
-				&& propertyList.get(
-				RolapConnectionProperties.DynamicSchemaProcessor.name() )
-				== null ) {
-			propertyList.put(
-					RolapConnectionProperties.DynamicSchemaProcessor.name(),
-					FoodmartTestContextImpl.HighCardDynamicSchemaProcessor.class.getName() );
-		}
+	
+
 		return propertyList;
 	}
 

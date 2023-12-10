@@ -18,7 +18,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -39,11 +38,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.DiffRepository;
-import mondrian.test.NotUseOldTestContext;
 import mondrian.tui.MockHttpServletRequest;
 import mondrian.tui.MockHttpServletResponse;
 import mondrian.tui.XmlaSupport;
@@ -395,13 +391,8 @@ System.out.println("password=" + password);
         return Callback.class;
     }
 
-    protected Map<String, String> getCatalogNameUrls(NotUseOldTestContext testContext) {
-        if (catalogNameUrls == null) {
 
-            catalogNameUrls.put("FoodMart", "FoodMart,xml");
-        }
-        return catalogNameUrls;
-    }
+
 
     /////////////////////////////////////////////////////////////////////////
     // tests
