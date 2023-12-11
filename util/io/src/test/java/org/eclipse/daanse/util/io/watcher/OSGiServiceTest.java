@@ -40,7 +40,7 @@ class OSGiServiceTest {
 		Path f = Files.createTempFile(path, "pre_exist1", ".txt");
 		Files.writeString(f, "1");
 
-		Map<String, Object> map = Map.of("pathListener.paths", new String[] { path.toAbsolutePath().toString() });
+		Map<String, Object> map = Map.of("pathListener.path", path.toAbsolutePath().toString(),"pathListener.recursive",true );
 
 		bc.registerService(PathListener.class, pathListener, asDictionary(map));
 
@@ -67,6 +67,20 @@ class OSGiServiceTest {
 
 		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f2);
 		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_DELETE);
+
+		
+		Path dir1 = Files.createDirectory(path.resolve("dir1"));// create dir
+		Thread.sleep(1000);
+		Path f1InDir1 = Files.createTempFile(dir1, "f1", ".txt");// create
+		System.out.println(f1InDir1);
+		Thread.sleep(100);
+
+		assertThat(pathListener.getEvents()).hasSize(2);
+		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(dir1);		
+		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_CREATE);
+		
+		assertThat(pathListener.getEvents().peek().getKey()).isEqualTo(f1InDir1);	
+		assertThat(pathListener.getEvents().poll().getValue()).isEqualTo(StandardWatchEventKinds.ENTRY_CREATE);
 
 		Thread.sleep(1000);
 

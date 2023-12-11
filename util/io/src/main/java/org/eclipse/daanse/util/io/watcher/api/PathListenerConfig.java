@@ -11,7 +11,7 @@ public interface PathListenerConfig {
 			EventKind.ENTRY_MODIFY };
 
 	@AttributeDefinition(required = true)
-	default String[] pathListener_paths() {
+	default String pathListener_path() {
 		return null;
 	}
 	

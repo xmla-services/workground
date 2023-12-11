@@ -39,7 +39,6 @@ public class PathWatcherService {
 		if (!config.pathListener_enabled()) {
 			return;
 		}
-		System.out.println(config.pathListener_paths());
 		
 		FileWatcherRunable fwt = new FileWatcherRunable(handler, config);
 		executorService.execute(fwt);

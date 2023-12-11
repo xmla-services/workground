@@ -143,7 +143,7 @@ class CsvDataLoadServiceImplTest {
 		if (quoteDetectionEnabled != null) {
 			dict.put("clearTableBeforeLoad", quoteDetectionEnabled);
 		}
-		dict.put("pathListener.paths", new String[] { path.toAbsolutePath().toString() });
+		dict.put("pathListener.path", path.toAbsolutePath().toString() );
 		conf.update(dict);
 	}
 

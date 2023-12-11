@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.eclipse.daanse.util.io.watcher.api.EventKind;
 import org.eclipse.daanse.util.io.watcher.api.PathListener;
@@ -33,55 +36,62 @@ public class FileWatcherRunable implements Runnable {
 
 	private PathListenerConfig config;
 
-	private List<Path> paths;
+	private Path observesPath;
 	private Kind<?>[] kinds;
 
 	private Optional<Pattern> oPattern;
+	private boolean recursive;
 
 	public FileWatcherRunable(PathListener listener, PathListenerConfig config) throws IOException {
 		this.listener = listener;
 		this.config = config;
+		this.recursive = config.pathListener_recursive();
 		this.watcher = FileSystems.getDefault().newWatchService();
 
 		FileSystem fs = FileSystems.getDefault();
 
 		String sPattern = config.pathListener_pattern();
-		boolean emptyPattern=sPattern==null ||sPattern.isBlank() ;
-		oPattern = emptyPattern? Optional.empty() : Optional.of(Pattern.compile(sPattern));
+		boolean emptyPattern = sPattern == null || sPattern.isBlank();
+		oPattern = emptyPattern ? Optional.empty() : Optional.of(Pattern.compile(sPattern));
 
-		paths = Stream.of(this.config.pathListener_paths()).map(sPath -> fs.getPath(sPath)).toList();
 		EventKind[] eventKinds = config.pathListener_kinds();
 		kinds = new WatchEvent.Kind<?>[eventKinds.length];
-
+		
 		for (int i = 0; i < eventKinds.length; i++) {
 			kinds[i] = eventKinds[i].getKind();
 		}
 
-		init();
+		observesPath = fs.getPath(this.config.pathListener_path());
+
+		if (recursive) {
+			registerPathWithSubDirs(observesPath);
+		} else {
+			registerPath(observesPath);
+		}
+
+
 	}
 
-	private void init() throws IOException {
+	private void registerPath(Path path) throws IOException {
 
-		for (Path path : paths) {
-
-			if (config.pathListener_initialFiles()) {
-				List<Path> currentPaths = Files.list(path).toList();
-				listener.handleInitialPaths(currentPaths);
-			}
-
-			WatchKey key = path.register(watcher, kinds);
-			synchronized (watchKeys) {
-				watchKeys.put(key, path);
-			}
-
+		if (config.pathListener_initialFiles()) {
+			List<Path> currentPaths = Files.list(path).toList();
+			listener.handleInitialPaths(currentPaths);
 		}
+
+		WatchKey key = path.register(watcher, kinds);
+		synchronized (watchKeys) {
+			System.out.println("www "+path);
+			watchKeys.put(key, path);
+		}
+
 	}
 
 	private void clear() {
 
 		listener = null;
 		config = null;
-		paths = null;
+		observesPath = null;
 		kinds = null;
 		oPattern = null;
 	}
@@ -97,7 +107,7 @@ public class FileWatcherRunable implements Runnable {
 		}
 		try {
 			watcher.close();
-			watcher=null;
+			watcher = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -121,16 +131,31 @@ public class FileWatcherRunable implements Runnable {
 				WatchEvent.Kind<?> kind = event.kind();
 				if (kind == StandardWatchEventKinds.OVERFLOW) {
 					continue;// not registerable
-				}
+				} 
 
 				WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
 				Path filename = watchEvent.context();
+				Path resolvedFile = observesPath.resolve(filename);
+				
+				
+				
+				if (recursive && (kind == StandardWatchEventKinds.ENTRY_CREATE)) {
+					try {
+						if (Files.isDirectory(resolvedFile,LinkOption.NOFOLLOW_LINKS)) {
+							
+							registerPathWithSubDirs(resolvedFile);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
 
 				AtomicBoolean matchesPattern = new AtomicBoolean(true);
 
 				oPattern.ifPresent(pattern -> {
 
-					Matcher matcher = pattern.matcher(filename.toString());
+					Matcher matcher = pattern.matcher(resolvedFile.toString());
 					matchesPattern.set(matcher.matches());
 
 				});
@@ -138,15 +163,9 @@ public class FileWatcherRunable implements Runnable {
 				if (!matchesPattern.get()) {
 					continue;
 				}
-				// search for filename
-				synchronized (watchKeys) {
 
-					Path observatedPath = watchKeys.get(key);
-					Path p = observatedPath.resolve(filename);
+				listener.handlePathEvent(resolvedFile, watchEvent.kind());
 
-					listener.handlePathEvent(p, watchEvent.kind());
-
-				}
 			}
 
 			boolean resetValid = key.reset();
@@ -155,6 +174,17 @@ public class FileWatcherRunable implements Runnable {
 			}
 		}
 		clear();
+
+	}
+
+	private void registerPathWithSubDirs(final Path baseDirectory) throws IOException {
+		Files.walkFileTree(baseDirectory, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path currentDirectory, BasicFileAttributes attrs) throws IOException {
+				registerPath(currentDirectory);
+				return FileVisitResult.CONTINUE;
+			}
+		});
 
 	}
 }
