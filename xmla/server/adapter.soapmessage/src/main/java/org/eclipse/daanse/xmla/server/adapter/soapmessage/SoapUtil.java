@@ -141,7 +141,7 @@ public class SoapUtil {
     }
 
     public static void toMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> rows, SOAPBody body) {
-        SOAPElement root = addDiscoverPropertiesRoot(body);
+        SOAPElement root = addMdSchemaDimensionsRoot(body);
         rows.forEach(r ->
             addMdSchemaDimensionsResponseRow(root, r)
         );
@@ -1938,6 +1938,37 @@ public class SoapUtil {
         addElement(s, "MEASURE_VISIBILITY", "xsd:unsignedShort", "0");
         return root;
     }
+
+    private static SOAPElement addMdSchemaDimensionsRoot(SOAPBody body) {
+        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", ROWSET);
+        SOAPElement schema = fillRoot(root);
+        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        ct.setAttribute("name", "row");
+        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME","xsd:string","0");
+        addElement(s, "SCHEMA_NAME", "xsd:string", "0");
+        addElement(s, "CUBE_NAME", "xsd:string", null);
+        addElement(s, "DIMENSION_NAME", "xsd:string", null);
+        addElement(s, "DIMENSION_UNIQUE_NAME", "xsd:string", null);
+        addElement(s, "DIMENSION_GUID", "uuid", "0");
+        addElement(s, "DIMENSION_CAPTION", "xsd:string", null);
+        addElement(s, "DIMENSION_ORDINAL", "xsd:unsignedInt", null);
+        addElement(s, "DIMENSION_TYPE", "xsd:short", null);
+        addElement(s, "DIMENSION_CARDINALITY", "xsd:unsignedInt", null);
+        addElement(s, "DEFAULT_HIERARCHY", "xsd:string", null);
+        addElement(s, "DESCRIPTION", "xsd:string", "0");
+        addElement(s, "IS_VIRTUAL", "xsd:boolean", "0");
+        addElement(s, "IS_READWRITE", "xsd:boolean", "0");
+        addElement(s, "DIMENSION_UNIQUE_SETTINGS", "xsd:int", "0");
+        addElement(s, "DIMENSION_MASTER_UNIQUE_NAME", "xsd:string", "0");
+        addElement(s, "DIMENSION_IS_VISIBLE", "xsd:boolean", "0");
+        addElement(s, "HIERARCHIES", null, "0");
+        return root;
+    }
+
+
 
     private static void addElement(SOAPElement s, String name, String type, String minOccurs) {
         SOAPElement se  = addChildElement(s, "element", "xsd");

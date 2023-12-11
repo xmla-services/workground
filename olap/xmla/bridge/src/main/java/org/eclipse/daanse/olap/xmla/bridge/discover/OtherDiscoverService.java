@@ -246,10 +246,6 @@ public class OtherDiscoverService {
             } else {
                 propertyValue = propertyDefinition.getValue();
             }
-            //TODO remove this code when connection.getCatalogName() will work as expected
-            if (propertyValue == null || propertyValue.length() == 0) {
-                propertyValue = "SteelWheels";
-            }
             result.add(new DiscoverPropertiesResponseRowR(
                 propertyDefinition.name(),
                 Optional.ofNullable(propertyDefinition.getDescription()),

@@ -69,7 +69,7 @@ public class DBSchemaDiscoverService {
                 return context.getDatabaseMappingSchemaProviders().stream().map(p -> {
                         MappingSchema s = p.get();
                         return (DbSchemaCatalogsResponseRow) new DbSchemaCatalogsResponseRowR(
-                            Optional.ofNullable(s.name()),
+                            Optional.ofNullable(context.getName()),
                             Optional.ofNullable(s.description()),
                             getRoles(s.roles()),
                             Optional.of(LocalDateTime.now()),
@@ -90,7 +90,7 @@ public class DBSchemaDiscoverService {
             return contextsListSupplyer.get().stream().map(c -> c.getDatabaseMappingSchemaProviders().stream().map(p -> {
                     MappingSchema s = p.get();
                     return (DbSchemaCatalogsResponseRow) new DbSchemaCatalogsResponseRowR(
-                        Optional.ofNullable(s.name()),
+                        Optional.ofNullable(c.getName()),
                         Optional.ofNullable(s.description()),
                         getRoles(s.roles()),
                         Optional.of(LocalDateTime.now()),
