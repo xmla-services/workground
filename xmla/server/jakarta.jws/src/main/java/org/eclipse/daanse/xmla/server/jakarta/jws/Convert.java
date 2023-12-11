@@ -1730,6 +1730,8 @@ public class Convert {
             .ifPresent(row::setMeasureUnqualifiedCaption);
         apiRow.measureGroupName()
             .ifPresent(row::setMeasureGroupName);
+        apiRow.measureDisplayFolder()
+            .ifPresent(row::setMeasureDisplayFolder);
         apiRow.defaultFormatString()
             .ifPresent(row::setDefaultFormatString);
         return row;

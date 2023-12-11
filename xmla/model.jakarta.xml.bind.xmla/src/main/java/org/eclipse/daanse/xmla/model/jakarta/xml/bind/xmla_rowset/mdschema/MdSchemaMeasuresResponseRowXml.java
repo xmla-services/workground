@@ -198,6 +198,8 @@ public class MdSchemaMeasuresResponseRowXml extends AbstractMdSchemaResponseRowX
     @XmlElement(name = "MEASUREGROUP_NAME", required = false)
     private String measureGroupName;
 
+    @XmlElement(name = "MEASURE_DISPLAY_FOLDER", required = false)
+    private String measureDisplayFolder;
     /**
      * The default format string for the measure.
      */
@@ -340,6 +342,14 @@ public class MdSchemaMeasuresResponseRowXml extends AbstractMdSchemaResponseRowX
 
     public void setMeasureGroupName(String measureGroupName) {
         this.measureGroupName = measureGroupName;
+    }
+
+    public String getMeasureDisplayFolder() {
+        return measureDisplayFolder;
+    }
+
+    public void setMeasureDisplayFolder(String measureDisplayFolder) {
+        this.measureDisplayFolder = measureDisplayFolder;
     }
 
     public String getDefaultFormatString() {

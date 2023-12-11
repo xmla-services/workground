@@ -7,13 +7,13 @@
  * Copyright (C) 2001-2005 Julian Hyde
  * Copyright (C) 2005-2020 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * For more information please visit the Project: Hitachi Vantara - Mondrian
- * 
+ *
  * ---- All changes after Fork in 2023 ------------------------
- * 
+ *
  * Project: Eclipse daanse
- * 
+ *
  * Copyright (c) 2023 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
@@ -149,7 +149,8 @@ public class RolapConnection extends ConnectionBase {
     assert connectInfo != null;
 
     this.connectInfo = connectInfo;
-	this.catalogName = connectInfo.get(RolapConnectionProperties.Catalog.name());
+	this.catalogName = context.getName();
+    //this.catalogName = connectInfo.get(RolapConnectionProperties.Catalog.name());
 
     Role roleInner = null;
 
@@ -172,7 +173,7 @@ public class RolapConnection extends ConnectionBase {
             catalogName,
             context,
             connectInfo );
-        
+
       } finally {
         Locus.pop( locus );
         bootstrapStatement.close();
@@ -301,7 +302,7 @@ public SchemaReader getSchemaReader() {
   @Override
 public Object getProperty( String name ) {
     // Mask out the values of certain properties.
-    if (  
+    if (
        name.equals( RolapConnectionProperties.CatalogContent.name() ) ) {
       return "";
     }
@@ -552,7 +553,7 @@ public Statement getInternalStatement() {
   }
 
 
-  @Deprecated() //finf a better way for agg manager. 
+  @Deprecated() //finf a better way for agg manager.
   @Override
 public DataSource getDataSource() {
       return getContext().getDataSource();
