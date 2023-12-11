@@ -122,5 +122,5 @@
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
 
-#-runproperties.tester: \
-#    tester.names='mondrian.test.SchemaTest'
+-runproperties.tester: \
+    tester.names='mondrian.test.SchemaTest'

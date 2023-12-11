@@ -418,20 +418,20 @@ public class FileRepository implements Repository {
                     : "jdbc:mondrian:" + connectString;
         }
 
-        private RolapSchema getRolapSchema() {
-            RolapConnection rolapConnection = null;
-            try {
-                rolapConnection =
-                    (RolapConnection)
-                        DriverManager.getConnection(
-                            connectString, this.locator);
-                return rolapConnection.getSchema();
-            } finally {
-                if (rolapConnection != null) {
-                    rolapConnection.close();
-                }
-            }
-        }
+//        private RolapSchema getRolapSchema() {
+//            RolapConnection rolapConnection = null;
+//            try {
+//                rolapConnection =
+//                    (RolapConnection)
+//                        DriverManager.getConnection(
+//                            connectString, this.locator);
+//                return rolapConnection.getSchema();
+//            } finally {
+//                if (rolapConnection != null) {
+//                    rolapConnection.close();
+//                }
+//            }
+//        }
     }
 
     // Method is defined as package-protected in order to be accessible by unit
