@@ -723,6 +723,7 @@ public class SoapUtil {
         r.measureNameSqlColumnName().ifPresent(v -> addChildElement(row, "MEASURE_NAME_SQL_COLUMN_NAME", prefix, v));
         r.measureUnqualifiedCaption().ifPresent(v -> addChildElement(row, "MEASURE_UNQUALIFIED_CAPTION", prefix, v));
         r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
+        r.measureDisplayFolder().ifPresent(v -> addChildElement(row, "MEASURE_DISPLAY_FOLDER", prefix, v));
         r.defaultFormatString().ifPresent(v -> addChildElement(row, "DEFAULT_FORMAT_STRING", prefix, v));
         r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", prefix, String.valueOf(v.getValue())));
         r.measureVisibility().ifPresent(v -> addChildElement(row, "MEASURE_VISIBILITY", prefix, String.valueOf(v.getValue())));
