@@ -55,7 +55,6 @@ import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.BlockingHashMap;
-import mondrian.util.MDCUtil;
 import mondrian.util.Pair;
 
 @SuppressWarnings( { "JavaDoc", "squid:S1192", "squid:S4274" } )
@@ -660,10 +659,8 @@ public class SegmentCacheManager {
       // Remove the segment from external caches. Use an executor, because
       // it may take some time. We discard the future, because we don't
       // care too much if it fails.
-      final MDCUtil mdc = new MDCUtil();
       final Future<?> future = event.cacheMgr.cacheExecutor.submit(
         () -> {
-          mdc.setContextMap();
           try {
             // Note that the SegmentCache API doesn't require
             // us to verify that the segment exists (by calling
@@ -740,24 +737,16 @@ public class SegmentCacheManager {
   }
 
   interface Message {
-    /**
-     * Sets the MDC context into the current thread
-     */
-    void setContextMap();
+
 
   }
 
   public abstract static class Command<T> implements Message {
 
-    private final MDCUtil mdc = new MDCUtil();
 
     public abstract Locus getLocus();
     public abstract T call() throws Exception;
 
-    @Override
-    public void setContextMap() {
-      mdc.setContextMap();
-    }
   }
 
   /**
@@ -843,10 +832,8 @@ public class SegmentCacheManager {
                                     SegmentHeader newHeader ) {
       for ( final SegmentCacheWorker worker
         : cacheMgr.segmentCacheWorkers ) {
-        final MDCUtil mdc = new MDCUtil();
         callableList.add(
           () -> {
-            mdc.setContextMap();
             boolean existed;
             if ( worker.supportsRichIndex() ) {
               final SegmentBody sb = worker.get( header );
@@ -876,10 +863,8 @@ public class SegmentCacheManager {
           "discard segment - it cannot be constrained and maintain consistency:\n"
             + header.getDescription() );
 
-        final MDCUtil mdc = new MDCUtil();
         final Future<?> task = cacheMgr.cacheExecutor.submit(
           () -> {
-            mdc.setContextMap();
             try {
               // Note that the SegmentCache API doesn't
               // require us to verify that the segment
@@ -996,7 +981,6 @@ public class SegmentCacheManager {
 
   private abstract static class Event implements Message {
 
-    private final MDCUtil mdc = new MDCUtil();
 
     /**
      * Dispatches a call to the appropriate {@code visit} method on {@link mondrian.server.monitor.Visitor}.
@@ -1005,10 +989,6 @@ public class SegmentCacheManager {
      */
     abstract void acceptWithoutResponse( Visitor visitor );
 
-    @Override
-    public void setContextMap() {
-      mdc.setContextMap();
-    }
   }
 
   /**
@@ -1032,7 +1012,6 @@ public class SegmentCacheManager {
           final Pair<Handler, Message> entry = eventQueue.take();
           final Handler handler = entry.left;
           final Message message = entry.right;
-          message.setContextMap(); // Set MDC logging info into this thread
           try {
             // A message is either a command or an event.
             // A command returns a value that must be read by

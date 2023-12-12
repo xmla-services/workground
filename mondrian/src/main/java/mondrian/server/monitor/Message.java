@@ -24,8 +24,5 @@ public interface Message {
    */
   <T> T accept( Visitor<T> visitor );
 
-  /**
-   * Sets the MDC context into the current thread
-   */
-  void setContextMap();
+
 }

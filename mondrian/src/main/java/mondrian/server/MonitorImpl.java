@@ -16,13 +16,13 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import mondrian.server.monitor.CellCacheEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapUtil;
+import mondrian.server.monitor.CellCacheEvent;
 import mondrian.server.monitor.CellCacheSegmentCreateEvent;
 import mondrian.server.monitor.CellCacheSegmentDeleteEvent;
 import mondrian.server.monitor.ConnectionEndEvent;
@@ -46,7 +46,6 @@ import mondrian.server.monitor.StatementInfo;
 import mondrian.server.monitor.StatementStartEvent;
 import mondrian.server.monitor.Visitor;
 import mondrian.util.BlockingHashMap;
-import mondrian.util.MDCUtil;
 import mondrian.util.Pair;
 
 /**
@@ -176,12 +175,8 @@ public List<SqlStatementInfo> getSqlStatements() {
    */
   abstract static class Command implements Message {
 
-    private final MDCUtil mdc = new MDCUtil();
 
-    @Override
-    public void setContextMap() {
-      mdc.setContextMap();
-    }
+
   }
 
   static class StatementsCommand extends Command {
@@ -850,7 +845,6 @@ public List<SqlStatementInfo> getSqlStatements() {
             final Pair<Handler, Message> entry = eventQueue.take();
             final Handler handler = entry.left;
             final Message message = entry.right;
-            message.setContextMap(); // Set MDC logging info into this thread
             final Object result = message.accept( handler );
             if ( message instanceof Command command) {
               responseMap.put( command, result );

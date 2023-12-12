@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import mondrian.rolap.RolapUtil;
-import mondrian.util.MDCUtil;
 
 /**
  * Base class for an event of interest.
@@ -34,7 +33,6 @@ public abstract class Event implements Message {
    */
   public final String stack;
 
-  private final MDCUtil mdc = new MDCUtil();
 
   /**
    * Creates an Event.
@@ -58,8 +56,5 @@ public abstract class Event implements Message {
     }
   }
 
-  @Override
-  public void setContextMap() {
-    mdc.setContextMap();
-  }
+
 }

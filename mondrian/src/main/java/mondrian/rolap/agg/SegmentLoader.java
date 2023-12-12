@@ -49,7 +49,6 @@ import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.CancellationChecker;
-import mondrian.util.MDCUtil;
 import mondrian.util.Pair;
 
 /**
@@ -146,7 +145,6 @@ public class SegmentLoader {
     private final int cellRequestCount;
     private final List<GroupingSet> groupingSets;
     private final List<StarPredicate> compoundPredicateList;
-    private final MDCUtil mdc = new MDCUtil();
 
     public SegmentLoadCommand( Locus locus, SegmentLoader segmentLoader, int cellRequestCount,
         List<GroupingSet> groupingSets, List<StarPredicate> compoundPredicateList ) {
@@ -159,7 +157,6 @@ public class SegmentLoader {
 
     @Override
 	public Map<Segment, SegmentWithData> call() throws Exception {
-      mdc.setContextMap();
       Locus.push( locus );
       try {
         return segmentLoader.loadImpl( cellRequestCount, groupingSets, compoundPredicateList );

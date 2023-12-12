@@ -359,7 +359,6 @@ public Result execute( QueryImpl query ) {
   }
 
   private Result executeInternal( final Execution execution ) {
-    execution.setContextMap();
     final Statement statement = execution.getMondrianStatement();
     // Cleanup any previous executions still running
     synchronized ( statement ) {

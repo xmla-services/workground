@@ -29,7 +29,6 @@ import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.server.monitor.ExecutionEndEvent;
 import mondrian.server.monitor.ExecutionPhaseEvent;
 import mondrian.server.monitor.ExecutionStartEvent;
-import mondrian.util.MDCUtil;
 
 /**
  * Execution context.
@@ -90,7 +89,6 @@ public class Execution {
 
   public static final Execution NONE = new Execution( null, 0 );
 
-  private final MDCUtil mdc = new MDCUtil();
 
   private final Execution parent;
 
@@ -105,13 +103,7 @@ public class Execution {
     this.timeoutIntervalMillis = timeoutIntervalMillis;
   }
 
-  /**
-   * Set the copied mdc into the current MDC. This should be called any time there will be logging in a thread handled
-   * by the RolapResultShepherd where original MDC needs to be retrieved
-   */
-  public void setContextMap() {
-    mdc.setContextMap();
-  }
+
 
   /**
    * Marks the start of an Execution instance. It is called by {@link Statement#start(Execution)} automatically. Users
