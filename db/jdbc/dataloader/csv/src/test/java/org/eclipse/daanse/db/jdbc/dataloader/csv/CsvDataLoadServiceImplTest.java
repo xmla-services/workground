@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -54,6 +55,7 @@ import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -114,7 +116,7 @@ class CsvDataLoadServiceImplTest {
 
 	private void setupCsvDataLoadServiceImpl(Boolean lineSeparatorDetectionEnabled, String nullValue,
 			Character quoteEscape, Character quote, String delimiter, String encoding, Boolean quoteDetectionEnabled,
-			Boolean clearTableBeforeLoad) throws IOException {
+			Boolean clearTableBeforeLoad, String stringPath) throws IOException {
 		conf = ca.getFactoryConfiguration(CsvDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
 		Dictionary<String, Object> dict = new Hashtable<>();
 		if (lineSeparatorDetectionEnabled != null) {
@@ -143,18 +145,23 @@ class CsvDataLoadServiceImplTest {
 		if (quoteDetectionEnabled != null) {
 			dict.put("clearTableBeforeLoad", quoteDetectionEnabled);
 		}
-		dict.put("pathListener.path", path.toAbsolutePath().toString() );
+        dict.put("dbSchema", "dbSchema");
+		dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString() :  path.toAbsolutePath().toString());
 		conf.update(dict);
 	}
 
 	@Test
 	void testBatch() throws IOException, URISyntaxException, SQLException, InterruptedException {
 
-		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
+        Path p = path.resolve("csv/db/schema1");
+        Files.createDirectories(p);
+
+		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv/db/schema1");
 
 		when(dialect.supportBatchOperations()).thenReturn(true);
+        when(dialect.quoteIdentifier("schema1", "test")).thenReturn("schema1.test");
 
-		copy("test.csv");
+		copy("csv/db/schema1/test.csv");
 		Thread.sleep(2000);
 
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
@@ -167,6 +174,7 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
+        assertThat(stringCaptor.getValue()).contains("schema1.test");
 
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
@@ -184,10 +192,14 @@ class CsvDataLoadServiceImplTest {
 
 	@Test
 	void testWithoutBach() throws IOException, URISyntaxException, SQLException, InterruptedException {
-		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true);
-		when(dialect.supportBatchOperations()).thenReturn(false);
+        Path p = path.resolve("csv/db");
+        Files.createDirectories(p);
 
-		copy("test.csv");
+        setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv/db");
+		when(dialect.supportBatchOperations()).thenReturn(false);
+        when(dialect.quoteIdentifier("dbSchema", "test")).thenReturn("dbSchema.test");
+
+        copy("csv/db/test.csv");
 		Thread.sleep(2000);
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
@@ -199,7 +211,7 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
-
+        assertThat(stringCaptor.getValue()).contains("dbSchema.test");
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
 		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());

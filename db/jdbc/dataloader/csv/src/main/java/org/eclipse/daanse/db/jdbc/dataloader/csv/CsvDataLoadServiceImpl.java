@@ -107,8 +107,9 @@ public class CsvDataLoadServiceImpl implements PathListener {
 	private void loadTable(Connection connection, Dialect dialect, CsvParserSettings settings, Path path) {
 		String tableName = getFileNameWithoutExtension(path.getFileName().toString());
 		LOGGER.debug("Load table {}", tableName);
+		String databaseSchemaName = getDatabaseSchemaNameFromPath(path);
 		if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
-			dialect.clearTable(connection, config.dbSchema(), tableName);
+			dialect.clearTable(connection,  databaseSchemaName, tableName);
 		}
 		if (!path.toFile().exists()) {
 
@@ -126,7 +127,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 			createTable(connection, headersTypeList, tableName);
 			StringBuilder b = new StringBuilder();
 			b.append("INSERT INTO ");
-			b.append(dialect.quoteIdentifier(config.dbSchema(), tableName));
+			b.append(dialect.quoteIdentifier(databaseSchemaName, tableName));
 			b.append(" ( ");
 			b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.getKey()))
 					.collect(Collectors.joining(",")));
@@ -146,7 +147,15 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		}
 	}
 
-	private void execute(PreparedStatement ps, CsvParser parser, List<Map.Entry<String, Type>> headersTypeList)
+    private String getDatabaseSchemaNameFromPath(Path path) {
+        Path parent = path.getParent();
+        if (parent != null && !parent.getFileName().toString().equals(config.baseFileFolder())) {
+            return parent.getFileName().toString();
+        }
+        return config.dbSchema();
+    }
+
+    private void execute(PreparedStatement ps, CsvParser parser, List<Map.Entry<String, Type>> headersTypeList)
 			throws SQLException {
 		boolean first = true;
 		long start = System.currentTimeMillis();
@@ -308,7 +317,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		if (dialectOptional.isPresent()) {
 			Dialect dialect = dialectOptional.get();
 			try (Connection connection = dataSource.getConnection()) {
-				dialect.deleteTable(connection, config.dbSchema(), tableName);
+				dialect.deleteTable(connection, getDatabaseSchemaNameFromPath(path), tableName);
 			} catch (SQLException e) {
 				LOGGER.error("Database connection error", e);
 			}

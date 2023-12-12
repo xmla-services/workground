@@ -9,7 +9,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition
 public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
 
-	
+
     /**
      * @return Line Separator Detection Enabled
      */
@@ -88,5 +88,10 @@ public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
     @AttributeDefinition(description = "dbSchema")
     default String dbSchema() {
         return null;
+    }
+
+    @AttributeDefinition(description = "baseFileFolder")
+    default String baseFileFolder() {
+        return "db";
     }
 }
