@@ -20,7 +20,9 @@ import com.univocity.parsers.csv.CsvParserSettings;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
+import org.eclipse.daanse.util.io.watcher.api.EventKind;
 import org.eclipse.daanse.util.io.watcher.api.PathListener;
+import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -54,11 +56,12 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
-@Designate(ocd = CsvDataLoadServiceConfig.class, factory = true)
+@Designate(ocd = CsvDataLoadConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
-public class CsvDataLoadServiceImpl implements PathListener {
+@PathListenerConfig(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.csv")
+public class CsvDataLoad implements PathListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CsvDataLoadServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CsvDataLoad.class);
 	public static final Converter CONVERTER = Converters.standardConverter();
 
 	private Queue<Path> initialPaths = new ArrayDeque<>();
@@ -69,14 +72,13 @@ public class CsvDataLoadServiceImpl implements PathListener {
 	@Reference
 	private DataSource dataSource;
 
-	private CsvDataLoadServiceConfig config;
+	private CsvDataLoadConfig config;
 
 	private CsvParserSettings settings;
 	private Path basePath;
 
 	@Activate
-	public void activate(Map<String, Object> configMap) {
-		this.config = CONVERTER.convert(configMap).to(CsvDataLoadServiceConfig.class);
+	public void activate(CsvDataLoadConfig config) {
 		settings = Csv.parseRfc4180();
 		settings.setLineSeparatorDetectionEnabled(this.config.lineSeparatorDetectionEnabled());
 		settings.setNullValue(config.nullValue());

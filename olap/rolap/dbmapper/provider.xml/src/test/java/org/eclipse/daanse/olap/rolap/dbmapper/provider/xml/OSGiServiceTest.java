@@ -42,19 +42,18 @@ class OSGiServiceTest {
 			@InjectService(cardinality = 0) ServiceAware<DatabaseMappingSchemaProvider> provider) throws Exception {
 
 		System.out.println(path);
-		init();
-		assertThat(provider.getServiceReferences()).isEmpty();
-		Thread.sleep(100);
-
 		Path f = Files.createTempFile(path, "schemaMapping", ".xml");
 		Files.writeString(f, XML);
+		Thread.sleep(100);
+		init();
+		assertThat(provider.getServiceReferences()).isEmpty();
 
-		Thread.sleep(1000000);
+
 
 	}
 
 	private void init() throws IOException {
-		Configuration c = ca.createFactoryConfiguration(XmlDbMappingFileWatcher.PID, "?");
+		Configuration c = ca.createFactoryConfiguration(XmlDbMappingPathListener.PID, "?");
 		c.update(Dictionaries.dictionaryOf("path", path.toAbsolutePath().toString()));
 	}
 }

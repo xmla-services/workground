@@ -64,7 +64,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequireConfigurationAdmin
 class CsvDataLoadServiceImplTest {
 
-	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoadServiceImpl";
+	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoad";
 	@TempDir(cleanup = CleanupMode.ON_SUCCESS)
 	Path path;
 

@@ -45,23 +45,23 @@ public class FileWatcherRunable implements Runnable {
 	public FileWatcherRunable(PathListener listener, PathListenerConfig config) throws IOException {
 		this.listener = listener;
 		this.config = config;
-		this.recursive = config.pathListener_recursive();
+		this.recursive = config.recursive();
 		this.watcher = FileSystems.getDefault().newWatchService();
 
 		FileSystem fs = FileSystems.getDefault();
 
-		String sPattern = config.pathListener_pattern();
+		String sPattern = config.pattern();
 		boolean emptyPattern = sPattern == null || sPattern.isBlank();
 		oPattern = emptyPattern ? Optional.empty() : Optional.of(Pattern.compile(sPattern));
 
-		EventKind[] eventKinds = config.pathListener_kinds();
+		EventKind[] eventKinds = config.kinds();
 		kinds = new WatchEvent.Kind<?>[eventKinds.length];
 		
 		for (int i = 0; i < eventKinds.length; i++) {
 			kinds[i] = eventKinds[i].getKind();
 		}
 
-		observedPath = fs.getPath(this.config.pathListener_path());
+		observedPath = fs.getPath(this.config.path());
 		
 		listener.handleBasePath(observedPath);
 
@@ -75,7 +75,7 @@ public class FileWatcherRunable implements Runnable {
 
 	private void registerPath(Path path) throws IOException {
 
-		if (config.pathListener_initialFiles()) {
+		if (config.initialFiles()) {
 			List<Path> currentPaths = Files.list(path).toList();
 			listener.handleInitialPaths(currentPaths);
 		}
