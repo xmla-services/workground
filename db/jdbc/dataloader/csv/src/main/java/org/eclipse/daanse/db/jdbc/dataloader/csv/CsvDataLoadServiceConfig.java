@@ -77,21 +77,9 @@ public interface CsvDataLoadServiceConfig  extends PathListenerConfig{
     /**
      * @return Batch Size. Use Batch operation if dialect support it
      */
-    @AttributeDefinition(description = "batchSize")
+    @AttributeDefinition(description = "batchSize" ,defaultValue = "1000")
     default int batchSize() {
         return 1000;
     }
 
-    /**
-     * @return Database schema name
-     */
-    @AttributeDefinition(description = "dbSchema")
-    default String dbSchema() {
-        return null;
-    }
-
-    @AttributeDefinition(description = "baseFileFolder")
-    default String baseFileFolder() {
-        return "db";
-    }
 }

@@ -43,6 +43,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -64,7 +65,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CsvDataLoadServiceImplTest {
 
 	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoadServiceImpl";
-	@TempDir
+	@TempDir(cleanup = CleanupMode.ON_SUCCESS)
 	Path path;
 
 	@Mock
@@ -145,25 +146,42 @@ class CsvDataLoadServiceImplTest {
 		if (quoteDetectionEnabled != null) {
 			dict.put("clearTableBeforeLoad", quoteDetectionEnabled);
 		}
-        dict.put("dbSchema", "dbSchema");
-		dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString() :  path.toAbsolutePath().toString());
+		dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
+				: path.toAbsolutePath().toString());
+		dict.put("pathListener.recursive", true);
 		conf.update(dict);
 	}
 
 	@Test
 	void testBatch() throws IOException, URISyntaxException, SQLException, InterruptedException {
+		Path p = path.resolve("csv");
+		Files.createDirectories(p);
 
-        Path p = path.resolve("csv/db/schema1");
-        Files.createDirectories(p);
-
-		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv/db/schema1");
-
+		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv");
 		when(dialect.supportBatchOperations()).thenReturn(true);
-        when(dialect.quoteIdentifier("schema1", "test")).thenReturn("schema1.test");
-
-		copy("csv/db/schema1/test.csv");
+		when(dialect.quoteIdentifier(null, "test")).thenReturn("test");
+		Thread.sleep(200);
+		copy("csv/test.csv");
 		Thread.sleep(2000);
+		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 
+		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
+		assertThat(stringCaptor.getValue()).contains("test");
+
+		verify(preparedStatement, (times(1))).executeBatch();
+	}
+
+	@Test
+	void testWithoutBach() throws IOException, URISyntaxException, SQLException, InterruptedException {
+		Path p = path.resolve("csv");
+		Files.createDirectories(p);
+
+		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv");
+		when(dialect.supportBatchOperations()).thenReturn(false);
+		when(dialect.quoteIdentifier(null, "test")).thenReturn("test");
+		Thread.sleep(200);
+		copy("csv/test.csv");
+		Thread.sleep(200);
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
@@ -174,8 +192,7 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
-        assertThat(stringCaptor.getValue()).contains("schema1.test");
-
+		assertThat(stringCaptor.getValue()).contains("test");
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
 		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
@@ -185,22 +202,20 @@ class CsvDataLoadServiceImplTest {
 		verify(preparedStatement, (times(2))).setTimestamp(integerCaptor.capture(), timestampCaptor.capture());
 		verify(preparedStatement, (times(2))).setString(integerCaptor.capture(), stringCaptor.capture());
 
-		verify(preparedStatement, (times(2))).addBatch();
-		verify(preparedStatement, (times(1))).executeBatch();
-
+		verify(preparedStatement, (times(2))).executeUpdate();
 	}
 
 	@Test
-	void testWithoutBach() throws IOException, URISyntaxException, SQLException, InterruptedException {
-        Path p = path.resolve("csv/db");
-        Files.createDirectories(p);
+	void testWithoutBacSubDir() throws IOException, URISyntaxException, SQLException, InterruptedException {
+		Path p = path.resolve("csv/schema1");
+		Files.createDirectories(p);
 
-        setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv/db");
+		setupCsvDataLoadServiceImpl(true, "NULL", '\\', '\"', ",", "UTF-8", true, true, "csv");
 		when(dialect.supportBatchOperations()).thenReturn(false);
-        when(dialect.quoteIdentifier("dbSchema", "test")).thenReturn("dbSchema.test");
-
-        copy("csv/db/test.csv");
-		Thread.sleep(2000);
+		when(dialect.quoteIdentifier("schema1", "test1")).thenReturn("schema1.test1");
+		Thread.sleep(200);
+		copy("csv/schema1/test1.csv");
+		Thread.sleep(200);
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<Boolean> booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
@@ -211,7 +226,7 @@ class CsvDataLoadServiceImplTest {
 		ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
-        assertThat(stringCaptor.getValue()).contains("dbSchema.test");
+		assertThat(stringCaptor.getValue()).contains("schema1.test1");
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
 		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());

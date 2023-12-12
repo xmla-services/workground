@@ -36,7 +36,7 @@ public class FileWatcherRunable implements Runnable {
 
 	private PathListenerConfig config;
 
-	private Path observesPath;
+	private Path observedPath;
 	private Kind<?>[] kinds;
 
 	private Optional<Pattern> oPattern;
@@ -61,14 +61,15 @@ public class FileWatcherRunable implements Runnable {
 			kinds[i] = eventKinds[i].getKind();
 		}
 
-		observesPath = fs.getPath(this.config.pathListener_path());
+		observedPath = fs.getPath(this.config.pathListener_path());
+		
+		listener.handleBasePath(observedPath);
 
 		if (recursive) {
-			registerPathWithSubDirs(observesPath);
+				registerPathWithSubDirs(observedPath);
 		} else {
-			registerPath(observesPath);
+				registerPath(observedPath);
 		}
-
 
 	}
 
@@ -91,7 +92,7 @@ public class FileWatcherRunable implements Runnable {
 
 		listener = null;
 		config = null;
-		observesPath = null;
+		observedPath = null;
 		kinds = null;
 		oPattern = null;
 	}
@@ -116,6 +117,8 @@ public class FileWatcherRunable implements Runnable {
 
 	@Override
 	public void run() {
+
+
 		while (!stop) {
 			WatchKey key = null;
 			try {
@@ -127,6 +130,11 @@ public class FileWatcherRunable implements Runnable {
 			if (key == null) {
 				continue;
 			}
+			Path path = null;
+			synchronized (watchKeys) {
+				 path = watchKeys.get(key) ;
+
+			}
 			for (WatchEvent<?> event : key.pollEvents()) {
 				WatchEvent.Kind<?> kind = event.kind();
 				if (kind == StandardWatchEventKinds.OVERFLOW) {
@@ -135,9 +143,8 @@ public class FileWatcherRunable implements Runnable {
 
 				WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
 				Path filename = watchEvent.context();
-				Path resolvedFile = observesPath.resolve(filename);
 				
-				
+				Path resolvedFile = path.resolve(filename);
 				
 				if (recursive && (kind == StandardWatchEventKinds.ENTRY_CREATE)) {
 					try {

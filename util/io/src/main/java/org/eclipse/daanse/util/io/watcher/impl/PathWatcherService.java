@@ -40,14 +40,17 @@ public class PathWatcherService {
 			return;
 		}
 		
-		FileWatcherRunable fwt = new FileWatcherRunable(handler, config);
-		executorService.execute(fwt);
-		listenerMap.put(handler, fwt);
+		FileWatcherRunable fwr = new FileWatcherRunable(handler, config);
+		executorService.execute(fwr);
+		listenerMap.put(handler, fwr);
 	}
 
 	public void unbindPathListener(PathListener handler) {
-		FileWatcherRunable threads = listenerMap.remove(handler);
-		threads.shutdown();
+		FileWatcherRunable runable = listenerMap.remove(handler);
+		if(runable!=null) {
+			
+			runable.shutdown();
+		}
 
 	}
 

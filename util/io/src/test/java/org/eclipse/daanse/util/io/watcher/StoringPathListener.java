@@ -44,4 +44,9 @@ public class StoringPathListener implements PathListener {
 		return events;
 	}
 
+	@Override
+	public void handleBasePath(Path basePath) {
+		
+	}
+
 }

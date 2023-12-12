@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent.Kind;
@@ -70,6 +72,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 	private CsvDataLoadServiceConfig config;
 
 	private CsvParserSettings settings;
+	private Path basePath;
 
 	@Activate
 	public void activate(Map<String, Object> configMap) {
@@ -96,6 +99,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 			try (Connection connection = dataSource.getConnection()) {
 				loadTable(connection, dialect, settings, path);
 			} catch (SQLException e) {
+				e.printStackTrace();
 				LOGGER.error("Database connection error", e);
 			}
 		} else {
@@ -113,7 +117,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		}
 		if (!path.toFile().exists()) {
 
-			LOGGER.warn("File does not exist - {}", tableName);
+			LOGGER.warn("File does not exist - {} {}", tableName,path);
 			return;
 		}
 
@@ -135,6 +139,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 			b.append(" ( ");
 			b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
 			b.append(" ) ");
+			
 			try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
 				if (dialect.supportBatchOperations()) {
 					batchExecute(connection, ps, parser, headersTypeList);
@@ -149,10 +154,10 @@ public class CsvDataLoadServiceImpl implements PathListener {
 
     private String getDatabaseSchemaNameFromPath(Path path) {
         Path parent = path.getParent();
-        if (parent != null && !parent.getFileName().toString().equals(config.baseFileFolder())) {
-            return parent.getFileName().toString();
+        if (basePath.equals(parent)) {
+        	return null;
         }
-        return config.dbSchema();
+        return parent.getFileName().toString();
     }
 
     private void execute(PreparedStatement ps, CsvParser parser, List<Map.Entry<String, Type>> headersTypeList)
@@ -213,6 +218,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 		}
 
 		LOGGER.debug("---");
+
 		ps.executeBatch();
 		LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
 
@@ -252,6 +258,7 @@ public class CsvDataLoadServiceImpl implements PathListener {
 	}
 
 	private void createTable(Connection connection, List<Entry<String, Type>> headersTypeList, String tableName) {
+		System.err.println(tableName);
 		try (Statement stmt = connection.createStatement();) {
 			StringBuilder sb = new StringBuilder("CREATE TABLE ").append(tableName).append(" ( ");
 			headersTypeList.stream().map(e -> {
@@ -330,20 +337,32 @@ public class CsvDataLoadServiceImpl implements PathListener {
 	public void handleInitialPaths(List<Path> initialPaths) {
 		this.initialPaths.addAll(initialPaths);
 		for (Path path : initialPaths) {
-			loadData(path);
+			
+			if(!Files.isDirectory(path)) {
+				loadData(path);
+			}
 		}
 
 	}
 
 	@Override
 	public void handlePathEvent(Path path, Kind<Path> kind) {
-		if ((kind.name().equals(StandardWatchEventKinds.ENTRY_CREATE.name()))
-				|| (kind.name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name()))) {
+		System.err.println(path);
+		if(Files.isDirectory(path)) {
+			return;
+		}
+		if ( kind.name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
 			loadData(path);
 		}
 		if (kind.name().equals(StandardWatchEventKinds.ENTRY_DELETE.name())) {
 			delete(path);
 		}
+	}
+
+	@Override
+	public void handleBasePath(Path basePath) {
+		this.basePath = basePath;
+		
 	}
 
 }

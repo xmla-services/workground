@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface PathListener {
 
+	void handleBasePath(Path basePath);
 	void handleInitialPaths(List<Path> path);
 
 	void handlePathEvent(Path path, WatchEvent.Kind<Path> kind);
+
 }
