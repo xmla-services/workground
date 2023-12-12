@@ -16,7 +16,8 @@ package org.eclipse.daanse.olap.xmla.bridge.discover;
 import mondrian.olap.DimensionType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapStoredMeasure;
 import mondrian.xmla.RowsetDefinition;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
@@ -2388,7 +2389,7 @@ oHierarchyName)
             }
             final String formatString =
                 (String) m.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING.getName());
-            final MeasureAggregatorEnum measureAggregator = MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN;
+            final MeasureAggregatorEnum measureAggregator = getAggregator(m);
 
             // DATA_TYPE DBType best guess is string
             XmlaConstants.DBType dbType = XmlaConstants.DBType.WSTR;
@@ -2431,6 +2432,33 @@ oHierarchyName)
                 Optional.of(VisibilityEnum.VISIBLE))
             );
         }
+    }
+
+    private static MeasureAggregatorEnum getAggregator(Member m) {
+        if (m instanceof RolapStoredMeasure rolapStoredMeasure) {
+            RolapAggregator rolapAggregator = rolapStoredMeasure.getAggregator();
+            if (rolapAggregator != null) {
+                if (rolapAggregator == RolapAggregator.Avg) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_AVG;
+                }
+                if (rolapAggregator == RolapAggregator.Sum) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_SUM;
+                }
+                if (rolapAggregator == RolapAggregator.Count) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_COUNT;
+                }
+                if (rolapAggregator == RolapAggregator.DistinctCount) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_DST;
+                }
+                if (rolapAggregator == RolapAggregator.Max) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_MAX;
+                }
+                if (rolapAggregator == RolapAggregator.Min) {
+                    return MeasureAggregatorEnum.MDMEASURE_AGGR_MIN;
+                }
+            }
+        }
+        return MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN;
     }
 
     private static List<org.eclipse.daanse.olap.api.element.Member> getMeasureWithFilterByName(
