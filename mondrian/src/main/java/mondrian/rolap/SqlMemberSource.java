@@ -566,17 +566,9 @@ RME is this right
         if (level.isAll()) {
             return Collections.singletonList(hierarchy.getAllMember());
         }
-        Dimension dimension = level.getDimension();
-        boolean isHighCardinality = dimension.isHighCardinality();
-        final TupleReader tupleReader = isHighCardinality
-                ? new HighCardSqlTupleReader(constraint)
-                : new SqlTupleReader(constraint);
-        if (isHighCardinality) {
-            String msg = MondrianResource.instance()
-                .HighCardinalityInDimension.str(
-                    dimension.getUniqueName());
-            LOGGER.warn(msg);
-        }
+ 
+        final TupleReader tupleReader = new SqlTupleReader(constraint);
+    
         tupleReader.addLevelMembers(level, this, null);
         final TupleList tupleList =
             tupleReader.readMembers(context, null, null);

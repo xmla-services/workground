@@ -43,8 +43,6 @@ public class PrivateDimensionImpl extends AbstractMainElement implements Mapping
 
 	@XmlAttribute(name = "foreignKey")
 	protected String foreignKey;
-	@XmlAttribute(name = "highCardinality")
-	protected Boolean highCardinality;
 
 	@XmlAttribute(name = "visible")
 	private Boolean visible = true;
@@ -75,19 +73,6 @@ public class PrivateDimensionImpl extends AbstractMainElement implements Mapping
 
 	public void setForeignKey(String value) {
 		this.foreignKey = value;
-	}
-
-	@Override
-	public Boolean highCardinality() {
-		if (highCardinality == null) {
-			return false;
-		} else {
-			return highCardinality;
-		}
-	}
-
-	public void setHighCardinality(Boolean value) {
-		this.highCardinality = value;
 	}
 
 	@Override

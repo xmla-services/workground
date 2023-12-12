@@ -110,8 +110,7 @@ public class RolapCubeLevel extends RolapLevel {
                     getCube(), dimension, xmlDimension,
                     new StringBuilder(getDimension().getName()).append("$Closure").toString(),
                     -1,
-                    getCube().hierarchyList,
-                    getDimension().isHighCardinality());
+                    getCube().hierarchyList);
 
             // RME HACK
             //  WG: Note that the reason for registering this usage is so that

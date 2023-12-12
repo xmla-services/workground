@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
@@ -88,10 +92,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public abstract class AbstractDbMappingSchemaModifier implements DatabaseMappingSchemaProvider {
 
@@ -218,13 +218,12 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
             String caption = dimensionCaption(dimension);
             String description = dimensionDescription(dimension);
             String foreignKey = dimensionForeignKey(dimension);
-            boolean highCardinality = dimensionCardinality(dimension);
             List<MappingAnnotation> annotations = dimensionAnnotations(dimension);
             List<MappingHierarchy> hierarchies = dimensionHieraries(dimension);
             boolean visible = dimensionVisible(dimension);
             String usagePrefix = dimensionUsagePrefix(dimension);
 
-            return new_PrivateDimension(name, type, caption, description, foreignKey, highCardinality, annotations,
+            return new_PrivateDimension(name, type, caption, description, foreignKey,  annotations,
                 hierarchies, visible, usagePrefix);
         }
         return null;
@@ -233,7 +232,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected abstract MappingPrivateDimension new_PrivateDimension(
         String name, DimensionTypeEnum type, String caption,
-        String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
+        String description, String foreignKey, List<MappingAnnotation> annotations,
         List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix
     );
 
@@ -247,10 +246,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
 
     protected boolean dimensionVisible(MappingPrivateDimension dimension) {
         return dimension.visible();
-    }
-
-    protected boolean dimensionCardinality(MappingPrivateDimension dimension) {
-        return dimension.highCardinality();
     }
 
     protected String dimensionForeignKey(MappingPrivateDimension dimension) {
@@ -960,7 +955,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
             List<MappingAnnotation> annotations = virtualCubeDimensionAnnotations(mappingVirtualCubeDimension);
             String name = virtualCubeDimensionName(mappingVirtualCubeDimension);
             String foreignKey = virtualCubeDimensionForeignKey(mappingVirtualCubeDimension);
-            boolean highCardinality = virtualCubeDimensionHighCardinality(mappingVirtualCubeDimension);
             String caption = virtualCubeDimensionCaption(mappingVirtualCubeDimension);
             boolean visible = virtualCubeDimensionVisible(mappingVirtualCubeDimension);
             String description = virtualCubeDimensionDescription(mappingVirtualCubeDimension);
@@ -971,7 +965,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
                 cubeName,
                 annotations,
                 foreignKey,
-                highCardinality,
                 caption,
                 visible,
                 description);
@@ -995,10 +988,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return mappingVirtualCubeDimension.caption();
     }
 
-    protected boolean virtualCubeDimensionHighCardinality(MappingVirtualCubeDimension mappingVirtualCubeDimension) {
-        return mappingVirtualCubeDimension.highCardinality();
-    }
-
     protected String virtualCubeDimensionForeignKey(MappingVirtualCubeDimension mappingVirtualCubeDimension) {
         return mappingVirtualCubeDimension.foreignKey();
     }
@@ -1016,7 +1005,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String cubeName,
         List<MappingAnnotation> annotations,
         String foreignKey,
-        boolean highCardinality,
         String caption,
         boolean visible,
         String description
@@ -2301,7 +2289,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
             List<MappingAnnotation> annotations = cubeDimensionAnnotations(cubeDimension);
             String name = cubeDimensionName(cubeDimension);
             String foreignKey = cubeDimensionForeignKey(cubeDimension);
-            boolean highCardinality = cubeDimensionHighCardinality(cubeDimension);
             String caption = cubeDimensionCaption(cubeDimension);
             boolean visible = cubeDimensionVisible(cubeDimension);
             String description = cubeDimensionDescription(cubeDimension);
@@ -2318,8 +2305,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
                     source,
                     level,
                     usagePrefix,
-                    foreignKey,
-                    highCardinality
+                    foreignKey                    
                 );
             }
             if (cubeDimension instanceof MappingPrivateDimension privateDimension) {
@@ -2328,7 +2314,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
                 String usagePrefix = dimensionUsagePrefix(privateDimension);
                 return new_PrivateDimension(
                     name, type, caption,
-                    description, foreignKey, highCardinality, annotations,
+                    description, foreignKey,  annotations,
                     hierarchies, visible, usagePrefix
                 );
             }
@@ -2342,8 +2328,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         List<MappingAnnotation> annotations,
         String caption,
         Boolean visible,
-        String foreignKey,
-        Boolean highCardinality);
+        String foreignKey);
 
     protected String cubeDimensionUsagePrefix(MappingDimensionUsage dimensionUsage) {
         return dimensionUsage.usagePrefix();
@@ -2370,10 +2355,6 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         return cubeDimension.caption();
     }
 
-    protected boolean cubeDimensionHighCardinality(MappingCubeDimension cubeDimension) {
-        return cubeDimension.highCardinality();
-    }
-
     protected String cubeDimensionForeignKey(MappingCubeDimension cubeDimension) {
         return cubeDimension.foreignKey();
     }
@@ -2395,8 +2376,7 @@ public abstract class AbstractDbMappingSchemaModifier implements DatabaseMapping
         String source,
         String level,
         String usagePrefix,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     );
 
     protected MappingLevel level(MappingLevel level) {

@@ -129,36 +129,17 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
         }
 
         return partiallySortList(
-          evaluator, list, hasHighCardDimension( list ),
+          evaluator, list, 
           Math.min( n, list.size() ) );
       }
 
       private TupleList partiallySortList(
         Evaluator evaluator,
         TupleList list,
-        boolean highCard,
         int n ) {
         assert list.size() > 0;
         assert n <= list.size();
-        if ( highCard ) {
-          // sort list in chunks, collect the results
-          final int chunkSize = 6400; // what is this really?
-          TupleList allChunkResults = TupleCollections.createList(
-            arity );
-          for ( int i = 0, next; i < list.size(); i = next ) {
-            next = Math.min( i + chunkSize, list.size() );
-            final TupleList chunk = list.subList( i, next );
-            TupleList chunkResult =
-              partiallySortList(
-                evaluator, chunk, false, n );
-            allChunkResults.addAll( chunkResult );
-          }
-          // one last sort, to merge and cull
-          return partiallySortList(
-            evaluator, allChunkResults, false, n );
-        }
 
-        // normal case: no need for chunks
         final int savepoint = evaluator.savepoint();
         try {
           switch ( list.getArity() ) {
@@ -189,15 +170,6 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
         return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
 
-      private boolean hasHighCardDimension( TupleList l ) {
-        final List<Member> trial = l.get( 0 );
-        for ( Member m : trial ) {
-          if ( m.getHierarchy().getDimension().isHighCardinality() ) {
-            return true;
-          }
-        }
-        return false;
-      }
     };
   }
 }

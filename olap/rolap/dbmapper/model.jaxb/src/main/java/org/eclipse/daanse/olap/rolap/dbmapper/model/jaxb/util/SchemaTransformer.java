@@ -115,7 +115,6 @@ public class SchemaTransformer {
             dimensionUsage.setLevel(du.level());
             dimensionUsage.setUsagePrefix(du.usagePrefix());
             dimensionUsage.setForeignKey(du.foreignKey());
-            dimensionUsage.setHighCardinality(du.highCardinality());
             //TODO
             dimensionUsage.setAnnotations(null);
             dimensionUsage.setCaption(du.caption());

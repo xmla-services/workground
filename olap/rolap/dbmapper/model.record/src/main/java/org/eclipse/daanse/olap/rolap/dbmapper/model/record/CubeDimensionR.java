@@ -11,8 +11,7 @@ public record CubeDimensionR(
                              List<MappingAnnotation> annotations,
                              String caption,
                              Boolean visible,
-                             String foreignKey,
-                             Boolean highCardinality
+                             String foreignKey
                             ) implements MappingCubeDimension {
 
 
@@ -23,8 +22,7 @@ public record CubeDimensionR(
             List<MappingAnnotation> annotations,
             String caption,
             Boolean visible,
-            String foreignKey,
-            Boolean highCardinality
+            String foreignKey
            )
 {
 	this.name = name;
@@ -33,7 +31,6 @@ public record CubeDimensionR(
 	this.caption = caption;
 	this.visible = visible == null ? Boolean.TRUE : visible;
 	this.foreignKey = foreignKey;
-	this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
 
 }
 

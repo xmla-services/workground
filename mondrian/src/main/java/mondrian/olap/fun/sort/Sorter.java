@@ -505,14 +505,7 @@ public class Sorter {
     if ( memberList.size() <= 1 ) {
       return;
     }
-    Dimension dimension = memberList.get( 0 ).getDimension();
-    if ( dimension.isHighCardinality() ) {
-      LOGGER.warn(
-        MondrianResource.instance()
-          .HighCardinalityInDimension.str(
-          dimension.getUniqueName() ) );
-      return;
-    }
+
     Comparator<Member> comparator = new HierarchizeComparator( post );
     memberList.sort( comparator );
   }

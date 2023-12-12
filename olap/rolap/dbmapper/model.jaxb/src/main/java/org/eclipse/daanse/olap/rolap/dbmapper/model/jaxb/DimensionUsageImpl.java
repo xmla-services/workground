@@ -35,8 +35,6 @@ public class DimensionUsageImpl extends AbstractMainElement implements MappingDi
 	protected String usagePrefix;
 	@XmlAttribute(name = "foreignKey")
 	protected String foreignKey;
-	@XmlAttribute(name = "highCardinality")
-	protected Boolean highCardinality;
 
 	@XmlAttribute(name = "visible")
 	protected Boolean visible = true;
@@ -78,21 +76,8 @@ public class DimensionUsageImpl extends AbstractMainElement implements MappingDi
 	}
 
 	@Override
-	public Boolean highCardinality() {
-		if (highCardinality == null) {
-			return Boolean.FALSE;
-		} else {
-			return highCardinality;
-		}
-	}
-
-	@Override
 	public Boolean visible() {
 		return visible == null ? Boolean.FALSE : visible;
-	}
-
-	public void setHighCardinality(Boolean value) {
-		this.highCardinality = value;
 	}
 
 	public void setVisible(Boolean visible) {

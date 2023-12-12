@@ -48,15 +48,4 @@ public interface Dimension extends OlapElement, MetaElement {
      */
     Schema getSchema();
 
-    /**
-     * Returns whether the dimension should be considered as a "high
-     * cardinality" or "low cardinality" according to cube definition.
-     *
-     * Mondrian tends to evaluate high cardinality dimensions using
-     * iterators rather than lists, avoiding instantiating the dimension in
-     * memory.
-     *
-     * @return whether this dimension is high-cardinality
-     */
-    boolean isHighCardinality();
 }

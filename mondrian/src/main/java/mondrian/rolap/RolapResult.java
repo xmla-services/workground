@@ -1271,51 +1271,7 @@ public Cell getCell( int[] pos ) {
       RolapAxis axis = (RolapAxis) axes[axisOrdinal];
       TupleList tupleList = axis.getTupleList();
       discard( tupleList.size() ); // force materialize
-      if ( isAxisHighCardinality( axisOrdinal, tupleList ) ) {
-        final int limit = MondrianProperties.instance().HighCardChunkSize.get();
-        if ( positionsIterators.get( axisOrdinal ) == null ) {
-          final TupleCursor tupleCursor = tupleList.tupleCursor();
-          positionsIterators.put( axisOrdinal, tupleCursor );
-          positionsIndexes.put( axisOrdinal, 0 );
-          final List<List<Member>> subPositions = new ArrayList<>();
-          for ( int i = 0; i < limit && tupleCursor.forward(); i++ ) {
-            subPositions.add( tupleCursor.current() );
-          }
-          positionsCurrent.put( axisOrdinal, subPositions );
-        }
-        final TupleCursor tupleCursor = positionsIterators.get( axisOrdinal );
-        final int positionIndex = positionsIndexes.get( axisOrdinal );
-        List<List<Member>> subTuples = positionsCurrent.get( axisOrdinal );
 
-        if ( subTuples == null ) {
-          return;
-        }
-
-        int pi;
-        if ( pos[axisOrdinal] > positionIndex + subTuples.size() - 1 && subTuples.size() == limit ) {
-          pi = positionIndex + subTuples.size();
-          positionsIndexes.put( axisOrdinal, positionIndex + subTuples.size() );
-          subTuples.subList( 0, subTuples.size() ).clear();
-          for ( int i = 0; i < limit && tupleCursor.forward(); i++ ) {
-            subTuples.add( tupleCursor.current() );
-          }
-          positionsCurrent.put( axisOrdinal, subTuples );
-        } else {
-          pi = positionIndex;
-        }
-        for ( final List<Member> tuple : subTuples ) {
-          point.setAxis( axisOrdinal, pi );
-          final int savepoint = revaluator.savepoint();
-          try {
-            revaluator.setContext( tuple );
-            execution.checkCancelOrTimeout();
-            executeStripe( axisOrdinal - 1, revaluator, pos );
-          } finally {
-            revaluator.restore( savepoint );
-          }
-          pi++;
-        }
-      } else {
         for ( List<Member> tuple : tupleList ) {
           List<Member> measures = new ArrayList<>( statement.getQuery().getMeasuresMembers() );
           for ( Member measure : measures ) {
@@ -1339,30 +1295,12 @@ public Cell getCell( int[] pos ) {
             revaluator.restore( savepoint );
           }
           tupleIndex++;
-        }
+        
       }
     }
   }
 
-  private boolean isAxisHighCardinality( int axisOrdinal, TupleList tupleList ) {
-    Boolean highCardinality = positionsHighCardinality.get( axisOrdinal );
-    if ( highCardinality != null ) {
-      return highCardinality;
-    }
-    highCardinality = false;
-    // noinspection LoopStatementThatDoesntLoop
-    List<Member> tuple = !tupleList.isEmpty() ? tupleList.get( 0 ) : null;
-    if ( tuple != null && !tuple.isEmpty() ) {
-      Dimension dimension = tuple.get( 0 ).getDimension();
-      highCardinality = dimension.isHighCardinality();
-      if ( highCardinality ) {
-        String msg = MondrianResource.instance().HighCardinalityInDimension.str(dimension.getUniqueName());
-        LOGGER.warn(msg);
-      }
-    }
-    positionsHighCardinality.put( axisOrdinal, highCardinality );
-    return highCardinality;
-  }
+
 
   /**
    * Distinct counts are aggregated separately from other measures. We need to apply filters to each level in the query.

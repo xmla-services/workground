@@ -27,7 +27,6 @@ public record PrivateDimensionR(String name,
 		Boolean visible,
         DimensionTypeEnum type,
         String foreignKey,
-        Boolean highCardinality,
         List<MappingHierarchy> hierarchies,
         String usagePrefix
         )
@@ -42,7 +41,6 @@ public record PrivateDimensionR(String name,
 			Boolean visible,
 	        DimensionTypeEnum type,
 	        String foreignKey,
-	        Boolean highCardinality,
 	        List<MappingHierarchy> hierarchies,
 	        String usagePrefix
 	        ) {
@@ -53,7 +51,6 @@ public record PrivateDimensionR(String name,
 			this.visible = visible == null ? Boolean.TRUE : visible;
 			this.type = type;
 			this.foreignKey = foreignKey;
-			this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
 			this.hierarchies = hierarchies == null ? List.of() : hierarchies;
 			this.usagePrefix = usagePrefix;
 	}

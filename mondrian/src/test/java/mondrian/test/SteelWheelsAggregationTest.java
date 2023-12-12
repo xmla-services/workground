@@ -102,7 +102,6 @@ class SteelWheelsAggregationTest {
                 PrivateDimensionRBuilder.builder()
                     .type(DimensionTypeEnum.STANDARD_DIMENSION)
                     .visible(true)
-                    .highCardinality(false)
                     .name("Customers Dimension")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
@@ -151,7 +150,6 @@ class SteelWheelsAggregationTest {
                             .name("Customer_DimUsage")
                             .visible(true)
                             .foreignKey("CUSTOMERNUMBER")
-                            .highCardinality(false)
                             .build()
                     ))
                     .measures(List.of(

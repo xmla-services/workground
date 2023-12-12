@@ -171,9 +171,9 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 
     @Override
 	protected PrivateDimensionR new_PrivateDimension(String name, DimensionTypeEnum type, String caption,
-                                                     String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
+                                                     String description, String foreignKey, List<MappingAnnotation> annotations,
                                                      List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix) {
-		return new PrivateDimensionR(name,description,annotations,caption,visible, type,   foreignKey, highCardinality,
+		return new PrivateDimensionR(name,description,annotations,caption,visible, type,   foreignKey, 
 				hierarchies,  usagePrefix);
 	}
 
@@ -291,7 +291,6 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         String cubeName,
         List<MappingAnnotation> annotations,
         String foreignKey,
-        boolean highCardinality,
         String caption,
         boolean visible,
         String description
@@ -303,8 +302,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             caption,
             visible,
             cubeName,
-            foreignKey,
-            highCardinality
+            foreignKey
             );
     }
 
@@ -717,8 +715,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         String source,
         String level,
         String usagePrefix,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         return new DimensionUsageR(
             name,
@@ -729,8 +726,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             source,
             level,
             usagePrefix,
-            foreignKey,
-            highCardinality
+            foreignKey
         );
     }
 
@@ -825,8 +821,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
         List<MappingAnnotation> annotations,
         String caption,
         Boolean visible,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         return new CubeDimensionR(
             name,
@@ -834,8 +829,8 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
             annotations,
             caption,
             visible,
-            foreignKey,
-            highCardinality);
+            foreignKey
+            );
     }
 
     protected MappingExpressionView new_ExpressionView(

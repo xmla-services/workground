@@ -180,7 +180,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
     @Override
     protected MappingPrivateDimension new_PrivateDimension(
         String name, DimensionTypeEnum type, String caption,
-        String description, String foreignKey, boolean highCardinality, List<MappingAnnotation> annotations,
+        String description, String foreignKey, List<MappingAnnotation> annotations,
         List<MappingHierarchy> hierarchies, boolean visible, String usagePrefix
     ) {
         PrivateDimensionImpl privateDimension = new PrivateDimensionImpl();
@@ -191,7 +191,6 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         privateDimension.setVisible(visible);
         privateDimension.setType(type);
         privateDimension.setForeignKey(foreignKey);
-        privateDimension.setHighCardinality(highCardinality);
         privateDimension.setHierarchies(hierarchies);
         privateDimension.setUsagePrefix(usagePrefix);
         return privateDimension;
@@ -371,7 +370,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
     @Override
     protected MappingVirtualCubeDimension new_VirtualCubeDimension(
         String name, String cubeName,
-        List<MappingAnnotation> annotations, String foreignKey, boolean highCardinality, String caption,
+        List<MappingAnnotation> annotations, String foreignKey, String caption,
         boolean visible, String description
     ) {
         VirtualCubeDimensionImpl virtualCubeDimension = new VirtualCubeDimensionImpl();
@@ -379,7 +378,6 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         virtualCubeDimension.setCubeName(cubeName);
         virtualCubeDimension.setAnnotations(annotations);
         virtualCubeDimension.setForeignKey(foreignKey);
-        virtualCubeDimension.setHighCardinality(highCardinality);
         virtualCubeDimension.setCaption(caption);
         virtualCubeDimension.setVisible(visible);
         virtualCubeDimension.setDescription(description);
@@ -775,8 +773,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         List<MappingAnnotation> annotations,
         String caption,
         Boolean visible,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         DimensionUsageImpl dimensionUsage = new DimensionUsageImpl();
         dimensionUsage.setName(name);
@@ -785,7 +782,6 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         dimensionUsage.setCaption(caption);
         dimensionUsage.setVisible(visible);
         dimensionUsage.setForeignKey(foreignKey);
-        dimensionUsage.setHighCardinality(highCardinality);
         return dimensionUsage;
     }
 
@@ -798,8 +794,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         String source,
         String level,
         String usagePrefix,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         DimensionUsageImpl privateDimension = new DimensionUsageImpl();
         privateDimension.setName(name);
@@ -811,7 +806,6 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         privateDimension.setLevel(level);
         privateDimension.setUsagePrefix(usagePrefix);
         privateDimension.setForeignKey(foreignKey);
-        privateDimension.setHighCardinality(highCardinality);
         return privateDimension;
     }
 
@@ -927,5 +921,7 @@ public class JaxbDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier
         userDefinedFunction.setScript(script);
         return userDefinedFunction;
     }
+
+
 
 }

@@ -41,7 +41,6 @@ public class RolapCubeDimension extends RolapDimension {
      * @param cubeDim XML element definition
      * @param name Name of dimension
      * @param cubeOrdinal Ordinal of dimension within cube
-     * @param hierarchyList List of hierarchies in cube
      * @param highCardinality Whether high cardinality dimension
      */
     public RolapCubeDimension(
@@ -50,8 +49,7 @@ public class RolapCubeDimension extends RolapDimension {
         MappingCubeDimension cubeDim,
         String name,
         int cubeOrdinal,
-        List<RolapHierarchy> hierarchyList,
-        final boolean highCardinality)
+        List<RolapHierarchy> hierarchyList)
     {
         super(
             null,
@@ -64,7 +62,6 @@ public class RolapCubeDimension extends RolapDimension {
                 ? cubeDim.description()
                 : rolapDim.getDescription(),
             null,
-            highCardinality,
             (cubeDim.annotations() != null && !cubeDim.annotations().isEmpty())
                 ? RolapHierarchy.createMetadataMap(cubeDim.annotations())
                 : rolapDim.getMetadata());

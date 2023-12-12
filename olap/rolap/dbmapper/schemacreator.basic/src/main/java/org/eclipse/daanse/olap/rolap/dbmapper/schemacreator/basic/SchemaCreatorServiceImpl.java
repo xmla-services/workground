@@ -184,7 +184,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         				fk.getPkTableName(),
         				fk.getPkColumnName(), jmds),
             null, //key is null for share dimension PkColumnName
-            true,
             hierarchies,
             null);
     }
@@ -644,7 +643,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     		true,
                         getDimensionType(schemaName, tableName, column.getName(), jmds),
                         column.getName(),
-                        true,
                         hierarchyList,
                         null));
                 }
@@ -696,8 +694,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     privateDimension.name(),
                     null,
                     privateDimension.usagePrefix(),
-                    foreignKey.getFkColumnName(),
-                    privateDimension.highCardinality()));
+                    foreignKey.getFkColumnName()));
             }
         }
         return result;

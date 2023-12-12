@@ -747,8 +747,7 @@ class SteelwheelReadTest {
             assertNull(dimension.level());
             assertNull(dimension.usagePrefix());
             assertEquals(map.get(FOREIGN_KEY), dimension.foreignKey());
-            assertEquals(get(HIGH_CARDINALITY, map) == null ? false : Boolean.valueOf((String) get(HIGH_CARDINALITY,
-                map)), dimension.highCardinality());
+
         }
     }
 

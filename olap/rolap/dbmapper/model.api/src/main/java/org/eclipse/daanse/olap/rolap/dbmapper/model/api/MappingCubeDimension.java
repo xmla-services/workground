@@ -23,8 +23,6 @@ public interface MappingCubeDimension {
 
     String foreignKey();
 
-    Boolean highCardinality();
-
     String caption();
 
     Boolean visible();

@@ -43,7 +43,6 @@ class RolapCubeDimensionTest {
     String name = "StubCubeName";
     int cubeOrdinal = 0;
     List<RolapHierarchy> hierarchyList = null;
-    final boolean highCardinality = false;
 
     return new RolapCubeDimension(
         cube,
@@ -51,8 +50,7 @@ class RolapCubeDimensionTest {
         cubeDim,
         name,
         cubeOrdinal,
-        hierarchyList,
-        highCardinality);
+        hierarchyList);
   }
 
   @Test

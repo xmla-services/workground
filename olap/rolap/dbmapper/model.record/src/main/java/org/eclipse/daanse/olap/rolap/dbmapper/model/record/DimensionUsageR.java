@@ -26,8 +26,7 @@ public record DimensionUsageR(String name,
                               String source,
                               String level,
                               String usagePrefix,
-                              String foreignKey,
-                              Boolean highCardinality
+                              String foreignKey
 )
     implements MappingDimensionUsage {
 
@@ -40,8 +39,7 @@ public record DimensionUsageR(String name,
         String source,
         String level,
         String usagePrefix,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         this.name = name;
         this.description = description;
@@ -52,7 +50,6 @@ public record DimensionUsageR(String name,
         this.level = level;
         this.usagePrefix = usagePrefix;
         this.foreignKey = foreignKey;
-        this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
 
     }
 }

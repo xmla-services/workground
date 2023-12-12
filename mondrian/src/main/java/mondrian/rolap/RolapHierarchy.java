@@ -1206,7 +1206,6 @@ public class RolapHierarchy extends HierarchyBase {
             true,
             "Closure dimension for parent-child hierarchy " + getName(),
             DimensionType.STANDARD_DIMENSION,
-            dimension.isHighCardinality(),
             Map.of());
 
         // Create a peer hierarchy.

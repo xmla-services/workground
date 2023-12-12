@@ -36,7 +36,6 @@ public abstract class DimensionBase
     protected final String name;
     protected final String uniqueName;
     protected final String description;
-    protected final boolean highCardinality;
     protected Hierarchy[] hierarchies;
     protected DimensionType dimensionType;
 
@@ -45,15 +44,13 @@ public abstract class DimensionBase
      *
      * @param name Name
      * @param dimensionType Type
-     * @param highCardinality Whether high-cardinality
      */
     protected DimensionBase(
         String name,
         String caption,
         boolean visible,
         String description,
-        DimensionType dimensionType,
-        boolean highCardinality)
+        DimensionType dimensionType)
     {
         this.name = name;
         this.caption = caption;
@@ -61,7 +58,6 @@ public abstract class DimensionBase
         this.uniqueName = Util.makeFqName(name);
         this.description = description;
         this.dimensionType = dimensionType;
-        this.highCardinality = highCardinality;
     }
 
     @Override
@@ -152,10 +148,6 @@ public abstract class DimensionBase
         }
     }
 
-    @Override
-	public boolean isHighCardinality() {
-        return this.highCardinality;
-    }
 
     private Hierarchy lookupHierarchy(NameSegment s) {
         for (Hierarchy hierarchy : hierarchies) {

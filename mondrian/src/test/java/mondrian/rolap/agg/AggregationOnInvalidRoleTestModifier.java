@@ -109,7 +109,6 @@ public class AggregationOnInvalidRoleTestModifier extends RDbMappingSchemaModifi
                     .type(DimensionTypeEnum.STANDARD_DIMENSION)
                     .visible(true)
                     .foreignKey("customer_id")
-                    .highCardinality(false)
                     .name("Customer")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
@@ -135,7 +134,6 @@ public class AggregationOnInvalidRoleTestModifier extends RDbMappingSchemaModifi
                     .type(DimensionTypeEnum.STANDARD_DIMENSION)
                     .visible(true)
                     .foreignKey("product_ID")
-                    .highCardinality(false)
                     .name("Product Code")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()

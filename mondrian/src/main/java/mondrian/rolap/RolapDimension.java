@@ -76,7 +76,6 @@ class RolapDimension extends DimensionBase {
         boolean visible,
         String description,
         DimensionType dimensionType,
-        final boolean highCardinality,
         Map<String, Object> metadata)
     {
         // todo: recognition of a time dimension should be improved
@@ -86,8 +85,7 @@ class RolapDimension extends DimensionBase {
             caption,
             visible,
             description,
-            dimensionType,
-            highCardinality);
+            dimensionType);
         assert metadata != null;
         this.schema = schema;
         this.metaData = metadata;
@@ -112,7 +110,6 @@ class RolapDimension extends DimensionBase {
             xmlDimension.visible(),
             xmlDimension.description(),
             DimensionTypeUtil.getDimensionType(xmlDimension),
-            xmlDimension.highCardinality(),
             RolapHierarchy.createMetadataMap(xmlDimension.annotations()));
 
         Util.assertPrecondition(schema != null);

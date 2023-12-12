@@ -29,8 +29,6 @@ public class VirtualCubeDimensionImpl  extends AbstractMainElement implements Ma
 
 	@XmlAttribute(name = "foreignKey")
 	protected String foreignKey;
-	@XmlAttribute(name = "highCardinality")
-	protected Boolean highCardinality = false;
 
 	@XmlAttribute(name = "visible")
 	protected Boolean visible = true;
@@ -49,10 +47,7 @@ public class VirtualCubeDimensionImpl  extends AbstractMainElement implements Ma
 		return foreignKey;
 	}
 
-	@Override
-	public Boolean highCardinality() {
-		return highCardinality == null ? Boolean.FALSE : highCardinality;
-	}
+
 
 	@Override
 	public Boolean visible() {
@@ -62,11 +57,6 @@ public class VirtualCubeDimensionImpl  extends AbstractMainElement implements Ma
 	public void setForeignKey(String foreignKey) {
 		this.foreignKey = foreignKey;
 	}
-
-	public void setHighCardinality(boolean highCardinality) {
-		this.highCardinality = highCardinality;
-	}
-
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}

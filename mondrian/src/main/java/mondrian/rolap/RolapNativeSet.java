@@ -204,16 +204,6 @@ public abstract class RolapNativeSet extends RolapNative {
 	public Object execute( ResultStyle desiredResultStyle ) {
       switch ( desiredResultStyle ) {
         case ITERABLE:
-          if (this.args !=null && this.args.length > 0) {
-              CrossJoinArg arg = this.args[0];
-              if ( arg.getLevel().getDimension().isHighCardinality() ) {
-                  // If any of the dimensions is a HCD,
-                  // use the proper tuple reader.
-                  return executeList(
-                      new HighCardSqlTupleReader( constraint ) );
-              }
-          }
-          // Use the regular tuple reader.
           return executeList(
               new SqlTupleReader( constraint ) );
         case MUTABLE_LIST, LIST:

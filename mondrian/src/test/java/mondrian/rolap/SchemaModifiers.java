@@ -254,7 +254,6 @@ public class SchemaModifiers {
                 .dimensionUsageOrDimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Store Type")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -278,11 +277,9 @@ public class SchemaModifiers {
                         .source("Store")
                         .name("Store")
                         .visible(true)
-                        .highCardinality(false)
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Has coffee bar")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -545,14 +542,12 @@ public class SchemaModifiers {
                         .source("Store")
                         .visible(true)
                         .foreignKey("product_id")
-                        .highCardinality(false)
                         .build(),
                     DimensionUsageRBuilder.builder()
                         .name("BuyerTwo")
                         .source("Store")
                         .visible(true)
                         .foreignKey("product_id")
-                        .highCardinality(false)
                         .build(),
                     DimensionUsageRBuilder.builder()
                         .name("Store Size in SQFT")
@@ -2544,7 +2539,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Employee")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -2589,7 +2583,6 @@ public class SchemaModifiers {
                                 .source("Employee")
                                 .name("Employee")
                                 .foreignKey("store_id")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -2730,7 +2723,6 @@ public class SchemaModifiers {
                         .virtualCubeDimensions(List.of(
                             VirtualCubeDimensionRBuilder.builder()
                                 .cubeName("Sales")
-                                .highCardinality(false)
                                 .name("Product")
                                 .build()
                         ))
@@ -4236,7 +4228,6 @@ public class SchemaModifiers {
                     .foreignKey("product_id")
                     .type(DimensionTypeEnum.STANDARD_DIMENSION)
                     .visible(true)
-                    .highCardinality(false)
                     .name("Example")
                     .hierarchies(List.of(
                         HierarchyRBuilder.builder()
@@ -6067,7 +6058,6 @@ public class SchemaModifiers {
                             PrivateDimensionRBuilder.builder()
                                 .name("Product - Bug")
                                 .foreignKey("product_id")
-                                .highCardinality(false)
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
                                         .hasAll(true)
@@ -6104,7 +6094,6 @@ public class SchemaModifiers {
                     	.dimensionUsageOrDimensions(List.of(
                     	    PrivateDimensionRBuilder.builder()
                                 .name("Product - no Bug")
-                                .highCardinality(false)
                                 .foreignKey("product_id")
                                 .hierarchies(List.of(
                                     HierarchyRBuilder.builder()
@@ -7696,7 +7685,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.TIME_DIMENSION)
-                        .highCardinality(false)
                         .name("Time")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -7757,7 +7745,6 @@ public class SchemaModifiers {
                                 .source("Time")
                                 .name("Time")
                                 .foreignKey("time_id")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -7788,7 +7775,6 @@ public class SchemaModifiers {
                         .virtualCubeDimensions(List.of(
                             VirtualCubeDimensionRBuilder.builder()
                                 .visible(true)
-                                .highCardinality(false)
                                 .name("Time")
                                 .build()
                         ))
@@ -12391,7 +12377,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Store")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -12416,7 +12401,6 @@ public class SchemaModifiers {
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.TIME_DIMENSION)
                         .visible(true)
-                        .highCardinality(false)
                         .name("Time")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -12460,7 +12444,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Warehouse")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -12497,13 +12480,11 @@ public class SchemaModifiers {
                                 .name("Store").source("Store")
                                 .visible(true)
                                 .foreignKey("store_id")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .name("Time").source("Time")
                                 .visible(true)
                                 .foreignKey("time_id")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -12527,21 +12508,18 @@ public class SchemaModifiers {
                                 .name("Store")
                                 .visible(true)
                                 .foreignKey("store_id")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Time")
                                 .name("Time")
                                 .visible(true)
                                 .foreignKey("time_id")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Warehouse")
                                 .name("Warehouse")
                                 .visible(true)
                                 .foreignKey("warehouse_id")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -12562,7 +12540,6 @@ public class SchemaModifiers {
                         .virtualCubeDimensions(List.of(
                             VirtualCubeDimensionRBuilder.builder()
                                 .visible(true)
-                                .highCardinality(false)
                                 .name("Time")
                                 .build()
                         ))
@@ -15676,7 +15653,6 @@ public class SchemaModifiers {
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
                         .foreignKey("customer_id")
-                        .highCardinality(false)
                         .name("Customers")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -15809,7 +15785,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Store")
                         .foreignKey("store_id")
                         .hierarchies(List.of(
@@ -18656,7 +18631,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Markets")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -18703,7 +18677,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Customers")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -18758,7 +18731,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Product")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -18818,7 +18790,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.TIME_DIMENSION)
-                        .highCardinality(false)
                         .name("Time")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -18861,7 +18832,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Order Status")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -18893,26 +18863,22 @@ public class SchemaModifiers {
                                 .source("Markets")
                                 .name("Markets")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Customers")
                                 .name("Customers")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Product")
                                 .name("Product")
                                 .foreignKey("PRODUCTCODE")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Time")
                                 .usagePrefix("TR_")
                                 .name("Time")
                                 .foreignKey("ORDERDATE")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -18940,26 +18906,22 @@ public class SchemaModifiers {
                                 .source("Markets")
                                 .name("Markets")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Customers")
                                 .name("Customers")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Product")
                                 .name("Product")
                                 .foreignKey("PRODUCTCODE")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Time")
                                 .usagePrefix("TC_")
                                 .name("Time")
                                 .foreignKey("REQUIREDDATE")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -18988,26 +18950,22 @@ public class SchemaModifiers {
                                 .source("Markets")
                                 .name("Markets")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Customers")
                                 .name("Customers")
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Product")
                                 .name("Product")
                                 .foreignKey("PRODUCTCODE")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Time")
                                 .usagePrefix("TW_")
                                 .name("Time")
                                 .foreignKey("SHIPPEDDATE")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -19232,7 +19190,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                        .highCardinality(false)
                         .name("Product")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -19373,7 +19330,6 @@ public class SchemaModifiers {
                                 .build(),
                             PrivateDimensionRBuilder.builder()
                                 .type(DimensionTypeEnum.TIME_DIMENSION)
-                                .highCardinality(false)
                                 .foreignKey("TIME_ID")
                                 .name("Time")
                                 .hierarchies(List.of(
@@ -19653,7 +19609,6 @@ public class SchemaModifiers {
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
                         .visible(true)
-                        .highCardinality(false)
                         .name("Customers Dimension")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -19702,7 +19657,6 @@ public class SchemaModifiers {
                                 .name("Customer_DimUsage")
                                 .visible(true)
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -19851,7 +19805,6 @@ public class SchemaModifiers {
                     PrivateDimensionRBuilder.builder()
                         .type(DimensionTypeEnum.STANDARD_DIMENSION)
                         .visible(true)
-                        .highCardinality(false)
                         .name("Customers Dimension")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -19900,7 +19853,6 @@ public class SchemaModifiers {
                                 .name("Customer_DimUsage")
                                 .visible(true)
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -20098,7 +20050,6 @@ public class SchemaModifiers {
                 .dimensions(List.of(
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Dimension1")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -20124,7 +20075,6 @@ public class SchemaModifiers {
                         .build(),
                     PrivateDimensionRBuilder.builder()
                         .visible(true)
-                        .highCardinality(false)
                         .name("Dimension2")
                         .hierarchies(List.of(
                             HierarchyRBuilder.builder()
@@ -20161,14 +20111,12 @@ public class SchemaModifiers {
                                 .name("Dimension1")
                                 .visible(true)
                                 .foreignKey("PRODUCTCODE")
-                                .highCardinality(false)
                                 .build(),
                             DimensionUsageRBuilder.builder()
                                 .source("Dimension2")
                                 .name("Dimension2")
                                 .visible(true)
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -20191,7 +20139,6 @@ public class SchemaModifiers {
                                 .name("Dimension2")
                                 .visible(true)
                                 .foreignKey("CUSTOMERNUMBER")
-                                .highCardinality(false)
                                 .build()
                         ))
                         .measures(List.of(
@@ -20222,10 +20169,10 @@ public class SchemaModifiers {
                         ))
                         .virtualCubeDimensions(List.of(
                             VirtualCubeDimensionRBuilder.builder()
-                                .cubeName("rolesTest1").visible(true).highCardinality(false).name("Dimension1")
+                                .cubeName("rolesTest1").visible(true).name("Dimension1")
                                 .build(),
                             VirtualCubeDimensionRBuilder.builder()
-                                .cubeName("rolesTest1").visible(true).highCardinality(false).name("Dimension2").build()
+                                .cubeName("rolesTest1").visible(true).name("Dimension2").build()
                         ))
                         .virtualCubeMeasures(List.of(
                             VirtualCubeMeasureRBuilder.builder()

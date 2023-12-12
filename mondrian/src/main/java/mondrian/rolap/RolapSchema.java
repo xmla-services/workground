@@ -1224,16 +1224,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 "while instantiating member reader '" + memberReaderClass);
         } else {
             SqlMemberSource source = new SqlMemberSource(hierarchy);
-            Dimension dimension = hierarchy.getDimension();
-            if (dimension.isHighCardinality()) {
-                String msg = MondrianResource.instance()
-                    .HighCardinalityInDimension.str(
-                        dimension.getUniqueName());
-                LOGGER.warn(msg);
-                LOGGER.debug(
-                    "High cardinality for {}", dimension);
-                return new NoCacheMemberReader(source);
-            } else {
+ 
                 LOGGER.debug(
                     "Normal cardinality for {}", hierarchy.getDimension());
                 if (MondrianProperties.instance().DisableCaching.get()) {
@@ -1244,7 +1235,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 } else {
                     return new SmartMemberReader(source);
                 }
-            }
+     
         }
     }
 

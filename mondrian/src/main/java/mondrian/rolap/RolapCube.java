@@ -282,7 +282,6 @@ public class RolapCube extends CubeBase {
                 true,
                 null,
                 DimensionType.MEASURES_DIMENSION,
-                false,
                 Map.of());
 
         this.dimensions[0] = measuresDimension;
@@ -298,12 +297,7 @@ public class RolapCube extends CubeBase {
 
         for (int i = 0; i < dimensions.size(); i++) {
             MappingCubeDimension xmlCubeDimension = dimensions.get(i);
-            if (xmlCubeDimension.highCardinality()) {
-                String msg = MondrianResource.instance()
-                    .HighCardinalityInDimension.str(
-                        xmlCubeDimension.name());
-                LOGGER.warn(msg);
-            }
+
             // Look up usages of shared dimensions in the schema before
             // consulting the XML schema (which may be null).
             RolapCubeDimension dimension =
@@ -1103,7 +1097,7 @@ public class RolapCube extends CubeBase {
         return new RolapCubeDimension(
             this, dimension, xmlCubeDimension,
             xmlCubeDimension.name(), dimensionOrdinal,
-            cubeHierarchyList, xmlCubeDimension.highCardinality());
+            cubeHierarchyList);
     }
 
     /**

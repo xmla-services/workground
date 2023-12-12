@@ -553,20 +553,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     if ( list.isEmpty() ) {
       return list;
     }
-    try {
-      final Object o = list.get( 0 );
-      if ( o instanceof Member member) {
-        // Cannot optimize high cardinality dimensions
-        Dimension dimension = member.getDimension();
-        if ( dimension.isHighCardinality() ) {
-          String msg = MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() );
-          CrossJoinFunDef.LOGGER.warn(msg);
-          return list;
-        }
-      }
-    } catch ( IndexOutOfBoundsException ioobe ) {
-      return TupleCollections.emptyList( list.getArity() );
-    }
+
     int size = list.size();
 
     if ( size > opSize && evaluator.isNonEmpty() ) {

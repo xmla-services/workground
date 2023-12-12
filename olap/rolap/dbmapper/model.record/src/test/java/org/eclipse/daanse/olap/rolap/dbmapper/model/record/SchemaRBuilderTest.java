@@ -23,5 +23,6 @@ class SchemaRBuilderTest {
                                 .build()))
                         .build())).build();
         assertThat(schema).isNotNull();
+        
     }
 }

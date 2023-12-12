@@ -608,40 +608,19 @@ public Context getContext() {
         ( (RolapAxis) underlying.getAxes()[ axis ] ).getTupleList();
 
       final TupleList filteredTupleList;
-      if ( !tupleList.isEmpty()
-        && tupleList.get( 0 ).get( 0 ).getDimension()
-        .isHighCardinality() ) {
-          String msg = MondrianResource.instance()
-              .HighCardinalityInDimension.str(
-                  tupleList.get( 0 ).get( 0 ).getDimension()
-                      .getUniqueName() );
-          LOGGER.warn(msg);
-          filteredTupleList =
-              new DelegatingTupleList(
-                  tupleList.getArity(),
-                  new FilteredIterableList<>(
-                      tupleList,
-                      new FilteredIterableList.Filter<List<Member>>() {
-                          @Override
-                          public boolean accept( final List<Member> p ) {
-                  return p.get( 0 ) != null;
-                }
-                      }
-                      )
-              );
-      } else {
-          filteredTupleList =
-              TupleCollections.createList( tupleList.getArity() );
-          int i = -1;
-          TupleCursor tupleCursor = tupleList.tupleCursor();
-          while ( tupleCursor.forward() ) {
-              ++i;
-              if ( !isEmpty( i, axis ) ) {
-                  map.put( filteredTupleList.size(), i );
-                  filteredTupleList.addCurrent( tupleCursor );
-              }
-          }
-      }
+
+
+		filteredTupleList = TupleCollections.createList(tupleList.getArity());
+		int i = -1;
+		TupleCursor tupleCursor = tupleList.tupleCursor();
+		while (tupleCursor.forward()) {
+			++i;
+			if (!isEmpty(i, axis)) {
+				map.put(filteredTupleList.size(), i);
+				filteredTupleList.addCurrent(tupleCursor);
+			}
+		}
+      
       this.axes[ axis ] = new RolapAxis( filteredTupleList );
     }
 

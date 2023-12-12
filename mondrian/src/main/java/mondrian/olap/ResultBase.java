@@ -112,10 +112,6 @@ public abstract class ResultBase implements Result {
             boolean firstTime = true;
             pw.print("{");
             for (Member member : position) {
-                if (member.getDimension().isHighCardinality()) {
-                    pw.println(" -- High cardinality dimension --}");
-                    return;
-                }
                 if (! firstTime) {
                     pw.print(", ");
                 }

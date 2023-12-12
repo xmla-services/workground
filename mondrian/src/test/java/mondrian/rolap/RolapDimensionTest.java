@@ -56,7 +56,6 @@ class RolapDimensionTest {
 
     xmlDimension.setName("dimensionName");
     xmlDimension.setVisible(true);
-    xmlDimension.setHighCardinality(true);
     xmlDimension.setHierarchies(List.of(hierarchy));
 
 

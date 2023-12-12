@@ -24,8 +24,7 @@ public record VirtualCubeDimensionR(String name,
                                     String caption,
                                     Boolean visible,
                                     String cubeName,
-                                    String foreignKey,
-                                    Boolean highCardinality
+                                    String foreignKey
 )
     implements MappingVirtualCubeDimension {
 
@@ -36,8 +35,7 @@ public record VirtualCubeDimensionR(String name,
         String caption,
         Boolean visible,
         String cubeName,
-        String foreignKey,
-        Boolean highCardinality
+        String foreignKey
     ) {
         this.name = name;
         this.description = description;
@@ -46,6 +44,5 @@ public record VirtualCubeDimensionR(String name,
         this.visible = visible == null ? Boolean.TRUE : visible;
         this.cubeName = cubeName;
         this.foreignKey = foreignKey;
-        this.highCardinality = highCardinality == null ? Boolean.FALSE : highCardinality;
     }
 }

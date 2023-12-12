@@ -267,10 +267,7 @@ public Dimension getDimension() {
       throw new UnsupportedOperationException();
     }
 
-    @Override
-	public boolean isHighCardinality() {
-      return false;
-    }
+
 
     @Override
 	public String getUniqueName() {
