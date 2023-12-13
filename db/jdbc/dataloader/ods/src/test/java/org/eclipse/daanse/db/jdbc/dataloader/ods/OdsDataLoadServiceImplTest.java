@@ -8,15 +8,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
-import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
 
@@ -41,10 +42,11 @@ import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
+@ExtendWith(MockitoExtension.class)
 @RequireConfigurationAdmin
 class OdsDataLoadServiceImplTest {
 
-    @TempDir
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path path;
     public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.ods.OdsDataLoadServiceImpl";
     @InjectBundleContext
@@ -52,8 +54,6 @@ class OdsDataLoadServiceImplTest {
     DialectResolver dialectResolver = mock(DialectResolver.class);
     Dialect dialect = mock(Dialect.class);
     Connection connection = mock(Connection.class);
-    JdbcMetaDataServiceFactory jmdsf = mock(JdbcMetaDataServiceFactory.class);
-    JdbcMetaDataService jmds = mock(JdbcMetaDataService.class);
     PreparedStatement preparedStatement = mock(PreparedStatement.class);
 
     DataSource dataSource = mock(DataSource.class);
@@ -63,32 +63,8 @@ class OdsDataLoadServiceImplTest {
     Configuration conf;
 
     @BeforeEach
-    void beforeEach() throws SQLException, IOException {
-        copy("test.ods");
-        bc.registerService(JdbcMetaDataServiceFactory.class, jmdsf, dictionaryOf("jmdsf", "1"));
+    void beforeEach() throws SQLException {
         bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "2"));
-        when(jmdsf.create(any())).thenReturn(jmds);
-        when(jmds.getColumnDataType("testSchema", "test", "col0"))
-            .thenReturn(Optional.of(4));
-        when(jmds.getColumnDataType("testSchema", "test", "col1"))
-            .thenReturn(Optional.of(12));
-        when(jmds.getColumnDataType("testSchema", "test", "col2"))
-            .thenReturn(Optional.of(91));
-        when(jmds.getColumnDataType("testSchema", "test", "col3"))
-            .thenReturn(Optional.of(4));
-        when(jmds.getColumnDataType("testSchema", "test", "col4"))
-            .thenReturn(Optional.of(4));
-        when(jmds.getColumnDataType("testSchema", "test", "col5"))
-            .thenReturn(Optional.of(4));
-        when(jmds.getColumnDataType("testSchema", "test", "col6"))
-            .thenReturn(Optional.of(16));
-        when(jmds.getColumnDataType("testSchema", "test", "col7"))
-            .thenReturn(Optional.of(92));
-        when(jmds.getColumnDataType("testSchema", "test", "col8"))
-            .thenReturn(Optional.of(3));
-        when(jmds.getColumnDataType("testSchema", "test", "col9"))
-            .thenReturn(Optional.of(93));
-
 
         when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
 
@@ -97,10 +73,10 @@ class OdsDataLoadServiceImplTest {
         when(connection.prepareStatement(any())).thenReturn(preparedStatement);
         when(connection.getSchema()).thenReturn("testSchema");
         when(preparedStatement.getConnection()).thenReturn(connection);
+
     }
 
     private void copy(String... files) throws IOException {
-
         for (String file : files) {
             InputStream is = bc.getBundle().getResource(file).openConnection().getInputStream();
             Files.copy(is, path.resolve(file));
@@ -115,15 +91,16 @@ class OdsDataLoadServiceImplTest {
     }
 
     @Test
-    void testBatch(
-        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadServiceImpl> odsDataLoadServiceAware
-    ) throws IOException, SQLException, InterruptedException {
-        setupOdsDataLoadServiceImpl(path, "test", ".ods", "", "UTF-8", true);
+    void testBatch() throws IOException, SQLException, InterruptedException {
+        Path p = path.resolve("ods");
+        Files.createDirectories(p);
+
+        setupOdsDataLoadServiceImpl( "UTF-8", true, "ods");
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         when(dialect.supportBatchOperations()).thenReturn(true);
-        OdsDataLoadServiceImpl odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
-        //odsDataLoadService.setJmdsf(jmdsf);
-        odsDataLoadService.loadData();
+        Thread.sleep(200);
+        copy("ods/test.ods");
+        Thread.sleep(20000);
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
         verify(preparedStatement, (times(6))).addBatch();
@@ -131,44 +108,37 @@ class OdsDataLoadServiceImplTest {
     }
 
     @Test
-    void test(
-        @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<OdsDataLoadServiceImpl> odsDataLoadServiceAware
-    ) throws IOException, SQLException, InterruptedException {
-        setupOdsDataLoadServiceImpl(path, "test", ".ods", "", "UTF-8", true);
+    void test() throws IOException, SQLException, InterruptedException {
+        Path p = path.resolve("ods/schema1");
+        Files.createDirectories(p);
+
+        setupOdsDataLoadServiceImpl( "UTF-8", true, "ods/schema1");
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         when(dialect.supportBatchOperations()).thenReturn(false);
-        OdsDataLoadServiceImpl odsDataLoadService = odsDataLoadServiceAware.waitForService(1000);
-        //odsDataLoadService.setJmdsf(jmdsf);
-        odsDataLoadService.loadData();
+        Thread.sleep(200);
+        copy("ods/schema1/test.ods");
+        Thread.sleep(2000);
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
         verify(preparedStatement, (times(5))).executeUpdate();
     }
 
-    private void setupOdsDataLoadServiceImpl(Path odsFolderPath, String odsFileName,  String odsFileSuffix,
-                                             String odsFilePrefix, String encoding, Boolean clearTableBeforeLoad)
+    private void setupOdsDataLoadServiceImpl(String encoding, Boolean clearTableBeforeLoad, String stringPath)
         throws IOException {
         conf = ca.getFactoryConfiguration(OdsDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
         Dictionary<String, Object> dict = new Hashtable<>();
-        if (odsFolderPath != null) {
-            dict.put("odsFolderPath", odsFolderPath.toAbsolutePath().toString());
-        }
-        if (odsFileSuffix != null) {
-            dict.put("odsFileSuffix", odsFileSuffix);
-        }
-        if (odsFilePrefix != null) {
-            dict.put("odsFilePrefix", odsFilePrefix);
-        }
-        if (odsFileName != null) {
-            dict.put("odsFileName", odsFileName);
-        }
+
         if (encoding != null) {
             dict.put("encoding", encoding);
         }
         if (clearTableBeforeLoad != null) {
             dict.put("clearTableBeforeLoad", clearTableBeforeLoad);
         }
-        dict.put("pathListener.paths", clearTableBeforeLoad);
+
+        dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
+            : path.toAbsolutePath().toString());
+        dict.put("pathListener.recursive", true);
+
         conf.update(dict);
     }
 
