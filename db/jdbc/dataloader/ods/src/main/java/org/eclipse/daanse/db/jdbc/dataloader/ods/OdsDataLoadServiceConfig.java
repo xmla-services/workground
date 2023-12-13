@@ -13,74 +13,33 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
+import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-
-import java.nio.charset.StandardCharsets;
+import org.osgi.service.metatype.annotations.Option;
 
 @ObjectClassDefinition
-public interface OdsDataLoadServiceConfig {
-
-    /**
-     * @return CSV Folder Files Path
-     */
-    @AttributeDefinition(description = "odsFolderPath")
-    default String odsFolderPath() {
-        return "/";
-    }
-
-    /**
-     * @return CSV File Suffix
-     */
-    @AttributeDefinition(description = "odsFileSuffix")
-    default String odsFileSuffix() {
-        return ".ods";
-    }
-
-    /**
-     * @return CSV File Prefix
-     */
-    @AttributeDefinition(description = "odsFilePrefix")
-    default String odsFilePrefix() {
-        return "";
-    }
+@PathListenerConfig
+public @interface OdsDataLoadServiceConfig {
 
     /**
      * @return Encoding default UTF-8
      */
-    @AttributeDefinition(description = "encoding")
-    default String encoding() {
-        return StandardCharsets.UTF_8.name();
-    }
+    @AttributeDefinition(description = "encoding", options = { @Option(value = "UTF_8"), @Option(value = "US_ASCII"),
+        @Option(value = "ISO_8859_1"), @Option(value = "UTF_16BE"), @Option(value = "UTF_16LE"),
+        @Option(value = "UTF_16") })
+    String encoding() default "UTF_8";
 
     /**
      * @return Clear Table Before Load Data
      */
     @AttributeDefinition(description = "clearTableBeforeLoad")
-    default Boolean clearTableBeforeLoad() {
-        return true;
-    }
+    boolean clearTableBeforeLoad() default true;
 
     /**
      * @return Batch Size. Use Batch operation if dialect support it
      */
     @AttributeDefinition(description = "batchSize")
-    default int batchSize() {
-        return 1000;
-    }
-
-    /**
-     * @return Encoding default UTF-8
-     */
-    @AttributeDefinition(description = "encoding")
-    default String odsFileName() {
-            return "test";
-    }
-
-
-    @AttributeDefinition(description = "pathListener.paths")
-    default String[] paths() {
-        return new String[] {""};
-    }
+    int batchSize() default 1000;
 
 }

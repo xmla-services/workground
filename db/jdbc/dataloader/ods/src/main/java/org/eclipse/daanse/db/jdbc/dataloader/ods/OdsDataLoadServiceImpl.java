@@ -15,19 +15,21 @@ package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.time.Duration;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,9 +37,10 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
+import org.eclipse.daanse.util.io.watcher.api.EventKind;
+import org.eclipse.daanse.util.io.watcher.api.PathListener;
+import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -54,20 +57,19 @@ import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
 
 @Designate(ocd = OdsDataLoadServiceConfig.class, factory = true)
-@Component( scope = ServiceScope.SINGLETON)
-public class OdsDataLoadServiceImpl  {
+@Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
+@PathListenerConfig(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.ods")
+public class OdsDataLoadServiceImpl  implements PathListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(OdsDataLoadServiceImpl.class);
     public static final Converter CONVERTER = Converters.standardConverter();
+    private Queue<Path> initialPaths = new ArrayDeque<>();
     @Reference
     private DialectResolver dialectResolver;
     @Reference
     private DataSource dataSource;
 
-    @Reference
-    private JdbcMetaDataServiceFactory jmdsf;
-
-
     private OdsDataLoadServiceConfig config;
+    private Path basePath;
 
     @Activate
     public void activate(Map<String, Object> configMap) {
@@ -80,44 +82,42 @@ public class OdsDataLoadServiceImpl  {
         config = null;
     }
 
-    public void loadData() {
+    private void loadData(Path path) {
+        Optional<Dialect> dialectOptional = this.dialectResolver.resolve(dataSource);
+        if (dialectOptional.isPresent()) {
+            Dialect dialect = dialectOptional.get();
+
+            try (Connection connection = dataSource.getConnection()) {
+                loadData(connection, dialect, path);
+            } catch (SQLException e) {
+                LOGGER.error("Database connection error", e);
+            }
+        } else {
+            LOGGER.error("Database dialect did not determinate");
+        }
+
+    }
+
+    public void loadData(Connection connection, Dialect dialect, Path p) {
         try {
-            Path p = Paths.get(config.odsFolderPath()).resolve(new StringBuilder().append(config.odsFilePrefix())
-                .append(config.odsFileName()).append(config.odsFileSuffix()).toString());
-            if (!p.toFile().exists()) {
-                String fileName = config.odsFileName();
-                LOGGER.warn("File does not exist - {}.", fileName);
-                return;
+            SpreadSheet spread = new SpreadSheet(p.toFile());
+            int numSheets = spread.getNumSheets();
+            LOGGER.debug("Number of sheets: {}", numSheets);
+            List<Sheet> sheets = spread.getSheets();
+            String schemaName = getDatabaseSchemaNameFromPath(p);
+            if (dialect.supportParallelLoading()) {
+                sheets.parallelStream().forEach(sheet -> loadSheet(connection, dialect, schemaName, sheet));
+            } else {
+                sheets.stream().forEach(sheet -> loadSheet(connection, dialect, schemaName, sheet));
             }
-            Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
-
-            if (dialectOptional.isPresent()) {
-                Dialect dialect = dialectOptional.get();
-                try (Connection connection = dataSource.getConnection()) {
-                    JdbcMetaDataService jms = jmdsf.create(connection);
-                    SpreadSheet spread = new SpreadSheet(p.toFile());
-                    int numSheets = spread.getNumSheets();
-                    LOGGER.debug("Number of sheets: {}", numSheets);
-                    List<Sheet> sheets = spread.getSheets();
-                    String schemaName = connection.getSchema();
-                    if (dialect.supportParallelLoading()) {
-                        sheets.parallelStream().forEach(sheet -> loadSheet(connection, jms, dialect, schemaName, sheet));
-                    } else {
-                        sheets.stream().forEach(sheet -> loadSheet(connection, jms, dialect, schemaName, sheet));
-                    }
-                } catch (SQLException e) {
-                    throw new OdsDataLoadException("Database connection error", e);
-                }
-            }
-
         } catch (IOException e){
             throw new OdsDataLoadException("OdsDataLoaderService loadData error", e);
         }
     }
 
-    private void loadSheet(Connection connection, JdbcMetaDataService jms, Dialect dialect, String schemaName, Sheet sheet) {
+    private void loadSheet(Connection connection, Dialect dialect, String schemaName, Sheet sheet) {
         String tableName = sheet.getName();
-        Map<String, Type> headersMap = getHeaders( schemaName, tableName, sheet, jms);
+        Map<String, Type> headersMap = getHeaders(sheet);
         StringBuilder b = new StringBuilder();
         Set<String> headers = headersMap.keySet();
         b.append("INSERT INTO ");
@@ -186,9 +186,9 @@ public class OdsDataLoadServiceImpl  {
         long start = System.currentTimeMillis();
         int columns = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
-        if (rows > 1) {
-            for (int i = 1; i < rows; i++) {
-                if (i > 1) {
+        if (rows > 2) {
+            for (int i = 2; i < rows; i++) {
+                if (i > 2) {
                     ps.clearParameters();
                 }
                 for (int j = 0; j < columns; j++) {
@@ -247,45 +247,43 @@ public class OdsDataLoadServiceImpl  {
         return Time.valueOf(value.toString());
     }
 
-    private Map<String, Type> getHeaders(String schemaName, String tableName, Sheet sheet, JdbcMetaDataService jms) {
+    private Map<String, Type> getHeaders(Sheet sheet) {
         Map<String, Type> result = new HashMap<>();
         int columns = sheet.getMaxColumns();
-        for (int i = 0; i < columns; i++) {
-            Range range = sheet.getRange(0, i);
-            if ( hasContent(range) ) {
-                String columnName = range.getValue().toString();
-                try {
-                    result.put(columnName, getColumnType(jms.getColumnDataType(schemaName, tableName, columnName)));
-                } catch (SQLException e) {
-                    throw new OdsDataLoadException("Get getColumnDataType error", e);
+        int rows = sheet.getMaxRows();
+        if (rows > 1) {
+            for (int i = 0; i < columns; i++) {
+                Range headerRange = sheet.getRange(0, i);
+                Range typeRange = sheet.getRange(1, i);
+                if (hasContent(headerRange)) {
+                    String columnName = headerRange.getValue().toString();
+                    String typeName = typeRange.getValue().toString();
+                    result.put(columnName, getColumnType(typeName));
                 }
             }
         }
         return result;
     }
 
-    private Type getColumnType(Optional<Integer> optionalType) {
-        Integer type = optionalType.orElseThrow(
-            () -> new OdsDataLoadException("getColumnType: type is absent")
-        );
-        switch (type) {
-            case Types.TINYINT, Types.SMALLINT:
+    private Type getColumnType(String stringType) {
+        switch (stringType) {
+            case "SMALLINT":
                 return Type.SMALLINT;
-            case Types.INTEGER:
+            case "INTEGER":
                 return Type.INTEGER;
-            case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL:
+            case "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL":
                 return Type.NUMERIC;
-            case Types.BIGINT:
+            case "BIGINT":
                 return Type.LONG;
-            case Types.BOOLEAN:
+            case "BOOLEAN":
                 return Type.BOOLEAN;
-            case Types.DATE:
+            case "DATE":
                 return Type.DATE;
-            case Types.TIME:
+            case "TIME":
                 return Type.TIME;
-            case Types.TIMESTAMP:
+            case "TIMESTAMP":
                 return Type.TIMESTAMP;
-            case Types.CHAR, Types.VARCHAR:
+            case "CHAR", "VARCHAR":
             default:
                 return Type.STRING;
         }
@@ -297,5 +295,60 @@ public class OdsDataLoadServiceImpl  {
         return  value != null && !value.toString().isEmpty();
     }
 
+    @Override
+    public void handleBasePath(Path basePath) {
+        this.basePath = basePath;
+    }
+
+    @Override
+    public void handleInitialPaths(List<Path> initialPaths) {
+        this.initialPaths.addAll(initialPaths);
+        for (Path path : initialPaths) {
+            loadData(path);
+        }
+
+    }
+
+    @Override
+    public void handlePathEvent(Path path, WatchEvent.Kind<Path> kind) {
+        if ((kind.name().equals(StandardWatchEventKinds.ENTRY_CREATE.name()))
+            || (kind.name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name()))) {
+            loadData(path);
+        }
+        if (kind.name().equals(StandardWatchEventKinds.ENTRY_DELETE.name())) {
+            delete(path);
+        }
+    }
+    private String getFileNameWithoutExtension(String fileName) {
+        if (fileName.indexOf(".") > 0) {
+            return fileName.substring(0, fileName.lastIndexOf("."));
+        } else {
+            return fileName;
+        }
+    }
+
+    private void delete(Path path) {
+        String tableName = getFileNameWithoutExtension(path.getFileName().toString());
+        LOGGER.debug("Drop table {}", tableName);
+        Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
+        if (dialectOptional.isPresent()) {
+            Dialect dialect = dialectOptional.get();
+            try (Connection connection = dataSource.getConnection()) {
+                dialect.deleteTable(connection, getDatabaseSchemaNameFromPath(path), tableName);
+            } catch (SQLException e) {
+                LOGGER.error("Database connection error", e);
+            }
+        } else {
+            LOGGER.error("Database dialect did not determinate");
+        }
+    }
+
+    private String getDatabaseSchemaNameFromPath(Path path) {
+        Path parent = path.getParent();
+        if (basePath.equals(parent)) {
+            return null;
+        }
+        return parent.getFileName().toString();
+    }
 
 }

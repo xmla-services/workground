@@ -141,7 +141,7 @@ public class CsvDataLoad implements PathListener {
 			b.append(" ( ");
 			b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
 			b.append(" ) ");
-			
+
 			try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
 				if (dialect.supportBatchOperations()) {
 					batchExecute(connection, ps, parser, headersTypeList);
@@ -316,7 +316,6 @@ public class CsvDataLoad implements PathListener {
 		} else {
 			return fileName;
 		}
-
 	}
 
 	private void delete(Path path) {
@@ -339,7 +338,7 @@ public class CsvDataLoad implements PathListener {
 	public void handleInitialPaths(List<Path> initialPaths) {
 		this.initialPaths.addAll(initialPaths);
 		for (Path path : initialPaths) {
-			
+
 			if(!Files.isDirectory(path)) {
 				loadData(path);
 			}
@@ -364,7 +363,7 @@ public class CsvDataLoad implements PathListener {
 	@Override
 	public void handleBasePath(Path basePath) {
 		this.basePath = basePath;
-		
+
 	}
 
 }
