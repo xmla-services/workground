@@ -56,12 +56,12 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
-@Designate(ocd = CsvDataLoadConfig.class, factory = true)
+@Designate(ocd = CsvDataLoaderConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
-@PathListenerConfig(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.csv")
-public class CsvDataLoad implements PathListener {
+@PathListenerConfig(kinds = EventKind.ENTRY_MODIFY, pattern = ".*.csv", recursive = true)
+public class CsvDataLoader implements PathListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CsvDataLoad.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CsvDataLoader.class);
 	public static final Converter CONVERTER = Converters.standardConverter();
 
 	private Queue<Path> initialPaths = new ArrayDeque<>();
@@ -72,15 +72,16 @@ public class CsvDataLoad implements PathListener {
 	@Reference
 	private DataSource dataSource;
 
-	private CsvDataLoadConfig config;
+	private CsvDataLoaderConfig config;
 
 	private CsvParserSettings settings;
 	private Path basePath;
 
 	@Activate
-	public void activate(CsvDataLoadConfig config) {
+	public void activate(CsvDataLoaderConfig config) {
+		this.config=config;
 		settings = Csv.parseRfc4180();
-		settings.setLineSeparatorDetectionEnabled(this.config.lineSeparatorDetectionEnabled());
+		settings.setLineSeparatorDetectionEnabled(config.lineSeparatorDetectionEnabled());
 		settings.setNullValue(config.nullValue());
 		settings.getFormat().setQuoteEscape(config.quoteEscape());
 		settings.getFormat().setQuote(config.quote());
@@ -149,7 +150,7 @@ public class CsvDataLoad implements PathListener {
 					execute(ps, parser, headersTypeList);
 				}
 			} catch (SQLException e) {
-				throw new CsvDataLoadException("Load data error", e);
+				throw new CsvDataLoaderException("Load data error", e);
 			}
 		}
 	}

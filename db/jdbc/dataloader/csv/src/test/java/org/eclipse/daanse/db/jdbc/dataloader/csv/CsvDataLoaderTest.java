@@ -61,9 +61,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(ServiceExtension.class)
 @ExtendWith(MockitoExtension.class)
 @RequireConfigurationAdmin
-class CsvDataLoadServiceImplTest {
+class CsvDataLoaderTest {
 
-	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoad";
+	public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoader";
 	@TempDir(cleanup = CleanupMode.ON_SUCCESS)
 	Path path;
 
@@ -117,7 +117,7 @@ class CsvDataLoadServiceImplTest {
 	private void setupCsvDataLoadServiceImpl(Boolean lineSeparatorDetectionEnabled, String nullValue,
 			Character quoteEscape, Character quote, String delimiter, String encoding, Boolean quoteDetectionEnabled,
 			Boolean clearTableBeforeLoad, String stringPath) throws IOException {
-		conf = ca.getFactoryConfiguration(CsvDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
+		conf = ca.getFactoryConfiguration(CsvDataLoaderTest.COMPONENT_NAME, "1", "?");
 		Dictionary<String, Object> dict = new Hashtable<>();
 		if (lineSeparatorDetectionEnabled != null) {
 

@@ -15,13 +15,13 @@ package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
 import java.sql.SQLException;
 
-public class CsvDataLoadException extends RuntimeException{
+public class CsvDataLoaderException extends RuntimeException{
 
-    public CsvDataLoadException(String msg, SQLException e) {
+    public CsvDataLoaderException(String msg, SQLException e) {
         super(msg, e);
     }
 
-    public CsvDataLoadException(String msg) {
+    public CsvDataLoaderException(String msg) {
         super(msg);
     }
 }

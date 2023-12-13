@@ -24,9 +24,9 @@
 -runee: JavaSE-17
 
 -runrequires: \
-    bnd.identity;id='${project.artifactId}-tests',\
-    bnd.identity;id=junit-jupiter-engine,\
-    bnd.identity;id=junit-platform-launcher
+	bnd.identity;id='${project.artifactId}-tests',\
+	bnd.identity;id=junit-jupiter-engine,\
+	bnd.identity;id=junit-platform-launcher
 
 # -runbundles is calculated by the bnd-resolver-maven-plugin
 -runbundles: \
@@ -45,7 +45,6 @@
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.ods;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.ods-tests;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.jdbc.metadata;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.util;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.util.io;version='[0.0.1,0.0.2)',\
 	org.mockito.junit-jupiter;version='[4.9.0,4.9.1)',\

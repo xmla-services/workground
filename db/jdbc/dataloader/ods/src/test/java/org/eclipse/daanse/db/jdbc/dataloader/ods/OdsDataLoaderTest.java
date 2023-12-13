@@ -44,11 +44,11 @@ import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 @ExtendWith(ServiceExtension.class)
 @ExtendWith(MockitoExtension.class)
 @RequireConfigurationAdmin
-class OdsDataLoadServiceImplTest {
+class OdsDataLoaderTest {
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path path;
-    public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.ods.OdsDataLoadServiceImpl";
+ 
     @InjectBundleContext
     BundleContext bc;
     DialectResolver dialectResolver = mock(DialectResolver.class);
@@ -64,7 +64,7 @@ class OdsDataLoadServiceImplTest {
 
     @BeforeEach
     void beforeEach() throws SQLException {
-        bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "2"));
+
 
         when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
 
@@ -73,6 +73,8 @@ class OdsDataLoadServiceImplTest {
         when(connection.prepareStatement(any())).thenReturn(preparedStatement);
         when(connection.getSchema()).thenReturn("testSchema");
         when(preparedStatement.getConnection()).thenReturn(connection);
+        bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "2"));
+        bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
 
     }
 
@@ -125,7 +127,7 @@ class OdsDataLoadServiceImplTest {
 
     private void setupOdsDataLoadServiceImpl(String encoding, Boolean clearTableBeforeLoad, String stringPath)
         throws IOException {
-        conf = ca.getFactoryConfiguration(OdsDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
+        conf = ca.getFactoryConfiguration(OdsDataLoader.class.getName(),  "1","?");
         Dictionary<String, Object> dict = new Hashtable<>();
 
         if (encoding != null) {
@@ -137,7 +139,7 @@ class OdsDataLoadServiceImplTest {
 
         dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
             : path.toAbsolutePath().toString());
-        dict.put("pathListener.recursive", true);
+
 
         conf.update(dict);
     }

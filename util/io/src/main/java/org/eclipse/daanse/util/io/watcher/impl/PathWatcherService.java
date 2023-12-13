@@ -35,6 +35,7 @@ public class PathWatcherService {
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	@AttributeDefinition
 	public void bindPathListener(PathListener handler, Map<String, Object> map) throws IOException {
+		System.out.println(map);
 		PathListenerConfig config = CONVERTER.convert(map).to(PathListenerConfig.class);
 
 		FileWatcherRunable fwr = new FileWatcherRunable(handler, config);

@@ -56,11 +56,11 @@ import com.github.miachm.sods.Range;
 import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
 
-@Designate(ocd = OdsDataLoadServiceConfig.class, factory = true)
+@Designate(ocd = OdsDataLoaderConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
 @PathListenerConfig(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.ods")
-public class OdsDataLoadServiceImpl  implements PathListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OdsDataLoadServiceImpl.class);
+public class OdsDataLoader  implements PathListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OdsDataLoader.class);
     public static final Converter CONVERTER = Converters.standardConverter();
     private Queue<Path> initialPaths = new ArrayDeque<>();
     @Reference
@@ -68,13 +68,15 @@ public class OdsDataLoadServiceImpl  implements PathListener {
     @Reference
     private DataSource dataSource;
 
-    private OdsDataLoadServiceConfig config;
+    private OdsDataLoaderConfig config;
     private Path basePath;
 
     @Activate
     public void activate(Map<String, Object> configMap) {
+    	
+    	System.err.println(configMap);
         this.config = CONVERTER.convert(configMap)
-            .to(OdsDataLoadServiceConfig.class);
+            .to(OdsDataLoaderConfig.class);
     }
 
     @Deactivate
@@ -111,7 +113,7 @@ public class OdsDataLoadServiceImpl  implements PathListener {
                 sheets.stream().forEach(sheet -> loadSheet(connection, dialect, schemaName, sheet));
             }
         } catch (IOException e){
-            throw new OdsDataLoadException("OdsDataLoaderService loadData error", e);
+            throw new OdsDataLoaderException("OdsDataLoaderService loadData error", e);
         }
     }
 
@@ -136,7 +138,7 @@ public class OdsDataLoadServiceImpl  implements PathListener {
                 execute(ps, headersMap, sheet);
             }
         } catch (SQLException e) {
-            throw new OdsDataLoadException("Load data error", e);
+            throw new OdsDataLoaderException("Load data error", e);
         }
 
     }

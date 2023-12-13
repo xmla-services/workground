@@ -20,7 +20,7 @@ import org.osgi.service.metatype.annotations.Option;
 
 @ObjectClassDefinition
 @PathListenerConfig
-public @interface OdsDataLoadServiceConfig {
+public @interface OdsDataLoaderConfig {
 
     /**
      * @return Encoding default UTF-8

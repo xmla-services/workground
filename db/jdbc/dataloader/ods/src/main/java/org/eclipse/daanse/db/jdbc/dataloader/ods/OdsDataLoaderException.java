@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
-public class OdsDataLoadException extends RuntimeException{
+public class OdsDataLoaderException extends RuntimeException{
 
-    public OdsDataLoadException(String msg, Exception e) {
+    public OdsDataLoaderException(String msg, Exception e) {
         super(msg, e);
     }
 
-    public OdsDataLoadException(String msg) {
+    public OdsDataLoaderException(String msg) {
         super(msg);
     }
 }
