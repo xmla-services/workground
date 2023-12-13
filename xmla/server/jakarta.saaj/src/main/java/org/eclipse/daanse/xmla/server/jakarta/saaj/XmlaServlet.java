@@ -14,12 +14,11 @@ import org.osgi.service.servlet.whiteboard.propertytypes.HttpWhiteboardServletPa
 import jakarta.servlet.Servlet;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPHeaderElement;
 import jakarta.xml.soap.SOAPMessage;
 
-@HttpWhiteboardServletPattern("/xmla3")
+@HttpWhiteboardServletPattern("/xmla")
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 public class XmlaServlet extends AbstractSAAJServlet {
 

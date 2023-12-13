@@ -138,7 +138,7 @@ public class DemoSetup {
 
 		dict = new Hashtable<>();
         dict.put("xmlaService.target", "(service.pid=*)");
-        dict.put( "osgi.soap.endpoint.contextpath","/xmla3");
+        dict.put( "osgi.http.whiteboard.servlet.pattern","/xmla3");
 
 
         cXmlaEndpoint3.update(dict);
