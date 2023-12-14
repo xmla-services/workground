@@ -66,6 +66,7 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.util.io;version='[0.0.1,0.0.2)',\
 	org.glassfish.hk2.osgi-resource-locator;version='[2.4.0,2.4.1)',\
 	org.glassfish.jaxb.runtime;version='[3.0.1,3.0.2)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\

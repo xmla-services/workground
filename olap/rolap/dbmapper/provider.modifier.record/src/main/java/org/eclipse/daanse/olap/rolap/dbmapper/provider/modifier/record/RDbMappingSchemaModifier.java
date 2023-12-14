@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record;
 
-import static org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeUsageRBuilder.CubeUsageR;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
@@ -101,6 +99,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnDefR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionGrantR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DrillThroughActionR;
@@ -308,7 +307,7 @@ public class RDbMappingSchemaModifier extends AbstractDbMappingSchemaModifier {
 
     @Override
     protected MappingCubeUsage new_CubeUsage(String cubeName, boolean ignoreUnrelatedDimensions) {
-        return CubeUsageR(cubeName, ignoreUnrelatedDimensions);
+        return new CubeUsageR(cubeName, ignoreUnrelatedDimensions);
     }
 
     @Override
