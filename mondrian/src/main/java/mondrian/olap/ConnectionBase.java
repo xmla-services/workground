@@ -118,14 +118,11 @@ public abstract class ConnectionBase implements Connection {
         }
 
         try {
-            //TODO
-            //return
-            //    parser.parseInternal(
-            //        statement, query, debug, funTable, strictValidation);
+            return
+                parser.parseInternal(
+                    statement, query, debug, funTable, strictValidation);
         } catch (Exception e) {
             throw MondrianResource.instance().FailedToParseQuery.ex(query, e);
         }
-
-        return null;
     }
 }

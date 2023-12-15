@@ -15,8 +15,6 @@ package org.eclipse.daanse.olap.xmla.bridge.execute;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.olap4j.MondrianOlap4jCell;
-import mondrian.olap4j.MondrianOlap4jMember;
 import mondrian.util.CompositeList;
 import mondrian.xmla.RowsetDefinition;
 import mondrian.xmla.XmlaException;
@@ -525,7 +523,7 @@ public class Convertor {
 
         Boolean allPropertyIsEmpty = true;
         for (String propertyName : queryCellPropertyNames) {
-            if (((mondrian.olap4j.MondrianOlap4jCell) cell).getRolapCell().getPropertyValue(propertyName) != null) {
+            if (cell.getPropertyValue(propertyName) != null) {
                 allPropertyIsEmpty = false;
                 break;
             }
@@ -545,8 +543,7 @@ public class Convertor {
                     continue;
                 }
             }
-            MondrianOlap4jCell mondrianOlap4jCell = (MondrianOlap4jCell) cell;
-            Object value = mondrianOlap4jCell.getRolapCell().getPropertyValue(propertyName);
+            Object value = cell.getPropertyValue(propertyName);
             if (value == null) {
                 continue;
             }
@@ -750,20 +747,23 @@ public class Convertor {
 
     private static String getXsdType(Property property) {
         Datatype datatype = property.getDatatype();
-        switch (datatype) {
-            case UNSIGNED_INTEGER:
-                return RowsetDefinition.Type.UNSIGNED_INTEGER.columnType;
-            case DOUBLE:
-                return RowsetDefinition.Type.DOUBLE.columnType;
-            case LARGE_INTEGER:
-                return RowsetDefinition.Type.LONG.columnType;
-            case INTEGER:
-                return RowsetDefinition.Type.INTEGER.columnType;
-            case BOOLEAN:
-                return RowsetDefinition.Type.BOOLEAN.columnType;
-            default:
-                return RowsetDefinition.Type.STRING.columnType;
+        if (datatype != null) {
+            switch (datatype) {
+                case UNSIGNED_INTEGER:
+                    return RowsetDefinition.Type.UNSIGNED_INTEGER.columnType;
+                case DOUBLE:
+                    return RowsetDefinition.Type.DOUBLE.columnType;
+                case LARGE_INTEGER:
+                    return RowsetDefinition.Type.LONG.columnType;
+                case INTEGER:
+                    return RowsetDefinition.Type.INTEGER.columnType;
+                case BOOLEAN:
+                    return RowsetDefinition.Type.BOOLEAN.columnType;
+                default:
+                    return RowsetDefinition.Type.STRING.columnType;
+            }
         }
+        return null;
     }
 
     private static int calculateDisplayInfo(
@@ -839,7 +839,7 @@ public class Convertor {
                 Level level = member.getLevel();
                 levelMembers.computeIfAbsent(level, k -> new ArrayList<Member>());
                 levelMembers.get(level)
-                    .add(((MondrianOlap4jMember) member).getOlapMember());
+                    .add(member);
             }
         }
         /*
@@ -927,10 +927,10 @@ public class Convertor {
                 value = getDefaultValue(prop);
             }
             if (value != null) {
-                if (longProp instanceof mondrian.olap4j.IMondrianOlap4jProperty) {
+                if (longProp instanceof IMondrianOlap4jProperty) {
                     any.add(new CellInfoItemR(encoder.encode(prop.getName()),
                         value.toString(),
-                        Optional.of(getXsdType(prop))));
+                        Optional.ofNullable(getXsdType(prop))));
                 } else {
                     any.add(new CellInfoItemR(encoder.encode(prop.getName()),
                         value.toString(),
@@ -1106,7 +1106,7 @@ public class Convertor {
             new StringBuilder(hierarchy.getUniqueName())
                 .append(".")
                 .append(Util.quoteMdxIdentifier(longProp.getName())).toString());
-        if (!(longProp instanceof mondrian.olap4j.IMondrianOlap4jProperty)) {
+        if (!(longProp instanceof IMondrianOlap4jProperty)) {
             values.add("type");
             values.add(getXsdType(longProp));
         }

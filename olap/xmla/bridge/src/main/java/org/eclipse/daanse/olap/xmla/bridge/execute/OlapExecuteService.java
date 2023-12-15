@@ -258,7 +258,7 @@ public class OlapExecuteService implements ExecuteService {
     private StatementResponse executeQuery(Context context, StatementRequest statementRequest) {
         Statement statement = context.getConnection().createStatement();
         String mdx = statementRequest.command().statement();
-        if ((mdx != null) && (mdx.length() == 0)) {
+        if ((mdx != null) && (mdx.length() != 0)) {
             CellSet cellSet = statement.executeQuery(statementRequest.command().statement());
             Optional<Content> content = statementRequest.properties().content();
             boolean omitDefaultSlicerInfo = false;

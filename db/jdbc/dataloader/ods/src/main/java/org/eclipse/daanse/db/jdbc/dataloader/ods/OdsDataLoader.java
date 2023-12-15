@@ -73,7 +73,7 @@ public class OdsDataLoader  implements PathListener {
 
     @Activate
     public void activate(Map<String, Object> configMap) {
-    	
+
     	System.err.println(configMap);
         this.config = CONVERTER.convert(configMap)
             .to(OdsDataLoaderConfig.class);
@@ -336,7 +336,7 @@ public class OdsDataLoader  implements PathListener {
         if (dialectOptional.isPresent()) {
             Dialect dialect = dialectOptional.get();
             try (Connection connection = dataSource.getConnection()) {
-                dialect.deleteTable(connection, getDatabaseSchemaNameFromPath(path), tableName);
+                dialect.clearTable(getDatabaseSchemaNameFromPath(path), tableName);
             } catch (SQLException e) {
                 LOGGER.error("Database connection error", e);
             }
