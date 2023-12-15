@@ -24,22 +24,22 @@ public class DemoSetup {
     public static final String PID_CSV_LOADER = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoader";
 
     public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.server.jakarta.jws.MsXmlAnalysisSoap";
-      
-    public static final String PID_MS_SOAP_MSG_WS ="org.eclipse.daanse.xmla.server.jakarta.xml.ws.provider.soapmessage.XmlaWebserviceProvider";   
-    public static final String PID_MS_SOAP_MSG_SAAJ ="org.eclipse.daanse.xmla.server.jakarta.saaj.XmlaServlet";   
- 
-    
-    
+
+    public static final String PID_MS_SOAP_MSG_WS ="org.eclipse.daanse.xmla.server.jakarta.xml.ws.provider.soapmessage.XmlaWebserviceProvider";
+    public static final String PID_MS_SOAP_MSG_SAAJ ="org.eclipse.daanse.xmla.server.jakarta.saaj.XmlaServlet";
+
+
+
     public static final String PID_XMLA_SERVICE = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
 
 	public static final String PID_CONTEXT = "org.eclipse.daanse.olap.core.BasicContext";
-	
+
 	public static final String PID_DS = "org.eclipse.daanse.db.datasource.h2.H2DataSource";
 	public static final String PID_SATATISTICS = "org.eclipse.daanse.db.statistics.metadata.JdbcStatisticsProvider";
 
 	public static final String PID_EXP_COMP_FAC="org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
-   
-	
+
+
 	public static final String PID_CONTEXT_GROUP = "org.eclipse.daanse.olap.core.BasicContextGroup";
 	@Reference
     ConfigurationAdmin configurationAdmin;
@@ -69,30 +69,32 @@ public class DemoSetup {
 		initXmlaEndPoint();
         //
         initXmlaService();
-        
-        
+
+
         initContext();
     }
 
 	private void initContext() throws IOException {
 		cContext = configurationAdmin.getFactoryConfiguration(PID_CONTEXT , "1", "?");
-        
-		
+
+
 		cDs = configurationAdmin.getFactoryConfiguration(PID_DS, "1", "?");
 
 		Dictionary<String, Object> propsDS = new Hashtable<>();
 		propsDS.put("ds", "1");
-		propsDS.put("url", "jdbc:h2:mem:test_mem");
+		propsDS.put("url", "jdbc:h2:file:../../../../expressivenames/demodb");
+
+
 		cDs.update(propsDS);
-		
-		
+
+
 		cCsvL = configurationAdmin.getFactoryConfiguration(PID_CSV_LOADER, "1", "?");
 
 		Dictionary<String, Object> propscCsvL = new Hashtable<>();
 		propscCsvL.put("dataSource.target","(ds=1)");
 		propscCsvL.put("pathListener.path", "../../../../expressivenames/data");
 		cCsvL.update(propscCsvL);
-		
+
 
 		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
 
@@ -100,7 +102,7 @@ public class DemoSetup {
 		propsCG.put("cg", "1");
 		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS+ TARGET_EXT, "(service.pid=*)");
 		cCG.update(propsCG);
-		
+
         Dictionary<String, Object> props = new Hashtable<>();
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
         props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(database.dialect.type=H2)");
@@ -111,7 +113,7 @@ public class DemoSetup {
 
         String theName = "theName";
         String theDescription = "theDescription";
-        
+
         props.put("name", theName);
         props.put("description", theDescription);
         cContext.update(props);
@@ -131,9 +133,9 @@ public class DemoSetup {
         Dictionary<String, Object> dict = new Hashtable<>();
         dict.put("xmlaService.target", "(service.pid=*)");
         dict.put( "osgi.soap.endpoint.contextpath","/xmla1");
-        
+
         cXmlaEndpoint.update(dict);
-        
+
 		cXmlaEndpoint2 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG_WS , "2", "?");
 
 		dict = new Hashtable<>();
@@ -142,9 +144,9 @@ public class DemoSetup {
 
 
         cXmlaEndpoint2.update(dict);
-        
-        
-        
+
+
+
 		cXmlaEndpoint3 = configurationAdmin.getFactoryConfiguration(PID_MS_SOAP_MSG_SAAJ , "3", "?");
 
 		dict = new Hashtable<>();

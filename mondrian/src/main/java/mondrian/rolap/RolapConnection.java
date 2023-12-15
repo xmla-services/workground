@@ -620,7 +620,7 @@ public Context getContext() {
 				filteredTupleList.addCurrent(tupleCursor);
 			}
 		}
-      
+
       this.axes[ axis ] = new RolapAxis( filteredTupleList );
     }
 
@@ -749,6 +749,6 @@ public Context getContext() {
   //TODO: Extract a statement between connection and Resuolt without the query
   @Override
   public org.eclipse.daanse.olap.api.Statement createStatement() {
-    throw new UnsupportedOperationException("TODO");
+    return new org.eclipse.daanse.olap.impl.StatementImpl(this);
   }
 }

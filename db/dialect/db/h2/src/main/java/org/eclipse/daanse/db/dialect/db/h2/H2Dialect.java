@@ -34,4 +34,10 @@ public class H2Dialect extends JdbcDialectImpl {
     public String getDialectName() {
         return SUPPORTED_PRODUCT_NAME.toLowerCase();
     }
+    
+    @Override
+    public String getQuoteIdentifierString() {
+        return "";
+    }
+
 }

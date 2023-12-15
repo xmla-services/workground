@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.olap.api;
 
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 
@@ -32,9 +33,11 @@ public interface Statement  {
      * @return {@link Result}
      *
      */
-    Result executeSelct(String mdx) throws Exception;
+    Result executeSelect(String mdx) throws Exception;
 
     CellSet executeQuery(String statement);
 
     ResultSet executeQuery(String statement, Optional<Boolean> advanced, Optional<String> tabFields, int[] rowCountSlot);
+
+    Query getQuery();
 }
