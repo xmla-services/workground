@@ -1086,23 +1086,20 @@ public abstract class JdbcDialectImpl implements Dialect {
             return true;
     }
 
-    @Override
-    public void clearTable(Connection connection, String schemaName, String tableName) {
-        try (Statement statement = connection.createStatement()){
-            statement.execute(new StringBuilder("TRUNCATE TABLE ").append(quoteIdentifier(schemaName, tableName)).toString());
-        } catch (SQLException e) {
-            throw new DialectException("clear table error", e);
-        }
-    }
+	@Override
+	public String clearTable(String schemaName, String tableName) {
+		return new StringBuilder("TRUNCATE TABLE ").append(quoteIdentifier(schemaName, tableName)).toString();
+	}
 
-    @Override
-    public void deleteTable(Connection connection, String schemaName, String tableName) {
-        try (Statement statement = connection.createStatement()){
-            statement.execute(new StringBuilder("DROP TABLE ").append(quoteIdentifier(schemaName, tableName)).toString());
-        } catch (SQLException e) {
-            throw new DialectException("delete table error", e);
-        }
-    }
+	@Override
+	public String dropTable(String schemaName, String tableName, boolean ifExists) {
+		StringBuilder sb = new StringBuilder("DROP TABLE ");
+		if (ifExists) {
+			sb = sb.append("IF EXISTS ");
+		}
+
+		return sb.append(quoteIdentifier(schemaName, tableName)).toString();
+	}
 
     @Override
     public boolean supportParallelLoading() {

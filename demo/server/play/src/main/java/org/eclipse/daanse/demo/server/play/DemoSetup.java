@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
 public class DemoSetup {
 	private static final String TARGET_EXT = ".target";
 
-	
+    public static final String PID_CSV_LOADER = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoader";
 
     public static final String PID_MS_SOAP = "org.eclipse.daanse.xmla.server.jakarta.jws.MsXmlAnalysisSoap";
       
@@ -59,6 +59,8 @@ public class DemoSetup {
 
 	private Configuration cXmlaEndpoint3;
 
+	private Configuration cCsvL;
+
 
     @Activate
     public void activate() throws IOException {
@@ -82,6 +84,15 @@ public class DemoSetup {
 		propsDS.put("ds", "1");
 		propsDS.put("url", "jdbc:h2:mem:test_mem");
 		cDs.update(propsDS);
+		
+		
+		cCsvL = configurationAdmin.getFactoryConfiguration(PID_CSV_LOADER, "1", "?");
+
+		Dictionary<String, Object> propscCsvL = new Hashtable<>();
+		propscCsvL.put("dataSource.target","(ds=1)");
+		propscCsvL.put("pathListener.path", "../../../../expressivenames/data");
+		cCsvL.update(propscCsvL);
+		
 
 		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
 

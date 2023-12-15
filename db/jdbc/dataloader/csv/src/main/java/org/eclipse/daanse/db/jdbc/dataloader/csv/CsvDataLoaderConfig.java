@@ -42,10 +42,10 @@ public @interface CsvDataLoaderConfig {
 	/**
 	 * @return Encoding default UTF-8
 	 */
-	@AttributeDefinition(description = "encoding", options = { @Option(value = "UTF_8"), @Option(value = "US_ASCII"),
+	@AttributeDefinition(description = "encoding", options = { @Option(value = "UTF-8"), @Option(value = "US_ASCII"),
 			@Option(value = "ISO_8859_1"), @Option(value = "UTF_16BE"), @Option(value = "UTF_16LE"),
 			@Option(value = "UTF_16") })
-	String encoding() default "UTF_8";
+	String encoding() default "UTF-8";
 
 	/**
 	 * @return Quote Detection Enabled

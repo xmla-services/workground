@@ -752,9 +752,9 @@ public interface Dialect {
 
     String getDialectName();
 
-    void clearTable(Connection connection, String schemaName, String tableName);
+    String clearTable( String schemaName, String tableName);
 
-    void deleteTable(Connection connection, String schemaName, String tableName);
+    String dropTable(String schemaName, String tableName,boolean ifExists);
 
     boolean supportParallelLoading();
 

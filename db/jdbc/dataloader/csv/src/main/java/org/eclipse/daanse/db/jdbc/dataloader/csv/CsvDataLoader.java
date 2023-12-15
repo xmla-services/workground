@@ -112,46 +112,59 @@ public class CsvDataLoader implements PathListener {
 	}
 
 	private void loadTable(Connection connection, Dialect dialect, CsvParserSettings settings, Path path) {
-		String tableName = getFileNameWithoutExtension(path.getFileName().toString());
-		LOGGER.debug("Load table {}", tableName);
+		String fileName = getFileNameWithoutExtension(path.getFileName().toString());
+		LOGGER.debug("Load table {}", fileName);
 		String databaseSchemaName = getDatabaseSchemaNameFromPath(path);
+		
+		
 		if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
-			dialect.clearTable(connection,  databaseSchemaName, tableName);
+			try {
+				String statementText = dialect.dropTable(databaseSchemaName, fileName, true);
+				connection.createStatement().execute(statementText);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
 		}
 		if (!path.toFile().exists()) {
 
-			LOGGER.warn("File does not exist - {} {}", tableName,path);
+			LOGGER.warn("File does not exist - {} {}", fileName, path);
 			return;
 		}
+		try {
 
-		com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
-		parser.beginParsing(path.toFile(), config.encoding());
-		parser.parseNext();
-		String[] headers = parser.getRecordMetadata().headers();
-		String[] types = parser.parseNext();
-		List<Map.Entry<String, Type>> headersTypeList = getHeadersTypeList(headers, types);
-		if (!headersTypeList.isEmpty()) {
-			createTable(connection, headersTypeList, tableName);
-			StringBuilder b = new StringBuilder();
-			b.append("INSERT INTO ");
-			b.append(dialect.quoteIdentifier(databaseSchemaName, tableName));
-			b.append(" ( ");
-			b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.getKey()))
-					.collect(Collectors.joining(",")));
-			b.append(" ) VALUES ");
-			b.append(" ( ");
-			b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
-			b.append(" ) ");
+			com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
+			parser.beginParsing(path.toFile(), config.encoding());
+			parser.parseNext();
+			String[] headers = parser.getRecordMetadata().headers();
+			String[] types = parser.parseNext();
+			List<Map.Entry<String, Type>> headersTypeList = getHeadersTypeList(headers, types);
+			if (!headersTypeList.isEmpty()) {
+				createTable(connection,dialect, headersTypeList,databaseSchemaName, fileName);
+				StringBuilder b = new StringBuilder();
+				b.append("INSERT INTO ");
+				b.append(dialect.quoteIdentifier(databaseSchemaName, fileName));
+				b.append(" ( ");
+				b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.getKey()))
+						.collect(Collectors.joining(",")));
+				b.append(" ) VALUES ");
+				b.append(" ( ");
+				b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
+				b.append(" ) ");
 
-			try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
-				if (dialect.supportBatchOperations()) {
-					batchExecute(connection, ps, parser, headersTypeList);
-				} else {
-					execute(ps, parser, headersTypeList);
+				System.out.println(b);
+				try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
+					if (dialect.supportBatchOperations()) {
+						batchExecute(connection, ps, parser, headersTypeList);
+					} else {
+						execute(ps, parser, headersTypeList);
+					}
+				} catch (SQLException e) {
+					throw new CsvDataLoaderException("Load data error", e);
 				}
-			} catch (SQLException e) {
-				throw new CsvDataLoaderException("Load data error", e);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -260,16 +273,21 @@ public class CsvDataLoader implements PathListener {
 		}
 	}
 
-	private void createTable(Connection connection, List<Entry<String, Type>> headersTypeList, String tableName) {
+	private void createTable(Connection connection, Dialect dialect,List<Entry<String, Type>> headersTypeList, String schemaName, String tableName) {
 		System.err.println(tableName);
+		String tabeleWithSchemaName=dialect.quoteIdentifier(schemaName, tableName);
 		try (Statement stmt = connection.createStatement();) {
-			StringBuilder sb = new StringBuilder("CREATE TABLE ").append(tableName).append(" ( ");
-			headersTypeList.stream().map(e -> {
+			StringBuilder sb = new StringBuilder("CREATE TABLE ").append(tabeleWithSchemaName).append(" ( ");
+			String cols=	headersTypeList.stream().map(e -> {
 				StringBuilder s = new StringBuilder();
-				s.append(e.getKey()).append(" ").append(getStringType(e.getValue()));
+				s.append(dialect.quoteIdentifier(e.getKey())).append(" ").append(getStringType(e.getValue()));
 				return s.toString();
 			}).collect(Collectors.joining(", "));
-			stmt.executeUpdate(sb.toString());
+			
+			String sql=sb.append(cols).append(")").toString();
+			stmt.execute(sql);
+			System.out.println(sql);
+			connection.commit();
 			LOGGER.debug("Created table in given database...");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -326,7 +344,9 @@ public class CsvDataLoader implements PathListener {
 		if (dialectOptional.isPresent()) {
 			Dialect dialect = dialectOptional.get();
 			try (Connection connection = dataSource.getConnection()) {
-				dialect.deleteTable(connection, getDatabaseSchemaNameFromPath(path), tableName);
+				
+				String statementText=dialect.dropTable( getDatabaseSchemaNameFromPath(path), tableName,true);
+				connection.createStatement().execute(statementText);
 			} catch (SQLException e) {
 				LOGGER.error("Database connection error", e);
 			}

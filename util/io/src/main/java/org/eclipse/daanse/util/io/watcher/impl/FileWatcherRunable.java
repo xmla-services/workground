@@ -61,7 +61,7 @@ public class FileWatcherRunable implements Runnable {
 			kinds[i] = eventKinds[i].getKind();
 		}
 
-		observedPath = fs.getPath(this.config.path());
+		observedPath = fs.getPath(this.config.path()).toAbsolutePath();
 		
 		listener.handleBasePath(observedPath);
 
