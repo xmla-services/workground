@@ -10,7 +10,6 @@
 */
 package org.eclipse.daanse.db.dialect.api;
 
-import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;

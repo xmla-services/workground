@@ -40,8 +40,9 @@ public interface PostgresConfig {
 	default String _password() {
 		return null;
 	}
+	
 
-	@AttributeDefinition(description = "")
+	@AttributeDefinition(description = "1",required = true)
 	default String host() {
 		return null;
 	}
@@ -51,7 +52,7 @@ public interface PostgresConfig {
 		return null;
 	}
 
-	@AttributeDefinition(description = "" ,defaultValue = {"5432"})
+	@AttributeDefinition(description = "" ,defaultValue = {"5432"} ,required = true)
 	 Integer port() ;
 
 }
