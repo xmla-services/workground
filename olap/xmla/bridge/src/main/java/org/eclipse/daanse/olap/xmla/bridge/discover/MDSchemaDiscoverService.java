@@ -91,6 +91,8 @@ public class MDSchemaDiscoverService {
         Optional<String> baseCubeName = request.restrictions().baseCubeName();
         Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
         
+        
+      //??????????????????
         Optional<String> oCatalog=  request.properties().catalog();
         if(oCatalog.isPresent()) {
         	catalogName= oCatalog.get();
@@ -160,6 +162,17 @@ public class MDSchemaDiscoverService {
         Optional<VisibilityEnum> oHierarchyVisibility = request.restrictions().hierarchyVisibility();
         Optional<Integer> oHierarchyOrigin = request.restrictions().hierarchyOrigin();
         Optional<Boolean> deep = request.properties().deep();
+        
+        
+        //??????????????????
+		if (oCatalogName.isEmpty()) {
+
+			Optional<String> oCatalog = request.properties().catalog();
+			if (oCatalog.isPresent()) {
+				oCatalogName = oCatalog;
+			}
+        }
+		
         if (oCatalogName.isPresent()) {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
@@ -355,6 +368,16 @@ public class MDSchemaDiscoverService {
         if (oPropertyType.isPresent()) {
             propertyType = oPropertyType.get();
         }
+
+      //??????????????????
+		if (oCatalogName.isEmpty()) {
+
+			Optional<String> oCatalog = request.properties().catalog();
+			if (oCatalog.isPresent()) {
+				oCatalogName = oCatalog;
+			}
+        }
+		
         switch (propertyType) {
             case PROPERTY_MEMBER:
                 if (oCatalogName.isPresent()) {
