@@ -29,6 +29,17 @@ public class PositionImpl extends AbstractList<Member> implements Position {
 
     @Override
     public List<Member> getMembers() {
-        return List.of();
+        return new AbstractList<>() {
+            @Override
+            public Member get(int slice) {
+                return tupleList.get(slice, offset);
+            }
+
+            @Override
+            public int size() {
+                return tupleList.getArity();
+            }
+        };
+
     }
 }

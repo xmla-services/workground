@@ -505,7 +505,7 @@ public class Convertor {
             List<Position> positions = axis.getPositions();
             for (int i = 0, n = positions.size(); i < n; i++) {
                 pos.set(axisOrdinal, i);
-                recurse(cellSet, pos, axisOrdinal - 1, cellOrdinal, queryCellPropertyNames, json);
+                cellList.addAll(recurse(cellSet, pos, axisOrdinal - 1, cellOrdinal, queryCellPropertyNames, json));
             }
         }
         return cellList;
@@ -572,9 +572,7 @@ public class Convertor {
                 } else {
                     valueString = vi.value.toString();
                 }
-                any.add(new CellInfoItemR(cellPropertyMap.get(propertyName).getAlias(),
-                    valueString,
-                    Optional.of(valueType)));
+                val = new ValueR(valueString, ItemTypeEnum.fromValue(valueType), List.of());
             } else {
                 any.add(new CellInfoItemR(cellPropertyMap.get(propertyName).getAlias(),
                     value.toString(),
@@ -1091,8 +1089,9 @@ public class Convertor {
             .encode(prop.getName());
         final Object[] attributes = getAttributes(
             prop, hierarchy);
-        return new CellInfoItemR(encodedProp, attributes != null && attributes.length > 0 ? attributes[0].toString() : null,
-            Optional.empty());
+        String name = attributes != null && attributes.length > 1 ? attributes[1].toString() : null;
+        Optional<String> type =  attributes != null && attributes.length > 3 ? Optional.ofNullable(attributes[3] != null ? attributes[3].toString() : null) : Optional.empty();
+        return new CellInfoItemR(encodedProp, name, type);
     }
 
     private static Object[] getAttributes(Property prop, Hierarchy hierarchy) {
