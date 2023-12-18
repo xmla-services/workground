@@ -222,6 +222,19 @@ public class MDSchemaDiscoverService {
         Optional<String> oLevelName = request.restrictions().levelName();
         Optional<String> oLevelUniqueName = request.restrictions().levelUniqueName();
         Optional<VisibilityEnum> oLevelVisibility = request.restrictions().levelVisibility();
+        
+        
+        //??????????????????
+		if (oCatalogName.isEmpty()) {
+
+			Optional<String> oCatalog = request.properties().catalog();
+			if (oCatalog.isPresent()) {
+				oCatalogName = oCatalog;
+			}
+        }
+        
+        
+        
         if (oCatalogName.isPresent()) {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {

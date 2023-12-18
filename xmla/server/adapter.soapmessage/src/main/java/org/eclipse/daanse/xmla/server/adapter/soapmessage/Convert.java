@@ -519,7 +519,9 @@ public class Convert {
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(m.get(LEVEL_NAME)),
             Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.empty(),
+            // how to handle cubesource?
+//            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
         );
     }
