@@ -228,32 +228,41 @@ public class OlapExecuteService implements ExecuteService {
         return new ClearCacheResponseR(new EmptyresultR(null, null));
     }
 
-    @Override
-    public StatementResponse statement(StatementRequest statementRequest) {
-        List<Context> contexts = contextsListSupplyer.get();
-        String statement = statementRequest.command().statement();
-        if (statement != null && statement.length() > 0) {
-        for (Context context : contexts) {
-            QueryImpl query = context.getConnection().parseQuery(statement);
-            if (query instanceof DrillThrough) {
-                return executeDrillThroughQuery(context, statementRequest);
-            } else if (query instanceof CalculatedFormula calculatedFormula) {
-                return executeCalculatedFormula(context, calculatedFormula);
-            } else if (query instanceof DmvQuery dmvQuery) {
-                return executeDmvQuery(dmvQuery, statementRequest);
-            } else if (query instanceof Refresh refresh) {
-                return executeRefresh(context, refresh);
-            } else if (query instanceof Update update) {
-                return executeUpdate(context, update);
-            } else if (query instanceof TransactionCommand transactionCommand) {
-                return executeTransactionCommand(context, statementRequest, transactionCommand);
-            } else {
-                return executeQuery(context, statementRequest);
-            }
-        }
-        }
-        return new StatementResponseR(null, null);
-    }
+	@Override
+	public StatementResponse statement(StatementRequest statementRequest) {
+
+		Optional<String> oCatalog = statementRequest.properties().catalog();
+
+		if (oCatalog.isPresent()) {
+
+			Optional<Context> oContext = contextsListSupplyer.tryGetFirstByName(oCatalog.get());
+			if (oContext.isPresent()) {
+				Context context = oContext.get();
+				String statement = statementRequest.command().statement();
+				if (statement != null && statement.length() > 0) {
+
+					QueryImpl query = context.getConnection().parseQuery(statement);
+					if (query instanceof DrillThrough) {
+						return executeDrillThroughQuery(context, statementRequest);
+					} else if (query instanceof CalculatedFormula calculatedFormula) {
+						return executeCalculatedFormula(context, calculatedFormula);
+					} else if (query instanceof DmvQuery dmvQuery) {
+						return executeDmvQuery(dmvQuery, statementRequest);
+					} else if (query instanceof Refresh refresh) {
+						return executeRefresh(context, refresh);
+					} else if (query instanceof Update update) {
+						return executeUpdate(context, update);
+					} else if (query instanceof TransactionCommand transactionCommand) {
+						return executeTransactionCommand(context, statementRequest, transactionCommand);
+					} else {
+						return executeQuery(context, statementRequest);
+					}
+				}
+
+			}
+		}
+		return new StatementResponseR(null, null);
+	}
 
     private StatementResponse executeQuery(Context context, StatementRequest statementRequest) {
         Statement statement = context.getConnection().createStatement();

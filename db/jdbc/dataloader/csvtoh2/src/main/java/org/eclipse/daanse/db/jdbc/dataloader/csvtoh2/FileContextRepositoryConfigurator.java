@@ -43,6 +43,8 @@ public class FileContextRepositoryConfigurator implements PathListener {
 	private Map<Path, Configuration> catalogFolderConfigsDS = new ConcurrentHashMap<>();
 
 	private Map<Path, Configuration> catalogFolderConfigsCSV = new ConcurrentHashMap<>();
+	
+	Path tempPath=null;
 
 	@ObjectClassDefinition
 	@interface ConfigA {
@@ -53,8 +55,9 @@ public class FileContextRepositoryConfigurator implements PathListener {
 	}
 
 	@Activate
-	void act() {
-		System.out.println(11);
+	void act() throws IOException {
+		tempPath = Files.createTempDirectory("daanse").toAbsolutePath();
+		
 	}
 
 	@Override
@@ -107,11 +110,12 @@ public class FileContextRepositoryConfigurator implements PathListener {
 			return;
 		}
 		String pathString = path.toString();
+		
 		try {
 			Configuration cH2 = configurationAdmin.getFactoryConfiguration(PID_H2, UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> props = new Hashtable<>();
 			props.put("pathListener.path", pathString);
-			props.put("url", "jdbc:h2:mem:" + basePath.resolve(path).toString());
+			props.put("url", "jdbc:h2:" + tempPath.toAbsolutePath().toString()+"/"+path.getFileName());
 			props.put("file.context.matcher", pathString);
 			cH2.update(props);
 			catalogFolderConfigsDS.put(path, cH2);

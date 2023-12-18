@@ -95,6 +95,15 @@ public class CsvDataLoader implements PathListener {
 	}
 
 	private void loadData(Path path) {
+		
+		if(Files.isDirectory(path)) {
+			return;
+		}	
+		if(!path.toString().endsWith(".csv")) {
+			return;
+		}
+		
+
 		Optional<Dialect> dialectOptional = this.dialectResolver.resolve(dataSource);
 		if (dialectOptional.isPresent()) {
 			Dialect dialect = dialectOptional.get();
@@ -118,7 +127,7 @@ public class CsvDataLoader implements PathListener {
 		LOGGER.debug("Load table {}", fileName);
 		String databaseSchemaName = getDatabaseSchemaNameFromPath(path);
 		
-		if(!databaseSchemaName.isEmpty()) {
+		if(databaseSchemaName!=null&&!databaseSchemaName.isEmpty()) {
 			
 			try {
 				String statementCreateSchema = dialect.createSchema(databaseSchemaName, true);
@@ -332,6 +341,10 @@ public class CsvDataLoader implements PathListener {
 
 	private List<Entry<String, Type>> getHeadersTypeList(String[] headers, String[] types) {
 		List<Entry<String, Type>> result = new ArrayList<>();
+		
+		if (headers==null) {
+			System.err.println(11);
+		}
 		for (int i = 0; i < headers.length; i++) {
 			try {
 				result.add(new AbstractMap.SimpleEntry<>(headers[i], Type.fromName(types[i])));
@@ -373,9 +386,7 @@ public class CsvDataLoader implements PathListener {
 		this.initialPaths.addAll(initialPaths);
 		for (Path path : initialPaths) {
 
-			if(!Files.isDirectory(path)) {
 				loadData(path);
-			}
 		}
 
 	}

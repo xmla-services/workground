@@ -296,6 +296,18 @@ public class MDSchemaDiscoverService {
         Optional<VisibilityEnum> oMeasureVisibility = request.restrictions().measureVisibility();
         boolean shouldEmitInvisibleMembers =
             oMeasureVisibility.isPresent() && VisibilityEnum.NOT_VISIBLE.equals(oMeasureVisibility.get());
+        
+        
+        //??????????????????
+		if (oCatalogName.isEmpty()) {
+
+			Optional<String> oCatalog = request.properties().catalog();
+			if (oCatalog.isPresent()) {
+				oCatalogName = oCatalog;
+			}
+        }
+        
+        
         if (oCatalogName.isPresent()) {
             Optional<Context> oContext = oCatalogName.flatMap(name -> contextsListSupplyer.tryGetFirstByName(name));
             if (oContext.isPresent()) {
