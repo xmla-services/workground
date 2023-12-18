@@ -8,7 +8,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition
 @ComponentPropertyType
 public @interface PathListenerConfig {
-	public static final String PREFIX_="pathListener.";
+	public static final String PREFIX_ = "pathListener.";
 
 	@AttributeDefinition(required = true)
 	String path() default "";
@@ -16,15 +16,13 @@ public @interface PathListenerConfig {
 	@AttributeDefinition
 	String pattern() default ".*";
 
-	@AttributeDefinition(defaultValue = { "ENTRY_CREATE", "ENTRY_DELETE", "ENTRY_MODIFY" })
+	@AttributeDefinition()
 	EventKind[] kinds() default { EventKind.ENTRY_CREATE, EventKind.ENTRY_DELETE, EventKind.ENTRY_MODIFY };
 
-	@AttributeDefinition(defaultValue = "true")
-
+	@AttributeDefinition()
 	boolean initialFiles() default true;
 
-	@AttributeDefinition(defaultValue = "true")
-
+	@AttributeDefinition()
 	boolean recursive() default false;
 
 }

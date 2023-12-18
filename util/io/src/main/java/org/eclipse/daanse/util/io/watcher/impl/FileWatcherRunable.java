@@ -1,7 +1,6 @@
 package org.eclipse.daanse.util.io.watcher.impl;
 
 import java.io.IOException;
-import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,19 +54,19 @@ public class FileWatcherRunable implements Runnable {
 
 		EventKind[] eventKinds = config.kinds();
 		kinds = new WatchEvent.Kind<?>[eventKinds.length];
-		
+
 		for (int i = 0; i < eventKinds.length; i++) {
 			kinds[i] = eventKinds[i].getKind();
 		}
 
 		observedPath = fs.getPath(this.config.path()).toAbsolutePath();
-		
+
 		listener.handleBasePath(observedPath);
 
 		if (recursive) {
-				registerPathWithSubDirs(observedPath);
+			registerPathWithSubDirs(observedPath);
 		} else {
-				registerPath(observedPath);
+			registerPath(observedPath);
 		}
 
 	}
@@ -82,7 +80,6 @@ public class FileWatcherRunable implements Runnable {
 
 		WatchKey key = path.register(watcher, kinds);
 		synchronized (watchKeys) {
-			System.out.println("www "+path);
 			watchKeys.put(key, path);
 		}
 
@@ -118,12 +115,11 @@ public class FileWatcherRunable implements Runnable {
 	@Override
 	public void run() {
 
-
 		while (!stop) {
 			WatchKey key = null;
 			try {
-				key = watcher.poll();
-			} catch (ClosedWatchServiceException e) {
+				key = watcher.take();
+			} catch (Exception e) {
 				break;
 			}
 
@@ -132,24 +128,23 @@ public class FileWatcherRunable implements Runnable {
 			}
 			Path path = null;
 			synchronized (watchKeys) {
-				 path = watchKeys.get(key) ;
+				path = watchKeys.get(key);
 
 			}
 			for (WatchEvent<?> event : key.pollEvents()) {
 				WatchEvent.Kind<?> kind = event.kind();
 				if (kind == StandardWatchEventKinds.OVERFLOW) {
 					continue;// not registerable
-				} 
+				}
 
 				WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
 				Path filename = watchEvent.context();
-				
+
 				Path resolvedFile = path.resolve(filename);
-				
+
 				if (recursive && (kind == StandardWatchEventKinds.ENTRY_CREATE)) {
 					try {
-						if (Files.isDirectory(resolvedFile,LinkOption.NOFOLLOW_LINKS)) {
-							
+						if (Files.isDirectory(resolvedFile, LinkOption.NOFOLLOW_LINKS)) {
 							registerPathWithSubDirs(resolvedFile);
 						}
 					} catch (IOException e) {
@@ -157,22 +152,13 @@ public class FileWatcherRunable implements Runnable {
 					}
 				}
 
-
-				AtomicBoolean matchesPattern = new AtomicBoolean(true);
-
 				oPattern.ifPresent(pattern -> {
-
 					Matcher matcher = pattern.matcher(resolvedFile.toString());
-					matchesPattern.set(matcher.matches());
+					if (matcher.matches()) {
+						listener.handlePathEvent(resolvedFile, watchEvent.kind());
+					}
 
 				});
-
-				if (!matchesPattern.get()) {
-					continue;
-				}
-
-				listener.handlePathEvent(resolvedFile, watchEvent.kind());
-
 			}
 
 			boolean resetValid = key.reset();
@@ -187,7 +173,8 @@ public class FileWatcherRunable implements Runnable {
 	private void registerPathWithSubDirs(final Path baseDirectory) throws IOException {
 		Files.walkFileTree(baseDirectory, new SimpleFileVisitor<Path>() {
 			@Override
-			public FileVisitResult preVisitDirectory(Path currentDirectory, BasicFileAttributes attrs) throws IOException {
+			public FileVisitResult preVisitDirectory(Path currentDirectory, BasicFileAttributes attrs)
+					throws IOException {
 				registerPath(currentDirectory);
 				return FileVisitResult.CONTINUE;
 			}
