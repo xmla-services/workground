@@ -21,7 +21,7 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.api.DialectFactory;
+import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.result.Scenario;
@@ -47,7 +47,7 @@ public class BasicContext implements Context {
 
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
 
-	public static final String REF_NAME_DIALECT_FACTORY = "dialectFactory";
+	public static final String REF_NAME_DIALECT_RESOLVER= "dialectResolver";
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
@@ -62,13 +62,13 @@ public class BasicContext implements Context {
 	@Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private DataSource dataSource = null;
 
-	@Reference(name = REF_NAME_DIALECT_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-	private DialectFactory dialectFactory = null;
+	@Reference(name = REF_NAME_DIALECT_RESOLVER)
+	private DialectResolver dialectResolver = null;
 
 	@Reference(name = REF_NAME_STATISTICS_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private StatisticsProvider statisticsProvider = null;
 
-	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.MULTIPLE)
+	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.AT_LEAST_ONE)
 	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 
 	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -90,8 +90,8 @@ public class BasicContext implements Context {
 
 		this.config = configuration;
 
-		try (Connection connection = dataSource.getConnection()) {
-			Optional<Dialect> optionalDialect = dialectFactory.tryCreateDialect(connection);
+		try (Connection connection = dataSource.getConnection()) {			
+			Optional<Dialect> optionalDialect = dialectResolver.resolve(dataSource);
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
 		}
 		statisticsProvider.initialize(dataSource, getDialect());

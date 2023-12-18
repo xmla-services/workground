@@ -399,9 +399,11 @@
 			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		
-		
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.util.io</artifactId>
+			<version>${revision}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<!--

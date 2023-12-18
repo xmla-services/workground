@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="Minimal_Time_Dimension">
+	<Dimension type="TimeDimension" name="Time">
+		<Hierarchy hasAll="true" allMemberName="All Years" primaryKey="DATE_KEY">
+			<Table name="Fact">
+			</Table>
+			<Level name="Years" column="YEAR_ID" type="Integer" uniqueMembers="true" levelType="TimeYears" hideMemberIf="Never">
+			</Level>
+			<Level name="Quarters" column="QTR_NAME" ordinalColumn="QTR_ID" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never">
+			</Level>
+			<Level name="Months" column="MONTH_NAME" ordinalColumn="MONTH_ID" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never">
+			</Level>
+		</Hierarchy>
+	</Dimension>
+		
+	<Cube name="CubeOneMeasure">
+		<Table name="Fact"/>
+		<Measure aggregator="sum" name="Measure-Sum" column="VALUE"/>
+		<DimensionUsage name="Time" source="Time" foreignKey="DATE_KEY"/>
+	</Cube>
+
+</Schema>

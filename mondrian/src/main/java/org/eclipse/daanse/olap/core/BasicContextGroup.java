@@ -59,7 +59,6 @@ public class BasicContextGroup implements ContextGroup {
 
 	public void activateI(BasicContextGroupConfig coniguration) {
 		this.config = coniguration;
-		createUniqueCheckedLists();
 
 	}
 

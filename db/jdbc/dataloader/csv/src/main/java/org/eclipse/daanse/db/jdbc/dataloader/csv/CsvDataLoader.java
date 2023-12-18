@@ -100,6 +100,8 @@ public class CsvDataLoader implements PathListener {
 			Dialect dialect = dialectOptional.get();
 
 			try (Connection connection = dataSource.getConnection()) {
+				
+				
 				loadTable(connection, dialect, settings, path);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -116,11 +118,22 @@ public class CsvDataLoader implements PathListener {
 		LOGGER.debug("Load table {}", fileName);
 		String databaseSchemaName = getDatabaseSchemaNameFromPath(path);
 		
+		if(!databaseSchemaName.isEmpty()) {
+			
+			try {
+				String statementCreateSchema = dialect.createSchema(databaseSchemaName, true);
+				connection.createStatement().execute(statementCreateSchema);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
 			try {
-				String statementText = dialect.dropTable(databaseSchemaName, fileName, true);
-				connection.createStatement().execute(statementText);
+				
+
+				String statementDropTable = dialect.dropTable(databaseSchemaName, fileName, true);
+				connection.createStatement().execute(statementDropTable);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

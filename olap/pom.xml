@@ -24,5 +24,6 @@
     <module>rolap</module>
     <module>calc</module>
     <module>xmla</module>
+    <module>filecatalog</module>
   </modules>
 </project>

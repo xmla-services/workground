@@ -758,4 +758,6 @@ public interface Dialect {
     boolean supportParallelLoading();
 
     boolean supportBatchOperations();
+
+	String createSchema(String schemaName, boolean ifExists);
 }

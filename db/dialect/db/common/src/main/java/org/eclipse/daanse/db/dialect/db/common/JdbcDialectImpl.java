@@ -1100,6 +1100,16 @@ public abstract class JdbcDialectImpl implements Dialect {
 
 		return sb.append(quoteIdentifier(schemaName, tableName)).toString();
 	}
+	
+	@Override
+	public String createSchema(String schemaName,  boolean ifNotExists) {
+		StringBuilder sb = new StringBuilder("CREATE SCHEMA ");
+		if (ifNotExists) {
+			sb = sb.append("IF NOT EXISTS ");
+		}
+
+		return sb.append(quoteIdentifier(schemaName)).toString();
+	}
 
     @Override
     public boolean supportParallelLoading() {

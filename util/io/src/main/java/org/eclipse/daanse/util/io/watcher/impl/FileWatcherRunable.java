@@ -14,10 +14,10 @@ import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 public class FileWatcherRunable implements Runnable {
 
 	private WatchService watcher;
-	private final Map<WatchKey, Path> watchKeys = new HashMap<>();
+	private final Map<WatchKey, Path> watchKeys = new ConcurrentHashMap<>();
 	private PathListener listener;
 	private boolean stop;
 

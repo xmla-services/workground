@@ -32,7 +32,9 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
 
 	@Override
 	public List<Context> get() {
-		return contextsGroup.getValidContexts();
+		List<Context> list=	contextsGroup.getValidContexts();
+		System.err.println(list);
+		return list;
 	}
 
 	@Override

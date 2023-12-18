@@ -90,6 +90,11 @@ public class MDSchemaDiscoverService {
         Optional<String> schemaName = request.restrictions().schemaName();
         Optional<String> baseCubeName = request.restrictions().baseCubeName();
         Optional<CubeSourceEnum> cubeSource = request.restrictions().cubeSource();
+        
+        Optional<String> oCatalog=  request.properties().catalog();
+        if(oCatalog.isPresent()) {
+        	catalogName= oCatalog.get();
+        }
 
         if (catalogName != null) {
             Optional<Context> oContext = contextsListSupplyer.tryGetFirstByName(catalogName);
