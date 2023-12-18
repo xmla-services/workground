@@ -100,7 +100,7 @@ public class CellImpl implements Cell {
 
     @Override
     public Object getPropertyValue(String propertyName) {
-        return null;
+        return cell.getPropertyValue(propertyName);
     }
 
     @Override
