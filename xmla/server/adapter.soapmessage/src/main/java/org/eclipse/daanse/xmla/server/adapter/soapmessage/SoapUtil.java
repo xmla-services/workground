@@ -1119,7 +1119,7 @@ public class SoapUtil {
             String prefix = "mddataset";
             SOAPElement el = addChildElement(e, "Cell", prefix);
             addCellTypeValue(el, it.value());
-            addCellInfoItemList(el, it.any());
+            addCellInfoItemListName(el, it.any());
             setAttribute(el, "CellOrdinal", String.valueOf(it.cellOrdinal()));
         }
     }
@@ -1330,7 +1330,13 @@ public class SoapUtil {
         if (it != null) {
             String prefix = "mddataset";
             SOAPElement el = addChildElement(e, "CellInfo", prefix);
-            addCellInfoItemList(el, it.any());
+            addCellInfoItemListName(el, it.any());
+        }
+    }
+
+    private static void addCellInfoItemListName(SOAPElement e, List<CellInfoItem> list) {
+        if (list != null) {
+            list.forEach(it -> addCellInfoItemName(e, it));
         }
     }
 
@@ -1340,11 +1346,19 @@ public class SoapUtil {
         }
     }
 
+    private static void addCellInfoItemName(SOAPElement e, CellInfoItem it) {
+        if (it != null) {
+            String prefix = "mddataset";
+            SOAPElement el = addChildElement(e, it.tagName(), prefix);
+            setAttribute(el,"name", it.name());
+            it.type().ifPresent(v -> setAttribute(el, "type", v));
+        }
+    }
+
     private static void addCellInfoItem(SOAPElement e, CellInfoItem it) {
         if (it != null) {
             String prefix = "mddataset";
             SOAPElement el = addChildElement(e, it.tagName(), prefix);
-            //setAttribute(el,"name", it.name());
             el.setTextContent(it.name());
             it.type().ifPresent(v -> setAttribute(el, "type", v));
         }
@@ -1383,7 +1397,7 @@ public class SoapUtil {
         if (it != null) {
             String prefix = "mddataset";
             SOAPElement el = addChildElement(e, "HierarchyInfo", prefix);
-            addCellInfoItemList(el, it.any());
+            addCellInfoItemListName(el, it.any());
             setAttribute(el, "name", it.name());
         }
     }

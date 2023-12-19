@@ -19,6 +19,6 @@
     <module>api</module>
     <module>csv</module>
     <module>ods</module>
-    <module>org.eclipse.daanse.db.jdbc.dataloader.csvtoh2</module>
+    <module>csvtoh2</module>
   </modules>
 </project>
