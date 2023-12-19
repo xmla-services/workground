@@ -672,6 +672,7 @@ public class OlapExecuteService implements ExecuteService {
             int rowCount = enableRowCount ? rowCountSlot[0] : -1;
             return Convertor.toStatementResponseRowSet(resultSet, rowCount);
         } catch (Exception e) {
+        	e.printStackTrace();
             // NOTE: One important error is "cannot drill through on the cell"
             throw new XmlaException(
                 SERVER_FAULT_FC,
