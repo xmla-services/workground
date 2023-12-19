@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryImpl;
 import mondrian.server.Session;
 import mondrian.xmla.XmlaException;
 import org.eclipse.daanse.olap.api.CacheControl;
@@ -28,6 +27,7 @@ import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
@@ -241,7 +241,7 @@ public class OlapExecuteService implements ExecuteService {
 				String statement = statementRequest.command().statement();
 				if (statement != null && statement.length() > 0) {
 
-					QueryImpl query = context.getConnection().parseQuery(statement);
+                    QueryComponent query = context.getConnection().parseStatement(statement);
 					if (query instanceof DrillThrough) {
 						return executeDrillThroughQuery(context, statementRequest);
 					} else if (query instanceof CalculatedFormula calculatedFormula) {
