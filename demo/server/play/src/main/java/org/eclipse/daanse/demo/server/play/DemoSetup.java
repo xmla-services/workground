@@ -54,7 +54,6 @@ public class DemoSetup {
 
 	private Configuration cCtxs;
 
-	private Configuration cUserAgentHandler;
 
 	@Activate
 	public void activate() throws IOException {

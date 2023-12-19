@@ -1346,12 +1346,12 @@ public class RolapStar {
          * Given a Expression return a column with that expression
          * or null.
          */
-        public Column lookupColumnByExpression(MappingExpression xmlExpr) {
+        public Column lookupColumnByExpression(MappingExpression expr) {
             for (Column column : getColumns()) {
                 if (column instanceof Measure) {
                     continue;
                 }
-                if (column.getExpression().equals(xmlExpr)) {
+                if (column.getExpression().equals(expr)) {
                     return column;
                 }
             }
@@ -1501,7 +1501,7 @@ public class RolapStar {
         private Column makeColumnForLevelExpr(
             RolapLevel level,
             String name,
-            MappingExpression xmlExpr,
+            MappingExpression expr,
             Datatype datatype,
             BestFitColumnType internalType,
             Column nameColumn,
@@ -1509,8 +1509,8 @@ public class RolapStar {
             String usagePrefix)
         {
             Table table = this;
-            if (xmlExpr instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn xmlColumn) {
-                String tableName = xmlColumn.table();
+            if (expr instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn column) {
+                String tableName = column.table();
                 table = findAncestor(tableName);
                 if (table == null) {
                     throw Util.newError(
@@ -1526,10 +1526,10 @@ public class RolapStar {
                 }
                 RolapStar.AliasReplacer aliasReplacer =
                     new RolapStar.AliasReplacer(tableName, table.getAlias());
-                xmlExpr = aliasReplacer.visit(xmlExpr);
+                expr = aliasReplacer.visit(expr);
             }
             // does the column already exist??
-            Column c = lookupColumnByExpression(xmlExpr);
+            Column c = lookupColumnByExpression(expr);
 
             RolapStar.Column column;
             // Verify Column is not null and not the same as the
@@ -1547,7 +1547,7 @@ public class RolapStar {
                 column = new RolapStar.Column(
                     name,
                     table,
-                    xmlExpr,
+                    expr,
                     datatype,
                     internalType,
                     nameColumn,
