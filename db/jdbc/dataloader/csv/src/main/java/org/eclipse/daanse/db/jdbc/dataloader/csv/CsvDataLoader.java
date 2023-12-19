@@ -335,7 +335,7 @@ public class CsvDataLoader implements PathListener {
 			return "TIME";
 		case STRING:
 		default:
-			return "VARCHAR(255)";
+			return "VARCHAR(4000)";
 		}
 	}
 

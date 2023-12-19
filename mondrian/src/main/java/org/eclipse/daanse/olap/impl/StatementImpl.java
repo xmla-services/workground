@@ -43,8 +43,6 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
      */
     CellSetImpl openCellSet;
 
-    protected Query query;
-
     public StatementImpl(Connection connection) {
         assert connection != null;
         this.connection = connection;

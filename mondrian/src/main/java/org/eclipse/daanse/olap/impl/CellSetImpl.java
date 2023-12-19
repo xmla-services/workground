@@ -33,7 +33,7 @@ public class CellSetImpl extends Execution implements CellSet {
     public CellSetImpl(StatementImpl statement) {
         super(statement, 10);
         this.statement = statement;
-        query = statement.query;
+        query = statement.getQuery();
         this.closed = false;
         if (statement instanceof PreparedStatement ps) {
             this.metaData = ps.getCellSetMetaData();
