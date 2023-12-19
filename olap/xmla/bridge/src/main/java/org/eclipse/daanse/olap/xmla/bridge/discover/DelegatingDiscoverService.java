@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -95,7 +96,7 @@ public class DelegatingDiscoverService implements DiscoverService {
 	}
 
 	@Override
-	public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request) {
+	public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request,RequestMetaData metaData) {
 
 		return dbSchemaService.dbSchemaCatalogs(request);
 	}

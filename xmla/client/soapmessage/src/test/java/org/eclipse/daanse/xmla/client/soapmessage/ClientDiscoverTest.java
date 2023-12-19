@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.client.soapmessage;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.Provider;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
@@ -207,9 +208,11 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Responses.SOURCE_TABLES
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.TABLES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.TABLES_INFO;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.XML_META_DATA;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RequireSoapWhiteboard
 @ExtendWith(ConfigurationExtension.class)
@@ -636,6 +639,11 @@ class ClientDiscoverTest {
 
     @Test
     void testCatalogs() throws Exception {
+    	
+		
+		RequestMetaData metaData= mock(RequestMetaData.class);
+		when(metaData.userAgent()).thenReturn(Optional.empty());
+		
         Provider<SOAPMessage> provider = registerService(CATALOGS);
         PropertiesR properties = new PropertiesR();
         properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
@@ -645,7 +653,7 @@ class ClientDiscoverTest {
         DbSchemaCatalogsRequest dbSchemaCatalogsRequest = new DbSchemaCatalogsRequestR(properties, restrictions);
 
         List<DbSchemaCatalogsResponseRow> rows = client.discover()
-            .dbSchemaCatalogs(dbSchemaCatalogsRequest);
+            .dbSchemaCatalogs(dbSchemaCatalogsRequest,metaData);
 
         assertThat(rows).isNotNull().hasSize(1);
         assertThat(rows.get(0)).isNotNull();

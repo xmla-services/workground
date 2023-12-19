@@ -23,6 +23,8 @@ import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPHeaderElement;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
+
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -196,7 +198,7 @@ public class XmlaApiAdapter {
     private static final String MDSCHEMA_MEASUREGROUPS = "MDSCHEMA_MEASUREGROUPS";
 
 
-    public SOAPMessage handleRequest(SOAPMessage messageRequest) {
+    public SOAPMessage handleRequest(SOAPMessage messageRequest,RequestMetaData metaData) {
         try {
             SOAPMessage messageResponse = MessageFactory.newInstance().createMessage();
             SOAPPart soapPartResponse = messageResponse.getSOAPPart();
@@ -216,7 +218,7 @@ public class XmlaApiAdapter {
             SOAPHeaderElement sessionElement = header.addHeaderElement(session);
             sessionElement.addAttribute(new QName("SessionId"), "29fvrtwjn9hx");
 
-            handleBody(messageRequest.getSOAPBody(), bodyResponse);
+            handleBody(messageRequest.getSOAPBody(), bodyResponse, metaData);
             return messageResponse;
         } catch (SOAPException e) {
             LOGGER.error("handleRequest error", e);
@@ -224,7 +226,7 @@ public class XmlaApiAdapter {
         return null;
     }
 
-    private void handleBody(SOAPBody body, SOAPBody responseBody) {
+    private void handleBody(SOAPBody body, SOAPBody responseBody,RequestMetaData metaData) {
         SOAPElement node = null;
 
         Iterator<Node> nodeIterator = body.getChildElements();
@@ -241,7 +243,7 @@ public class XmlaApiAdapter {
 
         if (node != null && Constants.QNAME_MSXMLA_DISCOVER.equals(node.getElementQName())) {
 
-            discover(node, responseBody);
+            discover(node, responseBody,metaData);
 
         }
         if (node != null && Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
@@ -250,7 +252,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void discover(SOAPElement discover, SOAPBody responseBody) {
+    private void discover(SOAPElement discover, SOAPBody responseBody,RequestMetaData metaData) {
 
         String requestType = null;
         PropertiesR properties = null;
@@ -274,7 +276,7 @@ public class XmlaApiAdapter {
             }
         }
 
-        discover(requestType, properties, restictions, responseBody);
+        discover(requestType, metaData,properties, restictions, responseBody);
     }
 
     private void execute(SOAPElement discover, SOAPBody responseBody) {
@@ -332,6 +334,7 @@ public class XmlaApiAdapter {
     }
 
     private void discover(String requestType,
+    						  RequestMetaData metaData,
                               PropertiesR properties,
                               SOAPElement restrictionElement,
                               SOAPBody responseBody) {
@@ -347,7 +350,7 @@ public class XmlaApiAdapter {
             case DISCOVER_ENUMERATORS ->  handleDiscoverEnumerators(properties, restrictionElement, responseBody);
             case DISCOVER_SCHEMA_ROWSETS ->  handleDiscoverSchemaRowsets(properties, restrictionElement, responseBody);
             case DISCOVER_PROPERTIES ->  handleDiscoverProperties(properties, restrictionElement, responseBody);
-            case DBSCHEMA_CATALOGS ->  handleDbSchemaCatalogs(properties, restrictionElement, responseBody);
+            case DBSCHEMA_CATALOGS ->  handleDbSchemaCatalogs(properties,metaData, restrictionElement, responseBody);
             case DISCOVER_DATASOURCES -> handleDiscoverDataSources(properties, restrictionElement, responseBody);
             case DISCOVER_XML_METADATA -> handleDiscoverXmlMetaData(properties, restrictionElement, responseBody);
             case DBSCHEMA_COLUMNS -> handleDbSchemaColumns(properties, restrictionElement, responseBody);
@@ -524,11 +527,11 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaCatalogs(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaCatalogs(PropertiesR propertiesR,RequestMetaData metaData, SOAPElement restrictionElement, SOAPBody body) {
         DbSchemaCatalogsRestrictionsR restrictionsR = Convert.discoverDbSchemaCatalogsRestrictions(restrictionElement);
         DbSchemaCatalogsRequest request = new DbSchemaCatalogsRequestR(propertiesR, restrictionsR);
         List<DbSchemaCatalogsResponseRow> rows = xmlaService.discover()
-            .dbSchemaCatalogs(request);
+            .dbSchemaCatalogs(request,metaData);
 
         SoapUtil.toDbSchemaCatalogs(rows, body);
 

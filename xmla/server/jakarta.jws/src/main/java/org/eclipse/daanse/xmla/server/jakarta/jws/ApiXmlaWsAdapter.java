@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.server.jakarta.jws;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -209,8 +211,19 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 	}
 
 	private DiscoverResponse handleDbSchemaCatalogs(Discover requestWs) throws JAXBException, IOException {
+		
+		RequestMetaData metaData= new RequestMetaData() {
+			
+			@Override
+			public Optional<String> userAgent() {
+				return Optional.empty();
+			}
+			
+
+		};
+		
 		DbSchemaCatalogsRequest requestApi = Convert.fromDiscoverDbSchemaCatalogs(requestWs);
-		List<DbSchemaCatalogsResponseRow> responseApi = xmlaService.discover().dbSchemaCatalogs(requestApi);
+		List<DbSchemaCatalogsResponseRow> responseApi = xmlaService.discover().dbSchemaCatalogs(requestApi,metaData);
 		return Convert.toDiscoverDbSchemaCatalogs(responseApi);
 	}
 

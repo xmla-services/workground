@@ -15,6 +15,8 @@ package org.eclipse.daanse.xmla.client.soapmessage;
 
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -117,7 +119,7 @@ public class DiscoverServiceImpl implements DiscoverService {
     }
 
     @Override
-    public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest dbSchemaCatalogsRequest) {
+    public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest dbSchemaCatalogsRequest,RequestMetaData metaData) {
 
         try {
             Consumer<SOAPMessage> msg = DiscoverConsumers.createDbSchemaCatalogsRequestConsumer(dbSchemaCatalogsRequest);

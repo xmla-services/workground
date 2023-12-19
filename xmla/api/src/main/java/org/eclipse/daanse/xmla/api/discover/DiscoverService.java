@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover;
 
 import java.util.List;
 
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -95,7 +96,7 @@ public interface DiscoverService {
 	 * @param request the request
 	 * @return the list
 	 */
-	List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request);
+	List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request, RequestMetaData metaData);
 
 	/**
 	 * describes the structure of cubes within a database. Perspectives are also

@@ -1,9 +1,11 @@
 
 package org.eclipse.daanse.xmla.server.jakarta.saaj;
 
-import java.util.Iterator;
+import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.model.record.RequestMetaDataR;
 import org.eclipse.daanse.xmla.server.adapter.soapmessage.XmlaApiAdapter;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -12,10 +14,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.servlet.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 
 import jakarta.servlet.Servlet;
-import jakarta.xml.soap.Node;
+import jakarta.xml.soap.MimeHeaders;
 import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPHeader;
-import jakarta.xml.soap.SOAPHeaderElement;
 import jakarta.xml.soap.SOAPMessage;
 
 @HttpWhiteboardServletPattern("/xmla")
@@ -42,26 +43,17 @@ public class XmlaServlet extends AbstractSAAJServlet {
 			SOAPHeader header = message.getSOAPHeader();
 			SOAPBody body = message.getSOAPBody();
 
-			Iterator<SOAPHeaderElement> headerElements = header
-					.examineMustUnderstandHeaderElements("http://foo.bar/receiver");
+			MimeHeaders m = message.getMimeHeaders();
+			String[] s = m.getHeader("User-agent");
 
-			while (headerElements.hasNext()) {
-				SOAPHeaderElement headerElement = headerElements.next();
-				String actor = headerElement.getActor();
-				boolean mustUnderStand = headerElement.getMustUnderstand();
-				Iterator<Node> headerChildElements = headerElement.getChildElements();
-
-				System.out.println("");
-				System.out.println("actor: " + actor + " - mustUnderStand: " + mustUnderStand);
-				while (headerChildElements.hasNext()) {
-
-					org.w3c.dom.Node child = headerElement.getFirstChild();
-					String childValue = child.getNodeValue();
-					System.out.println("childValue is " + childValue);
-				}
+			Optional<String> oUserAgent = Optional.empty();
+			if (s != null && s.length > 0) {
+				oUserAgent = Optional.of(s[0]);
 			}
 
-			return wsAdapter.handleRequest(message);
+			RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
+
+			return wsAdapter.handleRequest(message, metaData);
 
 		} catch (Exception e) {
 			e.printStackTrace();

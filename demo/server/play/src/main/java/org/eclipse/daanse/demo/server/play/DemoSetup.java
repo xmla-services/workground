@@ -5,7 +5,6 @@ import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.eclipse.daanse.olap.core.BasicContext;
 import org.eclipse.daanse.olap.core.BasicContextGroup;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -52,9 +51,10 @@ public class DemoSetup {
 
 	private Configuration cXmlaEndpoint3;
 
-	private Configuration cCsvL;
 
 	private Configuration cCtxs;
+
+	private Configuration cUserAgentHandler;
 
 	@Activate
 	public void activate() throws IOException {
@@ -125,6 +125,7 @@ public class DemoSetup {
 		dict = new Hashtable<>();
 		dict.put("xmlaService.target", "(service.pid=*)");
 		dict.put("osgi.http.whiteboard.servlet.pattern", "/xmla3");
+		       
 
 		cXmlaEndpoint3.update(dict);
 
@@ -134,6 +135,9 @@ public class DemoSetup {
 		dict = new Hashtable<>();
 		dict.put("osgi.soap.endpoint.selector", "(service.pid=*)");
 		cLoggingHandler.update(dict);
+		
+
+
 	}
 
 	@Deactivate

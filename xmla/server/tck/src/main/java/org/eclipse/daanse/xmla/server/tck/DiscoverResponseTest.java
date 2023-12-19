@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import jakarta.xml.soap.SOAPException;
+import javax.xml.transform.TransformerException;
+
 import org.assertj.core.api.Condition;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.common.enums.AccessEnum;
@@ -116,9 +117,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
 
+import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-
-import javax.xml.transform.TransformerException;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -451,7 +451,7 @@ class DiscoverResponseTest {
     @Test
     void testDbschemaCatalogs(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
         TransformerException {
-
+		
         DbSchemaCatalogsResponseRowR row = new DbSchemaCatalogsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
             Optional.of(DESCRIPTION_LOW),
@@ -463,7 +463,7 @@ class DiscoverResponseTest {
             Optional.of(ClientCacheRefreshPolicyEnum.REFRESH_NEWER_DATA));
 
         DiscoverService discoverService = xmlaService.discover();
-        when(discoverService.dbSchemaCatalogs(any())).thenReturn(List.of(row));
+        when(discoverService.dbSchemaCatalogs(any(),any())).thenReturn(List.of(row));
 
         SOAPMessage response = SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL,
             Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST, "DBSCHEMA_CATALOGS")));
