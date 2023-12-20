@@ -1461,7 +1461,7 @@ public class Utils {
 
     private static List<Cube> getCubesWithFilter(List<Cube> cubes, Optional<String> oCubeName) {
         if (oCubeName.isPresent()) {
-            cubes.stream().filter(c -> oCubeName.get().equals(c.getName())).toList();
+            return cubes.stream().filter(c -> oCubeName.get().equals(c.getName())).toList();
         }
         return cubes;
     }
