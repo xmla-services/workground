@@ -1,0 +1,9 @@
+day,week_day
+INTEGER,STRING
+1,Sunday
+2,Monday
+5,Thursday
+4,Wednesday
+3,Tuesday
+6,Friday
+7,Saturday
