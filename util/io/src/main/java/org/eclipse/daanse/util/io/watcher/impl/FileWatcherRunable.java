@@ -118,7 +118,7 @@ public class FileWatcherRunable implements Runnable {
 		while (!stop) {
 			WatchKey key = null;
 			try {
-				key = watcher.take();
+				key = watcher.poll();//not take so do not block
 			} catch (Exception e) {
 				break;
 			}
