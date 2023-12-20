@@ -1288,34 +1288,31 @@ public class SoapUtil {
 
     private static void addTupleType(SOAPElement e, String tagName, TupleType it) {
         if (it != null) {
-            String prefix = "mddataset";
-            SOAPElement el = addChildElement(e, tagName, prefix);
-            addMemberTypeList(el, it.member());
+            addMemberTypeList(e, tagName, it.member());
         }
 
     }
 
-    private static void addMemberTypeList(SOAPElement e, List<MemberType> list) {
+    private static void addMemberTypeList(SOAPElement e, String tagName, List<MemberType> list) {
         if (list != null) {
-            list.forEach(it -> addMemberType(e, it));
+            list.forEach(it -> addMemberType(e, tagName, it));
         }
     }
 
-    private static void addMemberType(SOAPElement e, MemberType it) {
+    private static void addMemberType(SOAPElement e, String tagName, MemberType it) {
         if (it != null) {
             String prefix = "mddataset";
-            SOAPElement el = addChildElement(e, "Member", prefix);
-            addCellInfoItemList(el, it.any());
+            SOAPElement el = addChildElement(e, tagName, prefix);
+            SOAPElement el1 = addChildElement(el, "Member", prefix);
+            addCellInfoItemList(el1, it.any());
             setAttribute(el, "Hierarchy", it.hierarchy());
         }
     }
 
     private static void addMembersType(SOAPElement e, MembersType it) {
         if (it != null) {
-            String prefix = "mddataset";
-            SOAPElement el = addChildElement(e, "Members", prefix);
-            addMemberTypeList(el, it.member());
-            setAttribute(el, "Hierarchy", it.hierarchy());
+            addMemberTypeList(e, "Members", it.member());
+            setAttribute(e, "Hierarchy", it.hierarchy());
         }
     }
 
@@ -2497,7 +2494,7 @@ public class SoapUtil {
         ct6.setAttribute("name", "CrossProductType");
         SOAPElement ct6Sequence  = addChildElement(ct6, "sequence", "xsd");
         ct6Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct6SequenceChoice  = addChildElement(ct3Sequence, "choice", "xsd");
+        SOAPElement ct6SequenceChoice  = addChildElement(ct6Sequence, "choice", "xsd");
         ct6SequenceChoice.setAttribute("minOccurs", "0");
         ct6SequenceChoice.setAttribute("maxOccurs", "unbounded");
         SOAPElement ct6SequenceChoiceE1  = addChildElement(ct6SequenceChoice, "element", "xsd");
@@ -2515,6 +2512,7 @@ public class SoapUtil {
         SOAPElement ct7Sequence  = addChildElement(ct7, "sequence", "xsd");
         SOAPElement ct7SequenceElement1  = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement1.setAttribute("name", "CubeInfo");
+
         SOAPElement ct7SequenceElement1Ct  = addChildElement(ct7SequenceElement1, "complexType", "xsd");
         SOAPElement ct7SequenceElement1CtSequence  = addChildElement(ct7SequenceElement1Ct, "sequence", "xsd");
         SOAPElement ct7SequenceElement1CtSequenceEl  = addChildElement(ct7SequenceElement1CtSequence, "element", "xsd");
@@ -2525,43 +2523,56 @@ public class SoapUtil {
         SOAPElement ct7SequenceElement1CtSequenceElCtSequenceEl  = addChildElement(ct7SequenceElement1CtSequenceElCtSequence, "element", "xsd");
         ct7SequenceElement1CtSequenceElCtSequenceEl.setAttribute("name", "CubeName");
         ct7SequenceElement1CtSequenceElCtSequenceEl.setAttribute("type", "xsd:string");
+
         SOAPElement ct7SequenceElement2  = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement2.setAttribute("name", "AxesInfo");
-        SOAPElement ct7SequenceElement2Ct  = addChildElement(ct7SequenceElement1, "complexType", "xsd");
+        SOAPElement ct7SequenceElement2Ct  = addChildElement(ct7SequenceElement2, "complexType", "xsd");
         SOAPElement ct7SequenceElement2CtSequence  = addChildElement(ct7SequenceElement2Ct, "sequence", "xsd");
         SOAPElement ct7SequenceElement2CtSequenceEl  = addChildElement(ct7SequenceElement2CtSequence, "element", "xsd");
         ct7SequenceElement2CtSequenceEl.setAttribute("name", "AxisInfo");
         ct7SequenceElement2CtSequenceEl.setAttribute("maxOccurs", "unbounded");
         SOAPElement ct7SequenceElement2CtSequenceElCt  = addChildElement(ct7SequenceElement2CtSequenceEl, "complexType", "xsd");
         SOAPElement ct7SequenceElement2CtSequenceElCtSequence  = addChildElement(ct7SequenceElement2CtSequenceElCt, "sequence", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "sequence", "xsd");
+
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElement  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("name", "HierarchyInfo");
+        ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("minOccurs", "0");
+        ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("maxOccurs", "unbounded");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCt  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElement, "complexType", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCt, "Sequence", "xsd");
+
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E1.setAttribute("name", "UName");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E1.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E2.setAttribute("name", "Caption");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E2.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E3  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E3  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E3.setAttribute("name", "LName");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E3.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E4  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E4  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E4.setAttribute("name", "LNum");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E4.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E5  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E5  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("name", "DisplayInfo");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("type", "PropType");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
         SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2Any  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence2, "any", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("processContents", "lax");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtAttribute  = addChildElement(ct7SequenceElement2Ct, "attribute", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCt, "attribute", "xsd");
+        ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("name", "name");
+        ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("type", "xsd:string");
+        ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("use", "required");
+        SOAPElement ct7SequenceElement2CtAttribute  = addChildElement(ct7SequenceElement2CtSequenceElCt, "attribute", "xsd");
         ct7SequenceElement2CtAttribute.setAttribute("name", "name");
         ct7SequenceElement2CtAttribute.setAttribute("type", "xsd:string");
-        ct7SequenceElement2CtAttribute.setAttribute("use", "required");
+
         SOAPElement ct7SequenceElement3  = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement3.setAttribute("name", "CellInfo");
         SOAPElement ct7SequenceElement3Ct  = addChildElement(ct7SequenceElement3, "complexType", "xsd");
@@ -2620,7 +2631,7 @@ public class SoapUtil {
         ct8.setAttribute("name", "Axes");
         SOAPElement ct8Sequence  = addChildElement(ct8, "sequence", "xsd");
         ct8Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct8SequenceElement  = addChildElement(ct3Sequence, "element", "xsd");
+        SOAPElement ct8SequenceElement  = addChildElement(ct8Sequence, "element", "xsd");
         ct8SequenceElement.setAttribute("name", "Axis");
         SOAPElement ct8SequenceElementComplexType  = addChildElement(ct8SequenceElement, "complexType", "xsd");
         SOAPElement ct8SequenceElementComplexTypeChoice  = addChildElement(ct8SequenceElementComplexType, "choice", "xsd");
@@ -2646,10 +2657,10 @@ public class SoapUtil {
         ct9SequenceElement.setAttribute("name", "Cell");
         ct9SequenceElement.setAttribute("minOccurs", "0");
         ct9SequenceElement.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct9SequenceElementComplexType  = addChildElement(ct8SequenceElement, "complexType", "xsd");
+        SOAPElement ct9SequenceElementComplexType  = addChildElement(ct9SequenceElement, "complexType", "xsd");
         SOAPElement ct9SequenceElementComplexTypeSequence  = addChildElement(ct9SequenceElementComplexType, "sequence", "xsd");
         ct9SequenceElementComplexTypeSequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoice  = addChildElement(ct8SequenceElementComplexType, "choice", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoice  = addChildElement(ct9SequenceElementComplexTypeSequence, "choice", "xsd");
         SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE1  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE1.setAttribute("name", "Value");
         SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE2  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
@@ -2676,7 +2687,7 @@ public class SoapUtil {
         SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE9  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("name", "NonEmptyBehavior");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("type", "xsd:unsignedShort");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE10  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE10  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("name", "SolveOrder");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("type", "xsd:unsignedInt");
         SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE11  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
