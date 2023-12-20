@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.server.adapter.soapmessage;
 import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
+import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
@@ -76,6 +77,7 @@ import org.eclipse.daanse.xmla.api.mddataset.MembersType;
 import org.eclipse.daanse.xmla.api.mddataset.NormTupleSet;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfo;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
+import org.eclipse.daanse.xmla.api.mddataset.RowSet;
 import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
 import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.api.mddataset.SetListType;
@@ -325,21 +327,22 @@ public class SoapUtil {
 
     public static void toStatementResponse(StatementResponse statementResponse, SOAPBody body) {
         if (statementResponse.mdDataSet() != null) {
-            SOAPElement root = addExecuteRoot(body, "mddataset");
+            SOAPElement root = addMddatasetRoot(body);
             if (statementResponse != null) {
                 addMdDataSet(root, statementResponse.mdDataSet());
             }
         }
         if (statementResponse.rowSet() != null) {
-            SOAPElement root = addExecuteRoot(body, ROWSET);
+            SOAPElement root = addRowSetRoot(body, statementResponse.rowSet());
             if (statementResponse.rowSet().rowSetRows() != null) {
                 statementResponse.rowSet().rowSetRows().forEach(it -> addRowSetRow(root, it));
             }
         }
         if (statementResponse.mdDataSet() == null && statementResponse.rowSet() == null) {
-            addExecuteRoot(body, EMPTY);
+            addEmptyRoot(body);
         }
     }
+
 
     private static void addRowSetRow(SOAPElement e, RowSetRow it) {
         String prefix = ROWSET;
@@ -351,28 +354,28 @@ public class SoapUtil {
 
     private static void addRowSetRowItem(SOAPElement e, RowSetRowItem it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, it.tagName(), null);
+            SOAPElement el = addChildElement(e, it.tagName(), ROWSET);
             el.setTextContent(it.value());
             it.type().ifPresent(v -> setAttribute(el, "type", v.getValue()));
         }
     }
 
     public static void toAlterResponse(AlterResponse alterResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body, EMPTY);
+        SOAPElement root = addEmptyRoot(body);
         if (alterResponse != null) {
             addEmptyresult(root, alterResponse.emptyresult());
         }
     }
 
     public static void toClearCacheResponse(ClearCacheResponse clearCacheResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body, EMPTY);
+        SOAPElement root = addEmptyRoot(body);
         if (clearCacheResponse != null) {
             addEmptyresult(root, clearCacheResponse.emptyresult());
         }
     }
 
     public static void toCancelResponse(CancelResponse cancelResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body, EMPTY);
+        SOAPElement root = addEmptyRoot(body);
         if (cancelResponse != null) {
             addEmptyresult(root, cancelResponse.emptyresult());
         }
@@ -422,7 +425,7 @@ public class SoapUtil {
         addChildElement(row, "LiteralInvalidChars", prefix, r.literalInvalidChars());
         addChildElement(row, "LiteralInvalidStartingChars", prefix, r.literalInvalidStartingChars());
         addChildElement(row, "LiteralMaxLength", prefix, String.valueOf(r.literalMaxLength()));
-        addChildElement(row, "LiteralNameValue", prefix, String.valueOf(r.literalNameEnumValue().getValue()));
+        addChildElement(row, "LiteralNameEnumValue", prefix, String.valueOf(r.literalNameEnumValue().getValue()));
     }
 
     private static void addDiscoverKeywordsResponseRow(SOAPElement root, DiscoverKeywordsResponseRow r) {
@@ -1709,6 +1712,12 @@ public class SoapUtil {
         se5.setAttribute("type", "xsd:int");
         se5.setAttribute("minOccurs", "0");
 
+        SOAPElement se6  = addChildElement(s, "element", "xsd");
+        se6.setAttribute("sql:field", "LiteralNameEnumValue");
+        se6.setAttribute("name", "LiteralNameEnumValue");
+        se6.setAttribute("type", "xsd:int");
+        se6.setAttribute("minOccurs", "0");
+
         return root;
     }
 
@@ -2340,17 +2349,79 @@ public class SoapUtil {
         return schema;
     }
 
-    private static SOAPElement addExecuteRoot(SOAPElement body, String prefix) {
+    private static SOAPElement addEmptyRoot(SOAPBody body) {
         SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
         SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", prefix);
+        SOAPElement root = addChildElement(ret, "root", EMPTY);
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        if ("mddataset".equals(prefix)) {
-            addMddatasetSchema(root);
-        }
         return root;
+    }
+
+    private static SOAPElement addMddatasetRoot(SOAPElement body) {
+        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", "mddataset");
+        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        addMddatasetSchema(root);
+        return root;
+    }
+
+    private static SOAPElement addRowSetRoot(SOAPBody body, RowSet rowSet) {
+        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        SOAPElement root = addChildElement(ret, "root", ROWSET);
+        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        addRowsetSchema(root, rowSet);
+        return root;
+    }
+
+
+    private static void addRowsetSchema(SOAPElement root, RowSet rowSet) {
+        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+        schema.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:rowset");
+        schema.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis:rowset");
+        schema.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        schema.setAttribute("xmlns:sql", "urn:schemas-microsoft-com:xml-sql");
+        schema.setAttribute("elementFormDefault", "qualified");
+
+        SOAPElement el1  = addChildElement(schema, "element", "xsd");
+        el1.setAttribute("name", "root");
+        SOAPElement el1complexType  = addChildElement(el1, "complexType", "xsd");
+        SOAPElement el1complexTypeSequence  = addChildElement(el1complexType, "sequence", "xsd");
+        SOAPElement el1complexTypeSequenceEl  = addChildElement(el1complexTypeSequence, "element", "xsd");
+        el1complexTypeSequenceEl.setAttribute("maxOccurs", "unbounded");
+        el1complexTypeSequenceEl.setAttribute("minOccurs", "0");
+        el1complexTypeSequenceEl.setAttribute("name", "row");
+        el1complexTypeSequenceEl.setAttribute("type", "row");
+
+        SOAPElement simpleType  = addChildElement(schema, "simpleType", "xsd");
+        simpleType.setAttribute("name", "uuid");
+        SOAPElement restriction  = addChildElement(simpleType, "restriction", "xsd");
+        restriction.setAttribute("base", "xsd:string");
+        SOAPElement pattern  = addChildElement(restriction, "restriction", "xsd");
+        pattern.setAttribute("value", "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
+
+        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        ct.setAttribute("name", "row");
+        SOAPElement ctSequence  = addChildElement(ct, "sequence", "xsd");
+        if ( rowSet.rowSetRows() != null && rowSet.rowSetRows().size() > 0
+            && rowSet.rowSetRows().get(0) != null && rowSet.rowSetRows().get(0).rowSetRowItem() != null) {
+            for (RowSetRowItem item : rowSet.rowSetRows().get(0).rowSetRowItem()) {
+                SOAPElement ctSequenceEl1  = addChildElement(ctSequence, "element", "xsd");
+                ItemTypeEnum type = item.type().orElse(ItemTypeEnum.STRING);
+                ctSequenceEl1.setAttribute("minOccurs", "0");
+                ctSequenceEl1.setAttribute("name", item.tagName());
+                ctSequenceEl1.setAttribute("sql:field", item.tagName());
+                ctSequenceEl1.setAttribute("type", type.getValue());
+            }
+        }
     }
 
     private static void addMddatasetSchema(SOAPElement root) {
@@ -2416,9 +2487,9 @@ public class SoapUtil {
 
         SOAPElement ct5  = addChildElement(schema, "complexType", "xsd");
         ct5.setAttribute("name", "TuplesType");
-        SOAPElement ct5Sequence  = addChildElement(ct3, "sequence", "xsd");
+        SOAPElement ct5Sequence  = addChildElement(ct5, "sequence", "xsd");
         ct5Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct5SequenceElement  = addChildElement(ct3Sequence, "element", "xsd");
+        SOAPElement ct5SequenceElement  = addChildElement(ct5Sequence, "element", "xsd");
         ct5SequenceElement.setAttribute("name", "Tuple");
         ct5SequenceElement.setAttribute("type", "TupleType");
 
@@ -2571,7 +2642,7 @@ public class SoapUtil {
         SOAPElement ct9  = addChildElement(schema, "complexType", "xsd");
         ct9.setAttribute("name", "CellData");
         SOAPElement ct9Sequence  = addChildElement(ct9, "sequence", "xsd");
-        SOAPElement ct9SequenceElement  = addChildElement(ct3Sequence, "element", "xsd");
+        SOAPElement ct9SequenceElement  = addChildElement(ct9Sequence, "element", "xsd");
         ct9SequenceElement.setAttribute("name", "Cell");
         ct9SequenceElement.setAttribute("minOccurs", "0");
         ct9SequenceElement.setAttribute("maxOccurs", "unbounded");
@@ -2579,42 +2650,42 @@ public class SoapUtil {
         SOAPElement ct9SequenceElementComplexTypeSequence  = addChildElement(ct9SequenceElementComplexType, "sequence", "xsd");
         ct9SequenceElementComplexTypeSequence.setAttribute("maxOccurs", "unbounded");
         SOAPElement ct9SequenceElementComplexTypeSequenceChoice  = addChildElement(ct8SequenceElementComplexType, "choice", "xsd");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE1  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE1  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE1.setAttribute("name", "Value");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE2  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE2  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE2.setAttribute("name", "FmtValue");
         ct9SequenceElementComplexTypeSequenceChoiceE2.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE3  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE3  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE3.setAttribute("name", "BackColor");
         ct9SequenceElementComplexTypeSequenceChoiceE3.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE4  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE4  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE4.setAttribute("name", "ForeColor");
         ct9SequenceElementComplexTypeSequenceChoiceE4.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE5  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE5  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE5.setAttribute("name", "FontName");
         ct9SequenceElementComplexTypeSequenceChoiceE5.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE6  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE6  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE6.setAttribute("name", "FontSize");
         ct9SequenceElementComplexTypeSequenceChoiceE6.setAttribute("type", "xsd:unsignedShort");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE7  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE7  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE7.setAttribute("name", "FontFlags");
         ct9SequenceElementComplexTypeSequenceChoiceE7.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE8  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE8  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE8.setAttribute("name", "FormatString");
         ct9SequenceElementComplexTypeSequenceChoiceE8.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE9  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE9  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("name", "NonEmptyBehavior");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("type", "xsd:unsignedShort");
         SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE10  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("name", "SolveOrder");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE11  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE11  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE11.setAttribute("name", "Updateable");
         ct9SequenceElementComplexTypeSequenceChoiceE11.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE12  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE12  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE12.setAttribute("name", "Visible");
         ct9SequenceElementComplexTypeSequenceChoiceE12.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE13  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE13  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE13.setAttribute("name", "Expression");
         ct9SequenceElementComplexTypeSequenceChoiceE13.setAttribute("type", "xsd:string");
         SOAPElement ct9SequenceElementComplexTypeAttribute  = addChildElement(ct9SequenceElementComplexType, "attribute", "xsd");
@@ -2625,7 +2696,7 @@ public class SoapUtil {
         SOAPElement element  = addChildElement(schema, "element", "xsd");
         element.setAttribute("name", "root");
         SOAPElement elementComplexType  = addChildElement(element, "complexType", "xsd");
-        SOAPElement elementComplexTypeSequence  = addChildElement(element, "sequence", "xsd");
+        SOAPElement elementComplexTypeSequence  = addChildElement(elementComplexType, "sequence", "xsd");
         elementComplexTypeSequence.setAttribute("maxOccurs", "unbounded");
         SOAPElement elementComplexTypeSequenceE1  = addChildElement(elementComplexTypeSequence, "element", "xsd");
         elementComplexTypeSequenceE1.setAttribute("name", "OlapInfo");
