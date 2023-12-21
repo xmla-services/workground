@@ -1428,7 +1428,7 @@ public class Utils {
 
     private static List<Schema> getSchemasWithFilter(List<Schema> schemas, Optional<String> oSchemaName) {
         if (oSchemaName.isPresent()) {
-            schemas.stream().filter(s -> oSchemaName.get().equals(s.getName())).toList();
+            return schemas.stream().filter(s -> oSchemaName.get().equals(s.getName())).toList();
         }
         return schemas;
     }
@@ -1694,7 +1694,7 @@ public class Utils {
         Optional<String> oLevelName
     ) {
         if (oLevelName.isPresent()) {
-            levels.stream().filter(l -> oLevelName.get().equals(l.getName()));
+            return levels.stream().filter(l -> oLevelName.get().equals(l.getName())).toList();
         }
         return levels;
     }
@@ -1704,7 +1704,7 @@ public class Utils {
         Optional<String> oLevelUniqueNameName
     ) {
         if (oLevelUniqueNameName.isPresent()) {
-            levels.stream().filter(l -> oLevelUniqueNameName.get().equals(l.getUniqueName()));
+            return levels.stream().filter(l -> oLevelUniqueNameName.get().equals(l.getUniqueName())).toList();
         }
         return levels;
     }
