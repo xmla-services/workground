@@ -31,7 +31,7 @@ public class CellSetImpl extends Execution implements CellSet {
     private final Query query;
 
     public CellSetImpl(StatementImpl statement) {
-        super(statement, 10);
+        super(statement, 5000);
         this.statement = statement;
         query = statement.getQuery();
         this.closed = false;
