@@ -126,6 +126,7 @@ public class SoapUtil {
 	private static final String MSXMLA = "msxmla";
 	private static final String EMPTY = "empty";
     private static final String ROWSET = "rowset";
+    private static final String MDDATASET = "mddataset";
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
 
     private SoapUtil() {
@@ -973,7 +974,7 @@ public class SoapUtil {
 
     private static void addMessages(SOAPElement e, Messages it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Messages", prefix);
             addExceptionTypeList(el, it.warningOrError());
 
@@ -1085,7 +1086,7 @@ public class SoapUtil {
 
     private static void addCellData(SOAPElement e, CellData it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "CellData", prefix);
             addCellTypeList(el, it.cell());
             //addCellSetType(el, it.cellSet());
@@ -1119,7 +1120,7 @@ public class SoapUtil {
 
     private static void addCellType(SOAPElement e, CellType it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Cell", prefix);
             addCellTypeValue(el, it.value());
             addCellInfoItemListName(el, it.any());
@@ -1129,7 +1130,7 @@ public class SoapUtil {
 
     private static void addCellTypeValue(SOAPElement e, Value it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Value", prefix);
             el.setAttribute("xsi:type", it.type().getValue());
             el.setTextContent(it.value());
@@ -1145,7 +1146,7 @@ public class SoapUtil {
 
     private static void addCellTypeError(SOAPElement e, CellTypeError it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Error", prefix);
             setAttribute(el, "ErrorCode", String.valueOf(it.errorCode()));
             setAttribute(el, DESCRIPTION, it.description());
@@ -1154,7 +1155,7 @@ public class SoapUtil {
 
     private static void addAxes(SOAPElement e, Axes it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Axes", prefix);
             addAxisList(el, it.axis());
         }
@@ -1168,7 +1169,7 @@ public class SoapUtil {
 
     private static void addAxis(SOAPElement e, Axis it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Axis", prefix);
             addTypeList(el, it.setType());
             setAttribute(el, "name", it.name());
@@ -1203,7 +1204,7 @@ public class SoapUtil {
 
     private static void addUnion(SOAPElement e, Union it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Union", prefix);
             addTypeList(el, it.setType());
         }
@@ -1211,7 +1212,7 @@ public class SoapUtil {
 
     private static void addNormTupleSet(SOAPElement e, NormTupleSet it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "NormTupleSet", prefix);
             addNormTuplesType(el, it.normTuples());
             addTupleTypeList(el, it.membersLookup());
@@ -1264,7 +1265,7 @@ public class SoapUtil {
 
     private static void addSetListType(SOAPElement e, SetListType it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "CrossProduct", prefix);
             addTypeList(el, it.setType());
             addChildElement(el, "Size", prefix, String.valueOf(it.size()));
@@ -1273,7 +1274,7 @@ public class SoapUtil {
 
     private static void addTuplesType(SOAPElement e, TuplesType it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Tuples", prefix);
             addTuplesTypeList(el, it.tuple());
         }
@@ -1301,7 +1302,7 @@ public class SoapUtil {
 
     private static void addMemberType(SOAPElement e, String tagName, MemberType it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, tagName, prefix);
             SOAPElement el1 = addChildElement(el, "Member", prefix);
             addCellInfoItemList(el1, it.any());
@@ -1317,7 +1318,7 @@ public class SoapUtil {
     }
 
     private static void addOlapInfo(SOAPElement e, OlapInfo it) {
-        String prefix = "mddataset";
+        String prefix = MDDATASET;
         if (it != null) {
             SOAPElement el = addChildElement(e, "OlapInfo", prefix);
             addCubeInfo(el, it.cubeInfo());
@@ -1328,7 +1329,7 @@ public class SoapUtil {
 
     private static void addCellInfo(SOAPElement e, CellInfo it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "CellInfo", prefix);
             addCellInfoItemListName(el, it.any());
         }
@@ -1348,7 +1349,7 @@ public class SoapUtil {
 
     private static void addCellInfoItemName(SOAPElement e, CellInfoItem it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, it.tagName(), prefix);
             setAttribute(el,"name", it.name());
             it.type().ifPresent(v -> setAttribute(el, "type", v));
@@ -1357,7 +1358,7 @@ public class SoapUtil {
 
     private static void addCellInfoItem(SOAPElement e, CellInfoItem it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, it.tagName(), prefix);
             el.setTextContent(it.name());
             it.type().ifPresent(v -> setAttribute(el, "type", v));
@@ -1366,7 +1367,7 @@ public class SoapUtil {
 
     private static void addAxesInfo(SOAPElement e, AxesInfo it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "AxesInfo", prefix);
             addAxisInfoList(el, it.axisInfo());
         }
@@ -1380,7 +1381,7 @@ public class SoapUtil {
 
     private static void addAxisInfo(SOAPElement e, AxisInfo it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "AxisInfo", prefix);
             setAttribute(el, "name", it.name());
             addHierarchyInfoList(el, it.hierarchyInfo());
@@ -1395,7 +1396,7 @@ public class SoapUtil {
 
     private static void addHierarchyInfo(SOAPElement e, HierarchyInfo it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "HierarchyInfo", prefix);
             addCellInfoItemListName(el, it.any());
             setAttribute(el, "name", it.name());
@@ -1404,7 +1405,7 @@ public class SoapUtil {
 
     private static void addCubeInfo(SOAPElement e, CubeInfo it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "CubeInfo", prefix);
             addOlapInfoCubeList(el, it.cube());
         }
@@ -1418,7 +1419,7 @@ public class SoapUtil {
 
     private static void addOlapInfoCube(SOAPElement e, OlapInfoCube it) {
         if (it != null) {
-            String prefix = "mddataset";
+            String prefix = MDDATASET;
             SOAPElement el = addChildElement(e, "Cube", prefix);
             addChildElement(el, "CubeName", prefix, it.cubeName());
             addChildElement(el, "LastDataUpdate", "engine", instantToString(it.lastDataUpdate()));
@@ -2359,7 +2360,7 @@ public class SoapUtil {
     private static SOAPElement addMddatasetRoot(SOAPElement body) {
         SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
         SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", "mddataset");
+        SOAPElement root = addChildElement(ret, "root", MDDATASET);
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");

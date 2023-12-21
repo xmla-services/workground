@@ -18,6 +18,7 @@ import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorServiceFactory;
@@ -155,7 +156,7 @@ class DbCreatorServiceImplTest {
             .contains("property1Column")
             .contains("property11Column");
         assertThat(dbStructure.getTables().get(0).getColumns())
-            .extracting(Column::type)
+            .extracting(Column::type).extracting(SqlType::getType)
             .contains(Type.INTEGER)
             .contains(Type.NUMERIC)
             .contains(Type.STRING);
@@ -225,6 +226,7 @@ class DbCreatorServiceImplTest {
             .contains("measure2Column");
         assertThat(table.getColumns())
             .extracting(Column::type)
+            .extracting(SqlType::getType)
             .contains(Type.INTEGER)
             .contains(Type.STRING)
             .contains(Type.NUMERIC);
@@ -260,6 +262,7 @@ class DbCreatorServiceImplTest {
             .contains("property11Column");
         assertThat(table.getColumns())
             .extracting(Column::type)
+            .extracting(SqlType::getType)
             .contains(Type.INTEGER)
             .contains(Type.NUMERIC)
             .contains(Type.STRING);
@@ -334,6 +337,7 @@ class DbCreatorServiceImplTest {
             .contains("columnDef2Name");
         assertThat(table.getColumns())
             .extracting(Column::type)
+            .extracting(SqlType::getType)
             .contains(Type.INTEGER)
             .contains(Type.STRING)
             .contains(Type.NUMERIC)
@@ -370,6 +374,7 @@ class DbCreatorServiceImplTest {
             .contains("property11Column");
         assertThat(table.getColumns())
             .extracting(Column::type)
+            .extracting(SqlType::getType)
             .contains(Type.INTEGER)
             .contains(Type.NUMERIC)
             .contains(Type.STRING);
@@ -410,10 +415,10 @@ class DbCreatorServiceImplTest {
             .contains("id", "name");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "name");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         t = getTable(dbStructure.getTables(), "country");
         assertThat(t).isNotNull();
@@ -423,13 +428,13 @@ class DbCreatorServiceImplTest {
             .contains("id", "name", "continent_id");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "name");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "continent_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         t = getTable(dbStructure.getTables(), "gender");
         assertThat(t).isNotNull();
@@ -439,10 +444,10 @@ class DbCreatorServiceImplTest {
             .contains("gender_id", "name");
         c = getColumn(t.getColumns(), "gender_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "name");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         t = getTable(dbStructure.getTables(), "year");
         assertThat(t).isNotNull();
@@ -452,10 +457,10 @@ class DbCreatorServiceImplTest {
             .contains("year", "ordinal");
         c = getColumn(t.getColumns(), "year");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER); //?
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER); //?
 
         t = getTable(dbStructure.getTables(), "state");
         assertThat(t).isNotNull();
@@ -465,13 +470,13 @@ class DbCreatorServiceImplTest {
             .contains("id", "name", "contry_id");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "name");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "contry_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         t = getTable(dbStructure.getTables(), "ageGroups");
         assertThat(t).isNotNull();
@@ -481,25 +486,25 @@ class DbCreatorServiceImplTest {
             .contains("age", "H1", "H1_Order", "H2", "H2_Order", "H9", "H9_Order");
         c = getColumn(t.getColumns(), "age");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "H1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "H1_Order");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "H2");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "H2_Order");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "H9");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
         c = getColumn(t.getColumns(), "H9_Order");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         t = getTable(dbStructure.getTables(), "population");
         assertThat(t).isNotNull();
@@ -509,16 +514,16 @@ class DbCreatorServiceImplTest {
             .contains("year", "state_id", "gender_id", "age");
         c = getColumn(t.getColumns(), "year");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "state_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "gender_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
         c = getColumn(t.getColumns(), "age");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
     }
 
@@ -550,15 +555,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D1H1L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D1H1L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D1H1L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         //2
         t = getTable(dbStructure.getTables(), "D2H1L1Table");
@@ -574,15 +579,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D2H1L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D2H1L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D2H1L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //3
         t = getTable(dbStructure.getTables(), "D2H2L2Table");
@@ -598,27 +603,27 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D2H2L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D2H2L2_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D2H2L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D2H2L2_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D2H2L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D2H2L2");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //4
         t = getTable(dbStructure.getTables(), "D3H1L1Table");
@@ -627,15 +632,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H1L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H1L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H1L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //5
         t = getTable(dbStructure.getTables(), "D3H2L1Table");
@@ -644,15 +649,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H2L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H2L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H2L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //6
         t = getTable(dbStructure.getTables(), "D3H2L2Table");
@@ -661,19 +666,19 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H2L2_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H2L2");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H2L1_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H2L2_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //7
         t = getTable(dbStructure.getTables(), "D3H3L1Table");
@@ -682,15 +687,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H3L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L1_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L1_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         //8
         t = getTable(dbStructure.getTables(), "D3H3L2Table");
@@ -699,19 +704,19 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H3L2");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L1_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L2_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H3L2_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //9
         t = getTable(dbStructure.getTables(), "D3H3L3Table");
@@ -720,19 +725,19 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D3H3L3");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L2_id");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3H3L3_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D3H3L3_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         //10
         t = getTable(dbStructure.getTables(), "Cube1Fact");
@@ -741,19 +746,19 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "M1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D2");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D3");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
     }
     @Test
@@ -783,15 +788,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "KEY_NAME");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "KEY_ORDER");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "KEY");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
 
         t = getTable(dbStructure.getTables(), "Cube1Fact");
@@ -807,15 +812,15 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "VALUE");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        assertThat(c.type().getType()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "VALUE_COUNT");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type().getType()).isEqualTo(Type.STRING);
 
     }
 
