@@ -110,7 +110,10 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
             }
             buf.append(NL);
             buf.append("    ").append(dialect.quoteIdentifier(column.getName()));
-            buf.append(" ").append(column.getType().toPhysical(dialect));
+            buf.append(" ").append(column.getSqlType().getType().toPhysical(dialect));
+            if (column.getSqlType().getLength().isPresent()) {
+                buf.append(column.getSqlType().getLength().get());
+            }
         }
 
         buf.append(")");

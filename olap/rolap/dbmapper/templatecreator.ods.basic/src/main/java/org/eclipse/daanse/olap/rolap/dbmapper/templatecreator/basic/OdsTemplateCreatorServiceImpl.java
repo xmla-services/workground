@@ -17,8 +17,8 @@ import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
 import org.eclipse.daanse.db.jdbc.util.impl.Table;
-import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.api.TemplateCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
@@ -83,7 +83,7 @@ public class OdsTemplateCreatorServiceImpl implements TemplateCreatorService {
         List<Column> columnList = t.getColumns();
         Sheet sheet = new Sheet(t.tableName(), 2, columnList.size());
         List<String> columnName = columnList.stream().map(Column::getName).toList();
-        List<String> columnExampleValues = columnList.stream().map(i -> getExampleValue(i.getType())).toList();
+        List<String> columnExampleValues = columnList.stream().map(i -> getExampleValue(i.getSqlType())).toList();
         for (int i = 0; i < columnList.size(); i++) {
             sheet.getRange(0, i).setValues(columnName.get(i));
         }
@@ -93,8 +93,8 @@ public class OdsTemplateCreatorServiceImpl implements TemplateCreatorService {
         spread.appendSheet(sheet);
     }
 
-    private String getExampleValue(Type type) {
-        switch (type) {
+    private String getExampleValue(SqlType type) {
+        switch (type.getType()) {
             case INTEGER, LONG:
                 return "2147483647";
             case SMALLINT:

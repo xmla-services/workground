@@ -3,6 +3,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.utils;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
@@ -11,17 +12,16 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Utils {
 
@@ -71,7 +71,7 @@ public class Utils {
             if (tableName != null) {
                 Table t = getTableOrCreateNew(tables, tableName, schemaName);
                 getColumnOrCreateNew(
-                    t.getColumns(), columnName, Type.fromName(m.datatype() != null ? m.datatype().name() : null));
+                    t.getColumns(), columnName, getSqlType(m.datatype()));
             }
         }
     }
@@ -83,7 +83,7 @@ public class Utils {
         if (tableName != null) {
             Table table = getTableOrCreateNew(tables, tableName, schemaName);
             if (d.foreignKey() != null) {
-                getColumnOrCreateNew(table.getColumns(), d.foreignKey(), Type.INTEGER);
+                getColumnOrCreateNew(table.getColumns(), d.foreignKey(), getSqlType(Type.INTEGER));
                 getConstraintOrCreateNew(table.getConstraint(), d.foreignKey(),
                     true, List.of(d.foreignKey()));
             }
@@ -99,7 +99,7 @@ public class Utils {
             if (h.primaryKey() != null && (tName != null || h.primaryKeyTable() != null)) {
                 String t = h.primaryKeyTable() != null ? h.primaryKeyTable() : tName;
                 Table table = getTableOrCreateNew(tables, t, schemaName);
-                getColumnOrCreateNew(table.getColumns(), h.primaryKey(), Type.INTEGER);
+                getColumnOrCreateNew(table.getColumns(), h.primaryKey(), getSqlType(Type.INTEGER));
                 getConstraintOrCreateNew(table.getConstraint(), h.primaryKey(), true, List.of(h.primaryKey()));
             }
         }
@@ -131,8 +131,19 @@ public class Utils {
 
     private static void processingColumnDef(MappingColumnDef c, Map<String, Column> columns) {
         if (!columns.containsKey(c.name())) {
-            columns.put(c.name(), new Column(c.name(), Type.fromName(c.type() != null ? c.type().name() : null)));
+            SqlType sqlType = getSqlType(c.type());
+            columns.put(c.name(), new Column(c.name(), sqlType));
         }
+    }
+
+
+    private static SqlType getSqlType(Enum typeEnum) {
+        Type type = Type.fromName(typeEnum != null ? typeEnum.name() : null);
+        Optional<String> length = Optional.empty();
+        if (Type.STRING.equals(type)) {
+            length = Optional.of("(255)");
+        }
+        return new SqlType(type, length);
     }
 
     private static String processingTable(
@@ -160,7 +171,7 @@ public class Utils {
                     columnName = relation.rightKey();
                 }
                 Table t = tables.get(tableName);
-                getColumnOrCreateNew(t.getColumns(), columnName, Type.INTEGER);
+                getColumnOrCreateNew(t.getColumns(), columnName, getSqlType(Type.INTEGER));
             }
         }
         return name;
@@ -172,19 +183,19 @@ public class Utils {
             Table t = getTableOrCreateNew(tables, tName, schema);
             Type type = Type.fromName(level.type() != null ? level.type().name() : null);
             if (level.column() != null && !level.column().isBlank()) {
-                getColumnOrCreateNew(t.getColumns(), level.column(), type);
+                getColumnOrCreateNew(t.getColumns(), level.column(), getSqlType(type));
             }
             if (level.parentColumn() != null && !level.parentColumn().isBlank()) {
-                getColumnOrCreateNew(t.getColumns(), level.parentColumn(), type);
+                getColumnOrCreateNew(t.getColumns(), level.parentColumn(), getSqlType(type));
             }
             if (level.nameColumn() != null && !level.nameColumn().isBlank()) {
-                getColumnOrCreateNew(t.getColumns(), level.nameColumn(), Type.STRING);
+                getColumnOrCreateNew(t.getColumns(), level.nameColumn(), getSqlType(Type.STRING));
             }
             if (level.captionColumn() != null && !level.captionColumn().isBlank()) {
-                getColumnOrCreateNew(t.getColumns(), level.captionColumn(), Type.STRING);
+                getColumnOrCreateNew(t.getColumns(), level.captionColumn(), getSqlType(Type.STRING));
             }
             if (level.ordinalColumn() != null && !level.ordinalColumn().isBlank()) {
-                getColumnOrCreateNew(t.getColumns(), level.ordinalColumn(), Type.INTEGER);
+                getColumnOrCreateNew(t.getColumns(), level.ordinalColumn(), getSqlType(Type.INTEGER));
             }
         }
         if (level.properties() != null) {
@@ -198,7 +209,7 @@ public class Utils {
             String columnName = property.column();
             if (tableName != null) {
                 Table t = getTableOrCreateNew(tables, tableName, schema);
-                getColumnOrCreateNew(t.getColumns(), columnName, Type.fromName(property.type() != null ? property.type().name() : null));
+                getColumnOrCreateNew(t.getColumns(), columnName, getSqlType(property.type()));
             }
         }
     }
@@ -214,7 +225,7 @@ public class Utils {
         return table;
     }
 
-    private static Column getColumnOrCreateNew(Map<String, Column> columnsMap, String columnName, Type type) {
+    private static Column getColumnOrCreateNew(Map<String, Column> columnsMap, String columnName, SqlType type) {
         Column column;
         if (!columnsMap.containsKey(columnName)) {
             column = new Column(columnName, type);

@@ -18,9 +18,9 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 public enum Type {
 
     INTEGER("INTEGER"),
-    NUMERIC("DECIMAL(15,4)"),
+    NUMERIC("DECIMAL"),
     SMALLINT("SMALLINT"),
-    STRING("VARCHAR(255)"),
+    STRING("VARCHAR"),
     BOOLEAN("BOOLEAN"),
     LONG("BIGINT"),
     DATE("DATE"),

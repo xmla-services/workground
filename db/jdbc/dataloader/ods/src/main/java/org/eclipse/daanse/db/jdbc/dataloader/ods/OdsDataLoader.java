@@ -37,6 +37,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
+import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.eclipse.daanse.util.io.watcher.api.EventKind;
 import org.eclipse.daanse.util.io.watcher.api.PathListener;
@@ -55,6 +56,9 @@ import org.slf4j.LoggerFactory;
 import com.github.miachm.sods.Range;
 import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
+
+import static org.eclipse.daanse.db.jdbc.util.impl.Utils.createTable;
+import static org.eclipse.daanse.db.jdbc.util.impl.Utils.parseTypeString;
 
 @Designate(ocd = OdsDataLoaderConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
@@ -119,7 +123,18 @@ public class OdsDataLoader  implements PathListener {
 
     private void loadSheet(Connection connection, Dialect dialect, String schemaName, Sheet sheet) {
         String tableName = sheet.getName();
-        Map<String, Type> headersMap = getHeaders(sheet);
+        if (Boolean.TRUE.equals(config.clearTableBeforeLoad())) {
+            try {
+                String statementDropTable = dialect.dropTable(schemaName, tableName, true);
+                connection.createStatement().execute(statementDropTable);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        Map<String, SqlType> headersMap = getHeaders(sheet);
+        List<Map.Entry<String, SqlType>> headersTypeList = headersMap.entrySet().stream()
+            .collect(Collectors.toList());
+        createTable(connection, dialect, headersTypeList, schemaName, tableName);
         StringBuilder b = new StringBuilder();
         Set<String> headers = headersMap.keySet();
         b.append("INSERT INTO ");
@@ -143,18 +158,18 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void batchExecute(PreparedStatement ps, Map<String, Type> headersMap, Sheet sheet) throws SQLException {
+    private void batchExecute(PreparedStatement ps, Map<String, SqlType> headersMap, Sheet sheet) throws SQLException {
         ps.getConnection().setAutoCommit(false);
         long start = System.currentTimeMillis();
         int count = 0;
         int columns = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
-        if (rows > 1) {
+        if (rows > 2) {
 
 
-            for (int i = 1; i < rows; i++) {
+            for (int i = 2; i < rows; i++) {
                 count++;
-                if (i > 1) {
+                if (i > 2) {
                     ps.clearParameters();
                 }
                 for (int j = 0; j < columns; j++) {
@@ -184,13 +199,13 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void execute(PreparedStatement ps, Map<String, Type> headersMap, Sheet sheet) throws SQLException {
+    private void execute(PreparedStatement ps, Map<String, SqlType> headersMap, Sheet sheet) throws SQLException {
         long start = System.currentTimeMillis();
         int columns = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
         if (rows > 2) {
-            for (int i = 2; i < rows; i++) {
-                if (i > 2) {
+            for (int i = 3; i < rows; i++) {
+                if (i > 3) {
                     ps.clearParameters();
                 }
                 for (int j = 0; j < columns; j++) {
@@ -204,11 +219,11 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void processingTypeValues(PreparedStatement ps, Map<String, Type> headersMap, int row, int column, Sheet sheet) throws SQLException {
+    private void processingTypeValues(PreparedStatement ps, Map<String, SqlType> headersMap, int row, int column, Sheet sheet) throws SQLException {
         Range range = sheet.getRange(0, column);
         if ( hasContent(range) ) {
             String columnName = range.getValue().toString();
-            Type type = headersMap.get(columnName);
+            Type type = headersMap.get(columnName).getType();
             Object value = sheet.getRange(row, column).getValue();
             if (value == null || value.toString().equals("NULL")) {
                 ps.setObject(row - 1, null);
@@ -228,7 +243,7 @@ public class OdsDataLoader  implements PathListener {
                 ps.setDouble(row - 1, Double.valueOf(sheet.getRange(row, column).getValue().toString()));
 
             } else if (type.equals(Type.SMALLINT)) {
-                ps.setShort(row - 1, Short.valueOf(sheet.getRange(row, column).getValue().toString()));
+                ps.setShort(row - 1, Double.valueOf(sheet.getRange(row, column).getValue().toString()).shortValue());
 
             } else if (type.equals(Type.TIMESTAMP)) {
                 ps.setTimestamp(row - 1, Timestamp.valueOf(sheet.getRange(row, column).getValue().toString()));
@@ -249,8 +264,8 @@ public class OdsDataLoader  implements PathListener {
         return Time.valueOf(value.toString());
     }
 
-    private Map<String, Type> getHeaders(Sheet sheet) {
-        Map<String, Type> result = new HashMap<>();
+    private Map<String, SqlType> getHeaders(Sheet sheet) {
+        Map<String, SqlType> result = new HashMap<>();
         int columns = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
         if (rows > 1) {
@@ -260,36 +275,11 @@ public class OdsDataLoader  implements PathListener {
                 if (hasContent(headerRange)) {
                     String columnName = headerRange.getValue().toString();
                     String typeName = typeRange.getValue().toString();
-                    result.put(columnName, getColumnType(typeName));
+                    result.put(columnName, parseTypeString(typeName));
                 }
             }
         }
         return result;
-    }
-
-    private Type getColumnType(String stringType) {
-        switch (stringType) {
-            case "SMALLINT":
-                return Type.SMALLINT;
-            case "INTEGER":
-                return Type.INTEGER;
-            case "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL":
-                return Type.NUMERIC;
-            case "BIGINT":
-                return Type.LONG;
-            case "BOOLEAN":
-                return Type.BOOLEAN;
-            case "DATE":
-                return Type.DATE;
-            case "TIME":
-                return Type.TIME;
-            case "TIMESTAMP":
-                return Type.TIMESTAMP;
-            case "CHAR", "VARCHAR":
-            default:
-                return Type.STRING;
-        }
-
     }
 
     private boolean hasContent(Range range) {

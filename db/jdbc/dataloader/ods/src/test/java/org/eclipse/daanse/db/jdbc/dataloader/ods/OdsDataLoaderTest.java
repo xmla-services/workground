@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Optional;
@@ -55,6 +56,7 @@ class OdsDataLoaderTest {
     Dialect dialect = mock(Dialect.class);
     Connection connection = mock(Connection.class);
     PreparedStatement preparedStatement = mock(PreparedStatement.class);
+    Statement statement = mock(Statement.class);
 
     DataSource dataSource = mock(DataSource.class);
     @InjectService
@@ -71,8 +73,9 @@ class OdsDataLoaderTest {
         when(dialect.getDialectName()).thenReturn("MYSQL");
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any())).thenReturn(preparedStatement);
+        when(connection.createStatement()).thenReturn(preparedStatement);
         when(connection.getSchema()).thenReturn("testSchema");
-        when(preparedStatement.getConnection()).thenReturn(connection);
+        when(preparedStatement.getConnection()).thenReturn(connection);       
         bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "2"));
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
 
@@ -102,7 +105,7 @@ class OdsDataLoaderTest {
         when(dialect.supportBatchOperations()).thenReturn(true);
         Thread.sleep(200);
         copy("ods/test.ods");
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
         verify(preparedStatement, (times(6))).addBatch();
@@ -122,7 +125,7 @@ class OdsDataLoaderTest {
         Thread.sleep(2000);
 
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
-        verify(preparedStatement, (times(5))).executeUpdate();
+        verify(preparedStatement, (times(4))).executeUpdate();
     }
 
     private void setupOdsDataLoadServiceImpl(String encoding, Boolean clearTableBeforeLoad, String stringPath)

@@ -8,19 +8,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   SmartCity Jena, Stefan Bischof - initial
- *
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.db.jdbc.util.impl;
 
-public record Column(String name, SqlType type) {
-
-
-    public String getName() {
-        return name;
-    }
-
-    public SqlType getSqlType() {
-        return type;
-    }
-}
+//TODO: REMOVE EXPORT  WAS JUST FOR TEST
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.record;

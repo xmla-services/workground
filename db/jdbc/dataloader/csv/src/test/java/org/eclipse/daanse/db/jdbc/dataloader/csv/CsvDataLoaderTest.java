@@ -161,7 +161,7 @@ class CsvDataLoaderTest {
 		when(dialect.quoteIdentifier(null, "test")).thenReturn("test");
 		Thread.sleep(200);
 		copy("csv/test.csv");
-		Thread.sleep(2000);
+		Thread.sleep(200);
 		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
@@ -192,6 +192,8 @@ class CsvDataLoaderTest {
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 		assertThat(stringCaptor.getValue()).contains("test");
+        verify(statement, (times(2))).execute(stringCaptor.capture());
+		assertThat(stringCaptor.getValue()).contains("VARCHAR(40)");
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
 		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
@@ -226,6 +228,8 @@ class CsvDataLoaderTest {
 
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 		assertThat(stringCaptor.getValue()).contains("schema1.test1");
+        verify(statement, (times(3))).execute(stringCaptor.capture());
+        assertThat(stringCaptor.getValue()).contains("VARCHAR(40)");
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
 		verify(preparedStatement, (times(2))).setLong(integerCaptor.capture(), longCaptor.capture());
 		verify(preparedStatement, (times(2))).setBoolean(integerCaptor.capture(), booleanCaptor.capture());
