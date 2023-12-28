@@ -54,6 +54,7 @@
 	com.sun.xml.messaging.saaj.impl;version='[2.0.1,2.0.2)',\
 	com.sun.xml.stream.buffer.streambuffer;version='[2.0.2,2.0.3)',\
 	com.sun.xml.ws.jaxws-rt;version='[3.0.2,3.0.3)',\
+	jakarta.activation-api;version='[2.1.0,2.1.1)',\
 	jakarta.annotation-api;version='[2.0.0,2.0.1)',\
 	jakarta.jws-api;version='[3.0.0,3.0.1)',\
 	jakarta.xml.bind-api;version='[3.0.1,3.0.2)',\

@@ -13,8 +13,13 @@
  */
 package org.eclipse.daanse.db.jdbc.util.impl;
 
-public record Column(String name, SqlType type) {
+public record Column(int index,String name, SqlType type) {
 
+
+	public Column(String name, SqlType type) {
+		this(-1, name, type);
+
+	}
 
     public String getName() {
         return name;

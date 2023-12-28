@@ -34,7 +34,6 @@
 # -runbundles is calculated by the bnd-resolver-maven-plugin
 -runbundles: \
 	assertj-core;version='[3.24.2,3.24.3)',\
-	com.sun.istack.commons-runtime;version='[4.0.1,4.0.2)',\
 	com.sun.xml.bind.jaxb-core;version='[3.0.2,3.0.3)',\
 	com.sun.xml.bind.jaxb-impl;version='[3.0.2,3.0.3)',\
 	jakarta.activation-api;version='[2.1.0,2.1.1)',\

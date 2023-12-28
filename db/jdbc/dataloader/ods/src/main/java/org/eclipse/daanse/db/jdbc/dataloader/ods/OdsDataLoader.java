@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
+import static org.eclipse.daanse.db.jdbc.util.impl.Utils.createTable;
+import static org.eclipse.daanse.db.jdbc.util.impl.Utils.parseTypeString;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -25,19 +28,18 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.ArrayDeque;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
+import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
 import org.eclipse.daanse.util.io.watcher.api.EventKind;
 import org.eclipse.daanse.util.io.watcher.api.PathListener;
@@ -56,9 +58,6 @@ import org.slf4j.LoggerFactory;
 import com.github.miachm.sods.Range;
 import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
-
-import static org.eclipse.daanse.db.jdbc.util.impl.Utils.createTable;
-import static org.eclipse.daanse.db.jdbc.util.impl.Utils.parseTypeString;
 
 @Designate(ocd = OdsDataLoaderConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
@@ -131,26 +130,25 @@ public class OdsDataLoader  implements PathListener {
                 e.printStackTrace();
             }
         }
-        Map<String, SqlType> headersMap = getHeaders(sheet);
-        List<Map.Entry<String, SqlType>> headersTypeList = headersMap.entrySet().stream()
-            .collect(Collectors.toList());
-        createTable(connection, dialect, headersTypeList, schemaName, tableName);
+        List<Column> columns = getHeaders(sheet);
+
+        createTable(connection, dialect, columns, schemaName, tableName);
         StringBuilder b = new StringBuilder();
-        Set<String> headers = headersMap.keySet();
+ 
         b.append("INSERT INTO ");
         b.append(dialect.quoteIdentifier(tableName, schemaName));
         b.append(" ( ");
-        b.append(headers.stream().map(dialect::quoteIdentifier).collect(Collectors.joining(",")));
+        b.append(columns.stream().map(Column::name).map(dialect::quoteIdentifier).collect(Collectors.joining(",")));
         b.append(" ) VALUES ");
         b.append(" ( ");
-        b.append(headers.stream().map(i -> "?").collect(Collectors.joining(",")));
+        b.append(columns.stream().map(i -> "?").collect(Collectors.joining(",")));
         b.append(" ) ");
 
         try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
             if (dialect.supportBatchOperations()) {
-                batchExecute(ps, headersMap, sheet);
+                batchExecute(ps, columns, sheet);
             } else {
-                execute(ps, headersMap, sheet);
+                execute(ps, columns, sheet);
             }
         } catch (SQLException e) {
             throw new OdsDataLoaderException("Load data error", e);
@@ -158,11 +156,11 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void batchExecute(PreparedStatement ps, Map<String, SqlType> headersMap, Sheet sheet) throws SQLException {
+    private void batchExecute(PreparedStatement ps, List<Column> columns, Sheet sheet) throws SQLException {
         ps.getConnection().setAutoCommit(false);
         long start = System.currentTimeMillis();
         int count = 0;
-        int columns = sheet.getMaxColumns();
+        int columnsCount = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
         if (rows > 2) {
 
@@ -172,8 +170,8 @@ public class OdsDataLoader  implements PathListener {
                 if (i > 2) {
                     ps.clearParameters();
                 }
-                for (int j = 0; j < columns; j++) {
-                    processingTypeValues( ps, headersMap, i, j, sheet );
+                for (int j = 0; j < columnsCount; j++) {
+                    processingTypeValues( ps, columns, i, j, sheet );
                 }
                 ps.addBatch();
 
@@ -199,17 +197,17 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void execute(PreparedStatement ps, Map<String, SqlType> headersMap, Sheet sheet) throws SQLException {
+    private void execute(PreparedStatement ps, List<Column> columns, Sheet sheet) throws SQLException {
         long start = System.currentTimeMillis();
-        int columns = sheet.getMaxColumns();
+        int columnsCount = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
         if (rows > 2) {
             for (int i = 3; i < rows; i++) {
                 if (i > 3) {
                     ps.clearParameters();
                 }
-                for (int j = 0; j < columns; j++) {
-                    processingTypeValues( ps, headersMap, i, j, sheet );
+                for (int j = 0; j < columnsCount; j++) {
+                    processingTypeValues( ps, columns, i, j, sheet );
                 }
                 ps.executeUpdate();
             }
@@ -219,11 +217,11 @@ public class OdsDataLoader  implements PathListener {
 
     }
 
-    private void processingTypeValues(PreparedStatement ps, Map<String, SqlType> headersMap, int row, int column, Sheet sheet) throws SQLException {
+    private void processingTypeValues(PreparedStatement ps, List<Column> columns, int row, int column, Sheet sheet) throws SQLException {
         Range range = sheet.getRange(0, column);
         if ( hasContent(range) ) {
             String columnName = range.getValue().toString();
-            Type type = headersMap.get(columnName).getType();
+            Type type = columns.stream().filter(c->c.name().equals(columnName)).findAny().get().type().getType();
             Object value = sheet.getRange(row, column).getValue();
             if (value == null || value.toString().equals("NULL")) {
                 ps.setObject(row - 1, null);
@@ -264,8 +262,8 @@ public class OdsDataLoader  implements PathListener {
         return Time.valueOf(value.toString());
     }
 
-    private Map<String, SqlType> getHeaders(Sheet sheet) {
-        Map<String, SqlType> result = new HashMap<>();
+    private List<Column> getHeaders(Sheet sheet) {
+        List<Column> result = new ArrayList<>();
         int columns = sheet.getMaxColumns();
         int rows = sheet.getMaxRows();
         if (rows > 1) {
@@ -275,7 +273,7 @@ public class OdsDataLoader  implements PathListener {
                 if (hasContent(headerRange)) {
                     String columnName = headerRange.getValue().toString();
                     String typeName = typeRange.getValue().toString();
-                    result.put(columnName, parseTypeString(typeName));
+                    result.add(new Column(i,columnName, parseTypeString(typeName)));
                 }
             }
         }

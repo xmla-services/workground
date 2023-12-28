@@ -1,16 +1,15 @@
 package org.eclipse.daanse.db.jdbc.util.impl;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Utils {
 
@@ -82,15 +81,15 @@ public class Utils {
 
     }
 
-    public static void createTable(Connection connection, Dialect dialect, List<Map.Entry<String, SqlType>> headersTypeList, String schemaName, String tableName) {
+    public static void createTable(Connection connection, Dialect dialect, List<Column> headersTypeList, String schemaName, String tableName) {
         System.err.println(tableName);
         String tabeleWithSchemaName=dialect.quoteIdentifier(schemaName, tableName);
         try (Statement stmt = connection.createStatement();) {
             StringBuilder sb = new StringBuilder("CREATE TABLE ").append(tabeleWithSchemaName).append(" ( ");
             String cols=	headersTypeList.stream().map(e -> {
                 StringBuilder s = new StringBuilder();
-                s.append(dialect.quoteIdentifier(e.getKey())).append(" ").append(getStringType(e.getValue()))
-                    .append(e.getValue().getLength().orElse(""));
+                s.append(dialect.quoteIdentifier(e.name())).append(" ").append(getStringType(e.getSqlType()))
+                    .append(e.getSqlType().getLength().orElse(""));
                 return s.toString();
             }).collect(Collectors.joining(", "));
 

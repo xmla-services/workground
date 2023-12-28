@@ -1,4 +1,3 @@
-
 -runtrace: true
 -runvm: ${def;argLine}
 
@@ -9,9 +8,9 @@
     osgi.console.enable.builtin=true
 	
 	
--runee: JavaSE-20
-#-runfw: org.apache.felix.framework
--runfw: org.eclipse.osgi
+-runee: JavaSE-17
+-runfw: org.apache.felix.framework
+#-runfw: org.eclipse.osgi
 
 
 -runrequires: \
@@ -25,7 +24,6 @@
 	bnd.identity;id='org.eclipse.daanse.db.datasource.h2',\
 	bnd.identity;id='org.eclipse.daanse.db.dialect.db.h2',\
 	bnd.identity;id='org.eclipse.daanse.db.statistics.metadata',\
-	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record',\
 	bnd.identity;id='org.apache.felix.metatype',\
 	bnd.identity;id='org.eclipse.daanse.emondrian',\
 	bnd.identity;id='org.osgi.util.converter',\
@@ -33,7 +31,12 @@
 	bnd.identity;id='org.apache.felix.gogo.runtime',\
 	bnd.identity;id='org.apache.felix.gogo.shell',\
 	bnd.identity;id='biz.aQute.gogo.commands.provider',\
-	bnd.identity;id='org.eclipse.daanse.xmla.server.jakarta.saaj'
+	bnd.identity;id='org.eclipse.daanse.xmla.server.jakarta.saaj',\
+	bnd.identity;id='org.eclipse.daanse.db.jdbc.dataloader.csv',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.resolver.basic',\
+	bnd.identity;id='org.eclipse.daanse.db.jdbc.dataloader.csvtoh2',\
+	bnd.identity;id='org.eclipse.daanse.olap.filecatalog',\
+	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.xml'
 
 
 
@@ -112,6 +115,7 @@
 	org.apache.commons.io;version='[2.6.0,2.6.1)',\
 	org.eclipse.daanse.xmla.server.adapter.soapmessage;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.server.jakarta.saaj;version='[0.0.1,0.0.2)',\
+	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
+	org.osgi.service.log;version='[1.5.0,1.5.1)',\
 	net.hydromatic.eigenbase-properties;version='[1.1.6,1.1.7)',\
-	net.hydromatic.eigenbase-resgen;version='[1.3.7,1.3.8)',\
-	org.apache.felix.configadmin;version='[1.9.26,1.9.27)'
+	net.hydromatic.eigenbase-resgen;version='[1.3.7,1.3.8)'
