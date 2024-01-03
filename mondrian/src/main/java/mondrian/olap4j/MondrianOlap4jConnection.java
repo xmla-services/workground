@@ -812,7 +812,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
 	public void setRoleName(String roleName) throws OlapException {
         if (roleName == null) {
             final RolapConnection connection1 = getMondrianConnection();
-            final Role role = Util.createRootRole(connection1.getSchema());
+            final Role role = RoleImpl.createRootRole(connection1.getSchema());
             assert role != null;
             this.roleName = roleName;
             this.roleNames = Collections.emptyList();

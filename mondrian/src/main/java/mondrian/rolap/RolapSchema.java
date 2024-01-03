@@ -254,8 +254,6 @@ public class RolapSchema implements Schema {
      * @param key Key
      * @param connectInfo Connect properties
      * @param context Context
-     * @param sha512Bytes MD5 hash
-     * @param useContentChecksum Whether to use content checksum
      */
     public RolapSchema(
         final SchemaKey key,
@@ -269,7 +267,7 @@ public class RolapSchema implements Schema {
         
         DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
-        this.defaultRole = Util.createRootRole(this);
+        this.defaultRole = RoleImpl.createRootRole(this);
         final MondrianServer internalServer = MondrianServer.forId(null);
         this.internalConnection =
             new RolapConnection(internalServer, connectInfo, this, context);
@@ -293,7 +291,7 @@ public class RolapSchema implements Schema {
     {
     	this.id = UUID.randomUUID().toString();
     	this.key = key;
-        this.defaultRole = Util.createRootRole(this);
+        this.defaultRole = RoleImpl.createRootRole(this);
         this.internalConnection = internalConnection;
     }
 
@@ -386,27 +384,6 @@ public class RolapSchema implements Schema {
 		aggTableManager.initialize(connectInfo);
 		setSchemaLoadDate();
 	}
-
-  
-
-    private boolean hasMondrian4Elements(final DOMWrapper schemaDom) {
-        // check for Mondrian 4 schema elements:
-        for (DOMWrapper child : schemaDom.getChildren()) {
-            if ("PhysicalSchema".equals(child.getTagName())) {
-                // Schema/PhysicalSchema
-                return true;
-            } else if ("Cube".equals(child.getTagName())) {
-                for (DOMWrapper grandchild : child.getChildren()) {
-                    if ("MeasureGroups".equals(grandchild.getTagName())) {
-                        // Schema/Cube/MeasureGroups
-                        return true;
-                    }
-                }
-            }
-        }
-        // otherwise assume version 3.x
-        return false;
-    }
 
     private void setSchemaLoadDate() {
         schemaLoadDate = new Date();

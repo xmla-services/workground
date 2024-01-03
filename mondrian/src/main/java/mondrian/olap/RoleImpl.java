@@ -56,6 +56,18 @@ public class RoleImpl implements Role {
         LoggerFactory.getLogger(RoleImpl.class);
     private final List<Object[]> hashCache = new ArrayList<>();
     private int hash = 0;
+    
+    /**
+     * Returns a role which has access to everything.
+     * @param schema A schema to bind this role to.
+     * @return A role with root access to the schema.
+     */
+    public static Role createRootRole(Schema schema) {
+        RoleImpl role = new RoleImpl();
+        role.grant(schema, Access.ALL);
+        role.makeImmutable();
+        return role;
+    }
 
     /**
      * Creates a role with no permissions.
@@ -655,7 +667,7 @@ public class RoleImpl implements Role {
      */
     public static HierarchyAccess createAllAccess(Hierarchy hierarchy) {
         return new HierarchyAccessImpl(
-            Util.createRootRole(hierarchy.getDimension().getSchema()),
+        		RoleImpl.createRootRole(hierarchy.getDimension().getSchema()),
             hierarchy, Access.ALL, null, null, RollupPolicy.FULL);
     }
 

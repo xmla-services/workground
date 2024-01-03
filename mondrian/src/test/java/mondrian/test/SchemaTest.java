@@ -4157,19 +4157,12 @@ class SchemaTest {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
-        final Logger logger = LoggerFactory.getLogger(AggTableManager.class);
-        //propSaver.setAtLeast(logger, org.apache.logging.log4j.Level.WARN);
+
+
 
         final StringWriter sw = new StringWriter();
-        //final Appender appender =
-        //    Util.makeAppender(
-        //        "testUnknownUsages",
-        //        sw,
-        //        null);
-        //Util.addAppender(appender, logger, org.apache.logging.log4j.Level.WARN);
 
 
-        try {
         /*
             withSchema(context,
                 "<?xml version=\"1.0\"?>\n"
@@ -4222,9 +4215,7 @@ class SchemaTest {
                 "Axis #0:\n"
                 + "{}\n"
                 + "225,627.23");
-        } finally {
-            //Util.removeAppender(appender, logger);
-        }
+   
         // Note that 'product_id' is NOT one of the columns with unknown usage.
         // It is used as a level in the degenerate dimension [Time Degenerate].
         assertEqualsVerbose(

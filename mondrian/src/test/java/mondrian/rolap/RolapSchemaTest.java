@@ -95,7 +95,6 @@ class RolapSchemaTest {
         SchemaKey key = new SchemaKey(
             mock(SchemaContentKey.class), mock(ConnectionKey.class));
 
-        ByteString md5 = new ByteString("test schema".getBytes());
         //noinspection deprecation
         //mock rolap connection to eliminate calls for cache loading
         MondrianServer mServerMock = mock(MondrianServer.class);

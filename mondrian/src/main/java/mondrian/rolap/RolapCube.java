@@ -122,6 +122,7 @@ import mondrian.olap.NameResolver;
 import mondrian.olap.Property;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
+import mondrian.olap.RoleImpl;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
@@ -1618,7 +1619,7 @@ public class RolapCube extends CubeBase {
     public synchronized SchemaReader getSchemaReader() {
         if (schemaReader == null) {
             schemaReader =
-                new RolapCubeSchemaReader(context, Util.createRootRole(schema));
+                new RolapCubeSchemaReader(context, RoleImpl.createRootRole(schema));
         }
         return schemaReader;
     }
