@@ -33,47 +33,6 @@ public class DriverManager {
 
     /**
      * Creates a connection to a Mondrian OLAP Engine
-     * using a connect string
-     * and a catalog locator.
-     *
-     * @param connectString Connect string of the form
-     *   'property=value;property=value;...'.
-     *   See {@link mondrian.olap.Util#parseConnectString} for more details of the format.
-     *   See {@link mondrian.rolap.RolapConnectionProperties} for a list of
-     *   allowed properties.
-     * @param locator Use to locate real catalog url by a customized
-     *   configuration value. If <code>null</code>, leave the catalog url
-     *   unchanged.
-     * @return A {@link Connection}, never null
-     */
-    public static Connection getConnection(
-        String connectString,
-        CatalogLocator locator)
-    {
-        Util.PropertyList properties = Util.parseConnectString(connectString);
-        return getConnection(properties, locator);
-    }
-
-    /**
-     * Creates a connection to a Mondrian OLAP Engine.
-     *
-     * @param properties Collection of properties which define the location
-     *   of the connection.
-     *   See {@link mondrian.rolap.RolapConnection} for a list of allowed properties.
-     * @param locator Use to locate real catalog url by a customized
-     *   configuration value. If <code>null</code>, leave the catalog url
-     *   unchanged.
-     * @return A {@link Connection}, never null
-     */
-    public static Connection getConnection(
-        Util.PropertyList properties,
-        CatalogLocator locator)
-    {
-        return getConnection(properties, locator, null);
-    }
-
-    /**
-     * Creates a connection to a Mondrian OLAP Engine
      * using a list of connection properties,
      * a catalog locator,
      * and a JDBC data source.
