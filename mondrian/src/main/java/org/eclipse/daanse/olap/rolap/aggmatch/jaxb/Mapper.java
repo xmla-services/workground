@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
+import java.util.Arrays;
+
 /**
  * This allows one to create an element that matches against a
  * single template, where the template is an attribute.
@@ -247,20 +249,14 @@ public abstract class Mapper extends CaseMatcher {
 
         } else if (CharCaseEnum.UPPER.equals(charcase)) {
             // convert name to upper case
-            String[] ucNames = new String[names.length];
-            for (int i = 0; i < names.length; i++) {
-                ucNames[i] = names[i].toUpperCase();
-            }
+            String[] ucNames = Arrays.stream(names).map(String::toUpperCase).toArray(String[]::new);
 
             regex = getRegex(ucNames);
 
         } else {
             // lower
             // convert name to lower case
-            String[] lcNames = new String[names.length];
-            for (int i = 0; i < names.length; i++) {
-                lcNames[i] = names[i].toLowerCase();
-            }
+            String[] lcNames = Arrays.stream(names).map(String::toLowerCase).toArray(String[]::new);
 
             regex = getRegex(lcNames);
 

@@ -92,8 +92,7 @@ public class AggRules {
     }
 
     public AggRule getAggRule(String tag) {
-        for (int i = 0; i < aggRules.size(); i++) {
-            AggRule aggRule = aggRules.get(i);
+        for (AggRule aggRule : aggRules) {
             if (Boolean.TRUE.equals(aggRule.isEnabled()) && aggRule.getTag().equals(tag)) {
                 return aggRule;
             }
@@ -123,8 +122,7 @@ public class AggRules {
         final List<? extends Base> bases,
         final mondrian.recorder.MessageRecorder msgRecorder
     ) {
-        for (int i = 0; i < bases.size(); i++) {
-            Base base = bases.get(i);
+        for (Base base : bases) {
             if (Boolean.TRUE.equals(base.isEnabled())) {
                 base.validate(this, msgRecorder);
             }
@@ -188,8 +186,7 @@ public class AggRules {
     }
 
     private Base lookupBase(String tag, List<? extends Base> bases) {
-        for (int i = 0; i < bases.size(); i++) {
-            Base base = bases.get(i);
+        for (Base base : bases) {
             if (Boolean.TRUE.equals(base.isEnabled()) && base.getTag().equals(tag)) {
                 return base;
             }

@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
+import java.util.List;
+
 /**
  * This is the template used to specify columns to be ignored.
  * There are NO template names. One simply uses a regular
@@ -24,9 +26,9 @@ import mondrian.rolap.aggmatcher.Recognizer;
 @XmlType(name = "IgnoreMap")
 public class IgnoreMap extends RegexMapper {
 
-    private static final String[] TEMPLATE_NAMES = new String[]{};
+    private static final List<String> TEMPLATE_NAMES = List.of();
 
-    protected String[] getTemplateNames() {
+    protected List<String> getTemplateNames() {
         return TEMPLATE_NAMES;
     }
 

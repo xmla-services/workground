@@ -19,6 +19,7 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlType(name = "RegexMapper")
@@ -51,10 +52,9 @@ public abstract class RegexMapper extends Base {
         msgRecorder.pushContextName(getName());
         try {
 
-            String[] templateNames = getTemplateNames();
+            List<String> templateNames = getTemplateNames();
 
-            for (int i = 0; i < regexs.size(); i++) {
-                Regex regex = regexs.get(i);
+            for (Regex regex : regexs) {
                 regex.validate(rules, templateNames, msgRecorder);
             }
 
@@ -70,22 +70,20 @@ public abstract class RegexMapper extends Base {
      *
      * @return array of symbol names
      */
-    protected abstract String[] getTemplateNames();
+    protected abstract List<String> getTemplateNames();
 
     protected Recognizer.Matcher getMatcher(final String[] names) {
 
-        final java.util.regex.Pattern[] patterns =
-            new java.util.regex.Pattern[regexs.size()];
+        final List<java.util.regex.Pattern> patterns =
+            new ArrayList<>();
 
-        for (int i = 0; i < regexs.size(); i++) {
-            Regex regex = regexs.get(i);
-            patterns[i] = regex.getPattern(names);
+        for (Regex regex : regexs) {
+            patterns.add(regex.getPattern(names));
         }
 
         return new Recognizer.Matcher() {
             public boolean matches(String name) {
-                for (int i = 0; i < patterns.length; i++) {
-                    java.util.regex.Pattern pattern = patterns[i];
+                for (java.util.regex.Pattern pattern : patterns) {
                     if ((pattern != null) &&
                         pattern.matcher(name).matches()) {
 

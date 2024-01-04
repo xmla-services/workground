@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
+import java.util.List;
+
 /**
  * This is the template that maps from a combination of measure
  * measure_name,
@@ -26,13 +28,13 @@ import mondrian.rolap.aggmatcher.Recognizer;
 @XmlType(name = "MeasureMap")
 public class MeasureMap extends RegexMapper {
 
-    private static final String[] TEMPLATE_NAMES = new String[]{
+    private static final List<String> TEMPLATE_NAMES = List.of(
         "measure_name",
         "measure_column_name",
         "aggregate_name"
-    };
+    );
 
-    protected String[] getTemplateNames() {
+    protected List<String> getTemplateNames() {
         return TEMPLATE_NAMES;
     }
 

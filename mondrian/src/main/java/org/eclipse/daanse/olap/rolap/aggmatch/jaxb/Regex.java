@@ -17,6 +17,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This element is used in a vector of child elements when
  * one wishes to have one or more regular expressions associated
@@ -81,13 +84,13 @@ public class Regex extends CaseMatcher {
 
     protected static final int BAD_ID = -1;
 
-    protected String[] templateParts;
+    protected List<String> templateParts;
 
     /**
      * This is a one-to-one mapping, each template name can appear
      * at most once.
      */
-    protected int[] templateNamePos;
+    protected List<Integer> templateNamePos;
 
     /**
      * It is hoped that no one will need to match more than 50 names
@@ -97,7 +100,7 @@ public class Regex extends CaseMatcher {
 
     public void validate(
         final AggRules rules,
-        final String[] templateNames,
+        final List<String> templateNames,
         final mondrian.recorder.MessageRecorder msgRecorder
     ) {
         msgRecorder.pushContextName(getName());
@@ -105,7 +108,7 @@ public class Regex extends CaseMatcher {
             super.validate(rules, msgRecorder);
 
             String[] ss = new String[MAX_SIZE + 1];
-            int[] poss = new int[MAX_SIZE];
+            Integer[] poss = new Integer[MAX_SIZE];
 
             String template = getTemplate();
             int count = 0;
@@ -115,12 +118,11 @@ public class Regex extends CaseMatcher {
             int start = template.indexOf("${", end);
             // if no templateNames, then there better not be
             // any ${}s
-            if (templateNames.length == 0) {
+            if (templateNames.isEmpty()) {
                 if (start == -1) {
                     // everything is ok
-                    templateParts = new String[1];
-                    templateParts[0] = template;
-                    templateNamePos = new int[0];
+                    templateParts = List.of(template);
+                    templateNamePos = List.of();
                 } else {
                     String msg = BAD_TEMPLATE +
                         template +
@@ -142,13 +144,12 @@ public class Regex extends CaseMatcher {
                         return;
                     }
                     // its OK, there are "count" ${}
-                    templateNamePos = new int[count];
+                    templateNamePos = List.of(poss);
                     System.arraycopy(poss, 0, templateNamePos, 0, count);
 
                     ss[count++] =
                         template.substring(end, template.length());
-                    templateParts = new String[count];
-                    System.arraycopy(ss, 0, templateParts, 0, count);
+                    templateParts = List.of(ss);
 
                     return;
                 }
@@ -188,7 +189,7 @@ public class Regex extends CaseMatcher {
 
     private int convertNameToID(
         final String name,
-        final String[] templateNames,
+        final List<String> templateNames,
         final mondrian.recorder.MessageRecorder msgRecorder
     ) {
 
@@ -198,8 +199,8 @@ public class Regex extends CaseMatcher {
             return BAD_ID;
         }
 
-        for (int i = 0; i < templateNames.length; i++) {
-            if (templateNames[i].equals(name)) {
+        for (int i = 0; i < templateNames.size(); i++) {
+            if (templateNames.get(i).equals(name)) {
                 return i;
             }
         }
@@ -221,9 +222,9 @@ public class Regex extends CaseMatcher {
         // Remember that:
         //      templateParts.length == templateNamePos.length+1
         //
-        buf.append(templateParts[0]);
-        for (int i = 0; i < templateNamePos.length; i++) {
-            String n = names[templateNamePos[i]];
+        buf.append(templateParts.get(0));
+        for (int i = 0; i < templateNamePos.size(); i++) {
+            String n = names[templateNamePos.get(i)];
             if (n == null) {
                 // its ok for a name to be null, it just
                 // eliminates the current regex from consideration
@@ -238,7 +239,7 @@ public class Regex extends CaseMatcher {
             }
 
             buf.append(n);
-            buf.append(templateParts[i + 1]);
+            buf.append(templateParts.get(i + 1));
         }
 
         String regex = buf.toString();
@@ -296,12 +297,9 @@ public class Regex extends CaseMatcher {
 
         } else if (CharCaseEnum.UPPER.equals(charcase)) {
             // convert name to upper case
-            String[] ucNames = new String[names.length];
-            for (int i = 0; i < names.length; i++) {
-                String name = names[i];
-                ucNames[i] = (name == null)
-                    ? null : name.toUpperCase();
-            }
+
+            String[] ucNames = Arrays.stream(names)
+                .map(s -> s != null ? s.toUpperCase() : null).toArray(String[]::new);
 
             final String regex = getRegex(ucNames);
             if (regex == null) {
@@ -314,12 +312,8 @@ public class Regex extends CaseMatcher {
         } else {
             // lower
             // convert name to lower case
-            String[] lcNames = new String[names.length];
-            for (int i = 0; i < names.length; i++) {
-                String name = names[i];
-                lcNames[i] = (name == null)
-                    ? null : name.toLowerCase();
-            }
+            String[] lcNames = Arrays.stream(names)
+                .map(s -> s != null ? s.toLowerCase() : null).toArray(String[]::new);
 
             final String regex = getRegex(lcNames);
             if (regex == null) {

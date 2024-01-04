@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
+import java.util.List;
+
 /**
  * This is the template that maps from a combination of level
  * usage_prefix
@@ -26,14 +28,14 @@ import mondrian.rolap.aggmatcher.Recognizer;
 @XmlType(name = "LevelMap")
 public class LevelMap extends RegexMapper {
 
-    private static final String[] TEMPLATE_NAMES = new String[]{
+    private static final List<String> TEMPLATE_NAMES = List.of(
         "usage_prefix",
         "hierarchy_name",
         "level_name",
         "level_column_name"
-    };
+    );
 
-    protected String[] getTemplateNames() {
+    protected List<String> getTemplateNames() {
         return TEMPLATE_NAMES;
     }
 
