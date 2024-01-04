@@ -13,7 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 /**
@@ -22,6 +25,8 @@ import mondrian.rolap.aggmatcher.Recognizer;
  * The default is that the name of the fact count colum is simply
  * the string "fact_count".
  */
+@XmlRootElement(name = "FactCountMatch")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FactCountMatch extends NameMatcher {
 
     /**

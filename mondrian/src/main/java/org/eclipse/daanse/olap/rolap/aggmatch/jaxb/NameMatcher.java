@@ -13,9 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
-import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 /**
@@ -28,7 +30,8 @@ import mondrian.rolap.aggmatcher.Recognizer;
  * be identified when their table names are formed by placing
  * text before and/or after the base fact table name.
  */
-@XmlType(name = "NameMatcher")
+@XmlRootElement(name = "NameMatcher")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({FactCountMatch.class, ForeignKeyMatch.class, TableMatch.class})
 public abstract class NameMatcher extends CaseMatcher {
 

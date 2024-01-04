@@ -14,7 +14,7 @@
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElementRef;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.List;
@@ -40,44 +40,44 @@ public class AggRules {
     /**
      * All shared TableMatches.
      */
-    @XmlElementRef(name = "tableMatches", type = TableMatch.class, required = false)
+    @XmlElement(name = "tableMatches", type = TableMatch.class, required = false)
     List<TableMatch> tableMatches;
 
     /**
      * All shared FactCountMatches.
      */
-    @XmlElementRef(name = "factCountMatches", type = FactCountMatch.class, required = false)
+    @XmlElement(name = "factCountMatches", type = FactCountMatch.class, required = false)
     List<FactCountMatch> factCountMatches;
 
     /**
      * All shared ForeignKeyMatches.
      */
-    @XmlElementRef(name = "foreignKeyMatches", type = ForeignKeyMatch.class, required = false)
+    @XmlElement(name = "foreignKeyMatches", type = ForeignKeyMatch.class, required = false)
     List<ForeignKeyMatch> foreignKeyMatches;
 
     /**
      * All shared LevelMap.
      */
-    @XmlElementRef(name = "levelMaps", type = LevelMap.class, required = false)
+    @XmlElement(name = "levelMaps", type = LevelMap.class, required = false)
     List<LevelMap> levelMaps;
 
     /**
      * All shared MeasureMap.
      */
-    @XmlElementRef(name = "measureMaps", type = MeasureMap.class, required = false)
+    @XmlElement(name = "measureMaps", type = MeasureMap.class, required = false)
     List<MeasureMap> measureMaps;
 
     /**
      * All shared IgnoreMap.
      */
-    @XmlElementRef(name = "ignoreMaps", type = IgnoreMap.class, required = false)
+    @XmlElement(name = "ignoreMaps", type = IgnoreMap.class, required = false)
     List<IgnoreMap> ignoreMaps;
 
     /**
      * All AggRules (at least one).
      * Also, one of them must be marked with default=true.
      */
-    @XmlElementRef(name = "aggRules", type = AggRule.class, required = true)
+    @XmlElement(name = "aggRules", type = AggRule.class, required = true)
     List<AggRule> aggRules;
 
     private static final org.slf4j.Logger LOGGER =

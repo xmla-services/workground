@@ -13,7 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 /**
@@ -27,7 +29,8 @@ import mondrian.rolap.aggmatcher.Recognizer;
  * aggregate tables who names were the same as (modulo case)
  * would match - which is surely not allowed).
  */
-@XmlType(name = "TableMatch")
+@XmlRootElement(name = "TableMatch")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TableMatch extends NameMatcher {
 
     @Override

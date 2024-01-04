@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
@@ -23,7 +25,12 @@ import jakarta.xml.bind.annotation.XmlType;
  * can be validated.
  */
 @XmlType(name = "Base")
-@XmlSeeAlso({CaseMatcher.class, RegexMapper.class, Ref.class, AggRule.class})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({AggRule.class, CaseMatcher.class, FactCountMatch.class,
+    FactCountMatchRef.class, ForeignKeyMatch.class, ForeignKeyMatchRef.class,
+    IgnoreMap.class, IgnoreMapRef.class, LevelMap.class, LevelMapRef.class,
+    Mapper.class, MeasureMap.class, MeasureMapRef.class, NameMatcher.class,
+    Ref.class, Regex.class, RegexMapper.class, TableMatch.class, TableMatchRef.class})
 public abstract class Base {
 
     public static final String NAME = "Base";

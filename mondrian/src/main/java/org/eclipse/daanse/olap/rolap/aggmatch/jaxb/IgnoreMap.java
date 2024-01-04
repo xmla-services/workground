@@ -32,7 +32,7 @@ public class IgnoreMap extends RegexMapper {
         return TEMPLATE_NAMES;
     }
 
-    protected Recognizer.Matcher getMatcher() {
+    public Recognizer.Matcher getMatcher() {
         return getMatcher(new String[]{});
     }
 

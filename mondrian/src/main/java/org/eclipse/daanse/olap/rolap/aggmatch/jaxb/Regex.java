@@ -13,8 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlValue;
 
 import java.util.Arrays;
@@ -45,7 +47,8 @@ import java.util.List;
  * following cdata template is not supported:
  * .*_${country}_.*_${city}_${country}
  */
-@XmlType(name = "Regex")
+@XmlRootElement(name="Regex")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Regex extends CaseMatcher {
 
     public static final String BAD_TEMPLATE = "Bad template \"";

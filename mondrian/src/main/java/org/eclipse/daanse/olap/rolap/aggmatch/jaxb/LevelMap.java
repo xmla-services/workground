@@ -39,7 +39,7 @@ public class LevelMap extends RegexMapper {
         return TEMPLATE_NAMES;
     }
 
-    protected Recognizer.Matcher getMatcher(
+    public Recognizer.Matcher getMatcher(
         final String usagePrefix,
         final String hierarchyName,
         final String levelName,

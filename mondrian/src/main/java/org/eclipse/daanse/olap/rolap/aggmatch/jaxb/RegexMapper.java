@@ -13,16 +13,18 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementRef;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
-import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlType(name = "RegexMapper")
+@XmlRootElement(name = "RegexMapper")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({LevelMap.class, MeasureMap.class, IgnoreMap.class})
 public abstract class RegexMapper extends Base {
 
@@ -38,7 +40,7 @@ public abstract class RegexMapper extends Base {
      * sequentially by each Regex in their document order until
      * one matches. In none match, well, none match.
      */
-    @XmlElementRef(name = "regex", type = Regex.class, required = false)
+    @XmlElement(name = "regex", type = Regex.class, required = false)
     List<Regex> regexs;
 
     protected String getTag() {

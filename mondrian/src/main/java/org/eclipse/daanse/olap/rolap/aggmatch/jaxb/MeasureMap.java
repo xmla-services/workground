@@ -38,7 +38,7 @@ public class MeasureMap extends RegexMapper {
         return TEMPLATE_NAMES;
     }
 
-    protected Recognizer.Matcher getMatcher(
+    public Recognizer.Matcher getMatcher(
         final String measureName,
         final String measuerColumnName,
         final String aggregateName
