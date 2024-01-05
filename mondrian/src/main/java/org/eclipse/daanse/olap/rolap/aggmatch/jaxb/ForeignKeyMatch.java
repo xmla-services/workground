@@ -15,7 +15,6 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
@@ -26,7 +25,7 @@ import mondrian.rolap.aggmatcher.Recognizer;
  * by using a regular exprsssion. The default is to simply
  * match the base fact table's foreign key column name.
  */
-@XmlRootElement(name = "ForeignKeyMatch")
+@XmlType(name = "ForeignKeyMatch")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ForeignKeyMatch extends NameMatcher {
 

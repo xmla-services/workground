@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
@@ -24,6 +26,7 @@ import java.util.List;
  * expression.
  */
 @XmlType(name = "IgnoreMap")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class IgnoreMap extends RegexMapper {
 
     private static final List<String> TEMPLATE_NAMES = List.of();

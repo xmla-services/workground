@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 /**
@@ -30,7 +30,7 @@ import mondrian.rolap.aggmatcher.Recognizer;
  * be identified when their table names are formed by placing
  * text before and/or after the base fact table name.
  */
-@XmlRootElement(name = "NameMatcher")
+@XmlType(name = "NameMatcher")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({FactCountMatch.class, ForeignKeyMatch.class, TableMatch.class})
 public abstract class NameMatcher extends CaseMatcher {
@@ -148,23 +148,23 @@ public abstract class NameMatcher extends CaseMatcher {
 
     protected Recognizer.Matcher getMatcher(String name) {
 
-        final String charcase = getCharCase().value();
+        final CharCaseEnum charcase = getCharCase();
         final String regex;
         int flag = 0;
 
-        if (charcase.equals("ignore")) {
+        if (CharCaseEnum.IGNORE.equals(charcase)) {
             // the case of name does not matter
             // since the Pattern will be create to ignore case
             regex = getRegex(name);
 
             flag = java.util.regex.Pattern.CASE_INSENSITIVE;
 
-        } else if (charcase.equals("exact")) {
+        } else if (CharCaseEnum.EXACT.equals(charcase)) {
             // the case of name is not changed
             // since we are interested in exact case matching
             regex = getRegex(name);
 
-        } else if (charcase.equals("upper")) {
+        } else if (CharCaseEnum.UPPER.equals(charcase)) {
             // convert name to upper case
             regex = getRegex(name.toUpperCase());
 

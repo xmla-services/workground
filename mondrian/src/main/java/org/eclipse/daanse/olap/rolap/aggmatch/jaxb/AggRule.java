@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * A RolapConnection uses one AggRule. If no name is specified, then
@@ -32,7 +32,21 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  * elements and with one quick edit the reference to use can be
  * changed by changing the refid attribute value).
  */
-@XmlRootElement(name = "AggRule")
+
+@XmlType(name = "AggRule", propOrder = {
+    "ignoreMap",
+    "ignoreMapRef",
+    "factCountMatch",
+    "factCountMatchRef",
+    "foreignKeyMatch",
+    "foreignKeyMatchRef",
+    "tableMatch",
+    "tableMatchRef",
+    "levelMap",
+    "levelMapRef",
+    "measureMap",
+    "measureMapRef"
+})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AggRule extends Base {
 
@@ -49,40 +63,40 @@ public class AggRule extends Base {
     @XmlAttribute(name = "countColumn", required = true)
     String countColumn = "fact_count";
 
-    @XmlElement(name = "ignoreMap")
+    @XmlElement(name = "IgnoreMap")
     IgnoreMap ignoreMap;
 
-    @XmlElement(name = "ignoreMapRef")
+    @XmlElement(name = "IgnoreMapRef")
     IgnoreMapRef ignoreMapRef;
 
-    @XmlElement(name = "factCountMatch")
+    @XmlElement(name = "FactCountMatch")
     FactCountMatch factCountMatch;
 
-    @XmlElement(name = "factCountMatchRef")
+    @XmlElement(name = "FactCountMatchRef")
     FactCountMatchRef factCountMatchRef;
 
-    @XmlElement(name = "foreignKeyMatch")
+    @XmlElement(name = "ForeignKeyMatch")
     ForeignKeyMatch foreignKeyMatch;
 
-    @XmlElement(name = "foreignKeyMatchRef")
+    @XmlElement(name = "ForeignKeyMatchRef")
     ForeignKeyMatchRef foreignKeyMatchRef;
 
-    @XmlElement(name = "tableMatch")
+    @XmlElement(name = "TableMatch")
     TableMatch tableMatch;
 
-    @XmlElement(name = "tableMatchRef")
+    @XmlElement(name = "TableMatchRef")
     TableMatchRef tableMatchRef;
 
-    @XmlElement(name = "levelMap")
+    @XmlElement(name = "LevelMap")
     LevelMap levelMap;
 
-    @XmlElement(name = "levelMapRef")
+    @XmlElement(name = "LevelMapRef")
     LevelMapRef levelMapRef;
 
-    @XmlElement(name = "measureMap")
+    @XmlElement(name = "MeasureMap")
     MeasureMap measureMap;
 
-    @XmlElement(name = "measureMapRef")
+    @XmlElement(name = "MeasureMapRef")
     MeasureMapRef measureMapRef;
 
     private boolean isOk(final Base base) {

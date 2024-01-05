@@ -17,14 +17,13 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
-import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Base is the base class for all of the elements.
  * All elements can be enabled or not, have a tag, and
  * can be validated.
  */
-@XmlType(name = "Base")
+//@XmlType(name = "")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({AggRule.class, CaseMatcher.class, FactCountMatch.class,
     FactCountMatchRef.class, ForeignKeyMatch.class, ForeignKeyMatchRef.class,

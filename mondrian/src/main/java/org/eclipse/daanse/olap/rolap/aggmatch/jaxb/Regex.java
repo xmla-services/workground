@@ -16,11 +16,12 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlValue;
+import jakarta.xml.bind.annotation.XmlMixed;
+import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This element is used in a vector of child elements when
@@ -47,11 +48,12 @@ import java.util.List;
  * following cdata template is not supported:
  * .*_${country}_.*_${city}_${country}
  */
-@XmlRootElement(name="Regex")
+@XmlType(name="Regex")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Regex extends CaseMatcher {
 
-    public static final String BAD_TEMPLATE = "Bad template \"";
+    private static final String BAD_TEMPLATE = "Bad template \"";
+
     /**
      * How to translate the space character.
      * For example, if the space=='_' and
@@ -59,7 +61,7 @@ public class Regex extends CaseMatcher {
      * then the target string is "Product_Family".
      */
     @XmlAttribute(name = "space", required = false)
-    String space = "_";
+    private String space = "_";
 
     /**
      * How to translate the dot character.
@@ -68,10 +70,10 @@ public class Regex extends CaseMatcher {
      * then the target string is "Time_Time Weekly".
      */
     @XmlAttribute(name = "dot", required = false)
-    String dot = "_";
+    private String dot = "_";
 
-    @XmlValue
-    String cdata;
+    @XmlMixed
+    private List<String> cdata;
 
     public String getSpace() {
         return space;
@@ -82,7 +84,7 @@ public class Regex extends CaseMatcher {
     }
 
     public String getTemplate() {
-        return cdata;
+        return cdata != null ? cdata.stream().collect(Collectors.joining()).trim() : null;
     }
 
     protected static final int BAD_ID = -1;
@@ -147,12 +149,13 @@ public class Regex extends CaseMatcher {
                         return;
                     }
                     // its OK, there are "count" ${}
-                    templateNamePos = List.of(poss);
-                    System.arraycopy(poss, 0, templateNamePos, 0, count);
+                    templateNamePos = Arrays.stream(poss, 0, count)
+                            .collect(Collectors.toList());
 
                     ss[count++] =
                         template.substring(end, template.length());
-                    templateParts = List.of(ss);
+                    templateParts = Arrays.stream(ss, 0, count)
+                            .collect(Collectors.toList());
 
                     return;
                 }
@@ -238,7 +241,7 @@ public class Regex extends CaseMatcher {
                 n = n.replace(" ", spaceInner);
             }
             if (dotInner != null) {
-                n = n.replace("\\.", dotInner);
+                n = n.replace(".", dotInner);
             }
 
             buf.append(n);

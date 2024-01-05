@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ import java.util.Arrays;
  * single template, where the template is an attribute.
  * While much loved, this is currently not used.
  */
-@XmlRootElement(name = "Mapper")
+@XmlType(name = "Mapper")
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Mapper extends CaseMatcher {
 

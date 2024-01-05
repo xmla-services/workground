@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
@@ -26,6 +28,7 @@ import java.util.List;
  * "distinct-count").
  */
 @XmlType(name = "MeasureMap")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MeasureMap extends RegexMapper {
 
     private static final List<String> TEMPLATE_NAMES = List.of(

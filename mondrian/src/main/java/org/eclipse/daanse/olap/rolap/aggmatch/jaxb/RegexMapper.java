@@ -15,15 +15,18 @@ package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement(name = "RegexMapper")
+@XmlType(name = "RegexMapper", propOrder = {
+    "regexs"
+})
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({LevelMap.class, MeasureMap.class, IgnoreMap.class})
 public abstract class RegexMapper extends Base {
@@ -31,7 +34,7 @@ public abstract class RegexMapper extends Base {
     /**
      * The unique identifier for this Matcher.
      */
-    @XmlElement(name = "id")
+    @XmlAttribute(name = "id")
     String id;
     /**
      * This is an array of Regex. A match occurs if any one of
@@ -40,7 +43,7 @@ public abstract class RegexMapper extends Base {
      * sequentially by each Regex in their document order until
      * one matches. In none match, well, none match.
      */
-    @XmlElement(name = "regex", type = Regex.class, required = false)
+    @XmlElement(name = "Regex", type = Regex.class, required = false)
     List<Regex> regexs;
 
     protected String getTag() {
