@@ -14,8 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import mondrian.olap.Util;
-
 /**
  * An expiring reference is a subclass of {@link SoftReference}
  * which pins the reference in memory until a certain timeout
@@ -30,7 +28,7 @@ import mondrian.olap.Util;
  */
 public class ExpiringReference<T> extends SoftReference<T> {
 
-    public static final String MIN_VALUE_MS = Long.MIN_VALUE + "ms";
+
     T hardRef;
     long expiry = Long.MIN_VALUE;
 
@@ -48,15 +46,14 @@ public class ExpiringReference<T> extends SoftReference<T> {
      * @param timeout The timeout to enforce, in minutes.
      * If timeout is equal or less than 0, this means a hard reference.
      */
-    public ExpiringReference(T ref, String timeout) {
+    public ExpiringReference(T ref, long time, TimeUnit timeUnit) {
         super(ref);
-        setTimer(ref, timeout);
+        setTimer(ref, time,timeUnit);
     }
 
-    private synchronized void setTimer(T referent, String timeoutString) {
-        Pair<Long, TimeUnit> pair =
-            Util.parseInterval(timeoutString, null);
-        final long timeout = pair.right.toMillis(pair.left);
+    private synchronized void setTimer(T referent, long time, TimeUnit timeUnit) {
+
+        final long timeout = timeUnit.toMillis(time);
 
         if (timeout == Long.MIN_VALUE
             && expiry != Long.MIN_VALUE)
@@ -114,16 +111,16 @@ public class ExpiringReference<T> extends SoftReference<T> {
 
     @Override
 	public synchronized T get() {
-        return get(MIN_VALUE_MS);
+        return get(Long.MIN_VALUE,TimeUnit.MILLISECONDS);
     }
 
-    public synchronized T get(String timeout) {
+    public synchronized T get(long time, TimeUnit timeUnit) {
         final T weakRef = super.get();
 
         if (weakRef != null) {
             // This object is still alive but was cleaned.
             // set a new TimerTask.
-            setTimer(weakRef, timeout);
+            setTimer(weakRef, time,timeUnit);
         }
 
         return weakRef;

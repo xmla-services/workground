@@ -216,7 +216,7 @@ public class BatchTestCase{
                     final BatchLoader fbcr =
                         new BatchLoader(
                             Locus.peek(),
-                            ((RolapConnection)connection).getServer()
+                            connection.getContext()
                                 .getAggregationManager().cacheMgr,
                             cube.getStar().getSqlQueryDialect(),
                             cube);
@@ -327,7 +327,7 @@ public class BatchTestCase{
             final AggregationManager aggMgr =
                 execution.getMondrianStatement()
                     .getMondrianConnection()
-                    .getServer().getAggregationManager();
+                    .getContext().getAggregationManager();
             final Locus locus =
                 new Locus(
                     execution,

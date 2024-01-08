@@ -30,7 +30,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -70,7 +70,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggExtraColsRequiringJoin(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -172,7 +172,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitForeignKey(TestContextWrapper context) {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -303,7 +303,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggOrdinalOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -382,7 +382,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggCaptionOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -461,7 +461,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggNameColumnOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -552,7 +552,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggPropertiesOnAggTable(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -689,7 +689,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDistinctAllowableRollup(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),
@@ -811,7 +811,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDisallowedRollup(TestContextWrapper context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context.getContext(),

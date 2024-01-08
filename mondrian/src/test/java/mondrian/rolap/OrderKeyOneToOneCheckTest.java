@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.executeQuery;
@@ -51,7 +51,7 @@ class OrderKeyOneToOneCheckTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   public void prepareContext(TestContext context) {
     //TestContext testContext = super.getTestContext()
     //        .withFreshConnection();
@@ -83,7 +83,7 @@ class OrderKeyOneToOneCheckTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMemberSource(TestContext context) {
     String mdx =
             "with member [Measures].[Count Month] as 'Count(Descendants(Time.CurrentMember, [Time].[Month]))' \n"
@@ -105,7 +105,7 @@ class OrderKeyOneToOneCheckTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testSqlReader(TestContext context) {
     String mdx = ""
             + "select [Time].[Quarter].Members on 0"

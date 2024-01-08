@@ -25,7 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.server.Statement;
 
@@ -73,7 +73,7 @@ class QueryTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHasCellPropertyWhenQueryHasCellProperties(TestContextWrapper context) {
         beforeTest(context);
         assertTrue(queryWithCellProps.hasCellProperty("Value"));
@@ -81,7 +81,7 @@ class QueryTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testIsCellPropertyEmpty(TestContextWrapper context) {
         beforeTest(context);
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());

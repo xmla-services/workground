@@ -20,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
 
@@ -53,7 +53,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
 
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNoTotalsForCompdMeasureWithComponentsHavingNonJoiningDims(TestContextWrapper context)
     {
         Connection connection = context.createConnection();
@@ -74,7 +74,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimsWhenAggFunctionIsUsedOrNotUsed(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -125,7 +125,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimForAMemberDefinedOnJoiningDim(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -153,7 +153,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimWithNumericIif(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -187,7 +187,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimAtMemberValueCalcMultipleScenarios(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -234,7 +234,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimAtTupleValueCalcMultipleScenarios(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -294,7 +294,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNoTotalsForCompoundMeasureWithNonJoiningDimAtAllLevel(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -315,7 +315,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNoTotalForMeasureWithCrossJoinOfJoiningAndNonJoiningDims(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -331,7 +331,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testShouldTotalAMeasureWithAllJoiningDimensions(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -352,7 +352,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testShouldNotTotalAMeasureWithANonJoiningDimension(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();
@@ -370,7 +370,7 @@ class IgnoreMeasureForNonJoiningDimensionInAggregationTest
 
     // base cube is null for calc measure
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testGetMeasureCubeForCalcMeasureDoesNotThrowCastException(TestContextWrapper context) {
         Connection connection = context.createConnection();
         connection.getCacheControl(null).flushSchemaCache();

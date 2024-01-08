@@ -300,46 +300,6 @@ public class CacheControlImpl implements CacheControl {
         }
     }
 
-    // todo: document
-    @Override
-	public void flushSchema(
-        String catalogUrl,
-        String connectionKey,
-        String jdbcUser,
-        String dataSourceStr)
-    {
-        RolapSchemaPool.instance().remove(
-            catalogUrl,
-            connectionKey,
-            jdbcUser,
-            dataSourceStr);
-    }
-
-    // todo: document
-    @Override
-	public void flushSchema(
-        String catalogUrl,
-        DataSource dataSource)
-    {
-        RolapSchemaPool.instance().remove(
-            catalogUrl,
-            dataSource);
-    }
-
-    /**
-     * Flushes the given RolapSchema instance from the pool
-     *
-     * @param schema RolapSchema
-     */
-    @Override
-	public void flushSchema(Schema schema) {
-        if (schema instanceof RolapSchema rolapSchema) {
-            RolapSchemaPool.instance().remove(rolapSchema);
-        } else {
-            throw new UnsupportedOperationException(
-                new StringBuilder(schema.getClass().getName()).append(" cannot be flushed").toString());
-        }
-    }
 
     protected void flushNonUnion(CellRegion region) {
         throw new UnsupportedOperationException();
@@ -600,7 +560,7 @@ public class CacheControlImpl implements CacheControl {
             star.print(pw, "", false);
         }
         final SegmentCacheManager manager =
-            MondrianServer.forConnection(connection)
+            connection.getContext()
                 .getAggregationManager().getCacheMgr(this.connection);
         Locus.execute(
             connection,

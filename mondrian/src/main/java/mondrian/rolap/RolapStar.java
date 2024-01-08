@@ -218,7 +218,7 @@ public class RolapStar {
 
     private Object getCellFromExternalCache(CellRequest request, RolapConnection rolapConnection) {
         final SegmentWithData segment =
-            Locus.peek().getServer().getAggregationManager()
+            Locus.peek().getContext().getAggregationManager()
                 .getCacheMgr(rolapConnection).peek(request);
         if (segment == null) {
             return null;

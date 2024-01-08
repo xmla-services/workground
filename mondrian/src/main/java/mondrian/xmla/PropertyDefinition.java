@@ -25,7 +25,7 @@ import org.olap4j.metadata.XmlaConstants;
  */
 public enum PropertyDefinition {
     AxisFormat(
-        RowsetDefinition.Type.ENUMERATION,
+        RowsetDefinitionType.ENUMERATION,
         Olap4jUtil.enumSetAllOf(XmlaConstants.AxisFormat.class),
         XmlaConstants.Access.Write,
         "",
@@ -33,7 +33,7 @@ public enum PropertyDefinition {
         "Determines the format used within an MDDataSet result set to describe the axes of the multidimensional dataset. This property can have the values listed in the following table: TupleFormat (default), ClusterFormat, CustomFormat."),
 
     BeginRange(
-        RowsetDefinition.Type.INTEGER,
+        RowsetDefinitionType.INTEGER,
         null,
         XmlaConstants.Access.Write,
         "-1",
@@ -44,7 +44,7 @@ public enum PropertyDefinition {
         The default value for this property is -1."""),
 
     Catalog(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.ReadWrite,
         "",
@@ -55,7 +55,7 @@ public enum PropertyDefinition {
         The default value for this property is an empty string."""),
 
     Content(
-        RowsetDefinition.Type.ENUM_STRING,
+        RowsetDefinitionType.ENUM_STRING,
         Olap4jUtil.enumSetAllOf(XmlaConstants.Content.class),
         XmlaConstants.Access.Write,
         XmlaConstants.Content.DEFAULT.name(),
@@ -68,7 +68,7 @@ public enum PropertyDefinition {
         SchemaData: Returns both the schema information as well as the data."""),
 
     Cube(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.ReadWrite,
         "",
@@ -76,7 +76,7 @@ public enum PropertyDefinition {
         "The cube context for the Command parameter. If the command contains a cube name (such as an MDX FROM clause) the setting of this property is ignored."),
 
     DataSourceInfo(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.ReadWrite,
         "",
@@ -85,7 +85,7 @@ public enum PropertyDefinition {
 
     // Mondrian-specific extension to XMLA.
     Deep(
-        RowsetDefinition.Type.BOOLEAN,
+        RowsetDefinitionType.BOOLEAN,
         null,
         XmlaConstants.Access.ReadWrite,
         "",
@@ -96,7 +96,7 @@ public enum PropertyDefinition {
 
     // Mondrian-specific extension to XMLA.
     EmitInvisibleMembers(
-        RowsetDefinition.Type.BOOLEAN,
+        RowsetDefinitionType.BOOLEAN,
         null,
         XmlaConstants.Access.ReadWrite,
         "",
@@ -105,7 +105,7 @@ public enum PropertyDefinition {
         + "measures whose MEASURE_IS_VISIBLE property is false."),
 
     EndRange(
-        RowsetDefinition.Type.INTEGER,
+        RowsetDefinitionType.INTEGER,
         null,
         XmlaConstants.Access.Write,
         "-1",
@@ -113,7 +113,7 @@ public enum PropertyDefinition {
         "An integer value corresponding to a CellOrdinal used to restrict an MDDataSet returned by a command to a specific range of cells. Used in conjunction with the BeginRange property. If unspecified, all cells are returned in the rowset. The value -1 means unspecified."),
 
     Format(
-        RowsetDefinition.Type.ENUM_STRING,
+        RowsetDefinitionType.ENUM_STRING,
         Olap4jUtil.enumSetAllOf(XmlaConstants.Format.class),
         XmlaConstants.Access.Write,
         "Native",
@@ -125,7 +125,7 @@ public enum PropertyDefinition {
         Native: The client does not request a specific format, so the provider may return the format  appropriate to the query. (The actual result type is identified by namespace of the result.)"""),
 
     LocaleIdentifier(
-        RowsetDefinition.Type.UNSIGNED_INTEGER,
+        RowsetDefinitionType.UNSIGNED_INTEGER,
         null,
         XmlaConstants.Access.ReadWrite,
         "None",
@@ -137,7 +137,7 @@ public enum PropertyDefinition {
         """),
 
     MDXSupport(
-        RowsetDefinition.Type.ENUM_STRING,
+        RowsetDefinitionType.ENUM_STRING,
         Olap4jUtil.enumSetAllOf(XmlaConstants.MdxSupport.class),
         XmlaConstants.Access.Read,
         "Core",
@@ -145,7 +145,7 @@ public enum PropertyDefinition {
         "Enumeration that describes the degree of MDX support. At initial release Core is the only value in the enumeration. In future releases, other values will be defined for this enumeration."),
 
     Password(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         org.olap4j.metadata.XmlaConstants.Access.Read,
         "",
@@ -153,7 +153,7 @@ public enum PropertyDefinition {
         "This property is deprecated in XMLA 1.1. To support legacy applications, the provider accepts but ignores the Password property setting when it is used with the Discover and Execute method"),
 
     ProviderName(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.Read,
         "Mondrian XML for Analysis Provider",
@@ -161,7 +161,7 @@ public enum PropertyDefinition {
         "The XML for Analysis Provider name."),
 
     ProviderVersion(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.Read,
 	"10.50.1600.1",
@@ -174,7 +174,7 @@ public enum PropertyDefinition {
      * @see Enumeration.ResponseMimeType
      */
     ResponseMimeType(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.ReadWrite,
         "None",
@@ -185,7 +185,7 @@ public enum PropertyDefinition {
         + "of the HTTP request is used."),
 
     StateSupport(
-        RowsetDefinition.Type.ENUM_STRING,
+        RowsetDefinitionType.ENUM_STRING,
         Olap4jUtil.enumSetAllOf(XmlaConstants.StateSupport.class),
         XmlaConstants.Access.Read,
         "None",
@@ -196,7 +196,7 @@ public enum PropertyDefinition {
         Sessions - Provider supports sessions."""),
 
     Timeout(
-        RowsetDefinition.Type.UNSIGNED_INTEGER,
+        RowsetDefinitionType.UNSIGNED_INTEGER,
         null,
         XmlaConstants.Access.ReadWrite,
         "Undefined",
@@ -204,7 +204,7 @@ public enum PropertyDefinition {
         "A numeric time-out specifying in seconds the amount of time to wait for a request to be successful."),
 
     UserName(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.Read,
         "",
@@ -213,7 +213,7 @@ public enum PropertyDefinition {
         + "This property is deprecated as writeable in XMLA 1.1. To support legacy applications, servers accept but ignore the password setting when it is used with the Execute method."),
 
     VisualMode(
-        RowsetDefinition.Type.ENUMERATION,
+        RowsetDefinitionType.ENUMERATION,
         Olap4jUtil.enumSetAllOf(XmlaConstants.VisualMode.class),
         XmlaConstants.Access.Write,
         Integer.toString(XmlaConstants.VisualMode.VISUAL.ordinal()),
@@ -223,7 +223,7 @@ public enum PropertyDefinition {
 
     // mondrian-specific property for advanced drill-through
     TableFields(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.Read,
         "",
@@ -234,7 +234,7 @@ public enum PropertyDefinition {
 
     // mondrian-specific property for advanced drill-through
     AdvancedFlag(
-        RowsetDefinition.Type.BOOLEAN,
+        RowsetDefinitionType.BOOLEAN,
         null,
         XmlaConstants.Access.Read,
         "false",
@@ -243,7 +243,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     SafetyOptions(
-        RowsetDefinition.Type.INTEGER,
+        RowsetDefinitionType.INTEGER,
         null,
         XmlaConstants.Access.ReadWrite,
         "0",
@@ -252,7 +252,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     MdxMissingMemberMode(
-        RowsetDefinition.Type.STRING,
+        RowsetDefinitionType.STRING,
         null,
         XmlaConstants.Access.Write,
         "",
@@ -261,7 +261,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     DbpropMsmdMDXCompatibility(
-            RowsetDefinition.Type.INTEGER,
+            RowsetDefinitionType.INTEGER,
             null,
             XmlaConstants.Access.ReadWrite,
             "0",
@@ -271,7 +271,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     MdpropMdxSubqueries(
-            RowsetDefinition.Type.INTEGER,
+            RowsetDefinitionType.INTEGER,
             null,
             XmlaConstants.Access.Read,
             "",
@@ -280,7 +280,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     ClientProcessID(
-            RowsetDefinition.Type.INTEGER,
+            RowsetDefinitionType.INTEGER,
             null,
             XmlaConstants.Access.ReadWrite,
             "0",
@@ -289,7 +289,7 @@ public enum PropertyDefinition {
 
 //    // Microsoft-specific XMLA definition.
 //    MdpropMdxFormulas(
-//            RowsetDefinition.Type.Integer,
+//            RowsetDefinitionType.Integer,
 //            null,
 //            XmlaConstants.Access.ReadWrite,
 //            "63",
@@ -298,7 +298,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     SspropInitAppName(
-            RowsetDefinition.Type.STRING,
+            RowsetDefinitionType.STRING,
             null,
             XmlaConstants.Access.ReadWrite,
             "",
@@ -307,7 +307,7 @@ public enum PropertyDefinition {
 
     // Microsoft-specific XMLA definition.
     DbpropMsmdSubqueries(
-            RowsetDefinition.Type.INTEGER,
+            RowsetDefinitionType.INTEGER,
             null,
             XmlaConstants.Access.ReadWrite,
             "1",
@@ -315,7 +315,7 @@ public enum PropertyDefinition {
             "An enumeration value that determines the behavior of subqueries.")
             ;
 
-    final RowsetDefinition.Type type;
+    final RowsetDefinitionType type;
     final Set<? extends Enum> enumSet;
     final XmlaConstants.Access access;
     final XmlaConstants.Method usage;
@@ -323,7 +323,7 @@ public enum PropertyDefinition {
     final String description;
 
     PropertyDefinition(
-        RowsetDefinition.Type type,
+        RowsetDefinitionType type,
         Set<? extends Enum> enumSet,
         XmlaConstants.Access access,
         String value,
@@ -353,7 +353,7 @@ public enum PropertyDefinition {
         return description;
     }
 
-    public RowsetDefinition.Type getType() {
+    public RowsetDefinitionType getType() {
         return type;
     }
 

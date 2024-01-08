@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -34,7 +35,7 @@ import mondrian.server.Locus;
 
 class SegmentCacheManagerTest {
 
-  @Mock private MondrianServer mondrianServer;
+  @Mock private Context context;
   private Locus locus = new Locus( new Execution( null, 0 ), "component", "message" );
   private ExecutorService executor = Executors.newFixedThreadPool( 15 );
 
@@ -46,7 +47,7 @@ class SegmentCacheManagerTest {
   @Test
   void testCommandExecution() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch( 1 );
-    SegmentCacheManager man = new SegmentCacheManager( mondrianServer );
+    SegmentCacheManager man = new SegmentCacheManager( context );
     man.execute( new MockCommand( latch::countDown ) );
 
     latch.await( 2000, TimeUnit.MILLISECONDS );
@@ -56,7 +57,7 @@ class SegmentCacheManagerTest {
   @Test
   void testShutdownEndOfQueue() throws InterruptedException {
     BlockingQueue execResults = new ArrayBlockingQueue( 10 );
-    SegmentCacheManager man = new SegmentCacheManager( mondrianServer );
+    SegmentCacheManager man = new SegmentCacheManager( context );
     // add 10 commands to the exec queue
     executeNtimes( execResults, man, 10 );
     // then shut down
@@ -76,7 +77,7 @@ class SegmentCacheManagerTest {
   void testShutdownMiddleOfQueue() throws InterruptedException {
     BlockingQueue<Object> execResults = new ArrayBlockingQueue( 20 );
 
-    SegmentCacheManager man = new SegmentCacheManager( mondrianServer );
+    SegmentCacheManager man = new SegmentCacheManager( context );
     // submit 2 commands for exec
     executeNtimes( execResults, man, 2 );
     // submit shutdown

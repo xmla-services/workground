@@ -8,7 +8,11 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.rolap.RolapSchemaPool;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
@@ -27,13 +31,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsContent;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.opencube.junit5.TestUtil.withSchema;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 /**
  * Tests the CachedExists function.
@@ -44,7 +42,7 @@ class CachedExistsTest{
 
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testEducationLevelSubtotals(TestContextWrapper context) {
     String query =
         "WITH "
@@ -73,7 +71,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testProductFamilySubtotals(TestContextWrapper context) {
     String query =
         "WITH\r\n"
@@ -102,7 +100,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testProductFamilyProductDepartmentSubtotals(TestContextWrapper context) {
     String query =
         "WITH\r\n"
@@ -137,7 +135,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRowColumSubtotals(TestContextWrapper context) {
     String query =
         "WITH\r\n"
@@ -175,7 +173,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testProductFamilyDisplayMember(TestContextWrapper context) {
     String query =
         "WITH\r\n" +
@@ -217,7 +215,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTop10Customers(TestContextWrapper context) {
     String query =
         "WITH\r\n" +
@@ -289,7 +287,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTop1CustomersWithColumnLevel(TestContextWrapper context) {
     String query =
         "WITH\n"
@@ -319,7 +317,7 @@ class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsContent.class,dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class,dataloader = FastFoodmardDataLoader.class )
     void testMondrian2704(TestContext context) {
     String cube=    "<Cube name=\"Alternate Sales\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"

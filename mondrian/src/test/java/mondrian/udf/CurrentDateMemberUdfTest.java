@@ -17,7 +17,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import static org.opencube.junit5.TestUtil.withSchema;
 
@@ -29,7 +29,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class CurrentDateMemberUdfTest {
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCurrentDateMemberUdf(TestContext context) {
 		//TODO: context redesign
 		//Assertions.fail("Handle comment , Context redesign nedded");
@@ -66,7 +66,7 @@ class CurrentDateMemberUdfTest {
      * "266,773\n"
     */
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testGetReturnType(TestContextWrapper context) {
 		Connection connection=context.createConnection();
         String query = "WITH MEMBER [Time].[YTD] AS SUM( YTD(CurrentDateMember"

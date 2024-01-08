@@ -30,7 +30,7 @@ public class CellCacheSegmentDeleteEvent extends CellCacheEvent {
      */
     public CellCacheSegmentDeleteEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId,
         long executionId,

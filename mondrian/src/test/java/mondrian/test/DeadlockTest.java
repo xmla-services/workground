@@ -20,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
 
@@ -39,7 +39,7 @@ class DeadlockTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testSegmentLoadDeadlock(TestContextWrapper context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1726
         // Deadlock can occur if a cardinality query is fired after

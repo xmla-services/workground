@@ -13,12 +13,32 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.util.CompositeList;
-import mondrian.xmla.RowsetDefinition;
-import mondrian.xmla.XmlaException;
-import mondrian.xmla.XmlaUtil;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DECIMAL;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DOUBLE;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER_LONG;
+import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
+import static org.eigenbase.xom.XOMUtil.discard;
+
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.Instant;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -76,31 +96,12 @@ import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.time.Instant;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
-import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_CODE;
-import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_FAULT_FS;
-import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DECIMAL;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DOUBLE;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER_LONG;
-import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
-import static org.eigenbase.xom.XOMUtil.discard;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.util.CompositeList;
+import mondrian.xmla.RowsetDefinitionType;
+import mondrian.xmla.XmlaException;
+import mondrian.xmla.XmlaUtil;
 
 public class Convertor {
 
@@ -748,17 +749,17 @@ public class Convertor {
         if (datatype != null) {
             switch (datatype) {
                 case UNSIGNED_INTEGER:
-                    return RowsetDefinition.Type.UNSIGNED_INTEGER.columnType;
+                    return RowsetDefinitionType.UNSIGNED_INTEGER.columnType;
                 case DOUBLE:
-                    return RowsetDefinition.Type.DOUBLE.columnType;
+                    return RowsetDefinitionType.DOUBLE.columnType;
                 case LARGE_INTEGER:
-                    return RowsetDefinition.Type.LONG.columnType;
+                    return RowsetDefinitionType.LONG.columnType;
                 case INTEGER:
-                    return RowsetDefinition.Type.INTEGER.columnType;
+                    return RowsetDefinitionType.INTEGER.columnType;
                 case BOOLEAN:
-                    return RowsetDefinition.Type.BOOLEAN.columnType;
+                    return RowsetDefinitionType.BOOLEAN.columnType;
                 default:
-                    return RowsetDefinition.Type.STRING.columnType;
+                    return RowsetDefinitionType.STRING.columnType;
             }
         }
         return null;

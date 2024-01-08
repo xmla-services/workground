@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -277,7 +277,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testSingleJoin(TestContextWrapper context) throws Exception {
     	super.prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -304,7 +304,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testComplexJoin(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -346,7 +346,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testComplexJoinDefaultRecognizer(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -385,7 +385,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testSsasCompatNamingInAgg(TestContextWrapper context) throws Exception {
         prepareContext(context);
         // MONDRIAN-1085
@@ -634,7 +634,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
      * Test case for cast exception on min/max of an integer measure
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1325(TestContextWrapper context) {
         prepareContext(context);
         final String query1 =

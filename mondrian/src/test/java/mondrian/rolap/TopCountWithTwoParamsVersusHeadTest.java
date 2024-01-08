@@ -23,7 +23,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 /**
  * According to
@@ -67,7 +67,7 @@ class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_States(TestContextWrapper context) throws Exception {
         assertResultsAreEqual(context.createConnection(),
             "States",
@@ -75,7 +75,7 @@ class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_Cities(TestContextWrapper context) throws Exception {
         assertResultsAreEqual(context.createConnection(),
             "Cities",
@@ -83,7 +83,7 @@ class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ShowsNotMoreThanExist(TestContextWrapper context) {
         assertResultsAreEqual(context.createConnection(),
             "Not more than exists",
@@ -91,7 +91,7 @@ class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_DoesNotIgnoreNonEmpty(TestContextWrapper context) {
         assertResultsAreEqual(context.createConnection(),
             "Does not ignore NON EMPTY",

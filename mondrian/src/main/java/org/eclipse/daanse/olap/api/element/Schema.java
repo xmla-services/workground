@@ -57,25 +57,6 @@ public interface Schema extends MetaElement {
     Hierarchy[] getSharedHierarchies();
 
     /**
-     * Creates a dimension in the given cube by parsing an XML string. The XML
-     * string must be either a &lt;Dimension&gt; or a &lt;DimensionUsage&gt;.
-     * Returns the dimension created.
-     */
-    Dimension createDimension(Cube cube, String xml);
-
-    /**
-     * Creates a cube by parsing an XML string. Returns the cube created.
-     */
-    Cube createCube(String xml);
-
-    /**
-     * Removes a cube.
-     *
-     * @return Whether cube was removed
-     */
-    boolean removeCube(String cubeName);
-
-    /**
      * Creates a {@link SchemaReader} without any access control.
      */
     SchemaReader getSchemaReader();

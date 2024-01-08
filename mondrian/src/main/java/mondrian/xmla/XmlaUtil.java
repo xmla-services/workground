@@ -10,20 +10,15 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.Util;
-import mondrian.util.XmlParserFactoryProducer;
-import mondrian.xmla.impl.DefaultXmlaResponse;
-import org.olap4j.OlapConnection;
-import org.olap4j.impl.LcidLocale;
-import org.olap4j.metadata.XmlaConstants.Format;
-import org.olap4j.metadata.XmlaConstants.Method;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,21 +27,18 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
+
+import org.olap4j.impl.LcidLocale;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
+import mondrian.util.XmlParserFactoryProducer;
 
 /**
  * Utility methods for XML/A implementation.
@@ -279,163 +271,6 @@ public class XmlaUtil implements XmlaConstants {
         return numericStr;
     }
 
-    /**
-     * Returns a set of column headings and rows for a given metadata request.
-     *
-     * <p/>Leverages mondrian's implementation of the XML/A specification, and
-     * is exposed here for use by mondrian's olap4j driver.
-     *
-     * @param connection Connection
-     * @param methodName Metadata method name per XMLA (e.g. "MDSCHEMA_CUBES")
-     * @param restrictionMap Restrictions
-     * @return Set of rows and column headings
-     */
-    public static MetadataRowset getMetadataRowset(
-        final OlapConnection connection,
-        String methodName,
-        final Map<String, Object> restrictionMap)
-    {
-        RowsetDefinition rowsetDefinition =
-            RowsetDefinition.valueOf(methodName);
-
-        final XmlaHandler.ConnectionFactory connectionFactory =
-            new XmlaHandler.ConnectionFactory() {
-                @Override
-				public OlapConnection getConnection(
-                    String catalog, String schema, String roleName,
-                    Properties props)
-                    throws SQLException
-                {
-                    return connection;
-                }
-
-                @Override
-				public Map<String, Object>
-                getPreConfiguredDiscoverDatasourcesResponse()
-                {
-                    // This method should not be used by the olap4j xmla
-                    // servlet. For the mondrian xmla servlet we don't provide
-                    // the "pre configured discover datasources" feature.
-                    return Map.of();
-                }
-            };
-        final XmlaRequest request = new XmlaRequest() {
-            @Override
-			public Method getMethod() {
-                return Method.DISCOVER;
-            }
-
-            @Override
-			public Map<String, String> getProperties() {
-                return Collections.emptyMap();
-            }
-
-            @Override
-			public Map<String, Object> getRestrictions() {
-                return restrictionMap;
-            }
-
-            @Override
-			public String getStatement() {
-                return null;
-            }
-
-            @Override
-			public String getRoleName() {
-                return null;
-            }
-
-            @Override
-			public String getRequestType() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-			public boolean isDrillThrough() {
-                throw new UnsupportedOperationException();
-            }
-
-            public Format getFormat() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-			public String getUsername() {
-                return null;
-            }
-
-            @Override
-			public String getPassword() {
-                return null;
-            }
-
-            @Override
-			public String getSessionId() {
-                return null;
-            }
-        };
-        final Rowset rowset =
-            rowsetDefinition.getRowset(
-                request,
-                new XmlaHandler(
-                    connectionFactory,
-                    "xmla")
-                {
-                    @Override
-                    public OlapConnection getConnection(
-                        XmlaRequest request,
-                        Map<String, String> propMap)
-                    {
-                        return connection;
-                    }
-                }
-            );
-        List<Rowset.Row> rowList = new ArrayList<>();
-        rowset.populate(
-            new DefaultXmlaResponse(
-                new ByteArrayOutputStream(),
-                Charset.defaultCharset().name(),
-                Enumeration.ResponseMimeType.SOAP),
-            connection,
-            rowList);
-        MetadataRowset result = new MetadataRowset();
-        final List<RowsetDefinition.Column> colDefs =
-            new ArrayList<>();
-        for (RowsetDefinition.Column columnDefinition
-            : rowsetDefinition.columnDefinitions)
-        {
-            if (columnDefinition.type == RowsetDefinition.Type.ROW_SET) {
-                // olap4j does not support the extended columns, e.g.
-                // Cube.Dimensions
-                continue;
-            }
-            colDefs.add(columnDefinition);
-        }
-        for (Rowset.Row row : rowList) {
-            Object[] values = new Object[colDefs.size()];
-            int k = -1;
-            for (RowsetDefinition.Column colDef : colDefs) {
-                Object o = row.get(colDef.name);
-                if (o instanceof List) {
-                    o = toString((List<String>) o);
-                } else if (o instanceof String[] arr) {
-                    o = toString(Arrays.asList(arr));
-                }
-                values[++k] = o;
-            }
-            result.rowList.add(Arrays.asList(values));
-        }
-        for (RowsetDefinition.Column colDef : colDefs) {
-            String columnName = colDef.name;
-            columnName = Util.camelToUpper(columnName);
-            // VALUE is a SQL reserved word
-            if (columnName.equals("VALUE")) {
-                columnName = "PROPERTY_VALUE";
-            }
-            result.headerList.add(columnName);
-        }
-        return result;
-    }
 
     private static <T> String toString(List<T> list) {
         StringBuilder buf = new StringBuilder();
@@ -476,25 +311,7 @@ public class XmlaUtil implements XmlaConstants {
         return null;
     }
 
-    /**
-     * Returns whether an XMLA request should return invisible members.
-     *
-     * <p>According to the XMLA spec, it should not. But we allow the client to
-     * specify different behavior. In particular, the olap4j driver for XMLA
-     * may need to access invisible members.
-     *
-     * <p>Returns true if the EmitInvisibleMembers property is specified and
-     * equal to "true".
-     *
-     * @param request XMLA request
-     * @return Whether to return invisible members
-     */
-    public static boolean shouldEmitInvisibleMembers(XmlaRequest request) {
-        final String value =
-            request.getProperties().get(
-                PropertyDefinition.EmitInvisibleMembers.name());
-        return Boolean.parseBoolean(value);
-    }
+ 
 
     /**
      * Result of a metadata query.

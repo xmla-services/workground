@@ -33,7 +33,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
-import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
@@ -59,7 +59,7 @@ class SteelWheelsSchemaTest {
      * Sanity check, that enumerates the Measures dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMeasures(TestContextWrapper context) {
         if (!TestUtil.databaseIsValid(context.createConnection())) {
             return;
@@ -72,7 +72,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1273(TestContextWrapper context) {
         //createContext(context, schema);
         withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier1::new);
@@ -106,7 +106,7 @@ class SteelWheelsSchemaTest {
      * (We've since dropped 'All Xxx' from member unique names.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMarkets(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -180,7 +180,7 @@ class SteelWheelsSchemaTest {
      * MONDRIAN-755, "Getting drillthrough count results in exception"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian755(TestContextWrapper context) {
         //getTestContext(context);
         //if (!databaseIsValid(context.createConnection())) {
@@ -257,7 +257,7 @@ class SteelWheelsSchemaTest {
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian756(TestContext context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -284,7 +284,7 @@ class SteelWheelsSchemaTest {
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian756b(TestContext context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -307,7 +307,7 @@ class SteelWheelsSchemaTest {
      * "Two dimensions with hasAll=false fail"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian805(TestContext context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -346,7 +346,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrianBug476_770_957(TestContext context) throws Exception {
         withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier4::new);
         final String mdxQuery =
@@ -390,7 +390,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian935(TestContext context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -441,7 +441,7 @@ class SteelWheelsSchemaTest {
      * @throws Exception on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testPropertyWithParameterOfTimestampType(TestContext context) throws Exception {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -468,7 +468,7 @@ class SteelWheelsSchemaTest {
      * year_id order by year_id". It should definitely not join to fact table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testEsr1587(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -490,7 +490,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1133(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -521,7 +521,7 @@ class SteelWheelsSchemaTest {
      * every which way to verify the correct ordering.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1197(TestContextWrapper context) {
 
         //if (!databaseIsValid(context.createConnection())) {
@@ -962,7 +962,7 @@ class SteelWheelsSchemaTest {
      * keys.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testRangeSortWithNullKeys(TestContextWrapper context) {
 
         //if (!databaseIsValid(context.createConnection())) {
@@ -1039,7 +1039,7 @@ class SteelWheelsSchemaTest {
      * keys.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBug1285(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -1129,7 +1129,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testDoubleValueCanBeRankedAmongIntegers(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -1170,7 +1170,7 @@ class SteelWheelsSchemaTest {
      * dimension whose name is different from the dimension it is based on.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1360(TestContext context) {
         withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier6::new);
 
@@ -1212,7 +1212,7 @@ class SteelWheelsSchemaTest {
      * Invalid filter SQL generated on numeric column
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1464(TestContextWrapper context) {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -1248,7 +1248,7 @@ class SteelWheelsSchemaTest {
      * On .Members in NonEmpty, with mondrian.native.nonempty.enabled=true
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1252(TestContext context) throws Exception {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -1326,7 +1326,7 @@ class SteelWheelsSchemaTest {
      * Compound slicer getting applied to CurrentDateMember
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1750(TestContext context) throws Exception {
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -1364,7 +1364,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_1(TestContextWrapper context) throws Exception {
         // Tests a user query followed by an admin query
         withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
@@ -1606,7 +1606,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_2(TestContextWrapper context) throws Exception {
         withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
 
@@ -1848,7 +1848,7 @@ class SteelWheelsSchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2411_3(TestContextWrapper context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
@@ -2100,7 +2100,7 @@ class SteelWheelsSchemaTest {
      * http://jira.pentaho.com/browse/Mondrian-2652
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2652(TestContextWrapper context) {
         // Check if there is a valid SteelWheels database.
         //if (!databaseIsValid(context.createConnection())) {

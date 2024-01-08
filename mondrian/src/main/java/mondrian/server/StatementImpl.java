@@ -133,10 +133,6 @@ public abstract class StatementImpl implements Statement {
         return getMondrianConnection().getSchema();
     }
 
-    @Override
-	public Object getProperty(String name) {
-        return getMondrianConnection().getProperty(name);
-    }
 
     @Override
 	public Query getQuery() {

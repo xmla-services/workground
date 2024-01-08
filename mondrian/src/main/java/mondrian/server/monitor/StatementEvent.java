@@ -16,7 +16,7 @@ public abstract class StatementEvent extends Event {
     /**
      * Identifier of the server.
      */
-    public final int serverId;
+    public final String serverId;
 
     /**
      * Identifier of the connection.
@@ -38,7 +38,7 @@ public abstract class StatementEvent extends Event {
      */
     public StatementEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId)
     {

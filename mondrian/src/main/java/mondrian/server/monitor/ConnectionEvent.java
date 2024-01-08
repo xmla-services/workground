@@ -17,7 +17,7 @@ public abstract class ConnectionEvent extends Event {
      * Server identifier; corresponds to
      * {@link mondrian.olap.MondrianServer#getId()}.
      */
-    public final int serverId;
+    public final String serverId;
 
     /**
      * Connection identifier. To retrieve the connection, call
@@ -34,7 +34,7 @@ public abstract class ConnectionEvent extends Event {
      */
     public ConnectionEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId)
     {
         super(timestamp);

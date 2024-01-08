@@ -16,7 +16,7 @@ public abstract class ExecutionEvent extends Event {
     /**
      * Identifier of the server.
      */
-    public final int serverId;
+    public final String serverId;
 
     /**
      * Identifier of the connection.
@@ -44,7 +44,7 @@ public abstract class ExecutionEvent extends Event {
      */
     public ExecutionEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId,
         long executionId)

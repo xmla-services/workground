@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
-import org.opencube.junit5.propupdator.PropertyUpdater;
+import org.opencube.junit5.propupdator.TestContextUpdater;
 
 @Target({
 	ElementType.ANNOTATION_TYPE, ElementType.METHOD
@@ -42,7 +42,7 @@ public @interface ContextSource {
 
 	Class<? extends DataLoader> dataloader() ;
 
-    Class<? extends PropertyUpdater>[] propertyUpdater()default {};
+    Class<? extends TestContextUpdater>[] propertyUpdater()default {};
 
 
 }

@@ -130,7 +130,7 @@ public class RolapResult extends ResultBase {
 
     this.point = CellKey.Generator.newCellKey( axes.length );
     final AggregationManager aggMgr =
-        execution.getMondrianStatement().getMondrianConnection().getServer().getAggregationManager();
+        execution.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
     this.aggregatingReader = aggMgr.getCacheCellReader();
     final int expDeps = MondrianProperties.instance().TestExpDependencies.get();
     if ( expDeps > 0 ) {

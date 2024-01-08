@@ -47,7 +47,7 @@ public class ExecutionEndEvent extends ExecutionEvent {
    * @param cellCachePendingCount
    *          Number of cell requests for which cell was
    */
-  public ExecutionEndEvent( long timestamp, int serverId, int connectionId, long statementId, long executionId,
+  public ExecutionEndEvent( long timestamp, String serverId, int connectionId, long statementId, long executionId,
       int phaseCount, Execution.State state, int cellCacheHitCount, int cellCacheMissCount, int cellCachePendingCount,
       int expCacheHitCount, int expCacheMissCount ) {
     super( timestamp, serverId, connectionId, statementId, executionId );

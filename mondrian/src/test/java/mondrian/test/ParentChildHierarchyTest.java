@@ -30,7 +30,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.List;
 
@@ -223,7 +223,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDotMembersNoClosure(TestContext context) {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -280,7 +280,7 @@ class ParentChildHierarchyTest {
      * "Closure tables do not work in a Snowflake Dimension"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSnowflakeClosure(TestContext context) {
         getEmpSnowFlakeClosureTestContext(context);
         assertQueryReturns(context.getConnection(),
@@ -304,7 +304,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSharedClosureParentChildHierarchy(TestContext context) {
         getEmpSharedClosureTestContext(context);
         assertQueryReturns(context.getConnection(),
@@ -329,7 +329,7 @@ class ParentChildHierarchyTest {
      * "Parent child hierarchies without closures are broken"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonClosureParentChildHierarchy(TestContext context) {
         Result result = executeQuery(context.getConnection(),
             "Select {[Employees].members} on columns from HR");
@@ -343,7 +343,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAll(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
@@ -361,7 +361,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testChildrenOfAll(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
@@ -406,7 +406,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDistinctChildrenOfAll(TestContextWrapper context) {
         // parent/child dimension expanded: fails with
         // java.lang.UnsupportedOperationException at
@@ -433,7 +433,7 @@ class ParentChildHierarchyTest {
 
     // same two tests, but on a subtree
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDistinctSubtree(TestContextWrapper context) {
         // also fails with UnsupportedOperationException
         assertQueryReturns(context.createConnection(),
@@ -462,7 +462,7 @@ class ParentChildHierarchyTest {
      * parent/child hierarchy. (Repeats the last 4 tests.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDistinctAllExplicitClosure(TestContext context) {
         getEmpClosureTestContext(context);
         assertQueryReturns(context.getConnection(),
@@ -486,7 +486,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDistinctChildrenOfAllExplicitClosure(TestContext context) {
         // the children of the closed relation are all the descendants, so limit
         // results
@@ -512,7 +512,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDistinctSubtreeExplicitClosure(TestContext context) {
         getEmpClosureTestContext(context);
         assertQueryReturns(context.getConnection(),
@@ -536,7 +536,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLeaf(TestContextWrapper context) {
         // Juanita Sharp has no reports
         assertQueryReturns(context.createConnection(),
@@ -555,7 +555,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testOneAboveLeaf(TestContextWrapper context) {
         // Rebecca Kanagaki has 2 direct reports, and they have no reports
         assertQueryReturns(context.createConnection(),
@@ -578,7 +578,7 @@ class ParentChildHierarchyTest {
      * Members, from <a href="http://www.winscriptingsolutions.com/Files/09/27139/Listing_01.txt">here</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParentChildDescendantsLeavesBottom(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "WITH SET [NonEmptyEmployees] AS 'FILTER(DESCENDANTS([Employees].[All Employees], 10, LEAVES),\n"
@@ -629,7 +629,7 @@ class ParentChildHierarchyTest {
      * Script from <a href="http://www.winscriptingsolutions.com/Files/09/27139/Listing_02.txt">here</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParentChildDescendantsLeavesTop(TestContextWrapper context) {
         if (Bug.avoidSlowTestOnLucidDB(getDialect(context.createConnection()))) {
             return;
@@ -670,7 +670,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMembersParent(TestContextWrapper context) {
         final String expected =
             "Axis #0:\n"
@@ -748,7 +748,7 @@ class ParentChildHierarchyTest {
      * dimensions (3) than the depth of the emp dimension (6).
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyFalseCycle(TestContext context) {
         if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
@@ -818,7 +818,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGenuineCycle(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "with member [Measures].[Foo] as \n"
@@ -887,7 +887,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParentChildDrillThrough(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "select {[Measures].Members} ON columns,\n"
@@ -966,7 +966,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParentChildDrillThroughWithContext(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "select {[Measures].Members} ON columns,\n"
@@ -1074,7 +1074,7 @@ class ParentChildHierarchyTest {
      * "NullPointerException in RolapEvaluator.setContext(....)"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian168(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select \n"
@@ -1111,7 +1111,7 @@ class ParentChildHierarchyTest {
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParentChildOrdinal(TestContext context) {
         if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
@@ -1185,7 +1185,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelMembers(TestContextWrapper context) {
         //use  "HR" cube name
         Connection connection = context.createConnection();
@@ -1222,7 +1222,7 @@ class ParentChildHierarchyTest {
      * "Closure Tables not working with Virtual Cubes"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testClosureTableInVirtualCube(TestContext context) {
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1287,7 +1287,7 @@ class ParentChildHierarchyTest {
      * a class cast exception when using non-closure parent child hierarchies.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testClosureVsNoClosure(TestContext context) {
         if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
@@ -1382,7 +1382,7 @@ class ParentChildHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaReaderLevelMembers(TestContextWrapper context)
     {
         final SchemaReader schemaReader =
@@ -1424,7 +1424,7 @@ class ParentChildHierarchyTest {
      * "Parent-child hierarchies: &lt;Join&gt; used in dimension"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBridgeTable(TestContext context) {
         if (!Bug.BugMondrian441Fixed) {
             return;
@@ -1520,7 +1520,7 @@ class ParentChildHierarchyTest {
      * so there are no added cost to this.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPCCacheKeyBug(TestContextWrapper context) throws Exception {
         final String mdx =
             "With\n"

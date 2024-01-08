@@ -1,14 +1,14 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.olap4j.Olap4jRuntimeException;
-import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.api.result.Datatype;
-import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
-import org.eclipse.daanse.olap.api.result.Property;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.result.Datatype;
+import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
+import org.eclipse.daanse.olap.api.result.Property;
 
 public class PropertyImpl implements IMondrianOlap4jProperty {
 
@@ -93,7 +93,7 @@ public class PropertyImpl implements IMondrianOlap4jProperty {
             case TYPE_OTHER:
                 return Datatype.VARIANT;
             default:
-                throw new Olap4jRuntimeException("unexpected: " + property.getType());
+                throw new RuntimeException("unexpected: " + property.getType());
         }
     }
 

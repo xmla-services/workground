@@ -19,7 +19,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ class MultipleHierarchyTest {
         hierarchyName("Time", "Time");
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testWeekly(TestContextWrapper context) {
         Connection connection = context.createConnection();
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -65,7 +65,7 @@ class MultipleHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testWeekly2(TestContextWrapper context) {
         // When the context is one hierarchy,
         // the current member of other hierarchy must be its default member.
@@ -105,7 +105,7 @@ class MultipleHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleMembersOfSameDimensionInSlicerFails(TestContextWrapper context) {
         assertQueryThrows(context.createConnection(),
             "select {[Measures].[Unit Sales]} on columns,\n"
@@ -116,7 +116,7 @@ class MultipleHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMembersOfHierarchiesInSameDimensionInSlicer(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales]} on columns,\n"
@@ -139,7 +139,7 @@ class MultipleHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMember(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
@@ -186,7 +186,7 @@ class MultipleHierarchyTest {
      * bug MONDRIAN-191, "Properties not working with multiple hierarchies"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testProperty(TestContext context) {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -330,7 +330,7 @@ class MultipleHierarchyTest {
      * but this is better.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAmbiguousHierarchyInCalcMember(TestContextWrapper context) {
         final String query =
             "with member [Measures].[Time Child Count] as\n"
@@ -360,7 +360,7 @@ class MultipleHierarchyTest {
      * throws exception"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultNamedHierarchy(TestContext context) {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -411,7 +411,7 @@ class MultipleHierarchyTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMemOnMultipleHierarchy(TestContextWrapper context) {
         // MONDRIAN-1485
         // Mondrian generates multiple queries during getMemberChildren

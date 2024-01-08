@@ -28,7 +28,7 @@ import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
@@ -90,7 +90,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetsWithAggregateOverDefaultMember(TestContextWrapper context) {
         pripareContext(context);
         // testcase for MONDRIAN-705
@@ -119,7 +119,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForSingleColumnConstraint(TestContextWrapper context) {
         pripareContext(context);
         propSaver.set(prop.DisableCaching, false);
@@ -204,7 +204,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         }
     }
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestContextWrapper context) {
         pripareContext(context);
         if (!(prop.UseAggregates.get()
@@ -250,7 +250,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNotUsingGroupingSet(TestContextWrapper context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -300,7 +300,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForMultipleMeasureAndSingleConstraint(TestContextWrapper context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -367,7 +367,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestContextWrapper context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -440,7 +440,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForMultipleColumnConstraint(TestContextWrapper context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -521,7 +521,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void
         testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(TestContextWrapper context)
     {
@@ -587,7 +587,7 @@ class GroupingSetQueryTest extends BatchTestCase{
      * Testcase for bug 2004202, "Except not working with grouping sets".
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBug2004202(TestContextWrapper context) {
         pripareContext(context);
         assertQueryReturns(context.createConnection(),

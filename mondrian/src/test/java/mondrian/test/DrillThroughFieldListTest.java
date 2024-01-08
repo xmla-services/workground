@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.rolap.RolapCell;
 
@@ -57,7 +57,7 @@ class DrillThroughFieldListTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testOneJoin(TestContextWrapper context) {
     String mdx = "SELECT\n"
         + "[Measures].[Unit Sales] ON COLUMNS,\n"
@@ -128,7 +128,7 @@ class DrillThroughFieldListTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testOneJoinTwoMeasures(TestContextWrapper context) {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
@@ -203,7 +203,7 @@ class DrillThroughFieldListTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testTwoJoins(TestContextWrapper context) {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
@@ -287,7 +287,7 @@ class DrillThroughFieldListTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testNoJoin(TestContextWrapper context) {
     String mdx = "SELECT\n"
         + "Measures.[Store Sqft] on COLUMNS\n"
@@ -333,7 +333,7 @@ class DrillThroughFieldListTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testVirtualCube(TestContextWrapper context) {
     String mdx = " SELECT\n"
         + " [Measures].[Unit Sales] ON COLUMNS\n"

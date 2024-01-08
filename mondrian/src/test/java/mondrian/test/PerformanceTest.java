@@ -34,7 +34,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +84,7 @@ public class PerformanceTest {
    * Bug MONDRIAN-550, "Performance bug with NON EMPTY and large axes"</a>.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void  testBugMondrian550(TestContext context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
@@ -123,7 +123,7 @@ public class PerformanceTest {
    * As testBugMondrian550() but with tuples on the rows axis.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian550Tuple(TestContext context) {
     getBugMondrian550Schema(context);
     final Statistician statistician =
@@ -195,7 +195,7 @@ public class PerformanceTest {
    * ResultStyle.LIST, 99+ seconds with ITERABLE (on DELL Latitude D630).
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrianBug641(TestContextWrapper context) {
     if ( !Bug.BugMondrian641Fixed ) {
       return;
@@ -216,7 +216,7 @@ public class PerformanceTest {
    * Tests performance when an MDX query contains a very large explicit set.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVeryLargeExplicitSet(TestContextWrapper context) {
     final Statistician[] statisticians = {
       // jdk1.6 mackerel access main old    5,000 ms
@@ -349,7 +349,7 @@ public class PerformanceTest {
    * in FunUtil.count()"</a>.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian639(TestContextWrapper context) {
     // unknown revision before fix mac-mini 233,000 ms
     // unknown revision after fix mac-mini    4,500 ms
@@ -394,7 +394,7 @@ public class PerformanceTest {
    * The performance boost gets more significant as the schema size grows.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBigResultsWithBigSchemaPerforms(TestContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       return;
@@ -459,7 +459,7 @@ public class PerformanceTest {
    * Disabled by performance reason run >10 h
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
   void testInMemoryCalc(TestContextWrapper context) {
     if ( !LOGGER.isDebugEnabled() ) {
@@ -540,7 +540,7 @@ public class PerformanceTest {
    * Bug MONDRIAN-843, where Filter is inefficient.</a>
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian843(TestContextWrapper context) {
     // On my core i7 laptop:
     // takes 2.5 seconds before bug fixed
@@ -571,7 +571,7 @@ public class PerformanceTest {
    * Disabled by performance reason run 1.8 h
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
   void testBugMondrian981(TestContextWrapper context) {
     if ( !LOGGER.isDebugEnabled() ) {
@@ -610,7 +610,7 @@ public class PerformanceTest {
    * in {@link PerformanceTest} checks performance.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian1242(TestContextWrapper context) {
     propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
     withSchema(context.getContext(), SchemaModifiers.PerformanceTestModifier4::new);

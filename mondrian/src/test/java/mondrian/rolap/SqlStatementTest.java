@@ -40,7 +40,7 @@ import mondrian.server.monitor.Monitor;
 class SqlStatementTest {
 
   private Monitor monitor;
-  private MondrianServer srv;
+  private Context context;
   private RolapConnection rolapConnection;
   private StatementImpl statMock;
   private Execution execution;
@@ -51,11 +51,11 @@ class SqlStatementTest {
   public void beforeEach() {
     monitor = mock(Monitor.class);
 
-    srv = mock(MondrianServer.class);
-    when(srv.getMonitor()).thenReturn(monitor);
+    context = mock(Context.class);
+    when(context.getMonitor()).thenReturn(monitor);
 
     rolapConnection = mock(RolapConnection.class);
-    when(rolapConnection.getServer()).thenReturn(srv);
+    when(rolapConnection.getContext()).thenReturn(context);
 
     statMock = mock(StatementImpl.class);
     when(statMock.getMondrianConnection()).thenReturn(rolapConnection);

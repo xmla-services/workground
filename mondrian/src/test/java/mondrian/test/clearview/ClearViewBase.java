@@ -21,9 +21,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContextWrapper;
-import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;

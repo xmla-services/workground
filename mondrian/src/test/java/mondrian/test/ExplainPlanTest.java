@@ -39,7 +39,7 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryTiming;
@@ -65,7 +65,7 @@ class ExplainPlanTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testExplain(TestContextWrapper context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
@@ -103,7 +103,7 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
 
   @ParameterizedTest
   @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
 	void testExplainComplex(TestContextWrapper context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
 		// Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in
@@ -222,7 +222,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
 	}
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testExplainInvalid(TestContextWrapper context) throws SQLException {
     OlapConnection connection = context.createOlap4jConnection();
     final OlapStatement statement = connection.createStatement();
@@ -242,7 +242,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    * @throws SQLException
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testQueryTimingAnalyzer(TestContextWrapper context) throws SQLException {
 
     final String mdx =
@@ -283,7 +283,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testMutiKeySort(TestContextWrapper context) throws SQLException {
     final String mdx =
         "WITH\r\n"
@@ -313,7 +313,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    * @throws SQLException
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testNestedSumFunDef(TestContextWrapper context) throws SQLException {
     final String mdx =
         "WITH\r\n"
@@ -343,7 +343,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    * @throws SQLException
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAggAboveSlicerSolveOrder(TestContextWrapper context) throws SQLException {
 
     final String mdx =
@@ -378,7 +378,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    * @throws SQLException
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAggBelowSlicerSolveOrder(TestContextWrapper context) throws SQLException {
     propSaver.set(MondrianProperties.instance().DisableCaching, true );
     propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);

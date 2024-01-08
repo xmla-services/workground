@@ -15,7 +15,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withSchema;
@@ -340,7 +340,7 @@ class SharedDimensionTest  {
         + "Row #0: 238\n";
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testA(TestContext context) {
         // Schema has two cubes sharing a dimension.
         // Query from the first cube.
@@ -350,7 +350,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testB(TestContext context) {
         // Schema has two cubes sharing a dimension.
         // Query from the second cube.
@@ -360,7 +360,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCube(TestContext context) {
         // Schema has two cubes sharing a dimension, and a virtual cube built
         // over these two cubes.
@@ -382,7 +382,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNECJMemberList(TestContext context) {
         // Schema has two cubes sharing a dimension.
         // Query from the second cube.
@@ -394,7 +394,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNECJMultiLevelMemberList(TestContext context) {
         // Schema has two cubes sharing a dimension.
         // Query from the first cube.
@@ -412,7 +412,7 @@ class SharedDimensionTest  {
      * MONDRIAN-286, "NullPointerException for certain mdx using [Sales 2]"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian286(TestContextWrapper context) {
         // Test for sourceforge.net bug 1711865 (MONDRIAN-286).
         // Use the default FoodMart schema
@@ -420,7 +420,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testStoreCube(TestContextWrapper context) {
         // Use the default FoodMart schema
         assertQueryReturns(context.createConnection(), queryStoreCube, resultStoreCube);
@@ -432,7 +432,7 @@ class SharedDimensionTest  {
      * cache"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian1243WrongAlias(TestContext context) {
         getTestContextForSharedDimCubeAltSales(context);
         assertQueryReturns(context.getConnection(),
@@ -441,7 +441,7 @@ class SharedDimensionTest  {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberUniqueNameForSharedWithChangedName(TestContext context) {
         getTestContextForSharedDimCubeAltSales(context);
         assertQueryReturns(context.getConnection(),

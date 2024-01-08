@@ -45,7 +45,7 @@ class Rolap {
 		when(ctx.getDataSource()).thenReturn(ds);
 		when(ctx.getDialect()).thenReturn(dialect);
 
-		new RolapSchema(schemaKey, list, ctx);
+//		new RolapSchema(schemaKey, list, ctx);
 
 	}
 }

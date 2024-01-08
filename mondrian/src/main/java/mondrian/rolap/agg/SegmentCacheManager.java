@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,11 +296,11 @@ public class SegmentCacheManager {
 
   private static final Logger LOGGER =
     LoggerFactory.getLogger( AggregationManager.class );
-  private final MondrianServer server;
+  private final Context context;
 
 
-  public SegmentCacheManager( MondrianServer server ) {
-    this.server = server;
+  public SegmentCacheManager( Context context ) {
+    this.context = context;
     actor = new Actor();
     thread = new Thread(
       actor, "mondrian.rolap.agg.SegmentCacheManager$ACTOR" );
@@ -326,7 +327,7 @@ public class SegmentCacheManager {
       // Hook up a listener so it can update
       // the segment index.
       cache.addListener(
-        new AsyncCacheListener( this, server ) );
+        new AsyncCacheListener( this, context ) );
     }
 
     compositeCache = new CompositeSegmentCache( segmentCacheWorkers );
@@ -357,10 +358,10 @@ public class SegmentCacheManager {
         if ( header.rolapStarFactTableName.equals( starFactTableAlias ) ) {
           if ( index != null ) {
             index.add( header, null, false );
-            server.getMonitor().sendEvent(
+            context.getMonitor().sendEvent(
               new CellCacheSegmentCreateEvent(
                 System.currentTimeMillis(),
-                server.getId(), 0, 0, 0,
+                context.getName(), 0, 0, 0,
                 header.getConstrainedColumns().size(),
                 0, CellCacheEvent.Source.EXTERNAL ) );
           }
@@ -399,8 +400,8 @@ public class SegmentCacheManager {
       handler,
       new SegmentLoadSucceededEvent(
         System.currentTimeMillis(),
-        locus.getServer().getMonitor(),
-        locus.getServer().getId(),
+        locus.getContext().getMonitor(),
+        locus.getContext().getName(),
         locus.execution.getMondrianStatement()
           .getMondrianConnection().getId(),
         locus.execution.getMondrianStatement().getId(),
@@ -428,8 +429,8 @@ public class SegmentCacheManager {
       handler,
       new SegmentLoadFailedEvent(
         System.currentTimeMillis(),
-        locus.getServer().getMonitor(),
-        locus.getServer().getId(),
+        locus.getContext().getMonitor(),
+        locus.getContext().getName(),
         locus.execution.getMondrianStatement()
           .getMondrianConnection().getId(),
         locus.execution.getMondrianStatement().getId(),
@@ -456,8 +457,8 @@ public class SegmentCacheManager {
       handler,
       new SegmentRemoveEvent(
         System.currentTimeMillis(),
-        locus.getServer().getMonitor(),
-        locus.getServer().getId(),
+        locus.getContext().getMonitor(),
+        locus.getContext().getName(),
         locus.execution.getMondrianStatement()
           .getMondrianConnection().getId(),
         locus.execution.getMondrianStatement().getId(),
@@ -472,7 +473,7 @@ public class SegmentCacheManager {
    */
   public void externalSegmentCreated(
     SegmentHeader header,
-    MondrianServer server ) {
+    Context context ) {
     if ( MondrianProperties.instance().DisableCaching.get() ) {
       // Ignore cache requests.
       return;
@@ -481,8 +482,8 @@ public class SegmentCacheManager {
       handler,
       new ExternalSegmentCreatedEvent(
         System.currentTimeMillis(),
-        server.getMonitor(),
-        server.getId(),
+        context.getMonitor(),
+        context.getName(),
         0,
         0,
         0,
@@ -495,7 +496,7 @@ public class SegmentCacheManager {
    */
   public void externalSegmentDeleted(
     SegmentHeader header,
-    MondrianServer server ) {
+    Context context ) {
     if ( MondrianProperties.instance().DisableCaching.get() ) {
       // Ignore cache requests.
       return;
@@ -504,8 +505,8 @@ public class SegmentCacheManager {
       handler,
       new ExternalSegmentDeletedEvent(
         System.currentTimeMillis(),
-        server.getMonitor(),
-        server.getId(),
+        context.getMonitor(),
+        context.getName(),
         0,
         0,
         0,
@@ -1123,7 +1124,7 @@ public class SegmentCacheManager {
     private final SegmentBody body;
     private final long timestamp;
     private final RolapStar star;
-    private final int serverId;
+    private final String serverId;
     private final int connectionId;
     private final long statementId;
     private final long executionId;
@@ -1132,7 +1133,7 @@ public class SegmentCacheManager {
     public SegmentLoadSucceededEvent(
       long timestamp,
       Monitor monitor,
-      int serverId,
+      String serverId,
       int connectionId,
       long statementId,
       long executionId,
@@ -1164,7 +1165,7 @@ public class SegmentCacheManager {
     private final long timestamp;
     private final RolapStar star;
     private final Monitor monitor;
-    private final int serverId;
+    private final String serverId;
     private final int connectionId;
     private final long statementId;
     private final long executionId;
@@ -1172,7 +1173,7 @@ public class SegmentCacheManager {
     public SegmentLoadFailedEvent(
       long timestamp,
       Monitor monitor,
-      int serverId,
+      String serverId,
       int connectionId,
       long statementId,
       long executionId,
@@ -1201,7 +1202,7 @@ public class SegmentCacheManager {
     private final SegmentHeader header;
     private final long timestamp;
     private final Monitor monitor;
-    private final int serverId;
+    private final String serverId;
     private final int connectionId;
     private final long statementId;
     private final long executionId;
@@ -1211,7 +1212,7 @@ public class SegmentCacheManager {
     public SegmentRemoveEvent(
       long timestamp,
       Monitor monitor,
-      int serverId,
+      String serverId,
       int connectionId,
       long statementId,
       long executionId,
@@ -1241,7 +1242,7 @@ public class SegmentCacheManager {
     private final SegmentHeader header;
     private final long timestamp;
     private final Monitor monitor;
-    private final int serverId;
+    private final String serverId;
     private final int connectionId;
     private final long statementId;
     private final long executionId;
@@ -1249,7 +1250,7 @@ public class SegmentCacheManager {
     public ExternalSegmentCreatedEvent(
       long timestamp,
       Monitor monitor,
-      int serverId,
+      String serverId,
       int connectionId,
       long statementId,
       long executionId,
@@ -1278,7 +1279,7 @@ public class SegmentCacheManager {
     private final SegmentHeader header;
     private final long timestamp;
     private final Monitor monitor;
-    private final int serverId;
+    private final String serverId;
     private final int connectionId;
     private final long statementId;
     private final long executionId;
@@ -1286,7 +1287,7 @@ public class SegmentCacheManager {
     public ExternalSegmentDeletedEvent(
       long timestamp,
       Monitor monitor,
-      int serverId,
+      String serverId,
       int connectionId,
       long statementId,
       long executionId,
@@ -1317,13 +1318,13 @@ public class SegmentCacheManager {
   private static class AsyncCacheListener
     implements SegmentCache.SegmentCacheListener {
     private final SegmentCacheManager cacheMgr;
-    private final MondrianServer server;
+    private final Context context;
 
     public AsyncCacheListener(
       SegmentCacheManager cacheMgr,
-      MondrianServer server ) {
+      Context context ) {
       this.cacheMgr = cacheMgr;
-      this.server = server;
+      this.context = context;
     }
 
     @Override
@@ -1345,7 +1346,7 @@ public class SegmentCacheManager {
 				public Void call() {
                     cacheMgr.externalSegmentCreated(
                       e.getSource(),
-                      server );
+                      context );
                     return null;
                   }
 
@@ -1362,7 +1363,7 @@ public class SegmentCacheManager {
 				public Void call() {
                     cacheMgr.externalSegmentDeleted(
                       e.getSource(),
-                      server );
+                      context );
                     return null;
                   }
 

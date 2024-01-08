@@ -22,7 +22,7 @@ public class ConnectionEndEvent extends ConnectionEvent {
      */
     public ConnectionEndEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId)
     {
         super(timestamp, serverId, connectionId);

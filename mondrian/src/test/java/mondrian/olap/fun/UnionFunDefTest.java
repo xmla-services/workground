@@ -31,7 +31,7 @@ import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -127,7 +127,7 @@ class UnionFunDefTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testArity4TupleUnion(TestContextWrapper context) {
     String tupleSet =
         "CrossJoin( [Customers].[USA].Children,"
@@ -150,7 +150,7 @@ class UnionFunDefTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testArity5TupleUnion(TestContextWrapper context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].lastChild, "
@@ -188,7 +188,7 @@ class UnionFunDefTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testArity6TupleUnion(TestContextWrapper context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
@@ -224,7 +224,7 @@ class UnionFunDefTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testArity6TupleUnionAll(TestContextWrapper context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "

@@ -12,9 +12,12 @@
 */
 package mondrian.rolap.agg;
 
+import static org.eigenbase.xom.XOMUtil.discard;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +26,12 @@ import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.CacheControlImpl;
@@ -42,8 +45,6 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
-import static org.eigenbase.xom.XOMUtil.discard;
-
 /**
  * <code>RolapAggregationManager</code> manages all {@link Aggregation}s
  * in the system. It is a singleton class.
@@ -53,22 +54,21 @@ import static org.eigenbase.xom.XOMUtil.discard;
  */
 public class AggregationManager extends RolapAggregationManager {
 
-    private static final MondrianProperties properties =
-        MondrianProperties.instance();
+
 
     private static final Logger LOGGER =
         LoggerFactory.getLogger(AggregationManager.class);
 
     public final SegmentCacheManager cacheMgr;
 
-    private MondrianServer server;
+    private Context context;
 
     /**
      * Creates the AggregationManager.
      */
-    public AggregationManager(MondrianServer server) {
-        this.server = server;
-        this.cacheMgr = new SegmentCacheManager(server);
+    public AggregationManager(Context context) {
+        this.context = context;
+        this.cacheMgr = new SegmentCacheManager(context);
     }
 
     /**
@@ -563,22 +563,23 @@ System.out.println(buf.toString());
         implements RolapAggregationManager.PinSet
     {
     }
+    
+    //TODO: Free SegmentCacheManager if connection closed
 
+	private Map<RolapConnection, SegmentCacheManager> segCachStore = new HashMap<>();
 
-    public SegmentCacheManager getCacheMgr(RolapConnection connection)  {
-        if(connection == null || !MondrianProperties.instance().EnableSessionCaching.get()) {
-            return cacheMgr;
-        }
-        else {
-            final String sessionId = connection.getConnectInfo().get("sessionId");
-            mondrian.server.Session session = mondrian.server.Session.getWithoutCheck(sessionId);
+	public SegmentCacheManager getCacheMgr(RolapConnection connection) {
+		if (connection == null || !MondrianProperties.instance().EnableSessionCaching.get()) {
+			return cacheMgr;
+		} else {
+			if (!segCachStore.containsKey(connection)) {
+				SegmentCacheManager connBasedCacheMgr = new SegmentCacheManager(context);
+				segCachStore.put(connection, connBasedCacheMgr);
+			}
 
-            if(session == null) {
-                return cacheMgr;
-            }
+			return segCachStore.get(connection);
 
-            return session.getOrCreateSegmentCacheManager(this.server);
-        }
-    }
+		}
+	}
 
 }

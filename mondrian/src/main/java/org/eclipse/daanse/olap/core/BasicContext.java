@@ -30,6 +30,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -39,7 +40,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import aQute.bnd.metatype.annotations.Designate;
-import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianServer;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionPropsR;
+import mondrian.rolap.RolapResultShepherd;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.MondrianServerImpl;
+import mondrian.server.Statement;
+import mondrian.server.monitor.Monitor;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
@@ -47,7 +55,7 @@ public class BasicContext implements Context {
 
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
 
-	public static final String REF_NAME_DIALECT_RESOLVER= "dialectResolver";
+	public static final String REF_NAME_DIALECT_RESOLVER = "dialectResolver";
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
@@ -81,6 +89,8 @@ public class BasicContext implements Context {
 
 	private Dialect dialect = null;
 
+	private MondrianServer server;
+
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
 		activate1(CONVERTER.convert(coniguration).to(BasicContextConfig.class));
@@ -90,11 +100,18 @@ public class BasicContext implements Context {
 
 		this.config = configuration;
 
-		try (Connection connection = dataSource.getConnection()) {			
+		try (Connection connection = dataSource.getConnection()) {
 			Optional<Dialect> optionalDialect = dialectResolver.resolve(dataSource);
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
 		}
 		statisticsProvider.initialize(dataSource, getDialect());
+
+		server = new MondrianServerImpl(this);
+	}
+	
+	@Deactivate
+	public void deactivate(Map<String, Object> coniguration) throws Exception {
+		server.shutdown();
 	}
 
 	@Override
@@ -139,13 +156,61 @@ public class BasicContext implements Context {
 
 	@Override
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
-		return DriverManager.getConnection(null, null, this);
+		RolapConnection rolapConnection = new RolapConnection(this, new RolapConnectionPropsR());
+		return rolapConnection;
+	}
+	
+
+	@Override
+	public Scenario createScenario() {
+		// TODO
+		return null;
 	}
 
-    @Override
-    public Scenario createScenario() {
-	    //TODO
-        return null;
-    }
+	@Override
+	public void addConnection(RolapConnection rolapConnection) {
+		server.addConnection(rolapConnection);
+
+	}
+
+	@Override
+	public void removeConnection(RolapConnection rolapConnection) {
+		server.removeConnection(rolapConnection);
+
+	}
+
+	@Override
+	public RolapResultShepherd getResultShepherd() {
+		return server.getResultShepherd();
+	}
+
+	@Override
+	public AggregationManager getAggregationManager() {
+		return server.getAggregationManager();
+	}
+
+	@Override
+	public void addStatement(Statement statement) {
+		server.addConnection(null);
+	}
+
+	@Override
+	public void removeStatement(Statement internalStatement) {
+		server.removeStatement(internalStatement);
+	}
+
+	@Override
+	public Monitor getMonitor() {
+		return server.getMonitor();
+	}
+
+	@Override
+	public List<Statement> getStatements(org.eclipse.daanse.olap.api.Connection connection) {
+		return server.getStatementMap().values().stream().filter(stmnt->stmnt.getMondrianConnection().equals(connection)).toList();
+	}
+
+	
+
+
 
 }

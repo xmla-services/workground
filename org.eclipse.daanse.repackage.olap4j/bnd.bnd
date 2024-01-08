@@ -4,3 +4,8 @@
 Export-Package: \
 	!org.olap4.xmla,\
 	org.olap4*
+	
+
+Import-Package: \
+	!mondrian.olap4j,\
+	*

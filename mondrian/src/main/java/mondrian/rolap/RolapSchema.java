@@ -31,7 +31,6 @@ package mondrian.rolap;
 
 import static mondrian.rolap.util.NamedSetUtil.getFormula;
 
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.DriverManager;
@@ -74,10 +73,8 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
@@ -92,24 +89,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionUsageImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
-import org.eigenbase.xom.DOMWrapper;
-import org.eigenbase.xom.Parser;
-import org.eigenbase.xom.XOMException;
-import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
@@ -257,28 +244,26 @@ public class RolapSchema implements Schema {
      */
     public RolapSchema(
         final SchemaKey key,
-        final Util.PropertyList connectInfo,
+         RolapConnectionProps rolapConnectionProps,
         final Context context)
     {
         this.id = UUID.randomUUID().toString();
         this.key = key;
-
-
         
         DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
         this.defaultRole = RoleImpl.createRootRole(this);
-        final MondrianServer internalServer = MondrianServer.forId(null);
+
         this.internalConnection =
-            new RolapConnection(internalServer, connectInfo, this, context);
-        internalServer.removeConnection(internalConnection);
-        internalServer.removeStatement(
+            new RolapConnection( context, this, rolapConnectionProps);
+        context.removeConnection(internalConnection);
+        context.removeStatement(
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
         
         
-        load(context, connectInfo);
+        load(context, rolapConnectionProps);
     }
 
     /**
@@ -367,7 +352,7 @@ public class RolapSchema implements Schema {
      * @param catalogStr Text of catalog, or null
      * @param connectInfo Mondrian connection properties
      */
-	protected void load(Context context, PropertyList connectInfo) {
+	protected void load(Context context, RolapConnectionProps connectionProps) {
 
 		this.context = context;
 		// TODO: get from schema var
@@ -381,7 +366,7 @@ public class RolapSchema implements Schema {
 
 		load(xmlSchema);
 
-		aggTableManager.initialize(connectInfo);
+		aggTableManager.initialize(connectionProps);
 		setSchemaLoadDate();
 	}
 
@@ -538,8 +523,11 @@ public class RolapSchema implements Schema {
         if (xmlSchema.defaultRole() != null) {
             Role role = lookupRole(xmlSchema.defaultRole());
             if (role == null) {
-                error(
-                    new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString());
+            
+            	String sb= new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString();
+                    
+                    final RuntimeException ex = new RuntimeException(sb);
+                    throw ex;
             } else {
                 // At this stage, the only roles in mapNameToRole are
                 // RoleImpl roles so it is safe to case.
@@ -562,30 +550,6 @@ public class RolapSchema implements Schema {
     }
 
 
-    /**
-     * Reports an error. If we are tolerant of errors
-     * (see {@link mondrian.rolap.RolapConnectionProperties#Ignore}), adds
-     * it to the stack, overwise throws. A thrown exception will typically
-     * abort the attempt to create the exception.
-     *
-     * @param message Message
-     * @param xmlLocation Location of XML element or attribute that caused
-     * the error, or null
-     */
-    void error(
-        String message)
-    {
-        final RuntimeException ex = new RuntimeException(message);
-        if (internalConnection != null
-            && "true".equals(
-                internalConnection.getProperty(
-                    RolapConnectionProperties.Ignore.name())))
-        {
-            warningList.add(ex);
-        } else {
-            throw ex;
-        }
-    }
 
     private NamedSet createNamedSet(MappingNamedSet xmlNamedSet) {
         final String formulaString = getFormula(xmlNamedSet);
@@ -790,69 +754,6 @@ public class RolapSchema implements Schema {
         throw Util.newError(new StringBuilder("Bad value access='").append(accessString).append("'").toString());
     }
 
-    @Override
-	public Dimension createDimension(Cube cube, String xml) {
-        MappingCubeDimension xmlDimension;
-        try {
-            final Parser xmlParser = XOMUtil.createDefaultParser();
-            final DOMWrapper def = xmlParser.parse(xml);
-            final String tagName = def.getTagName();
-            if (tagName.equals("Dimension")) {
-                JAXBContext jaxbContext = JAXBContext.newInstance(PrivateDimensionImpl.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                xmlDimension = (MappingPrivateDimension) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-            } else if (tagName.equals("DimensionUsage")) {
-                JAXBContext jaxbContext = JAXBContext.newInstance(DimensionUsageImpl.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                xmlDimension = (MappingDimensionUsage) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-            } else {
-                throw new XOMException(
-                    new StringBuilder("Got <").append(tagName)
-                    .append("> when expecting <Dimension> or <DimensionUsage>").toString());
-            }
-        } catch (XOMException | JAXBException e) {
-            throw Util.newError(
-                e,
-                new StringBuilder("Error while adding dimension to cube '").append(cube)
-                .append("' from XML [").append(xml).append("]").toString());
-        }
-        return ((RolapCube) cube).createDimension(xmlDimension, xmlSchema);
-    }
-
-    @Override
-	public Cube createCube(String xml) {
-        RolapCube cube;
-        try {
-            final Parser xmlParser = XOMUtil.createDefaultParser();
-            final DOMWrapper def = xmlParser.parse(xml);
-            final String tagName = def.getTagName();
-            if (tagName.equals("Cube")) {
-                // Create empty XML schema, to keep the method happy. This is
-                // okay, because there are no forward-references to resolve.
-                final MappingSchema xmlSchema = new org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl();
-                JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeImpl.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                MappingCube xmlDimension = (MappingCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-                cube = new RolapCube(this, xmlSchema, xmlDimension, context);
-            } else if (tagName.equals("VirtualCube")) {
-                // Need the real schema here.
-                MappingSchema xmlSchema = getXMLSchema();
-                JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeImpl.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                MappingVirtualCube xmlDimension = (MappingVirtualCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-                cube = new RolapCube(this, xmlSchema, xmlDimension, context);
-            } else {
-                throw new XOMException(
-                    new StringBuilder("Got <").append(tagName).append("> when expecting <Cube>").toString());
-            }
-        } catch (XOMException | JAXBException e) {
-            throw Util.newError(
-                e,
-                new StringBuilder("Error while creating cube from XML [").append(xml).append("]").toString());
-        }
-        return cube;
-    }
-
     public static List<RolapSchema> getRolapSchemas() {
         return RolapSchemaPool.instance().getRolapSchemas();
     }
@@ -941,12 +842,7 @@ public class RolapSchema implements Schema {
             cube);
     }
 
-    @Override
-	public boolean removeCube(final String cubeName) {
-        final RolapCube cube =
-            mapNameToCube.remove(Util.normalizeName(cubeName));
-        return cube != null;
-    }
+
 
     @Override
 	public Cube[] getCubes() {
@@ -1270,8 +1166,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 stars.put(rolapStarKey, star);
                 // let cache manager load pending segments
                 // from external cache if needed
-                MondrianServer.forConnection(
-                    internalConnection).getAggregationManager().getCacheMgr(internalConnection)
+                internalConnection.getContext().getAggregationManager().getCacheMgr(internalConnection)
                     .loadCacheForStar(star);
             }
             return star;

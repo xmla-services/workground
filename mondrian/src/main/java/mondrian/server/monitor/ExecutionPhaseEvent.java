@@ -39,7 +39,7 @@ public class ExecutionPhaseEvent extends ExecutionEvent {
      */
     public ExecutionPhaseEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId,
         long executionId,

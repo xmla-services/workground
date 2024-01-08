@@ -26,7 +26,7 @@ import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
@@ -69,7 +69,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotal(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -110,7 +110,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleSelection(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -137,7 +137,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasures(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -189,7 +189,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContextWrapper context)
         throws Exception
     {
@@ -274,7 +274,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testChildSelection(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {

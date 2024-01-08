@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
 import static org.opencube.junit5.TestUtil.flushSchemaCache;
@@ -55,7 +55,7 @@ class DefaultRecognizerTest {
      * recognizer doesn't use the agg tables anymore.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDefaultRecognizerWithFactAlias(TestContext context) {
         Connection connection = context.getConnection();
         flushSchemaCache(connection);
@@ -119,7 +119,7 @@ class DefaultRecognizerTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleReaderWithDistinctCountMeasureInContext(TestContext context) {
         Connection connection = context.getConnection();
         flushSchemaCache(connection);

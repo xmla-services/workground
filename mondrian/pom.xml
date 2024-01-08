@@ -404,6 +404,14 @@
 			<artifactId>org.eclipse.daanse.util.io</artifactId>
 			<version>${revision}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>
+				org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.record
+			</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<!--

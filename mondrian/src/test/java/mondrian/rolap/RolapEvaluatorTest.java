@@ -17,12 +17,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 class RolapEvaluatorTest {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testGetSlicerPredicateInfo(TestContextWrapper context) throws Exception {
         RolapResult result = (RolapResult) executeQuery(context.createConnection(),
             "select  from sales "
@@ -55,7 +55,7 @@ class RolapEvaluatorTest {
     */
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testListColumnPredicateInfo(TestContextWrapper context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
@@ -70,7 +70,7 @@ class RolapEvaluatorTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testOrPredicateInfo(TestContextWrapper context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "

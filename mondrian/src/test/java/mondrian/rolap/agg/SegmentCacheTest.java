@@ -23,7 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.agg.SegmentCacheManager.CompositeSegmentCache;
@@ -40,7 +40,7 @@ import mondrian.test.BasicQueryTest;
 class SegmentCacheTest {
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundPredicatesCollision(TestContextWrapper context) {
         String query =
             "SELECT [Gender].[All Gender] ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES";
@@ -71,7 +71,7 @@ class SegmentCacheTest {
     }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)	
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)	
     void testSegmentCacheEvents(TestContextWrapper context) throws Exception {
         SegmentCache mockCache = new MockSegmentCache();
         SegmentCacheWorker testWorker =
@@ -87,7 +87,7 @@ class SegmentCacheTest {
         cc.flush(cc.createMeasuresRegion(salesCube));
         Thread.sleep(1000);
 
-        MondrianServer.forConnection(connection)
+        connection.getContext()
             .getAggregationManager().cacheMgr.segmentCacheWorkers
             .add(testWorker);
 
@@ -114,8 +114,7 @@ class SegmentCacheTest {
 
         try {
             // Register our custom listener.
-            ((CompositeSegmentCache)MondrianServer
-                .forConnection(connection)
+            ((CompositeSegmentCache)connection.getContext()
                 .getAggregationManager().cacheMgr.compositeCache)
                 .addListener(listener);
             // Now execute a query and check the events
@@ -142,11 +141,10 @@ class SegmentCacheTest {
             assertEquals("FoodMart", deletedHeaders.get(0).schemaName);
             assertEquals("Unit Sales", deletedHeaders.get(0).measureName);
         } finally {
-            ((CompositeSegmentCache)MondrianServer
-                .forConnection(connection)
-                .getAggregationManager().cacheMgr.compositeCache)
+            ((CompositeSegmentCache)connection.getContext()
+            		.getAggregationManager().cacheMgr.compositeCache)
                 .removeListener(listener);
-            MondrianServer.forConnection(connection)
+           connection.getContext()
                 .getAggregationManager().cacheMgr.segmentCacheWorkers
                 .remove(testWorker);
         }

@@ -409,40 +409,7 @@ public interface CacheControl {
      */
     void flushSchemaCache();
 
-    /**
-     * Flushes the given Schema instance from the pool. It resolves the
-     * schema to flush by using its catalog URL, connection key and
-     * JDBC username.
-     *
-     * <p>Flushing the schema cache will flush all aggregations and segments
-     * associated to it as well.
-     */
-    void flushSchema(
-        final String catalogUrl,
-        final String connectionKey,
-        final String jdbcUser,
-        String dataSourceStr);
-
-    /**
-     * Flushes the given Schema instance from the pool. It resolves the
-     * schema to flush by using its catalog URL and DataSource object.
-     *
-     * <p>Flushing the schema cache will flush all aggregations and segments
-     * associated to it as well.
-     */
-    void flushSchema(
-        String catalogUrl,
-        DataSource dataSource);
-
-    /**
-     * Flushes the given Schema instance from the pool
-     *
-     * <p>Flushing the schema cache will flush all aggregations and segments
-     * associated to it as well.
-     *
-     * @param schema Schema
-     */
-    void flushSchema(Schema schema);
+   
 
     /** a region of cells in the cell cache */
     public interface CellRegion {

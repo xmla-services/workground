@@ -36,7 +36,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
@@ -255,7 +255,7 @@ class CacheControlTest {
      * {@link CacheControl}.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCreateCellRegion(TestContextWrapper context) {
         // Execute a query.
         final RolapConnection connection =
@@ -270,7 +270,7 @@ class CacheControlTest {
      * Creates a cell region, runs a query, then flushes the cache.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNormalize2(TestContextWrapper context) {
         // Execute a query.
         Connection connection = context.createConnection();
@@ -299,7 +299,7 @@ class CacheControlTest {
      * Creates a cell region, runs a query, then flushes the cache.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFlush(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
@@ -452,7 +452,7 @@ class CacheControlTest {
      * Creates a partial cell region, runs a query, then flushes the cache.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlush(TestContextWrapper context) {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
@@ -520,7 +520,7 @@ class CacheControlTest {
      * header column values to those of the cache region.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlush_2(TestContextWrapper context) throws Exception {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
@@ -558,7 +558,7 @@ class CacheControlTest {
      * the cache.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlushRange(TestContextWrapper context) {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
@@ -876,7 +876,7 @@ class CacheControlTest {
      * flushing and getting errors.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNegative(TestContextWrapper context) {
         final Connection connection = context.createConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -1022,7 +1022,7 @@ class CacheControlTest {
      * Tests crossjoin of regions, {@link CacheControl#createCrossjoinRegion}.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCrossjoin(TestContextWrapper context) {
         final Connection connection = context.createConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -1131,7 +1131,7 @@ class CacheControlTest {
      * normal form.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNormalize(TestContextWrapper context) {
         // Create
         // Union(
@@ -1204,7 +1204,7 @@ class CacheControlTest {
      * NullPointerException"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFlushNonPrimedContent(TestContextWrapper context) throws Exception {
         Connection connection = context.createConnection();
         flushCache(connection);
@@ -1224,7 +1224,7 @@ class CacheControlTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1094(TestContextWrapper context) throws Exception {
         final String query =
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"

@@ -33,7 +33,7 @@ public class CellCacheSegmentCreateEvent extends CellCacheEvent {
      */
     public CellCacheSegmentCreateEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId,
         long executionId,

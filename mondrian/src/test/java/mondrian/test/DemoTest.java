@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.ExpressiveNamesDataLoader;
-import org.opencube.junit5.propupdator.AppandExpressiveNamesCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandExpressiveNamesCatalog;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
@@ -30,7 +30,7 @@ class DemoTest {
     };
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandExpressiveNamesCatalogAsFile.class, dataloader = ExpressiveNamesDataLoader.class )
+    @ContextSource(propertyUpdater = AppandExpressiveNamesCatalog.class, dataloader = ExpressiveNamesDataLoader.class )
     void testSample0(TestContext context) {
         assertQueryReturns(context.getConnection(), sampleQueries[0].query, sampleQueries[0].result );
     }

@@ -13,12 +13,16 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
-import mondrian.olap.DimensionType;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapAggregator;
-import mondrian.rolap.RolapStoredMeasure;
-import mondrian.xmla.RowsetDefinition;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -103,15 +107,12 @@ import org.olap4j.metadata.XmlaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import mondrian.olap.DimensionType;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapStoredMeasure;
+import mondrian.xmla.VarType;
 
 public class Utils {
 
@@ -463,9 +464,7 @@ public class Utils {
                     buf.append(v.getPrittyName());
                 }
 
-                RowsetDefinition.MdschemaFunctionsRowset.VarType varType =
-                    RowsetDefinition.MdschemaFunctionsRowset.VarType
-                        .forCategory(returnCategory);
+                VarType varType = VarType.forCategory(returnCategory);
                 result.add(
                     new MdSchemaFunctionsResponseRowR(
                         Optional.ofNullable(fm.functionAtom().name()),

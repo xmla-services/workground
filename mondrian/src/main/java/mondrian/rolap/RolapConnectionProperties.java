@@ -24,51 +24,9 @@ import java.lang.ref.SoftReference;
  *
  * @author jhyde, Mar 18, 2003
  */
+@Deprecated
 public enum RolapConnectionProperties {
 
-  /**
-   * The "Catalog" property is the URL of the catalog, an XML file which
-   * describes the schema: cubes, hierarchies, and so forth.
-   * Catalogs are described in <a target="_top"
-   * href="{@docRoot}/../schema.html">the Schema Guide</a>.
-   * See also {@link #CatalogContent}.
-   */
-  Catalog,
-
-  /**
-   * The "CatalogContent" property is an XML string representing the schema:
-   * cubes, hierarchies, and so forth.
-   * Catalogs are described in <a target="_top"
-   * href="{@docRoot}/../schema.html">the Schema Guide</a>.
-   *
-   * <p>When using this property, quote its value with either single or
-   * double quotes, then escape all occurrences of that character within the
-   * catalog content by using double single/double quotes. ie:
-   *
-   * <p>&nbsp;&nbsp;CatalogContent="&lt;Schema name=""My Schema""/&gt;"
-   *
-   * <p>See also {@link #Catalog}.
-   */
-  CatalogContent,
-
-  /**
-   * The "CatalogName" property is not used. If, in future, we support
-   * multiple catalogs, this property will specify which catalog to use.
-   * See also {@link #Catalog}.
-   */
-  CatalogName,
-
-  /**
-   * The "PoolNeeded" property tells Mondrian whether to add a layer of
-   * connection pooling.
-   *
-   * <p>If no value is specified, we assume that:<ul>
-   * <li>connections created via the {@link #Jdbc} property are not pooled,
-   * and therefore need to be pooled,
-   * <li>connections created via the {@link #DataSource} are already pooled.
-   * </ul>
-   */
-  PoolNeeded,
 
   /**
    * The "Role" property is the name of the {@link mondrian.olap.Role role}
@@ -104,12 +62,6 @@ public enum RolapConnectionProperties {
    */
   Ignore,
 
-  /**
-   * The "Instance" property is the unique identifier of a mondrian server
-   * running in the current JVM. If there are multiple mondrian servers, it
-   * ensures that the connection belongs to the correct one.
-   */
-  Instance,
 
   /**
    * The "PinSchemaTimeout" defines how much time must Mondrian

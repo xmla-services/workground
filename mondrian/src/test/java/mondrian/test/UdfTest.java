@@ -47,7 +47,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class UdfTest {
     // ~ Tests follow ----------------------------------------------------------
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSanity(TestContext context) {
         // sanity check, make sure the schema is loading correctly
         prepareContext(context);
@@ -146,7 +146,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFun(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -185,7 +185,7 @@ public class UdfTest {
      * @throws SQLException on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFunWithProfiling(TestContextWrapper context) throws SQLException {
         prepareContext(context.getContext());
         OlapConnection connection = null;
@@ -205,7 +205,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLastNonEmpty(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -283,7 +283,7 @@ public class UdfTest {
      * property.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLastNonEmptyBig(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -305,7 +305,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBadFun(TestContext context) {
         updateTestContext(context, SchemaModifiers.UdfTestModifier12::new);
         /*
@@ -326,7 +326,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGenericFun(TestContext context) {
         updateTestContext(context, SchemaModifiers.UdfTestModifier14::new);
         /*
@@ -343,7 +343,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testComplexFun(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -372,7 +372,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testException(TestContext context) {
         prepareContext(context);
         Result result = executeQuery(context.getConnection(),
@@ -401,7 +401,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateString(TestContext context)
     {
         prepareContext(context);
@@ -415,7 +415,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberBefore(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -430,7 +430,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberBeforeUsingQuotes(TestContext context)
     {
         prepareContext(context);
@@ -444,7 +444,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberAfter(TestContext context)
     {
         prepareContext(context);
@@ -460,7 +460,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberExact(TestContext context)
     {
         prepareContext(context);
@@ -477,7 +477,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberNoFindArg(TestContext context)
     {
         prepareContext(context);
@@ -493,7 +493,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberHierarchy(TestContext context) {
         prepareContext(context);
         final String query =
@@ -514,7 +514,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberHierarchyNullReturn(TestContext context) {
         prepareContext(context);
         // CurrentDateMember will return null member since the latest date in
@@ -530,7 +530,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberRealAfter(TestContext context) {
         prepareContext(context);
         // omit formatting characters from the format so the current date
@@ -548,7 +548,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberRealExact1(TestContext context) {
         prepareContext(context);
         // omit formatting characters from the format so the current date
@@ -566,7 +566,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberRealExact2(TestContext context) {
         prepareContext(context);
         // omit formatting characters from the format so the current date
@@ -584,7 +584,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateMemberPrev(TestContext context) {
         prepareContext(context);
         // apply a function on the result of the UDF
@@ -600,7 +600,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCurrentDateLag(TestContext context) {
         prepareContext(context);
         // Also, try a different style of quoting, because single quote followed
@@ -627,7 +627,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMatches(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -657,7 +657,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNotMatches(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -684,7 +684,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testIn(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -706,7 +706,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNotIn(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -726,7 +726,7 @@ public class UdfTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testChildMemberIn(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -812,7 +812,7 @@ public class UdfTest {
      * guesses based on the type of the first argument.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonGuessableReturnType(TestContext context) {
         /*
         udfTestContext(context,
@@ -833,7 +833,7 @@ public class UdfTest {
      * member should have been evaluated to a scalar.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfToString(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -866,7 +866,7 @@ public class UdfTest {
      * case, applies f(member,dimension) to args(member,hierarchy).
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAnotherMemberFun(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -894,7 +894,7 @@ public class UdfTest {
 
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachingCurrentDate(TestContext context) {
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -923,7 +923,7 @@ public class UdfTest {
      * mondrian.rolap.RolapNamedSetEvaluator$1 instead"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testListUdf(TestContext context) {
         prepareContext(context);
         checkListUdf(context, ReverseFunction.class);
@@ -980,7 +980,7 @@ public class UdfTest {
      * Tests that a non-static function gives an error.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonStaticUdfFails(TestContext context) {
         /*
         udfTestContext(context,
@@ -1003,7 +1003,7 @@ public class UdfTest {
      * value.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberUdfDoesNotEvaluateToScalar(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -1021,7 +1021,7 @@ public class UdfTest {
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfNeitherScriptNorClassname(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -1039,7 +1039,7 @@ public class UdfTest {
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfBothScriptAndClassname(TestContextWrapper context) {
        /*
        udfTestContext(context,
@@ -1058,7 +1058,7 @@ public class UdfTest {
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfScriptBadLanguage(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -1077,7 +1077,7 @@ public class UdfTest {
      */
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testScriptUdf(TestContextWrapper context) {
         /*
         udfTestContext(context,
@@ -1125,7 +1125,7 @@ public class UdfTest {
      */
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testScriptUdfFactorial(TestContext context) {
     	//prepareContext(context);
         /*
@@ -1161,7 +1161,7 @@ public class UdfTest {
      */
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testScriptUdfInvalid(TestContext context) {
         /*
         udfTestContext(context,
@@ -1198,7 +1198,7 @@ public class UdfTest {
      * attribute of a Measure element.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatter(TestContext context) {
         prepareContext(context);
         // Note that
@@ -1230,7 +1230,7 @@ public class UdfTest {
      * CellFormatter element.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterNested(TestContext context) {
         prepareContext(context);
         // Note that
@@ -1264,7 +1264,7 @@ public class UdfTest {
      * As {@link #testCellFormatterNested()}, but using a script.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterScript(TestContext context) {
         /*
         measureTestContext(context,
@@ -1300,7 +1300,7 @@ public class UdfTest {
      * using the old syntax (a member property called "CELL_FORMATTER").
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMember(TestContext context) {
         /*
         calcMemberTestContext(context,
@@ -1333,7 +1333,7 @@ public class UdfTest {
      * using the new syntax (a nested CellFormatter element).
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMemberNested(TestContext context) {
         /*
         calcMemberTestContext(context,
@@ -1366,7 +1366,7 @@ public class UdfTest {
      * using a script.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMemberScript(TestContext context) {
         prepareContext(context);
         /*
@@ -1402,7 +1402,7 @@ public class UdfTest {
      * attribute of a Measure element.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatter(TestContext context) {
         prepareContext(context);
         /*
@@ -1429,7 +1429,7 @@ public class UdfTest {
      * memberFormatter element.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatterNested(TestContext context) {
         prepareContext(context);
         /*
@@ -1457,7 +1457,7 @@ public class UdfTest {
      * As {@link #testMemberFormatterNested()}, but using a script.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatterScript(TestContext context) {
         prepareContext(context);
         /*
@@ -1490,7 +1490,7 @@ public class UdfTest {
      * @throws SQLException on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatter(TestContextWrapper context) throws SQLException {
         prepareContext(context.getContext());
         /*
@@ -1527,7 +1527,7 @@ public class UdfTest {
      * @throws SQLException on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatterNested(TestContextWrapper context) throws SQLException {
         prepareContext(context.getContext());
         /*
@@ -1566,7 +1566,7 @@ public class UdfTest {
      * @throws SQLException on error
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatterScript(TestContextWrapper context) throws SQLException {
         prepareContext(context.getContext());
         /*

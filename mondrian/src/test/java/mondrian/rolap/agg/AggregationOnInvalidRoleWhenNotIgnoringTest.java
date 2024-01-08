@@ -20,7 +20,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
@@ -59,7 +59,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestContextWrapper context) {
         prepareContext(context);
         try {

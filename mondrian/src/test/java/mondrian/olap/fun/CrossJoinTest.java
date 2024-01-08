@@ -47,7 +47,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -163,7 +163,7 @@ private PropertySaver5 propSaver;
   // The test to verify that cancellation/timeout is checked
   // in CrossJoinFunDef$CrossJoinIterCalc$1$1.forward()
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCrossJoinIterCalc_IterationCancellationOnForward(TestContextWrapper foodMartContext) {
     propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 1 );
     // Get product members as TupleList
@@ -368,13 +368,13 @@ private PropertySaver5 propSaver;
   }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
 void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
 	}
 
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testResultLimitWithinCrossjoin(TestContextWrapper foodMartContext) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
    Connection connection= foodMartContext.createConnection();

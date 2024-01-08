@@ -34,7 +34,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.IdImpl;
 
@@ -48,7 +48,7 @@ import mondrian.olap.IdImpl;
 class TypeTest {
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testConversions(TestContextWrapper foodMartContext) {
         final Connection connection = foodMartContext.createConnection();
         Cube salesCube =
@@ -179,7 +179,7 @@ class TypeTest {
     }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCommonTypeWhenSetTypeHavingMemberTypeAndTupleType(TestContextWrapper foodMartContext) {
         Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =
@@ -210,7 +210,7 @@ class TypeTest {
     }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCommonTypeOfMemberandTupleTypeIsTupleType(TestContextWrapper foodMartContext) {
         Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =
@@ -236,7 +236,7 @@ class TypeTest {
     }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCommonTypeBetweenTuplesOfDifferentSizesIsATupleType(TestContextWrapper foodMartContext) {
     Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =

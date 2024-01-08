@@ -232,6 +232,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 							TestContextImpl testContextImpl=new TestContextImpl();
 							testContextImpl.setDataSource(dataBaseInfo.getKey());
 							testContextImpl.setDialect(dataBaseInfo.getValue());
+							testContextImpl.setName("TestContext");
 
 							BaseTestContext btcontext=new BaseTestContext(testContextImpl);
 
@@ -244,7 +245,6 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 									throw new RuntimeException(e);
 								}
 							}).forEachOrdered(u->{
-								btcontext.update(u);
 								u.updateContext(testContextImpl);
 								
 							});

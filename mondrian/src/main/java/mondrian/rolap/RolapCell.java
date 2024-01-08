@@ -190,7 +190,7 @@ public class RolapCell implements Cell {
             result.getExecution().getMondrianStatement()
                 .getMondrianConnection();
         final RolapAggregationManager aggMgr =
-            connection.getServer().getAggregationManager();
+            connection.getContext().getAggregationManager();
         return aggMgr.getDrillThroughSql(
             cellRequest,
             starPredicateSlicer,
@@ -221,7 +221,7 @@ public class RolapCell implements Cell {
             result.getExecution().getMondrianStatement()
                 .getMondrianConnection();
         final RolapAggregationManager aggMgr =
-            connection.getServer().getAggregationManager();
+            connection.getContext().getAggregationManager();
         final String sql =
             aggMgr.getDrillThroughSql(
                 cellRequest,

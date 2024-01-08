@@ -13,9 +13,20 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.execute;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.server.Session;
-import mondrian.xmla.XmlaException;
+import static mondrian.xmla.XmlaConstants.CLIENT_FAULT_FC;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
+import static mondrian.xmla.XmlaConstants.USM_DOM_PARSE_FAULT_FS;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Command;
 import org.eclipse.daanse.olap.api.Connection;
@@ -35,8 +46,8 @@ import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 import org.eclipse.daanse.olap.api.result.AllocationPolicy;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
-import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
+import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.olap.xmla.bridge.discover.DBSchemaDiscoverService;
@@ -143,19 +154,9 @@ import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import mondrian.olap.MondrianProperties;
 
-import static mondrian.xmla.XmlaConstants.CLIENT_FAULT_FC;
-import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_CODE;
-import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_FAULT_FS;
-import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
-import static mondrian.xmla.XmlaConstants.USM_DOM_PARSE_FAULT_FS;
+import mondrian.xmla.XmlaException;
 
 public class OlapExecuteService implements ExecuteService {
 
@@ -184,6 +185,7 @@ public class OlapExecuteService implements ExecuteService {
     @Override
     public CancelResponse cancel(CancelRequest cancel) {
         List<Context> contexts = contextsListSupplyer.get();
+        //TODO: store the connection for your session and use it.
         for (Context context : contexts) {
             try {
                 final Connection connection = context.getConnection();
@@ -196,13 +198,10 @@ public class OlapExecuteService implements ExecuteService {
                 }
             }
             */
-                mondrian.olap.MondrianServer mondrianServer =
-                    mondrian.olap.MondrianServer.forConnection(connection);
-                String sessionId = cancel.command().sessionID();
-                for (mondrian.server.Statement statement : mondrianServer.getStatements(sessionId)) {
-                    if (statement.getMondrianConnection().getConnectInfo().get(SESSION_ID).equals(sessionId)) {
+                ;
+          
+                for (mondrian.server.Statement statement : connection.getContext().getStatements(connection)) {
                         statement.cancel();
-                    }
                 }
             /*
             for(XmlaRequest xmlaRequest: currentRequests){
@@ -291,15 +290,15 @@ public class OlapExecuteService implements ExecuteService {
         TransactionCommand transactionCommand
     ) {
         String sessionId = statementRequest.sessionId();
-        Session session = Session.get(sessionId);
-        if (transactionCommand.getCommand() == Command.BEGIN) {
-            Scenario scenario = context.createScenario();
-            session.setScenario(scenario);
-        } else if (transactionCommand.getCommand() == Command.ROLLBACK) {
-            session.setScenario(null);
-        } else if (transactionCommand.getCommand() == Command.COMMIT) {
-            session.setScenario(null);
-        }
+
+		if (transactionCommand.getCommand() == Command.BEGIN) {
+			Scenario scenario = context.createScenario();
+			throw new UnsupportedOperationException("");
+		} else if (transactionCommand.getCommand() == Command.ROLLBACK) {
+			throw new UnsupportedOperationException("");
+		} else if (transactionCommand.getCommand() == Command.COMMIT) {
+			throw new UnsupportedOperationException("");
+		}
         return new StatementResponseR(null, null);
     }
 

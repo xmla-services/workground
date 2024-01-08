@@ -120,7 +120,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -231,7 +231,7 @@ class SchemaTest {
 
     // Tests follow...
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSolveOrderInCalculatedMember(TestContext context) {
         class TestSolveOrderInCalculatedMemberModifier extends RDbMappingSchemaModifier{
             public TestSolveOrderInCalculatedMemberModifier(MappingSchema mappingSchema) {
@@ -302,7 +302,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyDefaultMember(TestContext context) {
         class TestHierarchyDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyDefaultMemberModifier(MappingSchema mappingSchema) {
@@ -368,7 +368,7 @@ class SchemaTest {
      * forum post 'wrong unique name for default member when hasAll=false'</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMemberName(TestContext context) {
         class TestDefaultMemberNameModifier extends RDbMappingSchemaModifier {
             public TestDefaultMemberNameModifier(MappingSchema mappingSchema) {
@@ -460,7 +460,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyAbbreviatedDefaultMember(TestContext context) {
         class TestHierarchyAbbreviatedDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyAbbreviatedDefaultMemberModifier(MappingSchema mappingSchema) {
@@ -523,7 +523,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNoLevelsFails(TestContext context) {
         class TestHierarchyNoLevelsFailsModifier extends RDbMappingSchemaModifier {
             public TestHierarchyNoLevelsFailsModifier(MappingSchema mappingSchema) {
@@ -568,7 +568,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNonUniqueLevelsFails(TestContext context) {
         class TestHierarchyNonUniqueLevelsFailsModifier extends RDbMappingSchemaModifier {
             public TestHierarchyNonUniqueLevelsFailsModifier(MappingSchema mappingSchema) {
@@ -631,7 +631,7 @@ class SchemaTest {
      * Tests a measure based on 'count'.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountMeasure(TestContext context) {
         class TestCountMeasureModifier extends RDbMappingSchemaModifier {
             public TestCountMeasureModifier(MappingSchema mappingSchema) {
@@ -686,7 +686,7 @@ class SchemaTest {
      * table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyTableNotFound(TestContext context) {
         class TestHierarchyTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestHierarchyTableNotFoundModifier(MappingSchema mappingSchema) {
@@ -741,7 +741,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPrimaryKeyTableNotFound(TestContext context) {
         class TestPrimaryKeyTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestPrimaryKeyTableNotFoundModifier(MappingSchema mappingSchema) {
@@ -794,7 +794,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableNotFound(TestContext context) {
         class TestLevelTableNotFoundModifier extends RDbMappingSchemaModifier {
             public TestLevelTableNotFoundModifier(MappingSchema mappingSchema) {
@@ -848,7 +848,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyBadDefaultMember(TestContext context) {
         class TestHierarchyBadDefaultMemberModifier extends RDbMappingSchemaModifier {
             public TestHierarchyBadDefaultMemberModifier(MappingSchema mappingSchema) {
@@ -914,7 +914,7 @@ class SchemaTest {
      * Bug MONDRIAN-236, "Mondrian generates invalid SQL"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAlias(TestContext context) {
         class TestDuplicateTableAliasModifier extends RDbMappingSchemaModifier {
             public TestDuplicateTableAliasModifier(MappingSchema mappingSchema) {
@@ -977,7 +977,7 @@ class SchemaTest {
      * table without an alias, and the system doesn't complain.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAliasSameForeignKey(TestContext context) {
         class TestDuplicateTableAliasSameForeignKeyModifier extends RDbMappingSchemaModifier {
             public TestDuplicateTableAliasSameForeignKeyModifier(MappingSchema mappingSchema) {
@@ -1046,7 +1046,7 @@ class SchemaTest {
      * See {@link #testDuplicateTableAlias()}.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTable(TestContext context) {
         class TestDimensionsShareTableModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableModifier(MappingSchema mappingSchema) {
@@ -1250,7 +1250,7 @@ class SchemaTest {
      * note that this works when native cross join is disabled
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableNativeNonEmptyCrossJoin(TestContext context) {
         class TestDimensionsShareTableNativeNonEmptyCrossJoinModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableNativeNonEmptyCrossJoinModifier(MappingSchema mappingSchema) {
@@ -1314,7 +1314,7 @@ class SchemaTest {
      * one table uses an alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableSameForeignKeys(TestContext context) {
         class TestDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
@@ -1405,7 +1405,7 @@ class SchemaTest {
      * unique joins to the fact table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSnowflakeHierarchyValidationNotNeeded(TestContext context) {
         // this test breaks when using aggregates at the moment
         // due to a known limitation
@@ -1666,7 +1666,7 @@ class SchemaTest {
      * the same join aliases to the fact table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSnowflakeHierarchyValidationNotNeeded2(TestContext context) {
         class TestSnowflakeHierarchyValidationNotNeeded2Modifier extends RDbMappingSchemaModifier {
             public TestSnowflakeHierarchyValidationNotNeeded2Modifier(MappingSchema mappingSchema) {
@@ -1920,7 +1920,7 @@ class SchemaTest {
      * both using a table alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTable(TestContext context) {
         class TestDimensionsShareJoinTableModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableModifier(MappingSchema mappingSchema) {
@@ -2125,7 +2125,7 @@ class SchemaTest {
      * both using a table alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableOneAlias(TestContext context) {
         class TestDimensionsShareJoinTableOneAliasModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableOneAliasModifier(MappingSchema mappingSchema) {
@@ -2332,7 +2332,7 @@ class SchemaTest {
      * both using a table alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableTwoAliases(TestContext context) {
         class TestDimensionsShareJoinTableTwoAliasesModifier extends RDbMappingSchemaModifier {
             public TestDimensionsShareJoinTableTwoAliasesModifier(MappingSchema mappingSchema) {
@@ -2539,7 +2539,7 @@ class SchemaTest {
      * both using a table alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTable(TestContext context) {
         class TestTwoAliasesDimensionsShareTableModifier extends RDbMappingSchemaModifier {
             public TestTwoAliasesDimensionsShareTableModifier(MappingSchema mappingSchema) {
@@ -2689,7 +2689,7 @@ class SchemaTest {
      * both using a table alias.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTableSameForeignKeys(TestContext context) {
         class TestTwoAliasesDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
             public TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
@@ -2838,7 +2838,7 @@ class SchemaTest {
      * Test Multiple DimensionUsages on same Dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionUsages(TestContext context) {
         class TestMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
             public TestMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
@@ -2936,7 +2936,7 @@ class SchemaTest {
      * Test Multiple DimensionUsages on same Dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionHierarchyCaptionUsages(TestContext context) {
         class TestMultipleDimensionHierarchyCaptionUsagesModifier extends RDbMappingSchemaModifier {
             public TestMultipleDimensionHierarchyCaptionUsagesModifier(MappingSchema mappingSchema) {
@@ -3044,7 +3044,7 @@ class SchemaTest {
      * correctly.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionCreation(TestContext context) {
         class TestDimensionCreationModifier extends RDbMappingSchemaModifier {
             public TestDimensionCreationModifier(MappingSchema mappingSchema) {
@@ -3118,8 +3118,8 @@ class SchemaTest {
 
         String dimension =
             "<DimensionUsage name=\"Time\" source=\"Time\" foreignKey=\"time_id\"/>";
-        context.getConnection().getSchema().createDimension(
-            cube, dimension);
+//        context.getConnection().getSchema().createDimension(
+//            cube, dimension);
 
         assertQueryReturns(context.getConnection(),
             "select\n"
@@ -3139,7 +3139,7 @@ class SchemaTest {
      * Test DimensionUsage level attribute
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionUsageLevel(TestContext context) {
         class TestDimensionUsageLevelModifier extends RDbMappingSchemaModifier {
             public TestDimensionUsageLevelModifier(MappingSchema mappingSchema) {
@@ -3243,7 +3243,7 @@ class SchemaTest {
      * dimension usage name is different then source name
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberMultipleDimensionUsages(TestContext context) {
         class TestAllMemberMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
             public TestAllMemberMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
@@ -3357,7 +3357,7 @@ class SchemaTest {
      * an unaliased name instead of an aliased name
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonAliasedDimensionUsage(TestContext context) {
         class TestNonAliasedDimensionUsageModifier extends RDbMappingSchemaModifier {
             public TestNonAliasedDimensionUsageModifier(MappingSchema mappingSchema) {
@@ -3447,7 +3447,7 @@ class SchemaTest {
      * degenerate dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewDegenerateDims(TestContext context) {
         class TestViewDegenerateDimsModifier extends RDbMappingSchemaModifier {
             public TestViewDegenerateDimsModifier(MappingSchema mappingSchema) {
@@ -3601,7 +3601,7 @@ class SchemaTest {
      * Tests a cube whose fact table is a &lt;View&gt; element.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable(TestContext context) {
         class TestViewFactTableModifier extends RDbMappingSchemaModifier {
             public TestViewFactTableModifier(MappingSchema mappingSchema) {
@@ -3767,7 +3767,7 @@ class SchemaTest {
      * has dimensions based on the fact table.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable2(TestContext context) {
         class TestViewFactTable2Modifier extends RDbMappingSchemaModifier {
             public TestViewFactTable2Modifier(MappingSchema mappingSchema) {
@@ -3892,7 +3892,7 @@ class SchemaTest {
      * is "distinct-count".
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDeprecatedDistinctCountAggregator(TestContext context) {
         class TestDeprecatedDistinctCountAggregatorModifier extends RDbMappingSchemaModifier{
             public TestDeprecatedDistinctCountAggregatorModifier(MappingSchema mappingSchema) {
@@ -3973,7 +3973,7 @@ class SchemaTest {
      * Tests that an invalid aggregator causes an error.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidAggregator(TestContext context) {
         class TestInvalidAggregatorModifier extends RDbMappingSchemaModifier{
             public TestInvalidAggregatorModifier(MappingSchema mappingSchema) {
@@ -4040,7 +4040,7 @@ class SchemaTest {
      * Bug MONDRIAN-291, "'unknown usage' messages"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages(TestContext context) {
         class TestUnknownUsagesModifier extends RDbMappingSchemaModifier {
             public TestUnknownUsagesModifier(MappingSchema mappingSchema) {
@@ -4228,7 +4228,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages1(TestContext context) {
         class TestUnknownUsages1Modifier extends RDbMappingSchemaModifier {
             public TestUnknownUsages1Modifier(MappingSchema mappingSchema) {
@@ -4469,7 +4469,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatter(TestContext context) {
         class TestPropertyFormatterModifier extends RDbMappingSchemaModifier {
             public TestPropertyFormatterModifier(MappingSchema mappingSchema) {
@@ -4560,7 +4560,7 @@ class SchemaTest {
      * be qualified by cube name.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian233(TestContext context) {
         class TestBugMondrian233Modifier extends RDbMappingSchemaModifier {
             public TestBugMondrian233Modifier(MappingSchema mappingSchema) {
@@ -4630,7 +4630,7 @@ class SchemaTest {
      * MONDRIAN-303, "Property column shifting when use captionColumn"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian303(TestContext context) {
         class TestBugMondrian303Modifier extends RDbMappingSchemaModifier {
             public TestBugMondrian303Modifier(MappingSchema mappingSchema) {
@@ -4755,7 +4755,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionOneMeasure(TestContext context) {
         class TestCubeWithOneDimensionOneMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneDimensionOneMeasureModifier(MappingSchema mappingSchema) {
@@ -4834,7 +4834,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionUsageOneMeasure(TestContext context) {
         class TestCubeWithOneDimensionUsageOneMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneDimensionUsageOneMeasureModifier(MappingSchema mappingSchema) {
@@ -4898,7 +4898,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeHasFact(TestContext context) {
         class TestCubeHasFactModifier extends RDbMappingSchemaModifier {
             public TestCubeHasFactModifier(MappingSchema mappingSchema) {
@@ -4939,7 +4939,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeCaption(TestContextWrapper context) throws SQLException {
         class TestCubeCaptionModifier extends RDbMappingSchemaModifier {
             public TestCubeCaptionModifier(MappingSchema mappingSchema) {
@@ -5003,7 +5003,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoDimensions(TestContext context) {
         class TestCubeWithNoDimensionsModifier extends RDbMappingSchemaModifier {
             public TestCubeWithNoDimensionsModifier(MappingSchema mappingSchema) {
@@ -5043,7 +5043,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoMeasuresFails(TestContext context) {
         class TestCubeWithNoMeasuresFailsModifier extends RDbMappingSchemaModifier {
             public TestCubeWithNoMeasuresFailsModifier(MappingSchema mappingSchema) {
@@ -5117,7 +5117,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneCalcMeasure(TestContext context) {
         class TestCubeWithOneCalcMeasureModifier extends RDbMappingSchemaModifier {
             public TestCubeWithOneCalcMeasureModifier(MappingSchema mappingSchema) {
@@ -5208,7 +5208,7 @@ class SchemaTest {
      * specifc parent"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMemberInCube(TestContext context) {
         class TestCalcMemberInCubeModifier1 extends RDbMappingSchemaModifier {
             public TestCalcMemberInCubeModifier1(MappingSchema mappingSchema) {
@@ -5627,7 +5627,7 @@ class SchemaTest {
      * this test triggers an exception out of the aggregate table manager
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggTableSupportOfSharedDims(TestContext context) {
         if (Bug.BugMondrian361Fixed) {
             class TestAggTableSupportOfSharedDimsModifier extends RDbMappingSchemaModifier {
@@ -5733,7 +5733,7 @@ class SchemaTest {
      * Verifies that RolapHierarchy.tableExists() supports views.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableAttributeAsView(TestContext context) {
         class TestLevelTableAttributeAsViewModifier extends RDbMappingSchemaModifier {
             public TestLevelTableAttributeAsViewModifier(MappingSchema mappingSchema) {
@@ -5868,7 +5868,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidSchemaAccess(TestContextWrapper context) {
         class TestInvalidSchemaAccess extends RDbMappingSchemaModifier {
             public TestInvalidSchemaAccess(MappingSchema mappingSchema) {
@@ -5902,7 +5902,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberNoStringReplace(TestContext context) {
         class TestAllMemberNoStringReplaceModifier extends RDbMappingSchemaModifier {
             public TestAllMemberNoStringReplaceModifier(MappingSchema mappingSchema) {
@@ -5972,7 +5972,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRole(TestContextWrapper context) {
         class TestUnionRoleModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleModifier(MappingSchema mappingSchema) {
@@ -6041,7 +6041,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRoleContainsGrants(TestContextWrapper context) {
         class TestUnionRoleContainsGrantsModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleContainsGrantsModifier(MappingSchema mappingSchema) {
@@ -6089,7 +6089,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRoleIllegalForwardRef(TestContextWrapper context) {
         class TestUnionRoleIllegalForwardRefModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleIllegalForwardRefModifier(MappingSchema mappingSchema) {
@@ -6138,7 +6138,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchema(TestContext context) {
         class TestVirtualCubeNamedSetSupportInSchemaModifier extends RDbMappingSchemaModifier {
             public TestVirtualCubeNamedSetSupportInSchemaModifier(MappingSchema mappingSchema) {
@@ -6199,7 +6199,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchemaError(TestContextWrapper context) {
         class TestVirtualCubeNamedSetSupportInSchemaErrorModifier extends RDbMappingSchemaModifier {
             public TestVirtualCubeNamedSetSupportInSchemaErrorModifier(MappingSchema mappingSchema) {
@@ -6256,7 +6256,7 @@ class SchemaTest {
 
     @Disabled //not implemented yet
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void _testValidatorFindsNumericLevel(TestContextWrapper context) {
 
         class TestValidatorFindsNumericLevelModifier extends RDbMappingSchemaModifier {
@@ -6309,7 +6309,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidRoleError(TestContextWrapper context) {
         class TestInvalidRoleErrorModifier extends RDbMappingSchemaModifier {
             public TestInvalidRoleErrorModifier(MappingSchema mappingSchema) {
@@ -6344,7 +6344,7 @@ class SchemaTest {
      * caused by binary column value.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBinaryLevelKey(TestContext context) {
         switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case DERBY:
@@ -6506,7 +6506,7 @@ class SchemaTest {
      * MONDRIAN-896, "Oracle integer columns overflow if value &gt;>2^31"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelInternalType(TestContext context) {
         // One of the keys is larger than Integer.MAX_VALUE (2 billion), so
         // will only work if we use long values.
@@ -6625,7 +6625,7 @@ class SchemaTest {
      */
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelInternalTypeErr(TestContext context) {
         class TestLevelInternalTypeErrModifier extends RDbMappingSchemaModifier {
             public TestLevelInternalTypeErrModifier(MappingSchema mappingSchema) {
@@ -6718,7 +6718,7 @@ class SchemaTest {
 
     @Disabled // Adventure Works schema not found
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void _testAttributeHierarchy(TestContext context) {
         // from email from peter tran dated 2008/9/8
         // TODO: schema syntax to create attribute hierarchy
@@ -6763,7 +6763,7 @@ class SchemaTest {
      * any level.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testScdJoin(TestContext context) {
         class TestScdJoinModifier extends RDbMappingSchemaModifier {
             public TestScdJoinModifier(MappingSchema mappingSchema) {
@@ -6833,7 +6833,7 @@ class SchemaTest {
     // Join.rightAlias cannot be the empty string.
     @Disabled //not implemented yet
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void _testNonUniqueAlias(TestContext context) {
         class TestNonUniqueAliasModifier extends RDbMappingSchemaModifier {
             public TestNonUniqueAliasModifier(MappingSchema mappingSchema) {
@@ -6913,7 +6913,7 @@ class SchemaTest {
      * MONDRIAN-482, "ClassCastException when obtaining RolapCubeLevel"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian482(TestContext context) {
         // until bug MONDRIAN-495, "Table filter concept does not support
         // dialects." is fixed, this test case only works on MySQL
@@ -7060,7 +7060,7 @@ class SchemaTest {
      * "adding hours/mins as levelType for level of type Dimension"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian355(TestContext context) {
     	RolapSchemaPool.instance().clear();
         checkBugMondrian355(context, "TimeHalfYears");
@@ -7220,7 +7220,7 @@ class SchemaTest {
      * elements.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCaptionDescriptionAndAnnotation(TestContext context) {
         final String schemaName = "Description schema";
         final String salesCubeName = "DescSales";
@@ -7880,7 +7880,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCaption(TestContext context) {
         class TestCaptionModifier extends RDbMappingSchemaModifier {
 
@@ -7982,7 +7982,7 @@ class SchemaTest {
      * other than its leaf level, Mondrian gives wrong results"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian747(TestContext context) {
         // Test case requires a pecular inline view, and it works on dialects
         // that scalar subqery, viz oracle. I believe that the mondrian code
@@ -8375,7 +8375,7 @@ class SchemaTest {
      * MONDRIAN-463, "Snowflake dimension with 3-way join."</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian463(TestContext context) {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
@@ -8746,7 +8746,7 @@ class SchemaTest {
      * Same schema as {@link #testBugMondrian463}, except left-deep.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLeftDeepJoinFails(TestContext context) {
         class TestLeftDeepJoinFailsModifier extends RDbMappingSchemaModifier {
 
@@ -8875,7 +8875,7 @@ class SchemaTest {
      * Test for MONDRIAN-943 and MONDRIAN-465.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCaptionWithOrdinalColumn(TestContext context) {
     	RolapSchemaPool.instance().clear();
         class TestCaptionWithOrdinalColumnModifier extends RDbMappingSchemaModifier {
@@ -8960,7 +8960,7 @@ class SchemaTest {
      * of the base cubes.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian923(TestContext context) throws Exception {
         class TestBugMondrian923Modifier extends RDbMappingSchemaModifier {
 
@@ -9059,7 +9059,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestCubesVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9134,7 +9134,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubesVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestVirtualCubesVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9190,7 +9190,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestDimensionVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9272,7 +9272,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualDimensionVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestVirtualDimensionVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9335,7 +9335,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionUsageVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestDimensionUsageVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9406,8 +9406,10 @@ class SchemaTest {
             dimensionDef = dimensionDef.replace(
                 "@REPLACE_ME@",
                 String.valueOf(testValue));
-            context.getConnection().getSchema().createDimension(
-                cube, dimensionDef);
+            
+//            context.getConnection().getSchema().createDimension(
+//                cube, dimensionDef);
+            
             Dimension dim = null;
             for (Dimension dimCheck : cube.getDimensions()) {
                 if (dimCheck.getName().equals("Bar")) {
@@ -9420,7 +9422,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
         	RolapSchemaPool.instance().clear();
@@ -9511,7 +9513,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelVisibility(TestContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             class TestLevelVisibilityModifier extends RDbMappingSchemaModifier {
@@ -9603,7 +9605,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonCollapsedAggregate(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
@@ -9797,7 +9799,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonCollapsedAggregateOnNonUniqueLevelFails(TestContext context)
         throws Exception
     {
@@ -9982,7 +9984,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoNonCollapsedAggregate(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
@@ -10363,7 +10365,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCollapsedError(TestContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
@@ -10551,7 +10553,7 @@ class SchemaTest {
      * levels"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian1047(TestContext context) {
         // Test case only works under MySQL, due to how columns are quoted.
         switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
@@ -10640,7 +10642,7 @@ class SchemaTest {
      * using Oracle DB</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian1065(TestContext context) {
         // Test case only works under Oracle
         switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
@@ -10824,7 +10826,7 @@ class SchemaTest {
      * using TupleReader#readTuples instead of TupleReader#readMembers.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1390(TestContext context) throws Exception {
         Schema schema = context.getConnection().getSchema();
         Cube salesCube = schema.lookupCube("Sales", true);
@@ -10864,7 +10866,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1499(TestContext context) throws Exception {
         propSaver.set(propSaver.properties.UseAggregates, false);
         propSaver.set(propSaver.properties.ReadAggregates, false);
@@ -11232,7 +11234,7 @@ class SchemaTest {
     * "Two cubes operating on same fact table gives wrong WHERE clause"</a>.
     */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1073(TestContext context) throws Exception {
         class TestMondrian1073Modifier extends RDbMappingSchemaModifier {
 
@@ -11324,7 +11326,7 @@ class SchemaTest {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultiByteSchemaReadFromFile(TestContext context) throws IOException {
         //String rawSchema = TestContext.getRawFoodMartSchema().replace(
         class TestMultiByteSchemaReadFromFile extends RDbMappingSchemaModifier {
@@ -11379,7 +11381,7 @@ class SchemaTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMonrian2528(TestContextWrapper context) {
         class TestBugMonrian2528Modifier extends RDbMappingSchemaModifier {
 
@@ -11497,7 +11499,7 @@ class SchemaTest {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1275(TestContextWrapper context) throws Exception {
         class TestMondrian1275Modifier extends RDbMappingSchemaModifier {
 

@@ -29,7 +29,7 @@ public abstract class CellCacheEvent extends ExecutionEvent {
      */
     public CellCacheEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId,
         long executionId,

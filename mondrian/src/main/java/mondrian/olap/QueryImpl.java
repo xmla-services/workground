@@ -1904,17 +1904,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
             }
 
-            // Look for a parameter defined in this statement.
-            if (Util.lookup(RolapConnectionProperties.class, name) != null) {
-                Object value = query.statement.getProperty(name);
-                // TODO: Don't assume it's a string.
-                // TODO: Create expression which will get the value from the
-                //  statement at the time the query is executed.
-                StringLiteralImpl defaultValue =
-                    StringLiteralImpl.create(String.valueOf(value));
-                return new ConnectionParameterImpl(name, defaultValue);
-            }
-
             return super.getParameter(name);
         }
 
@@ -1979,24 +1968,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
     }
 
-    private static class ConnectionParameterImpl
-        extends ParameterImpl
-    {
-        public ConnectionParameterImpl(String name, StringLiteralImpl defaultValue) {
-            super(name, defaultValue, "Connection property", StringType.INSTANCE);
-        }
 
-        @Override
-		public Scope getScope() {
-            return Scope.Connection;
-        }
-
-        @Override
-		public void setValue(Object value) {
-            throw MondrianResource.instance().ParameterIsNotModifiable.ex(
-                getName(), getScope().name());
-        }
-    }
 
     /**
      * Implementation of {@link org.eclipse.daanse.olap.api.Validator} that works within a

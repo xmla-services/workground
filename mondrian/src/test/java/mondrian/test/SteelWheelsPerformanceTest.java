@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
-import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ class SteelWheelsPerformanceTest {
      */
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testComplexFilters(TestContext context) throws Exception {
         final String query =
             "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Product], NonEmptyCrossJoin([*BASE_MEMBERS_Markets], NonEmptyCrossJoin([*BASE_MEMBERS_Customers], NonEmptyCrossJoin([*BASE_MEMBERS_Time], [*BASE_MEMBERS_Order Status]))))'\n"

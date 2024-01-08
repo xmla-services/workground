@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -97,12 +98,12 @@ class RolapSchemaTest {
 
         //noinspection deprecation
         //mock rolap connection to eliminate calls for cache loading
-        MondrianServer mServerMock = mock(MondrianServer.class);
+        Context contextMock = mock(Context.class);
         RolapConnection rolapConnectionMock = mock(RolapConnection.class);
         AggregationManager aggManagerMock = mock(AggregationManager.class);
         SegmentCacheManager scManagerMock = mock(SegmentCacheManager.class);
-        when(rolapConnectionMock.getServer()).thenReturn(mServerMock);
-        when(mServerMock.getAggregationManager()).thenReturn(aggManagerMock);
+        when(rolapConnectionMock.getContext()).thenReturn(contextMock);
+        when(contextMock.getAggregationManager()).thenReturn(aggManagerMock);
         when(aggManagerMock.getCacheMgr(rolapConnectionMock)).thenReturn(scManagerMock);
         return new RolapSchema(key,  rolapConnectionMock);
     }

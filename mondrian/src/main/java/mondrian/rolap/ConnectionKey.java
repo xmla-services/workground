@@ -31,9 +31,7 @@ public class ConnectionKey extends StringKey {
 
     static ConnectionKey create(
         final DataSource dataSource,
-        final String catalogUrl,
         final String connectionKey,
-        final String dataSourceStr,
         final String sessionId)
     {
 		String s;
@@ -45,8 +43,6 @@ public class ConnectionKey extends StringKey {
 			attributeValue(buf, "dataSource", System.identityHashCode(dataSource));
 		} else {
 			attributeValue(buf, "connectionKey", connectionKey);
-			attributeValue(buf, "catalogUrl", catalogUrl);
-			attributeValue(buf, "dataSourceStr", dataSourceStr);
 		}
 		s = new ByteString(Util.digestSHA(buf.toString())).toString();
 
@@ -55,15 +51,11 @@ public class ConnectionKey extends StringKey {
 
     static ConnectionKey create(
             final DataSource dataSource,
-            final String catalogUrl,
-            final String connectionKey,
-            final String dataSourceStr)
+            final String connectionKey)
     {
         return create(
                 dataSource,
-                catalogUrl,
                 connectionKey,
-                dataSourceStr,
                 null);
     }
 

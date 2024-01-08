@@ -30,7 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class RolapSchemaReaderTest {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGetCubesWithNoHrCubes(TestContextWrapper context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
@@ -76,7 +76,7 @@ class RolapSchemaReaderTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGetCubesWithNoRole(TestContextWrapper context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
@@ -98,7 +98,7 @@ class RolapSchemaReaderTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGetCubesForCaliforniaManager(TestContextWrapper context) {
         String[] expectedCubes = new String[] {
                 "Sales"
@@ -120,7 +120,7 @@ class RolapSchemaReaderTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testConnectUseContentChecksum(TestContextWrapper context) {
 //    	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
         //Util.PropertyList properties =
@@ -159,7 +159,7 @@ class RolapSchemaReaderTest {
      * "RolapSchemaReader is not enforcing access control on two APIs"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGetCubeDimensions(TestContextWrapper context) {
         final String timeWeekly =
             hierarchyName("Time", "Weekly");

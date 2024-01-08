@@ -25,6 +25,12 @@ import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapResultShepherd;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.Statement;
+import mondrian.server.monitor.Monitor;
+
 /**
  * The {@link Context} gives access to all resources and configurations that are needed
  * to calculate and Data Cubes
@@ -87,9 +93,24 @@ public interface Context {
 
 	/*
 	 * Gives access to the {@link Connection}.
-	 *TODO: Currently just null implementations.- must see how to implement later. create or get an access...
 	 */
 	Connection getConnection();
-
+	
     Scenario createScenario();
+
+	void addConnection(RolapConnection rolapConnection);
+
+	void removeConnection(RolapConnection rolapConnection);
+
+	RolapResultShepherd getResultShepherd();
+
+	AggregationManager getAggregationManager();
+
+	void addStatement(Statement statement);
+
+	void removeStatement(Statement internalStatement);
+
+	Monitor getMonitor();
+
+	List<Statement> getStatements(Connection connection);
 }

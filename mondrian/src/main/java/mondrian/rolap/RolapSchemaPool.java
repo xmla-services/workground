@@ -10,25 +10,20 @@
 */
 package mondrian.rolap;
 
-import static mondrian.rolap.RolapConnectionProperties.PinSchemaTimeout;
-import static mondrian.rolap.RolapConnectionProperties.UseSchemaPool;
-
-import java.io.IOException;
 import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.JdbcSchema;
 import mondrian.util.ByteString;
 import mondrian.util.ExpiringReference;
@@ -59,38 +54,17 @@ public class RolapSchemaPool {
         return INSTANCE;
     }
 
-
-
-    RolapSchema get(
-        final String catalogUrl,
-        final Context context,
-        final Util.PropertyList connectInfo)
-    {
-        return get(
-            catalogUrl,
-            null,
-            context,
-            connectInfo);
-    }
-
     public RolapSchema get(
-        final String catalogUrl,
         final String connectionKey,
         final Context context,
-        final Util.PropertyList connectInfo)
+        final RolapConnectionProps connectionProps)
     {
 
-        final boolean useSchemaPool =
-            Boolean.parseBoolean(
-                connectInfo.get(UseSchemaPool.name(), "true"));
-        final String pinSchemaTimeout =
-            connectInfo.get(PinSchemaTimeout.name(), "-1s");
+        final boolean useSchemaPool =connectionProps.useSchemaPool();
 
-        final String sessionId = connectInfo.get(
-                "sessionId");
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                new StringBuilder("get: catalog=").append(catalogUrl)
+                new StringBuilder("get: context=").append(context.getName())
                     .append(", connectionKey=").append(connectionKey)
                     .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
                     .append(", useSchemaPool=").append(useSchemaPool)
@@ -99,14 +73,13 @@ public class RolapSchemaPool {
         }
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
-                context == null ? null : context.getDataSource(),
-                catalogUrl,
-                connectionKey,
-                sessionId);
-
-        final String catalogStr = getSchemaContent(connectInfo, catalogUrl);
+                context.getDataSource(),
+                connectionKey);
+        //TODO: schema name
+        MappingSchema schemaMapping=context.getDatabaseMappingSchemaProviders().get(0).get();
+        
         final SchemaContentKey schemaContentKey =
-            SchemaContentKey.create(connectInfo, catalogUrl, catalogStr);
+            SchemaContentKey.create(schemaMapping);
         final SchemaKey key =
             new SchemaKey(
                 schemaContentKey,
@@ -115,7 +88,7 @@ public class RolapSchemaPool {
         // Use the schema pool unless "UseSchemaPool" is explicitly false.
         if (!useSchemaPool) {
             RolapSchema schema = createRolapSchema(
-                 context, connectInfo,  key);
+                 context, connectionProps,  key);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                     "create (no pool): schema-name={}, schema-id={}",
@@ -126,14 +99,14 @@ public class RolapSchemaPool {
 
 
         return getByKey(
-            catalogUrl, context, connectInfo, pinSchemaTimeout,
-            catalogStr, key);
+             context, connectionProps, 
+             key);
     }
 
     private <T> RolapSchema lookUp(
         Map<T, ExpiringReference<RolapSchema>> map,
         T key,
-        String pinSchemaTimeout)
+        long time, TimeUnit timeUnit)
     {
         lock.readLock().lock();
         try {
@@ -143,7 +116,7 @@ public class RolapSchemaPool {
             }
 
             if (ref != null) {
-                RolapSchema schema = ref.get(pinSchemaTimeout);
+                RolapSchema schema = ref.get(time,timeUnit);
                 if (schema != null) {
                     return schema;
                 }
@@ -156,14 +129,13 @@ public class RolapSchemaPool {
     }
 
     private RolapSchema getByKey(
-        String catalogUrl,
         Context context,
-        Util.PropertyList connectInfo,
-        String pinSchemaTimeout,
-        String catalogStr,
+        RolapConnectionProps connectionProps,
         SchemaKey key)
     {
-        RolapSchema schema = lookUp(mapKeyToSchema, key, pinSchemaTimeout);
+    	long time=connectionProps.pinSchemaTimeout();
+    	TimeUnit timeUnit=connectionProps.pinSchemaTimeoutUnit();
+        RolapSchema schema = lookUp(mapKeyToSchema, key, time,timeUnit);
         if (schema != null) {
             return schema;
         }
@@ -178,7 +150,7 @@ public class RolapSchemaPool {
             // would remove the newborn schema
             ExpiringReference<RolapSchema> ref = mapKeyToSchema.get(key);
             if (ref != null) {
-                schema = ref.get(pinSchemaTimeout);
+                schema = ref.get(time,timeUnit);
                 if (schema == null) {
                     mapKeyToSchema.remove(key);
                 } else {
@@ -187,13 +159,17 @@ public class RolapSchemaPool {
             }
 
             schema = createRolapSchema(
-                 context, connectInfo,  key);
+                 context, connectionProps,  key);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("create: " + schema);
             }
-            putSchema(schema, null, pinSchemaTimeout);
+            putSchema(schema, null, time,timeUnit);
             return schema;
-        } finally {
+        }catch (Exception e) {
+        	e.printStackTrace();
+return null;
+        }
+         finally {
             lock.writeLock().unlock();
         }
     }
@@ -202,12 +178,12 @@ public class RolapSchemaPool {
     // is extracted and made package-local for testing purposes
     RolapSchema createRolapSchema(
         Context context,
-        Util.PropertyList connectInfo,
+        RolapConnectionProps connectionProps,
         SchemaKey key)
     {
         return new RolapSchema(
             key,
-            connectInfo,
+            connectionProps,
             context);
     }
 
@@ -223,11 +199,11 @@ public class RolapSchemaPool {
     private void putSchema(
         final RolapSchema schema,
         final ByteString md5Bytes,
-        final String pinTimeout)
+        final long time, TimeUnit timeUnit)
     {
         final ExpiringReference<RolapSchema> reference =
             new ExpiringReference<>(
-                schema, pinTimeout);
+                schema, time,timeUnit);
 
         mapKeyToSchema.put(schema.key, reference);
 
@@ -241,95 +217,7 @@ public class RolapSchemaPool {
         }
     }
 
-    private static String getSchemaContent(
-        final Util.PropertyList connectInfo,
-        final String catalogUrl)
-    {
-        // We will return the first of the following:
-        //  1. CatalogContent property if set
-        //  3. Util.readVirtualFileAsString(catalogUrl)
 
-        String catalogStr = connectInfo.get( RolapConnectionProperties.CatalogContent.name() );
-
-        if (Util.isEmpty(catalogStr)) {
-            if (Util.isEmpty(catalogUrl)) {
-                throw MondrianResource.instance().ConnectStringMandatoryProperties.ex(
-                        RolapConnectionProperties.Catalog.name(),
-                        RolapConnectionProperties.CatalogContent.name());
-            }
-
-
-
-            if (Util.isEmpty(catalogStr)) {
-                // read schema from file
-                try {
-                    catalogStr = Util.readVirtualFileAsString(catalogUrl);
-                } catch (IOException e) {
-                    throw Util.newError( e,"loading schema from url " + catalogUrl);
-                }
-            }
-        }
-
-
-        return catalogStr;
-    }
-
-
-
-
-    void remove(
-        final String catalogUrl,
-        final String connectionKey,
-        final String jdbcUser,
-        final String dataSourceStr)
-    {
-        final SchemaContentKey schemaContentKey =
-            SchemaContentKey.create(
-                new Util.PropertyList(),
-                catalogUrl,
-                null);
-        final ConnectionKey connectionUuid =
-            ConnectionKey.create(
-                null,
-                null,
-                catalogUrl,
-                connectionKey,
-                dataSourceStr);
-        final SchemaKey key =
-            new SchemaKey(schemaContentKey, connectionUuid);
-        if (RolapSchema.LOGGER.isDebugEnabled()) {
-            RolapSchema.LOGGER.debug(
-                new StringBuilder("Pool.remove: schema \"").append(catalogUrl)
-                .append("\" and datasource string \"").append(dataSourceStr).append("\"").toString());
-        }
-        remove(key);
-    }
-
-    void remove(
-        final String catalogUrl,
-        final DataSource dataSource)
-    {
-        final SchemaContentKey schemaContentKey =
-            SchemaContentKey.create(
-                new Util.PropertyList(),
-                catalogUrl,
-                null);
-        final ConnectionKey connectionKey =
-            ConnectionKey.create(
-                dataSource,
-                catalogUrl,
-                null,
-                null,
-                null);
-        final SchemaKey key =
-            new SchemaKey(schemaContentKey, connectionKey);
-        if (RolapSchema.LOGGER.isDebugEnabled()) {
-            RolapSchema.LOGGER.debug(
-                new StringBuilder("Pool.remove: schema \"").append(catalogUrl)
-                .append("\" and datasource object").toString());
-        }
-        remove(key);
-    }
 
     public void remove(RolapSchema schema) {
         if (schema != null) {

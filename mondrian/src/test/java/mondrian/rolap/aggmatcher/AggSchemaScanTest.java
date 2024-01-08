@@ -15,6 +15,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -24,11 +28,12 @@ import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapConnectionPropsR;
 
 /**
   * Test if AggSchemaScan and AggCatalogScan properties are used in JdbcSchema loadTablesOfType
@@ -43,21 +48,21 @@ class AggSchemaScanTest {
 	
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAggScanPropertiesEmptySchema(TestContextWrapper context) throws Exception {
     final RolapConnection rolapConn = (RolapConnection) context.createConnection();
     final DataSource dataSource = rolapConn.getDataSource();
     Connection sqlConnection = null;
     try {
       sqlConnection = dataSource.getConnection();
-      Util.PropertyList propertyList = new Util.PropertyList();
-      propertyList.put( RolapConnectionProperties.AggregateScanCatalog.name(), "bogus" );
-      propertyList.put( RolapConnectionProperties.AggregateScanSchema.name(), "bogus" );
+
+      
+      RolapConnectionPropsR rc=  new RolapConnectionPropsR(List.of(), false, Locale.getDefault(), 0l, TimeUnit.SECONDS, Optional.of("bogus"),Optional.of("bogus"));
       JdbcSchema jdbcSchema = JdbcSchema.makeDB(dataSource);
       jdbcSchema.resetAllTablesLoaded();
       jdbcSchema.getTablesMap().clear();
 
-      jdbcSchema.loadTables( propertyList );
+      jdbcSchema.loadTables( rc );
       assertEquals( 0, jdbcSchema.getTablesMap().size() );
     } finally {
       if (sqlConnection != null) {
@@ -72,7 +77,7 @@ class AggSchemaScanTest {
 
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAggScanPropertiesPopulatedSchema(TestContextWrapper context) throws Exception {
     final RolapConnection rolapConn = (RolapConnection) context.createConnection();
     final DataSource dataSource = rolapConn.getDataSource();
@@ -84,7 +89,8 @@ class AggSchemaScanTest {
         System.out.println( "Database does not support schema or catalog in table definitions.  Cannot run test." );
         return;
       }
-      Util.PropertyList propertyList = new Util.PropertyList();
+		String propCatalog = null;
+		String propSchema = null;
       boolean foundSchema = false;
       // Different databases treat catalogs and schemas differently.  Figure out whether foodmart is a schema or catalog in this database
       try {
@@ -92,8 +98,8 @@ class AggSchemaScanTest {
         String catalog = sqlConnection.getCatalog();
         if ( schema != null || catalog != null ) {
           foundSchema = true;
-          propertyList.put( RolapConnectionProperties.AggregateScanCatalog.name(), catalog );
-          propertyList.put( RolapConnectionProperties.AggregateScanSchema.name(), schema );
+          propCatalog= catalog ;
+          propSchema= schema ;
         }
       } catch ( AbstractMethodError | Exception ex ) {
         // Catch if the JDBC client throws an exception.  Do nothing.
@@ -105,8 +111,10 @@ class AggSchemaScanTest {
            if ( resultSet.getMetaData().getColumnCount() == 2 ) {
              while ( resultSet.next() ) {
                if ( resultSet.getString( 1 ).equalsIgnoreCase( "foodmart" ) ) {
-                 propertyList.put( RolapConnectionProperties.AggregateScanSchema.name(), resultSet.getString( 1 ) );
-                 propertyList.put( RolapConnectionProperties.AggregateScanCatalog.name(), resultSet.getString( 2 ) );
+            	   
+                   propCatalog= resultSet.getString( 2 ) ;
+                   propSchema= resultSet.getString( 1 ) ;
+
                  foundSchema = true;
                  break;
                }
@@ -121,7 +129,7 @@ class AggSchemaScanTest {
           if ( resultSet.getMetaData().getColumnCount() == 1 ) {
             while ( resultSet.next() ) {
               if ( resultSet.getString( 1 ).equalsIgnoreCase( "foodmart" ) ) {
-                propertyList.put( RolapConnectionProperties.AggregateScanCatalog.name(), resultSet.getString( 1 ) );
+                propCatalog= resultSet.getString( 1 ) ;
                 foundSchema = true;
                 break;
               }
@@ -138,8 +146,9 @@ class AggSchemaScanTest {
       // Have to clear the table list because creating the connection loads this
       jdbcSchema.resetAllTablesLoaded();
       jdbcSchema.getTablesMap().clear();
+      RolapConnectionPropsR rc=  new RolapConnectionPropsR(List.of(), false, Locale.getDefault(), 0l, TimeUnit.SECONDS, Optional.ofNullable(propSchema),Optional.ofNullable(propCatalog));
 
-      jdbcSchema.loadTables( propertyList );
+      jdbcSchema.loadTables( rc );
       //The foodmart schema has 37 tables.
       assertEquals( 37, jdbcSchema.getTablesMap().size() );
     } finally {

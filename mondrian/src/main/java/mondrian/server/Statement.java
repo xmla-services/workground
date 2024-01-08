@@ -56,7 +56,7 @@ public interface Statement {
      */
     RolapConnection getMondrianConnection();
 
-    Object getProperty(String name);
+
 
     Query getQuery();
 

@@ -32,6 +32,7 @@ import mondrian.recorder.ListRecorder;
 import mondrian.recorder.MessageRecorder;
 import mondrian.recorder.RecorderException;
 import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
@@ -91,10 +92,10 @@ public class AggTableManager {
      * This method should only be called once.
      * @param connectInfo The Mondrian connection properties
      */
-    public void initialize(PropertyList connectInfo) {
+    public void initialize(RolapConnectionProps connectionProps) {
         if (MondrianProperties.instance().UseAggregates.get()) {
             try {
-                loadRolapStarAggregates(connectInfo);
+                loadRolapStarAggregates(connectionProps);
             } catch (SQLException ex) {
                 throw mres.AggLoadingError.ex(ex);
             }
@@ -175,7 +176,7 @@ public class AggTableManager {
      */
     @SuppressWarnings({"java:S1143", "java:S1163"}) // throw exception in final
     private void loadRolapStarAggregates(
-        PropertyList connectInfo)
+        RolapConnectionProps connectionProps)
         throws SQLException
     {
         ListRecorder msgRecorder = new ListRecorder();
@@ -192,7 +193,7 @@ public class AggTableManager {
                 db.flushUsages();
 
                 // loads tables, not their columns
-                db.load(connectInfo);
+                db.load(connectionProps);
 
                 for (RolapStar star : getStars()) {
                     // This removes any AggStars from any previous invocation of

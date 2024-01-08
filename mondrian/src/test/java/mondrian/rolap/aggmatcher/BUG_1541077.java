@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
 
@@ -37,7 +37,7 @@ public class BUG_1541077 extends AggTableTestCase {
     private static final String BUG_1541077 = "BUG_1541077.csv";
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testStoreCount(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -63,7 +63,7 @@ public class BUG_1541077 extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testSalesCount(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -89,7 +89,7 @@ public class BUG_1541077 extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testTotalAmount(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -115,7 +115,7 @@ public class BUG_1541077 extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testBug1541077(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {

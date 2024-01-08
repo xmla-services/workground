@@ -84,7 +84,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.MemberCacheHelper;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
@@ -1280,31 +1279,6 @@ public class TestUtil {
 		}
 	}
 
-		static String rawSchema = null;
-
-		public static String getRawSchema(TestContextWrapper context) {
-			if(rawSchema == null) {
-				try {
-					OlapConnection connection = context.createOlap4jConnection();
-					final String catalogUrl = ((MondrianOlap4jConnection) connection).getMondrianConnection()
-							.getCatalogName();
-			    	String schema;
-				    synchronized ( TestUtil.class ) {
-				    	schema = Util.readVirtualFileAsString(catalogUrl);
-				    }
-					rawSchema = schema;
-				} catch (Exception e) {
-					throw new RuntimeException("getRawSchema exception", e);
-				}
-			}
-			return rawSchema;
-		}
-
-		@Deprecated
-		public static void withSchema(TestContextWrapper context, String schema) {
-			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
-		}
-
 	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {          
           RolapSchemaPool.instance().clear();
           MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
@@ -1566,11 +1540,7 @@ public class TestUtil {
 	}
 
 	public static OlapConnection getOlap4jConnection() throws SQLException {
-		try {
-			Class.forName( "mondrian.olap4j.MondrianOlap4jDriver" );
-		} catch ( ClassNotFoundException e ) {
-			throw new RuntimeException( "Driver not found" );
-		}
+
 		String connectString = getConnectString();
 		if ( connectString.startsWith( "Provider=mondrian; " ) ) {
 			connectString =
@@ -1594,13 +1564,7 @@ public class TestUtil {
 		return propertyList;
 	}
 
-	public static Util.PropertyList getConnectionProperties(Connection connection) {
-		final Util.PropertyList propertyList =
-				Util.parseConnectString(((RolapConnection)connection).getConnectInfo().toString());
-	
 
-		return propertyList;
-	}
 
 	/**
 	 * Constructs a connect string by which the unit tests can talk to the FoodMart database.

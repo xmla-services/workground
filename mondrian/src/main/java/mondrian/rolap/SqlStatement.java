@@ -196,7 +196,7 @@ public class SqlStatement {
         }
       }
 
-      locus.getServer().getMonitor().sendEvent(
+      locus.getContext().getMonitor().sendEvent(
         new SqlStatementStartEvent(
           startTimeMillis,
           id,
@@ -230,7 +230,7 @@ public class SqlStatement {
       final long executeMillis = executeNanos / 1000000;
       status = new StringBuilder(", exec ").append(executeMillis).append(" ms").toString();
 
-      locus.getServer().getMonitor().sendEvent(
+      locus.getContext().getMonitor().sendEvent(
         new SqlStatementExecuteEvent(
           timeMillis,
           id,
@@ -337,7 +337,7 @@ public class SqlStatement {
         "SqlStatement closed that was never executed: " + id );
     }
 
-    locus.getServer().getMonitor().sendEvent(
+    locus.getContext().getMonitor().sendEvent(
       new SqlStatementEndEvent(
         endTime,
         id,

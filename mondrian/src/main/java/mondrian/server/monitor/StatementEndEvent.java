@@ -23,7 +23,7 @@ public class StatementEndEvent extends StatementEvent {
      */
     public StatementEndEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId,
         long statementId)
     {

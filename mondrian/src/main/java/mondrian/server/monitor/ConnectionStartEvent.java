@@ -22,7 +22,7 @@ public class ConnectionStartEvent extends ConnectionEvent {
      */
     public ConnectionStartEvent(
         long timestamp,
-        int serverId,
+        String serverId,
         int connectionId)
     {
         super(timestamp, serverId, connectionId);

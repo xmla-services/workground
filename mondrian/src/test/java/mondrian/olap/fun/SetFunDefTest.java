@@ -20,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 /**
  * Unit test for the set constructor function <code>{ ... }</code>,
@@ -32,7 +32,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 class SetFunDefTest {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetWithMembersFromDifferentHierarchies(TestContextWrapper context) {
         assertQueryFailsInSetValidation(context.createConnection(),
             "with member store.x as "
@@ -41,7 +41,7 @@ class SetFunDefTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetWith2TuplesWithDifferentHierarchies(TestContextWrapper context) {
         assertQueryFailsInSetValidation(context.createConnection(),
             "with member store.x as '{([Gender].[M],[Store].[All Stores].[USA].[CA]),"

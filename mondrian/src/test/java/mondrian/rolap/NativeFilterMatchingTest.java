@@ -40,7 +40,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPositiveMatching(TestContextWrapper context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
             // No point testing these if the native filters
@@ -153,7 +153,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNegativeMatching(TestContextWrapper context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
              // No point testing these if the native filters
@@ -221,7 +221,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
      * @see mondrian.test.DialectTest#testRegularExpressionSqlInjection()
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMatchBugMondrian983(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "With\n"
@@ -248,7 +248,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterSameAsNonNative(TestContextWrapper context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
         // In some cases native filter would includes an unnecessary fact table
@@ -281,7 +281,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachedNativeFilter(TestContextWrapper context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
 
@@ -299,7 +299,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMatchesWithAccessControl(TestContextWrapper context) {
         String dimension =
             "<Dimension name=\"Store2\">\n"
@@ -467,7 +467,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer(TestContextWrapper context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
@@ -565,7 +565,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicerWithAggs(TestContextWrapper context) {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
@@ -633,7 +633,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_1(TestContextWrapper context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
@@ -779,7 +779,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_2(TestContextWrapper context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 40 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
@@ -788,7 +788,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_3(TestContextWrapper context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, [Measures].[Unit Sales] > 1000 ) )'\n"
@@ -797,7 +797,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_4(TestContextWrapper context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 500 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
@@ -806,7 +806,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicerDifferentProducts(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member measures.avgQtrs as 'count(filter(Customers.[Name].members, [Unit Sales] > 0))' "

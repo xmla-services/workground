@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.rolap.RolapUtil;
 
@@ -32,7 +32,7 @@ import mondrian.rolap.RolapUtil;
 class NullMemberRepresentationTest {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testClosingPeriodMemberLeafWithCustomNullRepresentation(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as ' ClosingPeriod().uniquename '\n"
@@ -58,7 +58,7 @@ class NullMemberRepresentationTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testItemMemberWithCustomNullMemberRepresentation(TestContextWrapper context)
         throws IOException
     {

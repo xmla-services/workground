@@ -30,7 +30,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,7 +66,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCube(TestContextWrapper context) {
         assertExprReturns(context.createConnection(), "[Measures].[Profit]", "$339,610.90");
 
@@ -88,7 +88,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCubeViaApi(TestContextWrapper context) {
         Cube salesCube = getSalesCube(context.createConnection(), "Sales");
         salesCube.createCalculatedMember(
@@ -123,7 +123,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * cube with spaces in its name.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCubeWithSpace(TestContext context) {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -139,7 +139,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCubeWithProps(TestContextWrapper context) {
         Cube salesCube = getSalesCube(context.createConnection(), "Sales");
 
@@ -242,7 +242,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCubeAndQuery(TestContextWrapper context) {
         // Profit is defined in the cube.
         // Profit Change is defined in the query.
@@ -270,7 +270,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testQueryCalculatedMemberOverridesCube(TestContextWrapper context) {
         // Profit is defined in the cube, and has a format string "$#,###".
         // We define it in a query to make sure that the format string in the
@@ -305,7 +305,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testQueryCalcMemberOverridesShallowerStoredMember(TestContextWrapper context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
@@ -342,7 +342,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * chosen, even if it is not the best match.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testEarlierCalcMember(TestContextWrapper context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
@@ -365,7 +365,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void _testWhole(TestContextWrapper context) {
         // "allmembers" tests compatibility with MSAS
 
@@ -477,7 +477,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberCaption(TestContextWrapper context) {
         String mdx =
             "select {[Measures].[Profit Growth]} on columns from Sales";
@@ -490,7 +490,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberIsSetFails(TestContextWrapper context) {
         // A member which is a set, and more important, cannot be converted to
         // a value, is an error.
@@ -562,7 +562,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * (Bug 1251683.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testBracketInCalcMemberName(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[has a [bracket]] in it] as \n"
@@ -581,7 +581,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * value. (Bug 1418689.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNpeInIif(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Foo] AS ' 1 / [Measures].[Unit Sales] ',\n"
@@ -615,7 +615,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * their names. (Bug 1251683.)
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testBracketInCubeCalcMemberName(TestContext context) {
         final String cubeName = "Sales_BracketInCubeCalcMemberName";
         /*
@@ -667,7 +667,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testPropertyReferencesCalcMember(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',"
@@ -683,7 +683,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberWithQuote(TestContextWrapper context) {
         // MSAS ignores single-quotes
         assertQueryReturns(context.createConnection(),
@@ -825,7 +825,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * quotes"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testQuoteInCalcMember(TestContext context) {
         final String cubeName = "Sales_Bug1410383";
         /*
@@ -905,7 +905,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testChildrenOfCalcMembers(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Time].[Time].[# Months Product Sold] as 'Count(Descendants([Time].[Time].LastSibling, [Time].[Month]), EXCLUDEEMPTY)'\n"
@@ -922,7 +922,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNonCharacterMembers(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Has Coffee Bar].[Maybe] as \n"
@@ -940,7 +940,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testFormatString(TestContextWrapper context) {
         // Verify that
         // (a) a calculated member without a format string does not
@@ -990,7 +990,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * bug MONDRIAN-263, Negative Solve Orders broken</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNegativeSolveOrder(TestContextWrapper context) {
         // Negative solve orders are OK.
         assertQueryReturns(context.createConnection(),
@@ -1029,7 +1029,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInQuery(TestContextWrapper context) {
         // calc measure defined in query
         assertQueryReturns(context.createConnection(),
@@ -1058,7 +1058,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInQueryNegative(TestContextWrapper context) {
         assertQueryThrows(context,
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
@@ -1070,7 +1070,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInQueryNegative2(TestContextWrapper context) {
         String query =
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
@@ -1087,7 +1087,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInNonMeasureInQuery(TestContextWrapper context) {
         // CELL_FORMATTER is ignored for calc members which are not measures.
         //
@@ -1110,7 +1110,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInSchema(TestContext context) {
         // calc member defined in schema
         /*
@@ -1152,7 +1152,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberCustomFormatterInSchemaNegative(TestContext context) {
         // calc member defined in schema
         /*
@@ -1181,7 +1181,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * Testcase for bug 1784617, "Using StrToTuple() in schema errors out".
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testStrToSetInCubeCalcMember(TestContext context) {
         // calc member defined in schema
         /*
@@ -1215,7 +1215,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCreateCalculatedMember(TestContextWrapper context) {
         // REVIEW: What is the purpose of this test?
         String query =
@@ -1244,7 +1244,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * to include the calculated member (but does not).
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testSetIncludesSelf(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with set [Top Products] as ' [Product].Children '\n"
@@ -1275,7 +1275,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * the other cal members(those with higher solve order).
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNegativeSolveOrderForCalMemberWithFilter(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "With "
@@ -1318,7 +1318,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * higher solve order; the filter computation ignores the other cal members.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNegativeSolveOrderForCalMemberWithFilters2(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "With "
@@ -1366,7 +1366,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * results.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNonTopLevelCalculatedMember(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
@@ -1404,7 +1404,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * of returning [All Products].Children
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberChildren(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
@@ -1429,7 +1429,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberMSASCompatibility(TestContextWrapper context) {
         propSaver.set(MondrianProperties.instance().CaseSensitive, false);
         assertQueryReturns(context.createConnection(),
@@ -1476,7 +1476,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * that aggregates over a set and places it in the WHERE clause.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testSimulatedCompoundSlicer(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with\n"
@@ -1553,7 +1553,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCompoundSlicerOverTuples(TestContextWrapper context) {
         // reference query
         assertQueryReturns(context.createConnection(),
@@ -1636,7 +1636,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * MONDRIAN-608, "Performance issue with large number of measures"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testExponentialPerformanceBugMondrian608(TestContextWrapper context) {
         // Run variants of the same query with increasing expression complexity.
         // With MONDRIAN-608, running time triples each iteration (for
@@ -1714,7 +1714,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * look like two evaluation contexts were expanding the same member.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCycleFalsePositive(TestContext context) {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // This test uses old-style [dimension.hierarchy] names.
@@ -1829,7 +1829,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * succeeds.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testBugMondrian852(TestContextWrapper context) {
         // Simpler repro case.
         assertQueryReturns(context.createConnection(),
@@ -1911,7 +1911,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      * unique name.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testNonCanonical(TestContextWrapper context) {
         // define without 'all', refer with 'all'
         final String expected =
@@ -1937,7 +1937,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberParentOfCalcMember(TestContextWrapper context) {
         // SSAS fails with "The X calculated member cannot be used as a parent
         // of another calculated member."
@@ -1951,7 +1951,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberSameNameDifferentHierarchies(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Gender].[X] as 4\n"
@@ -1967,7 +1967,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalcMemberTooDeep(TestContextWrapper context) {
         // SSAS fails with "The X calculated member cannot be created because
         // its parent is at the lowest level in the Gender hierarchy."

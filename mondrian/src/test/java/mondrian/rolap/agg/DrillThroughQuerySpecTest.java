@@ -36,7 +36,7 @@ import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarPredicate;
@@ -131,7 +131,7 @@ class DrillThroughQuerySpecTest {
 
   // test that returns correct number of columns
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMdxQuery(TestContextWrapper foodMartContext) throws SQLException {
     String drillThroughMdx = "DRILLTHROUGH WITH "
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store Type_])' "

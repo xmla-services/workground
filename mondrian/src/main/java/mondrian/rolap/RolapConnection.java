@@ -88,9 +88,8 @@ public class RolapConnection extends ConnectionBase {
     LoggerFactory.getLogger( RolapConnection.class );
   private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
 
-  private final MondrianServer server;
-
-  private final Util.PropertyList connectInfo;
+  
+  private final RolapConnectionProps rolapConnectionProps;
 
   private Context context = null;
   private final String catalogName;
@@ -104,20 +103,10 @@ public class RolapConnection extends ConnectionBase {
   private final int id;
   private final Statement internalStatement;
 
-  /**
-   * Creates a connection.
-   *
-   * @param server      Server instance this connection belongs to
-   * @param connectInfo Connection properties; keywords are described in
-   *                    {@link RolapConnectionProperties}.
-   * @param context  Context
-   */
-  public RolapConnection(
-    MondrianServer server,
-    Util.PropertyList connectInfo,
-    Context context ) {
-    this( server, connectInfo, null, context );
-  }
+
+	public RolapConnection(Context context, RolapConnectionProps rolapConnectionProps) {
+		this(context, null, rolapConnectionProps);
+	}
 
   /**
    * Creates a RolapConnection.
@@ -135,27 +124,21 @@ public class RolapConnection extends ConnectionBase {
    * @param context  If not null an external DataSource to be used
    *                    by Mondrian
    */
-  RolapConnection(
-    MondrianServer server,
-    Util.PropertyList connectInfo,
-    RolapSchema schema,
-    Context context ) {
+	RolapConnection(Context context, RolapSchema schema, RolapConnectionProps rolapConnectionProps) {
     super();
-    assert server != null;
-    this.server = server;
+
     this.context = context;
     this.id = ID_GENERATOR.getAndIncrement();
 
-    assert connectInfo != null;
+    assert rolapConnectionProps != null;
 
-    this.connectInfo = connectInfo;
+    this.rolapConnectionProps = rolapConnectionProps;
 	this.catalogName = context.getName();
-    //this.catalogName = connectInfo.get(RolapConnectionProperties.Catalog.name());
 
     Role roleInner = null;
 
     // Register this connection before we register its internal statement.
-    server.addConnection( this );
+    context.addConnection( this );
 
     if ( schema == null ) {
       // If RolapSchema.Pool.get were to call this with schema == null,
@@ -172,7 +155,7 @@ public class RolapConnection extends ConnectionBase {
           schema = RolapSchemaPool.instance().get(
             catalogName,
             context,
-            connectInfo );
+            rolapConnectionProps );
 
       } finally {
         Locus.pop( locus );
@@ -180,24 +163,14 @@ public class RolapConnection extends ConnectionBase {
       }
       internalStatement =
         schema.getInternalConnection().getInternalStatement();
-      String roleNameList =
-        connectInfo.get( RolapConnectionProperties.Role.name() );
-      if ( roleNameList != null ) {
-        List<String> roleNames = Util.parseCommaList( roleNameList );
+      List<String> roleNameList =rolapConnectionProps.roles();
+      if ( !roleNameList.isEmpty() ) {
+      
         List<Role> roleList = new ArrayList<>();
-        for ( String roleName : roleNames ) {
-          final LockBox.Entry entry =
-            server.getLockBox().get( roleName );
-          Role role1;
-          if ( entry != null ) {
-            try {
-              role1 = (Role) entry.getValue();
-            } catch ( ClassCastException e ) {
-              role1 = null;
-            }
-          } else {
-            role1 = schema.lookupRole( roleName );
-          }
+        for ( String roleName : roleNameList ) {
+
+          Role role1 = schema.lookupRole( roleName );
+
           if ( role1 == null ) {
             throw Util.newError(
               new StringBuilder("Role '").append(roleName).append("' not found").toString() );
@@ -228,12 +201,7 @@ public class RolapConnection extends ConnectionBase {
     }
 
     // Set the locale.
-    String localeString =
-      connectInfo.get( RolapConnectionProperties.Locale.name() );
-    if ( localeString != null ) {
-      this.locale = Util.parseLocale( localeString );
-      assert locale != null;
-    }
+    this.locale  =rolapConnectionProps.locale();
 
     this.schema = schema;
     setRole( roleInner );
@@ -255,15 +223,11 @@ protected Logger getLogger() {
   }
 
 
-  public Util.PropertyList getConnectInfo() {
-    return connectInfo;
-  }
-
   @Override
 public void close() {
     if ( !closed ) {
       closed = true;
-      server.removeConnection( this );
+      context.removeConnection( this );
     }
     if ( internalStatement != null ) {
       internalStatement.close();
@@ -300,18 +264,8 @@ public SchemaReader getSchemaReader() {
   }
 
   @Override
-public Object getProperty( String name ) {
-    // Mask out the values of certain properties.
-    if (
-       name.equals( RolapConnectionProperties.CatalogContent.name() ) ) {
-      return "";
-    }
-    return connectInfo.get( name );
-  }
-
-  @Override
 public CacheControl getCacheControl( PrintWriter pw ) {
-    return getServer().getAggregationManager().getCacheControl( this, pw );
+    return context.getAggregationManager().getCacheControl( this, pw );
   }
 
   /**
@@ -347,7 +301,7 @@ public Result execute( QueryImpl query ) {
    */
   public Result execute( final Execution execution ) {
     return
-      server.getResultShepherd()
+      context.getResultShepherd()
         .shepherdExecution(
           execution,
           new Callable<Result>() {
@@ -479,15 +433,6 @@ public Role getRole() {
     return scenario;
   }
 
-  /**
-   * Returns the server (mondrian instance) that this connection belongs to.
-   * Usually there is only one server instance in a given JVM.
-   *
-   * @return Server instance; never null
-   */
-  public MondrianServer getServer() {
-    return server;
-  }
 
   @Override
 public QueryComponent parseStatement(String query ) {
@@ -547,7 +492,7 @@ public Statement getInternalStatement() {
       reentrant
         ? new ReentrantInternalStatement()
         : new InternalStatement();
-    server.addStatement( statement );
+    context.addStatement( statement );
     return statement;
   }
 
@@ -699,7 +644,7 @@ public Context getContext() {
 	public void close() {
       if ( !closed ) {
         closed = true;
-        server.removeStatement( this );
+        context.removeStatement( this );
       }
     }
 

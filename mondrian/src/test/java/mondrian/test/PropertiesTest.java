@@ -25,7 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -45,7 +45,7 @@ class PropertiesTest {
      * Tests existence and values of mandatory member properties.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMandatoryMemberProperties(TestContextWrapper context) {
         Connection connection = context.createConnection();
         Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -186,7 +186,7 @@ class PropertiesTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGetChildCardinalityPropertyValue(TestContextWrapper context) {
         Connection connection = context.createConnection();
         Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -206,7 +206,7 @@ class PropertiesTest {
      * to Result object.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertiesMDX(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "SELECT {[Customers].[All Customers].[USA].[CA]} DIMENSION PROPERTIES \n"
@@ -249,7 +249,7 @@ class PropertiesTest {
      * Tests the ability to project non-standard member properties.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberProperties(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
@@ -266,7 +266,7 @@ class PropertiesTest {
      * Tests the ability to project non-standard member properties.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberPropertiesBad(TestContextWrapper context) {
         Result result = executeQuery(context.createConnection(),
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
@@ -280,7 +280,7 @@ class PropertiesTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMandatoryCellProperties(TestContextWrapper context) {
         Connection connection = context.createConnection();
         QueryImpl salesCube = connection.parseQuery(
@@ -335,7 +335,7 @@ class PropertiesTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyDescription(TestContextWrapper context) throws Exception {
         withSchema(context.getContext(), SchemaModifiers.PropertiesTestModifier::new);
         assertEquals(

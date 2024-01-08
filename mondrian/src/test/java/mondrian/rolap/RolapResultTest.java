@@ -19,7 +19,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.function.Function;
 
@@ -84,7 +84,7 @@ class RolapResultTest extends AggTableTestCase {
 
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAll(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -111,7 +111,7 @@ class RolapResultTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testD1(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -144,7 +144,7 @@ Axis #2:
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testD2(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -179,7 +179,7 @@ Axis #2:
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void _testNullDefaultMeasure(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -210,7 +210,7 @@ Axis #2:
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonAllPromotionMembers(TestContextWrapper context) {
         prepareContext(context);
         /*

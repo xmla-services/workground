@@ -30,6 +30,7 @@
 package org.eclipse.daanse.olap.api;
 
 import java.io.PrintWriter;
+import java.sql.DriverManager;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +43,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 
-import mondrian.olap.DriverManager;
 import mondrian.olap.QueryImpl;
 
 /**
@@ -53,8 +53,6 @@ import mondrian.olap.QueryImpl;
  * @author jhyde
  */
 public interface Connection {
-
-
 
     /**
      * Get the name of the Catalog associated with this Connection.
@@ -145,13 +143,6 @@ public interface Connection {
      */
     SchemaReader getSchemaReader();
 
-    /**
-     * Returns the value of a connection property.
-     *
-     * @param name Name of property, for example "JdbcUser".
-     * @return Value of property, or null if property is not defined.
-     */
-    Object getProperty(String name);
 
     /**
      * Returns an object with which to explicitly control the contents of the

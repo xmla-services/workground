@@ -23,7 +23,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.test.PropertySaver5;
@@ -46,7 +46,7 @@ class EffectiveMemberCacheTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachedLevelMembers(TestContextWrapper context) {
         Connection connection = context.createConnection();
         clearCache(connection);
@@ -84,7 +84,7 @@ class EffectiveMemberCacheTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachedChildMembers(TestContext context) {
         Connection connection = context.getConnection();
         clearCache(connection);
@@ -123,7 +123,7 @@ class EffectiveMemberCacheTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThreshold(TestContextWrapper context) {
         Connection connection = context.createConnection();
         clearCache(connection);
@@ -152,7 +152,7 @@ class EffectiveMemberCacheTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThresholdDisabled(TestContextWrapper context) {
         // with LevelPreCacheThreshold set to 0, we should not load
         // all [store type] members, we should only retrieve the 2
@@ -185,7 +185,7 @@ class EffectiveMemberCacheTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThresholdParentDegenerate(TestContextWrapper context) {
         // we should avoid pulling all deg members, regardless of cardinality.
         // The cost of doing full scans of the fact table is assumed

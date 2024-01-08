@@ -36,7 +36,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -94,7 +94,7 @@ class ParameterTest {
     // -- Tests --------------
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testChangeable(TestContextWrapper context) {
         // jpivot needs to set a parameters value before the query is executed
         String mdx =
@@ -119,7 +119,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterInFormatString(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[X] as '[Measures].[Store Sales]',\n"
@@ -135,7 +135,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterInFormatString_Bug1584439(TestContextWrapper context) {
         String queryString =
             "with member [Measures].[X] as '[Measures].[Store Sales]',\n"
@@ -150,7 +150,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterOnAxis(TestContextWrapper context) {
         assertQueryReturns(context.createConnection(),
             "select {[Measures].[Unit Sales]} on rows,\n"
@@ -167,7 +167,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNumericParameter(TestContextWrapper context) {
         String s =
             executeExpr(context.createConnection(),"Parameter(\"N\",NUMERIC,2+3,\"A numeric parameter\")");
@@ -175,7 +175,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testStringParameter(TestContextWrapper context) {
         String s =
             executeExpr(context.createConnection(),
@@ -185,7 +185,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testStringParameterNull(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertParameterizedExprReturns(connection,
@@ -212,7 +212,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNumericParameterNull(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertParameterizedExprReturns(connection,
@@ -231,7 +231,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberParameterNull(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertParameterizedExprReturns(connection,
@@ -270,7 +270,7 @@ class ParameterTest {
      * "NullPointerException when passing in null param value"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNullStrToMember(TestContextWrapper context) {
         Connection connection = context.createConnection();
         QueryImpl query = connection.parseQuery(
@@ -328,7 +328,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetUnsetParameter(TestContextWrapper context) {
         Connection connection = context.createConnection();
         QueryImpl query = connection.parseQuery(
@@ -388,7 +388,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNumericParameterStringValueFails(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprThrows(connection,
@@ -397,7 +397,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterDimensionWithTwoHierarchies(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
@@ -416,7 +416,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterDimensionWithOneHierarchy(TestContextWrapper context) {
         Connection connection = context.createConnection();
       assertExprReturns(connection,
@@ -435,7 +435,7 @@ class ParameterTest {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterHierarchy(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
@@ -464,7 +464,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterLevel(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
@@ -476,7 +476,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMemberFails(TestContextWrapper context) {
         // type of a param can be dimension, hierarchy, level but not member
         assertExprThrows(context.createConnection(),
@@ -489,7 +489,7 @@ class ParameterTest {
      * invalid.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMemberFailsBadLevel(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprThrows(connection,
@@ -506,7 +506,7 @@ class ParameterTest {
      * that dimension.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMemberDefaultValue(TestContextWrapper context) {
         // "[Time]" is shorthand for "[Time].CurrentMember"
         Connection connection = context.createConnection();
@@ -526,7 +526,7 @@ class ParameterTest {
      * time dimension to the latest date for which there are transactions?".
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMemberDefaultValue2(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
@@ -560,7 +560,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterWithExpressionForHierarchyFails(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprThrows(connection,
@@ -573,7 +573,7 @@ class ParameterTest {
      * not cyclic.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDerivedParameter(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
@@ -582,7 +582,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterInSlicer(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
@@ -605,7 +605,7 @@ class ParameterTest {
      * hierarchy, which is illegal.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void _testParameterDuplicateDimensionFails(TestContextWrapper context) {
         assertQueryThrows(context,
             "select {[Measures].[Unit Sales]} on rows,\n"
@@ -616,7 +616,7 @@ class ParameterTest {
 
     /** Mondrian can not handle forward references */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void dontTestParamRef(TestContextWrapper context) {
         String s = executeExpr(context.createConnection(),
             "Parameter(\"X\",STRING,\"x\",\"A string\") || "
@@ -628,13 +628,13 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamRefWithoutParamFails(TestContextWrapper context) {
         assertExprThrows(context.createConnection(), "ParamRef(\"Y\")", "Unknown parameter 'Y'");
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamDefinedTwiceFails(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertQueryThrows(connection,
@@ -645,7 +645,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamBadTypeFails(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprThrows(connection,
@@ -654,7 +654,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamCyclicOk(TestContextWrapper context) {
         Connection connection = context.createConnection();
         assertExprReturns(connection,
@@ -664,7 +664,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamCyclicFails(TestContextWrapper context) {
         assertExprThrows(context.createConnection(),
             "Parameter(\"P\", NUMERIC, ParamRef(\"Q\") + 1) + "
@@ -673,7 +673,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMetadata(TestContextWrapper context) {
         Connection connection = context.createConnection();
         QueryImpl query = connection.parseQuery(
@@ -705,7 +705,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoParametersBug1425153(TestContextWrapper context) {
         Connection connection = context.createConnection();
         QueryImpl query = connection.parseQuery(
@@ -794,7 +794,7 @@ class ParameterTest {
      * NUMERIC.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAssignNumericParameter(TestContextWrapper context) {
         final String para = "Parameter(\"x\", NUMERIC, 1)";
         Connection connection = context.createConnection();
@@ -823,7 +823,7 @@ class ParameterTest {
      * STRING.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAssignStringParameter(TestContextWrapper context) {
         final String para = "Parameter(\"x\", STRING, 'xxx')";
         Connection connection = context.createConnection();
@@ -846,7 +846,7 @@ class ParameterTest {
      * a member.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAssignMemberParameter(TestContextWrapper context) {
         final String para = "Parameter(\"x\", [Customers], [Customers].[USA])";
         Connection connection = context.createConnection();
@@ -942,7 +942,7 @@ class ParameterTest {
      * a set of members.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAssignSetParameter(TestContextWrapper context) {
         final String para =
             "Parameter(\"x\", [Customers], {[Customers].[USA], [Customers].[USA].[CA]})";
@@ -1134,7 +1134,7 @@ class ParameterTest {
      * Tests a parameter whose type is a set of members.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParamSet(TestContext context) {
         Connection connection = context.getConnection();
         try {
@@ -1187,7 +1187,7 @@ class ParameterTest {
      * Tests that certain connection properties which should be null, are.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testConnectionPropsWhichShouldBeNull(TestContextWrapper context) {
         // properties which must always return null
         Connection connection = context.createConnection();
@@ -1195,25 +1195,6 @@ class ParameterTest {
         assertExprReturns(connection, "ParamRef(\"CatalogContent\")", "");
     }
 
-    /**
-     * Tests that non-overrideable properties cannot be overridden in a
-     * statement.
-     */
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    void testConnectionPropsCannotBeOverridden(TestContextWrapper context) {
-        Set<RolapConnectionProperties> overrideableProps = Olap4jUtil.enumSetOf(
-            RolapConnectionProperties.Catalog,
-            RolapConnectionProperties.Locale);
-        for (RolapConnectionProperties prop
-            : RolapConnectionProperties.class.getEnumConstants())
-        {
-            if (!overrideableProps.contains(prop)) {
-                // try to override prop
-                assertSetPropertyFails(context.createConnection(), prop.name(), "Connection");
-            }
-        }
-    }
 
     // -- Tests for system properties --------------
 
@@ -1221,7 +1202,7 @@ class ParameterTest {
      * Tests accessing system properties as parameters in a statement.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSystemPropsGet(TestContextWrapper context) {
         final List<Property> propertyList =
             MondrianProperties.instance().getPropertyList();
@@ -1238,7 +1219,7 @@ class ParameterTest {
      * Tests getting a java system property is not possible
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSystemPropsNotAvailable(TestContextWrapper context) {
         assertExprThrows(context.createConnection(),
             "ParamRef(\"java.version\")",
@@ -1249,7 +1230,7 @@ class ParameterTest {
      * Tests getting a mondrian property.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrianPropsGetJava(TestContextWrapper context) {
         final String jdbcDrivers =
             MondrianProperties.instance().JdbcDrivers.get();
@@ -1261,7 +1242,7 @@ class ParameterTest {
      * Tests setting system properties.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSystemPropsSet(TestContextWrapper context) {
         final List<Property> propertyList =
             MondrianProperties.instance().getPropertyList();
@@ -1277,7 +1258,7 @@ class ParameterTest {
      * Tests a schema property with a default value.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaProp(TestContext context) {
         class TestSchemaPropModifier extends RDbMappingSchemaModifier {
 
@@ -1315,7 +1296,7 @@ class ParameterTest {
      * Tests a schema property with a default value.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropDupFails(TestContext context) {
         class TestSchemaPropDupFailsModifier extends RDbMappingSchemaModifier {
 
@@ -1367,7 +1348,7 @@ class ParameterTest {
 
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropIllegalTypeFails(TestContext context) {
         class TestSchemaPropIllegalTypeFailsModifier extends RDbMappingSchemaModifier {
 
@@ -1407,7 +1388,7 @@ class ParameterTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropInvalidDefaultExpFails(TestContext context) {
         class TestSchemaPropInvalidDefaultExpFailsModifier extends RDbMappingSchemaModifier {
 
@@ -1449,7 +1430,7 @@ class ParameterTest {
      * are not available.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSchemaPropContext(TestContext context) {
         class TestSchemaPropContextModifier extends RDbMappingSchemaModifier {
 

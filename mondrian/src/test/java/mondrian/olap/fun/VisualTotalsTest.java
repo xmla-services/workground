@@ -29,7 +29,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 /**
  * <code>VisualTotalsTest</code> tests the internal functions defined in
@@ -92,7 +92,7 @@ class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDrillthroughVisualTotal(TestContextWrapper foodMartContext) throws SQLException {
         OlapConnection conn = foodMartContext.createOlap4jConnection();
         CellSet cellSet =
@@ -131,7 +131,7 @@ class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testVisualTotalCaptionBug(TestContextWrapper foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
@@ -159,7 +159,7 @@ class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testVisualTotalsAggregatedMemberBug(TestContextWrapper foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),

@@ -22,13 +22,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianServer;
 import mondrian.server.monitor.Monitor;
@@ -54,7 +55,7 @@ class CacheTest {
      * not flushed correctly.</p>
      */
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNQueriesWaitingForSameSegmentRepeat(TestContextWrapper foodMartContext)
         throws ExecutionException, InterruptedException
     {
@@ -79,8 +80,8 @@ class CacheTest {
         String iteration)
         throws InterruptedException, ExecutionException
     {
-        final MondrianServer server =
-            MondrianServer.forConnection(connection);
+        final Context context =
+           connection.getContext();
         final CacheControl cacheControl =
         		connection.getCacheControl(null);
         cacheControl.flush(
@@ -89,7 +90,7 @@ class CacheTest {
                     "Sales",
                     connection.getSchema().getCubes())));
         Thread.sleep(2000); // wait for flush to propagate
-        final Monitor monitor = server.getMonitor();
+        final Monitor monitor = context.getMonitor();
         final ServerInfo serverBefore = monitor.getServer();
 
         final List<Future<Boolean>> futures = new ArrayList<>();

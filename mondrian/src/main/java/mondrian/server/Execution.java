@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.olap.MemoryLimitExceededException;
@@ -125,11 +126,11 @@ public class Execution {
 
   public void tracePhase( int hitCount, int missCount, int pendingCount ) {
     final RolapConnection connection = statement.getMondrianConnection();
-    final MondrianServer server = connection.getServer();
+    final Context context = connection.getContext();
     final int hitCountInc = hitCount - this.cellCacheHitCount;
     final int missCountInc = missCount - this.cellCacheMissCount;
     final int pendingCountInc = pendingCount - this.cellCachePendingCount;
-    server.getMonitor().sendEvent( new ExecutionPhaseEvent( System.currentTimeMillis(), server.getId(), connection
+    context.getMonitor().sendEvent( new ExecutionPhaseEvent( System.currentTimeMillis(), context.getName(), connection
         .getId(), statement.getId(), id, phase, hitCountInc, missCountInc, pendingCountInc ) );
     ++phase;
     this.cellCacheHitCount = hitCount;
@@ -331,7 +332,7 @@ public class Execution {
   public void unregisterSegmentRequests() {
     // We also have to cancel all requests for the current segments.
     final Locus locus = new Locus( this, "Execution.unregisterSegmentRequests", "cleaning up segment registrations" );
-    final SegmentCacheManager mgr = locus.getServer().getAggregationManager().getCacheMgr(null);
+    final SegmentCacheManager mgr = locus.getContext().getAggregationManager().getCacheMgr(null);
     mgr.execute( new SegmentCacheManager.Command<Void>() {
       @Override
 	public Void call() throws Exception {
@@ -388,16 +389,16 @@ public class Execution {
 
   private void fireExecutionEndEvent() {
     final RolapConnection connection = statement.getMondrianConnection();
-    final MondrianServer server = connection.getServer();
-    server.getMonitor().sendEvent( new ExecutionEndEvent( this.startTimeMillis, server.getId(), connection.getId(),
+    final Context context = connection.getContext();
+    context.getMonitor().sendEvent( new ExecutionEndEvent( this.startTimeMillis, context.getName(), connection.getId(),
         this.statement.getId(), this.id, this.phase, this.state, this.cellCacheHitCount, this.cellCacheMissCount,
         this.cellCachePendingCount, expCacheHitCount, expCacheMissCount ) );
   }
 
   private void fireExecutionStartEvent() {
     final RolapConnection connection = statement.getMondrianConnection();
-    final MondrianServer server = connection.getServer();
-    server.getMonitor().sendEvent( new ExecutionStartEvent( startTimeMillis, server.getId(), connection.getId(),
+    final Context context = connection.getContext();
+    context.getMonitor().sendEvent( new ExecutionStartEvent( startTimeMillis, context.getName(), connection.getId(),
         statement.getId(), id, getMdx() ) );
   }
 

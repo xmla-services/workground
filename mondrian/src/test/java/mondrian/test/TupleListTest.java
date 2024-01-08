@@ -34,7 +34,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.DelegatingTupleList;
@@ -58,7 +58,7 @@ class TupleListTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnaryTupleList(TestContextWrapper context) {
         // empty list
         final TupleList list0 = new UnaryTupleList();
@@ -97,7 +97,7 @@ class TupleListTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testArrayTupleList(TestContextWrapper context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
@@ -180,7 +180,7 @@ class TupleListTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDelegatingTupleList(TestContextWrapper context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
@@ -207,7 +207,7 @@ class TupleListTest {
      * method was mixing up the column and index variables.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDelegatingTupleListSlice(TestContextWrapper context) {
         // Functional test.
         Connection connection = context.createConnection();

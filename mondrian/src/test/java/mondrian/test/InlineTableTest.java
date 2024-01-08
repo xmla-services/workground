@@ -34,7 +34,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class InlineTableTest {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTable(TestContext context) {
         final String cubeName = "Sales_inline";
         class TestInlineTableModifier extends RDbMappingSchemaModifier {
@@ -204,7 +204,7 @@ class InlineTableTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTableInSharedDim(TestContext context) {
         final String cubeName = "Sales_inline_shared";
 
@@ -368,7 +368,7 @@ class InlineTableTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTableSnowflake(TestContext context) {
         if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
             == DatabaseProduct.INFOBRIGHT)
@@ -581,7 +581,7 @@ class InlineTableTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testInlineTableDate(TestContext context) {
         final String cubeName = "Sales_Inline_Date";
         class TestInlineTableDateModifier extends RDbMappingSchemaModifier {

@@ -12,6 +12,8 @@ package mondrian.util;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.Test;
 
 class ExpiringReferenceTest
@@ -20,7 +22,7 @@ class ExpiringReferenceTest
     void testSimpleExpiryMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "1s");
+            new ExpiringReference<>(referent, 1,TimeUnit.SECONDS);
         Thread.sleep(500);
         assertNotNull(reference.hardRef);
         Thread.sleep(600);
@@ -31,15 +33,15 @@ class ExpiringReferenceTest
     void testExpiryModeReAccess() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "1s");
+            new ExpiringReference<>(referent, 1,TimeUnit.SECONDS);
         Thread.sleep(500);
-        assertNotNull(reference.get("1s"));
+        assertNotNull(reference.get(1,TimeUnit.SECONDS));
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
-        assertNotNull(reference.get("1s"));
+        assertNotNull(reference.get(1,TimeUnit.SECONDS));
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
-        assertNotNull(reference.get("1s"));
+        assertNotNull(reference.get(1,TimeUnit.SECONDS));
         assertNotNull(reference.hardRef);
         Thread.sleep(1200);
         assertNull(reference.hardRef);
@@ -49,7 +51,7 @@ class ExpiringReferenceTest
     void testExpiryModeReAccessWithEmptyGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "1s");
+            new ExpiringReference<>(referent, 1,TimeUnit.SECONDS);
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.get());
@@ -62,7 +64,7 @@ class ExpiringReferenceTest
     void testSimpleSoftMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "-1s");
+            new ExpiringReference<>(referent, -1,TimeUnit.SECONDS);
         assertNull(reference.hardRef);
         assertNotNull(reference.get());
         assertNull(reference.hardRef);
@@ -72,7 +74,7 @@ class ExpiringReferenceTest
     void testSimplePermMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "0s");
+            new ExpiringReference<>(referent, 0,TimeUnit.SECONDS);
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.hardRef);
@@ -84,11 +86,11 @@ class ExpiringReferenceTest
     void testPermModeFollowedByNonPermGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<>(referent, "0s");
+            new ExpiringReference<>(referent, 0,TimeUnit.SECONDS);
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.hardRef);
-        assertNotNull(reference.get("1s"));
+        assertNotNull(reference.get(1,TimeUnit.SECONDS));
         Thread.sleep(1100);
         assertNotNull(reference.hardRef);
     }

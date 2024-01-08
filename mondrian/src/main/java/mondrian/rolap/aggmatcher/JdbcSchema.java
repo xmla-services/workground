@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -39,11 +38,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 import mondrian.util.ClassResolver;
@@ -1143,8 +1142,8 @@ public class JdbcSchema {
      * @param connectInfo Mondrian connection properties
      * @throws SQLException
      */
-    public void load(PropertyList connectInfo) throws SQLException {
-        loadTables(connectInfo);
+    public void load(RolapConnectionProps connectionProps) throws SQLException {
+        loadTables(connectionProps);
     }
 
     protected synchronized void clear() {
@@ -1278,7 +1277,7 @@ public class JdbcSchema {
      * @param connectInfo The Mondrian connection properties
      * @throws SQLException
      */
-    protected void loadTables(PropertyList connectInfo) throws SQLException {
+    protected void loadTables(RolapConnectionProps connectionProps) throws SQLException {
         if (allTablesLoaded) {
             return;
         }
@@ -1287,14 +1286,10 @@ public class JdbcSchema {
             conn = getDataSource().getConnection();
             final DatabaseMetaData databaseMetaData = conn.getMetaData();
 
-            final String scanSchemaProp =
-                connectInfo.get(
-                    RolapConnectionProperties.AggregateScanSchema.name(),
-                    getSchemaName());
-            final String scanCatalogProp =
-                connectInfo.get(
-                    RolapConnectionProperties.AggregateScanCatalog.name(),
-                    getCatalogName());
+            final String scanSchemaProp =connectionProps.aggregateScanSchema().orElse(getSchemaName());
+               
+            final String scanCatalogProp =connectionProps.aggregateScanCatalog().orElse(getCatalogName());
+  
 
             String[] tableTypes = { "TABLE", "VIEW" };
             if (databaseMetaData.getDatabaseProductName().toUpperCase().indexOf(

@@ -9,6 +9,8 @@
 
 package mondrian.server;
 
+import org.eclipse.daanse.olap.api.Context;
+
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapConnection;
 import mondrian.util.ArrayStack;
@@ -98,8 +100,8 @@ public class Locus {
         }
     }
 
-    public final MondrianServer getServer() {
-        return execution.statement.getMondrianConnection().getServer();
+    public final Context getContext() {
+        return execution.statement.getMondrianConnection().getContext();
     }
 
     public interface Action<T> {

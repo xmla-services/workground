@@ -20,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
   @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInKeyExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -102,7 +102,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
      @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInNameExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -151,7 +151,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
      @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInCaptionExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -200,7 +200,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
      @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInOrdinalExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -249,7 +249,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
      @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInParentExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -321,7 +321,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
      @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInPropertyExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -369,7 +369,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSqlInMeasureExpression(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -418,7 +418,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyCrossJoin(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL
@@ -500,7 +500,7 @@ class OrderByAliasTest extends BatchTestCase {
   }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCube(TestContext context) {
     if (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())
         != DatabaseProduct.MYSQL

@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
 
@@ -33,7 +33,7 @@ class UsagePrefixTest extends AggTableTestCase {
     private static final String MONDRIAN_595_CSV = "MONDRIAN-595.csv";
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefix(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
@@ -67,7 +67,7 @@ class UsagePrefixTest extends AggTableTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefixTwoDims(TestContextWrapper context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {

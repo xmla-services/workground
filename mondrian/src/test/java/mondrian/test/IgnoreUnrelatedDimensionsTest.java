@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.List;
 
@@ -138,7 +138,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotalingOnCrossJoinOfJoiningAndNonJoiningDimensions(TestContext context) {
     	prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -160,7 +160,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testVMShouldNotPushUpAggMemberDefinedOnNonJoiningDimension(TestContext context) {
     	prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -183,7 +183,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggMemberDefinedOnNonJoiningDimensionWithNonAllDefltMember(TestContext context)
     {
         // Gender dim to have Gender.F as default member
@@ -218,7 +218,7 @@ class IgnoreUnrelatedDimensionsTest {
      * would be empty.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testIgnoreUnrelatedDimsOnSlicer(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -243,7 +243,7 @@ class IgnoreUnrelatedDimensionsTest {
 
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testIgnoreUnrelatedDimsOnCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
         propSaver.set(
@@ -271,7 +271,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRelatedAndUnrelatedDimsOnCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
         propSaver.set(
@@ -302,7 +302,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testPartiallyRelatedMeasureWithCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
         propSaver.set(
@@ -355,7 +355,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimWithMeasureInCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
         propSaver.set(
@@ -375,7 +375,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotalingForValidAndNonValidMeasuresWithJoiningDimensions(TestContext context) {
     	prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -399,7 +399,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotalingWhenIgnoreUnrelatedDimensionsPropertyIsTrue(TestContext context) {
     	prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -458,7 +458,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotalingOnNonJoiningDimension(TestContext context) {
     	prepareContext(context);
         assertQueryReturns(context.getConnection(),
@@ -536,7 +536,7 @@ class IgnoreUnrelatedDimensionsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUnrelatedDimPropOverridesIgnoreMeasure(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,

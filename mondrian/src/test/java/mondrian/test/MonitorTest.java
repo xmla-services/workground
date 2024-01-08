@@ -21,7 +21,7 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianServer;
 import mondrian.server.monitor.ConnectionInfo;
@@ -46,7 +46,7 @@ class MonitorTest {
      * So that we can check that they are being populated.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMe(TestContextWrapper context) throws SQLException {
         String queryString =
             "WITH MEMBER [Measures].[Foo] AS\n"
@@ -68,9 +68,8 @@ class MonitorTest {
         statement1.close();
         println(stringWriter);
 
-        final MondrianServer mondrianServer =
-            MondrianServer.forConnection(context.createConnection());
-        final Monitor monitor = mondrianServer.getMonitor();
+
+        final Monitor monitor = context.getContext().getMonitor();
         final ServerInfo server = monitor.getServer();
 
         println(

@@ -11,6 +11,7 @@ import mondrian.rolap.RolapDrillThroughAction;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
@@ -34,7 +35,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
     private Connection connection;
     private boolean closed;
     protected boolean closeOnCompletion;
-    protected MondrianServer server;
+    protected Context context;
 
     /**
      * Current cell set, or null if the statement is not executing anything.
@@ -46,7 +47,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
     public StatementImpl(Connection connection) {
         assert connection != null;
         this.connection = connection;
-        this.server = MondrianServer.forConnection(connection);
+        this.context = connection.getContext();
         this.closed = false;
     }
 
@@ -221,7 +222,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
     public void close() {
         if (!closed) {
             closed = true;
-            server.removeStatement(this);
+            context.removeStatement(this);
             if (openCellSet != null) {
                 CellSetImpl c = openCellSet;
                 openCellSet = null;

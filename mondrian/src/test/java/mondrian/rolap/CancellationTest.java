@@ -30,7 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.MondrianException;
@@ -58,7 +58,7 @@ class CancellationTest {
      * Creates a cell region, runs a query, then flushes the cache.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyListCancellation(TestContextWrapper context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.nonEmptyList
@@ -81,7 +81,7 @@ class CancellationTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMutableCrossJoinCancellation(TestContextWrapper context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.mutableCrossJoin

@@ -9,6 +9,8 @@
 
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+
 import mondrian.olap.Util;
 import mondrian.util.ByteString;
 import mondrian.util.StringKey;
@@ -30,22 +32,9 @@ public class SchemaContentKey extends StringKey {
         super(s);
     }
 
-    static SchemaContentKey create(
-        final Util.PropertyList connectInfo,
-        final String catalogUrl,
-        final String catalogContents)
-    {
-        final String catalogContentProp =
-            RolapConnectionProperties.CatalogContent.name();
+	static SchemaContentKey create(MappingSchema mappingSchema) {
 
-        StringBuilder buf = new StringBuilder();
-        if (!Util.isEmpty(connectInfo.get(catalogContentProp)))
-        {
-            ConnectionKey.attributeValue(buf, "catalogStr", catalogContents);
-        } else {
-            ConnectionKey.attributeValue(buf, "catalog", catalogUrl);
-        }
-        return new SchemaContentKey(
-            new ByteString(Util.digestSHA(buf.toString())).toString());
-    }
+		int hash = System.identityHashCode(mappingSchema);
+		return new SchemaContentKey(new ByteString(Util.digestSHA(hash + "")).toString());
+	}
 }

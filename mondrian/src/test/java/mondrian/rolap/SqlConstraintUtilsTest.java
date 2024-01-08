@@ -53,7 +53,7 @@ import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.UnaryTupleList;
@@ -402,7 +402,7 @@ class SqlConstraintUtilsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testReplaceCompoundSlicerPlaceholder(TestContextWrapper context) {
         final Connection connection = context.createConnection();
 
@@ -624,7 +624,7 @@ class SqlConstraintUtilsTest {
 
     // test with a placeholder member
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testExpandSupportedCalculatedMembers2(TestContextWrapper context) {
       final Connection connection = context.createConnection();
 
@@ -825,7 +825,7 @@ class SqlConstraintUtilsTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testConstrainLevel(TestContextWrapper context){
 
         final RolapCubeLevel level = mock( RolapCubeLevel.class);

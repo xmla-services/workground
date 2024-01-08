@@ -13,9 +13,17 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
-import mondrian.olap.MondrianServer;
-import mondrian.xmla.PropertyDefinition;
-import mondrian.xmla.XmlaConstants;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -75,15 +83,9 @@ import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import mondrian.server.MondrianServerImpl;
+import mondrian.xmla.PropertyDefinition;
+import mondrian.xmla.XmlaConstants;
 
 public class OtherDiscoverService {
 
@@ -193,8 +195,8 @@ public class OtherDiscoverService {
 
     public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request) {
         List<DiscoverKeywordsResponseRow> result = new ArrayList<>();
-        MondrianServer mondrianServer = MondrianServer.forId(null);
-        for (String keyword : mondrianServer.getKeywords()) {
+
+        for (String keyword : MondrianServerImpl.KEYWORD_LIST) {
             result.add(new DiscoverKeywordsResponseRowR(keyword));
         }
         return result;

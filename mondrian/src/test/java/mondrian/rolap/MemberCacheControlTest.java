@@ -40,7 +40,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 
 import java.io.PrintWriter;
@@ -302,7 +302,7 @@ class MemberCacheControlTest {
      * {@link CacheControl#filter} method.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFilter(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -321,7 +321,7 @@ class MemberCacheControlTest {
      * Tests that member operations fail if cache is enabled.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberOpsFailIfCacheEnabled(TestContextWrapper context) {
         propSaver.set(
             MondrianProperties.instance().EnableRolapCubeMemberCache,
@@ -347,7 +347,7 @@ class MemberCacheControlTest {
      * Test that edits the properties of a single leaf Member.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetPropertyCommandOnLeafMember(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -404,7 +404,7 @@ class MemberCacheControlTest {
      * Dimension), but leaves grouping unchanged, so results not changed.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetPropertyCommandOnNonLeafMember(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -470,7 +470,7 @@ class MemberCacheControlTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAddCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -570,7 +570,7 @@ class MemberCacheControlTest {
         executeQuery(conn,
             "select {[Measures].[Unit Sales]} on columns, {[Retail].[CA]} on rows from [Sales]");
         final AggregationManager aggMgr =
-            ((RolapConnection) conn).getServer().getAggregationManager();
+            ( conn).getContext().getAggregationManager();
         assertEquals(
             Double.valueOf("74748"),
             aggMgr.getCellFromAllCaches(
@@ -686,7 +686,7 @@ class MemberCacheControlTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDeleteCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -728,7 +728,7 @@ class MemberCacheControlTest {
         executeQuery(conn,
             "select {[Measures].[Unit Sales]} on columns, {[Retail].[CA].[Alameda]} on rows from [Sales]");
         final AggregationManager aggMgr =
-            ((RolapConnection) conn).getServer().getAggregationManager();
+            conn.getContext().getAggregationManager();
         assertEquals(
             Double.valueOf("2117"),
             aggMgr.getCellFromAllCaches(
@@ -759,7 +759,7 @@ class MemberCacheControlTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMoveCommand(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -845,7 +845,7 @@ class MemberCacheControlTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMoveFailBadLevel(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -927,7 +927,7 @@ class MemberCacheControlTest {
      * add/delete/move members in parent-child hierarchies.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAddCommandNegative(TestContextWrapper context) {
         prepareTestContext(context);
         final Connection conn = context.createConnection();
@@ -1039,7 +1039,7 @@ class MemberCacheControlTest {
      */
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFlushHierarchy(TestContextWrapper context) {
         prepareTestContext(context);
         flushCache(context.createConnection());

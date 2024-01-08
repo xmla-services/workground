@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ class CaptionTest{
      * set caption "Anzahl Verkauf" for measure "Unit Sales"
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureCaption(TestContext context) {
         withSchema(context, MyFoodmartModifier::new);
         final Connection monConnection =
@@ -60,7 +60,7 @@ class CaptionTest{
      * set caption "Werbemedium" for nonshared dimension "Promotion Media"
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDimCaption(TestContext context) {
         withSchema(context, MyFoodmartModifier::new);
         final Connection monConnection =
@@ -82,7 +82,7 @@ class CaptionTest{
      * set caption "Quadrat-Fuesse:-)" for shared dimension "Store Size in SQFT"
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDimCaptionShared(TestContext context) {
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -111,7 +111,7 @@ class CaptionTest{
      * "Caption expression for dimension levels missing implementation"</a>.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testLevelCaptionExpression(TestContext context) {
 
         switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {

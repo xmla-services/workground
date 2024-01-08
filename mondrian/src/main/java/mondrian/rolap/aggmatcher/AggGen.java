@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.sql.SqlQuery;
 
@@ -173,7 +174,7 @@ public class AggGen {
     private void init() {
         JdbcSchema db = JdbcSchema.makeDB(star.getDataSource());
         try {
-            db.load(new Util.PropertyList());
+            db.load(new RolapConnectionPropsR());
         } catch (SQLException ex) {
             getLogger().error("",ex);
             return;

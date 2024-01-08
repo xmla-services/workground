@@ -42,7 +42,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
-import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 
 import mondrian.rolap.RolapSchemaPool;
 
@@ -175,7 +175,7 @@ class SteelWheelsAggregationTest {
 
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregation(TestContextWrapper context) throws Exception {
         final MappingSchema schema = getSchemaWith
                 (List.of(RoleRBuilder.builder()
@@ -223,7 +223,7 @@ class SteelWheelsAggregationTest {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationNoRestrictionsOnTopLevel(TestContextWrapper context) throws Exception {
         final MappingSchema schema = getSchemaWith
             (List.of(RoleRBuilder.builder()
@@ -268,7 +268,7 @@ class SteelWheelsAggregationTest {
 
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testUnionWithAggregation(TestContextWrapper context) throws Exception {
         final MappingSchema schema = getSchemaWith
             (List.of(
@@ -335,7 +335,7 @@ class SteelWheelsAggregationTest {
 
     @Disabled //disabled for CI build
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationUnionRolesWithSameGrants(TestContextWrapper context) throws Exception {
         final MappingSchema schema = getSchemaWith
             (List.of(

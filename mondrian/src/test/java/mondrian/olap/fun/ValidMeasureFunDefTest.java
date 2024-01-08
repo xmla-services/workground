@@ -15,7 +15,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
 
@@ -33,7 +33,7 @@ class ValidMeasureFunDefTest {
    * Test for MONDRIAN-1032 issue.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testSecondHierarchyInDimension(TestContext context) throws SQLException {
     /*
     final String schema = "<?xml version=\"1.0\"?>\n"
@@ -91,7 +91,7 @@ class ValidMeasureFunDefTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testValidMeasureWithNullTuple(TestContextWrapper context) {
     assertQueryReturns(context.createConnection(),
         "with member measures.vm as "
