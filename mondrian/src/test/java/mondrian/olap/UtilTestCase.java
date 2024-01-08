@@ -692,8 +692,7 @@ import mondrian.util.UnionIterator;
                 Arrays.asList(
                     // Usually on the list, but not guaranteed:
                     // "sun.jdbc.odbc.JdbcOdbcDriver",
-                    "mondrian.olap4j.MondrianOlap4jDriver",
-                    "org.olap4j.driver.xmla.XmlaOlap4jDriver"));
+                    "mondrian.olap4j.MondrianOlap4jDriver"));
         for (Class<Driver> driverClass : list) {
             expectedClassNames.remove(driverClass.getName());
         }

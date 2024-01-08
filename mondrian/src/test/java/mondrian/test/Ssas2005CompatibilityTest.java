@@ -14,8 +14,12 @@ import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -29,7 +33,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
@@ -37,6 +40,10 @@ import static org.opencube.junit5.TestUtil.assertExprReturns;
 import static org.opencube.junit5.TestUtil.assertExprThrows;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.getCubeByNameFromArray;
+import static org.opencube.junit5.TestUtil.getDimensionByNameFromArray;
+import static org.opencube.junit5.TestUtil.getHierarchyByNameFromArray;
+import static org.opencube.junit5.TestUtil.getLevelByNameFromArray;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.withSchema;
 
@@ -540,7 +547,7 @@ class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {    
+    void testDimensionMembersRequiresHierarchyQualification(TestContextWrapper context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1770,7 +1777,7 @@ class Ssas2005CompatibilityTest {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCanHaveMemberWithSameNameAsLevel(TestContextWrapper context) throws SQLException {
+    void testCanHaveMemberWithSameNameAsLevel(TestContext context) throws SQLException {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
@@ -1792,16 +1799,21 @@ class Ssas2005CompatibilityTest {
              + " </Hierarchy>\n"
              + "</Dimension>"));
          */
-        withSchema(context.getContext(), SchemaModifiers.Ssas2005CompatibilityTestModifier2::new);
-        org.olap4j.metadata.Member member = context.createOlap4jConnection()
-            .getOlapSchema().getCubes().get("Sales").getDimensions()
-            .get("SameName").getHierarchies().get("SameName").getLevels()
-            .get("SameName").getMembers().get(0);
+        withSchema(context, SchemaModifiers.Ssas2005CompatibilityTestModifier2::new);
+        Cube cube = getCubeByNameFromArray(context.getConnection()
+            .getSchema().getCubes(), "Sales").orElseThrow(() -> new RuntimeException("Cube with name \"Sales\" is absent"));
+        Dimension dimension =  getDimensionByNameFromArray(cube.getDimensions(), "SameName")
+            .orElseThrow(() -> new RuntimeException("Dimension with name \"SameName\" is absent"));
+        Hierarchy hierarchy = getHierarchyByNameFromArray(dimension.getHierarchies(), "SameName")
+            .orElseThrow(() -> new RuntimeException("Hierarchy with name \"SameName\" is absent"));
+        Level level = getLevelByNameFromArray(hierarchy.getLevels(), "SameName")
+            .orElseThrow(() -> new RuntimeException("Level with name \"SameName\" is absent"));
+        Member member = level.getMembers().get(0);
         assertEquals(
             "[SameName].[SameName].[SameName]",
             member.getUniqueName());
 
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context.getConnection(),
             "select {"
             + (MondrianProperties.instance().SsasCompatibleNaming.get()
                 ? "[SameName].[SameName].[SameName]"
@@ -1810,7 +1822,7 @@ class Ssas2005CompatibilityTest {
             "Mondrian Error:No function matches signature '{<Level>}'");
 
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            assertQueryReturns(context.createConnection(),
+            assertQueryReturns(context.getConnection(),
                 "select {[SameName].[SameName].[SameName].[SameName]} on 0 from Sales",
                 "Axis #0:\n"
                 + "{}\n"
@@ -1818,7 +1830,7 @@ class Ssas2005CompatibilityTest {
                 + "{[SameName].[SameName].[SameName]}\n"
                 + "Row #0: \n");
         } else {
-            assertQueryReturns(context.createConnection(),
+            assertQueryReturns(context.getConnection(),
                 "select {[SameName].[SameName].[SameName]} on 0 from Sales",
                 "Axis #0:\n"
                 + "{}\n"

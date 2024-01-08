@@ -10,12 +10,14 @@
 package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
@@ -23,9 +25,13 @@ import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -336,16 +342,20 @@ class PropertiesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPropertyDescription(TestContextWrapper context) throws Exception {
-        withSchema(context.getContext(), SchemaModifiers.PropertiesTestModifier::new);
+    void testPropertyDescription(TestContext context) throws Exception {
+        withSchema(context, SchemaModifiers.PropertiesTestModifier::new);
+        Cube[] cubes = context.getConnection().getSchema()
+            .getCubes();
+        Optional<Cube> optionalCube = Arrays.stream(cubes).filter(c -> c.getName().equals("Foo")).findFirst();
+        Cube cube = optionalCube.orElseThrow(() -> new RuntimeException("Cube with name Foo absent"));
+        Optional<Dimension> optionalDimension  = Arrays.stream(cube.getDimensions()).filter(d -> d.getName().equals("Promotions")).findFirst();
+        Dimension dimension = optionalDimension.orElseThrow(() -> new RuntimeException("Dimension with name Foo absent"));
+        Optional<Property> optionalProperty = Arrays.stream(dimension.getHierarchies()[0].getLevels()[1].getProperties())
+            .filter(p -> p.getName().equals("BarProp")).findFirst();
+        Property property =  optionalProperty.orElseThrow(() -> new RuntimeException("Property with name BarProp absent"));
         assertEquals(
             "BaconDesc",
-                context.createOlap4jConnection().getOlapSchema()
-                .getCubes().get("Foo")
-                .getDimensions().get("Promotions")
-                .getHierarchies().get(0)
-                .getLevels().get(1)
-                .getProperties().get("BarProp")
+            property
                 .getDescription());
     }
 }

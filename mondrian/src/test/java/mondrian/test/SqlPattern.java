@@ -14,9 +14,9 @@ package mondrian.test;
 import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.olap4j.impl.Olap4jUtil;
 
 import mondrian.enums.DatabaseProduct;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Pattern for a SQL statement (or fragment thereof) expected to be produced

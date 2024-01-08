@@ -20,24 +20,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
@@ -132,7 +131,7 @@ class DrillThroughQuerySpecTest {
   // test that returns correct number of columns
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMdxQuery(TestContextWrapper foodMartContext) throws SQLException {
+  void testMdxQuery(TestContext foodMartContext) throws Exception {
     String drillThroughMdx = "DRILLTHROUGH WITH "
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store Type_])' "
         + "SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER)})' "
@@ -150,9 +149,8 @@ class DrillThroughQuerySpecTest {
         + "FROM [Warehouse] " + "WHERE ([*CJ_SLICER_AXIS]) "
         + "RETURN [Product].[Product Department]";
 
-    OlapConnection olap4jConnection = foodMartContext.createOlap4jConnection();
-    ResultSet resultSet = olap4jConnection.createStatement()
-      .executeQuery(drillThroughMdx);
+    Connection connection = foodMartContext.getConnection();
+    ResultSet resultSet = connection.createStatement().executeQuery(drillThroughMdx, Optional.empty(), Optional.empty(), null);
 
     assertEquals(1, resultSet.getMetaData().getColumnCount());
     assertEquals

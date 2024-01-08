@@ -29,9 +29,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapException;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -347,7 +345,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testCaseInsensitiveNullMember(TestContext foodMartContext) throws SQLException, OlapException, IOException {
+    void testCaseInsensitiveNullMember(TestContext foodMartContext) throws SQLException, IOException {
     	Connection connection = foodMartContext.getConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getDialect();
@@ -426,7 +424,7 @@ class CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNullNameColumn(TestContextWrapper foodMartContext) throws SQLException, OlapException, IOException  {
+    void testNullNameColumn(TestContextWrapper foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getContext().getDialect();
@@ -517,7 +515,7 @@ class CompatibilityTest {
       */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNullCollation(TestContext foodMartContext) throws SQLException, OlapException, IOException  {
+    void testNullCollation(TestContext foodMartContext) {
     	Connection connection = foodMartContext.getConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = foodMartContext.getDialect();

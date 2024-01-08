@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -37,10 +38,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -125,14 +125,14 @@ class HierarchyBugTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-	void testNamesIdentitySsasCompatibleTimeHierarchy(TestContextWrapper foodMartContext) {
+	void testNamesIdentitySsasCompatibleTimeHierarchy(TestContext foodMartContext) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         String mdxTime = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Time].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
-       Connection conn= foodMartContext.createConnection();
+       Connection conn= foodMartContext.getConnection();
 
 
         Result resultTime = TestUtil.executeQuery(conn, mdxTime);
@@ -166,14 +166,14 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasInCompatibleTimeHierarchy(TestContextWrapper foodMartContext) {
+    void testNamesIdentitySsasInCompatibleTimeHierarchy(TestContext foodMartContext) {
         // SsasCompatibleNaming defaults to false
         String mdxTime = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
 
-        Connection conn=foodMartContext.createConnection();
+        Connection conn=foodMartContext.getConnection();
         Result resultTime =TestUtil.executeQuery(conn, mdxTime);
         verifyMemberLevelNamesIdentityMeasureAxis(
             resultTime.getAxes()[0], "[Measures]");
@@ -183,13 +183,13 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasInCompatibleWeeklyHierarchy(TestContextWrapper foodMartContext) {
+    void testNamesIdentitySsasInCompatibleWeeklyHierarchy(TestContext foodMartContext) {
         String mdxWeekly = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time.Weekly].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
 
-        Connection conn=foodMartContext.createConnection();
+        Connection conn=foodMartContext.getConnection();
         Result resultWeekly =TestUtil.executeQuery(conn, mdxWeekly);
 
         verifyMemberLevelNamesIdentityMeasureAxis(
@@ -222,19 +222,19 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasCompatibleOlap4j(TestContextWrapper foodMartContext) throws SQLException {
+    void testNamesIdentitySsasCompatibleOlap4j(TestContext foodMartContext) throws SQLException {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time].[Time]");
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasInCompatibleOlap4j(TestContextWrapper foodMartContext) throws SQLException {
+    void testNamesIdentitySsasInCompatibleOlap4j(TestContext foodMartContext) throws SQLException {
         // SsasCompatibleNaming defaults to false
         verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time]");
     }
 
-    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(TestContextWrapper foodMartContext, String expected)
+    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(TestContext foodMartContext, String expected)
         throws SQLException
     {
         // essential here, in time hierarchy, is hasAll="false"
@@ -247,7 +247,7 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasCompatibleOlap4jWeekly(TestContextWrapper foodMartContext)
+    void testNamesIdentitySsasCompatibleOlap4jWeekly(TestContext foodMartContext)
         throws SQLException
     {
         propSaver.set(
@@ -261,7 +261,7 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasInCompatibleOlap4jWeekly(TestContextWrapper foodMartContext)
+    void testNamesIdentitySsasInCompatibleOlap4jWeekly(TestContext foodMartContext)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
@@ -274,7 +274,7 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasCompatibleOlap4jDateDim(TestContextWrapper foodMartContext)
+    void testNamesIdentitySsasCompatibleOlap4jDateDim(TestContext foodMartContext)
         throws SQLException
     {
         propSaver.set(
@@ -283,14 +283,14 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesSsasInCompatibleOlap4jDateDim(TestContextWrapper foodMartContext)
+    void testNamesSsasInCompatibleOlap4jDateDim(TestContext foodMartContext)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
         verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext, "[Date]");
     }
 
-    private void verifyMemberLevelNamesIdentityOlap4jDateDim(TestContextWrapper context, String expected)
+    private void verifyMemberLevelNamesIdentityOlap4jDateDim(TestContext context, String expected)
         throws SQLException
     {
         String mdx =
@@ -368,12 +368,12 @@ TestUtil.flushSchemaCache(conn);
        /*
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
         */
-        withSchema(context.getContext(), VerifyMemberLevelNamesIdentityOlap4jDateDimModifier::new);
+        withSchema(context, VerifyMemberLevelNamesIdentityOlap4jDateDimModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasCompatibleOlap4jDateWeekly(TestContextWrapper context)
+    void testNamesIdentitySsasCompatibleOlap4jDateWeekly(TestContext context)
         throws SQLException
     {
         propSaver.set(
@@ -386,7 +386,7 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasInCompatibleOlap4jDateDim(TestContextWrapper context)
+    void testNamesIdentitySsasInCompatibleOlap4jDateDim(TestContext context)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
@@ -397,7 +397,7 @@ TestUtil.flushSchemaCache(conn);
         verifyMemberLevelNamesIdentityOlap4jWeekly(context,mdx, "[Date.Weekly]");
     }
 
-    private void verifyMemberLevelNamesIdentityOlap4jWeekly(TestContextWrapper context,
+    private void verifyMemberLevelNamesIdentityOlap4jWeekly(TestContext context,
         String mdx, String expected) throws SQLException
     {
 
@@ -469,29 +469,28 @@ TestUtil.flushSchemaCache(conn);
                 return result;
             }
         }
-        withSchema(context.getContext(), VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier::new);
+        withSchema(context, VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 
     private void verifyLevelMemberNamesIdentityOlap4j(
-        String mdx, TestContextWrapper context, String expected) throws SQLException
+        String mdx, TestContext context, String expected) throws SQLException
     {
-    OlapConnection olapConnection=	context.createOlap4jConnection();
+    Connection connection =	context.getConnection();
+        org.eclipse.daanse.olap.api.result.CellSet result = connection.createStatement().executeQuery(mdx);
 
-        CellSet result = TestUtil.executeOlap4jQuery(olapConnection,mdx);
-
-        List<org.olap4j.Position> positions =
+        List<Position> positions =
             result.getAxes().get(1).getPositions();
-        org.olap4j.metadata.Member year1997 =
+        Member year1997 =
             positions.get(0).getMembers().get(0);
         String year1997HierarchyName = year1997.getHierarchy().getUniqueName();
         assertEquals(expected, year1997HierarchyName);
 
-        org.olap4j.metadata.Level year = year1997.getLevel();
+        Level year = year1997.getLevel();
         String yearHierarchyName = year.getHierarchy().getUniqueName();
         assertEquals(year1997HierarchyName, yearHierarchyName);
 
-        TestUtil.flushSchemaCache(context.createConnection());
+        TestUtil.flushSchemaCache(context.getConnection());
     }
 
 

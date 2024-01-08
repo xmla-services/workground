@@ -18,16 +18,17 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.impl.CellImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.Cell;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.Position;
-import org.olap4j.metadata.Member;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -93,10 +94,10 @@ class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillthroughVisualTotal(TestContextWrapper foodMartContext) throws SQLException {
-        OlapConnection conn = foodMartContext.createOlap4jConnection();
+    void testDrillthroughVisualTotal(TestContext foodMartContext) throws SQLException {
+        Connection conn = foodMartContext.getConnection();
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery(conn,
+    		TestUtil.executeQueryWithCellSetResult(conn,
                 "select {[Measures].[Unit Sales]} on columns, "
                 + "{VisualTotals("
                 + "    {[Product].[Food].[Baked Goods].[Bread],"
@@ -112,13 +113,13 @@ class VisualTotalsTest {
         cell = cellSet.getCell(Arrays.asList(0, 0));
         member = positions.get(0).getMembers().get(0);
         assertEquals("*Subtotal - Bread", member.getCaption());
-        resultSet = cell.drillThrough();
+        resultSet = ((CellImpl)cell).drillThrough();
         assertNull(resultSet);
 
         cell = cellSet.getCell(Arrays.asList(0, 1));
         member = positions.get(1).getMembers().get(0);
         assertEquals("Bagels", member.getName());
-        resultSet = cell.drillThrough();
+        resultSet = ((CellImpl)cell).drillThrough();
         assertNotNull(resultSet);
         resultSet.close();
     }
@@ -132,9 +133,9 @@ class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testVisualTotalCaptionBug(TestContextWrapper foodMartContext) throws SQLException {        
+    void testVisualTotalCaptionBug(TestContext foodMartContext) throws SQLException {
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
+    		TestUtil.executeQueryWithCellSetResult(foodMartContext.getConnection(),
                 "select {[Measures].[Unit Sales]} on columns, "
                 + "VisualTotals("
                 + "    {[Product].[Food].[Baked Goods].[Bread],"
@@ -160,18 +161,18 @@ class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testVisualTotalsAggregatedMemberBug(TestContextWrapper foodMartContext) throws SQLException {        
+    void testVisualTotalsAggregatedMemberBug(TestContext foodMartContext) throws SQLException {
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
-                " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'" 
-            	+ "  select " 
-            	+ " {[Time].[1997]," 
-            	+ " [Time].[1997].[Q1],[Time].[1997].[Q2],[Time].[1997].[Q3],[Time].[1997].[Q4]} ON COLUMNS, " 
-            	+ " {[Gender].[M],[Gender].[YTD]} ON ROWS" 
+    		TestUtil.executeQueryWithCellSetResult(foodMartContext.getConnection(),
+                " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'"
+            	+ "  select "
+            	+ " {[Time].[1997],"
+            	+ " [Time].[1997].[Q1],[Time].[1997].[Q2],[Time].[1997].[Q3],[Time].[1997].[Q4]} ON COLUMNS, "
+            	+ " {[Gender].[M],[Gender].[YTD]} ON ROWS"
             	+ " FROM [Sales]");
         //fail("Not yet implemented");
         String s = TestUtil.toString(cellSet);
-        TestUtil.assertEqualsVerbose( 
+        TestUtil.assertEqualsVerbose(
         	     "Axis #0:\n"
         	     + "{}\n"
         	     + "Axis #1:\n"
@@ -193,7 +194,7 @@ class VisualTotalsTest {
         	     + "Row #1: 64,999\n"
         	     + "Row #1: 98,248\n"
         	     + "Row #1: 135,215\n"
-        		,s); 
+        		,s);
     }
-    
+
 }

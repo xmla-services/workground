@@ -24,20 +24,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.impl.RectangularCellSetFormatter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.olap4j.layout.RectangularCellSetFormatter;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -66,14 +66,14 @@ class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testExplain(TestContextWrapper context) throws SQLException {
+  void testExplain(TestContext context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
-    OlapConnection connection = context.createOlap4jConnection();
-    final OlapStatement statement = connection.createStatement();
+    Connection connection = context.getConnection();
+    final Statement statement = connection.createStatement();
     final ResultSet resultSet =
         statement.executeQuery( "explain plan for\n" + "select [Measures].[Unit Sales] on 0,\n"
-            + "  Filter([Product].Children, [Measures].[Unit Sales] > 100) on 1\n" + "from [Sales]" );
+            + "  Filter([Product].Children, [Measures].[Unit Sales] > 100) on 1\n" + "from [Sales]", Optional.empty(), Optional.empty(), null );
     assertTrue( resultSet.next() );
     assertEquals( 1, resultSet.getMetaData().getColumnCount() );
     assertEquals( "PLAN", resultSet.getMetaData().getColumnName( 1 ) );
@@ -104,12 +104,12 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
   @ParameterizedTest
   @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-	void testExplainComplex(TestContextWrapper context) throws SQLException {
+	void testExplainComplex(TestContext context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
 		// Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in
 		// case test environment has enabled profiling
-		OlapConnection connection = context.createOlap4jConnection();
-		final OlapStatement statement = connection.createStatement();
+		Connection connection = context.getConnection();
+		final Statement statement = connection.createStatement();
 		final String mdx = """
 				with member [Time].[Time].[1997].[H1] as
 				    Aggregate({[Time].[1997].[Q1], [Time].[1997].[Q2]})
@@ -131,7 +131,7 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
 				where [Gender].[F]""";
 
 		// Plan before execution.
-		final ResultSet resultSet = statement.executeQuery("explain plan for\n" + mdx);
+		final ResultSet resultSet = statement.executeQuery("explain plan for\n" + mdx, Optional.empty(), Optional.empty(), null);
 		assertTrue(resultSet.next());
 		String s = resultSet.getString(1);
 		String expected = """
@@ -169,7 +169,7 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
 			}
 		});
 
-		final CellSet cellSet = statement.executeOlapQuery(mdx);
+		final CellSet cellSet = statement.executeQuery(mdx);
 		new RectangularCellSetFormatter(true).format(cellSet, new PrintWriter(new StringWriter()));
 		cellSet.close();
 		assertEquals(8, strings.size());
@@ -223,15 +223,16 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testExplainInvalid(TestContextWrapper context) throws SQLException {
-    OlapConnection connection = context.createOlap4jConnection();
-    final OlapStatement statement = connection.createStatement();
+  void testExplainInvalid(TestContext context) throws SQLException {
+    Connection connection = context.getConnection();
+    final Statement statement = connection.createStatement();
     try {
       final ResultSet resultSet =
           statement.executeQuery( "select\n" + "  {[Measures].[Unit Sales], [Measures].[Store Margin]} on 0,\n"
-              + "  [Hi Val Products] * [Marital Status].Members on 1\n" + "from [Sales]\n" + "where [Gender].[F]" );
+              + "  [Hi Val Products] * [Marital Status].Members on 1\n" + "from [Sales]\n" + "where [Gender].[F]",
+              Optional.empty(), Optional.empty(), null );
       fail( "expected error, got " + resultSet );
-    } catch ( SQLException e ) {
+    } catch ( Exception e ) {
       checkThrowable( e, "MDX object '[Measures].[Store Margin]' not found in cube 'Sales'" );
     }
   }
@@ -243,7 +244,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testQueryTimingAnalyzer(TestContextWrapper context) throws SQLException {
+  void testQueryTimingAnalyzer(TestContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -266,7 +267,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
             + " UNION({[Gender].[*TOTAL_MEMBER_SEL~MAX]},UNION({[Gender].[*TOTAL_MEMBER_SEL~AVG]},UNION({[Gender].[*TOTAL_MEMBER_SEL~AGG]},UNION({[Gender].[*TOTAL_MEMBER_SEL~SUM]},[*SORTED_ROW_AXIS])))) ON ROWS\r\n"
             + " FROM [Sales]\r\n" + " WHERE ([*CJ_SLICER_AXIS])";
 
-    ArrayList<String> strings = executeOlapQuery(context, mdx );
+    ArrayList<String> strings = executeQuery(context, mdx );
     assertEquals( 20, strings.size() );
     assertTrue(strings.get( 19 ).contains( "RankFunDef invoked 16 times" ), strings.get( 19 ));
     assertTrue(strings.get( 19 ).contains( "EvalForSlicer invoked 6 times" ),  strings.get( 19 ));
@@ -284,7 +285,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testMutiKeySort(TestContextWrapper context) throws SQLException {
+  void testMutiKeySort(TestContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_]))'\r\n"
@@ -301,7 +302,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
             + " SELECT\r\n" + " CROSSJOIN([*SORTED_COL_AXIS],[*BASE_MEMBERS__Measures_]) ON COLUMNS\r\n"
             + " , NON EMPTY\r\n" + " [*SORTED_ROW_AXIS] ON ROWS\r\n" + " FROM [Sales]";
 
-    ArrayList<String> strings = executeOlapQuery(context, mdx );
+    ArrayList<String> strings = executeQuery(context, mdx );
     assertTrue(strings.get( strings.size() - 1 ).contains(
         "OrderFunDef invoked 5 times" ),  strings.get( strings.size() - 1 ));
   }
@@ -314,7 +315,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testNestedSumFunDef(TestContextWrapper context) throws SQLException {
+  void testNestedSumFunDef(TestContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'FILTER([Time].[Month].MEMBERS, NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -328,7 +329,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
             + " [*BASE_MEMBERS__Measures_] ON COLUMNS\r\n" + " , NON EMPTY\r\n"
             + " UNION({[Time].[*TOTAL_MEMBER_SEL~SUM]},[*SORTED_ROW_AXIS]) ON ROWS\r\n" + " FROM [Sales]";
 
-    ArrayList<String> strings = executeOlapQuery(context, mdx);
+    ArrayList<String> strings = executeQuery(context, mdx);
     assertEquals( 14, strings.size() );
     assertTrue(strings.get( 13 ).contains( "SumFunDef invoked 52 times for total of " ), strings.get( 13 ));
     assertTrue(strings.get( 13 ).contains( "XtdFunDef invoked 24 times for total of " ), strings.get( 13 ));
@@ -344,7 +345,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testAggAboveSlicerSolveOrder(TestContextWrapper context) throws SQLException {
+  void testAggAboveSlicerSolveOrder(TestContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -364,7 +365,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
             + " UNION(CROSSJOIN({[Education Level].[*TOTAL_MEMBER_SEL~AGG]},{([Customers].[*DEFAULT_MEMBER])}),[*SORTED_ROW_AXIS]) ON ROWS\r\n"
             + " FROM [Sales]\r\n" + " WHERE ([*CJ_SLICER_AXIS])";
 
-    ArrayList<String> strings = executeOlapQuery(context, mdx);
+    ArrayList<String> strings = executeQuery(context, mdx);
 
     assertTrue(strings.get( 19 ).contains( "EvalForSlicer invoked 4 times" ), strings.get( 19 ));
     assertTrue(strings.get( 19 ).contains( "AggregateFunDef invoked 2 times" ), strings.get( 19 ));
@@ -379,7 +380,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testAggBelowSlicerSolveOrder(TestContextWrapper context) throws SQLException {
+  void testAggBelowSlicerSolveOrder(TestContext context) throws SQLException {
     propSaver.set(MondrianProperties.instance().DisableCaching, true );
     propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
 
@@ -401,22 +402,22 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
             + " UNION(CROSSJOIN({[Education Level].[*TOTAL_MEMBER_SEL~AGG]},{([Customers].[*DEFAULT_MEMBER])}),[*SORTED_ROW_AXIS]) ON ROWS\r\n"
             + " FROM [Sales]\r\n" + " WHERE ([*CJ_SLICER_AXIS])";
 
-    ArrayList<String> strings = executeOlapQuery(context, mdx);
+    ArrayList<String> strings = executeQuery(context, mdx);
     assertTrue(strings.get( 19 ).contains( "EvalForSlicer invoked 6 times" ), strings.get( 19 ));
     assertTrue(strings.get( 19 ).contains( "AggregateFunDef invoked 4 times" ), strings.get( 19 ));
   }
 
-  private ArrayList<String> executeOlapQuery(TestContextWrapper context, String mdx ) throws SQLException {
-    OlapConnection connection = context.createOlap4jConnection();
-    Connection connection1 = context.createConnection();
-    final CacheControl cacheControl = connection1.getCacheControl( null );
+  private ArrayList<String> executeQuery(TestContext context, String mdx ) throws SQLException {
+
+    Connection connection = context.getConnection();
+    final CacheControl cacheControl = connection.getCacheControl( null );
 
     // Flush the entire cache.
-    final Cube salesCube = connection1.getSchema().lookupCube( "Sales", true );
+    final Cube salesCube = connection.getSchema().lookupCube( "Sales", true );
     final CacheControl.CellRegion measuresRegion = cacheControl.createMeasuresRegion( salesCube );
     cacheControl.flush( measuresRegion );
 
-    final OlapStatement statement = connection.createStatement();
+    final Statement statement = connection.createStatement();
 
     final ArrayList<String> strings = new ArrayList<>();
     ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
@@ -427,7 +428,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
       }
     } );
 
-    CellSet cellSet = statement.executeOlapQuery( mdx );
+    CellSet cellSet = statement.executeQuery( mdx );
     cellSet.close();
     return strings;
   }

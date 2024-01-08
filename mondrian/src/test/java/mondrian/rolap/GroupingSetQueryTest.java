@@ -21,10 +21,10 @@ import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;

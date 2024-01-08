@@ -113,6 +113,7 @@ public class CellSetImpl extends Execution implements CellSet {
         return buf.toString();
     }
 
+    @Override
     public void close() {
         if (closed) {
             return;
