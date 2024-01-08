@@ -16,6 +16,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRule;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRules;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.FactCountMatch;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.ForeignKeyMatch;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.TableMatch;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMUtil;
@@ -36,9 +43,9 @@ class DefaultRuleTest {
         LoggerFactory.getLogger(DefaultRuleTest.class);
     private static final String TEST_RULE_XML = "TestRule.xml";
 
-    private static DefaultDef.AggRules rules;
+    private static AggRules rules;
 
-    private DefaultDef.AggRule getAggRule(String tag) {
+    private AggRule getAggRule(String tag) {
         return rules.getAggRule(tag);
     }
 
@@ -47,10 +54,9 @@ class DefaultRuleTest {
         File file = new File(TESTFILES_DIR, TEST_RULE_XML);
         FileReader reader = new FileReader(file);
 
-        Parser xmlParser = XOMUtil.createDefaultParser();
-
-       final DOMWrapper domWrapper = xmlParser.parse(reader);
-       rules = new DefaultDef.AggRules(domWrapper);
+        JAXBContext jaxbContext = JAXBContext.newInstance(AggRules.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        rules = (AggRules) jaxbUnmarshaller.unmarshal(reader);
 
        ListRecorder msgRecorder = new ListRecorder();
        rules.validate(msgRecorder);
@@ -66,11 +72,11 @@ class DefaultRuleTest {
 
 
     private Recognizer.Matcher getTableMatcher(String tag, String tableName) {
-        DefaultDef.AggRule rule = getAggRule(tag);
+        AggRule rule = getAggRule(tag);
         if (rule == null) {
             LOGGER.info("rule == null for tag=" + tag);
         }
-        DefaultDef.TableMatch tableMatch = rule.getTableMatch();
+        TableMatch tableMatch = rule.getTableMatch();
         if (tableMatch == null) {
             LOGGER.info(
                 "tableMatch == null for tag="
@@ -82,8 +88,8 @@ class DefaultRuleTest {
     }
 
     private Recognizer.Matcher getFactCountMatcher(String tag) {
-        DefaultDef.AggRule rule = getAggRule(tag);
-        DefaultDef.FactCountMatch factTableName = rule.getFactCountMatch();
+        AggRule rule = getAggRule(tag);
+        FactCountMatch factTableName = rule.getFactCountMatch();
         return factTableName.getMatcher();
     }
 
@@ -91,8 +97,8 @@ class DefaultRuleTest {
         String tag,
         String foreignKeyName)
     {
-        DefaultDef.AggRule rule = getAggRule(tag);
-        DefaultDef.ForeignKeyMatch foreignKeyMatch = rule.getForeignKeyMatch();
+        AggRule rule = getAggRule(tag);
+        ForeignKeyMatch foreignKeyMatch = rule.getForeignKeyMatch();
         return foreignKeyMatch.getMatcher(foreignKeyName);
     }
 
@@ -104,7 +110,7 @@ class DefaultRuleTest {
         String levelName,
         String levelColumnName)
     {
-        DefaultDef.AggRule rule = getAggRule(tag);
+        AggRule rule = getAggRule(tag);
         Recognizer.Matcher matcher =
             rule.getLevelMap().getMatcher(
                 usagePrefix,
@@ -120,7 +126,7 @@ class DefaultRuleTest {
         String measureColumnName,
         String aggregateName)
     {
-        DefaultDef.AggRule rule = getAggRule(tag);
+        AggRule rule = getAggRule(tag);
         Recognizer.Matcher matcher =
             rule.getMeasureMap().getMatcher(
                 measureName,

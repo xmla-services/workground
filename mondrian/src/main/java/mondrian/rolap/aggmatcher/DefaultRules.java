@@ -11,14 +11,21 @@
 
 package mondrian.rolap.aggmatcher;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+import mondrian.olap.MondrianProperties;
+import mondrian.recorder.ListRecorder;
+import mondrian.recorder.MessageRecorder;
+import mondrian.recorder.RecorderException;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapStar;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRule;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRules;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.FactCountMatch;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.ForeignKeyMatch;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.IgnoreMap;
+import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.TableMatch;
 import org.eigenbase.util.property.Property;
 import org.eigenbase.util.property.Trigger;
 import org.eigenbase.xom.DOMWrapper;
@@ -28,12 +35,14 @@ import org.eigenbase.xom.XOMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.recorder.ListRecorder;
-import mondrian.recorder.MessageRecorder;
-import mondrian.recorder.RecorderException;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapStar;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Container for the default aggregate recognition rules.
@@ -63,7 +72,7 @@ public class DefaultRules {
                 return null;
             }
 
-            DefaultDef.AggRules defs = makeAggRules(inStream);
+            AggRules defs = makeAggRules(inStream);
 
             // validate the DefaultDef.AggRules object
             ListRecorder reclists = new ListRecorder();
@@ -83,7 +92,7 @@ public class DefaultRules {
 
             // make sure the tag name exists
             String tag = MondrianProperties.instance().AggregateRuleTag.get();
-            DefaultDef.AggRule aggrule = defs.getAggRule(tag);
+            AggRule aggrule = defs.getAggRule(tag);
             if (aggrule == null) {
                 throw mres.MissingDefaultAggRule.ex(tag);
             }
@@ -170,46 +179,52 @@ public class DefaultRules {
         properties.AggregateRuleTag.addTrigger(trigger);
     }
 
-    protected static DefaultDef.AggRules makeAggRules(final File file) {
-        DOMWrapper def = makeDOMWrapper(file);
+    protected static AggRules makeAggRules(final File file) {
         try {
-            return new DefaultDef.AggRules(def);
-        } catch (XOMException e) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(AggRules.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (AggRules) jaxbUnmarshaller.unmarshal(file);
+        } catch (JAXBException e) {
             throw mres.AggRuleParse.ex(file.getName(), e);
         }
     }
 
-    protected static DefaultDef.AggRules makeAggRules(final URL url) {
-        DOMWrapper def = makeDOMWrapper(url);
+    protected static AggRules makeAggRules(final URL url) {
         try {
-            return new DefaultDef.AggRules(def);
-        } catch (XOMException e) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(AggRules.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (AggRules) jaxbUnmarshaller.unmarshal(url);
+
+        } catch (JAXBException e) {
             throw mres.AggRuleParse.ex(url.toString(), e);
         }
     }
 
-    protected static DefaultDef.AggRules makeAggRules(
+    protected static AggRules makeAggRules(
         final InputStream inStream)
     {
-        DOMWrapper def = makeDOMWrapper(inStream);
         try {
-            return new DefaultDef.AggRules(def);
-        } catch (XOMException e) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(AggRules.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (AggRules) jaxbUnmarshaller.unmarshal(inStream);
+        } catch (JAXBException e) {
             throw mres.AggRuleParse.ex("InputStream", e);
         }
     }
 
-    protected static DefaultDef.AggRules makeAggRules(
+    protected static AggRules makeAggRules(
         final String text,
         final String name)
     {
-        DOMWrapper def = makeDOMWrapper(text, name);
         try {
-            return new DefaultDef.AggRules(def);
-        } catch (XOMException e) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(AggRules.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (AggRules) jaxbUnmarshaller.unmarshal(new StringReader(text));
+        } catch (JAXBException e) {
             throw mres.AggRuleParse.ex(name, e);
         }
     }
+
 
     protected static DOMWrapper makeDOMWrapper(final File file) {
         try {
@@ -250,14 +265,14 @@ public class DefaultRules {
     }
 
 
-    private final DefaultDef.AggRules rules;
+    private final AggRules rules;
     private final Map<String, Recognizer.Matcher> factToPattern;
     private final Map<String, Recognizer.Matcher> foreignKeyMatcherMap;
     private Recognizer.Matcher ignoreMatcherMap;
     private Recognizer.Matcher factCountMatcher;
     private String tag;
 
-    private DefaultRules(final DefaultDef.AggRules rules) {
+    private DefaultRules(final AggRules rules) {
         this.rules = rules;
         this.factToPattern = new HashMap<>();
         this.foreignKeyMatcherMap = new HashMap<>();
@@ -288,21 +303,21 @@ public class DefaultRules {
 
 
     /**
-     * Returns the {@link mondrian.rolap.aggmatcher.DefaultDef.AggRule} whose
+     * Returns the {@link AggRule} whose
      * tag equals this rule's tag.
      */
-    public DefaultDef.AggRule getAggRule() {
+    public AggRule getAggRule() {
         return getAggRule(getTag());
     }
 
     /**
-     * Returns the {@link mondrian.rolap.aggmatcher.DefaultDef.AggRule} whose
+     * Returns the {@link AggRule} whose
      * tag equals the parameter tag, or null if not found.
      *
      * @param tag
      * @return the AggRule with tag value equal to tag parameter, or null.
      */
-    public DefaultDef.AggRule getAggRule(final String tag) {
+    public AggRule getAggRule(final String tag) {
         return this.rules.getAggRule(tag);
     }
 
@@ -316,8 +331,8 @@ public class DefaultRules {
         Recognizer.Matcher matcher = factToPattern.get(tableName);
         if (matcher == null) {
             // get default AggRule
-            DefaultDef.AggRule rule = getAggRule();
-            DefaultDef.TableMatch tableMatch = rule.getTableMatch();
+            AggRule rule = getAggRule();
+            TableMatch tableMatch = rule.getTableMatch();
             matcher = tableMatch.getMatcher(tableName);
             factToPattern.put(tableName, matcher);
         }
@@ -331,8 +346,8 @@ public class DefaultRules {
     public Recognizer.Matcher getIgnoreMatcher() {
         if (ignoreMatcherMap == null) {
             // get default AggRule
-            DefaultDef.AggRule rule = getAggRule();
-            DefaultDef.IgnoreMap ignoreMatch = rule.getIgnoreMap();
+            AggRule rule = getAggRule();
+            IgnoreMap ignoreMatch = rule.getIgnoreMap();
             if (ignoreMatch == null) {
                 ignoreMatcherMap = new Recognizer.Matcher() {
                     @Override
@@ -357,8 +372,8 @@ public class DefaultRules {
     public Recognizer.Matcher getFactCountMatcher() {
         if (factCountMatcher == null) {
             // get default AggRule
-            DefaultDef.AggRule rule = getAggRule();
-            DefaultDef.FactCountMatch factCountMatch =
+            AggRule rule = getAggRule();
+            FactCountMatch factCountMatch =
                 rule.getFactCountMatch();
             factCountMatcher = factCountMatch.getMatcher();
         }
@@ -376,8 +391,8 @@ public class DefaultRules {
             foreignKeyMatcherMap.get(foreignKeyName);
         if (matcher == null) {
             // get default AggRule
-            DefaultDef.AggRule rule = getAggRule();
-            DefaultDef.ForeignKeyMatch foreignKeyMatch =
+            AggRule rule = getAggRule();
+            ForeignKeyMatch foreignKeyMatch =
                 rule.getForeignKeyMatch();
             matcher = foreignKeyMatch.getMatcher(foreignKeyName);
             foreignKeyMatcherMap.put(foreignKeyName, matcher);
@@ -410,7 +425,7 @@ public class DefaultRules {
         final String measureColumnName,
         final String aggregateName)
     {
-        DefaultDef.AggRule rule = getAggRule();
+        AggRule rule = getAggRule();
         return rule.getMeasureMap().getMatcher(
             measureName,
             measureColumnName,
@@ -427,7 +442,7 @@ public class DefaultRules {
         final String levelName,
         final String levelColumnName)
     {
-        DefaultDef.AggRule rule = getAggRule();
+        AggRule rule = getAggRule();
         return rule.getLevelMap().getMatcher(
                 usagePrefix,
                 hierarchyName,
