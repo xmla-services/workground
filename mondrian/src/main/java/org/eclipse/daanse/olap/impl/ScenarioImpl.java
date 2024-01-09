@@ -75,6 +75,7 @@ public class ScenarioImpl implements Scenario {
      * @param allocationPolicy Allocation policy
      * @param allocationArgs Additional arguments of allocation policy
      */
+    @Override
     public void setCellValue(
         Connection connection,
         List<RolapMember> members,

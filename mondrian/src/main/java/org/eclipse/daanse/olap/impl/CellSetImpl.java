@@ -98,7 +98,7 @@ public class CellSetImpl extends Execution implements CellSet {
                 throw e;
             }
         }
-        return new CellImpl(pos, this, cell);
+        return new CellImpl(result, pos, this, cell);
     }
 
     private static String getCoordsAsString(int[] pos) {
@@ -125,6 +125,7 @@ public class CellSetImpl extends Execution implements CellSet {
         statement.onResultSetClose(this);
     }
 
+    @Override
     public void execute() {
         result =
             ((RolapConnection) statement.getConnection()).execute(

@@ -11590,7 +11590,7 @@ class SchemaTest {
                                         + "</Schema>\n");
         */
         withSchema(context.getContext(), TestMondrian1275Modifier::new);
-        final RolapConnection rolapConn = context.createOlap4jConnection().unwrap(RolapConnection.class);
+        final RolapConnection rolapConn = (RolapConnection) context.getContext().getConnection();
         final SchemaReader schemaReader = rolapConn.getSchemaReader();
         final RolapSchema schema = schemaReader.getSchema();
         for (RolapCube cube : schema.getCubeList()) {

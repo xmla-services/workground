@@ -806,7 +806,7 @@ public class RolapResult extends ResultBase {
   }
 
   @Override
-public final Execution getExecution() {
+  public final Execution getExecution() {
     return execution;
   }
 

@@ -45,6 +45,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
@@ -250,6 +251,25 @@ public class TestUtil {
         Throwable throwable;
         try {
             Result result = executeQuery(context.getConnection(), queryString);
+            Util.discard(result);
+            throwable = null;
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
+    /**
+     * Executes a query, and asserts that it throws an exception which contains the
+     * given pattern.
+     *
+     * @param queryString Query string
+     * @param pattern     Pattern which exception must match
+     */
+    public static void assertQueryThrows(TestContext context, RolapConnectionProps props, String queryString, String pattern) {
+        Throwable throwable;
+        try {
+            Result result = executeQuery(context.getConnection(props), queryString);
             Util.discard(result);
             throwable = null;
         } catch (Throwable e) {
@@ -1014,15 +1034,6 @@ public class TestUtil {
 				new PrintWriter( sw ) );
 		return sw.toString();
 	}
-
-    public static String toString( org.olap4j.CellSet cellSet ) {
-        final StringWriter sw = new StringWriter();
-        new org.olap4j.layout.TraditionalCellSetFormatter().format(
-            cellSet,
-            new PrintWriter( sw ) );
-        return sw.toString();
-    }
-
 
     /**
 	 * Converts a {@link Result} to text in traditional format.

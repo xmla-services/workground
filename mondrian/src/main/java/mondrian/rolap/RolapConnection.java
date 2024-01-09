@@ -44,7 +44,6 @@ import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -53,16 +52,14 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.olap4j.Scenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.ConnectionBase;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryTimeoutException;
@@ -77,8 +74,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.server.StatementImpl;
-import mondrian.util.FilteredIterableList;
-import mondrian.util.LockBox;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.MemoryMonitorFactory;
 
@@ -88,7 +83,7 @@ public class RolapConnection extends ConnectionBase {
     LoggerFactory.getLogger( RolapConnection.class );
   private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
 
-  
+
   private final RolapConnectionProps rolapConnectionProps;
 
   private Context context = null;
@@ -165,7 +160,7 @@ public class RolapConnection extends ConnectionBase {
         schema.getInternalConnection().getInternalStatement();
       List<String> roleNameList =rolapConnectionProps.roles();
       if ( !roleNameList.isEmpty() ) {
-      
+
         List<Role> roleList = new ArrayList<>();
         for ( String roleName : roleNameList ) {
 
@@ -429,6 +424,7 @@ public Role getRole() {
     this.scenario = scenario;
   }
 
+  @Override
   public Scenario getScenario() {
     return scenario;
   }
@@ -513,7 +509,7 @@ public Context getContext() {
    *
    * @return new Scenario
    */
-  public ScenarioImpl createScenario() {
+  public Scenario createScenario() {
     final ScenarioImpl scenarioInner = new ScenarioImpl();
     scenarioInner.register( schema );
     return scenarioInner;
@@ -630,6 +626,11 @@ public Context getContext() {
 	public void close() {
       underlying.close();
     }
+
+      @Override
+      public RolapMember[] getCellMembers(int[] coordinates) {
+          return underlying.getCellMembers(coordinates);
+      }
   }
 
 

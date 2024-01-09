@@ -17,4 +17,6 @@ public interface CellSet {
     Statement getStatement();
 
     void close();
+
+    void execute();
 }

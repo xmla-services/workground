@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
@@ -108,7 +109,7 @@ public class BasicContext implements Context {
 
 		server = new MondrianServerImpl(this);
 	}
-	
+
 	@Deactivate
 	public void deactivate(Map<String, Object> coniguration) throws Exception {
 		server.shutdown();
@@ -156,12 +157,16 @@ public class BasicContext implements Context {
 
 	@Override
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
-		RolapConnection rolapConnection = new RolapConnection(this, new RolapConnectionPropsR());
-		return rolapConnection;
+		return getConnection(new RolapConnectionPropsR());
 	}
-	
 
-	@Override
+    @Override
+    public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
+        RolapConnection rolapConnection = new RolapConnection(this, props);
+        return rolapConnection;
+    }
+
+    @Override
 	public Scenario createScenario() {
 		// TODO
 		return null;
@@ -209,7 +214,7 @@ public class BasicContext implements Context {
 		return server.getStatementMap().values().stream().filter(stmnt->stmnt.getMondrianConnection().equals(connection)).toList();
 	}
 
-	
+
 
 
 

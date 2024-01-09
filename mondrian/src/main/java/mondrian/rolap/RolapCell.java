@@ -45,11 +45,11 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
+import org.eclipse.daanse.olap.api.result.AllocationPolicy;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
-import org.olap4j.AllocationPolicy;
-import org.olap4j.Scenario;
+import org.eclipse.daanse.olap.api.result.Scenario;
 import org.slf4j.Logger;
 
 import mondrian.mdx.MdxVisitorImpl;
@@ -674,6 +674,7 @@ public class RolapCell implements Cell {
         return result.getMember(pos, hierarchy);
     }
 
+    /*
     @Deprecated
 	public void setValue(
         Scenario scenario,
@@ -728,7 +729,7 @@ public class RolapCell implements Cell {
             allocationPolicy,
             allocationArgs);
     }
-
+    */
     @Override
     public void setValue(
         org.eclipse.daanse.olap.api.result.Scenario scenario,

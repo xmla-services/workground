@@ -18,11 +18,7 @@
  */
 package org.opencube.junit5.context;
 
-import java.sql.SQLException;
-
 import org.eclipse.daanse.olap.api.Connection;
-import org.olap4j.OlapConnection;
-
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionPropsR;
@@ -32,7 +28,7 @@ public class BaseTestContext implements TestContextWrapper {
 	private TestContext context;
 	private Util.PropertyList properties = new Util.PropertyList();
 
-	
+
 	public  BaseTestContext(TestContext context) {
 		this.context = context;
 
@@ -71,25 +67,10 @@ public class BaseTestContext implements TestContextWrapper {
         return context;
     }
 
-    @Override
-	public OlapConnection createOlap4jConnection() throws SQLException {
-
-		//final java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:mondrian:" + getOlapConnectString());
-//        MondrianOlap4jDriver driver = new MondrianOlap4jDriver(context);
-//        final java.sql.Connection connection =  driver.connect("jdbc:mondrian:" + getOlapConnectString(), new Properties());
-//		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
-    	
-    	throw new RuntimeException("Switch so correct RolapConnection");
-	}
-
-
-
 	@Override
 	public String getOlapConnectString() {
 
 		return properties.toString();
 	}
-
-
 
 }
