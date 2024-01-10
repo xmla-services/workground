@@ -960,7 +960,7 @@ class SqlQueryTest  extends BatchTestCase {
                             .build()
                     ))
                     .build());
-                return roles;
+                return result;
             }
         }
         /*

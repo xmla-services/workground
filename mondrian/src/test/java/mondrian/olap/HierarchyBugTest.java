@@ -12,7 +12,7 @@
 */
 package mondrian.olap;
 
-import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -41,13 +41,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -145,7 +147,7 @@ TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNamesIdentitySsasCompatibleWeeklyHierarchy(TestContextWrapper foodMartContext) {
+    void testNamesIdentitySsasCompatibleWeeklyHierarchy(TestContext foodMartContext) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         String mdxWeekly = "SELECT\n"
@@ -155,8 +157,12 @@ TestUtil.flushSchemaCache(conn);
 
        // Fresh sets this before get new Conn
        //  RolapConnectionProperties.UseSchemaPool.name(), false);
-        foodMartContext.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
-        Connection conn=foodMartContext.createConnection();
+       //foodMartContext.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
+
+        Connection conn = foodMartContext.getConnection(new RolapConnectionPropsR(
+            List.of(), false, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()
+        ));
+
         Result resultWeekly =TestUtil.executeQuery(conn, mdxWeekly);
         verifyMemberLevelNamesIdentityMeasureAxis(
             resultWeekly.getAxes()[0], "[Measures]");

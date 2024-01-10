@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import mondrian.rolap.RolapConnectionPropsR;
+
+import org.apache.commons.lang3.LocaleUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Test;
@@ -109,7 +111,7 @@ class I18nTest {
         //properties.put(RolapConnectionProperties.Locale.name(), localeName);
         //context.setProperty(RolapConnectionProperties.Locale.name(), localeName);
         Connection connection = context.getConnection(new RolapConnectionPropsR(
-		List.of(), true, Locale.forLanguageTag(localeName),
+		List.of(), true, LocaleUtils.toLocale(localeName),
             -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()));
 
         QueryImpl query = connection.parseQuery(

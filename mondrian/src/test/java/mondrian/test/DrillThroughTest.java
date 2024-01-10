@@ -1366,7 +1366,7 @@ class DrillThroughTest {
                 + "{[Time].[1997]} ON 1\n"
                 + "FROM Sales");
             fail("expected error, got " + resultSet);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             checkThrowable(
                 e, "Syntax error at line 1, column 22, token '-'");
         }

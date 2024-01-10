@@ -239,6 +239,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DatabaseMap
         .hasAll(true)
         .name("D3H2")
         .primaryKey(D_3_H_2_L_2)
+        .primaryKeyTable("D3H2L2Table")
         .description("Hierarchy 2 Dimension 3")
         .relation(JOIN0)
         .levels(List.of(LEVEL321, LEVEL322))
@@ -249,6 +250,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DatabaseMap
         .hasAll(true)
         .name("D3H3")
         .primaryKey(D_3_H_3_L_3)
+        .primaryKeyTable("D3H3L3Table")
         .description("Hierarchy 1 Dimension 3")
         .relation(JOIN)
         .levels(List.of(LEVEL331, LEVEL332, LEVEL333))
@@ -256,8 +258,8 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DatabaseMap
 
     private static final PrivateDimensionR DIMENSION_SCHEMA1 = PrivateDimensionRBuilder
         .builder()
-        .name("D1H1")
-        .foreignKey(D_1_H_1_L_1)
+        .name(DIMENSION_1)
+        //.foreignKey(D_1_H_1_L_1)
         .description("Hierarchy 1 Dimension 1")
         .hierarchies(List.of(HIERARCHY1))
         .build();
@@ -265,14 +267,14 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DatabaseMap
     private static final PrivateDimensionR DIMENSION_SCHEMA2 = PrivateDimensionRBuilder
         .builder()
         .name(DIMENSION_2)
-        .foreignKey("D2")
+        //.foreignKey("D2")
         .hierarchies(List.of(HIERARCHY21, HIERARCHY22))
         .build();
 
     private static final PrivateDimensionR DIMENSION_SCHEMA3 = PrivateDimensionRBuilder
         .builder()
         .name(DIMENSION_3)
-        .foreignKey("D3")
+        //.foreignKey("D3")
         .hierarchies(List.of(HIERARCHY31, HIERARCHY32, HIERARCHY33))
         .build();
 
