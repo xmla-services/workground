@@ -17,10 +17,10 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.result.AllocationPolicy;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.Calc;
-import org.olap4j.AllocationPolicy;
-import org.olap4j.Scenario;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
@@ -78,6 +78,7 @@ public final class ScenarioImpl implements Scenario {
      * @param allocationPolicy Allocation policy
      * @param allocationArgs Additional arguments of allocation policy
      */
+    @Override
     public void setCellValue(
         Connection connection,
         List<RolapMember> members,

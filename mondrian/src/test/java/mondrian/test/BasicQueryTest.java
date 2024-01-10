@@ -37,12 +37,14 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -53,9 +55,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
@@ -4129,7 +4128,7 @@ public class BasicQueryTest {
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testBadMeasure1(TestContextWrapper context) {
+  void testBadMeasure1(TestContext context) {
       /*
       String schema = SchemaUtil.getSchema(baseSchema, null, "<Cube name=\"SalesWithBadMeasure\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"
@@ -4137,10 +4136,10 @@ public class BasicQueryTest {
             + "  <Measure name=\"Bad Measure\" aggregator=\"sum\"\n" + "      formatString=\"Standard\"/>\n"
             + "</Cube>", null, null, null, null );
        */
-    TestUtil.withSchema(context.getContext(), SchemaModifiers.BasicQueryTestModifier23::new);
+    TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier23::new);
     Throwable throwable = null;
     try {
-      assertSimpleQuery(context.createConnection());
+      assertSimpleQuery(context.getConnection());
     } catch ( Throwable e ) {
       throwable = e;
     }
@@ -5398,8 +5397,8 @@ public class BasicQueryTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testConcurrentStatementRun(TestContextWrapper context) throws Exception {
-    final OlapConnection olapConnection = context.createOlap4jConnection();
+  void testConcurrentStatementRun(TestContext context) throws Exception {
+    final Connection connection = context.getConnection();
 
     final String mdxQuery =
         "select {TopCount([Customers].Members, 10, [Measures].[Unit Sales])} on columns from [Sales]";
@@ -5414,12 +5413,12 @@ public class BasicQueryTest {
       }
     } );
 
-    final OlapStatement stmt = olapConnection.createStatement();
+    final Statement stmt = connection.createStatement();
 
     es.submit( new Callable<CellSet>() {
       @Override
 	public CellSet call() throws Exception {
-        return stmt.executeOlapQuery( mdxQuery );
+        return stmt.executeQuery( mdxQuery );
       }
     } );
 
@@ -5429,7 +5428,7 @@ public class BasicQueryTest {
     es.submit( new Callable<CellSet>() {
       @Override
 	public CellSet call() throws Exception {
-        return stmt.executeOlapQuery( mdxQuery );
+        return stmt.executeQuery( mdxQuery );
       }
     } ).get();
 

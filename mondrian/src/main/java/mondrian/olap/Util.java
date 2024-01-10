@@ -120,6 +120,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
@@ -2123,6 +2124,43 @@ public class Util extends XOMUtil {
                 if (statement == null) {
                     statement = resultSet.getStatement();
                 }
+                resultSet.close();
+            } catch (Exception t) {
+                firstException = new SQLException();
+                firstException.initCause(t);
+            }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (Exception t) {
+                if (firstException == null) {
+                    firstException = new SQLException();
+                    firstException.initCause(t);
+                }
+            }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (Exception t) {
+                if (firstException == null) {
+                    firstException = new SQLException();
+                    firstException.initCause(t);
+                }
+            }
+        }
+        return firstException;
+    }
+
+    public static SQLException close(
+        CellSet resultSet,
+        org.eclipse.daanse.olap.impl.StatementImpl statement,
+        org.eclipse.daanse.olap.api.Connection connection)
+    {
+        SQLException firstException = null;
+        if (resultSet != null) {
+            try {
                 resultSet.close();
             } catch (Exception t) {
                 firstException = new SQLException();

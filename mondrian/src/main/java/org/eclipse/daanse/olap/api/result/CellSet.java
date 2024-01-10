@@ -15,4 +15,8 @@ public interface CellSet {
     Cell getCell(List<Integer> pos);
 
     Statement getStatement();
+
+    void close();
+
+    void execute();
 }

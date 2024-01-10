@@ -25,7 +25,7 @@ class DemoTest {
 
     private static final QueryAndResult[] sampleQueries = {
         // 0
-        new QueryAndResult("select {[Measures].[Measure1]} on columns\n" + " from [Cube 1]",
+        new QueryAndResult("select {[Measures].[Measure1]} on columns\n" + " from [Cube1]",
             "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Measure1]}\n" + "Row #0: 54\n")
     };
 

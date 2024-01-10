@@ -2,10 +2,13 @@ package org.opencube.junit5.context;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Connection;
@@ -37,7 +40,7 @@ public class TestContextImpl implements TestContext {
 	private String name;
 	private Optional<String> description = Optional.empty();
 	private MondrianServerImpl server;
-	
+
 	public TestContextImpl() {
 		server = new MondrianServerImpl(this);
 	}
@@ -98,8 +101,20 @@ public class TestContextImpl implements TestContext {
 
 	@Override
 	public org.eclipse.daanse.olap.api.Connection getConnection() {
-		return new RolapConnection(this, new RolapConnectionPropsR());
+		return getConnection(new RolapConnectionPropsR());
 	}
+
+    @Override
+    public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
+        return new RolapConnection(this, props);
+    }
+
+    @Override
+    public org.eclipse.daanse.olap.api.Connection getConnection(List<String> roles) {
+        return getConnection(new RolapConnectionPropsR(roles,
+                true, Locale.getDefault(),
+                -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()));
+    }
 
     @Override
     public Scenario createScenario() {
@@ -107,7 +122,7 @@ public class TestContextImpl implements TestContext {
     }
 
     @Override
-	public String getName() {	
+	public String getName() {
 		return name;
 	}
 
@@ -153,16 +168,16 @@ public class TestContextImpl implements TestContext {
 		}
 	}
 
-	
+
 	/// TODO:
 	@Override
 	public void addConnection(RolapConnection rolapConnection) {
-		 server.addConnection(rolapConnection);		
+		 server.addConnection(rolapConnection);
 	}
 
 	@Override
 	public void removeConnection(RolapConnection rolapConnection) {
-		 server.removeConnection(rolapConnection);		
+		 server.removeConnection(rolapConnection);
 	}
 
 	@Override
@@ -177,12 +192,12 @@ public class TestContextImpl implements TestContext {
 
 	@Override
 	public void addStatement(Statement statement) {
-		 server.addStatement(statement);		
+		 server.addStatement(statement);
 	}
 
 	@Override
 	public void removeStatement(Statement internalStatement) {
-		 server.removeStatement(internalStatement);		
+		 server.removeStatement(internalStatement);
 	}
 
 	@Override

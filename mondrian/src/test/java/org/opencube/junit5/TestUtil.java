@@ -41,9 +41,11 @@ import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
@@ -53,11 +55,14 @@ import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -65,15 +70,10 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
+import org.eclipse.daanse.olap.impl.CoordinateIterator;
+import org.eclipse.daanse.olap.impl.TraditionalCellSetFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.olap4j.CellSet;
-import org.olap4j.CellSetAxis;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.olap4j.OlapWrapper;
-import org.olap4j.impl.CoordinateIterator;
-import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 
@@ -85,7 +85,6 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.MemberCacheHelper;
-import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
@@ -252,6 +251,37 @@ public class TestUtil {
         Throwable throwable;
         try {
             Result result = executeQuery(context.getConnection(), queryString);
+            Util.discard(result);
+            throwable = null;
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
+    public static void assertQueryThrows(TestContext context, List<String> roles, String queryString, String pattern) {
+        Throwable throwable;
+        try {
+            Result result = executeQuery(context.getConnection(roles), queryString);
+            Util.discard(result);
+            throwable = null;
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
+    /**
+     * Executes a query, and asserts that it throws an exception which contains the
+     * given pattern.
+     *
+     * @param queryString Query string
+     * @param pattern     Pattern which exception must match
+     */
+    public static void assertQueryThrows(TestContext context, RolapConnectionProps props, String queryString, String pattern) {
+        Throwable throwable;
+        try {
+            Result result = executeQuery(context.getConnection(props), queryString);
             Util.discard(result);
             throwable = null;
         } catch (Throwable e) {
@@ -560,10 +590,10 @@ public class TestUtil {
 		return sql;
 	}
 
-	public static ResultSet executeStatement(OlapConnection connection, String queryString ) throws SQLException {
+	public static ResultSet executeStatement(Connection connection, String queryString ) throws SQLException {
 		queryString = upgradeQuery( queryString );
-		OlapStatement stmt = connection.createStatement();
-		return stmt.executeQuery( queryString );
+        org.eclipse.daanse.olap.api.Statement stmt = connection.createStatement();
+		return stmt.executeQuery( queryString, Optional.empty(), Optional.empty(), null );
 	}
 
 
@@ -1008,7 +1038,7 @@ public class TestUtil {
 		return buf.toString();
 	}
 
-	
+
 	public static String toString( CellSet cellSet ) {
 		final StringWriter sw = new StringWriter();
 		new TraditionalCellSetFormatter().format(
@@ -1017,11 +1047,11 @@ public class TestUtil {
 		return sw.toString();
 	}
 
-	/**
+    /**
 	 * Converts a {@link Result} to text in traditional format.
 	 *
 	 * <p>
-	 * For more exotic formats, see {@link org.olap4j.layout.CellSetFormatter}.
+	 * For more exotic formats, see {@link CellSetFormatter}.
 	 *
 	 * @param result Query result
 	 * @return Result as text
@@ -1111,18 +1141,18 @@ public class TestUtil {
 		}
 	}
 
-	public static CellSet executeOlap4jQuery(OlapConnection olapConnection, String queryString ) throws SQLException {
+	public static org.eclipse.daanse.olap.api.result.CellSet executeOlap4jQuery(Connection connection, String queryString ) throws SQLException {
 	//TODO: may better fix querys then use upgradeQuery
 	  //  queryString = upgradeQuery( queryString );
 
-		assertThat(olapConnection).isNotNull();
+		assertThat(connection).isNotNull();
 		assertThat(queryString).isNotNull().isNotBlank();
 
-		OlapStatement stmt = olapConnection.createStatement();
+        org.eclipse.daanse.olap.api.Statement stmt = connection.createStatement();
 
 	    assertThat(stmt).isNotNull();
 
-	    final CellSet cellSet = stmt.executeOlapQuery( queryString );
+	    final org.eclipse.daanse.olap.api.result.CellSet cellSet = stmt.executeQuery( queryString );
 
 	    assertThat(cellSet).isNotNull();
 
@@ -1135,6 +1165,29 @@ public class TestUtil {
 	    }
 	    return cellSet;
 	  }
+
+    public static org.eclipse.daanse.olap.api.result.CellSet executeQueryWithCellSetResult(Connection connection, String queryString ) throws SQLException {
+
+        assertThat(connection).isNotNull();
+        assertThat(queryString).isNotNull().isNotBlank();
+
+        org.eclipse.daanse.olap.api.Statement stmt = connection.createStatement();
+
+        assertThat(stmt).isNotNull();
+
+        final org.eclipse.daanse.olap.api.result.CellSet cellSet = stmt.executeQuery( queryString );
+
+        assertThat(cellSet).isNotNull();
+
+        // If we're deep testing, check that we never return the dummy null
+        // value when cells are null. TestExpDependencies isn't the perfect
+        // switch to enable this, but it will do for now.
+        //TODO: activate this for all tests
+        if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
+            assertCellSetValid( cellSet );
+        }
+        return cellSet;
+    }
 
 	/**
 	 * Checks that an actual string matches an expected pattern. If they do not, throws a {@link ComparisonFailure} and
@@ -1170,85 +1223,85 @@ public class TestUtil {
 		throw new RuntimeException(message);
 	}
 
+    /**
+     * Checks that a {@link CellSet} is valid.
+     *
+     */
+    public static void assertCellSetValid( CellSet cellSet ) {
+        for ( Cell cell : cellIter( cellSet ) ) {
+            final Object value = cell.getValue();
 
-	  /**
-	   * Checks that a {@link CellSet} is valid.
-	   *
-	   */
-	  public static void assertCellSetValid( CellSet cellSet ) {
-	    for ( org.olap4j.Cell cell : cellIter( cellSet ) ) {
-	      final Object value = cell.getValue();
+            // Check that the dummy value used to represent null cells never
+            // leaks into the outside world.
+            assertNotSame( value, Util.nullValue );
+            assertFalse(
+                value instanceof Number
+                    && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_NULL);
 
-	      // Check that the dummy value used to represent null cells never
-	      // leaks into the outside world.
-	      assertNotSame( value, Util.nullValue );
-	      assertFalse(
-	        value instanceof Number
-	          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_NULL);
+            // Similarly empty values.
+            assertNotSame( value, Util.EmptyValue );
+            assertFalse(
+                value instanceof Number
+                    && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_EMPTY);
 
-	      // Similarly empty values.
-	      assertNotSame( value, Util.EmptyValue );
-	      assertFalse(
-	        value instanceof Number
-	          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_EMPTY);
+            // Cells should be null if and only if they are null or empty.
+            if ( cell.getValue() == null ) {
+                assertTrue( cell.isNull() );
+            } else {
+                assertFalse( cell.isNull() );
+            }
+        }
+    }
 
-	      // Cells should be null if and only if they are null or empty.
-	      if ( cell.getValue() == null ) {
-	        assertTrue( cell.isNull() );
-	      } else {
-	        assertFalse( cell.isNull() );
-	      }
-	    }
-	    }
-	    /**
-	     * Returns an iterator over cells in an olap4j cell set.
-	     */
-	    static Iterable<org.olap4j.Cell> cellIter( final CellSet cellSet ) {
-	      return new Iterable<>() {
-	        @Override
-			public Iterator<org.olap4j.Cell> iterator() {
-	          int[] axisDimensions = new int[ cellSet.getAxes().size() ];
-	          int k = 0;
-	          for ( CellSetAxis axis : cellSet.getAxes() ) {
-	            axisDimensions[ k++ ] = axis.getPositions().size();
-	          }
-	          final CoordinateIterator
-	            coordIter = new CoordinateIterator( axisDimensions );
-	          return new Iterator<>() {
-	            @Override
-				public boolean hasNext() {
-	              return coordIter.hasNext();
-	            }
+    /**
+     * Returns an iterator over cells in an olap4j cell set.
+     */
+    static Iterable<Cell> cellIter( final CellSet cellSet ) {
+        return new Iterable<>() {
+            @Override
+            public Iterator<Cell> iterator() {
+                int[] axisDimensions = new int[ cellSet.getAxes().size() ];
+                int k = 0;
+                for ( CellSetAxis axis : cellSet.getAxes() ) {
+                    axisDimensions[ k++ ] = axis.getPositions().size();
+                }
+                final CoordinateIterator
+                    coordIter = new CoordinateIterator( axisDimensions );
+                return new Iterator<>() {
+                    @Override
+                    public boolean hasNext() {
+                        return coordIter.hasNext();
+                    }
 
-	            @Override
-				public org.olap4j.Cell next() {
-	              final int[] ints = coordIter.next();
-	              final List<Integer> list =
-	                new AbstractList<>() {
-	                  @Override
-					public Integer get( int index ) {
-	                    return ints[ index ];
-	                  }
+                    @Override
+                    public Cell next() {
+                        final int[] ints = coordIter.next();
+                        final List<Integer> list =
+                            new AbstractList<>() {
+                                @Override
+                                public Integer get( int index ) {
+                                    return ints[ index ];
+                                }
 
-	                  @Override
-					public int size() {
-	                    return ints.length;
-	                  }
-	                };
-	              return cellSet.getCell(
-	                list );
-	            }
+                                @Override
+                                public int size() {
+                                    return ints.length;
+                                }
+                            };
+                        return cellSet.getCell(
+                            list );
+                    }
 
-	            @Override
-				public void remove() {
-	              throw new UnsupportedOperationException();
-	            }
-	          };
-	        }
-	      };
-	    }
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
+    }
 
-	static public Dialect getDialect(Connection connection){
+    static public Dialect getDialect(Connection connection){
 		return connection.getContext().getDialect();
     }
 
@@ -1279,15 +1332,11 @@ public class TestUtil {
 		}
 	}
 
-	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {          
+	public static void withSchema(TestContext context, Function<MappingSchema, RDbMappingSchemaModifier> f) {
           RolapSchemaPool.instance().clear();
           MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
           context.setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));
     }
-
-    public static void withRole(TestContextWrapper context, String roleName) {
-			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
-		}
 
 	public static void assertExprDependsOn(Connection connection, String expr, String hierList ) {
 		// Construct a query, and mine it for a parsed expression.
@@ -1529,7 +1578,7 @@ public class TestUtil {
 				measureValues(resultString1),
 				measureValues(resultString2));
 	}
-	
+
 
 	/**
 	 * Truncates the query result to return only measure values.
@@ -1539,19 +1588,6 @@ public class TestUtil {
 		return index != -1 ? resultString.substring(index) : resultString;
 	}
 
-	public static OlapConnection getOlap4jConnection() throws SQLException {
-
-		String connectString = getConnectString();
-		if ( connectString.startsWith( "Provider=mondrian; " ) ) {
-			connectString =
-					connectString.substring( "Provider=mondrian; ".length() );
-		}
-		final java.sql.Connection connection =
-				java.sql.DriverManager.getConnection(
-						"jdbc:mondrian:" + connectString );
-		return ( (OlapWrapper) connection ).unwrap( OlapConnection.class );
-	}
-
 	private static final String getConnectString() {
 		return getConnectionProperties().toString();
 	}
@@ -1559,12 +1595,10 @@ public class TestUtil {
 	public static Util.PropertyList getConnectionProperties() {
 		final Util.PropertyList propertyList =
 				Util.parseConnectString( getDefaultConnectString() );
-	
+
 
 		return propertyList;
 	}
-
-
 
 	/**
 	 * Constructs a connect string by which the unit tests can talk to the FoodMart database.
@@ -1928,10 +1962,11 @@ public class TestUtil {
 						+ cookie,
 				info );
 		*/
-		OlapConnection olapConnection = context.createOlap4jConnection();
+		Connection connection = context.getContext().getConnection();
 		//		con.unwrap( OlapConnection.class );
-		OlapStatement statement = olapConnection.createStatement();
-		return statement.executeOlapQuery( queryString );
+
+        org.eclipse.daanse.olap.api.Statement statement = connection.createStatement();
+		return statement.executeQuery( queryString );
 	}
 
 
@@ -2093,4 +2128,19 @@ public class TestUtil {
 		}
 	}
 
+    public static Optional<Cube> getCubeByNameFromArray(Cube[] cubes, String name){
+	    return Arrays.stream(cubes).filter(c -> name.equals(c.getName())).findFirst();
+    }
+
+    public static Optional<Dimension> getDimensionByNameFromArray(Dimension[] dimensions, String name){
+        return Arrays.stream(dimensions).filter(d -> name.equals(d.getName())).findFirst();
+    }
+
+    public static Optional<Hierarchy> getHierarchyByNameFromArray(Hierarchy[] hierarchies, String name){
+        return Arrays.stream(hierarchies).filter(h -> name.equals(h.getName())).findFirst();
+    }
+
+    public static Optional<Level> getLevelByNameFromArray(Level[] hierarchies, String name){
+        return Arrays.stream(hierarchies).filter(l -> name.equals(l.getName())).findFirst();
+    }
 }

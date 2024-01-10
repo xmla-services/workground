@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
@@ -95,7 +96,9 @@ public interface Context {
 	 * Gives access to the {@link Connection}.
 	 */
 	Connection getConnection();
-	
+
+    Connection getConnection(RolapConnectionProps props);
+
     Scenario createScenario();
 
 	void addConnection(RolapConnection rolapConnection);

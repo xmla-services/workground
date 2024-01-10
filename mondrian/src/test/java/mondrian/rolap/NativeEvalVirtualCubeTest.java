@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -24,6 +25,11 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.enums.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 class NativeEvalVirtualCubeTest extends BatchTestCase {
 
@@ -399,7 +405,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldUseCache(TestContextWrapper context) {
+  void testShouldUseCache(TestContext context) {
     // verify cache does get used for applicable grouped target tuple queries
     propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     String mySqlGenderQuery = "select\n"
@@ -414,7 +420,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
       + "order by\n"
       + "    ISNULL(`c0`) ASC, `c0` ASC";
     //TestContext tc = getTestContext().withFreshConnection();
-    context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
+    //context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
     SqlPattern mysqlPattern =
       new SqlPattern(
           DatabaseProduct.MYSQL,
@@ -426,7 +432,9 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "crossjoin(gender.gender.members, warehouse.[USA].[CA]) on 0, "
         + "measures.vm on 1 from [warehouse and sales]";
     // first MDX with a fresh query should result in gender query.
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection(new RolapConnectionPropsR(
+        List.of(), false, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()
+    ));
     assertQuerySqlOrNot(connection,
         mdx, new SqlPattern[]{ mysqlPattern }, false, false, false);
     // rerun the MDX, since the previous assert aborts when it hits the SQL.

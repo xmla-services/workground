@@ -28,6 +28,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRB
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -43,7 +44,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -53,15 +53,14 @@ class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCubesWithNoHrCubes(TestContextWrapper context) {
+    void testGetCubesWithNoHrCubes(TestContext context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2"
         };
 
-        withRole(context, "No HR Cube");
         Connection connection =
-            context.createConnection();
+            context.getConnection(List.of("No HR Cube"));
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();
 
@@ -99,13 +98,12 @@ class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCubesForCaliforniaManager(TestContextWrapper context) {
+    void testGetCubesForCaliforniaManager(TestContext context) {
         String[] expectedCubes = new String[] {
                 "Sales"
         };
 
-        withRole(context,"California manager");
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection(List.of("California manager"));
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();
 
@@ -160,7 +158,7 @@ class RolapSchemaReaderTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCubeDimensions(TestContextWrapper context) {
+    void testGetCubeDimensions(TestContext context) {
         final String timeWeekly =
             hierarchyName("Time", "Weekly");
         final String timeTime =
@@ -227,9 +225,8 @@ class RolapSchemaReaderTest {
                 + "</Role>");
         withSchema(context, schema);
          */
-        withRole(context, "REG1");
-        withSchema(context.getContext(), TestGetCubeDimensionsModifier::new);
-        Connection connection = context.createConnection();
+        withSchema(context, TestGetCubeDimensionsModifier::new);
+        Connection connection = context.getConnection(List.of("REG1"));
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();
             final Map<String, Cube> cubes = new HashMap<>();

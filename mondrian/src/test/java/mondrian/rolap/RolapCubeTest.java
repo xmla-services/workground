@@ -26,6 +26,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -43,7 +44,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.cubeByName;
 import static org.opencube.junit5.TestUtil.getDimensionWithName;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -126,14 +126,13 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersForCaliforniaManager(TestContextWrapper context) {
+    void testGetCalculatedMembersForCaliforniaManager(TestContext context) {
     	RolapSchemaPool.instance().clear();
         String[] expectedCalculatedMembers = new String[] {
             "[Measures].[Profit]", "[Measures].[Profit last Period]",
             "[Measures].[Profit Growth]"
         };
-        withRole(context, "California manager");
-        Connection connection = context.getContext().getConnection();
+        Connection connection = context.getConnection(List.of("California manager"));
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");
@@ -155,7 +154,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembers(TestContextWrapper context) {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembers(TestContext context) {
         String[] expectedCalculatedMembers = {
             "[Measures].[Profit]",
             "[Measures].[Profit last Period]",
@@ -165,8 +164,7 @@ class RolapCubeTest {
 
 
         createTestContextWithAdditionalMembersAndARole(context);
-
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection(List.of("California manager"));
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");
@@ -187,7 +185,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestContextWrapper context)
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestContext context)
     {
         String[] expectedCalculatedMembersFromProduct = {
             "[Product].[~Missing]"
@@ -195,7 +193,7 @@ class RolapCubeTest {
         //TestContext testContext =
         //    createTestContextWithAdditionalMembersAndARole();
         createTestContextWithAdditionalMembersAndARole(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection(List.of("California manager"));
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");
@@ -231,14 +229,14 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel(TestContextWrapper context) {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel(TestContext context) {
         String[] expectedCalculatedMembersFromProduct = new String[]{
             "[Product].[~Missing]"
         };
 
 
         createTestContextWithAdditionalMembersAndARole(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection(List.of("California manager"));
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");
@@ -354,24 +352,8 @@ class RolapCubeTest {
         }
     }
 
-    void createTestContextWithAdditionalMembersAndARole(TestContextWrapper context) {
-        /*
-        String nonAccessibleMember =
-            "  <CalculatedMember name=\"~Missing\" dimension=\"Gender\">\n"
-            + "    <Formula>100</Formula>\n"
-            + "  </CalculatedMember>\n";
-        String accessibleMember =
-            "  <CalculatedMember name=\"~Missing\" dimension=\"Product\">\n"
-            + "    <Formula>100</Formula>\n"
-            + "  </CalculatedMember>\n";
-        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales",
-            null,
-            nonAccessibleMember
-            + accessibleMember));
-         */
-    	withSchema(context.getContext(), SchemaModifiers.RolapCubeTestModifier1::new);
-        withRole(context, "California manager");
+    void createTestContextWithAdditionalMembersAndARole(TestContext context) {
+    	withSchema(context, SchemaModifiers.RolapCubeTestModifier1::new);
     }
 
     private void assertCalculatedMemberExists(

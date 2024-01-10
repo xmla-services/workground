@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1306,13 +1306,13 @@ class ConcurrentMdxTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testFlushingDoesNotCauseDeadlock(TestContextWrapper context) throws Exception {
+    void testFlushingDoesNotCauseDeadlock(TestContext context) throws Exception {
         // Create a seeded deterministic random generator.
         final long seed = new Random().nextLong();
         LOGGER.debug("Test seed: " + seed);
         final Random random = new Random(seed);
 
-        final List<OlapStatement> statements = new ArrayList<>();
+        final List<Statement> statements = new ArrayList<>();
         ExecutorService executorService =
             Executors.newFixedThreadPool(
                 propSaver.properties
@@ -1323,15 +1323,15 @@ class ConcurrentMdxTest {
                 executorService.submit(
                     new Runnable() { @Override
 					public void run() {
-                        OlapStatement statement = null;
+                        Statement statement = null;
                         try {
                             // Throttle a bit (randomly)
                             Thread.sleep(random.nextInt(50));
-                            OlapConnection connection =
-                                    context.createOlap4jConnection();
+                            Connection connection =
+                                    context.getConnection();
                             statement = connection.createStatement();
                             statements.add(statement);
-                            statement.executeOlapQuery(mdxQuery.query);
+                            statement.executeQuery(mdxQuery.query);
                         } catch (Exception e) {
                             e.printStackTrace();
                         } finally {
@@ -1358,7 +1358,7 @@ class ConcurrentMdxTest {
         count++;
     }
 
-    private void randomlyFlush(List<OlapStatement> statements, Random r) {
+    private void randomlyFlush(List<Statement> statements, Random r) {
         try {
             // Let the system boot up and start processing queries.
             Thread.sleep(1000);
@@ -1367,13 +1367,12 @@ class ConcurrentMdxTest {
                 Thread.sleep(1000 * r.nextInt(5));
                 try {
                     if (statements.size() > 0) {
-                        OlapStatement olapStatement = statements.get(
+                        Statement olapStatement = statements.get(
                             r.nextInt(statements.size()));
                         LOGGER.debug("flushing");
                         System.out.println("flushing");
                         flushSchema(
-                            olapStatement.getConnection().unwrap(
-                                Connection.class));
+                            olapStatement.getConnection());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

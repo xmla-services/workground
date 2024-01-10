@@ -685,15 +685,13 @@ import mondrian.util.UnionIterator;
 
         // Check that discovered classes include AT LEAST:
         // JdbcOdbcDriver (in the JDK),
-        // MondrianOlap4jDriver (in mondrian) and
-        // XmlaOlap4jDriver (in olap4j.jar).
+        // MondrianOlap4jDriver (in mondrian)
         List<String> expectedClassNames =
             new ArrayList<>(
                 Arrays.asList(
                     // Usually on the list, but not guaranteed:
                     // "sun.jdbc.odbc.JdbcOdbcDriver",
-                    "mondrian.olap4j.MondrianOlap4jDriver",
-                    "org.olap4j.driver.xmla.XmlaOlap4jDriver"));
+                    "mondrian.olap4j.MondrianOlap4jDriver"));
         for (Class<Driver> driverClass : list) {
             expectedClassNames.remove(driverClass.getName());
         }

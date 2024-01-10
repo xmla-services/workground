@@ -33,7 +33,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
@@ -48,7 +47,7 @@ import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
@@ -961,8 +960,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughDupKeysAndMeasure_2(TestContextWrapper context) throws Exception {
-        withSchema(context.getContext(), SchemaModifiers.DrillThroughTestModifier4::new);
+    void  testDrillThroughDupKeysAndMeasure_2(TestContext context) throws Exception {
+        withSchema(context, SchemaModifiers.DrillThroughTestModifier4::new);
         String drillThroughMdx =
             "DRILLTHROUGH WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER([Store sqft].[Store sqft].MEMBERS, NOT ISEMPTY ([Measures].[Meat sqft]))'\n"
@@ -974,11 +973,11 @@ class DrillThroughTest {
             + " [Measures].[Meat sqft] ON COLUMNS\n"
             + ", [*SORTED_ROW_AXIS]  ON ROWS\n"
             + "FROM [dsad] WHERE ( [Grocery Sqft].[24390] ) RETURN [Store sqft].[Store sqft], [Measures].[Grocery sqft]";
-        OlapConnection olap4jConnection = context.createOlap4jConnection();
+        Connection connection = context.getConnection();
         ResultSet resultSet = null;
         try {
-            resultSet = olap4jConnection.createStatement()
-                .executeQuery(drillThroughMdx);
+            resultSet = connection.createStatement()
+                .executeQuery(drillThroughMdx, Optional.empty(), Optional.empty(), null);
             assertEquals(2, resultSet.getMetaData().getColumnCount());
             assertEquals
                 ("Store sqft", resultSet.getMetaData().getColumnLabel(1));
@@ -988,7 +987,7 @@ class DrillThroughTest {
             if (resultSet != null) {
                 resultSet.close();
             }
-            olap4jConnection.close();
+            connection.close();
         }
         RolapSchemaPool.instance().clear();
     }
@@ -1324,8 +1323,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillthroughMaxRows(TestContextWrapper context) throws SQLException {
-        OlapConnection connection = context.createOlap4jConnection();
+    void  testDrillthroughMaxRows(TestContext context) throws SQLException {
+        Connection connection = context.getConnection();
         assertMaxRows(connection, "", 29);
         assertMaxRows(connection, "maxrows 1000", 29);
         assertMaxRows(connection, "maxrows 0", 29);
@@ -1335,7 +1334,7 @@ class DrillThroughTest {
         assertMaxRows(connection, "firstrowset 30", 0);
     }
 
-    private void assertMaxRows(OlapConnection connection, String firstMaxRow, int expectedCount)
+    private void assertMaxRows(Connection connection, String firstMaxRow, int expectedCount)
         throws SQLException
     {
         final ResultSet resultSet = executeStatement(connection,
@@ -1358,16 +1357,16 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillthroughNegativeMaxRowsFails(TestContextWrapper context) throws SQLException {
-        OlapConnection olapConnection = context.createOlap4jConnection();
+    void  testDrillthroughNegativeMaxRowsFails(TestContext context) throws SQLException {
+        Connection connection = context.getConnection();
         try {
-            final ResultSet resultSet = executeStatement(olapConnection,
+            final ResultSet resultSet = executeStatement(connection,
                 "DRILLTHROUGH MAXROWS -3\n"
                 + "SELECT {[Customers].[USA].[CA].[Berkeley]} ON 0,\n"
                 + "{[Time].[1997]} ON 1\n"
                 + "FROM Sales");
             fail("expected error, got " + resultSet);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             checkThrowable(
                 e, "Syntax error at line 1, column 22, token '-'");
         }
@@ -1375,10 +1374,10 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughCalculatedMemberMeasure(TestContextWrapper context) throws SQLException {
-        OlapConnection olapConnection = context.createOlap4jConnection();
+    void  testDrillThroughCalculatedMemberMeasure(TestContext context) throws SQLException {
+        Connection connection = context.getConnection();
         try {
-            final ResultSet resultSet = executeStatement(olapConnection,
+            final ResultSet resultSet = executeStatement(connection,
                 "DRILLTHROUGH\n"
                 + "SELECT {[Customers].[USA].[CA].[Berkeley]} ON 0,\n"
                 + "{[Time].[1997]} ON 1\n"
@@ -1394,10 +1393,10 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThroughNotDrillableFails(TestContextWrapper context) throws SQLException {
-        OlapConnection olapConnection = context.createOlap4jConnection();
+    void testDrillThroughNotDrillableFails(TestContext context) throws SQLException {
+        Connection connection = context.getConnection();
         try {
-            final ResultSet resultSet = executeStatement(olapConnection,
+            final ResultSet resultSet = executeStatement(connection,
                 "DRILLTHROUGH\n"
                 + "WITH MEMBER [Measures].[Foo] "
                 + " AS [Measures].[Unit Sales]\n"
@@ -1898,7 +1897,7 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillthroughVirtualCubeWithReturnClause(TestContextWrapper context)
+    void  testDrillthroughVirtualCubeWithReturnClause(TestContext context)
         throws SQLException
     {
         // Validates that a RETURN clause including a mix of applicable
@@ -1907,7 +1906,7 @@ class DrillThroughTest {
         // columns.
         ResultSet rs = null;
         try {
-            rs = executeStatement(context.createOlap4jConnection(),
+            rs = executeStatement(context.getConnection(),
                 "DRILLTHROUGH \n"
                 + "// Request ID: d73ea21c-2a29-11e5-ba1d-d4bed923da37 - RUN_REPORT\n"
                 + "WITH\n"
@@ -1923,7 +1922,7 @@ class DrillThroughTest {
             assertEquals(
                 5, rs.getMetaData().getColumnCount());
             Object expectedYear;
-            switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+            switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
             case MARIADB:
             case MYSQL:
                 expectedYear = new Integer(1997);
@@ -1960,14 +1959,14 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughWithReturnClause_ReturnsNameColumn(TestContextWrapper context)
+    void  testDrillThroughWithReturnClause_ReturnsNameColumn(TestContext context)
         throws SQLException
     {
         ResultSet rs = null;
-        withSchema(context.getContext(), SchemaModifiers.DrillThroughTestModifier5::new);
+        withSchema(context, SchemaModifiers.DrillThroughTestModifier5::new);
         int rowCount = 0;
         try {
-            rs = executeStatement(context.createOlap4jConnection(),
+            rs = executeStatement(context.getConnection(),
                 DRILLTHROUGH_QUERY_WITH_CUSTOMER_FULL_NAME);
             assertEquals(
                 5, rs.getMetaData().getColumnCount());
@@ -2014,14 +2013,14 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughWithReturnClause_ReturnsNoNameColumn(TestContextWrapper context)
+    void  testDrillThroughWithReturnClause_ReturnsNoNameColumn(TestContext context)
             throws SQLException
     {
         ResultSet rs = null;
-        withSchema(context.getContext(), SchemaModifiers.DrillThroughTestModifier6::new);
+        withSchema(context, SchemaModifiers.DrillThroughTestModifier6::new);
         int rowCount = 0;
         try {
-            rs = executeStatement(context.createOlap4jConnection(),
+            rs = executeStatement(context.getConnection(),
                 DRILLTHROUGH_QUERY_WITH_CUSTOMER_ID);
             assertEquals(
                 3, rs.getMetaData().getColumnCount());
@@ -2055,7 +2054,7 @@ class DrillThroughTest {
     */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMultipleFilterByLevel_NoDuplicatedColumnsInResult(TestContextWrapper context)
+    void testMultipleFilterByLevel_NoDuplicatedColumnsInResult(TestContext context)
         throws SQLException
     {
         String[] expectedColumnValues = {"Gourmet Supermarket",
@@ -2066,7 +2065,7 @@ class DrillThroughTest {
         int rowCount = 0;
         ResultSet rs = null;
         try {
-            rs = executeStatement(context.createOlap4jConnection(),
+            rs = executeStatement(context.getConnection(),
                 "DRILLTHROUGH \n"
                 + "WITH\n"
                 + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER({[Store Type].[All Store Types].[Gourmet Supermarket],[Store Type].[All Store Types].[Small Grocery]}, NOT ISEMPTY ([Measures].[Store Sales]))'\n"

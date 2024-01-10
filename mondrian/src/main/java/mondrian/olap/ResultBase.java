@@ -153,11 +153,12 @@ public abstract class ResultBase implements Result {
         return hierarchy.getHierarchy().getDefaultMember();
     }
 
+  @Override
   public Execution getExecution() {
     return execution;
   }
 
   @Override
-public void close() {
+  public void close() {
   }
 }

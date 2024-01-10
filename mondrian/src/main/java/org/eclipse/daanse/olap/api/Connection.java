@@ -44,6 +44,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.QueryImpl;
+import org.eclipse.daanse.olap.api.result.Scenario;
 
 /**
  * Connection to a multi-dimensional database.
@@ -161,4 +162,10 @@ public interface Connection {
     DataSource getDataSource();
 
     Context getContext();
+
+    Scenario getScenario();
+
+    Scenario createScenario();
+
+    void setScenario(Scenario scenario);
 }

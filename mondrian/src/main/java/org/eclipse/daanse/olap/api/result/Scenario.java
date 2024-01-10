@@ -1,5 +1,9 @@
 package org.eclipse.daanse.olap.api.result;
 
+import mondrian.rolap.RolapMember;
+import org.eclipse.daanse.olap.api.Connection;
+
+import java.util.List;
 
 /**
  * Context for a set of writeback operations.
@@ -29,4 +33,12 @@ public interface Scenario {
      * @return Unique identifier of this Scenario.
      */
     String getId();
+
+    void setCellValue(
+        Connection connection,
+        List<RolapMember> members,
+        double newValue,
+        double currentValue,
+        AllocationPolicy allocationPolicy,
+        Object[] allocationArgs);
 }

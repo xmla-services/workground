@@ -30,7 +30,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 import org.eigenbase.util.property.Property;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
@@ -1191,7 +1190,7 @@ class ParameterTest {
     void testConnectionPropsWhichShouldBeNull(TestContextWrapper context) {
         // properties which must always return null
         Connection connection = context.createConnection();
-        assertExprThrows(connection, "ParamRef(\"JdbcPassword\")", "Unknown parameter 'JdbcPassword'"); // was deleted        
+        assertExprThrows(connection, "ParamRef(\"JdbcPassword\")", "Unknown parameter 'JdbcPassword'"); // was deleted
         assertExprReturns(connection, "ParamRef(\"CatalogContent\")", "");
     }
 

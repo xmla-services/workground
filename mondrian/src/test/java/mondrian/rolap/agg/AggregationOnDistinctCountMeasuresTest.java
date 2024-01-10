@@ -88,7 +88,6 @@ import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 import static org.opencube.junit5.TestUtil.member;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 import static org.opencube.junit5.TestUtil.upgradeActual;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -720,7 +719,7 @@ class AggregationOnDistinctCountMeasuresTest {
           }
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
-              List<MappingPrivateDimension> result = new ArrayList<>();              
+              List<MappingPrivateDimension> result = new ArrayList<>();
               result.add(PrivateDimensionRBuilder.builder()
                   .name("Warehouse2")
                   .hierarchies(List.of(
@@ -759,7 +758,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
           @Override
           protected List<MappingCube> schemaCubes(MappingSchema schema) {
-              List<MappingCube> result = new ArrayList<>();              
+              List<MappingCube> result = new ArrayList<>();
               result.add(CubeRBuilder.builder()
                   .name("Warehouse2")
                   .fact(new TableR("inventory_fact_1997"))
@@ -1794,8 +1793,8 @@ class AggregationOnDistinctCountMeasuresTest {
      */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian906(TestContextWrapper context) {
-      prepareContext(context.getContext());
+  void testMondrian906(TestContext context) {
+      prepareContext(context);
 
       class TestMondrian906Modifier extends RDbMappingSchemaModifier {
 
@@ -1860,13 +1859,12 @@ class AggregationOnDistinctCountMeasuresTest {
                 + "</Role>\n");
       withSchema(context, schema);
        */
-      withSchema(context.getContext(), TestMondrian906Modifier::new);
+      withSchema(context, TestMondrian906Modifier::new);
 
       final String mdx =
             "select {[Customers].[USA], [Customers].[USA].[OR], [Customers].[USA].[WA]} on columns, {[Measures].[Customer Count]} on rows from [Sales]";
 
-        withRole(context, "Role1");
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(List.of("Role1")),
                     mdx,
                     "Axis #0:\n"
                     + "{}\n"
@@ -2112,7 +2110,7 @@ class AggregationOnDistinctCountMeasuresTest {
                                   AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
                                   AggExcludeRBuilder.builder().name("agg_l_03_sales_fact_1997").build(),
                                   AggExcludeRBuilder.builder().name("agg_pl_01_sales_fact_1997").build()
-                              ),                             
+                              ),
                               List.of(AggNameRBuilder.builder()
                                   .name("agg_c_10_sales_fact_1997")
                                   .aggFactCount(AggColumnNameRBuilder.builder().column("FACT_COUNT").build())

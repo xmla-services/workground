@@ -14,16 +14,16 @@ import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.impl.RectangularCellSetFormatter;
+import org.eclipse.daanse.olap.impl.StatementImpl;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapStatement;
-import org.olap4j.layout.RectangularCellSetFormatter;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianServer;
 import mondrian.server.monitor.ConnectionInfo;
 import mondrian.server.monitor.Monitor;
 import mondrian.server.monitor.ServerInfo;
@@ -47,7 +47,7 @@ class MonitorTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMe(TestContextWrapper context) throws SQLException {
+    void testMe(TestContext context) throws SQLException {
         String queryString =
             "WITH MEMBER [Measures].[Foo] AS\n"
             + " [Measures].[Unit Sales]"
@@ -58,18 +58,18 @@ class MonitorTest {
             + "from [Sales]\n"
             + "where [Time].[1997].[Q3].[9]";
 
-        final OlapStatement statement1 =
-            context.createOlap4jConnection().createStatement();
-        CellSet cellSet = statement1.executeOlapQuery(queryString);
+        final Statement statement =
+            context.getConnection().createStatement();
+        CellSet cellSet = statement.executeQuery(queryString);
         StringWriter stringWriter = new StringWriter();
         new RectangularCellSetFormatter(true).format(
             cellSet,
             new PrintWriter(stringWriter));
-        statement1.close();
+        ((StatementImpl)statement).close();
         println(stringWriter);
 
 
-        final Monitor monitor = context.getContext().getMonitor();
+        final Monitor monitor = context.getMonitor();
         final ServerInfo server = monitor.getServer();
 
         println(

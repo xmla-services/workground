@@ -90,11 +90,11 @@
         classname="mondrian.rolap.aggmatcher.DefaultDef"
         dtdname="aggregates.dtd"/-->
 
-    <xomgen
+    <!--xomgen
         model="${relative.java.dir}/mondrian/xmla/DataSourcesConfig.xml"
         destdir="${relative.generated.java.dir}"
         classname="mondrian.xmla.DataSourcesConfig"
-        dtdname="datasourcesconfig.dtd"/>
+        dtdname="datasourcesconfig.dtd"/-->
   </target>
 
 </project>

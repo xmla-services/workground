@@ -10,19 +10,18 @@
 package mondrian.test;
 
 import mondrian.rolap.SchemaModifiers;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.result.AllocationPolicy;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.Scenario;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.AllocationPolicy;
-import org.olap4j.Cell;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.olap4j.PreparedOlapStatement;
-import org.olap4j.Scenario;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -52,9 +51,9 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCreateScenario(TestContextWrapper context) throws SQLException {
-        final OlapConnection connection =
-            context.createOlap4jConnection();
+    void testCreateScenario(TestContext context) throws SQLException {
+        final Connection connection =
+            context.getConnection();
         try {
             assertNull(connection.getScenario());
             final Scenario scenario = connection.createScenario();
@@ -76,14 +75,15 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCell(TestContextWrapper context) throws SQLException {
-        final OlapConnection connection =
-            context.createOlap4jConnection();
+    void testSetCell(TestContext context) throws SQLException {
+        final Connection connection =
+            context.getConnection();
         try {
             assertNull(connection.getScenario());
             final Scenario scenario = connection.createScenario();
             connection.setScenario(scenario);
-            connection.prepareOlapStatement(
+            Statement statement = connection.createStatement();
+            statement.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]");
@@ -97,19 +97,20 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCellWithoutScenarioFails(TestContextWrapper context) throws SQLException {
-        final OlapConnection connection =
-            context.createOlap4jConnection();
+    void testSetCellWithoutScenarioFails(TestContext context) throws SQLException {
+        final Connection connection =
+            context.getConnection();
         try {
             assertNull(connection.getScenario());
-            final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+            final Statement pstmt = connection.createStatement();
+            final CellSet result = pstmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
-                + "{[Product].Children} on 1\n"
-                + "from [Sales]");
-            final CellSet result = pstmt.executeQuery();
+                    + "{[Product].Children} on 1\n"
+                    + "from [Sales]"
+            );
             final Cell cell = result.getCell(Arrays.asList(0, 1));
             try {
-                cell.setValue(123, AllocationPolicy.EQUAL_ALLOCATION);
+                cell.setValue(connection.getScenario(), 123, AllocationPolicy.EQUAL_ALLOCATION);
                 fail("expected error");
             } catch (RuntimeException e) {
                 checkThrowable(e, "No active scenario");
@@ -124,19 +125,20 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetCellCalcError(TestContextWrapper context) throws SQLException {
-        final OlapConnection connection = context.createOlap4jConnection();
+    void testSetCellCalcError(TestContext context) throws SQLException {
+        final Connection connection = context.getConnection();
         connection.setScenario(connection.createScenario());
-        PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+        Statement pstmt = connection.createStatement();
+        CellSet cellSet = pstmt.executeQuery(
             "with member [Measures].[Unit Sales Plus One]\n"
             + "   as ' [Measures].[Unit Sales] + 1 '\n"
             + "select {[Measures].[Unit Sales Plus One]} on 0,\n"
             + "{[Product].Children} on 1\n"
             + "from [Sales]");
-        CellSet cellSet = pstmt.executeQuery();
+
         Cell cell = cellSet.getCell(Arrays.asList(0, 1));
         try {
-            cell.setValue(123, AllocationPolicy.EQUAL_ALLOCATION);
+            cell.setValue(connection.getScenario(), 123, AllocationPolicy.EQUAL_ALLOCATION);
             fail("expected exception");
         } catch (RuntimeException e) {
             checkThrowable(
@@ -146,7 +148,7 @@ class ScenarioTest {
         }
 
         // Calc member on non-measures dimension
-        cellSet = pstmt.executeOlapQuery(
+        cellSet = pstmt.executeQuery(
             "with member [Product].[FoodDrink]\n"
             + "   as Aggregate({[Product].[Food], [Product].[Drink]})\n"
             + "select {[Measures].[Unit Sales]} on 0,\n"
@@ -154,11 +156,11 @@ class ScenarioTest {
             + "from [Sales]");
         // OK to set ([Measures].[Unit Sales], [Product].[Drink])
         cell = cellSet.getCell(Arrays.asList(0, 1));
-        cell.setValue(123, AllocationPolicy.EQUAL_ALLOCATION);
+        cell.setValue(connection.getScenario(), 123, AllocationPolicy.EQUAL_ALLOCATION);
         // Not OK to set ([Measures].[Unit Sales], [Product].[FoodDrink])
         cell = cellSet.getCell(Arrays.asList(0, 3));
         try {
-            cell.setValue(123, AllocationPolicy.EQUAL_ALLOCATION);
+            cell.setValue(connection.getScenario(),123, AllocationPolicy.EQUAL_ALLOCATION);
             fail("expected exception");
         } catch (RuntimeException e) {
             checkThrowable(
@@ -173,14 +175,14 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnsupportedAllocationPolicyFails(TestContextWrapper context) throws SQLException {
-        final OlapConnection connection = context.createOlap4jConnection();
+    void testUnsupportedAllocationPolicyFails(TestContext context) throws SQLException {
+        final Connection connection = context.getConnection();
         connection.setScenario(connection.createScenario());
-        final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+        final Statement pstmt = connection.createStatement();
+        final CellSet cellSet = pstmt.executeQuery(
             "select {[Measures].[Unit Sales]} on 0,\n"
-            + "{[Product].Children} on 1\n"
-            + "from [Sales]");
-        final CellSet cellSet = pstmt.executeQuery();
+                + "{[Product].Children} on 1\n"
+                + "from [Sales]");
         final Cell cell = cellSet.getCell(Arrays.asList(0, 1));
         for (AllocationPolicy policy : AllocationPolicy.values()) {
             switch (policy) {
@@ -189,7 +191,7 @@ class ScenarioTest {
                 continue;
             }
             try {
-                cell.setValue(123, policy);
+                cell.setValue(connection.getScenario(), 123, policy);
                 fail("expected error");
             } catch (RuntimeException e) {
                 checkThrowable(
@@ -198,7 +200,7 @@ class ScenarioTest {
             }
         }
         try {
-            cell.setValue(123, null);
+            cell.setValue(connection.getScenario(),123, null);
             fail("expected error");
         } catch (RuntimeException e) {
             checkThrowable(
@@ -212,7 +214,7 @@ class ScenarioTest {
     @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEqualIncrement(TestContextWrapper context) throws SQLException {
+    void testEqualIncrement(TestContext context) throws SQLException {
         assertAllocation(context, AllocationPolicy.EQUAL_INCREMENT);
     }
 
@@ -222,11 +224,11 @@ class ScenarioTest {
     @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEqualAllocation(TestContextWrapper context) throws SQLException {
+    void testEqualAllocation(TestContext context) throws SQLException {
         assertAllocation(context, AllocationPolicy.EQUAL_ALLOCATION);
     }
 
-    private void assertAllocation(TestContextWrapper context,
+    private void assertAllocation(TestContext context,
         final AllocationPolicy allocationPolicy) throws SQLException
     {
         // TODO: Should not need to explicitly create a scenario. Add element
@@ -250,27 +252,27 @@ class ScenarioTest {
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
         */
-        withSchema(context.getContext(),  SchemaModifiers.ScenarioTestModifier1::new);
+        withSchema(context,  SchemaModifiers.ScenarioTestModifier1::new);
 
-        final OlapConnection connection = context.createOlap4jConnection();
+        final Connection connection = context.getConnection();
         connection.setScenario(connection.createScenario());
         final Scenario scenario = connection.getScenario();
         String id = scenario.getId();
-        final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+        final Statement pstmt = connection.createStatement();
+        CellSet cellSet = pstmt.executeQuery(
             "select {[Measures].[Unit Sales]} on 0,\n"
-            + "{[Product].Children} on 1\n"
-            + "from [Sales]\n"
-            + "where [Scenario].["
-            + id
-            + "]");
-        CellSet cellSet = pstmt.executeQuery();
+                + "{[Product].Children} on 1\n"
+                + "from [Sales]\n"
+                + "where [Scenario].["
+                + id
+                + "]");
 
         // Update ([Product].[Drink], [Measures].[Unit Sales])
         // from 24,597 to 23,597.
         final Cell cell = cellSet.getCell(Arrays.asList(0, 0));
-        cell.setValue(23597, allocationPolicy);
+        cell.setValue(connection.getScenario(),23597, allocationPolicy);
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on 0,\n"
             + "{[Product].[Drink]} on 1\n"
             + "from [Sales]"
@@ -283,7 +285,7 @@ class ScenarioTest {
             + "{[Product].[Drink]}\n"
             + "Row #0: 23,597\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on 0,\n"
             + "{[Product].Children,\n"
             + " [Product].[Drink].Children,\n"
@@ -357,20 +359,20 @@ class ScenarioTest {
         // slicer has scenario2,
         // slicer wins.
         String value;
-        final OlapStatement stmt = connection.createStatement();
+        final Statement stmt = connection.createStatement();
         cellSet =
-            stmt.executeOlapQuery(
+            stmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]\n"
                 + "where [Scenario].["
                 + id2
                 + "]");
-        cellSet.getCell(Arrays.asList(0, 0)).setValue(100, allocationPolicy);
+        cellSet.getCell(Arrays.asList(0, 0)).setValue(connection.getScenario(),100, allocationPolicy);
 
         // With slicer=scenario1, value as per scenario1.
         cellSet =
-            stmt.executeOlapQuery(
+            stmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]\n"
@@ -382,7 +384,7 @@ class ScenarioTest {
 
         // With slicer=scenario2, value as per scenario2.
         cellSet =
-            stmt.executeOlapQuery(
+            stmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]\n"
@@ -395,7 +397,7 @@ class ScenarioTest {
         // With no slicer, value as per connection's scenario, scenario1.
         assert connection.getScenario() == scenario;
         cellSet =
-            stmt.executeOlapQuery(
+            stmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]\n");
@@ -405,7 +407,7 @@ class ScenarioTest {
         // Set connection's scenario to null, and we get the unmodified value.
         connection.setScenario(null);
         cellSet =
-            stmt.executeOlapQuery(
+            stmt.executeQuery(
                 "select {[Measures].[Unit Sales]} on 0,\n"
                 + "{[Product].Children} on 1\n"
                 + "from [Sales]\n");
@@ -420,7 +422,7 @@ class ScenarioTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian815(TestContextWrapper context) throws SQLException {
+    void testBugMondrian815(TestContext context) throws SQLException {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
@@ -437,25 +439,25 @@ class ScenarioTest {
                 + "</Dimension>",
                 "<Measure name='Atomic Cell Count' aggregator='count'/>"));
          */
-        withSchema(context.getContext(),  SchemaModifiers.ScenarioTestModifier1::new);
+        withSchema(context,  SchemaModifiers.ScenarioTestModifier1::new);
 
-        final OlapConnection connection = context.createOlap4jConnection();
+        final Connection connection = context.getConnection();
         connection.setScenario(connection.createScenario());
         final Scenario scenario = connection.createScenario();
         connection.setScenario(scenario);
         final String id = scenario.getId();
         final String scenarioUniqueName = "[Scenario].[" + id + "]";
-        final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
-            "select NON EMPTY [Gender].Members ON COLUMNS,\n"
-            + "NON EMPTY Order([Product].[All Products].[Drink].Children,\n"
-            + "[Gender].[All Gender].[F], ASC) ON ROWS\n"
-            + "from [Sales]\n"
-            + "where ([Customers].[All Customers].[USA].[CA].[San Francisco],\n"
-            + " [Time].[1997], " + scenarioUniqueName + ")");
+        final Statement pstmt = connection.createStatement();
 
         // With bug MONDRIAN-815, got an NPE here, because cell (0, 1) has a
         // null value.
-        final CellSet cellSet = pstmt.executeQuery();
+        final CellSet cellSet = pstmt.executeQuery(
+            "select NON EMPTY [Gender].Members ON COLUMNS,\n"
+                + "NON EMPTY Order([Product].[All Products].[Drink].Children,\n"
+                + "[Gender].[All Gender].[F], ASC) ON ROWS\n"
+                + "from [Sales]\n"
+                + "where ([Customers].[All Customers].[USA].[CA].[San Francisco],\n"
+                + " [Time].[1997], " + scenarioUniqueName + ")");
         assertEqualsVerbose(
             "Axis #0:\n"
             + "{[Customers].[USA].[CA].[San Francisco], [Time].[1997], "
@@ -476,10 +478,15 @@ class ScenarioTest {
             + "Row #1: 2\n",
             TestUtil.toString(cellSet));
         cellSet.getCell(Arrays.asList(0, 1))
-            .setValue(10, AllocationPolicy.EQUAL_ALLOCATION);
+            .setValue(scenario, 10, AllocationPolicy.EQUAL_ALLOCATION);
         cellSet.getCell(Arrays.asList(1, 0))
-            .setValue(999, AllocationPolicy.EQUAL_ALLOCATION);
-        final CellSet cellSet2 = pstmt.executeQuery();
+            .setValue(scenario, 999, AllocationPolicy.EQUAL_ALLOCATION);
+        final CellSet cellSet2 = pstmt.executeQuery("select NON EMPTY [Gender].Members ON COLUMNS,\n"
+            + "NON EMPTY Order([Product].[All Products].[Drink].Children,\n"
+            + "[Gender].[All Gender].[F], ASC) ON ROWS\n"
+            + "from [Sales]\n"
+            + "where ([Customers].[All Customers].[USA].[CA].[San Francisco],\n"
+            + " [Time].[1997], " + scenarioUniqueName + ")");
         assertEqualsVerbose(
             "Axis #0:\n"
             + "{[Customers].[USA].[CA].[San Francisco], [Time].[1997], "
@@ -503,11 +510,11 @@ class ScenarioTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testScenarioPropertyBug1496(TestContextWrapper context) {
+    void testScenarioPropertyBug1496(TestContext context) {
         // looking up the $scenario property for a non ScenarioCalc member
         // causes class cast exception
         // http://jira.pentaho.com/browse/MONDRIAN-1496
-        Result result = executeQuery(context.createConnection(),
+        Result result = executeQuery(context.getConnection(),
             "select {[Gender].[Gender].members} on columns from Sales");
 
         // non calc member, should return null
@@ -515,7 +522,7 @@ class ScenarioTest {
             .getPropertyValue("$scenario");
         assertEquals(null, o);
 
-        result = executeQuery(context.createConnection(),
+        result = executeQuery(context.getConnection(),
             "with member gender.cal as '1' "
             + "select {[Gender].cal} on 0 from Sales");
         // calc member, should return null

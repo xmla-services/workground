@@ -18,10 +18,7 @@
  */
 package org.opencube.junit5.context;
 
-import java.sql.SQLException;
-
 import org.eclipse.daanse.olap.api.Connection;
-import org.olap4j.OlapConnection;
 
 @Deprecated
 public interface TestContextWrapper {
@@ -31,15 +28,12 @@ public interface TestContextWrapper {
 	 * Returns the olap.Connection.
 	 */
 	Connection createConnection();
-	
-	@Deprecated
-	OlapConnection createOlap4jConnection() throws SQLException;
 
 	@Deprecated
 	String getOlapConnectString();
 
 	TestContext getContext();
-	
+
 	@Deprecated
 	void setProperty(String key, String value);
 }

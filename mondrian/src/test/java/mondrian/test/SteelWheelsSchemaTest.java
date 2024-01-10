@@ -15,10 +15,10 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.databaseIsValid;
 import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -73,14 +73,13 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1273(TestContextWrapper context) {
+    void testMondrian1273(TestContext context) {
         //createContext(context, schema);
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier1::new);
-        withRole(context, "dev");
-        if (!databaseIsValid(context.createConnection())) {
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier1::new);
+        if (!databaseIsValid(context.getConnection(List.of("dev")))) {
             return;
         }
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Markets], (NOT IsEmpty([Measures].[Sales])))'\n"
             + "  set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], [Markets].CurrentMember.OrderKey, BASC)'\n"
             + "  set [*BASE_MEMBERS_Markets] as '[Markets].[Territory].Members'\n"
@@ -1365,11 +1364,10 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian2411_1(TestContextWrapper context) throws Exception {
+    void testMondrian2411_1(TestContext context) throws Exception {
         // Tests a user query followed by an admin query
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
-        withRole(context, "Power User");
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
+        assertQueryReturns(context.getConnection(List.of("Power User")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -1389,8 +1387,7 @@ class SteelWheelsSchemaTest {
             + "{[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]}\n"
             + "Row #0: 1,701.95\n");
 
-        withRole(context, "Administrator");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(List.of("Administrator")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -1607,11 +1604,10 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian2411_2(TestContextWrapper context) throws Exception {
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
+    void testMondrian2411_2(TestContext context) throws Exception {
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier8::new);
 
-        withRole(context, "Administrator");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(List.of("Administrator")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -1825,8 +1821,7 @@ class SteelWheelsSchemaTest {
             + "Row #96: 2,662.14\n"
             + "Row #97: 4,235.63\n");
 
-        withRole(context, "Power User");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(List.of("Power User")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -1849,7 +1844,7 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian2411_3(TestContextWrapper context) throws Exception {
+    void testMondrian2411_3(TestContext context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
         if ((MondrianProperties.instance().UseAggregates.get()
@@ -1857,9 +1852,8 @@ class SteelWheelsSchemaTest {
         {
             return;
         }
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier9::new);
-        withRole(context, "Administrator Union");
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier9::new);
+        assertQueryReturns(context.getConnection(List.of("Administrator Union")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -2073,8 +2067,7 @@ class SteelWheelsSchemaTest {
             + "Row #96: 2,662.14\n"
             + "Row #97: 4,235.63\n");
 
-        withRole(context, "Power User Union");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(List.of("Power User Union")),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER([*BASE_MEMBERS__Customer_DimUsage.Customers Hierarchy_], NOT ISEMPTY ([Measures].[Price Each]))'\n"
             + "SET [*NATIVE_CJ_SET] AS '[*NATIVE_CJ_SET_WITH_SLICER]'\n"
@@ -2101,7 +2094,7 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian2652(TestContextWrapper context) {
+    void testMondrian2652(TestContext context) {
         // Check if there is a valid SteelWheels database.
         //if (!databaseIsValid(context.createConnection())) {
         //    return;
@@ -2122,24 +2115,22 @@ class SteelWheelsSchemaTest {
             + " FROM [rolesTest]";
 
 
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
         //withCube("SteelWheelsSales");
-        withRole(context, "Report Author");
 
         // Report Author gets an exception since
         // he has no access to [Dimension2].[All Customers].[Alpha Cognac].
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context.getConnection(List.of("Report Author")),
             mdxQuery,
     "MDX object '[Dimension2].[All Customers].[Alpha Cognac]' not found in cube 'rolesTest'");
 
 
-        withSchema(context.getContext(), SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
+        withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier10::new);
         //withCube("SteelWheelsSales");
-        withRole(context, "Administrator");
 
         // Administrator has full access to the data,
         // So he gets the expected result.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(List.of("Administrator")),
             mdxQuery,
             "Axis #0:\n"
             + "{}\n"

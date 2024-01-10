@@ -12,6 +12,7 @@
 package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;
@@ -26,22 +27,21 @@ import mondrian.spi.PropertyFormatter;
 import mondrian.spi.UserDefinedFunction;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.impl.StatementImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.CellSet;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapStatement;
-import org.olap4j.metadata.Property;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
@@ -51,6 +51,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -186,21 +187,21 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFunWithProfiling(TestContextWrapper context) throws SQLException {
-        prepareContext(context.getContext());
-        OlapConnection connection = null;
-        OlapStatement statement = null;
+    void testFunWithProfiling(TestContext context) throws SQLException {
+        prepareContext(context);
+        Connection connection = null;
+        Statement statement = null;
         CellSet x = null;
         try {
-            connection = context.createOlap4jConnection();
+            connection = context.getConnection();
             statement = connection.createStatement();
-            x = statement.executeOlapQuery(
+            x = statement.executeQuery(
                 "SELECT { CurrentDateMember([Time].[Time], "
                 + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\", BEFORE)} "
                 + "ON COLUMNS FROM [Sales]");
             Util.discard(TestUtil.toString(x));
         } finally {
-            Util.close(x, statement, connection);
+            Util.close(x, ((StatementImpl) statement), connection);
         }
     }
 
@@ -1491,8 +1492,8 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPropertyFormatter(TestContextWrapper context) throws SQLException {
-        prepareContext(context.getContext());
+    void testPropertyFormatter(TestContext context) throws SQLException {
+        prepareContext(context);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
@@ -1507,17 +1508,18 @@ public class UdfTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier8::new);
+        updateTestContext(context, SchemaModifiers.UdfTestModifier8::new);
         final CellSet result =
-            executeOlap4jQuery(context.createOlap4jConnection(),
+            executeOlap4jQuery(context.getConnection(),
                 "select [Promotions2].Children on 0\n"
                 + "from [Sales]");
-        final org.olap4j.metadata.Member member =
+        final Member member =
             result.getAxes().get(0).getPositions().get(0).getMembers().get(0);
-        final Property property = member.getProperties().get("Medium");
+        final mondrian.olap.Property property = Arrays.stream(member.getProperties()).filter(p -> "Medium".equals(p.name)).findFirst()
+            .orElseThrow(() -> new RuntimeException("property with name \"Medium\" is absent"));
         assertEquals(
             "foo0/Medium/No Mediabar",
-            member.getPropertyFormattedValue(property));
+            member.getPropertyFormattedValue(property.name));
     }
 
     /**
@@ -1528,8 +1530,8 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPropertyFormatterNested(TestContextWrapper context) throws SQLException {
-        prepareContext(context.getContext());
+    void testPropertyFormatterNested(TestContext context) throws SQLException {
+        prepareContext(context);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
@@ -1546,18 +1548,20 @@ public class UdfTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier9::new);
+        updateTestContext(context, SchemaModifiers.UdfTestModifier9::new);
 
         final CellSet result =
-            executeOlap4jQuery(context.createOlap4jConnection(),
+            executeOlap4jQuery(context.getConnection(),
                 "select [Promotions2].Children on 0\n"
                 + "from [Sales]");
-        final org.olap4j.metadata.Member member =
+        final Member member =
             result.getAxes().get(0).getPositions().get(0).getMembers().get(0);
-        final Property property = member.getProperties().get("Medium");
+        final Property property = Arrays.stream(member.getProperties())
+            .filter(p -> "Medium".equals(p.name)).findFirst()
+            .orElseThrow(() -> new RuntimeException("Property with name \"Medium\" is absent"));
         assertEquals(
             "foo0/Medium/No Mediabar",
-            member.getPropertyFormattedValue(property));
+            member.getPropertyFormattedValue(property.name));
     }
 
     /**
@@ -1567,8 +1571,8 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPropertyFormatterScript(TestContextWrapper context) throws SQLException {
-        prepareContext(context.getContext());
+    void testPropertyFormatterScript(TestContext context) throws SQLException {
+        prepareContext(context);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
@@ -1589,18 +1593,20 @@ public class UdfTest {
             + "  </Hierarchy>\n"
             + "</Dimension>"));
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier10::new);
+        updateTestContext(context, SchemaModifiers.UdfTestModifier10::new);
 
         final CellSet result =
-            executeOlap4jQuery(context.createOlap4jConnection(),
+            executeOlap4jQuery(context.getConnection(),
                 "select [Promotions2].Children on 0\n"
                 + "from [Sales]");
-        final org.olap4j.metadata.Member member =
+        final Member member =
             result.getAxes().get(0).getPositions().get(0).getMembers().get(0);
-        final Property property = member.getProperties().get("Medium");
+        final
+        mondrian.olap.Property property = Arrays.stream(member.getProperties()).filter(p -> "Medium".equals(p.name))
+            .findFirst().orElseThrow(() -> new RuntimeException("Propertywith name \"Medium\" is absent"));
         assertEquals(
             "foo0/Medium/No Mediabar",
-            member.getPropertyFormattedValue(property));
+            member.getPropertyFormattedValue(property.name));
     }
 
 

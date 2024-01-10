@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.io.PrintWriter;
 
+import mondrian.rolap.RolapMember;
+import mondrian.server.Execution;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
@@ -39,4 +41,8 @@ public interface Result {
     Cell getCell(int[] pos);
     void print(PrintWriter pw);
     void close();
+
+    Execution getExecution();
+
+    RolapMember[] getCellMembers(int[] coordinates);
 }

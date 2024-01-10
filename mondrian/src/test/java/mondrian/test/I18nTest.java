@@ -13,21 +13,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
+import mondrian.rolap.RolapConnectionPropsR;
+
+import org.apache.commons.lang3.LocaleUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.util.Format;
 
 /**
@@ -79,7 +84,7 @@ class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoFrench(TestContextWrapper context) {
+    void testAutoFrench(TestContext context) {
         // Create a connection in French.
         String localeName = "fr_FR";
         String resultString = "12" + Nbsp + "345,67";
@@ -88,24 +93,26 @@ class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoSpanish(TestContextWrapper context) {
+    void testAutoSpanish(TestContext context) {
         // Format a number in (Peninsular) spanish.
         assertFormatNumber(context, "es", "12.345,67");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAutoMexican(TestContextWrapper context) {
+    void testAutoMexican(TestContext context) {
         // Format a number in Mexican spanish.
         assertFormatNumber(context, "es_MX", "12,345.67");
     }
 
-    private void assertFormatNumber(TestContextWrapper context, String localeName, String resultString) {
+    private void assertFormatNumber(TestContext context, String localeName, String resultString) {
         //final Util.PropertyList properties =
         //    TestUtil.getConnectionProperties().clone();
         //properties.put(RolapConnectionProperties.Locale.name(), localeName);
-        context.setProperty(RolapConnectionProperties.Locale.name(), localeName);
-        Connection connection = context.createConnection();
+        //context.setProperty(RolapConnectionProperties.Locale.name(), localeName);
+        Connection connection = context.getConnection(new RolapConnectionPropsR(
+		List.of(), true, LocaleUtils.toLocale(localeName),
+            -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()));
 
         QueryImpl query = connection.parseQuery(
             "WITH MEMBER [Measures].[Foo] AS ' 12345.67 ',\n"
