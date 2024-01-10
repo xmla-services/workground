@@ -25,6 +25,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -55,7 +56,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
 
     protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
-        TestUtil.withRole(context,  "Test");
+        //TestUtil.withRole(context,  "Test");
     }
 
     @ParameterizedTest
@@ -63,7 +64,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestContextWrapper context) {
         prepareContext(context);
         try {
-            executeAnalyzerQuery(context.createConnection());
+            executeAnalyzerQuery(context.getContext().getConnection(List.of("Test")));
         } catch (Exception e) {
             // that's ok, junit's assertion errors are derived from Error,
             // hence they will not be caught here

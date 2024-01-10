@@ -64,7 +64,6 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -1588,7 +1587,7 @@ protected void assertQuerySql(Connection connection,
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeVirtualRestrictedSet(TestContextWrapper context) throws Exception {
+  void testNativeVirtualRestrictedSet(TestContext context) throws Exception {
       class TestNativeVirtualRestrictedSetModifier extends RDbMappingSchemaModifier {
 
           public TestNativeVirtualRestrictedSetModifier(MappingSchema mappingSchema) {
@@ -1659,8 +1658,7 @@ protected void assertQuerySql(Connection connection,
         + "  </Role>\n" );
     withSchema(context, schema);
     */
-    withRole(context, "F-MIS-BE-CLIENT" );
-    withSchema(context.getContext(), TestNativeVirtualRestrictedSetModifier::new);
+    withSchema(context, TestNativeVirtualRestrictedSetModifier::new);
     Result result = executeQuery(
       "With\n"
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Store],[*BASE_MEMBERS_Warehouse])'\n"
@@ -1676,14 +1674,14 @@ protected void assertQuerySql(Connection connection,
         + "Select\n"
         + "[*BASE_MEMBERS_Measures] on columns,\n"
         + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
-        + "From [Warehouse and Sales]\n", context.createConnection());
+        + "From [Warehouse and Sales]\n", context.getConnection(List.of("F-MIS-BE-CLIENT")));
     assertNotNull(result);
   }
 
   @Disabled("disabled for CI build") //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeHonorsRoleRestrictions(TestContextWrapper context) {
+  void testNativeHonorsRoleRestrictions(TestContext context) {
     // NativeSetEvaluation pushes role restrictions to the where clause
     // (see SqlConstraintUtils.addRoleAccessConstraints) by
     // generating an IN expression based on accessible members.
@@ -1786,10 +1784,9 @@ protected void assertQuerySql(Connection connection,
       null, null, null, null, null, roleDef );
     withSchema(context, schema);
      */
-    withRole(context, "Test" );
-    withSchema(context.getContext(), TestNativeHonorsRoleRestrictionsModifier::new);
+    withSchema(context, TestNativeHonorsRoleRestrictionsModifier::new);
 
-      Connection connection = context.createConnection();
+      Connection connection = context.getConnection(List.of("Test"));
     verifySameNativeAndNot(connection,
       "select non empty crossjoin([Store].[USA],[Product].[Product Name].members) on 0 from sales",
       "Native crossjoin mismatch", propSaver);

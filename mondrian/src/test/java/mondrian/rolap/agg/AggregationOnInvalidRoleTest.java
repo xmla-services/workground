@@ -23,6 +23,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -54,7 +55,6 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
 
     protected void prepareContext(TestContextWrapper context) {
         super.prepareContext(context);
-        TestUtil.withRole(context,  "Test");
     }
 
 
@@ -62,7 +62,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestContextWrapper context) {
         prepareContext(context);
-        Connection connection = context.createConnection();
+        Connection connection = context.getContext().getConnection(List.of("Test"));
         //TestContext context = getTestContext().withFreshConnection();
         try {
             executeAnalyzerQuery(connection);

@@ -2,7 +2,9 @@ package org.opencube.junit5.context;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -105,6 +107,13 @@ public class TestContextImpl implements TestContext {
     @Override
     public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
         return new RolapConnection(this, props);
+    }
+
+    @Override
+    public org.eclipse.daanse.olap.api.Connection getConnection(List<String> roles) {
+        return getConnection(new RolapConnectionPropsR(roles,
+                true, Locale.getDefault(),
+                -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()));
     }
 
     @Override

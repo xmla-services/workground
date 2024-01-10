@@ -259,6 +259,18 @@ public class TestUtil {
         checkThrowable(throwable, pattern);
     }
 
+    public static void assertQueryThrows(TestContext context, List<String> roles, String queryString, String pattern) {
+        Throwable throwable;
+        try {
+            Result result = executeQuery(context.getConnection(roles), queryString);
+            Util.discard(result);
+            throwable = null;
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        checkThrowable(throwable, pattern);
+    }
+
     /**
      * Executes a query, and asserts that it throws an exception which contains the
      * given pattern.
@@ -1325,10 +1337,6 @@ public class TestUtil {
           MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
           context.setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));
     }
-
-    public static void withRole(TestContextWrapper context, String roleName) {
-			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
-		}
 
 	public static void assertExprDependsOn(Connection connection, String expr, String hierList ) {
 		// Construct a query, and mine it for a parsed expression.

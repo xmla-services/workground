@@ -51,7 +51,6 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.executeAxis;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -573,7 +572,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
-  void testBugMondrian981(TestContextWrapper context) {
+  void testBugMondrian981(TestContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Too slow to run as part of standard regress until bug is fixed.
       return;
@@ -585,9 +584,8 @@ public class PerformanceTest {
     //
     // jdk1.7 marmite   main 14770   30,857 ms
     // jdk1.7 marmite   main 14771   29,083 ms
-    withSchema(context.getContext(), SchemaModifiers.PerformanceTestModifier3::new);
-    withRole(context, "Role1" );
-    assertQueryReturns(context.createConnection(),
+    withSchema(context, SchemaModifiers.PerformanceTestModifier3::new);
+    assertQueryReturns(context.getConnection(List.of("Role1")),
       "with member [Measures].[Foo] as\n"
         + "Aggregate([Gender].Members * [Marital Status].Members * [Time].Members)\n"
         + "select from [Sales] where [Measures].[Foo]",

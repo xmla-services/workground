@@ -4128,7 +4128,7 @@ public class BasicQueryTest {
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testBadMeasure1(TestContextWrapper context) {
+  void testBadMeasure1(TestContext context) {
       /*
       String schema = SchemaUtil.getSchema(baseSchema, null, "<Cube name=\"SalesWithBadMeasure\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"
@@ -4136,10 +4136,10 @@ public class BasicQueryTest {
             + "  <Measure name=\"Bad Measure\" aggregator=\"sum\"\n" + "      formatString=\"Standard\"/>\n"
             + "</Cube>", null, null, null, null );
        */
-    TestUtil.withSchema(context.getContext(), SchemaModifiers.BasicQueryTestModifier23::new);
+    TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier23::new);
     Throwable throwable = null;
     try {
-      assertSimpleQuery(context.createConnection());
+      assertSimpleQuery(context.getConnection());
     } catch ( Throwable e ) {
       throwable = e;
     }

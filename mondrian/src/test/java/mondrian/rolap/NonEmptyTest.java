@@ -21,7 +21,6 @@ import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.util.ArrayList;
@@ -6122,7 +6121,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian1133(TestContextWrapper context)  {
+  void testMondrian1133(TestContext context)  {
     propSaver.set(
       propSaver.properties.UseAggregates,
       false );
@@ -6207,7 +6206,7 @@ class NonEmptyTest extends BatchTestCase {
         + "having\n"
         + "    c1 IS NOT NULL AND UPPER(c1) REGEXP '.*CA.*'\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC"
         : "    ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC,\n"
@@ -6233,7 +6232,7 @@ class NonEmptyTest extends BatchTestCase {
         + "having\n"
         + "    c1 IS NOT NULL AND UPPER(c1) REGEXP '.*CA.*'\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC"
         : "    ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC,\n"
@@ -6294,21 +6293,19 @@ class NonEmptyTest extends BatchTestCase {
     };
 
     RolapSchemaPool.instance().clear();
-    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier6::new );
+    withSchema(context, SchemaModifiers.NonEmptyTestModifier6::new );
     //withSchema(context, schema );
 
     // The filter condition does not require a join to the fact table.
-    assertQuerySql(context.createConnection(), query, patterns );
-    withRole(context, "Role1" );
-    assertQuerySql(context.createConnection(), query, patterns );
+    assertQuerySql(context.getConnection(), query, patterns );
+    assertQuerySql(context.getConnection(List.of("Role1")), query, patterns );
 
     // in a non-empty context where a role is in effect, the query
     // will pessimistically join the fact table and apply the
     // constraint, since the filter condition could be influenced by
     // role limitations.
-    withRole(context, "Role1" );
     assertQuerySql(
-      context.createConnection(), nonEmptyQuery, patternsWithFactJoin );
+      context.getConnection(List.of("Role1")), nonEmptyQuery, patternsWithFactJoin );
   }
 
   /**
@@ -6322,7 +6319,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian1133WithAggs(TestContextWrapper context)  {
+  void testMondrian1133WithAggs(TestContext context)  {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -6408,7 +6405,7 @@ class NonEmptyTest extends BatchTestCase {
         + "having\n"
         + "    c1 IS NOT NULL AND UPPER(c1) REGEXP '.*CA.*'\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC"
         : "    ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC,\n"
@@ -6431,7 +6428,7 @@ class NonEmptyTest extends BatchTestCase {
         + "having\n"
         + "    c1 IS NOT NULL AND UPPER(c1) REGEXP '.*CA.*'\n"
         + "order by\n"
-        + ( getDialect(context.createConnection()).requiresOrderByAlias()
+        + ( getDialect(context.getConnection()).requiresOrderByAlias()
         ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
         + "    ISNULL(`c1`) ASC, `c1` ASC"
         : "    ISNULL(`store`.`store_country`) ASC, `store`.`store_country` ASC,\n"
@@ -6488,20 +6485,18 @@ class NonEmptyTest extends BatchTestCase {
         oracleWithFactJoin, oracleWithFactJoin )
     };
 
-    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier6::new );
+    withSchema(context, SchemaModifiers.NonEmptyTestModifier6::new );
 
     // The filter condition does not require a join to the fact table.
-    assertQuerySql(context.createConnection(), query, patterns );
-    withRole(context, "Role1");
-    assertQuerySql(context.createConnection(), query, patterns );
+    assertQuerySql(context.getConnection(), query, patterns );
+    assertQuerySql(context.getConnection(List.of("Role1")), query, patterns );
 
     // in a non-empty context where a role is in effect, the query
     // will pessimistically join the fact table and apply the
     // constraint, since the filter condition could be influenced by
     // role limitations.
-    withRole(context, "Role1");
     assertQuerySql(
-      context.createConnection(), nonEmptyQuery, patternsWithFactJoin );
+      context.getConnection(List.of("Role1")), nonEmptyQuery, patternsWithFactJoin );
   }
 
 

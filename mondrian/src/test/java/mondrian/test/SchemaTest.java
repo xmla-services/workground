@@ -147,7 +147,6 @@ import static org.opencube.junit5.TestUtil.assertSimpleQuery;
 import static org.opencube.junit5.TestUtil.checkThrowable;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 //import org.apache.logging.log4j.spi.LoggerContext;
@@ -5869,7 +5868,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testInvalidSchemaAccess(TestContextWrapper context) {
+    void testInvalidSchemaAccess(TestContext context) {
         class TestInvalidSchemaAccess extends RDbMappingSchemaModifier {
             public TestInvalidSchemaAccess(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -5894,9 +5893,8 @@ class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestInvalidSchemaAccess::new);
-        withRole(context, "Role1");
-        assertQueryThrows(context,
+        withSchema(context, TestInvalidSchemaAccess::new);
+        assertQueryThrows(context, List.of("Role1"),
             "select from [Sales]",
             "Cannot invoke \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum.name()\" because the return value of \"org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant.access()\" is null");
     }
@@ -5973,7 +5971,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnionRole(TestContextWrapper context) {
+    void testUnionRole(TestContext context) {
         class TestUnionRoleModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6031,9 +6029,8 @@ class SchemaTest {
             + "</Role>\n");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestUnionRoleModifier::new);
-        withRole(context, "Role1Plus2Plus1");
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, TestUnionRoleModifier::new);
+        assertQueryReturns(context.getConnection(List.of("Role1Plus2Plus1")),
             "select from [Sales]",
             "Axis #0:\n"
             + "{}\n"
@@ -6042,7 +6039,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnionRoleContainsGrants(TestContextWrapper context) {
+    void testUnionRoleContainsGrants(TestContext context) {
         class TestUnionRoleContainsGrantsModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleContainsGrantsModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6082,15 +6079,14 @@ class SchemaTest {
             + "</Role>\n");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestUnionRoleContainsGrantsModifier::new);
-        withRole(context, "Role1Plus2");
-        assertQueryThrows(context,
+        withSchema(context, TestUnionRoleContainsGrantsModifier::new);
+        assertQueryThrows(context, List.of("Role1Plus2"),
             "select from [Sales]", "Union role must not contain grants");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnionRoleIllegalForwardRef(TestContextWrapper context) {
+    void testUnionRoleIllegalForwardRef(TestContext context) {
         class TestUnionRoleIllegalForwardRefModifier extends RDbMappingSchemaModifier {
             public TestUnionRoleIllegalForwardRefModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6131,9 +6127,8 @@ class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestUnionRoleIllegalForwardRefModifier::new);
-        withRole(context, "Role1Plus2");
-        assertQueryThrows(context,
+        withSchema(context, TestUnionRoleIllegalForwardRefModifier::new);
+        assertQueryThrows(context, List.of("Role1Plus2"),
             "select from [Sales]", "Unknown role 'Role2'");
     }
 
@@ -11382,7 +11377,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMonrian2528(TestContextWrapper context) {
+    void testBugMonrian2528(TestContext context) {
         class TestBugMonrian2528Modifier extends RDbMappingSchemaModifier {
 
             public TestBugMonrian2528Modifier(MappingSchema mappingSchema) {
@@ -11476,10 +11471,9 @@ class SchemaTest {
           + "</Role>\n");
         withSchema(context, schema);
        */
-        withSchema(context.getContext(), TestBugMonrian2528Modifier::new);
-        withRole(context, "dev");
+        withSchema(context, TestBugMonrian2528Modifier::new);
 
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(List.of("dev")),
           "SELECT\n"
           + "[Product].[All Products] ON 0,\n"
           + "[Measures].[Store Sales] ON 1\n"

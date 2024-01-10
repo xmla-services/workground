@@ -20,6 +20,8 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
+import java.util.List;
+
 import static mondrian.rolap.RolapNativeTopCountTestCases.CUSTOM_COUNT_MEASURE_QUERY;
 import static mondrian.rolap.RolapNativeTopCountTestCases.EMPTY_CELLS_ARE_HIDDEN_WHEN_NON_EMPTY_QUERY;
 import static mondrian.rolap.RolapNativeTopCountTestCases.EMPTY_CELLS_ARE_SHOWN_COUNTRIES_QUERY;
@@ -36,7 +38,6 @@ import static mondrian.rolap.RolapNativeTopCountTestCases.SUM_MEASURE_QUERY;
 import static mondrian.rolap.RolapNativeTopCountTestCases.TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY;
 import static mondrian.rolap.RolapNativeTopCountTestCases.TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -131,7 +132,7 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testRoleRestrictionWorks_ForRowWithData(TestContextWrapper context) {
+    void testRoleRestrictionWorks_ForRowWithData(TestContext context) {
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -139,16 +140,15 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
                 ROLE_RESTRICTION_WORKS_WA_ROLE_DEF);
         withSchema(context, schema);
          */
-        withRole(context, ROLE_RESTRICTION_WORKS_WA_ROLE_NAME);
-        withSchema(context.getContext(), SchemaModifiers.RoleRestrictionWorksWaRoleDef::new);
-        assertResultsAreEqual(context.createConnection(),
+        withSchema(context, SchemaModifiers.RoleRestrictionWorksWaRoleDef::new);
+        assertResultsAreEqual(context.getConnection(List.of(ROLE_RESTRICTION_WORKS_WA_ROLE_NAME)),
             "Role restriction works - For WA state",
             ROLE_RESTRICTION_WORKS_WA_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testRoleRestrictionWorks_ForRowWithOutData(TestContextWrapper context) {
+    void testRoleRestrictionWorks_ForRowWithOutData(TestContext context) {
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -156,9 +156,8 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
                 ROLE_RESTRICTION_WORKS_DF_ROLE_DEF);
         withSchema(context, schema);
          */
-        withRole(context, ROLE_RESTRICTION_WORKS_DF_ROLE_NAME);
-        withSchema(context.getContext(), SchemaModifiers.RoleRestrictionWorksDfRoleDef::new);
-        assertResultsAreEqual(context.createConnection(),
+        withSchema(context, SchemaModifiers.RoleRestrictionWorksDfRoleDef::new);
+        assertResultsAreEqual(context.getConnection(List.of(ROLE_RESTRICTION_WORKS_DF_ROLE_NAME)),
             "Role restriction works - For DF state",
             ROLE_RESTRICTION_WORKS_DF_QUERY);
     }

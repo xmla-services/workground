@@ -38,6 +38,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -49,7 +50,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -300,38 +300,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMatchesWithAccessControl(TestContextWrapper context) {
-        String dimension =
-            "<Dimension name=\"Store2\">\n"
-            + "  <Hierarchy hasAll=\"true\" primaryKey=\"store_id\"  >\n"
-            + "    <Table name=\"store\"/>\n"
-            + "    <Level name=\"Store Country\" column=\"store_country\" uniqueMembers=\"true\"/>\n"
-            + "    <Level name=\"Store State\" column=\"store_state\" uniqueMembers=\"true\"/>\n"
-            + "  </Hierarchy>\n"
-            + "</Dimension>\n";
-
-        String cube =
-            "<Cube name=\"TinySales\">\n"
-            + "  <Table name=\"sales_fact_1997\"/>\n"
-            + "  <DimensionUsage name=\"Product\" source=\"Product\" foreignKey=\"product_id\"/>\n"
-            + "  <DimensionUsage name=\"Store2\" source=\"Store2\" foreignKey=\"store_id\"/>\n"
-            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"/>\n"
-            + "</Cube>";
-
-
-        final String roleDefs =
-            "<Role name=\"test\">\n"
-            + "        <SchemaGrant access=\"none\">\n"
-            + "            <CubeGrant cube=\"TinySales\" access=\"all\">\n"
-            + "                <HierarchyGrant hierarchy=\"[Store2]\" access=\"custom\"\n"
-            + "                                 rollupPolicy=\"PARTIAL\">\n"
-            + "                    <MemberGrant member=\"[Store2].[USA].[CA]\" access=\"all\"/>\n"
-            + "                    <MemberGrant member=\"[Store2].[USA].[OR]\" access=\"all\"/>\n"
-            + "                    <MemberGrant member=\"[Store2].[Canada]\" access=\"all\"/>\n"
-            + "                </HierarchyGrant>\n"
-            + "            </CubeGrant>\n"
-            + "        </SchemaGrant>\n"
-            + "    </Role> ";
+    void testMatchesWithAccessControl(TestContext context) {
 
         class TestCachedNativeFilterModifier extends RDbMappingSchemaModifier {
 
@@ -449,9 +418,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
             roleDefs);
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestCachedNativeFilterModifier::new);
-        withRole(context, "test");
-        Connection connection = context.createConnection();
+        withSchema(context, TestCachedNativeFilterModifier::new);
+        Connection connection = context.getConnection(List.of("test"));
         verifySameNativeAndNot(connection,
             "select Filter([Product].[Product Category].Members, [Product].CurrentMember.Name matches \"(?i).*Food.*\")"
             + " on 0 from tinysales",

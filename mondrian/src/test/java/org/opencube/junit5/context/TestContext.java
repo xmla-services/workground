@@ -7,13 +7,14 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 public interface TestContext extends Context{
-	
-	
+
+
 	void setDialect(Dialect dialect);
 	void setDataSource(DataSource dialect);
 	void setDatabaseMappingSchemaProviders(List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders);
@@ -21,6 +22,6 @@ public interface TestContext extends Context{
 	void setDescription(Optional<String> description);
 	void setExpressionCompilerFactory(ExpressionCompilerFactory expressionCompilerFactory);
 	void setStatisticsProvider(StatisticsProvider statisticsProvider);
-
+    Connection getConnection(List<String> roles);
 
 }

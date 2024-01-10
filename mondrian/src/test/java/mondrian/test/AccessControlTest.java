@@ -153,7 +153,6 @@ class AccessControlTest {
     void testRestrictMeasures(TestContext foodMartContext) {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier31::new);
 
-    	//TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
     	Connection connection = foodMartContext.getConnection();
 
@@ -176,7 +175,6 @@ class AccessControlTest {
             + "Row #0: 5,581\n"
             + "Row #0: 151,211.21\n");
 
-    	//TestUtil.withRole(foodMartContext, "Role2");
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
     	connection = foodMartContext.getConnection(props);
     	TestUtil.assertQueryReturns(
@@ -197,7 +195,6 @@ class AccessControlTest {
     void testRestrictMeasuresHierarchy_InTwoRoles(TestContext foodMartContext) {
 
 
-      //TestUtil.withRole(foodMartContext, "Administrator");
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier32::new);
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Administrator"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
       Connection connection = foodMartContext.getConnection(props);
@@ -357,7 +354,6 @@ class AccessControlTest {
             + "</Role>");
          */
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier33::new);
-        //TestUtil.withRole(foodMartContext, "MR,DBPentUsers");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("MR", "DBPentUsers"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
 
@@ -373,7 +369,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRoleMemberAccessNonExistentMemberFails(TestContext foodMartContext) {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier34::new);
-    	//TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         TestUtil.assertQueryThrows(
         	foodMartContext,
@@ -683,7 +678,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_1201_MultipleMembersInRoleAccessControl(TestContext foodMartContext) {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier35::new);
-        //TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
 
@@ -743,7 +737,6 @@ class AccessControlTest {
             + "Row #1: 10,319\n");
 
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier35::new);
-        //TestUtil.withRole(foodMartContext, "Role2");
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
 
@@ -772,7 +765,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_2586_RaggedDimMembersShouldBeVisible(TestContext foodMartContext) {
       TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier38::new);
-      //TestUtil.withRole(foodMartContext, "Sales Ragged");
     //[Geography].[Country]
       RolapConnectionProps props = new RolapConnectionPropsR(List.of("Sales Ragged"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
       Connection connection = foodMartContext.getConnection(props);
@@ -800,7 +792,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian_1201_CacheAwareOfRoleAccessControl(TestContext foodMartContext) {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier36::new);
-        //TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
 
@@ -823,7 +814,6 @@ class AccessControlTest {
             + "Row #1: 187\n");
 
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier36::new);
-        //TestUtil.withRole(foodMartContext, "Role2");
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
 
@@ -1267,7 +1257,6 @@ class AccessControlTest {
         RolapSchemaPool.instance().clear();
         MappingSchema schema = foodMartContext.getDatabaseMappingSchemaProviders().get(0).get();
         foodMartContext.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.AccessControlTestModifier39(schema, rollupPolicy)));
-    	//TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
     	Connection connection = foodMartContext.getConnection(props);
         // All of the children of [San Francisco] are invisible, because [City]
@@ -1474,7 +1463,6 @@ class AccessControlTest {
         Connection connection;
 
         try {
-        	//TestUtil.withRole(foodMartContext, "Role3,Role2");
             RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role3", "Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         	connection = foodMartContext.getConnection(props);
         	fail("expected exception, got " + connection);
@@ -1548,7 +1536,6 @@ class AccessControlTest {
             + "{[Customers].[USA].Children,\n"
             + " [Customers].[USA].[OR].Children}) on 0\n"
             + "from [Sales]";
-        //TestUtil.withRole(foodMartContext, null);
         connection = foodMartContext.getConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -1602,7 +1589,6 @@ class AccessControlTest {
         // Compared to above:
         // a. cities in Oregon are missing besides Portland
         // b. total for Oregon = total for Portland
-    	//TestUtil.withRole(foodMartContext, "Role1,Role2");
         props = new RolapConnectionPropsR(List.of("Role1", "Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
     	connection = foodMartContext.getConnection(props);
     	TestUtil.assertQueryReturns(
@@ -3068,7 +3054,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1091(TestContext foodMartContext) throws Exception {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier22::new);
-    	//TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
     	Connection connection = foodMartContext.getConnection(props);
     	TestUtil.assertQueryReturns(
@@ -3136,7 +3121,6 @@ class AccessControlTest {
         final String mdx =
             "select non empty {[Store].Members} on columns from [Sales]";
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier23::new);
-        //TestUtil.withRole(foodMartContext, "Role1");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Role1"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -3167,7 +3151,6 @@ class AccessControlTest {
             + "Row #0: 25,635\n"
             + "Row #0: 2,117\n"
             + "Row #0: 2,117\n");
-        //TestUtil.withRole(foodMartContext, "Role2");
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -3223,7 +3206,6 @@ class AccessControlTest {
                 + "Axis #1:\n"
                 + "{[Measures].[Unit Sales]}\n"
                 + "Row #0: 266,773\n");
-        //TestUtil.withRole(foodMartContext, "Admin");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Admin"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil
@@ -3254,7 +3236,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian936(TestContext foodMartContext) throws Exception {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier25::new);
-        //TestUtil.withRole(foodMartContext, "test");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("test"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -3314,7 +3295,6 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1434(TestContext foodMartContext) {
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier26::new);
-        //TestUtil.withRole(foodMartContext, "dev");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("dev"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
         TestUtil.executeQuery(
@@ -3322,7 +3302,6 @@ class AccessControlTest {
             " select from [Sales] where {[Measures].[Unit Sales]}");
 
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier27::new);
-        //TestUtil.withRole(foodMartContext, "dev");
         props = new RolapConnectionPropsR(List.of("dev"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil.executeQuery(
@@ -3357,7 +3336,6 @@ class AccessControlTest {
             + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
             + "From [Sales]\n";
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier28::new);
-        //TestUtil.withRole(foodMartContext, "Admin");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("Admin"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -3436,7 +3414,6 @@ class AccessControlTest {
                     MappingSchema schemaO = foodMartContext.getDatabaseMappingSchemaProviders().get(0).get();
                     foodMartContext.setDatabaseMappingSchemaProviders(
                         List.of(new SchemaModifiers.AccessControlTestModifier29(schemaO, hasAll, defaultMember, policy)));
-                    //TestUtil.withRole(foodMartContext, "test");
                     RolapConnectionProps props = new RolapConnectionPropsR(List.of("test"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
                     Connection connection = foodMartContext.getConnection(props);
                 	TestUtil.assertQueryReturns(
@@ -3518,7 +3495,6 @@ class AccessControlTest {
     void testValidMeasureWithRestrictedCubes(TestContext foodMartContext) {
         //http://jira.pentaho.com/browse/MONDRIAN-1616
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier30::new);
-        //TestUtil.withRole(foodMartContext, "noBaseCubes");
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("noBaseCubes"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
 

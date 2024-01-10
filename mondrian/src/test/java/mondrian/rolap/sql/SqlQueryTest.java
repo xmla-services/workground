@@ -63,7 +63,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
@@ -919,8 +918,8 @@ class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testLimitedRollupMemberRetrievableFromCache(TestContextWrapper context) throws Exception {
-        Connection connection = context.createConnection();
+    void testLimitedRollupMemberRetrievableFromCache(TestContext context) throws Exception {
+        Connection connection = context.getConnection();
         prepareContext(connection);
         final String mdx =
             "select NON EMPTY { [Store].[Store].[Store State].members } on 0 from [Sales]";
@@ -979,8 +978,7 @@ class SqlQueryTest  extends BatchTestCase {
                 + " </Role>\n");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestLimitedRollupMemberRetrievableFromCacheModifier::new);
-        withRole(context,"justCA");
+        withSchema(context, TestLimitedRollupMemberRetrievableFromCacheModifier::new);
 
         String pgSql =
             "select \"store\".\"store_country\" as \"c0\","
@@ -1008,7 +1006,7 @@ class SqlQueryTest  extends BatchTestCase {
             + " ISNULL(`store`.`store_state`) ASC, `store`.`store_state` ASC";
         SqlPattern myPattern = new SqlPattern(MYSQL, mySql, mySql.length());
         SqlPattern[] patterns = {pgPattern, myPattern};
-        connection = context.getContext().getConnection();
+        connection = context.getConnection(List.of("justCA"));
         executeQuery(mdx, connection);
         assertQuerySqlOrNot(connection, mdx, patterns, true, false, false);
     }
