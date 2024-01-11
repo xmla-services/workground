@@ -773,17 +773,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.daanse</groupId>
-				<artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
-				<version>${olap4j.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.daanse</groupId>
 				<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
 				<version>${olap4j-xmla.version}</version>
 			</dependency>

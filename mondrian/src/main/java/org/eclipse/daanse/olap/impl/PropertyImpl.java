@@ -29,12 +29,12 @@ public class PropertyImpl implements IMondrianOlap4jProperty {
     static {
         // Build set of names of olap4j standard member properties.
         final Set<String> memberNames = new HashSet<>();
-        for (org.olap4j.metadata.Property property : org.olap4j.metadata.Property.StandardMemberProperty.values()) {
+        for (Property property : Property.StandardMemberProperty.values()) {
             memberNames.add(property.getName());
         }
 
         final Set<String> cellNames = new HashSet<>();
-        for (org.olap4j.metadata.Property property : org.olap4j.metadata.Property.StandardCellProperty.values()) {
+        for (Property property : Property.StandardCellProperty.values()) {
             cellNames.add(property.getName());
         }
 

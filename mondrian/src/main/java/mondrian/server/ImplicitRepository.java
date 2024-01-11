@@ -12,14 +12,9 @@ package mondrian.server;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import org.olap4j.OlapConnection;
-import org.olap4j.impl.Olap4jUtil;
-
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Implementation of {@link Repository} for
@@ -66,20 +61,6 @@ public class ImplicitRepository implements Repository {
         final RolapSchema schema = connection.getSchema();
         assert schema.getName().equals(catalogName);
         return Collections.singletonMap(schema.getName(), schema);
-    }
-
-    @Override
-	public OlapConnection getConnection(
-        MondrianServer server,
-        String databaseName,
-        String catalogName,
-        String roleName,
-        Properties props)
-    {
-        // This method does not make sense in an ImplicitRepository. The
-        // catalog and schema are gleaned from the connection, not vice
-        // versa.
-        throw new UnsupportedOperationException();
     }
 
     @Override

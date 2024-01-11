@@ -11,7 +11,7 @@
 */
 package mondrian.xmla;
 
-import org.olap4j.metadata.XmlaConstant;
+import org.eclipse.daanse.olap.impl.XmlaConstant;
 /**
  * Constants for XML/A.
  *

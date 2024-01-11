@@ -21,8 +21,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
+import org.eclipse.daanse.olap.impl.IdentifierNode;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
 
 /**
  * Resolves a list of segments (a parsed identifier) to an OLAP element.

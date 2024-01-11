@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.impl.XmlaConstants;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -35,7 +36,6 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesIn
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRowR;
-import org.olap4j.metadata.XmlaConstants;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -85,7 +85,7 @@ public class CoordinateIterator implements Iterator<int[]> {
     public static Iterable<int[]> iterate(final int[] dimensions) {
         return new Iterable<int[]>() {
             public Iterator<int[]> iterator() {
-                return new org.olap4j.impl.CoordinateIterator(dimensions, true);
+                return new CoordinateIterator(dimensions, true);
             }
         };
     }

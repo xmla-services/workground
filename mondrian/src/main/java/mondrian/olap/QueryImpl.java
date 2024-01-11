@@ -72,8 +72,8 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
-import org.olap4j.impl.IdentifierParser;
-import org.olap4j.mdx.IdentifierSegment;
+
+
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
@@ -83,7 +83,6 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.ParameterFunDef;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
@@ -98,6 +97,8 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.ProfileHandler;
 import mondrian.util.ArrayStack;
+import org.eclipse.daanse.olap.impl.IdentifierParser;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
 
 /**
  * <code>Query</code> is an MDX query.

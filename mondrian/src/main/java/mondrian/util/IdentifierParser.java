@@ -39,7 +39,7 @@ import mondrian.rolap.RolapCube;
  *
  * @author jhyde
  */
-public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
+public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierParser {
 
     /**
      * Implementation of Builder that resolves segment lists to members.

@@ -17,7 +17,7 @@
 */
 package org.eclipse.daanse.olap.api.result;
 
-import org.olap4j.Cell;
+
 
 /**
  * Enumeration of the policies that can be used to modify the values of

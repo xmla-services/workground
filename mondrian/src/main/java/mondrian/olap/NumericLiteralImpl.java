@@ -24,11 +24,9 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
-import org.olap4j.impl.UnmodifiableArrayMap;
 
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.StringType;
+import org.eclipse.daanse.olap.impl.UnmodifiableArrayMap;
 
 public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implements NumericLiteral {
 	private static final NumericLiteralImpl negativeOne = new NumericLiteralImpl(BigDecimal.ONE.negate());
@@ -77,7 +75,7 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 	public void unparse(PrintWriter pw) {
 		pw.print(getValue());
 	}
-	
+
 	@Override
 	public Calc<?> accept(ExpressionCompiler compiler) {
 		return new ConstantDoubleCalc(NumericType.INSTANCE, getValue().doubleValue());

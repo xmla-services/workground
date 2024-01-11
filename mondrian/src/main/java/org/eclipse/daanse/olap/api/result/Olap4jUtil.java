@@ -17,9 +17,9 @@
 */
 package org.eclipse.daanse.olap.api.result;
 
-import org.olap4j.impl.AbstractNamedList;
-import org.olap4j.impl.Olap4jUtilCompatible;
-import org.olap4j.metadata.NamedList;
+import org.eclipse.daanse.olap.impl.AbstractNamedList;
+import org.eclipse.daanse.olap.impl.NamedList;
+import org.eclipse.daanse.olap.impl.Olap4jUtilCompatible;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -83,9 +83,9 @@ public class Olap4jUtil {
     static {
         String className;
         if (PreJdk15 || Retrowoven) {
-            className = "org.olap4j.impl.Olap4jUtilCompatibleJdk14";
+            className = "org.eclipse.daanse.olap.impl.Olap4jUtilCompatibleJdk14";
         } else {
-            className = "org.olap4j.impl.Olap4jUtilCompatibleJdk15";
+            className = "org.eclipse.daanse.olap.impl.Olap4jUtilCompatibleJdk15";
         }
         try {
             //noinspection unchecked

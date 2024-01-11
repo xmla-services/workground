@@ -50,7 +50,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.olap4j.impl.IdentifierParser.Builder;
+import org.eclipse.daanse.olap.impl.IdentifierParser.Builder;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
@@ -64,7 +64,6 @@ import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
@@ -1604,7 +1603,7 @@ public class FunUtil extends Util {
         evaluator.getSchemaReader(),
         evaluator.getCube(),
         hierarchies );
-    org.olap4j.impl.IdentifierParser.parseTupleList( builder, string );
+    IdentifierParser.parseTupleList( builder, string );
     return builder.tupleList;
   }
 
@@ -1635,7 +1634,7 @@ public class FunUtil extends Util {
           memberList.toArray( members );
         }
       };
-    return org.olap4j.impl.IdentifierParser.parseTuple( builder, string, i );
+    return IdentifierParser.parseTuple( builder, string, i );
   }
 
   /**
@@ -1668,7 +1667,7 @@ public class FunUtil extends Util {
         evaluator.getSchemaReader(),
         evaluator.getCube(),
         hierarchy );
-    org.olap4j.impl.IdentifierParser.parseMemberList( builder, string );
+    IdentifierParser.parseMemberList( builder, string );
     return builder.memberList;
   }
 
@@ -1687,7 +1686,7 @@ public class FunUtil extends Util {
           segmentList.clear();
         }
       };
-    return org.olap4j.impl.IdentifierParser.parseMember( builder, string, i );
+    return IdentifierParser.parseMember( builder, string, i );
   }
 
   static Member parseMember(

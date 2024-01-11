@@ -32,16 +32,14 @@ import java.util.TreeMap;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
-import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util.PropertyList;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
@@ -1287,9 +1285,9 @@ public class JdbcSchema {
             final DatabaseMetaData databaseMetaData = conn.getMetaData();
 
             final String scanSchemaProp =connectionProps.aggregateScanSchema().orElse(getSchemaName());
-               
+
             final String scanCatalogProp =connectionProps.aggregateScanCatalog().orElse(getCatalogName());
-  
+
 
             String[] tableTypes = { "TABLE", "VIEW" };
             if (databaseMetaData.getDatabaseProductName().toUpperCase().indexOf(

@@ -7,13 +7,13 @@
  * Copyright (C) 2001-2005 Julian Hyde
  * Copyright (C) 2005-2019 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * For more information please visit the Project: Hitachi Vantara - Mondrian
- * 
+ *
  * ---- All changes after Fork in 2023 ------------------------
- * 
+ *
  * Project: Eclipse daanse
- * 
+ *
  * Copyright (c) 2023 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
@@ -70,7 +70,9 @@ import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
@@ -89,8 +91,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
-import org.olap4j.impl.Olap4jUtil;
-import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +99,6 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
-import mondrian.olap.Util.PropertyList;
 import mondrian.olap.fun.FunTableImpl;
 import mondrian.olap.fun.GlobalFunTable;
 import mondrian.olap.fun.UdfResolver;
@@ -249,7 +248,7 @@ public class RolapSchema implements Schema {
     {
         this.id = UUID.randomUUID().toString();
         this.key = key;
-        
+
         DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
         this.defaultRole = RoleImpl.createRootRole(this);
@@ -261,8 +260,8 @@ public class RolapSchema implements Schema {
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
-        
-        
+
+
         load(context, rolapConnectionProps);
     }
 
@@ -360,7 +359,7 @@ public class RolapSchema implements Schema {
 
 
 		sha512Bytes = new ByteString((""+xmlSchema.hashCode()).getBytes());
-		
+
 		//todo: use this >jdk19
 //		sha512Bytes = new ByteString(Objects.toIdentityString(xmlSchema).getBytes());
 
@@ -523,9 +522,9 @@ public class RolapSchema implements Schema {
         if (xmlSchema.defaultRole() != null) {
             Role role = lookupRole(xmlSchema.defaultRole());
             if (role == null) {
-            
+
             	String sb= new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString();
-                    
+
                     final RuntimeException ex = new RuntimeException(sb);
                     throw ex;
             } else {
@@ -1097,7 +1096,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 "while instantiating member reader '" + memberReaderClass);
         } else {
             SqlMemberSource source = new SqlMemberSource(hierarchy);
- 
+
                 LOGGER.debug(
                     "Normal cardinality for {}", hierarchy.getDimension());
                 if (MondrianProperties.instance().DisableCaching.get()) {
@@ -1108,7 +1107,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 } else {
                     return new SmartMemberReader(source);
                 }
-     
+
         }
     }
 
@@ -1231,5 +1230,5 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         return nativeRegistry;
     }
 
-   
+
 }

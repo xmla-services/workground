@@ -76,15 +76,6 @@
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
-			<version>1.2.0</version>
-		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.olap4j</groupId>-->
 <!--			<artifactId>olap4j-tck</artifactId>-->
@@ -392,7 +383,7 @@
 			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>
@@ -529,8 +520,8 @@
 					</execution>
 				</executions>
 			</plugin>
-		
-		
+
+
 			<plugin>
 				<groupId>biz.aQute.bnd</groupId>
 				<artifactId>bnd-maven-plugin</artifactId>
