@@ -6,8 +6,8 @@
 	org.osgi.service.http.port=8090,\
     osgi.console=,\
     osgi.console.enable.builtin=true
-	
-	
+
+
 -runee: JavaSE-17
 -runfw: org.apache.felix.framework
 #-runfw: org.eclipse.osgi
@@ -88,8 +88,6 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.repackage.olap4j;version='[1.2.0,1.2.1)',\
-	org.eclipse.daanse.repackage.olap4j.xmla;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.repackage.rhino.engine;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.model.record;version='[0.0.1,0.0.2)',\

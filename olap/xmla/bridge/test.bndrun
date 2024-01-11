@@ -6,7 +6,7 @@
 
 -tester: biz.aQute.tester.junit-platform
 
-# JaCoCo calculates test coverage    
+# JaCoCo calculates test coverage
 -runpath.jacoco:\
 	org.jacoco.agent,\
 	org.jacoco.agent.rt
@@ -72,8 +72,6 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge-tests;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.repackage.olap4j;version='[1.2.0,1.2.1)',\
-	org.eclipse.daanse.repackage.olap4j.xmla;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.repackage.rhino.engine;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.model.record;version='[0.0.1,0.0.2)',\
@@ -96,8 +94,8 @@
 	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
 	slf4j.api;version='[2.0.9,2.0.10)',\
 	slf4j.simple;version='[2.0.9,2.0.10)'
-	
+
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
-    
+
 
