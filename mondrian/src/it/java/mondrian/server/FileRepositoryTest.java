@@ -9,7 +9,6 @@
 */
 package mondrian.server;
 
-import mondrian.olap.MondrianServer;
 import mondrian.server.FileRepository.CatalogInfo;
 
 import junit.framework.TestCase;

@@ -21,7 +21,6 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;

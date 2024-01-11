@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.core.AbstractBasicContext;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
@@ -83,7 +84,6 @@ import org.eclipse.daanse.xmla.model.record.xmla.RestrictionR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.server.MondrianServerImpl;
 import mondrian.xmla.PropertyDefinition;
 import mondrian.xmla.XmlaConstants;
 
@@ -196,7 +196,7 @@ public class OtherDiscoverService {
     public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request) {
         List<DiscoverKeywordsResponseRow> result = new ArrayList<>();
 
-        for (String keyword : MondrianServerImpl.KEYWORD_LIST) {
+        for (String keyword : AbstractBasicContext.KEYWORD_LIST) {
             result.add(new DiscoverKeywordsResponseRowR(keyword));
         }
         return result;

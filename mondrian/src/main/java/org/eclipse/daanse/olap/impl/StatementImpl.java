@@ -2,7 +2,6 @@ package org.eclipse.daanse.olap.impl;
 
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryTimeoutException;

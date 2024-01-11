@@ -85,7 +85,7 @@ import mondrian.util.Pair;
  * </ul>
  * </ul>
  */
-class MonitorImpl implements Monitor, MonitorMXBean {
+public class MonitorImpl implements Monitor, MonitorMXBean {
   private static final Logger LOGGER = LoggerFactory.getLogger( MonitorImpl.class );
   private final Handler handler = new Handler();
 

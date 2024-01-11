@@ -21,6 +21,8 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import mondrian.rolap.RolapConnectionProps;
+import mondrian.rolap.RolapResultShepherd;
+import mondrian.rolap.agg.AggregationManager;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
@@ -39,20 +41,13 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import aQute.bnd.metatype.annotations.Designate;
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionPropsR;
-import mondrian.rolap.RolapResultShepherd;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.MondrianServerImpl;
-import mondrian.server.Statement;
-import mondrian.server.monitor.Monitor;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
-public class BasicContext implements Context {
+public class BasicContext extends AbstractBasicContext  {
 
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
 
@@ -83,14 +78,9 @@ public class BasicContext implements Context {
 	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private ExpressionCompilerFactory expressionCompilerFactory = null;
 
-//    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-//    private QueryProvider queryProvider;
-
 	private BasicContextConfig config;
 
 	private Dialect dialect = null;
-
-	private MondrianServer server;
 
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
@@ -106,13 +96,17 @@ public class BasicContext implements Context {
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
 		}
 		statisticsProvider.initialize(dataSource, getDialect());
+        shepherd = new RolapResultShepherd();
+        aggMgr = new AggregationManager(this);
 
-		server = new MondrianServerImpl(this);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("new MondrianServer: id=" + getId());
+        }
 	}
 
 	@Deactivate
 	public void deactivate(Map<String, Object> coniguration) throws Exception {
-		server.shutdown();
+		shutdown();
 	}
 
 	@Override
@@ -162,8 +156,7 @@ public class BasicContext implements Context {
 
     @Override
     public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
-        RolapConnection rolapConnection = new RolapConnection(this, props);
-        return rolapConnection;
+        return new RolapConnection(this, props);
     }
 
     @Override
@@ -171,51 +164,4 @@ public class BasicContext implements Context {
 		// TODO
 		return null;
 	}
-
-	@Override
-	public void addConnection(RolapConnection rolapConnection) {
-		server.addConnection(rolapConnection);
-
-	}
-
-	@Override
-	public void removeConnection(RolapConnection rolapConnection) {
-		server.removeConnection(rolapConnection);
-
-	}
-
-	@Override
-	public RolapResultShepherd getResultShepherd() {
-		return server.getResultShepherd();
-	}
-
-	@Override
-	public AggregationManager getAggregationManager() {
-		return server.getAggregationManager();
-	}
-
-	@Override
-	public void addStatement(Statement statement) {
-		server.addConnection(null);
-	}
-
-	@Override
-	public void removeStatement(Statement internalStatement) {
-		server.removeStatement(internalStatement);
-	}
-
-	@Override
-	public Monitor getMonitor() {
-		return server.getMonitor();
-	}
-
-	@Override
-	public List<Statement> getStatements(org.eclipse.daanse.olap.api.Connection connection) {
-		return server.getStatementMap().values().stream().filter(stmnt->stmnt.getMondrianConnection().equals(connection)).toList();
-	}
-
-
-
-
-
 }

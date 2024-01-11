@@ -10,7 +10,6 @@ package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.Segment;

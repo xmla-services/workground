@@ -31,7 +31,6 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianServer;
 import mondrian.server.monitor.Monitor;
 import mondrian.server.monitor.ServerInfo;
 

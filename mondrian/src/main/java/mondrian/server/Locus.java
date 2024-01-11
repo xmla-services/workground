@@ -11,7 +11,6 @@ package mondrian.server;
 
 import org.eclipse.daanse.olap.api.Context;
 
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapConnection;
 import mondrian.util.ArrayStack;
 
