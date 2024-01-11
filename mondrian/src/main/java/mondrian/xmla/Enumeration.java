@@ -16,9 +16,9 @@ package mondrian.xmla;
 import java.util.List;
 import java.util.Map;
 
-import org.olap4j.impl.UnmodifiableArrayMap;
-import org.olap4j.metadata.XmlaConstant;
-import org.olap4j.metadata.XmlaConstants;
+import org.eclipse.daanse.olap.impl.Member;
+import org.eclipse.daanse.olap.impl.UnmodifiableArrayMap;
+import org.eclipse.daanse.olap.impl.XmlaConstant;
 
 /**
  * Contains inner classes which define enumerations used in XML for Analysis.
@@ -38,7 +38,7 @@ public class Enumeration {
             "Bitmap which controls which relatives of a member are "
             + "returned",
             RowsetDefinitionType.INTEGER,
-            org.olap4j.metadata.Member.TreeOp.getDictionary());
+            Member.TreeOp.getDictionary());
 
     public static final Enumeration VISUAL_MODE =
         new Enumeration(
@@ -46,21 +46,21 @@ public class Enumeration {
             "This property determines the default behavior for visual "
             + "totals.",
             RowsetDefinitionType.INTEGER,
-            org.olap4j.metadata.XmlaConstants.VisualMode.getDictionary());
+            org.eclipse.daanse.olap.impl.XmlaConstants.VisualMode.getDictionary());
 
     public static final Enumeration METHODS =
         new Enumeration(
             "Methods",
             "Set of methods for which a property is applicable",
             RowsetDefinitionType.ENUMERATION,
-            XmlaConstants.Method.getDictionary());
+            org.eclipse.daanse.olap.impl.XmlaConstants.Method.getDictionary());
 
     public static final Enumeration ACCESS =
         new Enumeration(
             "Access",
             "The read/write behavior of a property",
             RowsetDefinitionType.ENUMERATION,
-            XmlaConstants.Access.getDictionary());
+            org.eclipse.daanse.olap.impl.XmlaConstants.Access.getDictionary());
 
     public static final Enumeration AUTHENTICATION_MODE =
         new Enumeration(
@@ -68,14 +68,14 @@ public class Enumeration {
             "Specification of what type of security mode the data source "
             + "uses.",
             RowsetDefinitionType.ENUM_STRING,
-            XmlaConstants.AuthenticationMode.getDictionary());
+            org.eclipse.daanse.olap.impl.XmlaConstants.AuthenticationMode.getDictionary());
 
     public static final Enumeration PROVIDER_TYPE =
         new Enumeration(
             "ProviderType",
             "The types of data supported by the provider.",
             RowsetDefinitionType.ARRAY,
-            XmlaConstants.ProviderType.getDictionary());
+            org.eclipse.daanse.olap.impl.XmlaConstants.ProviderType.getDictionary());
 
     public Enumeration(
         String name,

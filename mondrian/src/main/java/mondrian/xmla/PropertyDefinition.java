@@ -14,8 +14,8 @@ package mondrian.xmla;
 
 import java.util.Set;
 
-import org.olap4j.impl.Olap4jUtil;
-import org.olap4j.metadata.XmlaConstants;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
+import org.eclipse.daanse.olap.impl.XmlaConstants;
 
 /**
  * Defines an XML for Analysis Property.
@@ -147,7 +147,7 @@ public enum PropertyDefinition {
     Password(
         RowsetDefinitionType.STRING,
         null,
-        org.olap4j.metadata.XmlaConstants.Access.Read,
+        XmlaConstants.Access.Read,
         "",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
         "This property is deprecated in XMLA 1.1. To support legacy applications, the provider accepts but ignores the Password property setting when it is used with the Discover and Execute method"),

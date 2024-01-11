@@ -9,14 +9,8 @@
 
 package mondrian.server;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import org.olap4j.OlapConnection;
-
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 
@@ -86,24 +80,6 @@ public interface Repository {
     List<Map<String, Object>> getDatabases(
         RolapConnection connection);
 
-    /**
-     * Returns an OlapConnection object.
-     * @param server The MondrianServer to use.
-     * @param databaseName The database name. Can be null.
-     * @param catalogName The catalog name. Can be null.
-     * @param roleName The role name. Can be null.
-     * @param props Additional connection properties.
-     * @return An opened olap connection.
-     * @throws SQLException If an error is encountered while
-     * creating the connection.
-     */
-    OlapConnection getConnection(
-        MondrianServer server,
-        String databaseName,
-        String catalogName,
-        String roleName,
-        Properties props)
-        throws SQLException;
 
     /**
      * Shuts down and terminates a repository.

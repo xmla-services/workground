@@ -27,8 +27,8 @@ import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.impl.UnmodifiableArrayList;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
-import org.olap4j.impl.UnmodifiableArrayList;
 
 /**
  * Multi-part identifier.

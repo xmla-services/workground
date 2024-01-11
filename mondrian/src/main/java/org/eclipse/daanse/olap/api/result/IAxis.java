@@ -1,7 +1,5 @@
 package org.eclipse.daanse.olap.api.result;
 
-import org.olap4j.Cell;
-
 import java.util.Locale;
 
 public interface IAxis {

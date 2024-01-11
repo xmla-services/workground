@@ -771,22 +771,6 @@
 				<artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
 				<version>${eigenbase-resgen.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.eclipse.daanse</groupId>
-				<artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
-				<version>${olap4j.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.daanse</groupId>
-				<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
-				<version>${olap4j-xmla.version}</version>
-			</dependency>
 			<!--      <dependency>-->
 			<!--        <groupId>org.olap4j</groupId>-->
 			<!--        <artifactId>olap4j-tck</artifactId>-->
@@ -980,8 +964,6 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>org.eclipse.daanse.repackage.olap4j.xmla</module>
-		<module>org.eclipse.daanse.repackage.olap4j</module>
 		<module>org.eclipse.daanse.repackage.eigenbase.xom</module>
 		<module>org.eclipse.daanse.repackage.eigenbase.resgen</module>
 		<module>org.eclipse.daanse.repackage.eigenbase.properties</module>

@@ -94,6 +94,7 @@ import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -107,7 +108,6 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
@@ -121,18 +121,18 @@ import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
+import org.eclipse.daanse.olap.impl.IdentifierNode;
 import org.eigenbase.xom.XOMUtil;
-import org.olap4j.impl.Olap4jUtil;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
-import org.olap4j.mdx.KeySegment;
-import org.olap4j.mdx.NameSegment;
-import org.olap4j.mdx.Quoting;
+import org.eclipse.daanse.olap.impl.KeySegment;
+import org.eclipse.daanse.olap.impl.NameSegment;
+import org.eclipse.daanse.olap.impl.IdentifierParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -527,7 +527,7 @@ public class Util extends XOMUtil {
      */
     public static List<Segment> parseIdentifier(String s)  {
         return convert(
-            org.olap4j.impl.IdentifierParser.parseIdentifier(s));
+            IdentifierParser.parseIdentifier(s));
     }
 
     /**
