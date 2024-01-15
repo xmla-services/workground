@@ -26,7 +26,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -70,12 +70,12 @@ class GroupingSetQueryTest extends BatchTestCase{
         propSaver.reset();
     }
 
-    private void pripareContext(TestContextWrapper context) {
+    private void pripareContext(TestContext context) {
         // This test warns of missing sql patterns for
         //
         // ACCESS
         // ORACLE
-        final Dialect dialect = getDialect(context.createConnection());
+        final Dialect dialect = getDialect(context.getConnection());
         if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
                 || getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ACCESS
                 || getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE)
@@ -91,10 +91,10 @@ class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupingSetsWithAggregateOverDefaultMember(TestContextWrapper context) {
+    void testGroupingSetsWithAggregateOverDefaultMember(TestContext context) {
         pripareContext(context);
         // testcase for MONDRIAN-705
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         if (getDialect(connection).supportsGroupingSets()) {
             propSaver.set(prop.EnableGroupingSets, true);
         }
@@ -120,10 +120,10 @@ class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupingSetForSingleColumnConstraint(TestContextWrapper context) {
+    void testGroupingSetForSingleColumnConstraint(TestContext context) {
         pripareContext(context);
         propSaver.set(prop.DisableCaching, false);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2, measureUnitSales, tableCustomer, fieldGender, "M");
 
@@ -179,7 +179,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         };
 
         propSaver.set(prop.EnableGroupingSets, true);
-        connection = context.createConnection();
+        connection = context.getConnection();
 
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             assertRequestSql(connection,
@@ -205,7 +205,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestContextWrapper context) {
+    void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestContext context) {
         pripareContext(context);
         if (!(prop.UseAggregates.get()
               && prop.ReadAggregates.get()))
@@ -213,7 +213,7 @@ class GroupingSetQueryTest extends BatchTestCase{
             return;
         }
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales,
             measureUnitSales, tableCustomer, fieldGender, "M");
@@ -244,19 +244,19 @@ class GroupingSetQueryTest extends BatchTestCase{
                 + "group by \"agg_g_ms_pcat_sales_fact_1997\".\"gender\"",
                 26)
         };
-        assertRequestSql(context.createConnection(),
+        assertRequestSql(context.getConnection(),
             new CellRequest[] {request3, request1, request2},
             patternsWithoutGsets);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNotUsingGroupingSet(TestContextWrapper context) {
+    void testNotUsingGroupingSet(TestContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         propSaver.set(prop.EnableGroupingSets, true);
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
@@ -301,13 +301,13 @@ class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupingSetForMultipleMeasureAndSingleConstraint(TestContextWrapper context) {
+    void testGroupingSetForMultipleMeasureAndSingleConstraint(TestContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
         propSaver.set(prop.EnableGroupingSets, true);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
             measureUnitSales, tableCustomer, fieldGender, "M");
@@ -368,13 +368,13 @@ class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestContextWrapper context) {
+    void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
         propSaver.set(prop.EnableGroupingSets, true);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
             measureUnitSales, tableCustomer, fieldGender, "M");
@@ -441,13 +441,13 @@ class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGroupingSetForMultipleColumnConstraint(TestContextWrapper context) {
+    void testGroupingSetForMultipleColumnConstraint(TestContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
         propSaver.set(prop.EnableGroupingSets, true);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
             measureUnitSales, new String[]{tableCustomer, tableTime},
@@ -523,7 +523,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void
-        testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(TestContextWrapper context)
+        testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(TestContext context)
     {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -534,7 +534,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         compoundMembers.add(new String[] {"CANADA", "BC"});
         CellRequestConstraint constraint =
             makeConstraintCountryState(compoundMembers);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
             measureCustomerCount, new String[]{tableCustomer, tableTime},
@@ -588,9 +588,9 @@ class GroupingSetQueryTest extends BatchTestCase{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBug2004202(TestContextWrapper context) {
+    void testBug2004202(TestContext context) {
         pripareContext(context);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member store.allbutwallawalla as\n"
             + " 'aggregate(\n"
             + "    except(\n"

@@ -944,7 +944,7 @@ class AccessControlTest {
         //   from Sales
         //   where ([Marital Status].[S], [Store].[SF LA])
     	final Connection connection = getRestrictedConnection(foodMartContext);
-    	//Connection connection = foodMartContext.createConnection();
+    	//Connection connection = foodMartContext.getConnection();
     	TestUtil.assertQueryReturns(
 			connection,
             "with member [Measures].[California Unit Sales] as "

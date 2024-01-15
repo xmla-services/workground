@@ -17,7 +17,7 @@ import java.io.IOException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -33,8 +33,8 @@ class NullMemberRepresentationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testClosingPeriodMemberLeafWithCustomNullRepresentation(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testClosingPeriodMemberLeafWithCustomNullRepresentation(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' ClosingPeriod().uniquename '\n"
             + "select {[Measures].[Foo]} on columns,\n"
             + "  {[Time].[1997],\n"
@@ -59,10 +59,10 @@ class NullMemberRepresentationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testItemMemberWithCustomNullMemberRepresentation(TestContextWrapper context)
+    void testItemMemberWithCustomNullMemberRepresentation(TestContext context)
         throws IOException
     {
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertExprReturns(connection,
             "[Time].[1997].Children.Item(6).UniqueName",
             "[Time].[" + getNullMemberRepresentation() + "]");
@@ -71,8 +71,8 @@ class NullMemberRepresentationTest {
             "[Time].[" + getNullMemberRepresentation() + "]");
     }
 
-    void testNullMemberWithCustomRepresentation(TestContextWrapper context) throws IOException {
-        Connection connection = context.createConnection();
+    void testNullMemberWithCustomRepresentation(TestContext context) throws IOException {
+        Connection connection = context.getConnection();
         assertExprReturns(connection,
             "[Gender].[All Gender].Parent.UniqueName",
             "[Gender].[" + getNullMemberRepresentation() + "]");

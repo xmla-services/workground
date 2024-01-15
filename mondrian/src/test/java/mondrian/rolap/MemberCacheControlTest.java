@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
@@ -107,8 +107,8 @@ class MemberCacheControlTest {
         return DiffRepository.lookup(MemberCacheControlTest.class);
     }
 
-    private void prepareTestContext(TestContextWrapper context) {
-        final RolapConnection conn = (RolapConnection) context.createConnection();
+    private void prepareTestContext(TestContext context) {
+        final RolapConnection conn = (RolapConnection) context.getConnection();
         final Statement statement = conn.getInternalStatement();
         final Execution execution = new Execution(statement, 0);
         //locus = new Locus(execution, getName(), null);
@@ -138,7 +138,7 @@ class MemberCacheControlTest {
             + "    </Hierarchy>\n"
             + "   </Dimension>"));
          */
-        withSchema(context.getContext(), SchemaModifiers.MemberCacheControlTestModifier::new);
+        withSchema(context, SchemaModifiers.MemberCacheControlTestModifier::new);
 
     }
 
@@ -303,9 +303,9 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFilter(TestContextWrapper context) {
+    void testFilter(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final DiffRepository dr = getDiffRepos();
         final CacheControl cc = conn.getCacheControl(null);
 
@@ -322,12 +322,12 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberOpsFailIfCacheEnabled(TestContextWrapper context) {
+    void testMemberOpsFailIfCacheEnabled(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableRolapCubeMemberCache,
             true);
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
         final MemberEditCommand command =
             cc.createDeleteCommand(findMember(conn, "Sales", "Retail", "OR"));
@@ -348,9 +348,9 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetPropertyCommandOnLeafMember(TestContextWrapper context) {
+    void testSetPropertyCommandOnLeafMember(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final DiffRepository dr = getDiffRepos();
         final CacheControl cc = conn.getCacheControl(null);
 
@@ -405,9 +405,9 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetPropertyCommandOnNonLeafMember(TestContextWrapper context) {
+    void testSetPropertyCommandOnNonLeafMember(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final DiffRepository dr = getDiffRepos();
         final CacheControl cc = conn.getCacheControl(null);
 
@@ -471,9 +471,9 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAddCommand(TestContextWrapper context) {
+    void testAddCommand(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
         final RolapCubeMember caCubeMember =
             (RolapCubeMember) findMember(conn, "Sales", "Retail", "CA");
@@ -687,9 +687,9 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDeleteCommand(TestContextWrapper context) {
+    void testDeleteCommand(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
         final RolapCubeMember sfCubeMember =
             (RolapCubeMember) findMember(
@@ -760,9 +760,9 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMoveCommand(TestContextWrapper context) {
+    void testMoveCommand(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
         final RolapCubeMember caCubeMember =
             (RolapCubeMember) findMember(conn, "Sales", "Retail", "CA");
@@ -846,9 +846,9 @@ class MemberCacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMoveFailBadLevel(TestContextWrapper context) {
+    void testMoveFailBadLevel(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
         final RolapCubeMember caCubeMember =
             (RolapCubeMember) findMember(conn, "Sales", "Retail", "CA");
@@ -928,9 +928,9 @@ class MemberCacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAddCommandNegative(TestContextWrapper context) {
+    void testAddCommandNegative(TestContext context) {
         prepareTestContext(context);
-        final Connection conn = context.createConnection();
+        final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
 
         MemberEditCommand command;
@@ -1040,13 +1040,13 @@ class MemberCacheControlTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFlushHierarchy(TestContextWrapper context) {
+    void testFlushHierarchy(TestContext context) {
         prepareTestContext(context);
-        flushCache(context.createConnection());
+        flushCache(context.getConnection());
         final CacheControl cacheControl =
-            context.createConnection().getCacheControl(null);
+            context.getConnection().getCacheControl(null);
         final Cube salesCube =
-                context.createConnection()
+                context.getConnection()
                 .getSchema().lookupCube("Sales", true);
 
         final Logger logger = RolapUtil.SQL_LOGGER;
@@ -1071,7 +1071,7 @@ class MemberCacheControlTest {
                 };
 
             final Result result =
-                executeQuery(context.createConnection(),
+                executeQuery(context.getConnection(),
                     "select [Store].[Mexico].[Yucatan] on 0 from [Sales]");
             final Member storeYucatanMember =
                 result.getAxes()[0].getPositions().get(0).get(0);
@@ -1093,7 +1093,7 @@ class MemberCacheControlTest {
 					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to an 'all' member.
-                        assertAxisReturns(context.createConnection(),
+                        assertAxisReturns(context.getConnection(),
                             "[Store].Children",
                             "[Store].[Canada]\n"
                             + "[Store].[Mexico]\n"
@@ -1107,7 +1107,7 @@ class MemberCacheControlTest {
 					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to regular member.
-                        assertAxisReturns(context.createConnection(),
+                        assertAxisReturns(context.getConnection(),
                             "[Store].[USA].[CA].Children",
                             "[Store].[USA].[CA].[Alameda]\n"
                             + "[Store].[USA].[CA].[Beverly Hills]\n"
@@ -1126,7 +1126,7 @@ class MemberCacheControlTest {
 					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to regular member.
-                        assertAxisReturns(context.createConnection(),
+                        assertAxisReturns(context.getConnection(),
                             "[Store].[USA].[CA].Children",
                             "[Store].[USA].[CA].[Alameda]\n"
                             + "[Store].[USA].[CA].[Beverly Hills]\n"
@@ -1141,7 +1141,7 @@ class MemberCacheControlTest {
                     @Override
 					public void run() {
                         // Check that <Hierarchy>.Members uses cache.
-                        assertExprReturns(context.createConnection(),
+                        assertExprReturns(context.getConnection(),
                             "Count([Store].Members)", "63");
                     }
                 });
@@ -1150,7 +1150,7 @@ class MemberCacheControlTest {
                     @Override
 					public void run() {
                         // Check that <Level>.Members uses cache.
-                        assertExprReturns(context.createConnection(),
+                        assertExprReturns(context.getConnection(),
                             "Count([Store].[Store Name].Members)", "25");
                     }
                 });
@@ -1179,7 +1179,7 @@ class MemberCacheControlTest {
                     @Override
 					public void run() {
                         // Check that <Level>.Members uses cache.
-                        assertExprReturns(context.createConnection(),
+                        assertExprReturns(context.getConnection(),
                             "Count([Time].[Month].Members)",
                             "24");
                     }
@@ -1190,7 +1190,7 @@ class MemberCacheControlTest {
                     @Override
 					public void run() {
                         // Check that <Level>.Members uses cache.
-                        assertAxisReturns(context.createConnection(),
+                        assertAxisReturns(context.getConnection(),
                             "[Time].[1997].[Q2].Children",
                             "[Time].[1997].[Q2].[4]\n"
                             + "[Time].[1997].[Q2].[5]\n"

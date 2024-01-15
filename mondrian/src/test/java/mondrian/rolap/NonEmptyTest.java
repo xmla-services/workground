@@ -64,7 +64,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -128,7 +127,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian584EnumOrder(TestContextWrapper context) {
+  void testBugMondrian584EnumOrder(TestContext context) {
     // The interpreter results include males before females, which is
     // correct because it is consistent with the explicit order present
     // in the query. Native evaluation returns the females before males,
@@ -147,8 +146,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugCantRestrictSlicerToCalcMember(TestContextWrapper context) throws Exception {
-    assertQueryReturns(context.createConnection(),
+  void testBugCantRestrictSlicerToCalcMember(TestContext context) throws Exception {
+    assertQueryReturns(context.getConnection(),
       "WITH Member [Time].[Time].[Aggr] AS 'Aggregate({[Time].[1998].[Q1], [Time].[1998].[Q2]})' "
         + "SELECT {[Measures].[Store Sales]} ON COLUMNS, "
         + "NON EMPTY Order(TopCount([Customers].[Name].Members,3,[Measures].[Store Sales]),[Measures].[Store Sales],"
@@ -170,7 +169,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAnalyzerPerformanceIssue(TestContextWrapper context) {
+  void testAnalyzerPerformanceIssue(TestContext context) {
     final MondrianProperties mondrianProperties =
       MondrianProperties.instance();
     propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
@@ -179,7 +178,7 @@ class NonEmptyTest extends BatchTestCase {
     propSaver.set( mondrianProperties.EnableNativeNonEmpty, false );
     propSaver.set( mondrianProperties.ResultLimit, 5000000 );
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level], NonEmptyCrossJoin"
         + "([*BASE_MEMBERS_Product], NonEmptyCrossJoin([*BASE_MEMBERS_Customers], [*BASE_MEMBERS_Time])))' "
         + "set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET], ([Measures].[*TOP_Unit Sales_SEL~SUM] <= 2.0))' "
@@ -637,8 +636,8 @@ class NonEmptyTest extends BatchTestCase {
 
 @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug1961163(TestContextWrapper context) throws Exception {
-    assertQueryReturns(context.createConnection(),
+  void testBug1961163(TestContext context) throws Exception {
+    assertQueryReturns(context.getConnection(),
       "with member [Measures].[AvgRevenue] as 'Avg([Store].[Store Name].Members, [Measures].[Store Sales])' "
         + "select NON EMPTY {[Measures].[Store Sales], [Measures].[AvgRevenue]} ON COLUMNS, "
         + "NON EMPTY Filter([Store].[Store Name].Members, ([Measures].[AvgRevenue] < [Measures].[Store Sales])) ON "
@@ -682,9 +681,9 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountWithCalcMemberInSlicer(TestContextWrapper context) {
+  void testTopCountWithCalcMemberInSlicer(TestContext context) {
     // Internal error: can not restrict SQL to calculated Members
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with member [Time].[Time].[First Term] as 'Aggregate({[Time].[1997].[Q1], [Time].[1997].[Q2]})' "
         + "select {[Measures].[Unit Sales]} ON COLUMNS, "
         + "TopCount([Product].[Product Subcategory].Members, 3, [Measures].[Unit Sales]) ON ROWS "
@@ -705,12 +704,12 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testTopCountCacheKeyMustIncludeCount(TestContextWrapper context) {
+  void testTopCountCacheKeyMustIncludeCount(TestContext context) {
     /**
      * When caching topcount results, the number of elements must
      * be part of the cache key
      */
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
         + "TopCount([Product].[Product Subcategory].Members, 2, [Measures].[Unit Sales]) ON ROWS "
         + "from [Sales]",
@@ -724,7 +723,7 @@ class NonEmptyTest extends BatchTestCase {
         + "Row #0: 20,739\n"
         + "Row #1: 11,767\n" );
     // run again with different count
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
         + "TopCount([Product].[Product Subcategory].Members, 3, [Measures].[Unit Sales]) ON ROWS "
         + "from [Sales]",
@@ -996,12 +995,12 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeMembers(TestContextWrapper context) throws Exception {
+  void testVirtualCubeMembers(TestContext context) throws Exception {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
     // ok to use native sql optimization for members on a virtual cube
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       6,
       3,
       "select NON EMPTY {[Measures].[Unit Sales], [Measures].[Warehouse Sales]} ON COLUMNS, "
@@ -1016,7 +1015,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeCJWithRedundantSetBraces(TestContextWrapper context) {
+  void testNativeCJWithRedundantSetBraces(TestContext context) {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
 
@@ -1040,7 +1039,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandAllNonNativeInputs(TestContextWrapper context) {
+  void testExpandAllNonNativeInputs(TestContext context) {
     // This query will not run natively unless the <Dimension>.Children
     // expression is expanded to a member list.
     //
@@ -1075,7 +1074,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandOneNonNativeInput(TestContextWrapper context) {
+  void testExpandOneNonNativeInput(TestContext context) {
     // This query will not be evaluated natively unless the Filter
     // expression is expanded to a member list.
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
@@ -1106,7 +1105,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandNonNativeResourceLimitFailure(TestContextWrapper context) {
+  void testExpandNonNativeResourceLimitFailure(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -1116,7 +1115,7 @@ class NonEmptyTest extends BatchTestCase {
       executeQuery(
         "select "
           + "NonEmptyCrossJoin({[Gender].Children, [Gender].[F]}, {[Store].Children, [Store].[Mexico]}) on columns "
-          + "from [Sales]", context.createConnection() );
+          + "from [Sales]", context.getConnection() );
       fail( "Expected error did not occur" );
     } catch ( Throwable e ) {
       String expectedErrorMsg =
@@ -1131,7 +1130,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandAllMembersInAllInputs(TestContextWrapper context) {
+  void testExpandAllMembersInAllInputs(TestContext context) {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
@@ -1160,7 +1159,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandCalcMembersInAllInputs(TestContextWrapper context) {
+  void testExpandCalcMembersInAllInputs(TestContext context) {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
@@ -1189,7 +1188,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandCalcMemberInputNECJ(TestContextWrapper context) {
+  void testExpandCalcMemberInputNECJ(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
       1,
@@ -1215,7 +1214,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandCalcMembers(TestContextWrapper context) {
+  void testExpandCalcMembers(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
       9,
@@ -1257,7 +1256,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandNestedNonNativeInputs(TestContextWrapper context) {
+  void testExpandNestedNonNativeInputs(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -1296,7 +1295,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandLowMaxConstraints(TestContextWrapper context) {
+  void testExpandLowMaxConstraints(TestContext context) {
     propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
@@ -1340,7 +1339,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandDifferentLevels(TestContextWrapper context) {
+  void testExpandDifferentLevels(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
       278,
@@ -1356,7 +1355,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandTupleInputs1(TestContextWrapper context) {
+  void testExpandTupleInputs1(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
       1,
@@ -1378,7 +1377,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandTupleInputs2(TestContextWrapper context) {
+  void testExpandTupleInputs2(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(context,
       1,
@@ -1400,7 +1399,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandWithOneEmptyInput(TestContextWrapper context) {
+  void testExpandWithOneEmptyInput(TestContext context) {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     boolean requestFreshConnection = true;
     // Query should return empty result.
@@ -1431,8 +1430,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandWithTwoEmptyInputs(TestContextWrapper context) {
-    context.createConnection().getCacheControl( null ).flushSchemaCache();
+  void testExpandWithTwoEmptyInputs(TestContext context) {
+    context.getConnection().getCacheControl( null ).flushSchemaCache();
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     // Query should return empty result.
     checkNotNative(context,
@@ -1463,7 +1462,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testEnumLowMaxConstraints(TestContextWrapper context) {
+  void testEnumLowMaxConstraints(TestContext context) {
     propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     checkNotNative(context,
       12,
@@ -1517,7 +1516,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAllMembersNECJ1(TestContextWrapper context) {
+  void testAllMembersNECJ1(TestContext context) {
     // This query cannot be evaluated natively because of the "All" member.
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -1538,7 +1537,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAllMembersNECJ2(TestContextWrapper context) {
+  void testAllMembersNECJ2(TestContext context) {
     // This query can be evaluated natively because there is at least one
     // non "All" member.
     //
@@ -1575,7 +1574,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAllLevelMembers(TestContextWrapper context) {
+  void testAllLevelMembers(TestContext context) {
     checkNative(context,
       14,
       14,
@@ -1589,7 +1588,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjDescendantsEnumAllOnly(TestContextWrapper context) {
+  void testCjDescendantsEnumAllOnly(TestContext context) {
     checkNative(context,
       9,
       9,
@@ -1605,7 +1604,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testResultIsModifyableCopy(TestContextWrapper context) {
+  void testResultIsModifyableCopy(TestContext context) {
     checkNative(context,
       3,
       3,
@@ -1623,8 +1622,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeTopCount(TestContextWrapper context) {
-    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
+  void testNativeTopCount(TestContext context) {
+    switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -1652,8 +1651,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCmNativeTopCount(TestContextWrapper context) {
-    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
+  void testCmNativeTopCount(TestContext context) {
+    switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -1677,8 +1676,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMeasureAndAggregateInSlicer(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testMeasureAndAggregateInSlicer(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "with member [Store Type].[All Store Types].[All Types] as 'Aggregate({[Store Type].[All Store Types].[Deluxe "
         + "Supermarket],  "
         + "[Store Type].[All Store Types].[Gourmet Supermarket],  "
@@ -1709,8 +1708,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMeasureInSlicer(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testMeasureInSlicer(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,   "
         + "NON EMPTY [Store].[All Stores].[USA].[CA].Children ON ROWS  "
         + "from [Sales]  "
@@ -1735,7 +1734,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCmInTopCount(TestContextWrapper context) {
+  void testCmInTopCount(TestContext context) {
     checkNotNative(context,
       1,
       "with member [Time].[Time].[Jan] as  "
@@ -1749,7 +1748,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCmInSlicer(TestContextWrapper context) {
+  void testCmInSlicer(TestContext context) {
     checkNotNative(context,
       3,
       "with member [Time].[Time].[Jan] as  "
@@ -1761,8 +1760,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCmInSlicerResults(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testCmInSlicerResults(TestContext context) {
+    assertQueryReturns(context.getConnection(),
       "with member [Time].[Time].[Jan] as  "
         + "'Aggregate({[Time].[1998].[Q1].[1], [Time].[1997].[Q1].[1]})'  "
         + "select NON EMPTY {[Measures].[Unit Sales]} ON columns,  "
@@ -1804,7 +1803,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersMembersMembers(TestContextWrapper context) {
+  void testCjMembersMembersMembers(TestContext context) {
     checkNative(context,
       0,
       67,
@@ -1821,7 +1820,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersWithHideIfBlankLeafAndNoAll(TestContextWrapper context) {
+  void testCjMembersWithHideIfBlankLeafAndNoAll(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1835,7 +1834,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
       */
-    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier::new);
+    withSchema(context, SchemaModifiers.NonEmptyTestModifier::new);
     // No 'all' level, and ragged because [Product Name] is hidden if
     // blank.  Native evaluation should be able to handle this query.
     checkNative(context,
@@ -1854,7 +1853,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersWithHideIfBlankLeaf(TestContextWrapper context) {
+  void testCjMembersWithHideIfBlankLeaf(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1869,8 +1868,8 @@ class NonEmptyTest extends BatchTestCase {
         + "</Dimension>" ) );
      */
       RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
           HideMemberIfEnum.IF_BLANK_NAME)));
 
       // [Product Name] can be hidden if it is blank, but native evaluation
@@ -1891,7 +1890,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersWithHideIfParentsNameLeaf(TestContextWrapper context) {
+  void testCjMembersWithHideIfParentsNameLeaf(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1906,8 +1905,8 @@ class NonEmptyTest extends BatchTestCase {
         + "</Dimension>" ) );
      */
       RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
           HideMemberIfEnum.IF_PARENTS_NAME)));
 
       // [Product Name] can be hidden if it it matches its parent name, so
@@ -1927,7 +1926,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersWithHideIfBlankNameAncestor(TestContextWrapper context) {
+  void testCjMembersWithHideIfBlankNameAncestor(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1941,7 +1940,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
      */
-    withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier3::new);
+    withSchema(context, SchemaModifiers.NonEmptyTestModifier3::new);
     // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
@@ -1960,7 +1959,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersWithHideIfParentsNameAncestor(TestContextWrapper context) {
+  void testCjMembersWithHideIfParentsNameAncestor(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1974,7 +1973,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
     */
-      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier3::new);
+      withSchema(context, SchemaModifiers.NonEmptyTestModifier3::new);
       // Since the parent of [Product Name] can be hidden, native evaluation
     // can't handle the query.
     checkNative(context,
@@ -1993,7 +1992,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumWithHideIfBlankLeaf(TestContextWrapper context) {
+  void testCjEnumWithHideIfBlankLeaf(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -2008,8 +2007,8 @@ class NonEmptyTest extends BatchTestCase {
         + "</Dimension>" ) );
       */
       RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getContext().getDatabaseMappingSchemaProviders().get(0).get();
-      context.getContext().setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
+      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      context.setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
           HideMemberIfEnum.IF_BLANK_NAME)));
 
       // [Product Name] can be hidden if it is blank, but native evaluation
@@ -2043,7 +2042,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumEnum(TestContextWrapper context) {
+  void testCjEnumEnum(TestContext context) {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -2067,7 +2066,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjNullInEnum(TestContextWrapper context) {
+  void testCjNullInEnum(TestContext context) {
     propSaver.set(
       MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
       true );
@@ -2085,7 +2084,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjDescendantsEnumAll(TestContextWrapper context) {
+  void testCjDescendantsEnumAll(TestContext context) {
     checkNotNative(context,
       13,
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -2098,7 +2097,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjDescendantsEnum(TestContextWrapper context) {
+  void testCjDescendantsEnum(TestContext context) {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -2120,7 +2119,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumChildren(TestContextWrapper context) {
+  void testCjEnumChildren(TestContext context) {
     // Make sure maxConstraint settting is high enough
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
@@ -2146,7 +2145,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumDifferentLevelsChildren(TestContextWrapper context) {
+  void testCjEnumDifferentLevelsChildren(TestContext context) {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -2154,7 +2153,7 @@ class NonEmptyTest extends BatchTestCase {
       return;
     }
 
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       8,
       5,
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -2168,7 +2167,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjDescendantsMembers(TestContextWrapper context)  {
+  void testCjDescendantsMembers(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2183,7 +2182,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersDescendants(TestContextWrapper context)  {
+  void testCjMembersDescendants(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2199,7 +2198,7 @@ class NonEmptyTest extends BatchTestCase {
   // testcase for bug MONDRIAN-506
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersDescendantsWithNumericArgument(TestContextWrapper context)  {
+  void testCjMembersDescendantsWithNumericArgument(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2214,7 +2213,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjChildrenMembers(TestContextWrapper context)  {
+  void testCjChildrenMembers(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2228,7 +2227,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersChildren(TestContextWrapper context)  {
+  void testCjMembersChildren(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2242,7 +2241,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjMembersMembers(TestContextWrapper context)  {
+  void testCjMembersMembers(TestContext context)  {
     checkNative(context,
       0,
       67,
@@ -2256,7 +2255,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjChildrenChildren(TestContextWrapper context)  {
+  void testCjChildrenChildren(TestContext context)  {
     checkNative(context,
       3,
       3,
@@ -2926,7 +2925,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyUnionQuery(TestContextWrapper context)  {
+  void testNonEmptyUnionQuery(TestContext context)  {
     Result result = executeQuery(
       "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} on columns,\n"
         + " NON EMPTY Hierarchize(\n"
@@ -2940,7 +2939,7 @@ class NonEmptyTest extends BatchTestCase {
         + "       Crossjoin(\n"
         + "         [Customers].[All Customers].[USA].children,\n"
         + "         [Product].[All Products].children) ) )) on rows\n"
-        + "from Sales where ([Time].[1997])", context.createConnection());
+        + "from Sales where ([Time].[1997])", context.getConnection());
     final Axis rowsAxis = result.getAxes()[ 1 ];
     assertEquals( 21, rowsAxis.getPositions().size() );
   }
@@ -2951,7 +2950,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLookupMemberCache(TestContextWrapper context)  {
+  void testLookupMemberCache(TestContext context)  {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
@@ -2960,12 +2959,12 @@ class NonEmptyTest extends BatchTestCase {
 
     // there currently isn't a cube member to children cache, only
     // a shared cache so use the shared smart member reader
-    SmartMemberReader smr = getSmartMemberReader(context.createConnection(), "Store" );
+    SmartMemberReader smr = getSmartMemberReader(context.getConnection(), "Store" );
     MemberCacheHelper smrch = smr.cacheHelper;
     MemberCacheHelper rcsmrch =
       ( (RolapCubeHierarchy.RolapCubeHierarchyMemberReader) smr )
         .getRolapCubeMemberCacheHelper();
-    SmartMemberReader ssmr = getSharedSmartMemberReader(context.createConnection(), "Store" );
+    SmartMemberReader ssmr = getSharedSmartMemberReader(context.getConnection(), "Store" );
     MemberCacheHelper ssmrch = ssmr.cacheHelper;
     clearAndHardenCache( smrch );
     clearAndHardenCache( rcsmrch );
@@ -2973,7 +2972,7 @@ class NonEmptyTest extends BatchTestCase {
 
     RolapResult result =
       (RolapResult) executeQuery(
-        "select {[Store].[All Stores].[USA].[CA].[San Francisco]} on columns from [Sales]", context.createConnection() );
+        "select {[Store].[All Stores].[USA].[CA].[San Francisco]} on columns from [Sales]", context.getConnection() );
     assertTrue(
       ssmrch.mapKeyToMember.size() <= 5, "no additional members should be read:"
                     + ssmrch.mapKeyToMember.size());
@@ -3002,10 +3001,10 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLookupMember(TestContextWrapper context)  {
+  void testLookupMember(TestContext context)  {
     // ok if no exception occurs
     executeQuery(
-      "SELECT DESCENDANTS([Time].[1997], [Month]) ON COLUMNS FROM [Sales]", context.createConnection() );
+      "SELECT DESCENDANTS([Time].[1997], [Month]) ON COLUMNS FROM [Sales]", context.getConnection() );
   }
 
 
@@ -3015,7 +3014,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyCrossJoinList(TestContextWrapper context)  {
+  void testNonEmptyCrossJoinList(TestContext context)  {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, false );
     boolean oldEnableNativeNonEmpty =
@@ -3025,7 +3024,7 @@ class NonEmptyTest extends BatchTestCase {
     executeQuery(
       "select non empty CrossJoin([Customers].[Name].Members, "
         + "{[Promotions].[All Promotions].[Fantastic Discounts]}) "
-        + "ON COLUMNS FROM [Sales]", context.createConnection());
+        + "ON COLUMNS FROM [Sales]", context.getConnection());
     MondrianProperties.instance().EnableNativeNonEmpty.set(
       oldEnableNativeNonEmpty );
   }
@@ -3035,10 +3034,10 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLookupMember2(TestContextWrapper context)  {
+  void testLookupMember2(TestContext context)  {
     // ok if no exception occurs
     executeQuery(
-      "select {[Store].[USA].[Washington]} on columns from [Sales Ragged]", context.createConnection());
+      "select {[Store].[USA].[Washington]} on columns from [Sales Ragged]", context.getConnection());
   }
 
   /**
@@ -3046,9 +3045,9 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalcMemberWithNonEmptyCrossJoin(TestContextWrapper context)  {
+  void testCalcMemberWithNonEmptyCrossJoin(TestContext context)  {
     //etCacheControl( null );
-    flushSchemaCache(context.createConnection());
+    flushSchemaCache(context.getConnection());
     Result result = executeQuery(
       "with member [Measures].[CustomerCount] as \n"
         + "'Count(CrossJoin({[Product].[All Products]}, [Customers].[Name].Members))'\n"
@@ -3057,7 +3056,7 @@ class NonEmptyTest extends BatchTestCase {
         + "NON EMPTY{[Product].[All Products]} ON rows\n"
         + "from [Sales]\n"
         + "where ([Store].[All Stores].[USA].[CA].[San Francisco].[Store 14], [Time].[1997].[Q1].[1])",
-            context.createConnection());
+            context.getConnection());
     Cell c = result.getCell( new int[] { 0, 0 } );
     // we expect 10281 customers, although there are only 20 non-empty ones
     // @see #testLevelMembers
@@ -3066,13 +3065,13 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelMembers(TestContextWrapper context)  {
+  void testLevelMembers(TestContext context)  {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
       return;
     }
-    SmartMemberReader smr = getSmartMemberReader(context.createConnection(), "Customers" );
+    SmartMemberReader smr = getSmartMemberReader(context.getConnection(), "Customers" );
     // use the RolapCubeHierarchy's member cache for levels
     MemberCacheHelper smrch =
       ( (RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader) smr )
@@ -3082,11 +3081,11 @@ class NonEmptyTest extends BatchTestCase {
     clearAndHardenCache( smrich );
 
     // use the shared member cache for mapMemberToChildren
-    SmartMemberReader ssmr = getSharedSmartMemberReader(context.createConnection(), "Customers" );
+    SmartMemberReader ssmr = getSharedSmartMemberReader(context.getConnection(), "Customers" );
     MemberCacheHelper ssmrch = ssmr.cacheHelper;
     clearAndHardenCache( ssmrch );
 
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       50,
       21,
       "select \n"
@@ -3134,9 +3133,9 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelMembersWithoutNonEmpty(TestContextWrapper context)  {
-	context.createConnection().getCacheControl(null).flushSchemaCache();
-    SmartMemberReader smr = getSmartMemberReader(context.createConnection(), "Customers" );
+  void testLevelMembersWithoutNonEmpty(TestContext context)  {
+	context.getConnection().getCacheControl(null).flushSchemaCache();
+    SmartMemberReader smr = getSmartMemberReader(context.getConnection(), "Customers" );
 
     MemberCacheHelper smrch =
       ( (RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader) smr )
@@ -3146,7 +3145,7 @@ class NonEmptyTest extends BatchTestCase {
     MemberCacheHelper smrich = smr.cacheHelper;
     clearAndHardenCache( smrich );
 
-    SmartMemberReader ssmr = getSharedSmartMemberReader(context.createConnection(), "Customers" );
+    SmartMemberReader ssmr = getSharedSmartMemberReader(context.getConnection(), "Customers" );
     MemberCacheHelper ssmrch = ssmr.cacheHelper;
     clearAndHardenCache( ssmrch );
 
@@ -3155,7 +3154,7 @@ class NonEmptyTest extends BatchTestCase {
         + "{[Measures].[Unit Sales]} ON columns,\n"
         + "{[Customers].[All Customers], [Customers].[Name].Members} ON rows\n"
         + "from [Sales]\n"
-        + "where ([Store].[All Stores].[USA].[CA].[San Francisco].[Store 14], [Time].[1997].[Q1].[1])", context.createConnection() );
+        + "where ([Store].[All Stores].[USA].[CA].[San Francisco].[Store 14], [Time].[1997].[Q1].[1])", context.getConnection() );
     Level[] levels = smr.getHierarchy().getLevels();
     Level nameLevel = levels[ levels.length - 1 ];
 
@@ -3202,11 +3201,11 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionMembers(TestContextWrapper context)  {
+  void testDimensionMembers(TestContext context)  {
     // No query should return more than 20 rows. (1 row at 'all' level,
     // 1 row at nation level, 1 at state level, 20 at city level, and 11
     // at customers level = 34.)
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       34,
       34,
       "select \n"
@@ -3222,8 +3221,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberChildrenOfRolapMember(TestContextWrapper context)  {
-    TestCase c = new TestCase(context.createConnection(),
+  void testMemberChildrenOfRolapMember(TestContext context)  {
+    TestCase c = new TestCase(context.getConnection(),
       50,
       4,
       "select \n"
@@ -3239,8 +3238,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberChildrenOfAllMember(TestContextWrapper context)  {
-    TestCase c = new TestCase(context.createConnection(),
+  void testMemberChildrenOfAllMember(TestContext context)  {
+    TestCase c = new TestCase(context.getConnection(),
       50,
       14,
       "select {[Measures].[Unit Sales]} ON columns,\n"
@@ -3254,7 +3253,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberChildrenNoWhere(TestContextWrapper context)  {
+  void testMemberChildrenNoWhere(TestContext context)  {
     // The time dimension is joined because there is no (All) level in the
     // Time hierarchy:
     //
@@ -3274,7 +3273,7 @@ class NonEmptyTest extends BatchTestCase {
     //        `promotion`.`promotion_name`
 
     TestCase c =
-      new TestCase(context.createConnection(),
+      new TestCase(context.getConnection(),
         50,
         48,
         "select {[Measures].[Unit Sales]} ON columns,\n"
@@ -3289,12 +3288,12 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMemberChildrenNameCol(TestContextWrapper context)  {
+  void testMemberChildrenNameCol(TestContext context)  {
     // Expression dependency testing casues false negatives.
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
-    TestCase c = new TestCase(context.createConnection(),
+    TestCase c = new TestCase(context.getConnection(),
       3,
       1,
       "select "
@@ -3314,7 +3313,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoin(TestContextWrapper context)  {
+  void testCrossjoin(TestContext context)  {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and makes this
       // test fail.
@@ -3322,7 +3321,7 @@ class NonEmptyTest extends BatchTestCase {
     }
 
     TestCase c =
-      new TestCase(context.createConnection(),
+      new TestCase(context.getConnection(),
         45,
         4,
         "select \n"
@@ -3340,7 +3339,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyDescendants(TestContextWrapper context)  {
+  void testNonEmptyDescendants(TestContext context)  {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -3348,7 +3347,7 @@ class NonEmptyTest extends BatchTestCase {
       return;
     }
 
-    Connection con = context.createConnection();
+    Connection con = context.getConnection();
     SmartMemberReader smr = getSmartMemberReader( con, "Customers" );
     MemberCacheHelper smrch = smr.cacheHelper;
     clearAndHardenCache( smrch );
@@ -3418,9 +3417,9 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug1412384(TestContextWrapper context)  {
+  void testBug1412384(TestContext context)  {
     // Bug 1412384 causes a NPE in SqlConstraintUtils.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,\n"
         + "NON EMPTY Hierarchize(Union({[Customers].[All Customers]},\n"
         + "[Customers].[All Customers].Children)) ON ROWS\n"
@@ -3439,7 +3438,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeCrossJoin(TestContextWrapper context)  {
+  void testVirtualCubeCrossJoin(TestContext context)  {
     checkNative(context,
       18,
       3,
@@ -3452,7 +3451,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeNonEmptyCrossJoin(TestContextWrapper context)  {
+  void testVirtualCubeNonEmptyCrossJoin(TestContext context)  {
     checkNative(context,
       18,
       3,
@@ -3465,7 +3464,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeNonEmptyCrossJoin3Args(TestContextWrapper context)  {
+  void testVirtualCubeNonEmptyCrossJoin3Args(TestContext context)  {
     checkNative(context,
       3,
       3,
@@ -3479,8 +3478,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotNativeVirtualCubeCrossJoin1(TestContextWrapper context)  {
-    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
+  void testNotNativeVirtualCubeCrossJoin1(TestContext context)  {
+    switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -3503,7 +3502,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotNativeVirtualCubeCrossJoin2(TestContextWrapper context)  {
+  void testNotNativeVirtualCubeCrossJoin2(TestContext context)  {
     // native cross join cannot be used due to the range operator
     checkNotNative(context,
       3,
@@ -3516,8 +3515,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotNativeVirtualCubeCrossJoinUnsupported(TestContextWrapper context)  {
-    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
+  void testNotNativeVirtualCubeCrossJoinUnsupported(TestContext context)  {
+    switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -3643,7 +3642,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeCrossJoinCalculatedMember1(TestContextWrapper context)  {
+  void testVirtualCubeCrossJoinCalculatedMember1(TestContext context)  {
     // calculated member appears in query
     checkNative(context,
       18,
@@ -3659,7 +3658,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVirtualCubeCrossJoinCalculatedMember2(TestContextWrapper context)  {
+  void testVirtualCubeCrossJoinCalculatedMember2(TestContext context)  {
     // calculated member defined in schema
     checkNative(context,
       18,
@@ -3673,7 +3672,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNotNativeVirtualCubeCrossJoinCalculatedMember(TestContextWrapper context)  {
+  void testNotNativeVirtualCubeCrossJoinCalculatedMember(TestContext context)  {
     // native cross join cannot be used due to CurrentMember in the
     // calculated member
     checkNotNative(context,
@@ -3689,7 +3688,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumCalcMembers(TestContextWrapper context)  {
+  void testCjEnumCalcMembers(TestContext context)  {
     // 3 cross joins -- 2 of the 4 arguments to the cross joins are
     // enumerated sets with calculated members
     // should be non-native due to the fix to testCjEnumCalcMembersBug()
@@ -3725,7 +3724,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumCalcMembersBug(TestContextWrapper context)  {
+  void testCjEnumCalcMembersBug(TestContext context)  {
     // make sure NECJ is forced to be non-native
     // before the fix, the query is natively evaluated and result
     // has empty rows for [Store Type].[All Store Types].[HeadQuarters]
@@ -3771,7 +3770,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjEnumEmptyCalcMembers(TestContextWrapper context)  {
+  void testCjEnumEmptyCalcMembers(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3804,7 +3803,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCjUnionEnumCalcMembers(TestContextWrapper context)  {
+  void testCjUnionEnumCalcMembers(TestContext context)  {
     // non-native due to the fix to testCjEnumCalcMembersBug()
     checkNotNative(context,
       46,
@@ -3829,7 +3828,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyWithWeirdDefaultMember(TestContextWrapper context)  {
+  void testNonEmptyWithWeirdDefaultMember(TestContext context)  {
     if ( !Bug.BugMondrian229Fixed ) {
       return;
     }
@@ -3848,10 +3847,10 @@ class NonEmptyTest extends BatchTestCase {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
      */
-      withSchema(context.getContext(), SchemaModifiers.NonEmptyTestModifier4::new);
+      withSchema(context, SchemaModifiers.NonEmptyTestModifier4::new);
     // Check that the grand total is different than when [Time].[1997] is
     // the default member.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select from [Sales]",
       "Axis #0:\n"
         + "{}\n"
@@ -3860,7 +3859,7 @@ class NonEmptyTest extends BatchTestCase {
     // Results of this query agree with MSAS 2000 SP1.
     // The query gives the same results if the default member of [Time]
     // is [Time].[1997] or [Time].[1997].[Q1].[1].
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select\n"
         + "NON EMPTY Crossjoin({[Time].[1997].[Q2].[4]}, [Customers].[Country].members) on columns,\n"
         + "NON EMPTY [Product].[All Products].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Portsmouth]"
@@ -3879,7 +3878,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinNamedSets1(TestContextWrapper context)  {
+  void testCrossJoinNamedSets1(TestContext context)  {
     checkNative(context,
       3,
       3,
@@ -3893,7 +3892,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinNamedSets2(TestContextWrapper context)  {
+  void testCrossJoinNamedSets2(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3916,7 +3915,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinSetWithDifferentParents(TestContextWrapper context)  {
+  void testCrossJoinSetWithDifferentParents(TestContext context)  {
     // Verify that only the members explicitly referenced in the set
     // are returned.  Note that different members are referenced in
     // each level in the time dimension.
@@ -3931,7 +3930,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinSetWithCrossProdMembers(TestContextWrapper context)  {
+  void testCrossJoinSetWithCrossProdMembers(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 6;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3953,7 +3952,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinSetWithSameParent(TestContextWrapper context)  {
+  void testCrossJoinSetWithSameParent(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3975,7 +3974,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinSetWithUniqueLevel(TestContextWrapper context)  {
+  void testCrossJoinSetWithUniqueLevel(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3997,7 +3996,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinMultiInExprAllMember(TestContextWrapper context)  {
+  void testCrossJoinMultiInExprAllMember(TestContext context)  {
     checkNative(context,
       10,
       10,
@@ -4011,7 +4010,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinEvaluatorContext1(TestContextWrapper context)  {
+  void testCrossJoinEvaluatorContext1(TestContext context)  {
     // This test ensures that the proper measure members context is
     // set when evaluating a non-empty cross join.  The context should
     // not include the calculated measure [*TOP_BOTTOM_SET].  If it
@@ -4019,7 +4018,7 @@ class NonEmptyTest extends BatchTestCase {
     // join will try evaluating the calculated member (when it shouldn't)
     // and the calculated member references the cross join, resulting
     // in the loop
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "With "
         + "Set [*NATIVE_CJ_SET] as "
         + "'NonEmptyCrossJoin([*BASE_MEMBERS_Store], [*BASE_MEMBERS_Products])' "
@@ -4071,7 +4070,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinEvaluatorContext2(TestContextWrapper context)  {
+  void testCrossJoinEvaluatorContext2(TestContext context)  {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -4081,7 +4080,7 @@ class NonEmptyTest extends BatchTestCase {
     }
 
     // calculated measure contains a calculated member
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "With Set [*NATIVE_CJ_SET] as "
         + "'NonEmptyCrossJoin([*BASE_MEMBERS_Dates], [*BASE_MEMBERS_Stores])' "
         + "Set [*BASE_MEMBERS_Dates] as '{[Time].[1997].[Q1], [Time].[1997].[Q2]}' "
@@ -4145,13 +4144,13 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVCNativeCJWithIsEmptyOnMeasure(TestContextWrapper context)  {
+  void testVCNativeCJWithIsEmptyOnMeasure(TestContext context)  {
     // Don't use checkNative method here because in the case where
     // native cross join isn't used, the query causes a stack overflow.
     //
     // A measures member is referenced in the IsEmpty() function.  This
     // shouldn't prevent native cross join from being used.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with "
         + "set BM_PRODUCT as {[Product].[All Products].[Drink]} "
         + "set BM_EDU as [Education Level].[Education Level].Members "
@@ -4179,7 +4178,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVCNativeCJWithTopPercent(TestContextWrapper context)  {
+  void testVCNativeCJWithTopPercent(TestContext context)  {
     // The reference to [Store Sales] inside the topPercent function
     // should not prevent native cross joins from being used
     checkNative(context,
@@ -4193,7 +4192,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVCOrdinalExpression(TestContextWrapper context)  {
+  void testVCOrdinalExpression(TestContext context)  {
     // [Customers].[Name] is an ordinal expression.  Make sure ordering
     // is done on the column corresponding to that expression.
     checkNative(context,
@@ -4212,7 +4211,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyWithCalcMeasure(TestContextWrapper context)  {
+  void testNonEmptyWithCalcMeasure(TestContext context)  {
     checkNative(context,
       15,
       6,
@@ -4249,7 +4248,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalculatedSlicerMember(TestContextWrapper context)  {
+  void testCalculatedSlicerMember(TestContext context)  {
     // This test verifies that members(the FILTER members in the query
     // below) on the slicer are ignored in CrossJoin emptiness check.
     // Otherwise, if they are not ignored, stack over flow will occur
@@ -4284,24 +4283,24 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testIndependentSlicerMemberNonNative(TestContextWrapper context)  {
+  void testIndependentSlicerMemberNonNative(TestContext context)  {
     checkIndependentSlicerMemberNative(context, false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testIndependentSlicerMemberNative(TestContextWrapper context)  {
+  void testIndependentSlicerMemberNative(TestContext context)  {
     checkIndependentSlicerMemberNative(context, true );
   }
 
-  private void checkIndependentSlicerMemberNative(TestContextWrapper context, boolean useNative ) {
+  private void checkIndependentSlicerMemberNative(TestContext context, boolean useNative ) {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, useNative );
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
     //final TestContext context = getTestContext().withFreshConnection();
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       assertQueryReturns(connection,
         "with set [p] as '[Product].[Product Family].members' "
@@ -4326,14 +4325,14 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDependentSlicerMemberNonNative(TestContextWrapper context)  {
+  void testDependentSlicerMemberNonNative(TestContext context)  {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, false );
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
     //final TestContext context = getTestContext().withFreshConnection();
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       assertQueryReturns(connection,
         "with set [p] as '[Product].[Product Family].members' "
@@ -4352,14 +4351,14 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDependentSlicerMemberNative(TestContextWrapper context)  {
+  void testDependentSlicerMemberNative(TestContext context)  {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
     //final TestContext context = getTestContext().withFreshConnection();
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     try {
       assertQueryReturns(connection,
         "with set [p] as '[Product].[Product Family].members' "
@@ -4381,7 +4380,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBug1791609NonEmptyCrossJoinEliminatesCalcMember(TestContextWrapper context)  {
+  void testBug1791609NonEmptyCrossJoinEliminatesCalcMember(TestContext context)  {
     if ( !Bug.BugMondrian328Fixed ) {
       return;
     }
@@ -4389,7 +4388,7 @@ class NonEmptyTest extends BatchTestCase {
     //   With NON EMPTY (mondrian.rolap.nonempty) behavior set to true
     //   the following mdx return no result. The same mdx returns valid
     // result when NON EMPTY is turned off.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH \n"
         + "MEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\n"
         + "MEMBER Product.Conditional as 'Iif (Measures.CurrentMember IS Measures.[Calc], "
@@ -4484,7 +4483,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyLevelMembers(TestContextWrapper context)  {
+  void testNonEmptyLevelMembers(TestContext context)  {
     boolean currentNativeNonEmpty =
       MondrianProperties.instance().EnableNativeNonEmpty.get();
     boolean currentNonEmptyOnAllAxis =
@@ -4492,7 +4491,7 @@ class NonEmptyTest extends BatchTestCase {
     try {
       MondrianProperties.instance().EnableNativeNonEmpty.set( false );
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.set( true );
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
         "WITH MEMBER [Measures].[One] AS '1' "
           + "SELECT "
           + "NON EMPTY {[Measures].[One], [Measures].[Store Sales]} ON rows, "
@@ -4537,7 +4536,7 @@ class NonEmptyTest extends BatchTestCase {
 
       if ( Bug.BugMondrian446Fixed ) {
         MondrianProperties.instance().EnableNativeNonEmpty.set( true );
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
           "WITH MEMBER [Measures].[One] AS '1' "
             + "SELECT "
             + "NON EMPTY {[Measures].[One], [Measures].[Store Sales]} ON rows, "
@@ -4590,11 +4589,11 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyResults(TestContextWrapper context)  {
+  void testNonEmptyResults(TestContext context)  {
     // This unit test was failing with a NullPointerException in JPivot
     // after the highcardinality feature was added, I've included it
     // here to make sure it continues to work.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Measures].[Unit Sales], [Measures].[Store Cost]} ON columns, "
         + "NON EMPTY Filter([Product].[Brand Name].Members, ([Measures].[Unit Sales] > 100000.0)) ON rows "
         + "from [Sales] where [Time].[1997]",
@@ -4610,8 +4609,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian412(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testBugMondrian412(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "with member [Measures].[AvgRevenue] as 'Avg([Store].[Store Name].Members, [Measures].[Store Sales])' "
         + "select NON EMPTY {[Measures].[Store Sales], [Measures].[AvgRevenue]} ON COLUMNS, "
         + "NON EMPTY Filter([Store].[Store Name].Members, ([Measures].[AvgRevenue] < [Measures].[Store Sales])) ON "
@@ -4654,8 +4653,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmpyOnVirtualCubeWithNonJoiningDimension(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testNonEmpyOnVirtualCubeWithNonJoiningDimension(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "select non empty {[Warehouse].[Warehouse name].members} on 0,"
         + "{[Measures].[Units Shipped],[Measures].[Unit Sales]} on 1"
         + " from [Warehouse and Sales]",
@@ -4708,8 +4707,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyOnNonJoiningValidMeasure(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testNonEmptyOnNonJoiningValidMeasure(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Unit Sales])'"
         + "select non empty {[Warehouse].[Warehouse name].members} on 0,"
         + "{[Measures].[Units Shipped],[Measures].[vm]} on 1"
@@ -4763,13 +4762,13 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinWithTwoDimensionsJoiningToOppositeBaseCubes(TestContextWrapper context)  {
+  void testCrossjoinWithTwoDimensionsJoiningToOppositeBaseCubes(TestContext context)  {
     // This test formerly expected an empty result set,
     // which is actually inconsistent with SSAS.  Since ValidMeasure forces
     // Warehouse to the [All] level when evaluating the [vm] measure,
     // the results should include each [warehouse name] member intersected
     // with the non-empty Gender members.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Unit Sales])'\n"
         + "select non empty Crossjoin([Warehouse].[Warehouse Name].members, [Gender].[Gender].members) on 0,\n"
         + "{[Measures].[Units Shipped],[Measures].[vm]} on 1\n"
@@ -4862,8 +4861,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossjoinWithOneDimensionThatDoesNotJoinToBothBaseCubes(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testCrossjoinWithOneDimensionThatDoesNotJoinToBothBaseCubes(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Units Shipped])'"
         + "select non empty Crossjoin([Store].[Store Name].members, [Gender].[Gender].members) on 0,"
         + "{[Measures].[Unit Sales],[Measures].[vm]} on 1"
@@ -4956,7 +4955,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLeafMembersOfParentChildDimensionAreNativelyEvaluated(TestContextWrapper context)  {
+  void testLeafMembersOfParentChildDimensionAreNativelyEvaluated(TestContext context)  {
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -4979,7 +4978,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonLeafMembersOfPCDimensionAreNotNativelyEvaluated(TestContextWrapper context)  {
+  void testNonLeafMembersOfPCDimensionAreNotNativelyEvaluated(TestContext context)  {
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -5000,7 +4999,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeWithOverriddenNullMemberRepAndNullConstraint(TestContextWrapper context)  {
+  void testNativeWithOverriddenNullMemberRepAndNullConstraint(TestContext context)  {
     String preMdx = "SELECT FROM [Sales]";
 
     String mdx =
@@ -5012,7 +5011,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  [Store Size in SQFT].[All Store Size in SQFTs].[~Missing ]";
 
     // run an mdx query with the default NullMemberRepresentation
-    executeQuery(preMdx, context.createConnection());
+    executeQuery(preMdx, context.getConnection());
 
     propSaver.set(
       MondrianProperties.instance().NullMemberRepresentation,
@@ -5021,7 +5020,7 @@ class NonEmptyTest extends BatchTestCase {
       MondrianProperties.instance().EnableNonEmptyOnAllAxis,
       true );
     RolapUtil.reloadNullLiteral();
-    executeQuery(mdx, context.createConnection());
+    executeQuery(mdx, context.getConnection());
   }
 
   /**
@@ -5030,8 +5029,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian321(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testBugMondrian321(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "WITH SET [#DataSet#] AS 'Crossjoin({Descendants([Customers].[All Customers], 2)}, {[Product].[All Products]})'"
         + " \n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} on columns, \n"
@@ -5052,7 +5051,7 @@ class NonEmptyTest extends BatchTestCase {
         + "Row #2: 124,366\n"
         + "Row #2: 263,793.22\n" );
 
-    verifySameNativeAndNot(context.createConnection(),
+    verifySameNativeAndNot(context.getConnection(),
       "WITH SET [#DataSet#] AS 'Crossjoin({Descendants([Customers].[All Customers], 2)}, {[Product].[All Products]})'"
         + " \n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} on columns, \n"
@@ -5063,7 +5062,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes(TestContextWrapper context)  {
+  void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes(TestContext context)  {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -5123,12 +5122,12 @@ class NonEmptyTest extends BatchTestCase {
         + "    \"time_by_day\".\"the_year\" ASC NULLS LAST,\n"
         + "    \"promotion\".\"promotion_name\" ASC NULLS LAST",
       611 );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { oraclePattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { oraclePattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testLevelMembersWillConstrainUsingArgsFromAllAxes(TestContextWrapper context)  {
+  void testLevelMembersWillConstrainUsingArgsFromAllAxes(TestContext context)  {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -5170,12 +5169,12 @@ class NonEmptyTest extends BatchTestCase {
         + "order by\n"
         + "    \"promotion\".\"promotion_name\" ASC NULLS LAST",
       347 );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { oraclePattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { oraclePattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeCrossjoinWillExpandFirstLastChild(TestContextWrapper context)  {
+  void testNativeCrossjoinWillExpandFirstLastChild(TestContext context)  {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].firstChild,[Gender].lastChild},{[Measures].[Unit Sales]}) on 0,"
@@ -5235,12 +5234,12 @@ class NonEmptyTest extends BatchTestCase {
         + "    \"time_by_day\".\"the_year\" ASC NULLS LAST,\n"
         + "    \"promotion\".\"promotion_name\" ASC NULLS LAST",
       611 );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { pattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { pattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNativeCrossjoinWillExpandLagInNamedSet(TestContextWrapper context)  {
+  void testNativeCrossjoinWillExpandLagInNamedSet(TestContext context)  {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx =
       "with set [blah] as '{[Gender].lastChild.lag(1),[Gender].[M]}' "
@@ -5302,12 +5301,12 @@ class NonEmptyTest extends BatchTestCase {
         + "    \"time_by_day\".\"the_year\" ASC NULLS LAST,\n"
         + "    \"promotion\".\"promotion_name\" ASC NULLS LAST",
       611 );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { pattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { pattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testConstrainedMeasureGetsOptimized(TestContextWrapper context)  {
+  void testConstrainedMeasureGetsOptimized(TestContext context)  {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Female] as '([Measures].[Unit Sales],[Gender].[Gender].[F])' "
@@ -5343,7 +5342,7 @@ class NonEmptyTest extends BatchTestCase {
         + "\"customer\".\"gender\", \"customer\".\"marital_status\", \"customer\".\"education\", \"customer\""
         + ".\"yearly_income\" order by \"customer\".\"country\" ASC NULLS LAST, \"customer\".\"state_province\" ASC "
         + "NULLS LAST, \"customer\".\"city\" ASC NULLS LAST, \"fname\" || ' ' || \"lname\" ASC NULLS LAST";
-    assertQuerySql(context.createConnection(),
+    assertQuerySql(context.getConnection(),
       mdx,
       new SqlPattern[] {
         new SqlPattern(
@@ -5354,7 +5353,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNestedMeasureConstraintsGetOptimized(TestContextWrapper context)  {
+  void testNestedMeasureConstraintsGetOptimized(TestContext context)  {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Male Married] as '([Measures].[unit sales Male],[Marital Status].[Marital "
@@ -5409,12 +5408,12 @@ class NonEmptyTest extends BatchTestCase {
       DatabaseProduct.ORACLE,
       sqlOracle,
       sqlOracle.length() );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { pattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { pattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonUniformNestedMeasureConstraintsGetOptimized(TestContextWrapper context)  {
+  void testNonUniformNestedMeasureConstraintsGetOptimized(TestContext context)  {
     if ( MondrianProperties.instance().UseAggregates.get() ) {
       // This test can't work with aggregates becaused
       // the aggregate table doesn't include member properties.
@@ -5458,12 +5457,12 @@ class NonEmptyTest extends BatchTestCase {
         + " \"customer\".\"city\" ASC NULLS LAST, "
         + "\"fname\" || ' ' || \"lname\" ASC NULLS LAST",
       852 );
-    assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { pattern } );
+    assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { pattern } );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonUniformConstraintsAreNotUsedForOptimization(TestContextWrapper context)  {
+  void testNonUniformConstraintsAreNotUsedForOptimization(TestContext context)  {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Married] as '([Measures].[Unit Sales],[Marital Status].[Marital Status].[M])' "
@@ -5488,12 +5487,12 @@ class NonEmptyTest extends BatchTestCase {
       sqlOracle,
       sqlOracle.length() );
     assertQuerySqlOrNot(
-      context.createConnection(), mdx, new SqlPattern[] { pattern }, true, false, true );
+      context.getConnection(), mdx, new SqlPattern[] { pattern }, true, false, true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMeasureConstraintsInACrossjoinHaveCorrectResults(TestContextWrapper context)  {
+  void testMeasureConstraintsInACrossjoinHaveCorrectResults(TestContext context)  {
     //http://jira.pentaho.com/browse/MONDRIAN-715
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     String mdx =
@@ -5507,7 +5506,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  non empty "
         + "  [Marital Status].[Marital Status].members on rows"
         + " from sales";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{}\n"
@@ -5819,7 +5818,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testExpandNonNativeWithEnableNativeCrossJoin(TestContextWrapper context)  {
+  void testExpandNonNativeWithEnableNativeCrossJoin(TestContext context)  {
     final MondrianProperties mondrianProperties =
       MondrianProperties.instance();
     propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
@@ -5834,7 +5833,7 @@ class NonEmptyTest extends BatchTestCase {
         + "Level].[All Education Levels], [Gender].[All Gender], [Marital Status].[All Marital Status], [Yearly "
         + "Income].[All Yearly Incomes])}) ON ROWS"
         + " from [Sales]";
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       mdx,
       "Axis #0:\n"
         + "{}\n"
@@ -5870,7 +5869,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyCJWithMultiPositionSlicer(TestContextWrapper context)  {
+  void testNonEmptyCJWithMultiPositionSlicer(TestContext context)  {
     final String mdx =
       "select NON EMPTY NonEmptyCrossJoin([Measures].[Sales Count], [Store].[USA].Children) ON COLUMNS, "
         + "       NON EMPTY CrossJoin({[Customers].[All Customers]}, {([Promotions].[Bag Stuffers] : [Promotions]"
@@ -5958,14 +5957,14 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testFilterChildlessSnowflakeMembers2(TestContextWrapper context)  {
+  void testFilterChildlessSnowflakeMembers2(TestContext context)  {
     if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
       // If FilterChildlessSnowflakeMembers is true, then
       // [Product].[Drink].[Baking Goods].[Coffee] does not even exist!
       return;
     }
     // children across a snowflake boundary
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "select [Product].[Drink].[Baking Goods].[Dry Goods].[Coffee].Children on 0\n"
         + "from [Sales]",
       "Axis #0:\n"
@@ -6088,8 +6087,8 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian897DoubleNamedSetDefinitions(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testBugMondrian897DoubleNamedSetDefinitions(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "WITH SET [CustomerSet] as {[Customers].[Canada].[BC].[Burnaby].[Alexandra Wellington], [Customers].[USA].[WA]"
         + ".[Tacoma].[Eric Coleman]} "
         + "SET [InterestingCustomers] as [CustomerSet] "
@@ -6505,7 +6504,7 @@ class NonEmptyTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyAggregateSlicerIsNative(TestContextWrapper context)  {
+  void testNonEmptyAggregateSlicerIsNative(TestContext context)  {
 	RolapSchemaPool.instance().clear();
     final String mdx =
       "select NON EMPTY\n"
@@ -6642,7 +6641,7 @@ class NonEmptyTest extends BatchTestCase {
         mysqlNativeCrossJoinQuery,
         triggerSql );
 
-    assertQuerySql(context.createConnection(),  mdx, new SqlPattern[] { mysqlPattern } );
+    assertQuerySql(context.getConnection(),  mdx, new SqlPattern[] { mysqlPattern } );
 
     checkNative(context,
       20,
@@ -6703,7 +6702,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithConflictingMemberInSlicer(TestContextWrapper context)  {
+  void testMondrian2202WithConflictingMemberInSlicer(TestContext context)  {
     // Validates correct behavior of the crossjoin optimizer and
     // native non empty when a calculated member should override the
     // slicer context.
@@ -6718,7 +6717,7 @@ class NonEmptyTest extends BatchTestCase {
     };
 
     for ( String timeMember : referencesToTimeMember ) {
-      assertQueryReturns(context.createConnection(),
+      assertQueryReturns(context.getConnection(),
         "with member [Measures].[YTD Unit Sales] as "
           + "'Sum(Ytd(" + timeMember + "), [Measures].[Unit Sales])'\n"
           + "select\n"
@@ -6751,10 +6750,10 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithCrossjoin(TestContextWrapper context)  {
+  void testMondrian2202WithCrossjoin(TestContext context)  {
     // the [overrideContext] measure should have a value for the tuple
     // on rows, given it overrides the time member on the axis.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH  member measures.[overrideContext] as '( measures.[unit sales], Time.[1997].Q1 )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
         + "NON EMPTY crossjoin( Time.[1998].Q1, [Marital Status].[M]) on 1\n"
@@ -6767,7 +6766,7 @@ class NonEmptyTest extends BatchTestCase {
         + "{[Time].[1998].[Q1], [Marital Status].[M]}\n"
         + "Row #0: 33,101\n" );
     // same thing w/ nonemptycrossjoin().
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH  member measures.[overrideContext] as '( measures.[unit sales], Time.[1997].Q1 )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
         + "NonEmptyCrossjoin( Time.[1998].Q1, [Marital Status].[M]) on 1\n"
@@ -6784,7 +6783,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithLevelMembers(TestContextWrapper context)  {
+  void testMondrian2202WithLevelMembers(TestContext context)  {
     // verifies SqlConstraintFactory.getLevelMembersConstraint() doesn't
     // generate a conflicting constraint.  Since CJAF attempts to collect
     // constraints from all axes, it's possible for it to construct
@@ -6792,7 +6791,7 @@ class NonEmptyTest extends BatchTestCase {
     // In this case it would result in
     //    (year = 1997 AND year = 1998)
     // if potential conflicts aren't removed.
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH  member measures.[overrideContext] as '( measures.[unit sales], Time.[1997].Q1 )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
         + "NON EMPTY [Marital Status].[Marital Status].members on 1,\n"
@@ -6813,9 +6812,9 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithAggTopCountSet(TestContextWrapper context)  {
+  void testMondrian2202WithAggTopCountSet(TestContext context)  {
     // in slicer
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with member measures.top5Prod as "
         + "'aggregate(topcount("
         + "crossjoin( {time.[1997]}, product.[product name].members), 5, measures.[unit sales]), measures.[unit "
@@ -6832,7 +6831,7 @@ class NonEmptyTest extends BatchTestCase {
         + "Row #0: 398\n"
         + "Row #1: 385\n" );
     // in CJ
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with member measures.top5Prod as "
         + "'aggregate(topcount("
         + "crossjoin( {time.[1997]}, product.[product name].members), 5, measures.[unit sales]), measures.[unit "
@@ -6852,8 +6851,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithParameter(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testMondrian2202WithParameter(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "WITH "
         + "member measures.[overrideContext] as "
         + "'( measures.[unit sales], "
@@ -6868,7 +6867,7 @@ class NonEmptyTest extends BatchTestCase {
         + "Axis #2:\n"
         + "{[Time].[1998].[Q1], [Marital Status].[M]}\n"
         + "Row #0: 33,101\n" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH member Time.param as 'Parameter(\"timeParam\",[Time],[Time].[1997].[Q1],\"?\")' "
         + "member measures.[overrideContext] as '( measures.[unit sales], Time.param )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
@@ -6885,12 +6884,12 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithFilter(TestContextWrapper context)  {
+  void testMondrian2202WithFilter(TestContext context)  {
     // Validates correct results when a filtered set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
     // RolapNativeSql cannot nativize tuple calculations.)
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH  member measures.[overrideContext] as "
         + " '( measures.[unit sales], Time.[1997].Q1 )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
@@ -6910,12 +6909,12 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithTopCount(TestContextWrapper context)  {
+  void testMondrian2202WithTopCount(TestContext context)  {
     // Validates correct results when a topcount set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
     // RolapNativeSql cannot nativize tuple calculations.)
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH  member measures.[overrideContext] as "
         + " '( measures.[unit sales], Time.[1997].Q1 )'\n"
         + "SELECT measures.[overrideContext] on 0, \n"
@@ -6936,9 +6935,9 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrian2202WithMeasureContainingCJ(TestContextWrapper context)  {
+  void testMondrian2202WithMeasureContainingCJ(TestContext context)  {
     // NECJ nested within a measure expression
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "with  "
         + " member gender.agg as 'aggregate(NonEmptyCrossJoin({Gender.F}, {[Marital Status].[Marital Status]"
         + ".members}))' "
@@ -6960,8 +6959,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202RunningSum(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(),
+  void testMon2202RunningSum(TestContext context)  {
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Customers_])))'\n"
@@ -7027,7 +7026,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202AnalyzerTopCount(TestContextWrapper context)  {
+  void testMon2202AnalyzerTopCount(TestContext context)  {
     // will throw an exception if native cj is not used.
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
@@ -7062,15 +7061,15 @@ class NonEmptyTest extends BatchTestCase {
         + "CROSSJOIN([*SORTED_COL_AXIS],[*BASE_MEMBERS__Measures_]) ON COLUMNS\n"
         + ",[*SORTED_ROW_AXIS] ON ROWS\n"
         + "FROM [Sales]\n"
-        + "WHERE ([*CJ_SLICER_AXIS])", context.createConnection());
+        + "WHERE ([*CJ_SLICER_AXIS])", context.getConnection());
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202AnalyzerFilter(TestContextWrapper context)  {
+  void testMon2202AnalyzerFilter(TestContext context)  {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_]))'\n"
@@ -7140,10 +7139,10 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202AnalyzerPercOfMeasure(TestContextWrapper context)  {
+  void testMon2202AnalyzerPercOfMeasure(TestContext context)  {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_]))'\n"
@@ -7223,10 +7222,10 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202AnalyzerRunningSum(TestContextWrapper context)  {
+  void testMon2202AnalyzerRunningSum(TestContext context)  {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'FILTER(NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_])), NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
@@ -7316,10 +7315,10 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter(TestContextWrapper context)  {
+  void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter(TestContext context)  {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Promotion Media_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Store_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
@@ -7394,10 +7393,10 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount(TestContextWrapper context)  {
+  void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount(TestContext context)  {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Promotion Media_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],[*BASE_MEMBERS__Time_])))'\n"
@@ -7486,8 +7485,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonEmptyCrossJoinCalcMember(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(), new StringBuilder()
+  void testNonEmptyCrossJoinCalcMember(TestContext context)  {
+    assertQueryReturns(context.getConnection(), new StringBuilder()
         .append( "WITH \n" )
         .append( "MEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\n" )
         .append( "MEMBER Product.Conditional as 'Iif(Measures.CurrentMember IS Measures.[Calc], + Measures.CurrentMember, " )
@@ -7520,8 +7519,8 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCrossJoinCalcMember(TestContextWrapper context)  {
-    assertQueryReturns(context.createConnection(), String.format(
+  void testCrossJoinCalcMember(TestContext context)  {
+    assertQueryReturns(context.getConnection(), String.format(
       "WITH \nMEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\nMEMBER Product.Conditional as 'Iif"
         + "(Measures.CurrentMember IS Measures.[Calc], + Measures.CurrentMember, null)', SOLVE_ORDER=2000\nSET [S2] AS "
         + "'{[Store].MEMBERS}' \nSET [S1] AS 'CROSSJOIN({[Customers].[All Customers]},{Product.Conditional})' \nSELECT "
@@ -7593,7 +7592,7 @@ class NonEmptyTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContextWrapper context)  {
+  void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContext context)  {
     // http://jira.pentaho.com/browse/ANALYZER-3630
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     /*
@@ -7634,8 +7633,8 @@ class NonEmptyTest extends BatchTestCase {
           + "  </VirtualCube>"
           + "</Schema>" );
      */
-      withSchema(context.getContext(),  SchemaModifiers.NonEmptyTestModifier7::new);
-      verifySameNativeAndNot(context.createConnection(),
+      withSchema(context,  SchemaModifiers.NonEmptyTestModifier7::new);
+      verifySameNativeAndNot(context.getConnection(),
       "select "
         + " [Measures].[dummyMeasure2] on COLUMNS, "
         + " NON EMPTY CrossJoin([Store].[Store State].Members, Time.[Year].members) ON ROWS "

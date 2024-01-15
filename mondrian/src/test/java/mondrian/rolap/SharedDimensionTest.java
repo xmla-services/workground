@@ -13,7 +13,6 @@ package mondrian.rolap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -413,17 +412,17 @@ class SharedDimensionTest  {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian286(TestContextWrapper context) {
+    void testBugMondrian286(TestContext context) {
         // Test for sourceforge.net bug 1711865 (MONDRIAN-286).
         // Use the default FoodMart schema
-        assertQueryReturns(context.createConnection(), querySF1711865, resultSF1711865);
+        assertQueryReturns(context.getConnection(), querySF1711865, resultSF1711865);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testStoreCube(TestContextWrapper context) {
+    void testStoreCube(TestContext context) {
         // Use the default FoodMart schema
-        assertQueryReturns(context.createConnection(), queryStoreCube, resultStoreCube);
+        assertQueryReturns(context.getConnection(), queryStoreCube, resultStoreCube);
     }
 
     /**

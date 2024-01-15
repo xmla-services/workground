@@ -18,7 +18,7 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -33,8 +33,8 @@ class SetFunDefTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetWithMembersFromDifferentHierarchies(TestContextWrapper context) {
-        assertQueryFailsInSetValidation(context.createConnection(),
+    void testSetWithMembersFromDifferentHierarchies(TestContext context) {
+        assertQueryFailsInSetValidation(context.getConnection(),
             "with member store.x as "
             + "'{[Gender].[M],[Store].[USA].[CA]}' "
             + " SELECT store.x on 0, [measures].[customer count] on 1 from sales");
@@ -42,8 +42,8 @@ class SetFunDefTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSetWith2TuplesWithDifferentHierarchies(TestContextWrapper context) {
-        assertQueryFailsInSetValidation(context.createConnection(),
+    void testSetWith2TuplesWithDifferentHierarchies(TestContext context) {
+        assertQueryFailsInSetValidation(context.getConnection(),
             "with member store.x as '{([Gender].[M],[Store].[All Stores].[USA].[CA]),"
             + "([Store].[USA].[OR],[Gender].[F])}'\n"
             + " SELECT store.x on 0, [measures].[customer count] on 1 from sales");

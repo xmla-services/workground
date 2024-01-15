@@ -32,7 +32,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -59,7 +59,7 @@ class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUnaryTupleList(TestContextWrapper context) {
+    void testUnaryTupleList(TestContext context) {
         // empty list
         final TupleList list0 = new UnaryTupleList();
         assertTrue(list0.isEmpty());
@@ -69,7 +69,7 @@ class TupleListTest {
 
         TupleList list1 = new UnaryTupleList();
         assertEquals(list0, list1);
-        final Member storeUsaMember = xxx(context.createConnection(),"[Store].[USA]");
+        final Member storeUsaMember = xxx(context.getConnection(),"[Store].[USA]");
         list1.add(Collections.singletonList(storeUsaMember));
         assertFalse(list1.isEmpty());
         assertEquals(1, list1.size());
@@ -98,8 +98,8 @@ class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testArrayTupleList(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testArrayTupleList(TestContext context) {
+        Connection connection = context.getConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection,"[Gender].[M]");
 
@@ -181,8 +181,8 @@ class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDelegatingTupleList(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testDelegatingTupleList(TestContext context) {
+        Connection connection = context.getConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection, "[Gender].[M]");
         final Member storeUsaMember = xxx(connection, "[Store].[USA]");
@@ -208,9 +208,9 @@ class TupleListTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDelegatingTupleListSlice(TestContextWrapper context) {
+    void testDelegatingTupleListSlice(TestContext context) {
         // Functional test.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
             "select {[Measures].[Store Sales]} ON COLUMNS, Hierarchize(Except({[Customers].[All Customers], [Customers].[All Customers].Children}, {[Customers].[All Customers]})) ON ROWS from [Sales] ",
             "Axis #0:\n"

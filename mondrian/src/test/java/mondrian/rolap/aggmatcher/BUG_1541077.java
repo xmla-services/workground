@@ -16,7 +16,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -38,9 +38,9 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testStoreCount(TestContextWrapper context) throws Exception {
+    public void testStoreCount(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -51,12 +51,12 @@ public class BUG_1541077 extends AggTableTestCase {
 
         String mdx =
             "select {[Measures].[Store Count]} on columns from Cheques";
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
         propSaver.set(props.UseAggregates, true);
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
 
         assertTrue(v.equals(v1));
@@ -64,9 +64,9 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSalesCount(TestContextWrapper context) throws Exception {
+    public void testSalesCount(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -77,12 +77,12 @@ public class BUG_1541077 extends AggTableTestCase {
 
         String mdx =
             "select {[Measures].[Sales Count]} on columns from Cheques";
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
         propSaver.set(props.UseAggregates, true);
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
 
         assertTrue(v.equals(v1));
@@ -90,9 +90,9 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalAmount(TestContextWrapper context) throws Exception {
+    public void testTotalAmount(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -103,12 +103,12 @@ public class BUG_1541077 extends AggTableTestCase {
 
         String mdx =
             "select {[Measures].[Total Amount]} on columns from Cheques";
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
         propSaver.set(props.UseAggregates, false);
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
 
         assertTrue(v.equals(v1));
@@ -116,9 +116,9 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testBug1541077(TestContextWrapper context) throws Exception {
+    public void testBug1541077(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -129,13 +129,13 @@ public class BUG_1541077 extends AggTableTestCase {
 
         String mdx = "select {[Measures].[Avg Amount]} on columns from Cheques";
 
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getFormattedValue();
 
         // get value with aggregates
         propSaver.set(props.UseAggregates, true);
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getFormattedValue();
 
         assertTrue(v.equals(v1));

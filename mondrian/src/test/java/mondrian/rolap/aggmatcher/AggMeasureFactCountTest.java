@@ -35,7 +35,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -76,13 +75,13 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     @Override
-    protected void prepareContext(TestContextWrapper context) {
+    protected void prepareContext(TestContext context) {
         super.prepareContext(context);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDefaultRecognition(TestContextWrapper context) {
+    void testDefaultRecognition(TestContext context) {
         prepareContext(context);
         String sqlMysql = ""
                 + "select\n"
@@ -99,12 +98,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), List.of()), sqlMysql);
+        verifySameAggAndNot(context, QUERY, getAggSchema(List.of(), List.of()), sqlMysql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggName(TestContextWrapper context) {
+    void testAggName(TestContext context) {
     	prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -178,13 +177,13 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
+        verifySameAggAndNot(context, QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testFactColumnNotExists(TestContextWrapper context) {
+    void testFactColumnNotExists(TestContext context) {
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -241,7 +240,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "</AggName>\n";
         */
         try {
-            verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables));
+            verifySameAggAndNot(context, QUERY, getAggSchema(List.of(), aggTables));
             fail("Should throw mondrian exception");
         } catch (MondrianException e) {
             assertTrue
@@ -253,7 +252,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnUpperCase(TestContextWrapper context) {
+    void testMeasureFactColumnUpperCase(TestContext context) {
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -328,12 +327,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
+        assertQuerySql(context, QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnNotExist(TestContextWrapper context) {
+    void testMeasureFactColumnNotExist(TestContext context) {
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -408,12 +407,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
+        assertQuerySql(context, QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testWithoutMeasureFactColumnElement(TestContextWrapper context) {
+    void testWithoutMeasureFactColumnElement(TestContext context) {
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -472,12 +471,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
+        assertQuerySql(context, QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMeasureFactColumnAndAggFactCountNotExist(TestContextWrapper context) {
+    void testMeasureFactColumnAndAggFactCountNotExist(TestContext context) {
         prepareContext(context);
 
         List<MappingAggTable> aggTables = List.of(
@@ -538,7 +537,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "</AggName>\n";
         */
         try {
-            assertQuerySql(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), "");
+            assertQuerySql(context, QUERY, getAggSchema(List.of(), aggTables), "");
             fail("Should have thrown mondrian exception");
         } catch (MondrianException e) {
             assertEquals
@@ -550,7 +549,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggNameDifferentColumnNames(TestContextWrapper context) {
+    void testAggNameDifferentColumnNames(TestContext context) {
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
             AggExcludeRBuilder.builder()
@@ -630,12 +629,12 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_csv_different_column_names`.`the_year`,\n"
                 + "    `agg_csv_different_column_names`.`quarter`";
 
-        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(aggExcludes, aggTables), aggSql);
+        verifySameAggAndNot(context, QUERY, getAggSchema(aggExcludes, aggTables), aggSql);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggDivideByZero(TestContextWrapper context) {
+    void testAggDivideByZero(TestContext context) {
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
             AggExcludeRBuilder.builder()
@@ -709,13 +708,13 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "Row #2: 3\n"
                 + "Row #2: 3\n";
 
-        withSchema(context.getContext(), getAggSchema(aggExcludes, aggTables));
-        assertQueryReturns(context.getContext().getConnection(), QUERY, result);
+        withSchema(context, getAggSchema(aggExcludes, aggTables));
+        assertQueryReturns(context.getConnection(), QUERY, result);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAggPattern(TestContextWrapper context) {
+    void testAggPattern(TestContext context) {
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(AggPatternRBuilder.builder()
             .pattern("agg_c_6_fact_csv_2016")
@@ -781,7 +780,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
                 + "    `agg_c_6_fact_csv_2016`.`the_year`,\n"
                 + "    `agg_c_6_fact_csv_2016`.`quarter`";
 
-        verifySameAggAndNot(context.getContext(), QUERY, getAggSchema(List.of(), aggTables), aggSql);
+        verifySameAggAndNot(context, QUERY, getAggSchema(List.of(), aggTables), aggSql);
     }
 
     private Function<MappingSchema, RDbMappingSchemaModifier> getAggSchema(List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {

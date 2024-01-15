@@ -27,7 +27,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -58,12 +58,12 @@ class DrillThroughFieldListTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testOneJoin(TestContextWrapper context) {
+  void testOneJoin(TestContext context) {
     String mdx = "SELECT\n"
         + "[Measures].[Unit Sales] ON COLUMNS,\n"
         + "[Time].[Quarter].[Q1] ON ROWS\n"
         + "FROM [Sales]";
-    Result result = executeQuery(context.createConnection(), mdx);
+    Result result = executeQuery(context.getConnection(), mdx);
 
     RolapCell rCell = (RolapCell)result.getCell(new int[] { 0, 0 });
 
@@ -78,7 +78,7 @@ class DrillThroughFieldListTest {
         .asList(returnMeasureAttribute, returnLevelAttribute);
 
     String expectedSql;
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
@@ -129,12 +129,12 @@ class DrillThroughFieldListTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testOneJoinTwoMeasures(TestContextWrapper context) {
+  void testOneJoinTwoMeasures(TestContext context) {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
         + "[Time].[Quarter].[Q1] ON ROWS\n"
         + "FROM [Sales]";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     Result result = executeQuery(connection, mdx);
 
     RolapCell rCell = (RolapCell)result.getCell(new int[] { 0, 0 });
@@ -204,13 +204,13 @@ class DrillThroughFieldListTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testTwoJoins(TestContextWrapper context) {
+  void testTwoJoins(TestContext context) {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
         + "NONEMPTYCROSSJOIN({[Time].[Quarter].[Q1]},"
         + " {[Product].[Product Name].[Good Imported Beer]}) ON ROWS\n"
         + "FROM [Sales]";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     Result result = executeQuery(connection, mdx);
 
     RolapCell rCell = (RolapCell)result.getCell(new int[] { 0, 0 });
@@ -288,11 +288,11 @@ class DrillThroughFieldListTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testNoJoin(TestContextWrapper context) {
+  void testNoJoin(TestContext context) {
     String mdx = "SELECT\n"
         + "Measures.[Store Sqft] on COLUMNS\n"
         + "FROM [Store]";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     Result result = executeQuery(connection, mdx);
 
     RolapCell rCell = (RolapCell)result.getCell(new int[] { 0 });
@@ -334,12 +334,12 @@ class DrillThroughFieldListTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testVirtualCube(TestContextWrapper context) {
+  void testVirtualCube(TestContext context) {
     String mdx = " SELECT\n"
         + " [Measures].[Unit Sales] ON COLUMNS\n"
         + " FROM [Warehouse and Sales]\n"
         + " WHERE [Gender].[F]";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     Result result = executeQuery(connection, mdx);
 
     RolapCell rCell = (RolapCell)result.getCell(new int[] { 0 });

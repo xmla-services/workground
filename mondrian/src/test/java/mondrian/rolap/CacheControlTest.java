@@ -34,7 +34,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -256,10 +256,10 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCreateCellRegion(TestContextWrapper context) {
+    void testCreateCellRegion(TestContext context) {
         // Execute a query.
         final RolapConnection connection =
-            ((RolapConnection) context.createConnection());
+            ((RolapConnection) context.getConnection());
         final CacheControl cacheControl = new CacheControlImpl(connection);
         final CellRegion region =
             createCellRegion(connection, cacheControl);
@@ -271,9 +271,9 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNormalize2(TestContextWrapper context) {
+    void testNormalize2(TestContext context) {
         // Execute a query.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final CacheControl cacheControl = connection.getCacheControl(null);
 
         final CellRegion region =
@@ -300,8 +300,8 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFlush(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testFlush(TestContext context) {
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
             "SELECT {[Product].[Product Department].MEMBERS} ON AXIS(0),\n"
             + "{{[Gender].[Gender].MEMBERS}, {[Gender].[All Gender]}} ON AXIS(1)\n"
@@ -453,11 +453,11 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPartialFlush(TestContextWrapper context) {
+    void testPartialFlush(TestContext context) {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         flushCache(connection);
 
         // Execute a query.
@@ -521,12 +521,12 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPartialFlush_2(TestContextWrapper context) throws Exception {
+    void testPartialFlush_2(TestContext context) throws Exception {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw);
         final CacheControl cacheControl =
@@ -559,12 +559,12 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPartialFlushRange(TestContextWrapper context) {
+    void testPartialFlushRange(TestContext context) {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         flushCache(connection);
 
         // Execute a query.
@@ -877,8 +877,8 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNegative(TestContextWrapper context) {
-        final Connection connection = context.createConnection();
+    void testNegative(TestContext context) {
+        final Connection connection = context.getConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
         final SchemaReader schemaReader = salesCube.getSchemaReader(null);
         final CacheControl cacheControl = connection.getCacheControl(null);
@@ -1023,8 +1023,8 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCrossjoin(TestContextWrapper context) {
-        final Connection connection = context.createConnection();
+    void testCrossjoin(TestContext context) {
+        final Connection connection = context.getConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
         final CacheControl cacheControl = connection.getCacheControl(null);
 
@@ -1132,7 +1132,7 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNormalize(TestContextWrapper context) {
+    void testNormalize(TestContext context) {
         // Create
         // Union(
         //    Crossjoin(
@@ -1150,7 +1150,7 @@ class CacheControlTest {
         //          [Gender].[F])
         //       [Time].[1997].[Q1])
         //
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         final CacheControl cacheControl =
             new CacheControlImpl(
                 (RolapConnection) connection);
@@ -1205,8 +1205,8 @@ class CacheControlTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFlushNonPrimedContent(TestContextWrapper context) throws Exception {
-        Connection connection = context.createConnection();
+    void testFlushNonPrimedContent(TestContext context) throws Exception {
+        Connection connection = context.getConnection();
         flushCache(connection);
         final CacheControl cacheControl = connection.getCacheControl(null);
         final Cube cube =
@@ -1225,12 +1225,12 @@ class CacheControlTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1094(TestContextWrapper context) throws Exception {
+    void testMondrian1094(TestContext context) throws Exception {
         final String query =
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "NON EMPTY {[Store].[All Stores].Children} ON ROWS \n"
             + "from [Sales] \n";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         flushCache(connection);
 
         assertQueryReturns(connection,

@@ -27,7 +27,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -265,7 +265,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
 
     @Override
-	protected void prepareContext(TestContextWrapper context) {
+	protected void prepareContext(TestContext context) {
         try {
             super.prepareContext(context);
         }
@@ -278,9 +278,9 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testSingleJoin(TestContextWrapper context) throws Exception {
+    void testSingleJoin(TestContext context) throws Exception {
     	super.prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -290,7 +290,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
 
         // We expect the correct cell value + 1 if the agg table is used.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -305,9 +305,9 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testComplexJoin(TestContextWrapper context) throws Exception {
+    void testComplexJoin(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -317,7 +317,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
 
         // We expect the correct cell value + 1 if the agg table is used.
-        assertQueryReturns(context.getContext().getConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -332,7 +332,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
         final String mdx2 =
             "select {[Measures].[Unit Sales]} on columns, {[dimension.network].[line class].Members} on rows from [foo]";
         // We expect the correct cell value + 1 if the agg table is used.
-        assertQueryReturns(context.getContext().getConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx2,
             "Axis #0:\n"
             + "{}\n"
@@ -347,16 +347,16 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testComplexJoinDefaultRecognizer(TestContextWrapper context) throws Exception {
+    void testComplexJoinDefaultRecognizer(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
         // We expect the correct cell value + 2 if the agg table is used.
         final String mdx =
             "select {[Measures].[Unit Sales]} on columns, {[dimension.distributor].[line class].Members} on rows from [foo2]";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -371,7 +371,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
         final String mdx2 =
             "select {[Measures].[Unit Sales]} on columns, {[dimension.network].[line class].Members} on rows from [foo2]";
         // We expect the correct cell value + 2 if the agg table is used.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx2,
             "Axis #0:\n"
             + "{}\n"
@@ -386,7 +386,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testSsasCompatNamingInAgg(TestContextWrapper context) throws Exception {
+    void testSsasCompatNamingInAgg(TestContext context) throws Exception {
         prepareContext(context);
         // MONDRIAN-1085
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -613,11 +613,11 @@ class NonCollapsedAggTest extends AggTableTestCase {
             }
         }
 
-        withSchema(context.getContext(), TestSsasCompatNamingInAggModifier::new);
+        withSchema(context, TestSsasCompatNamingInAggModifier::new);
 
         final String mdx =
                 "select {[Measures].[Unit Sales]} on columns, {[dimension].[tenant].[tenant].Members} on rows from [testSsas]";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -635,7 +635,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMondrian1325(TestContextWrapper context) {
+    void testMondrian1325(TestContext context) {
         prepareContext(context);
         final String query1 =
             "SELECT\n"
@@ -678,10 +678,10 @@ class NonCollapsedAggTest extends AggTableTestCase {
                 null,
                 null));
         */
-        withSchema(context.getContext(), TestMondrian1325Modifier::new);
+        withSchema(context, TestMondrian1325Modifier::new);
 
 
-        executeQuery(query2, context.createConnection());
+        executeQuery(query2, context.getConnection());
     }
 
     protected Function<MappingSchema, RDbMappingSchemaModifier> getModifierFunction(){

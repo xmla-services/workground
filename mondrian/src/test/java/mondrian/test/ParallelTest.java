@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -37,9 +37,9 @@ class ParallelTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testParallelSchemaFlush(TestContextWrapper context) {
+    void testParallelSchemaFlush(TestContext context) {
         // 5 threads, 8 cycles each, flush cache 1/10 of the time
-        checkSchemaFlush(context.createConnection(), 5, 8, 10);
+        checkSchemaFlush(context.getConnection(), 5, 8, 10);
     }
 
     /**

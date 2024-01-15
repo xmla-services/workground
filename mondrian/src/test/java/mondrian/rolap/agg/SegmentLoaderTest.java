@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -73,8 +73,8 @@ class SegmentLoaderTest extends BatchTestCase {
     private SegmentCacheManager cacheMgr;
     private Statement statement;
 
-    private void prepareContext(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    private void prepareContext(TestContext context) {
+        Connection connection = context.getConnection();
         cacheMgr =
             ((RolapConnection) connection)
                 .getContext().getAggregationManager().cacheMgr;
@@ -116,11 +116,11 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testRollup(TestContextWrapper context) {
+    void testRollup(TestContext context) {
         prepareContext(context);
         for (boolean rollup : new Boolean[] {true, false}) {
             PrintWriter pw = new PrintWriter(System.out);
-            context.createConnection().getCacheControl(pw).flushSchemaCache();
+            context.getConnection().getCacheControl(pw).flushSchemaCache();
             pw.flush();
             propSaver.set(
                 MondrianProperties.instance().DisableCaching,
@@ -132,10 +132,10 @@ class SegmentLoaderTest extends BatchTestCase {
                 "select \"time_by_day\".\"the_year\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" from \"sales_fact_1997\" \"sales_fact_1997\", \"time_by_day\" \"time_by_day\" where \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" group by \"time_by_day\".\"the_year\"";
             final String queryMySQL =
                 "select `time_by_day`.`the_year` as `c0`, sum(`sales_fact_1997`.`unit_sales`) as `m0` from `sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day` where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` group by `time_by_day`.`the_year`";
-            TestUtil.executeQuery(context.createConnection(),
+            TestUtil.executeQuery(context.getConnection(),
                 "select {[Store].[Store Country].Members} on rows, {[Time].[Time].[Year].Members} on columns from [Sales]");
             assertQuerySqlOrNot(
-                context.createConnection(),
+                context.getConnection(),
                 "select {[Time].[Time].[Year].Members} on columns from [Sales]",
                 new SqlPattern[] {
                     new SqlPattern(
@@ -157,11 +157,11 @@ class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments(TestContextWrapper context) throws ExecutionException, InterruptedException {
+    void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments(TestContext context) throws ExecutionException, InterruptedException {
         prepareContext(context);
-        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
+        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.getConnection());
 
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
         ArrayList<GroupingSet> groupingSets =
             new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
@@ -240,11 +240,11 @@ class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testLoadWithWithNullInRollupColumn(TestContextWrapper context) throws ExecutionException, InterruptedException {
+    void testLoadWithWithNullInRollupColumn(TestContext context) throws ExecutionException, InterruptedException {
         prepareContext(context);
-        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
+        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.getConnection());
 
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
         ArrayList<GroupingSet> groupingSets =
             new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
@@ -276,11 +276,11 @@ class SegmentLoaderTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void
-        testLoadWithMockResultsForLoadingSummaryAndDetailedSegmentsUsingSparse(TestContextWrapper context) throws ExecutionException, InterruptedException {
+        testLoadWithMockResultsForLoadingSummaryAndDetailedSegmentsUsingSparse(TestContext context) throws ExecutionException, InterruptedException {
         prepareContext(context);
-        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
+        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.getConnection());
 
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
         ArrayList<GroupingSet> groupingSets =
             new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
@@ -360,10 +360,10 @@ class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testLoadWithMockResultsForLoadingOnlyDetailedSegments(TestContextWrapper context) throws ExecutionException,
+    void testLoadWithMockResultsForLoadingOnlyDetailedSegments(TestContext context) throws ExecutionException,
             InterruptedException {
         prepareContext(context);
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
         ArrayList<GroupingSet> groupingSets =
             new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
@@ -400,11 +400,11 @@ class SegmentLoaderTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void
-        testProcessDataForGettingGroupingSetsBitKeysAndLoadingAxisValueSet(TestContextWrapper context) throws SQLException {
+        testProcessDataForGettingGroupingSetsBitKeysAndLoadingAxisValueSet(TestContext context) throws SQLException {
         prepareContext(context);
-        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
+        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.getConnection());
 
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
 
         List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
@@ -481,11 +481,11 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProcessDataForSettingNullAxis(TestContextWrapper context)
+    void testProcessDataForSettingNullAxis(TestContext context)
         throws SQLException
     {
         prepareContext(context);
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
 
         final SqlStatement stmt =
             new MockSqlStatement(
@@ -525,11 +525,11 @@ class SegmentLoaderTest extends BatchTestCase {
     // PDI-16150
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProcessBinaryData(TestContextWrapper context)
+    void testProcessBinaryData(TestContext context)
             throws SQLException
     {
         prepareContext(context);
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
 
         String binaryData0 = "11011";
         String binaryData1 = "01011";
@@ -576,11 +576,11 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProcessDataForNonGroupingSetsScenario(TestContextWrapper context)
+    void testProcessDataForNonGroupingSetsScenario(TestContext context)
         throws SQLException
     {
         prepareContext(context);
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
         final List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"1997", "Food", "Deli", "F", "5990"});
         data.add(new Object[]{"1997", "Food", "Deli", "M", "6047"});
@@ -707,7 +707,7 @@ class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetGroupingBitKey(TestContextWrapper context) throws SQLException {
+    void testGetGroupingBitKey(TestContext context) throws SQLException {
         prepareContext(context);
         Object[] data = {
             "1997", "Food", "Deli", "M", "6047", 0, 0, 0, 0
@@ -743,11 +743,11 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGroupingSetsUtilForMissingGroupingBitKeys(TestContextWrapper context) {
+    void testGroupingSetsUtilForMissingGroupingBitKeys(TestContext context) {
         prepareContext(context);
         List<GroupingSet> groupingSets = new ArrayList<>();
-        groupingSets.add(getDefaultGroupingSet(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnGender(context.createConnection()));
+        groupingSets.add(getDefaultGroupingSet(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnGender(context.getConnection()));
         GroupingSetsList detail = new GroupingSetsList(groupingSets);
 
         List<BitKey> bitKeysList = detail.getRollupColumnsBitKeyList();
@@ -760,8 +760,8 @@ class SegmentLoaderTest extends BatchTestCase {
         assertEquals(key, bitKeysList.get(1));
 
         groupingSets = new ArrayList<>();
-        groupingSets.add(getDefaultGroupingSet(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnGenderAndProductFamily(context.createConnection()));
+        groupingSets.add(getDefaultGroupingSet(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnGenderAndProductFamily(context.getConnection()));
         bitKeysList = new GroupingSetsList(groupingSets)
             .getRollupColumnsBitKeyList();
         assertEquals(
@@ -788,9 +788,9 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGroupingSetsUtilSetsDetailForRollupColumns(TestContextWrapper context) {
+    void testGroupingSetsUtilSetsDetailForRollupColumns(TestContext context) {
         prepareContext(context);
-        RolapStar.Measure measure = getMeasure(context.createConnection(), cubeNameSales, measureUnitSales);
+        RolapStar.Measure measure = getMeasure(context.getConnection(), cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
         RolapStar.Column year = star.lookupColumn(tableTime, fieldYear);
         RolapStar.Column productFamily =
@@ -800,9 +800,9 @@ class SegmentLoaderTest extends BatchTestCase {
         RolapStar.Column gender = star.lookupColumn(tableCustomer, fieldGender);
 
         List<GroupingSet> groupingSets = new ArrayList<>();
-        groupingSets.add(getDefaultGroupingSet(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
+        groupingSets.add(getDefaultGroupingSet(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.getConnection()));
         GroupingSetsList detail = new GroupingSetsList(groupingSets);
 
         List<RolapStar.Column> rollupColumnsList = detail.getRollupColumns();
@@ -811,7 +811,7 @@ class SegmentLoaderTest extends BatchTestCase {
         assertEquals(productDepartment, rollupColumnsList.get(1));
 
         groupingSets
-            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.createConnection()));
+            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         rollupColumnsList = detail.getRollupColumns();
         assertEquals(3, rollupColumnsList.size());
@@ -820,7 +820,7 @@ class SegmentLoaderTest extends BatchTestCase {
         assertEquals(year, rollupColumnsList.get(2));
 
         groupingSets
-            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.createConnection()));
+            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         rollupColumnsList = detail.getRollupColumns();
         assertEquals(4, rollupColumnsList.size());
@@ -877,9 +877,9 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGroupingSetsUtilSetsForDetailForRollupColumns(TestContextWrapper context) {
+    void testGroupingSetsUtilSetsForDetailForRollupColumns(TestContext context) {
         prepareContext(context);
-        RolapStar.Measure measure = getMeasure(context.createConnection(), cubeNameSales, measureUnitSales);
+        RolapStar.Measure measure = getMeasure(context.getConnection(), cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
         RolapStar.Column year = star.lookupColumn(tableTime, fieldYear);
         RolapStar.Column productFamily =
@@ -889,9 +889,9 @@ class SegmentLoaderTest extends BatchTestCase {
         RolapStar.Column gender = star.lookupColumn(tableCustomer, fieldGender);
 
         List<GroupingSet> groupingSets = new ArrayList<>();
-        groupingSets.add(getDefaultGroupingSet(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
+        groupingSets.add(getDefaultGroupingSet(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.getConnection()));
         GroupingSetsList detail = new GroupingSetsList(groupingSets);
 
         List<RolapStar.Column> rollupColumnsList = detail.getRollupColumns();
@@ -900,7 +900,7 @@ class SegmentLoaderTest extends BatchTestCase {
         assertEquals(productDepartment, rollupColumnsList.get(1));
 
         groupingSets
-            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.createConnection()));
+            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         rollupColumnsList = detail.getRollupColumns();
         assertEquals(3, rollupColumnsList.size());
@@ -909,7 +909,7 @@ class SegmentLoaderTest extends BatchTestCase {
         assertEquals(year, rollupColumnsList.get(2));
 
         groupingSets
-            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.createConnection()));
+            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         rollupColumnsList = detail.getRollupColumns();
         assertEquals(4, rollupColumnsList.size());
@@ -925,25 +925,25 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGroupingSetsUtilSetsForGroupingFunctionIndex(TestContextWrapper context) {
+    void testGroupingSetsUtilSetsForGroupingFunctionIndex(TestContext context) {
         prepareContext(context);
         List<GroupingSet> groupingSets = new ArrayList<>();
-        groupingSets.add(getDefaultGroupingSet(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
-        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
+        groupingSets.add(getDefaultGroupingSet(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnProductDepartment(context.getConnection()));
+        groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.getConnection()));
         GroupingSetsList detail = new GroupingSetsList(groupingSets);
         assertEquals(0, detail.findGroupingFunctionIndex(3));
         assertEquals(1, detail.findGroupingFunctionIndex(2));
 
         groupingSets
-            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.createConnection()));
+            .add(getGroupingSetRollupOnGenderAndProductDepartmentAndYear(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         assertEquals(0, detail.findGroupingFunctionIndex(3));
         assertEquals(1, detail.findGroupingFunctionIndex(2));
         assertEquals(2, detail.findGroupingFunctionIndex(0));
 
         groupingSets
-            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.createConnection()));
+            .add(getGroupingSetRollupOnProductFamilyAndProductDepartment(context.getConnection()));
         detail = new GroupingSetsList(groupingSets);
         assertEquals(0, detail.findGroupingFunctionIndex(3));
         assertEquals(1, detail.findGroupingFunctionIndex(2));
@@ -953,11 +953,11 @@ class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetGroupingColumnsList(TestContextWrapper context) {
+    void testGetGroupingColumnsList(TestContext context) {
         prepareContext(context);
-        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
+        GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.getConnection());
 
-        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
+        GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.getConnection());
 
 
         RolapStar.Column[] detailedColumns =

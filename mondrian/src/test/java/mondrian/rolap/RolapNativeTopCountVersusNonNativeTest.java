@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -71,15 +70,15 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount_ImplicitCountMeasure(TestContextWrapper context) throws Exception {
-        assertResultsAreEqual(context.createConnection(),
+    void testTopCount_ImplicitCountMeasure(TestContext context) throws Exception {
+        assertResultsAreEqual(context.getConnection(),
             "Implicit Count Measure", IMPLICIT_COUNT_MEASURE_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount_SumMeasure(TestContextWrapper context) throws Exception {
-        assertResultsAreEqual(context.createConnection(),
+    void testTopCount_SumMeasure(TestContext context) throws Exception {
+        assertResultsAreEqual(context.getConnection(),
             "Sum Measure", SUM_MEASURE_QUERY);
     }
 
@@ -100,32 +99,32 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_Countries(TestContextWrapper context) throws Exception {
-        assertResultsAreEqual(context.createConnection(),
+    void testEmptyCellsAreShown_Countries(TestContext context) throws Exception {
+        assertResultsAreEqual(context.getConnection(),
             "Empty Cells Are Shown - Countries",
             EMPTY_CELLS_ARE_SHOWN_COUNTRIES_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_States(TestContextWrapper context) throws Exception {
-        assertResultsAreEqual(context.createConnection(),
+    void testEmptyCellsAreShown_States(TestContext context) throws Exception {
+        assertResultsAreEqual(context.getConnection(),
             "Empty Cells Are Shown - States",
             EMPTY_CELLS_ARE_SHOWN_STATES_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreShown_ButNoMoreThanReallyExist(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testEmptyCellsAreShown_ButNoMoreThanReallyExist(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Empty Cells Are Shown - But no more than really exist",
             EMPTY_CELLS_ARE_SHOWN_NOT_MORE_THAN_EXIST_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Empty Cells Are Hidden - When NON EMPTY is declared explicitly",
             EMPTY_CELLS_ARE_HIDDEN_WHEN_NON_EMPTY_QUERY);
     }
@@ -164,32 +163,32 @@ class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_States(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testMimicsHeadWhenTwoParams_States(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Two Parameters - States",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_Cities(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testMimicsHeadWhenTwoParams_Cities(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Two Parameters - Cities",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Two Parameters - Shows not more than really exist",
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_QUERY);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty(TestContextWrapper context) {
-        assertResultsAreEqual(context.createConnection(),
+    void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty(TestContext context) {
+        assertResultsAreEqual(context.getConnection(),
             "Two Parameters - Does not ignore NON EMPTY",
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_QUERY);
     }

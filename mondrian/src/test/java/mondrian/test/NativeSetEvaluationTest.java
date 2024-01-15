@@ -48,7 +48,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -2163,19 +2162,19 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionUsageWithDifferentNameExecutedNatively(TestContextWrapper context) {
+  void testDimensionUsageWithDifferentNameExecutedNatively(TestContext context) {
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<DimensionUsage name=\"PurchaseDate\" source=\"Time\" foreignKey=\"time_id\"/>" ));
      */
-	  withSchema(context.getContext(), SchemaModifiers.NativeSetEvaluationTestModifier::new);
+	  withSchema(context, SchemaModifiers.NativeSetEvaluationTestModifier::new);
 
       String mdx = ""
       + "with member Measures.q1Sales as '([PurchaseDate].[1997].[Q1], Measures.[Unit Sales])'\n"
       + "select NonEmptyCrossjoin([PurchaseDate].[1997].[Q1], Gender.Gender.members) on 0 \n"
       + "from Sales where Measures.q1Sales";
-    Result result = executeQuery(mdx, context.createConnection());
+    Result result = executeQuery(mdx, context.getConnection());
 
     checkNative(context, mdx, result);
     RolapSchemaPool.instance().clear();
@@ -2183,12 +2182,12 @@ protected void assertQuerySql(Connection connection,
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDimensionUsageExecutedNatively(TestContextWrapper context) {
+  void testDimensionUsageExecutedNatively(TestContext context) {
     String mdx = ""
       + "with member Measures.q1Sales as '([Time].[1997].[Q1], Measures.[Unit Sales])'\n"
       + "select NonEmptyCrossjoin( [Time].[1997].[Q1], Gender.Gender.members) on 0 \n"
       + "from Sales where Measures.q1Sales";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     Result result = executeQuery(mdx, connection);
 
     checkNative(context, mdx, result );

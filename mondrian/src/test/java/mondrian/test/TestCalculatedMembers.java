@@ -28,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.opentest4j.AssertionFailedError;
@@ -67,11 +66,11 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberInCube(TestContextWrapper context) {
-        assertExprReturns(context.createConnection(), "[Measures].[Profit]", "$339,610.90");
+     void testCalculatedMemberInCube(TestContext context) {
+        assertExprReturns(context.getConnection(), "[Measures].[Profit]", "$339,610.90");
 
         // Testcase for bug 829012.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Avg Salary], [Measures].[Org Salary]} ON columns,\n"
             + "{([Time].[1997], [Store].[All Stores], [Employees].[All Employees])} ON rows\n"
             + "from [HR]\n"
@@ -89,14 +88,14 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberInCubeViaApi(TestContextWrapper context) {
-        Cube salesCube = getSalesCube(context.createConnection(), "Sales");
+     void testCalculatedMemberInCubeViaApi(TestContext context) {
+        Cube salesCube = getSalesCube(context.getConnection(), "Sales");
         salesCube.createCalculatedMember(
             "<CalculatedMember name='Profit2'"
             + "  dimension='Measures'"
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]'/>");
 
-        String s = executeExpr(context.createConnection(), "[Measures].[Profit2]");
+        String s = executeExpr(context.getConnection(), "[Measures].[Profit2]");
         assertEquals("339,610.90", s);
 
         // should fail if member of same name exists
@@ -140,8 +139,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberInCubeWithProps(TestContextWrapper context) {
-        Cube salesCube = getSalesCube(context.createConnection(), "Sales");
+     void testCalculatedMemberInCubeWithProps(TestContext context) {
+        Cube salesCube = getSalesCube(context.getConnection(), "Sales");
 
         // member with a property
         salesCube.createCalculatedMember(
@@ -152,7 +151,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "</CalculatedMember>");
 
         // note that result uses format string
-        Result result = executeQuery("select {[Measures].[Profit3]} on columns from Sales", context.createConnection());
+        Result result = executeQuery("select {[Measures].[Profit3]} on columns from Sales", context.getConnection());
         String s = result.getCell(new int[]{0}).getFormattedValue();
         assertEquals("339611", s);
 
@@ -226,7 +225,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]+"
             + "     [Measures].[FooBar]'>"
             + "</CalculatedMember>");
-        result = executeQuery("select {[Measures].[Profit4]} on columns from Sales", context.createConnection());
+        result = executeQuery("select {[Measures].[Profit4]} on columns from Sales", context.getConnection());
         s = result.getCell(new int[]{0}).getFormattedValue();
         assertEquals("339,610.90", s);
     }
@@ -243,10 +242,10 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberInCubeAndQuery(TestContextWrapper context) {
+     void testCalculatedMemberInCubeAndQuery(TestContext context) {
         // Profit is defined in the cube.
         // Profit Change is defined in the query.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Measures].[Profit Change]\n"
             + " AS '[Measures].[Profit] - ([Measures].[Profit], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Profit], [Measures].[Profit Change]} ON COLUMNS,\n"
@@ -271,11 +270,11 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testQueryCalculatedMemberOverridesCube(TestContextWrapper context) {
+     void testQueryCalculatedMemberOverridesCube(TestContext context) {
         // Profit is defined in the cube, and has a format string "$#,###".
         // We define it in a query to make sure that the format string in the
         // cube doesn't change.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Measures].[Profit]\n"
             + " AS '(Measures.[Store Sales] - Measures.[Store Cost])', FORMAT_STRING='#,###' \n"
             + "SELECT {[Measures].[Profit]} ON COLUMNS,\n"
@@ -291,7 +290,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
         // Note that the Profit measure defined against the cube has
         // a format string preceded by "$".
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT {[Measures].[Profit]} ON COLUMNS,\n"
             + " {[Time].[1997].[Q2]} ON ROWS\n"
             + "FROM [Sales]",
@@ -306,7 +305,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testQueryCalcMemberOverridesShallowerStoredMember(TestContextWrapper context) {
+     void testQueryCalcMemberOverridesShallowerStoredMember(TestContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
             return;
@@ -316,7 +315,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // or the calculated member "[Time].[Time2].[1997].[1998]"?
         // In SSAS, the calc member gets chosen, even though it is not as
         // good a match.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Time].[Weekly].[1998].[1997] as 4\n"
             + " select [Time].[Weekly].[1997] on 0\n"
             + " from [Sales]",
@@ -326,7 +325,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "{[Time].[Weekly].[1998].[1997]}\n"
             + "Row #0: 4\n");
         // does not match if last segment is different
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Time].[Weekly].[1998].[1997xxx] as 4\n"
             + " select [Time].[Weekly].[1997] on 0\n"
             + " from [Sales]",
@@ -343,13 +342,13 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testEarlierCalcMember(TestContextWrapper context) {
+     void testEarlierCalcMember(TestContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
             return;
         }
         // SSAS returns 2
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + " member [Time].[Time].[1997].[Q1].[1999] as 1\n"
             + " member [Time].[Time].[1997].[Q1].[1998] as 2\n"
@@ -366,7 +365,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void _testWhole(TestContextWrapper context) {
+     void _testWhole(TestContext context) {
         // "allmembers" tests compatibility with MSAS
 
         executeQuery(
@@ -446,7 +445,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "   [Store].[USA].[CA],\n"
             + "   [Store].[USA].[CA].[San Francisco]}) on columns,\n"
             + " AddCalculatedMembers([Measures].members) on rows\n"
-            + " from Sales", context.createConnection());
+            + " from Sales", context.getConnection());
 
         // Repeat time-related measures with more time members.
         Result result = executeQuery(
@@ -472,16 +471,16 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "   [Store].[USA].[CA].[San Francisco]},\n"
             + "  [Time].[Month].members) on columns,\n"
             + " AddCalculatedMembers([Measures].members) on rows\n"
-            + " from Sales", context.createConnection());
+            + " from Sales", context.getConnection());
         assertNotNull(result);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberCaption(TestContextWrapper context) {
+     void testCalculatedMemberCaption(TestContext context) {
         String mdx =
             "select {[Measures].[Profit Growth]} on columns from Sales";
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Axis axis0 = result.getAxes()[0];
         Position pos0 = axis0.getPositions().get(0);
         Member profGrowth = pos0.get(0);
@@ -491,7 +490,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberIsSetFails(TestContextWrapper context) {
+     void testCalcMemberIsSetFails(TestContext context) {
         // A member which is a set, and more important, cannot be converted to
         // a value, is an error.
         String queryString =
@@ -506,7 +505,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         queryString =
             "with member [Measures].[Foo] as ' ([Measures].[Unit Sales], [Gender].[F]) '"
             + "select {[Measures].[Foo]} on columns from [Sales]";
-        final Result result = executeQuery(queryString, context.createConnection());
+        final Result result = executeQuery(queryString, context.getConnection());
         Util.discard(result);
 
         // Level cannot be converted.
@@ -515,10 +514,10 @@ import static org.opencube.junit5.TestUtil.withSchema;
             "Member expression '[Customers].[Country]' must not be a set");
 
         // Hierarchy can be converted.
-        assertExprReturns(context.createConnection(), "[Customers].[Customers]", "266,773");
+        assertExprReturns(context.getConnection(), "[Customers].[Customers]", "266,773");
 
         // Dimension can be converted, if unambiguous.
-        assertExprReturns(context.createConnection(), "[Customers]", "266,773");
+        assertExprReturns(context.getConnection(), "[Customers]", "266,773");
 
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // SSAS 2005 does not have default hierarchies.
@@ -528,17 +527,17 @@ import static org.opencube.junit5.TestUtil.withSchema;
                 + "therefore the hierarchy must be explicitly specified.");
         } else {
             // Default to first hierarchy.
-            assertExprReturns(context.createConnection(), "[Time]", "266,773");
+            assertExprReturns(context.getConnection(), "[Time]", "266,773");
         }
 
         // Explicit hierarchy OK.
-        assertExprReturns(context.createConnection(), "[Time].[Time]", "266,773");
+        assertExprReturns(context.getConnection(), "[Time].[Time]", "266,773");
 
         // Member can be converted.
-        assertExprReturns(context.createConnection(), "[Customers].[USA]", "266,773");
+        assertExprReturns(context.getConnection(), "[Customers].[USA]", "266,773");
 
         // Tuple can be converted.
-        assertExprReturns(context.createConnection(),
+        assertExprReturns(context.getConnection(),
             "([Customers].[USA], [Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer])",
             "1,683");
 
@@ -563,8 +562,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testBracketInCalcMemberName(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testBracketInCalcMemberName(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[has a [bracket]] in it] as \n"
             + "' [Measures].CurrentMember.Name '\n"
             + "select {[Measures].[has a [bracket]] in it]} on columns\n"
@@ -582,8 +581,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNpeInIif(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testNpeInIif(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Measures].[Foo] AS ' 1 / [Measures].[Unit Sales] ',\n"
             + "  FORMAT_STRING=IIf([Measures].[Foo] < .3, \"|0.0|style=red\",\"0.0\")\n"
             + "SELECT {[Store].[USA].[WA].children} on columns\n"
@@ -668,8 +667,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testPropertyReferencesCalcMember(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testPropertyReferencesCalcMember(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',"
             + " FORMAT_STRING=IIf([Measures].[Foo] < 600000, \"|#,##0|style=red\",\"#,##0\")  "
             + "select {[Measures].[Foo]} on columns "
@@ -684,9 +683,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberWithQuote(TestContextWrapper context) {
+     void testCalcMemberWithQuote(TestContext context) {
         // MSAS ignores single-quotes
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as '1 + 2'\n"
             + "select from [Sales] where [Measures].[Foo]",
             "Axis #0:\n"
@@ -694,7 +693,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "3");
 
         // As above
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as 1 + 2\n"
             + "select from [Sales] where [Measures].[Foo]",
             "Axis #0:\n"
@@ -702,7 +701,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "3");
 
         // MSAS treats doubles-quotes as strings
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as \"1 + 2\"\n"
             + "select from [Sales] where [Measures].[Foo]",
             "Axis #0:\n"
@@ -721,7 +720,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
         // Escaped single quote in double-quoted string literal inside
         // single-quoted member declaration.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' \"quoted string with ''apostrophe'' in it\" ' "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -732,7 +731,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #0: quoted string with 'apostrophe' in it\n");
 
         // escaped double-quote inside double-quoted string literal
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' \"quoted string with \"\"double-quote\"\" in it\" ' "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -743,7 +742,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #0: quoted string with \"double-quote\" in it\n");
 
         // escaped double-quote inside double-quoted string literal
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as \"quoted string with 'apos' in it\" "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -757,7 +756,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // inside escaped single-quoted string literal
         // inside single-quoted formula.
         // MSAS does not allow this, but I think it should.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' ''quoted string and ''''apos''''.'' ' "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -770,7 +769,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // Escaped single-quote
         // inside double-quoted string literal
         // inside single-quoted formula.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' \"quoted string and ''apos''.\" ' "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -781,7 +780,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #0: quoted string and 'apos'.\n");
 
         // single quote in format expression
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Colored Profit] as  ' [Measures].[Store Sales] - [Measures].[Store Cost] ', "
             + "  FORMAT_STRING = Iif([Measures].[Colored Profit] < 0, '|($#,##0.00)|style=red', '|$#,##0.00|style=green') "
             + "select {[Measures].[Colored Profit]} on columns,"
@@ -800,7 +799,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #2: |$64,487.05|style=green\n");
 
         // double quote in format expression
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Colored Profit] as  ' [Measures].[Store Sales] - [Measures].[Store Cost] ', "
             + "  FORMAT_STRING = Iif([Measures].[Colored Profit] < 0, \"|($#,##0.00)|style=red\", \"|$#,##0.00|style=green\") "
             + "select {[Measures].[Colored Profit]} on columns,"
@@ -906,8 +905,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testChildrenOfCalcMembers(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testChildrenOfCalcMembers(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Time].[Time].[# Months Product Sold] as 'Count(Descendants([Time].[Time].LastSibling, [Time].[Month]), EXCLUDEEMPTY)'\n"
             + "select Crossjoin([Time].[# Months Product Sold].Children,\n"
             + "     [Store].[All Stores].Children) ON COLUMNS,\n"
@@ -923,8 +922,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNonCharacterMembers(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testNonCharacterMembers(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Has Coffee Bar].[Maybe] as \n"
             + "'SUM([Has Coffee Bar].members)' \n"
             + "SELECT {[Has Coffee Bar].[Maybe]} on rows, \n"
@@ -941,7 +940,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testFormatString(TestContextWrapper context) {
+     void testFormatString(TestContext context) {
         // Verify that
         // (a) a calculated member without a format string does not
         //     override the format string of a base measure
@@ -954,7 +953,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // (c) the format string for conflicting calculated members
         //     is chosen according to solve order
         //     ([Plain States] overrides [Profit])
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Customers].[Highly Profitable States]\n"
             + "AS 'SUM(FILTER([Customers].[USA].children,([Measures].[Profit] > 90000)))'\n"
             + "MEMBER [Customers].[Plain States]\n"
@@ -991,9 +990,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNegativeSolveOrder(TestContextWrapper context) {
+     void testNegativeSolveOrder(TestContext context) {
         // Negative solve orders are OK.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member measures.blah as 'measures.[unit sales]', SOLVE_ORDER = -6 select {measures.[unit sales], measures.blah} on 0 from sales",
             "Axis #0:\n"
             + "{}\n"
@@ -1006,7 +1005,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // Member with a negative solve order is trumped by a stored measure
         // (which has solve order 0), which in turn is trumped by a calc member
         // with a positive solve order.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Product].[Foo] as ' 1 ', SOLVE_ORDER = -6\n"
             + " member [Gender].[Bar] as ' 2 ', SOLVE_ORDER = 3\n"
             + "select {[Measures].[Unit Sales]} on 0,\n"
@@ -1030,9 +1029,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInQuery(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInQuery(TestContext context) {
         // calc measure defined in query
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='"
             + UdfTest.FooBarCellFormatter.class.getName()
@@ -1059,7 +1058,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInQueryNegative(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInQueryNegative(TestContext context) {
         assertQueryThrows(context,
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='mondrian.test.NonExistentCellFormatter' \n"
@@ -1071,7 +1070,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInQueryNegative2(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInQueryNegative2(TestContext context) {
         String query =
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='java.lang.String' \n"
@@ -1088,14 +1087,14 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberCustomFormatterInNonMeasureInQuery(TestContextWrapper context) {
+     void testCalcMemberCustomFormatterInNonMeasureInQuery(TestContext context) {
         // CELL_FORMATTER is ignored for calc members which are not measures.
         //
         // We could change this behavior if it makes sense. In fact, we would
         // allow ALL properties to be inherited from the member with the
         // highest solve order. Need to check whether this is consistent with
         // the MDX spec. -- jhyde, 2007/9/5.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Store].[CA or OR] as ' Aggregate({[Store].[USA].[CA], [Store].[USA].[OR]}) ',\n"
             + " CELL_FORMATTER='mondrian.test.UdfTest.FooBarCellFormatter'\n"
             + "select {[Store].[USA], [Store].[CA or OR]} on columns\n"
@@ -1216,7 +1215,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCreateCalculatedMember(TestContextWrapper context) {
+     void testCreateCalculatedMember(TestContext context) {
         // REVIEW: What is the purpose of this test?
         String query =
             "WITH MEMBER [Product].[Calculated Member] as 'AGGREGATE({})'\n"
@@ -1236,7 +1235,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         };
 
         assertQuerySqlOrNot(
-            context.createConnection(), query, patterns, true, true, true);
+            context.getConnection(), query, patterns, true, true, true);
     }
 
     /**
@@ -1245,8 +1244,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testSetIncludesSelf(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testSetIncludesSelf(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with set [Top Products] as ' [Product].Children '\n"
             + "member [Product].[Top Product Total] as ' Aggregate([Top Products]) '\n"
             + "select {[Product].[Food], [Product].[Top Product Total]} on 0,"
@@ -1276,8 +1275,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNegativeSolveOrderForCalMemberWithFilter(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testNegativeSolveOrderForCalMemberWithFilter(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level],[*BASE_MEMBERS_Product])' "
             + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Unit Sales_SEL~SUM] > 10000.0)' "
@@ -1319,8 +1318,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNegativeSolveOrderForCalMemberWithFilters2(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testNegativeSolveOrderForCalMemberWithFilters2(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level],[*BASE_MEMBERS_Product])' "
             + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Unit Sales_SEL~SUM] > 10000.0)' "
@@ -1367,8 +1366,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNonTopLevelCalculatedMember(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testNonTopLevelCalculatedMember(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
             + "{[Product].[Test]} on rows "
@@ -1381,7 +1380,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "{[Product].[Test]}\n"
             + "Row #0: 191,940\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Product].[Food].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
             + "{[Product].[Food].[Test]} on rows "
@@ -1405,8 +1404,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberChildren(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testCalculatedMemberChildren(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
             + "[Product].[Test].children on rows "
@@ -1416,7 +1415,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Axis #1:\n"
             + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Product].[Food].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
             + "[Product].[Food].[Test].children on rows "
@@ -1430,9 +1429,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalculatedMemberMSASCompatibility(TestContextWrapper context) {
+     void testCalculatedMemberMSASCompatibility(TestContext context) {
         propSaver.set(MondrianProperties.instance().CaseSensitive, false);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with "
             + "member gender.calculated as 'gender.m' "
             + "member  gender.[All Gender].calculated as 'gender.m' "
@@ -1477,8 +1476,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testSimulatedCompoundSlicer(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testSimulatedCompoundSlicer(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Price per Unit] as\n"
             + "    [Measures].[Store Sales] / [Measures].[Unit Sales]\n"
@@ -1515,7 +1514,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #3: 2.25\n");
 
         // Now the equivalent query, using a set in the slicer.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Price per Unit] as\n"
             + "    [Measures].[Store Sales] / [Measures].[Unit Sales]\n"
@@ -1554,9 +1553,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCompoundSlicerOverTuples(TestContextWrapper context) {
+     void testCompoundSlicerOverTuples(TestContext context) {
         // reference query
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "    TopCount(\n"
             + "      [Product].[Product Category].Members\n"
@@ -1593,7 +1592,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // The actual query. Note that the set in the slicer has two dimensions.
         // This could not be expressed using calculated members and the
         // Aggregate function.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Price per Unit] as\n"
             + "    [Measures].[Store Sales] / [Measures].[Unit Sales]\n"
@@ -1637,14 +1636,14 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testExponentialPerformanceBugMondrian608(TestContextWrapper context) {
+     void testExponentialPerformanceBugMondrian608(TestContext context) {
         // Run variants of the same query with increasing expression complexity.
         // With MONDRIAN-608, running time triples each iteration (for
         // example, i=10 takes 2.7s, i=11 takes 9.6s), so 20 would be very
         // noticeable!
         final boolean print = false;
         for (int i = 0; i < 20; ++i) {
-            checkForExponentialPerformance(context.createConnection(), i, print);
+            checkForExponentialPerformance(context.getConnection(), i, print);
         }
     }
 
@@ -1830,9 +1829,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testBugMondrian852(TestContextWrapper context) {
+     void testBugMondrian852(TestContext context) {
         // Simpler repro case.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Bar] as cast(123 as string)\n"
             + " member [Measures].[Foo] as [Measures].[Bar] / 2\n"
             + "select [Measures].[Foo] on 0\n"
@@ -1850,11 +1849,11 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // and added a Format() inside the cache to assure fixed # of digits.
         executeQuery(
             "select {[Time].[1997].[Q1].[1] : [Time].[1997].[Q2].[4]} * "
-            + "Gender.Gender.members * measures.[store sales] on 0 from sales ", context.createConnection());
+            + "Gender.Gender.members * measures.[store sales] on 0 from sales ", context.getConnection());
 
         // Tom's original query should generate a cast error (not a
         // ClassCastException) because solve orders are wrong.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Tom1] as\n"
             + "    ([Measures].[Store Sales] / [Measures].[Unit Sales])\n"
@@ -1879,7 +1878,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Row #1: #ERR: mondrian.olap.fun.MondrianEvaluationException: wrtong typed, was: 45539.69, 44058.79, 50029.87, 42878.25\n");
 
         // Solve orders to achieve what Tom intended.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Tom1] as\n"
             + "    ([Measures].[Store Sales] / [Measures].[Unit Sales]),\n"
@@ -1912,7 +1911,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testNonCanonical(TestContextWrapper context) {
+     void testNonCanonical(TestContext context) {
         // define without 'all', refer with 'all'
         final String expected =
             "Axis #0:\n"
@@ -1920,7 +1919,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "Axis #1:\n"
             + "{[Store].[USA].[Foo]}\n"
             + "Row #0: 266,773\n";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Store].[USA].[Foo] as\n"
             + " [Store].[USA] + [Store].[Canada].[BC]\n"
             + "select [Store].[All Stores].[USA].[Foo] on 0\n"
@@ -1928,7 +1927,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             expected);
 
         // and vice versa: define without 'all', refer with 'all'
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Store].[All Stores].[USA].[Foo] as\n"
             + " [Store].[USA] + [Store].[Canada].[BC]\n"
             + "select [Store].[USA].[Foo] on 0\n"
@@ -1938,7 +1937,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberParentOfCalcMember(TestContextWrapper context) {
+     void testCalcMemberParentOfCalcMember(TestContext context) {
         // SSAS fails with "The X calculated member cannot be used as a parent
         // of another calculated member."
         assertQueryThrows(context,
@@ -1952,8 +1951,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberSameNameDifferentHierarchies(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+     void testCalcMemberSameNameDifferentHierarchies(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Gender].[X] as 4\n"
             + " member [Marital Status].[X] as 5\n"
             + " member [Promotion Media].[X] as 6\n"
@@ -1968,7 +1967,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-     void testCalcMemberTooDeep(TestContextWrapper context) {
+     void testCalcMemberTooDeep(TestContext context) {
         // SSAS fails with "The X calculated member cannot be created because
         // its parent is at the lowest level in the Gender hierarchy."
         assertQueryThrows(context,

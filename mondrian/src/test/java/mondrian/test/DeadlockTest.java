@@ -18,7 +18,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -40,7 +40,7 @@ class DeadlockTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testSegmentLoadDeadlock(TestContextWrapper context) {
+    void testSegmentLoadDeadlock(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1726
         // Deadlock can occur if a cardinality query is fired after
         // all available database connections have been consumed and active
@@ -54,7 +54,7 @@ class DeadlockTest {
             new Runnable() {
             @Override
 			public void run() {
-                executeQuery(context.createConnection(),
+                executeQuery(context.getConnection(),
                     "With\n"
                     + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Store],NonEmptyCrossJoin([*BASE_MEMBERS_Product],[*BASE_MEMBERS_Time]))'\n"
                     + "Set [*BASE_MEMBERS_Product] as '[Product].[Product Subcategory].Members'\n"

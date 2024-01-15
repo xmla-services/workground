@@ -45,7 +45,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -103,7 +102,7 @@ public class UdfTest {
      * @return Test context
      */
     /*
-    private void udfTestContext(TestContextWrapper context, String xmlUdf) {
+    private void udfTestContext(TestContext context, String xmlUdf) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, xmlUdf, null);
@@ -835,15 +834,15 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUdfToString(TestContextWrapper context) {
+    void testUdfToString(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name=\"StringMult\" className=\""
             + StringMultUdf.class.getName()
             + "\"/>\n");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier15::new);
-        assertQueryReturns(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier15::new);
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[ABC] as StringMult(1, 'A')\n"
             + "member [Measures].[Unit Sales Formatted] as\n"
             + "  [Measures].[Unit Sales],\n"
@@ -868,7 +867,7 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAnotherMemberFun(TestContextWrapper context) {
+    void testAnotherMemberFun(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name=\"PlusOne\" className=\""
@@ -876,8 +875,8 @@ public class UdfTest {
             + "<UserDefinedFunction name=\"AnotherMemberError\" className=\""
             + AnotherMemberErrorUdf.class.getName() + "\"/>");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier16::new);
-        assertQueryReturns(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier16::new);
+        assertQueryReturns(context.getConnection(),
             "WITH MEMBER [Measures].[Test] AS "
             + "'([Measures].[Store Sales],[Product].[Food],AnotherMemberError([Product].[Drink],[Time].[Time]))'\n"
             + "SELECT {[Measures].[Test]} ON COLUMNS, \n"
@@ -1005,15 +1004,15 @@ public class UdfTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberUdfDoesNotEvaluateToScalar(TestContextWrapper context) {
+    void testMemberUdfDoesNotEvaluateToScalar(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name=\"MemberName\" className=\""
             + MemberNameFunction.class.getName()
             + "\"/>\n");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier19::new);
-        assertExprReturns(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier19::new);
+        assertExprReturns(context.getConnection(),
             "MemberName([Gender].[F])", "F");
     }
 
@@ -1023,13 +1022,13 @@ public class UdfTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUdfNeitherScriptNorClassname(TestContextWrapper context) {
+    void testUdfNeitherScriptNorClassname(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name='StringMult'/>\n");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier20::new);
-        assertQueryThrows(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier20::new);
+        assertQueryThrows(context.getConnection(),
             "select from [Sales]",
             "Must specify either className attribute or Script element");
     }
@@ -1041,15 +1040,15 @@ public class UdfTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUdfBothScriptAndClassname(TestContextWrapper context) {
+    void testUdfBothScriptAndClassname(TestContext context) {
        /*
        udfTestContext(context,
             "<UserDefinedFunction name='StringMult' className='foo'>\n"
             + " <Script>bar</Script>\n"
             + "</UserDefinedFunction>");
         */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier21::new);
-        assertQueryThrows(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier21::new);
+        assertQueryThrows(context.getConnection(),
             "select from [Sales]",
             "Must not specify both className attribute and Script element");
     }
@@ -1060,15 +1059,15 @@ public class UdfTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testUdfScriptBadLanguage(TestContextWrapper context) {
+    void testUdfScriptBadLanguage(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name='StringMult'>\n"
             + " <Script language='bad'>bar</Script>\n"
             + "</UserDefinedFunction>");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier22::new);
-        assertQueryThrows(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier22::new);
+        assertQueryThrows(context.getConnection(),
             "select from [Sales]",
             "Invalid script language 'bad'");
     }
@@ -1079,7 +1078,7 @@ public class UdfTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testScriptUdf(TestContextWrapper context) {
+    void testScriptUdf(TestContext context) {
         /*
         udfTestContext(context,
             "<UserDefinedFunction name='StringMult'>\n"
@@ -1104,8 +1103,8 @@ public class UdfTest {
             + "  </Script>\n"
             + "</UserDefinedFunction>\n");
          */
-        updateTestContext(context.getContext(), SchemaModifiers.UdfTestModifier23::new);
-        assertQueryReturns(context.createConnection(),
+        updateTestContext(context, SchemaModifiers.UdfTestModifier23::new);
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[ABC] as StringMult(1, 'A')\n"
             + "member [Measures].[Unit Sales Formatted] as\n"
             + "  [Measures].[Unit Sales],\n"

@@ -26,13 +26,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapConnectionPropsR;
 
 /**
@@ -40,23 +38,23 @@ import mondrian.rolap.RolapConnectionPropsR;
   *
   */
 class AggSchemaScanTest {
-	
+
   @BeforeAll
   public static void beforeAll() {
       ContextArgumentsProvider.dockerWasChanged = true;
   }
-	
+
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testAggScanPropertiesEmptySchema(TestContextWrapper context) throws Exception {
-    final RolapConnection rolapConn = (RolapConnection) context.createConnection();
+  void testAggScanPropertiesEmptySchema(TestContext context) throws Exception {
+    final RolapConnection rolapConn = (RolapConnection) context.getConnection();
     final DataSource dataSource = rolapConn.getDataSource();
     Connection sqlConnection = null;
     try {
       sqlConnection = dataSource.getConnection();
 
-      
+
       RolapConnectionPropsR rc=  new RolapConnectionPropsR(List.of(), false, Locale.getDefault(), 0l, TimeUnit.SECONDS, Optional.of("bogus"),Optional.of("bogus"));
       JdbcSchema jdbcSchema = JdbcSchema.makeDB(dataSource);
       jdbcSchema.resetAllTablesLoaded();
@@ -78,8 +76,8 @@ class AggSchemaScanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testAggScanPropertiesPopulatedSchema(TestContextWrapper context) throws Exception {
-    final RolapConnection rolapConn = (RolapConnection) context.createConnection();
+  void testAggScanPropertiesPopulatedSchema(TestContext context) throws Exception {
+    final RolapConnection rolapConn = (RolapConnection) context.getConnection();
     final DataSource dataSource = rolapConn.getDataSource();
     Connection sqlConnection = null;
     try {
@@ -111,7 +109,7 @@ class AggSchemaScanTest {
            if ( resultSet.getMetaData().getColumnCount() == 2 ) {
              while ( resultSet.next() ) {
                if ( resultSet.getString( 1 ).equalsIgnoreCase( "foodmart" ) ) {
-            	   
+
                    propCatalog= resultSet.getString( 2 ) ;
                    propSchema= resultSet.getString( 1 ) ;
 

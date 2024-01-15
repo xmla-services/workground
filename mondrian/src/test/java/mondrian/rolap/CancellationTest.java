@@ -28,7 +28,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -59,14 +59,14 @@ class CancellationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyListCancellation(TestContextWrapper context) throws MondrianException {
+    void testNonEmptyListCancellation(TestContext context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.nonEmptyList
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
         CrossJoinFunDefTester crossJoinFunDef =
                 new CrossJoinFunDefTester(new CrossJoinTest.NullFunDef().getFunctionMetaData());
         Result result =
-            executeQuery(context.createConnection(), "select store.[store name].members on 0 from sales");
+            executeQuery(context.getConnection(), "select store.[store name].members on 0 from sales");
         Evaluator eval = ((RolapResult) result).getEvaluator(new int[]{0});
         TupleList list = new UnaryTupleList();
         for (Position pos : result.getAxes()[0].getPositions()) {
@@ -82,11 +82,11 @@ class CancellationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMutableCrossJoinCancellation(TestContextWrapper context) throws MondrianException {
+    void testMutableCrossJoinCancellation(TestContext context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.mutableCrossJoin
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         RolapCube salesCube = (RolapCube) cubeByName(
              connection,
             "Sales");

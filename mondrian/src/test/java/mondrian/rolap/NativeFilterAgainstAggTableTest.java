@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -42,7 +42,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
         propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.EnableNativeFilter, true);
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);        
+        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
     @AfterEach
@@ -52,7 +52,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFilteringOnAggregated_ByCount(TestContextWrapper context) {
+    void testFilteringOnAggregated_ByCount(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-2155
         // Aggregation table can have fact's count value exceeding 1,
         // so that to compute the overall amount of facts it is necessary
@@ -100,12 +100,12 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
             + "Row #0: 1,959\n"
             + "Row #0: 4,090\n";
 
-        doTestFilteringOnAggregatedBy(context.createConnection(), "COUNT", query, expectedResult);
+        doTestFilteringOnAggregatedBy(context.getConnection(), "COUNT", query, expectedResult);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testFilteringOnAggregated_BySum(TestContextWrapper context) {
+    void testFilteringOnAggregated_BySum(TestContext context) {
         String query = ""
             + "SELECT "
             + "   {FILTER("
@@ -127,7 +127,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
             + "Row #0: 101,261.32\n"
             + "Row #0: 26,781.23\n";
 
-        doTestFilteringOnAggregatedBy(context.createConnection(), "SUM", query, expectedResult);
+        doTestFilteringOnAggregatedBy(context.getConnection(), "SUM", query, expectedResult);
     }
 
     private void doTestFilteringOnAggregatedBy(
@@ -150,7 +150,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggTableWithNotAllMeasures(TestContextWrapper context) {
+    void testAggTableWithNotAllMeasures(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1703
         // If a filter condition contains one or more measures that are
         // not present in the aggregate table, the SQL should omit the
@@ -170,7 +170,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
             + "    `agg_c_10_sales_fact_1997`.`the_year`,\n"
             + "    `agg_c_10_sales_fact_1997`.`quarter`\n"
             + "order by\n"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                 + "    ISNULL(`c1`) ASC, `c1` ASC"
                 : "    ISNULL(`agg_c_10_sales_fact_1997`.`the_year`) ASC, `agg_c_10_sales_fact_1997`.`the_year` ASC,\n"
@@ -181,11 +181,11 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
         // This query should hit the agg_c_10_sales_fact_1997 agg table,
         // which has [unit sales] but not [store count], so should
         // not include the filter condition in the having.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         TestUtil.flushCache(connection);
         TestUtil.flushSchemaCache(connection);
         assertQuerySqlOrNot(
-             context.createConnection(),
+             context.getConnection(),
             "select filter(Time.[1997].children,  "
             + "measures.[Sales Count] +  measures.[unit sales] > 0) on 0 "
             + "from [sales]",
@@ -205,7 +205,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
             + "having\n"
             + "    ((sum(`agg_c_10_sales_fact_1997`.`store_sales`) + sum(`agg_c_10_sales_fact_1997`.`unit_sales`)) > 0)\n"
             + "order by\n"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                 + "    ISNULL(`c1`) ASC, `c1` ASC"
                 : "    ISNULL(`agg_c_10_sales_fact_1997`.`the_year`) ASC, `agg_c_10_sales_fact_1997`.`the_year` ASC,\n"
@@ -216,7 +216,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
         // both measures are present on the agg table, so this one *should*
         // include having.
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             "select filter(Time.[1997].children,  "
             + "measures.[Store Sales] +  measures.[unit sales] > 0) on 0 "
             + "from [sales]",

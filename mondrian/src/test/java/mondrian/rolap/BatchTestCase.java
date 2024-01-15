@@ -42,7 +42,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.slf4j.LoggerFactory;
 
 import mondrian.enums.DatabaseProduct;
@@ -814,7 +813,7 @@ public class BatchTestCase{
      * @param rowCount number of rows returned
      * @param mdx      query
      */
-    protected void checkNotNative(TestContextWrapper context, int rowCount, String mdx) {
+    protected void checkNotNative(TestContext context, int rowCount, String mdx) {
         checkNotNative(context, rowCount, mdx, null);
     }
 
@@ -825,15 +824,15 @@ public class BatchTestCase{
      * @param mdx            Query
      * @param expectedResult Expected result string
      */
-    protected void checkNotNative(TestContextWrapper context,
+    protected void checkNotNative(TestContext context,
         int rowCount,
         String mdx,
         String expectedResult)
     {
-        context.createConnection().getCacheControl(null).flushSchemaCache();
+        context.getConnection().getCacheControl(null).flushSchemaCache();
         //Connection con =
         //    getTestContext().withSchemaPool(false).getConnection();
-        Connection con = context.createConnection();
+        Connection con = context.getConnection();
         RolapNativeRegistry reg = getRegistry(con);
         reg.setListener(
             new Listener() {
@@ -886,7 +885,7 @@ public class BatchTestCase{
      * @param rowCount    Number of rows returned
      * @param mdx         Query
      */
-    protected void checkNative(TestContextWrapper context,
+    protected void checkNative(TestContext context,
         int resultLimit, int rowCount, String mdx)
     {
         checkNative(context, resultLimit, rowCount, mdx, null, false);
@@ -914,7 +913,7 @@ public class BatchTestCase{
      * @param freshConnection Whether fresh connection is required
      */
     protected void checkNative(
-        TestContextWrapper context,
+        TestContext context,
         int resultLimit,
         int rowCount,
         String mdx,
@@ -928,7 +927,7 @@ public class BatchTestCase{
             return;
         }
 
-        context.createConnection().getCacheControl(null).flushSchemaCache();
+        context.getConnection().getCacheControl(null).flushSchemaCache();
         try {
             LoggerFactory.getLogger(getClass()).debug("*** Native: " + mdx);
             boolean reuseConnection = !freshConnection;
@@ -936,7 +935,7 @@ public class BatchTestCase{
             //    getTestContext()
             //        .withSchemaPool(reuseConnection)
             //        .getConnection();
-            Connection con = context.createConnection();
+            Connection con = context.getConnection();
             RolapNativeRegistry reg = getRegistry(con);
             reg.useHardCache(true);
             TestListener listener = new TestListener();
@@ -965,9 +964,9 @@ public class BatchTestCase{
 
             LoggerFactory.getLogger(getClass()).debug("*** Interpreter: " + mdx);
 
-            context.createConnection().getCacheControl(null).flushSchemaCache();
+            context.getConnection().getCacheControl(null).flushSchemaCache();
             //con = getTestContext().withSchemaPool(false).getConnection();
-            con = context.createConnection();
+            con = context.getConnection();
             reg = getRegistry(con);
             listener.setFoundEvaluator(false);
             reg.setListener(listener);
@@ -1003,7 +1002,7 @@ public class BatchTestCase{
                     + "interpreter; MDX=" + mdx);
             }
         } finally {
-            Connection con = context.createConnection();
+            Connection con = context.getConnection();
             RolapNativeRegistry reg = getRegistry(con);
             reg.setEnabled(true);
             reg.useHardCache(false);
@@ -1024,11 +1023,11 @@ public class BatchTestCase{
     /**
      * Convenience method for debugging; please do not delete.
      */
-    public void assertNotNative(TestContextWrapper context, String mdx) {
+    public void assertNotNative(TestContext context, String mdx) {
         new BatchTestCase().checkNotNative(context, mdx, null);
     }
 
-    public static void checkNotNative(TestContextWrapper context, String mdx, Result expectedResult) {
+    public static void checkNotNative(TestContext context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNotNative(context,
                 getRowCount(expectedResult),
@@ -1036,7 +1035,7 @@ public class BatchTestCase{
                 TestUtil.toString(expectedResult));
     }
 
-    public static void checkNative(TestContextWrapper context, String mdx, Result expectedResult) {
+    public static void checkNative(TestContext context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNative(context,
                 0,
@@ -1048,7 +1047,7 @@ public class BatchTestCase{
     /**
      * Convenience method for debugging; please do not delete.
      */
-    public void assertNative(TestContextWrapper context, String mdx) {
+    public void assertNative(TestContext context, String mdx) {
         new BatchTestCase().checkNative(context,0, 0, mdx, null, true);
     }
 

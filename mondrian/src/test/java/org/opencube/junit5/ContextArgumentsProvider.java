@@ -42,10 +42,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
-import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.context.TestContextImpl;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.xmltests.ResourceTestCase;
@@ -72,7 +70,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
 
 		// TODO: parallel
-		List<TestContextWrapper> contexts = prepareContexts(extensionContext);
+		List<TestContext> contexts = prepareContexts(extensionContext);
 		List<XmlResourceTestCase> xmlTestCases = readTestcases(extensionContext);
 
 		List<Arguments> argumentss = new ArrayList<>();
@@ -86,14 +84,14 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			}
 		} else {
-			for (TestContextWrapper context : contexts) {
+			for (TestContext context : contexts) {
 
 				if (xmlTestCases == null || xmlTestCases.isEmpty()) {
-					argumentss.add(Arguments.of(contextOrWrapper(extensionContext,context)));
+					argumentss.add(Arguments.of(context));
 
 				} else {
 					for (XmlResourceTestCase xmlTestCase : xmlTestCases) {
-						argumentss.add(Arguments.of(contextOrWrapper(extensionContext,context), xmlTestCase));
+						argumentss.add(Arguments.of(context, xmlTestCase));
 					}
 
 				}
@@ -103,22 +101,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		return argumentss.stream();
 
 	}
-	
-	Object contextOrWrapper(ExtensionContext extensionContext, TestContextWrapper testContextWrapper) {
 
-		Optional<AnnotatedElement> oElement = extensionContext.getElement();
-		if (oElement.isPresent()) {
-			if (oElement.get() instanceof Method) {
-				Method method = (Method) oElement.get();
-				for (Parameter param : method.getParameters()) {
-					if (TestContext.class.equals(param.getType())||Context.class.equals(param.getType())) {
-						return testContextWrapper.getContext();
-					}
-				}
-			}
-		}
-		return testContextWrapper;
-	}
 
 	private List<XmlResourceTestCase> readTestcases(ExtensionContext extensionContext) {
 
@@ -165,7 +148,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		return null;
 	}
 
-	private List<TestContextWrapper> prepareContexts(ExtensionContext extensionContext) {
+	private List<TestContext> prepareContexts(ExtensionContext extensionContext) {
 		Stream<DatabaseProvider> providers;
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
@@ -182,7 +165,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			});
 		}
-		List<TestContextWrapper> args = providers.parallel().map(dbp -> {
+		List<TestContext> args = providers.parallel().map(dbp -> {
 
 			Entry<DataSource, Dialect> dataBaseInfo = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
@@ -193,16 +176,15 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 			}
 
-			List<TestContextWrapper> testingContexts = new ArrayList<>();
+			List<TestContext> testingContexts = new ArrayList<>();
 
 			Optional<AnnotatedElement> oElement = extensionContext.getElement();
 			if (oElement.isPresent()) {
 				if (oElement.get() instanceof Method) {
 					Method method = (Method) oElement.get();
 					for (Parameter param : method.getParameters()) {
-						if (TestContextWrapper.class.isAssignableFrom(param.getType())||
-								TestContext.class.isAssignableFrom(param.getType())||
-								Context.class.isAssignableFrom(param.getType())) {
+						if (TestContext.class.isAssignableFrom(param.getType()) ||
+                            Context.class.isAssignableFrom(param.getType())) {
 							ContextSource contextSource=method.getAnnotation(ContextSource.class);
 
 							try {
@@ -229,12 +211,10 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								throw new RuntimeException(e);
 							}
 
-							TestContextImpl testContextImpl=new TestContextImpl();
+							TestContextImpl testContextImpl = new TestContextImpl();
 							testContextImpl.setDataSource(dataBaseInfo.getKey());
 							testContextImpl.setDialect(dataBaseInfo.getValue());
 							testContextImpl.setName("TestContext");
-
-							BaseTestContext btcontext=new BaseTestContext(testContextImpl);
 
 
 							Stream.of(contextSource.propertyUpdater()).map(c -> {
@@ -246,10 +226,10 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								}
 							}).forEachOrdered(u->{
 								u.updateContext(testContextImpl);
-								
+
 							});
 
-							testingContexts.add(btcontext);
+							testingContexts.add(testContextImpl);
 						}
 					}
 				}
@@ -262,36 +242,6 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	@Override
 	public void accept(ContextSource annotation) {
 		this.contextSource = annotation;
-
-	}
-
-	class NamedArguments implements Arguments {
-
-		public NamedArguments(TestContextWrapper context, ResourceTestCase res) {
-			super();
-			this.context = context;
-			this.res = res;
-		}
-
-		TestContextWrapper context;
-		ResourceTestCase res;
-
-		@Override
-		public Object[] get() {
-
-			if (context == null) {
-				if (res != null) {
-					return new Object[] { context, res };
-				}
-			}
-
-			if (res == null) {
-				if (context != null) {
-					return new Object[] { context };
-				}
-			}
-			return new Object[] { context, res };
-		}
 
 	}
 

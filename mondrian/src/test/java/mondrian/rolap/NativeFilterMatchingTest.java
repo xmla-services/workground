@@ -39,7 +39,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -70,7 +69,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPositiveMatching(TestContextWrapper context) throws Exception {
+    void testPositiveMatching(TestContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
             // No point testing these if the native filters
             // are turned off.
@@ -82,7 +81,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "select \"customer\".\"country\" as \"c0\", \"customer\".\"state_province\" as \"c1\", \"customer\".\"city\" as \"c2\", \"customer\".\"customer_id\" as \"c3\", fullname as \"c4\", fullname as \"c5\", \"customer\".\"gender\" as \"c6\", \"customer\".\"marital_status\" as \"c7\", \"customer\".\"education\" as \"c8\", \"customer\".\"yearly_income\" as \"c9\" from \"customer\" as \"customer\" group by \"customer\".\"country\", \"customer\".\"state_province\", \"customer\".\"city\", \"customer\".\"customer_id\", fullname, \"customer\".\"gender\", \"customer\".\"marital_status\", \"customer\".\"education\", \"customer\".\"yearly_income\" having cast(fullname as text) is not null and cast(fullname as text) ~ '(?i).*jeanne.*'  order by \"customer\".\"country\" ASC NULLS LAST, \"customer\".\"state_province\" ASC NULLS LAST, \"customer\".\"city\" ASC NULLS LAST, fullname ASC NULLS LAST";
         final String sqlMysql =
             "select `customer`.`country` as `c0`, `customer`.`state_province` as `c1`, `customer`.`city` as `c2`, `customer`.`customer_id` as `c3`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`) as `c4`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`) as `c5`, `customer`.`gender` as `c6`, `customer`.`marital_status` as `c7`, `customer`.`education` as `c8`, `customer`.`yearly_income` as `c9` from `customer` as `customer` group by `customer`.`country`, `customer`.`state_province`, `customer`.`city`, `customer`.`customer_id`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`), `customer`.`gender`, `customer`.`marital_status`, `customer`.`education`, `customer`.`yearly_income` having c5 IS NOT NULL AND UPPER(c5) REGEXP '.*JEANNE.*' order by "
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "ISNULL(`c0`) ASC, `c0` ASC, "
                     + "ISNULL(`c1`) ASC, `c1` ASC, "
                     + "ISNULL(`c2`) ASC, `c2` ASC, "
@@ -139,22 +138,22 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns\n"
             + "From [Sales]";
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             query,
             patterns,
             false,
             true,
             true);
         assertQueryReturns(
-            context.createConnection(),
+            context.getConnection(),
             query,
             queryResults);
-        verifySameNativeAndNot(context.createConnection(), query, null, propSaver);
+        verifySameNativeAndNot(context.getConnection(), query, null, propSaver);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNegativeMatching(TestContextWrapper context) throws Exception {
+    void testNegativeMatching(TestContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
              // No point testing these if the native filters
              // are turned off.
@@ -166,7 +165,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "select \"customer\".\"country\" as \"c0\", \"customer\".\"state_province\" as \"c1\", \"customer\".\"city\" as \"c2\", \"customer\".\"customer_id\" as \"c3\", fullname as \"c4\", fullname as \"c5\", \"customer\".\"gender\" as \"c6\", \"customer\".\"marital_status\" as \"c7\", \"customer\".\"education\" as \"c8\", \"customer\".\"yearly_income\" as \"c9\" from \"customer\" as \"customer\" group by \"customer\".\"country\", \"customer\".\"state_province\", \"customer\".\"city\", \"customer\".\"customer_id\", fullname, \"customer\".\"gender\", \"customer\".\"marital_status\", \"customer\".\"education\", \"customer\".\"yearly_income\" having NOT(cast(fullname as text) is not null and cast(fullname as text) ~ '(?i).*jeanne.*')  order by \"customer\".\"country\" ASC NULLS LAST, \"customer\".\"state_province\" ASC NULLS LAST, \"customer\".\"city\" ASC NULLS LAST, fullname ASC NULLS LAST";
         final String sqlMysql =
             "select `customer`.`country` as `c0`, `customer`.`state_province` as `c1`, `customer`.`city` as `c2`, `customer`.`customer_id` as `c3`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`) as `c4`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`) as `c5`, `customer`.`gender` as `c6`, `customer`.`marital_status` as `c7`, `customer`.`education` as `c8`, `customer`.`yearly_income` as `c9` from `customer` as `customer` group by `customer`.`country`, `customer`.`state_province`, `customer`.`city`, `customer`.`customer_id`, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`), `customer`.`gender`, `customer`.`marital_status`, `customer`.`education`, `customer`.`yearly_income` having NOT(c5 IS NOT NULL AND UPPER(c5) REGEXP '.*JEANNE.*')  order by "
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "ISNULL(`c0`) ASC, `c0` ASC, "
                     + "ISNULL(`c1`) ASC, `c1` ASC, "
                     + "ISNULL(`c2`) ASC, `c2` ASC, "
@@ -200,17 +199,17 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "From [Sales]";
 
         assertQuerySqlOrNot(
-            context.createConnection(),
+            context.getConnection(),
             query,
             patterns,
             false,
             true,
             true);
 
-        final Result result = executeQuery(query, context.createConnection());
+        final Result result = executeQuery(query, context.getConnection());
         final String resultString = TestUtil.toString(result);
         assertFalse(resultString.contains("Jeanne"));
-        verifySameNativeAndNot(context.createConnection(), query, null, propSaver);
+        verifySameNativeAndNot(context.getConnection(), query, null, propSaver);
     }
 
     /**
@@ -222,8 +221,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMatchBugMondrian983(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testMatchBugMondrian983(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Product], Not IsEmpty ([Measures].[Unit Sales]))' \n"
             + "Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Product].CurrentMember.OrderKey,BASC,Ancestor([Product].CurrentMember,[Product].[Product Department]).OrderKey,BASC)' \n"
@@ -249,11 +248,11 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterSameAsNonNative(TestContextWrapper context) {
+    void testNativeFilterSameAsNonNative(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
         // In some cases native filter would includes an unnecessary fact table
         // join which incorrectly eliminated some tuples from the set
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         verifySameNativeAndNot(connection,
             "select Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
@@ -282,12 +281,12 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCachedNativeFilter(TestContextWrapper context) {
+    void testCachedNativeFilter(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
 
         // verify that the RolapNativeSet cached values from NON EMPTY context
         // are not reused when not NON EMPTY.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         verifySameNativeAndNot(connection,
             "select NON EMPTY Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
@@ -436,7 +435,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicer(TestContextWrapper context) {
+    void testNativeFilterWithCompoundSlicer(TestContext context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
@@ -446,7 +445,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             && MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             boolean requiresOrderByAlias =
-                    getDialect(context.createConnection()).requiresOrderByAlias();
+                    getDialect(context.getConnection()).requiresOrderByAlias();
             final String sqlMysql =
                 propSaver.properties.UseAggregates.get() == false
                     ? "select\n"
@@ -506,10 +505,10 @@ class NativeFilterMatchingTest extends BatchTestCase {
                         : "    ISNULL(`agg_c_14_sales_fact_1997`.`the_year`) ASC, `agg_c_14_sales_fact_1997`.`the_year` ASC,\n"
                         + "    ISNULL(`agg_c_14_sales_fact_1997`.`quarter`) ASC, `agg_c_14_sales_fact_1997`.`quarter` ASC");
             final SqlPattern[] patterns = mysqlPattern(sqlMysql);
-            context.createConnection().getCacheControl(null).flushSchemaCache();
+            context.getConnection().getCacheControl(null).flushSchemaCache();
             // Make sure the tuples list is using the HAVING clause.
             assertQuerySqlOrNot(
-            	context.createConnection(),
+            	context.getConnection(),
                 mdx,
                 patterns,
                 false,
@@ -517,7 +516,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
                 true);
         }
         // Make sure the numbers are right
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Good].[Good Imported Beer]}\n"
@@ -534,7 +533,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicerWithAggs(TestContextWrapper context) {
+    void testNativeFilterWithCompoundSlicerWithAggs(TestContext context) {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
@@ -566,7 +565,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
                 + "having\n"
                 + "    (sum(`agg_c_14_sales_fact_1997`.`unit_sales`) > 80)\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC"
                     : "    ISNULL(`agg_c_14_sales_fact_1997`.`the_year`) ASC, `agg_c_14_sales_fact_1997`.`the_year` ASC,\n"
@@ -574,9 +573,9 @@ class NativeFilterMatchingTest extends BatchTestCase {
             final SqlPattern[] patterns = mysqlPattern(sqlMysql);
 
             // Make sure the tuples list is using the HAVING clause.
-            context.createConnection().getCacheControl(null).flushSchemaCache();
+            context.getConnection().getCacheControl(null).flushSchemaCache();
             assertQuerySqlOrNot(
-                context.createConnection(),
+                context.getConnection(),
                 mdx,
                 patterns,
                 false,
@@ -585,7 +584,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
         }
         // Make sure the numbers are right
         assertQueryReturns(
-            context.createConnection(),
+            context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Good].[Good Imported Beer]}\n"
@@ -602,7 +601,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicer_1(TestContextWrapper context) {
+    void testNativeFilterWithCompoundSlicer_1(TestContext context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
@@ -611,7 +610,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             && MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             boolean requiresOrderByAlias =
-                    getDialect(context.createConnection()).requiresOrderByAlias();
+                    getDialect(context.getConnection()).requiresOrderByAlias();
             final String sqlMysql =
                 propSaver.properties.UseAggregates.get() == false
                     ? "select\n"
@@ -728,7 +727,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
             // Make sure the tuples list is using the HAVING clause.
             assertQuerySqlOrNot(
-                context.createConnection(),
+                context.getConnection(),
                 mdx,
                 patterns,
                 false,
@@ -736,7 +735,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
                 true);
         }
         // Make sure the numbers are right
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer]}\n"
@@ -748,8 +747,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicer_2(TestContextWrapper context) {
-        verifySameNativeAndNot(context.createConnection(),
+    void testNativeFilterWithCompoundSlicer_2(TestContext context) {
+        verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 40 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
             "Failed.", propSaver);
@@ -757,8 +756,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicer_3(TestContextWrapper context) {
-        verifySameNativeAndNot(context.createConnection(),
+    void testNativeFilterWithCompoundSlicer_3(TestContext context) {
+        verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, [Measures].[Unit Sales] > 1000 ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
             "Failed.", propSaver);
@@ -766,8 +765,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicer_4(TestContextWrapper context) {
-        verifySameNativeAndNot(context.createConnection(),
+    void testNativeFilterWithCompoundSlicer_4(TestContext context) {
+        verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 500 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
             "Failed.", propSaver);
@@ -775,8 +774,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithCompoundSlicerDifferentProducts(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testNativeFilterWithCompoundSlicerDifferentProducts(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member measures.avgQtrs as 'count(filter(Customers.[Name].members, [Unit Sales] > 0))' "
             + "select measures.avgQtrs on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )",
             "Axis #0:\n"
