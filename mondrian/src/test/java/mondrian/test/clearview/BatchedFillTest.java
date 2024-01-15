@@ -11,7 +11,7 @@ package mondrian.test.clearview;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -42,7 +42,7 @@ class BatchedFillTest extends ClearViewBase {
     @Override
 	@ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    protected void runTest(TestContextWrapper context) {
+    protected void runTest(TestContext context) {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);
@@ -54,7 +54,7 @@ class BatchedFillTest extends ClearViewBase {
                 // If agg tables are enabled, the SQL generated is 'better' than
                 // expected.
             } else {
-                super.assertQuerySql(context.createConnection(), true);
+                super.assertQuerySql(context.getConnection(), true);
             }
             super.runTest(context);
         }

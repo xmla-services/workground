@@ -19,7 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -64,7 +64,7 @@ public class Checkin_7634 extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCrossJoin(TestContextWrapper context) throws Exception {
+    public void testCrossJoin(TestContext context) throws Exception {
         prepareContext(context);
         // explicit use of [Product].[Class1]
         String mdx =
@@ -80,7 +80,7 @@ public class Checkin_7634 extends CsvDBTestCase {
         propSaver.set(
             MondrianProperties.instance().CrossJoinOptimizerSize,
             Integer.MAX_VALUE);
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         String resultString1 = TestUtil.toString(result1);
 
         // Execute query using the new version of the CrossJoin
@@ -88,7 +88,7 @@ public class Checkin_7634 extends CsvDBTestCase {
         propSaver.set(
             MondrianProperties.instance().CrossJoinOptimizerSize,
             Integer.MAX_VALUE);
-        Result result2 = executeQuery(mdx, context.createConnection());
+        Result result2 = executeQuery(mdx, context.getConnection());
         String resultString2 = TestUtil.toString(result2);
 
         // This succeeds.

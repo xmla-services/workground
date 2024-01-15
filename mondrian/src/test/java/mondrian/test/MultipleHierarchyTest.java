@@ -17,7 +17,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -43,8 +42,8 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testWeekly(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testWeekly(TestContext context) {
+        Connection connection = context.getConnection();
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // [Time.Weekly] has an 'all' member, but [Time] does not.
             assertAxisReturns(connection,
@@ -66,10 +65,10 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testWeekly2(TestContextWrapper context) {
+    void testWeekly2(TestContext context) {
         // When the context is one hierarchy,
         // the current member of other hierarchy must be its default member.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "  member [Measures].[Foo] as ' "
             + timeWeekly + ".CurrentMember.UniqueName '\n"
@@ -106,8 +105,8 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMultipleMembersOfSameDimensionInSlicerFails(TestContextWrapper context) {
-        assertQueryThrows(context.createConnection(),
+    void testMultipleMembersOfSameDimensionInSlicerFails(TestContext context) {
+        assertQueryThrows(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns,\n"
             + " {[Store].children} on rows\n"
             + "from [Sales]\n"
@@ -117,8 +116,8 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMembersOfHierarchiesInSameDimensionInSlicer(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testMembersOfHierarchiesInSameDimensionInSlicer(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Unit Sales]} on columns,\n"
             + " {[Store].children} on rows\n"
             + "from [Sales]\n"
@@ -140,8 +139,8 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalcMember(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testCalcMember(TestContext context) {
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
             "with member [Measures].[Sales to Date] as \n"
             + " ' Sum(PeriodsToDate([Time].[Year], [Time].[Time].CurrentMember), [Measures].[Unit Sales])'\n"
@@ -331,13 +330,13 @@ class MultipleHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAmbiguousHierarchyInCalcMember(TestContextWrapper context) {
+    void testAmbiguousHierarchyInCalcMember(TestContext context) {
         final String query =
             "with member [Measures].[Time Child Count] as\n"
             + "  [Time].Children.Count\n"
             + "select [Measures].[Time Child Count] on 0\n"
             + "from [Sales]";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             assertQueryThrows(connection,
                 query,
@@ -412,7 +411,7 @@ class MultipleHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalcMemOnMultipleHierarchy(TestContextWrapper context) {
+    void testCalcMemOnMultipleHierarchy(TestContext context) {
         // MONDRIAN-1485
         // Mondrian generates multiple queries during getMemberChildren
         // that references the hierarchy as a value in the where clause.
@@ -421,7 +420,7 @@ class MultipleHierarchyTest {
             + "UPPER('Time.Weekly') group by `store`.`store_country` order by"
             + " ISNULL(`store`.`store_country`) ASC, "
             + "`store`.`store_country` ASC";
-        TestUtil.assertNoQuerySql(context.createConnection(),
+        TestUtil.assertNoQuerySql(context.getConnection(),
             "with member [Time.Weekly].blah as '1' select from sales",
             new SqlPattern[]{
                 new SqlPattern(

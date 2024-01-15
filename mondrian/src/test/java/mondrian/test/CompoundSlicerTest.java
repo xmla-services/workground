@@ -19,7 +19,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -56,8 +55,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSimulatedCompoundSlicer(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testSimulatedCompoundSlicer(TestContext context) {
+        Connection connection = context.getConnection();
         assertQueryReturns(connection,
                 "with\n"
                         + "  member [Measures].[Price per Unit] as\n"
@@ -140,8 +139,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicerExcept(TestContextWrapper context) {
-        Connection  connection = context.createConnection();
+    void testCompoundSlicerExcept(TestContext context) {
+        Connection  connection = context.getConnection();
         final String expected =
                 "Axis #0:\n"
                         + "{[Promotion Media].[Bulk Mail]}\n"
@@ -255,8 +254,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1226(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testMondrian1226(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with set a as '([Time].[1997].[Q1] : [Time].[1997].[Q2])'\n"
                         +    "member Time.x as Aggregate(a,[Measures].[Store Sales])\n"
                         +    "member Measures.x1 as ([Time].[1997].[Q1],"
@@ -286,14 +285,14 @@ class CompoundSlicerTest {
                         + "Row #0: 261.80\n");
     }
 
-    public void _testMondrian1226Variation(TestContextWrapper context) {
+    public void _testMondrian1226Variation(TestContext context) {
         // currently broke.  Below are two queries with two dimensions
         // in the compound slicer.
 
         //  The first has a measure which overrides the Time context,
         // and gives expected results (since the Time dimension is
         // the "placeholder" dimension.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with member measures.HalfTime as '[Time].[1997].[Q1]/2'"
                         + " select measures.HalfTime on 0 from sales where "
                         + "({[Time].[1997].[Q1] : [Time].[1997].[Q2]} * gender.[All Gender]) ",
@@ -306,7 +305,7 @@ class CompoundSlicerTest {
 
         // The second query has a measure overriding gender, which
         // fails since context is not set appropriately for gender.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with member measures.HalfMan as 'Gender.m/2'"
                         +    " select measures.HalfMan on 0 from sales where "
                         +    "({[Time].[1997].[Q1] : [Time].[1997].[Q2]} "
@@ -326,9 +325,9 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicerOverTuples(TestContextWrapper context) {
+    void testCompoundSlicerOverTuples(TestContext context) {
         // reference query
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "    TopCount(\n"
                         + "      [Product].[Product Category].Members\n"
@@ -365,7 +364,7 @@ class CompoundSlicerTest {
         // The actual query. Note that the set in the slicer has two dimensions.
         // This could not be expressed using calculated members and the
         // Aggregate function.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "  member [Measures].[Price per Unit] as\n"
                         + "    [Measures].[Store Sales] / [Measures].[Unit Sales]\n"
@@ -408,8 +407,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptySetSlicerReturnsNull(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testEmptySetSlicerReturnsNull(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Product].Children on 1\n"
                         + "from [Sales]\n"
@@ -432,8 +431,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testEmptySetSlicerViaExpressionReturnsNull(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testEmptySetSlicerViaExpressionReturnsNull(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Product].Children on 1\n"
                         + "from [Sales]\n"
@@ -456,9 +455,9 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicer(TestContextWrapper context) {
+    void testCompoundSlicer(TestContext context) {
         // Reference query.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -475,7 +474,7 @@ class CompoundSlicerTest {
                         + "Row #1: 12,202\n"
                         + "Row #2: 12,395\n");
         // Reference query.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -494,7 +493,7 @@ class CompoundSlicerTest {
 
         // Sum members at same level.
         // Note that 216,537 = 24,597 (drink) + 191,940 (food).
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -514,7 +513,7 @@ class CompoundSlicerTest {
 
         // sum list that contains duplicates
         // duplicates are ignored (checked SSAS 2005)
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -550,7 +549,7 @@ class CompoundSlicerTest {
         // sum list that contains a null member -
         // null member is ignored;
         // confirmed behavior with ssas 2005
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -569,7 +568,7 @@ class CompoundSlicerTest {
                         + "Row #2: 109,521\n");
 
         // Reference query.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -593,7 +592,7 @@ class CompoundSlicerTest {
         // SSAS 2005 doesn't simply sum them: it behaves behavior as if
         // predicates are pushed down to the fact table. Mondrian double-counts,
         // and that is a bug.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -631,7 +630,7 @@ class CompoundSlicerTest {
 
         // The correct behavior of the aggregate function is to double-count.
         // SSAS 2005 and Mondrian give the same behavior.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with member [Product].[Foo] as\n"
                         + "  Aggregate({\n"
                         + "    [Product].[Drink],\n"
@@ -660,8 +659,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSlicerContainsNullMember(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testSlicerContainsNullMember(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -686,7 +685,7 @@ class CompoundSlicerTest {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSlicerContainsLiteralNull(TestContextWrapper context) {
+    void testSlicerContainsLiteralNull(TestContext context) {
         final String mdx =
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
@@ -694,14 +693,14 @@ class CompoundSlicerTest {
                         + "where null";
         if (Bug.Ssas2005Compatible) {
             // SSAS returns a cell set containing null cells.
-            assertQueryReturns(context.createConnection(),
+            assertQueryReturns(context.getConnection(),
                     mdx,
                     "xxx");
         } else {
             // Mondrian gives an error. This is not unreasonable. It is very
             // low priority to make Mondrian consistent with SSAS 2005 in this
             // behavior.
-            assertQueryThrows(context.createConnection(),
+            assertQueryThrows(context.getConnection(),
                     mdx,
                     "Function does not support NULL member parameter");
         }
@@ -714,8 +713,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSlicerContainsPartiallyNullMember(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testSlicerContainsPartiallyNullMember(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select [Measures].[Unit Sales] on 0,\n"
                         + "[Gender].Members on 1\n"
                         + "from [Sales]\n"
@@ -737,8 +736,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicerWithDistinctCount(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testCompoundSlicerWithDistinctCount(TestContext context) {
+        Connection connection = context.getConnection();
         // Reference query.
         assertQueryReturns(connection,
                 "select [Measures].[Customer Count] on 0,\n"
@@ -937,8 +936,8 @@ class CompoundSlicerTest {
     // similar to MONDRIAN-899 testcase
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCount(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCount(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
                         + "  TopCount([Customers].[USA].[WA].[Spokane].Children, 10, [Measures].[Unit Sales]) ON ROWS \n"
                         + "from [Sales] \n"
@@ -974,8 +973,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountAllSlicers(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountAllSlicers(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
                         + "  TopCount([Customers].[USA].[WA].[Spokane].Children, 10, [Measures].[Unit Sales]) ON ROWS \n"
                         + "from [Sales] \n"
@@ -1015,8 +1014,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMemberCMRange(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMemberCMRange(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with set TO_AGGREGATE as '([Time].[1997].[Q1] : [Time].[1997].[Q2])'\n"
                         + "member Time.x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1048,8 +1047,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMember2(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMember2(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member Time.x as Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2], [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1081,8 +1080,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMemberEnumCMSet(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMemberEnumCMSet(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with set TO_AGGREGATE as '{[Time].[1997].[Q1] , [Time].[1997].[Q2]}'\n"
                         + "member Time.x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1114,8 +1113,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMemberEnumSet(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMemberEnumSet(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member Time.x as Aggregate({[Time].[1997].[Q1] , [Time].[1997].[Q2]}, [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1147,8 +1146,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMember5(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMember5(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member Time.x as Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2], [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1182,8 +1181,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testTopCountWithAggregatedMemberCacheKey(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testTopCountWithAggregatedMemberCacheKey(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member Time.x as Aggregate({[Time].[1997].[Q1] , [Time].[1997].[Q2]}, [Measures].[Store Sales])\n"
                         + "member Measures.x1 as ([Time].[1997].[Q1], [Measures].[Store Sales])\n"
@@ -1208,7 +1207,7 @@ class CompoundSlicerTest {
                         + "Row #1: 226.20\n"
                         + "Row #1: 236.64\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with\n"
                         + "member Time.x as Aggregate(Union({[Time].[1997].[Q4]},[Time].[1997].[Q1] : [Time].[1997].[Q2]),[Measures].[Store Sales]) \n"
                         + "member Measures.x1 as ([Time].[1997].[Q1],[Measures].[Store Sales]) \n"
@@ -1242,8 +1241,8 @@ class CompoundSlicerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian900(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testBugMondrian900(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS,\n"
                         + "  Tail(Filter([Customers].[Name].Members, ([Measures].[Unit Sales] IS EMPTY)), 3) ON ROWS \n"
                         + "from [Sales]\n"
@@ -1269,9 +1268,9 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSlicerWithCalcMembers(TestContextWrapper context) throws Exception {
+    void testSlicerWithCalcMembers(TestContext context) throws Exception {
         //2 calc mems
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "WITH "
                         + "MEMBER [Store].[aggCA] AS "
                         + "'Aggregate({[Store].[USA].[CA].[Los Angeles], "
@@ -1285,7 +1284,7 @@ class CompoundSlicerTest {
                         + "53,859");
 
         // mix calc and non-calc
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "WITH "
                         + "MEMBER [Store].[aggCA] AS "
                         + "'Aggregate({[Store].[USA].[CA].[Los Angeles], "
@@ -1297,7 +1296,7 @@ class CompoundSlicerTest {
                         + "53,859");
 
         // multi-position slicer with mix of calc and non-calc
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "WITH "
                         + "MEMBER [Store].[aggCA] AS "
                         + "'Aggregate({[Store].[USA].[CA].[Los Angeles], "
@@ -1313,7 +1312,7 @@ class CompoundSlicerTest {
                         + "53,859");
 
         // named set with calc mem and non-calc
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 "with member Time.aggTime as "
                         + "'aggregate({ [Time].[1997].[Q1], [Time].[1997].[Q2] })'"
                         + "set [timeMembers] as "
@@ -1325,7 +1324,7 @@ class CompoundSlicerTest {
                         + "194,749");
 
         // calculated measure in slicer
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
                 " SELECT FROM SALES WHERE "
                         + "[Measures].[Profit] * { [Store].[USA].[CA], [Store].[USA].[OR]}",
                 "Axis #0:\n"
@@ -1336,8 +1335,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundSlicerAndNamedSet(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testCompoundSlicerAndNamedSet(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "WITH SET [aSet] as 'Filter( Except([Store].[Store Country].Members, [Store].[Store Country].[Canada]), Measures.[Store Sales] > 0)'\n"
                         + "SELECT\n"
                         + "  { Measures.[Unit Sales] } ON COLUMNS,\n"
@@ -1356,8 +1355,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctCountMeasureInSlicer(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testDistinctCountMeasureInSlicer(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "select gender.members on 0 "
                         + "from sales where "
                         + "NonEmptyCrossJoin(Measures.[Customer Count], "
@@ -1376,8 +1375,8 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctCountWithAggregateMembersAndCompSlicer(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testDistinctCountWithAggregateMembersAndCompSlicer(TestContext context) {
+        assertQueryReturns(context.getConnection(),
                 "with member time.agg as 'Aggregate({Time.[1997].Q1, Time.[1997].Q2})' "
                         + "member Store.agg as 'Aggregate(Head(Store.[USA].children,2))' "
                         + "select NON EMPTY CrossJoin( time.agg, CrossJoin( store.agg, measures.[customer count]))"
@@ -1494,36 +1493,36 @@ class CompoundSlicerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundAggCalcMemberInSlicer1(TestContextWrapper context) {
+    void testCompoundAggCalcMemberInSlicer1(TestContext context) {
         String query = "WITH member store.agg as "
                 + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.F))' "
                 + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
                 + "FROM sales where store.agg";
 
-        verifySameNativeAndNot(context.createConnection(),
+        verifySameNativeAndNot(context.getConnection(),
                 query,
                 "Compound aggregated member should return same results with native filter on/off", propSaver);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundAggCalcMemberInSlicer2(TestContextWrapper context) {
+    void testCompoundAggCalcMemberInSlicer2(TestContext context) {
         String query = "WITH member store.agg as "
                 + "'Aggregate({ ([Product].[Product Family].[Drink], Time.[1997].[Q1]), ([Product].[Product Family].[Food], Time.[1997].[Q2]) }))' "
                 + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
                 + "FROM sales where store.agg";
 
-        verifySameNativeAndNot(context.createConnection(),
+        verifySameNativeAndNot(context.getConnection(),
                 query,
                 "Compound aggregated member should return same results with native filter on/off", propSaver);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeFilterWithNullMember(TestContextWrapper context) {
+    void testNativeFilterWithNullMember(TestContext context) {
         // The [Store Sqft] attribute include a null member.  This member should not be excluded
         // by the filter function in this query.
-        verifySameNativeAndNot(context.createConnection(), "WITH\n"
+        verifySameNativeAndNot(context.getConnection(), "WITH\n"
                 + "SET [*NATIVE_CJ_SET] AS 'FILTER(FILTER([Store Size in SQFT].[Store Sqft].MEMBERS,[Store Size in SQFT]"
                 + ".CURRENTMEMBER.CAPTION NOT MATCHES (\"(?i).*20319.*\")), NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
                 + "SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Store Size in SQFT].CURRENTMEMBER.ORDERKEY,BASC)'\n"

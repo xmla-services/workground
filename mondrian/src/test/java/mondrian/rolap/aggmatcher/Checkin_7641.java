@@ -19,7 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -56,7 +56,7 @@ public class Checkin_7641 extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void testImplicitMember(TestContextWrapper context) throws Exception {
+    public void testImplicitMember(TestContext context) throws Exception {
         // explicit use of [Product].[Class1]
         prepareContext(context);
         String mdx =
@@ -70,9 +70,9 @@ public class Checkin_7641 extends CsvDBTestCase {
             + "[Geography].[All Regions].Children)) ON ROWS"
             + " from [ImplicitMember]";
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         String resultString1 = TestUtil.toString(result1);
-        Result result2 = executeQuery(mdx, context.createConnection());
+        Result result2 = executeQuery(mdx, context.getConnection());
         String resultString2 = TestUtil.toString(result2);
 
         assertEquals(resultString1, resultString2);

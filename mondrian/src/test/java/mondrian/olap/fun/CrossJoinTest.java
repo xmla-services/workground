@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -164,10 +164,10 @@ private PropertySaver5 propSaver;
   // in CrossJoinFunDef$CrossJoinIterCalc$1$1.forward()
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testCrossJoinIterCalc_IterationCancellationOnForward(TestContextWrapper foodMartContext) {
+  void testCrossJoinIterCalc_IterationCancellationOnForward(TestContext foodMartContext) {
     propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 1 );
     // Get product members as TupleList
-   Connection con= foodMartContext.createConnection();
+   Connection con= foodMartContext.getConnection();
     RolapCube salesCube =
       (RolapCube) TestUtil.cubeByName( con, SALES_CUBE );
     SchemaReader salesCubeSchemaReader =
@@ -369,15 +369,15 @@ private PropertySaver5 propSaver;
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
+void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 	}
 
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-  void testResultLimitWithinCrossjoin(TestContextWrapper foodMartContext) {
+  void testResultLimitWithinCrossjoin(TestContext foodMartContext) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
-   Connection connection= foodMartContext.createConnection();
+   Connection connection= foodMartContext.getConnection();
     TestUtil.assertAxisThrows(connection, "Hierarchize(Crossjoin(Union({[Gender].CurrentMember}, [Gender].Children), "
         + "Union({[Product].CurrentMember}, [Product].[Brand Name].Members)))",
       "result (1,539) exceeded limit (1,000)","Sales" );
@@ -427,7 +427,7 @@ void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
     TestFunDef() {
     }
 
-   
+
     @Override
 	public Expression createCall( Validator validator, Expression[] args ) {
       throw new UnsupportedOperationException();
@@ -451,12 +451,12 @@ void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
 	@Override
 	public FunctionMetaData getFunctionMetaData() {
 		return new FunctionMetaData() {
-			
+
 		    @Override
 			public String signature() {
 		      throw new UnsupportedOperationException();
 		    }
-			
+
 
 			@Override
 			public FunctionAtom functionAtom() {
@@ -498,7 +498,7 @@ void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
     public NullFunDef() {
     }
 
- 
+
 
     @Override
 	public Expression createCall( Validator validator, Expression[] args ) {
@@ -528,7 +528,7 @@ void testResultLimitWithinCrossjoin_1(TestContextWrapper foodMartContext) {
 			public String signature() {
 		      return "";
 		    }
-			
+
 			@Override
 			public FunctionAtom functionAtom() {
 				return new FunctionAtom() {

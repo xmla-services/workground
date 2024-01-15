@@ -15,7 +15,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import mondrian.rolap.SchemaModifiers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -34,9 +34,9 @@ class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testUsagePrefix(TestContextWrapper context) throws Exception {
+    void testUsagePrefix(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
         MondrianProperties props = MondrianProperties.instance();
@@ -49,9 +49,9 @@ class UsagePrefixTest extends AggTableTestCase {
             "select {[StoreX].[Store Value].members} on columns, "
                 +   "{ measures.[Amount] } on rows from Cheques";
 
-        withSchema(context.getContext(), SchemaModifiers.UsagePrefixTestModifier1::new);
-        context.createConnection().getCacheControl(null).flushSchemaCache();
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.UsagePrefixTestModifier1::new);
+        context.getConnection().getCacheControl(null).flushSchemaCache();
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             +    "{}\n"
@@ -68,9 +68,9 @@ class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testUsagePrefixTwoDims(TestContextWrapper context) throws Exception {
+    void testUsagePrefixTwoDims(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
         MondrianProperties props = MondrianProperties.instance();
@@ -84,9 +84,9 @@ class UsagePrefixTest extends AggTableTestCase {
             + " [StoreY].[Store Value].members) on columns, "
             +   "{ measures.[Amount] } on rows from Cheques";
 
-        withSchema(context.getContext(), SchemaModifiers.UsagePrefixTestModifier1::new);
-        context.createConnection().getCacheControl(null).flushSchemaCache();
-        assertQueryReturns(context.createConnection(),
+        withSchema(context, SchemaModifiers.UsagePrefixTestModifier1::new);
+        context.getConnection().getCacheControl(null).flushSchemaCache();
+        assertQueryReturns(context.getConnection(),
             mdx,
                 "Axis #0:\n"
                 + "{}\n"

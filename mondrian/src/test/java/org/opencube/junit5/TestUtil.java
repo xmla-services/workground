@@ -75,7 +75,7 @@ import org.eclipse.daanse.olap.impl.TraditionalCellSetFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
+
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
@@ -85,7 +85,6 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.MemberCacheHelper;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchemaPool;
@@ -228,10 +227,10 @@ public class TestUtil {
 	 * @param queryString Query string
 	 * @param pattern     Pattern which exception must match
 	 */
-	public static void assertQueryThrows(TestContextWrapper context, String queryString, String pattern) {
+	public static void assertQueryThrows(TestContext context, String queryString, String pattern) {
 		Throwable throwable;
 		try {
-			Result result = executeQuery(context.createConnection(), queryString);
+			Result result = executeQuery(context.getConnection(), queryString);
 			Util.discard(result);
 			throwable = null;
 		} catch (Throwable e) {
@@ -239,25 +238,6 @@ public class TestUtil {
 		}
 		checkThrowable(throwable, pattern);
 	}
-
-    /**
-     * Executes a query, and asserts that it throws an exception which contains the
-     * given pattern.
-     *
-     * @param queryString Query string
-     * @param pattern     Pattern which exception must match
-     */
-    public static void assertQueryThrows(TestContext context, String queryString, String pattern) {
-        Throwable throwable;
-        try {
-            Result result = executeQuery(context.getConnection(), queryString);
-            Util.discard(result);
-            throwable = null;
-        } catch (Throwable e) {
-            throwable = e;
-        }
-        checkThrowable(throwable, pattern);
-    }
 
     public static void assertQueryThrows(TestContext context, List<String> roles, String queryString, String pattern) {
         Throwable throwable;
@@ -319,14 +299,14 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
-	public static void assertExprThrows(TestContextWrapper context, String cubeName, String expression, String pattern) {
+	public static void assertExprThrows(TestContext context, String cubeName, String expression, String pattern) {
 		Throwable throwable = null;
 		try {
 			if (cubeName.indexOf(' ') >= 0) {
 				cubeName = Util.quoteMdxIdentifier(cubeName);
 			}
 			expression = expression.replace("'", "''");
-			Result result = executeQuery(context.createConnection(), "with member [Measures].[Foo] as '" + expression
+			Result result = executeQuery(context.getConnection(), "with member [Measures].[Foo] as '" + expression
 					+ "' select {[Measures].[Foo]} on columns from " + cubeName);
 			Cell cell = result.getCell(new int[] { 0 });
 			if (cell.isError()) {
@@ -339,30 +319,6 @@ public class TestUtil {
 	}
 
     /**
-     * Executes an expression, and asserts that it gives an error which contains a
-     * particular pattern. The error might occur during parsing, or might be
-     * contained within the cell value.
-     */
-    public static void assertExprThrows(TestContext context, String cubeName, String expression, String pattern) {
-        Throwable throwable = null;
-        try {
-            if (cubeName.indexOf(' ') >= 0) {
-                cubeName = Util.quoteMdxIdentifier(cubeName);
-            }
-            expression = expression.replace("'", "''");
-            Result result = executeQuery(context.getConnection(), "with member [Measures].[Foo] as '" + expression
-                + "' select {[Measures].[Foo]} on columns from " + cubeName);
-            Cell cell = result.getCell(new int[] { 0 });
-            if (cell.isError()) {
-                throwable = (Throwable) cell.getValue();
-            }
-        } catch (Throwable e) {
-            throwable = e;
-        }
-        checkThrowable(throwable, pattern);
-    }
-
-    /**
 	 * Executes an expression, and asserts that it gives an error which contains a
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
@@ -370,16 +326,6 @@ public class TestUtil {
 	public static void assertExprThrows(Connection connection, String expression, String pattern) {
 		String cubeName = getDefaultCubeName();
 		assertExprThrows(connection, cubeName, expression, pattern);
-	}
-
-	/**
-	 * Executes an expression, and asserts that it gives an error which contains a
-	 * particular pattern. The error might occur during parsing, or might be
-	 * contained within the cell value.
-	 */
-	public static void assertExprThrows(TestContextWrapper context, String expression, String pattern) {
-		String cubeName = getDefaultCubeName();
-		assertExprThrows(context, cubeName, expression, pattern);
 	}
 
     /**
@@ -644,15 +590,16 @@ public class TestUtil {
 	 *
 	 * @return Warnings encountered while loading schema
 	 */
-	public static List<Exception> getSchemaWarnings(TestContextWrapper context) {
+	public static List<Exception> getSchemaWarnings(TestContext context) {
 		//final Util.PropertyList propertyList =
 		//		getConnectionProperties().clone();
 		//propertyList.put(
 		//		RolapConnectionProperties.Ignore.name(),
 		//		"true" );
-		context.setProperty(RolapConnectionProperties.Ignore.name(),
-				"true");
-		final Connection connection = context.createConnection();
+        //TODO
+		//context.setProperty(RolapConnectionProperties.Ignore.name(),
+		//		"true");
+		final Connection connection = context.getConnection();
 				//withProperties( propertyList ).getConnection();
 		return connection.getSchema().getWarnings();
 	}
@@ -1923,10 +1870,10 @@ public class TestUtil {
 		return genderDimension.getHierarchy().getAllMember();
 	}
 
-	public static CellSet executeOlap4jXmlaQuery(TestContextWrapper context, String queryString )
+	public static CellSet executeOlap4jXmlaQuery(TestContext context, String queryString )
 			throws SQLException {
 		/*
-		Connection connection = context.createConnection();
+		Connection connection = context.getConnection();
 		String schema = getConnectionProperties(connection)
 				.get( RolapConnectionProperties.CatalogContent.name() );
 		if ( schema == null ) {
@@ -1962,7 +1909,7 @@ public class TestUtil {
 						+ cookie,
 				info );
 		*/
-		Connection connection = context.getContext().getConnection();
+		Connection connection = context.getConnection();
 		//		con.unwrap( OlapConnection.class );
 
         org.eclipse.daanse.olap.api.Statement statement = connection.createStatement();

@@ -53,7 +53,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -92,7 +92,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testSimpleEnum(TestContextWrapper context) {
+    void testSimpleEnum(TestContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -138,7 +138,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testCalcMemsNotResolved(TestContextWrapper context) {
+    void testCalcMemsNotResolved(TestContext context) {
         assertFalse(
             batchResolve(context,
                 "with member time.foo as '1' member time.bar as '2' "
@@ -154,7 +154,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testLevelReferenceHandled(TestContextWrapper context) {
+    void testLevelReferenceHandled(TestContext context) {
         // make sure ["Week", 1997] don't get batched as children of
         // [Time.Weekly].[All]
         batchResolve(context,
@@ -177,7 +177,7 @@ class IdBatchResolverTest  {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testPhysMemsResolvedWhenCalcsMixedIn(TestContextWrapper context) {
+    void testPhysMemsResolvedWhenCalcsMixedIn(TestContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -208,7 +208,7 @@ class IdBatchResolverTest  {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAnalyzerFilterMdx(TestContextWrapper context) {
+    void testAnalyzerFilterMdx(TestContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -263,7 +263,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testSetWithNullMember(TestContextWrapper context) {
+    void testSetWithNullMember(TestContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -301,7 +301,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMultiHierarchyNonSSAS(TestContextWrapper context) {
+    void testMultiHierarchyNonSSAS(TestContext context) {
         propSaver.set(propSaver.properties.SsasCompatibleNaming, false);
         assertContains(
             "Resolved map omitted one or more members",
@@ -340,7 +340,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testMultiHierarchySSAS(TestContextWrapper context) {
+    void testMultiHierarchySSAS(TestContext context) {
         propSaver.set(propSaver.properties.SsasCompatibleNaming, true);
         assertContains(
             "Resolved map omitted one or more members",
@@ -380,7 +380,7 @@ class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testParentChild(TestContextWrapper context) {
+    void testParentChild(TestContext context) {
         // P-C resolution will not result in consolidated SQL, but it should
         // still correctly identify children and attempt to resolve them
         // together.
@@ -427,7 +427,7 @@ class IdBatchResolverTest  {
         }
     }
 
-    public Set<String> batchResolve(TestContextWrapper context,String mdx) {
+    public Set<String> batchResolve(TestContext context,String mdx) {
         IdBatchResolver batchResolver = makeTestBatchResolver(context,mdx);
         Map<QueryComponent, QueryComponent> resolvedIdents = batchResolver.resolve();
         Set<String> resolvedNames = getResolvedNames(resolvedIdents);
@@ -466,13 +466,13 @@ class IdBatchResolverTest  {
                 }));
     }
 
-    public IdBatchResolver makeTestBatchResolver(TestContextWrapper context,String mdx) {
-    	TestUtil.flushSchemaCache(context.createConnection());
+    public IdBatchResolver makeTestBatchResolver(TestContext context,String mdx) {
+    	TestUtil.flushSchemaCache(context.getConnection());
         FactoryImpl factoryImpl = new FactoryImplTestWrapper();
         MdxParserValidator parser = new JavaccParserValidatorImpl(factoryImpl);
 
         RolapConnection conn = (RolapConnection) spy(
-        		context.createConnection());
+        		context.getConnection());
         when(conn.createParser()).thenReturn(parser);
 
         query = conn.parseQuery(mdx);

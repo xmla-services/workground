@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
@@ -195,13 +194,13 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMondrianBug641(TestContextWrapper context) {
+  void testMondrianBug641(TestContext context) {
     if ( !Bug.BugMondrian641Fixed ) {
       return;
     }
     long start = System.currentTimeMillis();
     Result result =
-      executeQuery(context.createConnection(),
+      executeQuery(context.getConnection(),
         "select  non empty  {  crossjoin( customers.[city].members, "
           + "crossjoin( [store type].[store type].members,  "
           + "product.[product name].members)) }"
@@ -216,7 +215,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testVeryLargeExplicitSet(TestContextWrapper context) {
+  void testVeryLargeExplicitSet(TestContext context) {
     final Statistician[] statisticians = {
       // jdk1.6 mackerel access main old    5,000 ms
       // jdk1.6 marmalade 3.2 14036   4,376 4,055 ms
@@ -269,7 +268,7 @@ public class PerformanceTest {
       new Statistician( "testVeryLargeExplicitSet: Param query" ),
     };
     for ( int i = 0; i < 10; i++ ) {
-      checkVeryLargeExplicitSet(context.createConnection(), statisticians);
+      checkVeryLargeExplicitSet(context.getConnection(), statisticians);
     }
     for ( Statistician statistician : statisticians ) {
       statistician.printDurations();
@@ -349,7 +348,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian639(TestContextWrapper context) {
+  void testBugMondrian639(TestContext context) {
     // unknown revision before fix mac-mini 233,000 ms
     // unknown revision after fix mac-mini    4,500 ms
     // jdk1.6 marmalade 3.2 14036             1,821 1,702 ms
@@ -362,7 +361,7 @@ public class PerformanceTest {
     final Statistician statistician =
       new Statistician( "testBugMondrian639" );
     for ( int i = 0; i < 20; i++ ) {
-      checkBugMondrian639(context.createConnection(), statistician);
+      checkBugMondrian639(context.getConnection(), statistician);
     }
     statistician.printDurations();
   }
@@ -460,7 +459,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   @Disabled
-  void testInMemoryCalc(TestContextWrapper context) {
+  void testInMemoryCalc(TestContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Test is too expensive to run as part of standard regress.
       // Take 10h on hudson (MySQL)!!!
@@ -529,7 +528,7 @@ public class PerformanceTest {
         + "from [Sales]\n"
         + "where [Time].[1997].[Q3]";
     final long start = System.currentTimeMillis();
-    assertQueryReturns(context.createConnection(), mdx, result );
+    assertQueryReturns(context.getConnection(), mdx, result );
     printDuration( "in-memory calc", start );
   }
 
@@ -540,7 +539,7 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian843(TestContextWrapper context) {
+  void testBugMondrian843(TestContext context) {
     // On my core i7 laptop:
     // takes 2.5 seconds before bug fixed
     // takes 0.4 seconds after bug fixed
@@ -551,7 +550,7 @@ public class PerformanceTest {
     // jdk1.7 marmite   main 14771    266 ms (as part of suite)
     // jdk1.7 marmite   main 14773    181 ms
     long start = System.currentTimeMillis();
-    executeQuery(context.createConnection(),
+    executeQuery(context.getConnection(),
       "WITH SET [filtered] AS "
         + "FILTER({customers.members, customers.members, customers.members, customers.members, customers.members}, "
         + "[Measures].[Unit Sales] > 100) "
@@ -609,11 +608,11 @@ public class PerformanceTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testBugMondrian1242(TestContextWrapper context) {
+  void testBugMondrian1242(TestContext context) {
     propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
-    withSchema(context.getContext(), SchemaModifiers.PerformanceTestModifier4::new);
+    withSchema(context, SchemaModifiers.PerformanceTestModifier4::new);
     // original test case for MONDRIAN-1242; ensures correct result
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertQueryReturns(connection,
       "select {[Measures].[Unit Sales]} on COLUMNS,\n"
         + "[Store].[USA].[CA].Children on ROWS\n"

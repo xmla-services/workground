@@ -14,7 +14,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -34,7 +34,7 @@ class IndexedValuesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testQueryWithIndex(TestContextWrapper context) {
+    void testQueryWithIndex(TestContext context) {
         final String desiredResult =
             "Axis #0:\n"
             + "{}\n"
@@ -45,7 +45,7 @@ class IndexedValuesTest {
             + "{[Employees].[Sheri Nowmer]}\n"
             + "Row #0: $39,431.67\n"
             + "Row #0: 7,392\n";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         // Query using name
         assertQueryReturns(connection,
             "SELECT {[Measures].[Org Salary], [Measures].[Count]} "

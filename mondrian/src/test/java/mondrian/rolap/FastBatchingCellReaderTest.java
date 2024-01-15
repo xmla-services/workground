@@ -39,7 +39,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -96,8 +95,8 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     salesCube = null;
   }
 
-  private void prepareContext(TestContextWrapper context) {
-    connection = context.createConnection();
+  private void prepareContext(TestContext context) {
+    connection = context.getConnection();
     connection.getCacheControl( null ).flushSchemaCache();
     final Statement statement = ((RolapConnection) connection).getInternalStatement();
     e = new Execution( statement, 0 );
@@ -105,17 +104,6 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     locus = new Locus( e, "FastBatchingCellReaderTest", null );
     Locus.push( locus );
     salesCube = (RolapCube) connection.getSchemaReader().withLocus().getCubes()[0];
-  }
-
-  private void prepareContext(TestContext context) {
-        connection = context.getConnection();
-        connection.getCacheControl( null ).flushSchemaCache();
-        final Statement statement = ((RolapConnection) connection).getInternalStatement();
-        e = new Execution( statement, 0 );
-        aggMgr = e.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
-        locus = new Locus( e, "FastBatchingCellReaderTest", null );
-        Locus.push( locus );
-        salesCube = (RolapCube) connection.getSchemaReader().withLocus().getCubes()[0];
   }
 
   private BatchLoader createFbcr( Boolean useGroupingSets, RolapCube cube ) {
@@ -133,9 +121,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMissingSubtotalBugMetricFilter(TestContextWrapper context) {
+  void testMissingSubtotalBugMetricFilter(TestContext context) {
     prepareContext(context);
-    assertQueryReturns(context.createConnection(), "With " + "Set [*NATIVE_CJ_SET] as " + "'NonEmptyCrossJoin({[Time].[Year].[1997]},"
+    assertQueryReturns(context.getConnection(), "With " + "Set [*NATIVE_CJ_SET] as " + "'NonEmptyCrossJoin({[Time].[Year].[1997]},"
         + "                   NonEmptyCrossJoin({[Product].[All Products].[Drink]},{[Education Level].[All Education Levels].[Bachelors Degree]}))' "
         + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Unit Sales_SEL~SUM] > 1000.0)' "
         + "Set [*METRIC_MEMBERS_Education Level] as 'Generate([*METRIC_CJ_SET], {[Education Level].CurrentMember})' "
@@ -152,9 +140,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testMissingSubtotalBugMultiLevelMetricFilter(TestContextWrapper context) {
+  void testMissingSubtotalBugMultiLevelMetricFilter(TestContext context) {
     prepareContext(context);
-    assertQueryReturns(context.createConnection(), "With "
+    assertQueryReturns(context.getConnection(), "With "
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Product],[*BASE_MEMBERS_Education Level])' "
         + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Store Cost_SEL~SUM] > 1000.0)' "
         + "Set [*BASE_MEMBERS_Product] as '{[Product].[All Products].[Drink].[Beverages],[Product].[All Products].[Food].[Baked Goods]}' "
@@ -175,7 +163,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldUseGroupingFunctionOnPropertyTrueAndOnSupportedDB(TestContextWrapper context) {
+  void testShouldUseGroupingFunctionOnPropertyTrueAndOnSupportedDB(TestContext context) {
     prepareContext(context);
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
     BatchLoader fbcr = createFbcr( true, salesCube );
@@ -184,7 +172,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldUseGroupingFunctionOnPropertyTrueAndOnNonSupportedDB(TestContextWrapper context) {
+  void testShouldUseGroupingFunctionOnPropertyTrueAndOnNonSupportedDB(TestContext context) {
     prepareContext(context);
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
     BatchLoader fbcr = createFbcr( false, salesCube );
@@ -193,7 +181,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldUseGroupingFunctionOnPropertyFalseOnSupportedDB(TestContextWrapper context) {
+  void testShouldUseGroupingFunctionOnPropertyFalseOnSupportedDB(TestContext context) {
     prepareContext(context);
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
     BatchLoader fbcr = createFbcr( true, salesCube );
@@ -202,7 +190,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testShouldUseGroupingFunctionOnPropertyFalseOnNonSupportedDB(TestContextWrapper context) {
+  void testShouldUseGroupingFunctionOnPropertyFalseOnNonSupportedDB(TestContext context) {
     prepareContext(context);
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
     BatchLoader fbcr = createFbcr( false, salesCube );
@@ -211,9 +199,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDoesDBSupportGroupingSets(TestContextWrapper context) {
+  void testDoesDBSupportGroupingSets(TestContext context) {
     prepareContext(context);
-    final Dialect dialect = getDialect(context.createConnection());
+    final Dialect dialect = getDialect(context.getConnection());
     FastBatchingCellReader fbcr = new FastBatchingCellReader( e, salesCube, aggMgr ) {
       @Override
 	Dialect getDialect() {
@@ -237,10 +225,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testGroupBatchesForNonGroupableBatchesWithSorting(TestContextWrapper context) {
+  void testGroupBatchesForNonGroupableBatchesWithSorting(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) );
     BatchLoader.Batch maritalStatusBatch =
@@ -256,14 +244,14 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testGroupBatchesForNonGroupableBatchesWithConstraints(TestContextWrapper context) {
+  void testGroupBatchesForNonGroupableBatchesWithConstraints(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
     List<String[]> compoundMembers = new ArrayList<>();
     compoundMembers.add( new String[] { "USA", "CA" } );
     compoundMembers.add( new String[] { "Canada", "BC" } );
     CellRequestConstraint constraint = makeConstraintCountryState( compoundMembers );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F", constraint ) );
     BatchLoader.Batch maritalStatusBatch =
@@ -280,10 +268,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testGroupBatchesForGroupableBatches(TestContextWrapper context) {
+  void testGroupBatchesForGroupableBatches(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
           @Override
@@ -310,10 +298,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testGroupBatchesForGroupableBatchesAndNonGroupableBatches(TestContextWrapper context) {
+  void testGroupBatchesForGroupableBatchesAndNonGroupableBatches(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     final BatchLoader.Batch group1Agg2 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
           @Override
@@ -368,7 +356,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testGroupBatchesForTwoSetOfGroupableBatches(TestContextWrapper context) {
+  void testGroupBatchesForTwoSetOfGroupableBatches(TestContext context) {
     prepareContext(context);
     String[] fieldValuesStoreType =
         { "Deluxe Supermarket", "Gourmet Supermarket", "HeadQuarters", "Mid-Size Grocery", "Small Grocery",
@@ -381,7 +369,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     String tableWarehouse = "warehouse";
 
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch batch1RollupOnGender =
         createBatch(connection, fbcr, new String[] { tableTime, tableStore, tableProductClass }, new String[] { fieldYear,
           fieldStoreType, fieldProductFamily }, new String[][] { fieldValuesYear, fieldValuesStoreType,
@@ -451,10 +439,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAddToCompositeBatchForBothBatchesNotPartOfCompositeBatch(TestContextWrapper context) {
+  void testAddToCompositeBatchForBothBatchesNotPartOfCompositeBatch(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch batch1 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
     BatchLoader.Batch batch2 =
@@ -471,11 +459,11 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAddToCompositeBatchForDetailedBatchAlreadyPartOfACompositeBatch(TestContextWrapper context) {
+  void testAddToCompositeBatchForDetailedBatchAlreadyPartOfACompositeBatch(TestContext context) {
 	prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
     prepareContext(context);
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
     BatchLoader.Batch aggBatch1 =
@@ -500,10 +488,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAddToCompositeBatchForAggregationBatchAlreadyPartOfACompositeBatch(TestContextWrapper context) {
+  void testAddToCompositeBatchForAggregationBatchAlreadyPartOfACompositeBatch(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
     BatchLoader.Batch aggBatchToAddToDetailedBatch =
@@ -528,10 +516,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAddToCompositeBatchForBothBatchAlreadyPartOfACompositeBatch(TestContextWrapper context) {
+  void testAddToCompositeBatchForBothBatchAlreadyPartOfACompositeBatch(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
     BatchLoader.Batch aggBatchToAddToDetailedBatch =
@@ -568,10 +556,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForSuperSet(TestContextWrapper context) {
+  void testCanBatchForSuperSet(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -589,14 +577,14 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchWithConstraint(TestContextWrapper context) {
+  void testCanBatchForBatchWithConstraint(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
     List<String[]> compoundMembers = new ArrayList<>();
     compoundMembers.add( new String[] { "USA", "CA" } );
     compoundMembers.add( new String[] { "Canada", "BC" } );
     CellRequestConstraint constraint = makeConstraintCountryState( compoundMembers );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -614,10 +602,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchWithConstraint2(TestContextWrapper context) {
+  void testCanBatchForBatchWithConstraint2(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     List<String[]> compoundMembers1 = new ArrayList<>();
     compoundMembers1.add( new String[] { "USA", "CA" } );
     compoundMembers1.add( new String[] { "Canada", "BC" } );
@@ -646,13 +634,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchWithDistinctCountInDetailedBatch(TestContextWrapper context) {
+  void testCanBatchForBatchWithDistinctCountInDetailedBatch(TestContext context) {
     prepareContext(context);
     if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -669,13 +657,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchWithDistinctCountInAggregateBatch(TestContextWrapper context) {
+  void testCanBatchForBatchWithDistinctCountInAggregateBatch(TestContext context) {
     prepareContext(context);
     if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -692,13 +680,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchSummaryBatchWithDetailedBatchWithDistinctCount(TestContextWrapper context) {
+  void testCanBatchSummaryBatchWithDetailedBatchWithDistinctCount(TestContext context) {
     prepareContext(context);
     if ( MondrianProperties.instance().UseAggregates.get() || MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime }, new String[] { fieldYear }, new String[][] { fieldValuesYear },
             cubeNameSales, "[Measures].[Customer Count]" );
@@ -718,10 +706,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testNonSuperSet(TestContextWrapper context) {
+  void testNonSuperSet(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -742,10 +730,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testSuperSetAndNotAllValues(TestContextWrapper context) {
+  void testSuperSetAndNotAllValues(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, fieldValuesProductFamily,
@@ -763,10 +751,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchesFromSameAggregationButDifferentRollupOption(TestContextWrapper context) {
+  void testCanBatchForBatchesFromSameAggregationButDifferentRollupOption(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch batch1 =
         createBatch(connection, fbcr, new String[] { tableTime }, new String[] { fieldYear }, new String[][] { fieldValuesYear },
             cubeNameSales, measureUnitSales );
@@ -796,10 +784,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testSuperSetDifferentValues(TestContextWrapper context) {
+  void testSuperSetDifferentValues(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch aggregationBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { new String[] { "1997" },
@@ -817,9 +805,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCanBatchForBatchWithDifferentAggregationTable(TestContextWrapper context) {
+  void testCanBatchForBatchWithDifferentAggregationTable(TestContext context) {
     prepareContext(context);
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     final Dialect dialect = getDialect(connection);
     final DatabaseProduct product = getDatabaseProduct(dialect.getDialectName());
     switch ( product ) {
@@ -851,10 +839,10 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCannotBatchTwoBatchesAtTheSameLevel(TestContextWrapper context) {
+  void testCannotBatchTwoBatchesAtTheSameLevel(TestContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     BatchLoader.Batch firstBatch =
         createBatch(connection, fbcr, new String[] { tableTime, tableProductClass, tableProductClass }, new String[] { fieldYear,
           fieldProductFamily, fieldProductDepartment }, new String[][] { fieldValuesYear, new String[] { "Food" },
@@ -871,9 +859,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCompositeBatchLoadAggregation(TestContextWrapper context) throws Exception {
+  void testCompositeBatchLoadAggregation(TestContext context) throws Exception {
     prepareContext(context);
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     if ( !getDialect(connection).supportsGroupingSets() ) {
       return;
     }
@@ -896,7 +884,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
     final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
         new ArrayList<>();
-    context.getContext().getAggregationManager().cacheMgr.execute(
+    context.getAggregationManager().cacheMgr.execute(
         new SegmentCacheManager.Command<Void>() {
           private final Locus locus = Locus.peek();
 
@@ -1193,11 +1181,11 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount(TestContextWrapper context) {
+  void testAggregateDistinctCount(TestContext context) {
     prepareContext(context);
     // solve_order=1 says to aggregate [CA] and [OR] before computing their
     // sums
-    assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.getConnection(),
         "WITH MEMBER [Time].[Time].[1997 Q1 plus Q2] AS 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q2]})', solve_order=1\n"
             + "SELECT {[Measures].[Customer Count]} ON COLUMNS,\n"
             + "      {[Time].[1997].[Q1], [Time].[1997].[Q2], [Time].[1997 Q1 plus Q2]} ON ROWS\n" + "FROM Sales\n"
@@ -1213,9 +1201,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount2(TestContextWrapper context) {
+  void testAggregateDistinctCount2(TestContext context) {
     prepareContext(context);
-    assertQueryReturns(context.createConnection(), "WITH MEMBER [Time].[Time].[1997 Q1 plus July] AS\n"
+    assertQueryReturns(context.getConnection(), "WITH MEMBER [Time].[Time].[1997 Q1 plus July] AS\n"
         + " 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q3].[7]})', solve_order=1\n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Customer Count]} ON COLUMNS,\n"
         + "      {[Time].[1997].[Q1],\n" + "       [Time].[1997].[Q2],\n" + "       [Time].[1997].[Q3].[7],\n"
@@ -1235,9 +1223,9 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount3(TestContextWrapper context) {
+  void testAggregateDistinctCount3(TestContext context) {
     prepareContext(context);
-    assertQueryReturns(context.createConnection(), "WITH\n"
+    assertQueryReturns(context.getConnection(), "WITH\n"
         + "  MEMBER [Promotion Media].[TV plus Radio] AS 'AGGREGATE({[Promotion Media].[TV], [Promotion Media].[Radio]})', solve_order=1\n"
         + "  MEMBER [Time].[Time].[1997 Q1 plus July] AS 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q3].[7]})', solve_order=1\n"
         + "SELECT {[Promotion Media].[TV plus Radio],\n" + "        [Promotion Media].[TV],\n"
@@ -1299,7 +1287,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "\"promotion\".\"media_type\" in ('Radio', 'TV') " + "group by "
             + "\"time_by_day\".\"the_year\", \"time_by_day\".\"quarter\", " + "\"promotion\".\"media_type\"";
 
-    assertQuerySql(context.createConnection(), "WITH\n"
+    assertQuerySql(context.getConnection(), "WITH\n"
         + "  MEMBER [Promotion Media].[TV plus Radio] AS 'AGGREGATE({[Promotion Media].[TV], [Promotion Media].[Radio]})', solve_order=1\n"
         + "  MEMBER [Time].[Time].[1997 Q1 plus July] AS 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q3].[7]})', solve_order=1\n"
         + "SELECT {[Promotion Media].[TV plus Radio],\n" + "        [Promotion Media].[TV],\n"
@@ -1316,7 +1304,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount4(TestContextWrapper context) {
+  void testAggregateDistinctCount4(TestContext context) {
     prepareContext(context);
     // CA and USA are overlapping members
     final String mdxQuery =
@@ -1338,7 +1326,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "Row #0: 3,505\n" + "Row #0: 112,347\n" + "Row #1: 1,386\n" + "Row #1: 22,293\n" + "Row #2: 3,505\n"
             + "Row #2: 90,054\n" + "Row #3: 2,981\n" + "Row #3: 83,181\n" + "Row #4: 1,462\n" + "Row #4: 29,166\n";
 
-    assertQueryReturns(context.createConnection(), mdxQuery, result );
+    assertQueryReturns(context.getConnection(), mdxQuery, result );
   }
 
   /**
@@ -1347,7 +1335,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount5(TestContextWrapper context) {
+  void testAggregateDistinctCount5(TestContext context) {
     prepareContext(context);
     // make sure tuple optimization will be used
     propSaver.set( propSaver.properties.MaxConstraints, 2 );
@@ -1380,13 +1368,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
         { new SqlPattern( DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
             DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
-     assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.getConnection(), query, patterns );
   }
 
   // Test for multiple members on different levels within the same hierarchy.
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount6(TestContextWrapper context) {
+  void testAggregateDistinctCount6(TestContext context) {
     prepareContext(context);
     // CA and USA are overlapping members
     final String mdxQuery =
@@ -1409,7 +1397,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "Row #0: 3,753\n" + "Row #0: 229,496\n" + "Row #1: 1,877\n" + "Row #1: 36,177\n" + "Row #2: 845\n"
             + "Row #2: 13,123\n" + "Row #3: 2,073\n" + "Row #3: 37,789\n" + "Row #4: 3,753\n" + "Row #4: 142,407\n";
 
-    assertQueryReturns(context.createConnection(), mdxQuery, result );
+    assertQueryReturns(context.getConnection(), mdxQuery, result );
   }
 
   /**
@@ -1421,7 +1409,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountBug1785406(TestContextWrapper context) {
+  void testDistinctCountBug1785406(TestContext context) {
     prepareContext(context);
     String query =
         "With \n" + "Set [*BASE_MEMBERS_Product] as {[Product].[All Products].[Food].[Deli]}\n"
@@ -1431,7 +1419,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "NonEmptyCrossJoin([*BASE_MEMBERS_Store],{([Product].[*CTX_MEMBER_SEL~SUM])})\n" + "on rows\n"
             + "From [Sales]\n" + "where ([Time].[1997])";
 
-    assertQueryReturns(context.createConnection(), query, "Axis #0:\n" + "{[Time].[1997]}\n" + "Axis #1:\n" + "{[Measures].[Customer Count]}\n"
+    assertQueryReturns(context.getConnection(), query, "Axis #0:\n" + "{[Time].[1997]}\n" + "Axis #1:\n" + "{[Measures].[Customer Count]}\n"
         + "Axis #2:\n" + "{[Store].[USA].[WA], [Product].[*CTX_MEMBER_SEL~SUM]}\n" + "Row #0: 889\n" );
 
     String mysqlSql =
@@ -1478,19 +1466,19 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( DatabaseProduct.MYSQL,
                 mysqlSql, mysqlSql ) };
 
-     assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.getConnection(), query, patterns );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testDistinctCountBug1785406_2(TestContextWrapper context) {
+  void testDistinctCountBug1785406_2(TestContext context) {
     prepareContext(context);
     String query =
         "With " + "Member [Product].[x] as 'Aggregate({Gender.CurrentMember})'\n"
             + "member [Measures].[foo] as '([Product].[x],[Measures].[Customer Count])'\n"
             + "select Filter([Gender].members,(Not IsEmpty([Measures].[foo]))) on 0 " + "from Sales";
 
-    assertQueryReturns(context.createConnection(), query, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Gender].[All Gender]}\n" + "{[Gender].[F]}\n"
+    assertQueryReturns(context.getConnection(), query, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Gender].[All Gender]}\n" + "{[Gender].[F]}\n"
         + "{[Gender].[M]}\n" + "Row #0: 266,773\n" + "Row #0: 131,558\n" + "Row #0: 135,215\n" );
 
     String mysqlSql =
@@ -1518,12 +1506,12 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( DatabaseProduct.MYSQL,
                 mysqlSql, mysqlSql ) };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+    assertQuerySql(context.getConnection(), query, patterns );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCount2ndParameter(TestContextWrapper context) {
+  void testAggregateDistinctCount2ndParameter(TestContext context) {
     prepareContext(context);
     // simple case of count distinct measure as second argument to
     // Aggregate(). Should apply distinct-count aggregator (MONDRIAN-2016)
@@ -1655,13 +1643,13 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testContextSetCorrectlyWith2ParamAggregate(TestContextWrapper context) {
+  void testContextSetCorrectlyWith2ParamAggregate(TestContext context) {
     prepareContext(context);
     // Aggregate with a second parameter may change context. Verify
     // the evaluator is restored. The query below would return
     // the [Unit Sales] value instead of [Store Sales] if context was
     // not restored.
-    assertQueryReturns(context.createConnection(), "with \n" + "member Store.cond as 'iif( \n"
+    assertQueryReturns(context.getConnection(), "with \n" + "member Store.cond as 'iif( \n"
         + "aggregate({[Store].[All Stores].[USA]}, measures.[unit sales])\n"
         + " > 70000, (Store.[All Stores], measures.currentMember), 0)'\n" + "select Store.cond on 0 from sales\n"
         + "where measures.[store sales]\n", "Axis #0:\n" + "{[Measures].[Store Sales]}\n" + "Axis #1:\n"
@@ -1670,7 +1658,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testAggregateDistinctCountInDimensionFilter(TestContextWrapper context) {
+  void testAggregateDistinctCountInDimensionFilter(TestContext context) {
     prepareContext(context);
     String query =
         "With " + "Set [Products] as '{[Product].[All Products].[Drink], [Product].[All Products].[Food]}' "
@@ -1679,7 +1667,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "Filter([States], not IsEmpty([Measures].[Customer Count])) on rows, "
             + "{[Measures].[Customer Count]} on columns " + "From [Sales] " + "Where ([Product].[Selected Products])";
 
-    assertQueryReturns(context.createConnection(), query, "Axis #0:\n" + "{[Product].[Selected Products]}\n" + "Axis #1:\n"
+    assertQueryReturns(context.getConnection(), query, "Axis #0:\n" + "{[Product].[Selected Products]}\n" + "Axis #1:\n"
         + "{[Measures].[Customer Count]}\n" + "Axis #2:\n" + "{[Store].[USA].[CA]}\n" + "{[Store].[USA].[OR]}\n"
         + "Row #0: 2,692\n" + "Row #1: 1,036\n" );
 
@@ -1715,7 +1703,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
         { new SqlPattern( DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
             DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
-     assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.getConnection(), query, patterns );
   }
 
   public static class MyDelegatingInvocationHandler extends DelegatingInvocationHandler {
@@ -1744,7 +1732,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testInMemoryAggSum(TestContextWrapper context) throws Exception {
+  void testInMemoryAggSum(TestContext context) throws Exception {
 	prepareContext(context);
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
@@ -1787,7 +1775,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testInMemoryAggMin(TestContextWrapper context) throws Exception {
+  void testInMemoryAggMin(TestContext context) throws Exception {
 	prepareContext(context);
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
@@ -1830,7 +1818,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testInMemoryAggMax(TestContextWrapper context) throws Exception {
+  void testInMemoryAggMax(TestContext context) throws Exception {
 	prepareContext(context);
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
@@ -1881,7 +1869,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testCellBatchSizeWithUdf(TestContextWrapper context) {
+  void testCellBatchSizeWithUdf(TestContext context) {
     prepareContext(context);
     propSaver.set( MondrianProperties.instance().CellBatchSize, 1 );
     assertQueryReturns(connection, "select lastnonempty([education level].members, measures.[unit sales]) on 0 from sales",

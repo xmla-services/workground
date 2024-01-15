@@ -44,7 +44,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -1037,9 +1036,9 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasure(TestContextWrapper context) {
+    void testCalculatedMeasure(TestContext context) {
         // calculated measures reference measures defined in the base cube
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select\n"
             + "{[Measures].[Profit Growth], "
             + "[Measures].[Profit], "
@@ -1059,8 +1058,8 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testLostData(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testLostData(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select {[Time].[Time].Members} on columns,\n"
             + " {[Product].Children} on rows\n"
             + "from [Sales]",
@@ -1207,7 +1206,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "Row #2: \n"
             + "Row #2: \n"
             + "Row #2: \n");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select\n"
             + " {[Measures].[Unit Sales]} on 0,\n"
             + " {[Product].Children} on 1\n"
@@ -1231,8 +1230,8 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCalculatedMeasureAcrossCubes(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testCalculatedMeasureAcrossCubes(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Shipped per Ordered] as ' [Measures].[Units Shipped] / [Measures].[Unit Sales] ', format_string='#.00%'\n"
             + " member [Measures].[Profit per Unit Shipped] as ' [Measures].[Profit] / [Measures].[Units Shipped] '\n"
             + "select\n"
@@ -1380,10 +1379,10 @@ class VirtualCubeTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllMeasureMembers(TestContextWrapper context) {
+    void testAllMeasureMembers(TestContext context) {
         // result should exclude measures that are not explicitly defined
         // in the virtual cube (e.g., [Profit last Period])
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select\n"
             + "{[Measures].allMembers} on columns\n"
             + "from [Warehouse and Sales]",
@@ -1583,10 +1582,10 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNativeSetCaching(TestContextWrapper context) {
+    void testNativeSetCaching(TestContext context) {
         // Only need to run this against one db to verify caching
         // behavior is correct.
-        final Dialect dialect = getDialect(context.createConnection());
+        final Dialect dialect = getDialect(context.getConnection());
         if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.DERBY) {
             return;
         }
@@ -1689,12 +1688,12 @@ class VirtualCubeTest extends BatchTestCase {
 
         // Run query 1 with cleared cache;
         // Make sure NECJ 1 is evaluated natively.
-        assertQuerySql(context.createConnection(), query1, patterns1, true);
+        assertQuerySql(context.getConnection(), query1, patterns1, true);
 
         // Now run query 2 with warm cache;
         // Make sure NECJ 2 does not reuse the cache result from NECJ 1, and
         // NECJ 2 is evaluated natively.
-        assertQuerySql(context.createConnection(), query2, patterns2, false);
+        assertQuerySql(context.getConnection(), query2, patterns2, false);
     }
 
     /**
@@ -1976,7 +1975,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testRolapCubeLevelInVirtualCube(TestContextWrapper context) {
+    void testRolapCubeLevelInVirtualCube(TestContext context) {
         String query1 =
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Warehouse],[*BASE_MEMBERS_Time])' "
@@ -1997,7 +1996,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "Set [*BASE_MEMBERS_Measures] as '{[Measures].[*FORMATTED_MEASURE_0]}' Member [Measures].[*FORMATTED_MEASURE_0] as '[Measures].[Warehouse Sales]', FORMAT_STRING = '#,##0', SOLVE_ORDER=400 "
             + "Select [*BASE_MEMBERS_Measures] on columns, Non Empty Generate([*NATIVE_CJ_SET], {([Warehouse].currentMember,[Time].[Time].currentMember)}) on rows From [Warehouse and Sales]";
 
-        executeQuery(query1, context.createConnection());
+        executeQuery(query1, context.getConnection());
 
         /* The query with the filter should now succeed without NPE */
         String result =
@@ -2029,7 +2028,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "Row #9: 15,356\n"
             + "Row #10: 13,948\n";
 
-        assertQueryReturns(context.createConnection(), query2, result);
+        assertQueryReturns(context.getConnection(), query2, result);
     }
 
     /**
@@ -2038,7 +2037,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyCJConstraintOnVirtualCube(TestContextWrapper context) {
+    void testNonEmptyCJConstraintOnVirtualCube(TestContext context) {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             // Generated SQL is different if NonEmptyCrossJoin is evaluated in
             // memory.
@@ -2239,7 +2238,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "Row #11: 9,705.561\n"
             + "Row #11: 41,484.40\n";
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQuerySql(connection, query, mysqlPattern, true);
         assertQueryReturns(connection, query, result);
     }
@@ -2250,7 +2249,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContextWrapper context) {
+    void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContext context) {
         if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
@@ -2374,7 +2373,7 @@ class VirtualCubeTest extends BatchTestCase {
                 DatabaseProduct.MYSQL, mysqlSQL, mysqlSQL)
         };
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertQuerySql(connection, query, mysqlPattern, true);
         assertQueryReturns(connection, query, result);
     }
@@ -2385,7 +2384,7 @@ class VirtualCubeTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian902(TestContextWrapper context) {
+    void testBugMondrian902(TestContext context) {
         Result result = executeQuery(
             "SELECT\n"
             + "NON EMPTY CrossJoin(\n"
@@ -2396,7 +2395,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "NON EMPTY CrossJoin(\n"
             + "  [Promotions].[Promotion Name].Members,\n"
             + "  [Marital Status].[Marital Status].Members) ON ROWS\n"
-            + "FROM [Warehouse and Sales]", context.createConnection());
+            + "FROM [Warehouse and Sales]", context.getConnection());
         assertEquals(
             "[[Education Level].[Bachelors Degree], [Product].[Drink], [Store].[USA].[CA]]",
             result.getAxes()[0].getPositions().get(0).toString());

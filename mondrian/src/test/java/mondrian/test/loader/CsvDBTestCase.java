@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 
 import java.io.File;
 import java.util.function.Function;
@@ -41,12 +41,12 @@ import static org.opencube.junit5.TestUtil.getDialect;
  */
 public abstract class CsvDBTestCase extends BatchTestCase {
 
-    protected void prepareContext(TestContextWrapper context) {
+    protected void prepareContext(TestContext context) {
         try {
             File inputFile = new File(Constants.TESTFILES_DIR + "/mondrian/rolap/agg/" +  getFileName());
 
-            CsvDBLoader loader = new CsvDBLoader(context.getContext());
-            loader.setConnection(context.getContext().getConnection().getDataSource().getConnection());
+            CsvDBLoader loader = new CsvDBLoader(context);
+            loader.setConnection(context.getConnection().getDataSource().getConnection());
             loader.initialize();
             loader.setInputFile(inputFile);
             DBLoader.Table[] tables = loader.getTables();
@@ -63,7 +63,7 @@ public abstract class CsvDBTestCase extends BatchTestCase {
                     getUdfDescription(), getRoleDescription());
             TestUtil.withSchema(context, schema);
              */
-            TestUtil.withSchema(context.getContext(), getModifierFunction());
+            TestUtil.withSchema(context, getModifierFunction());
 
         }
         catch (Exception e) {

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -53,16 +53,16 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     }
 
 
-    protected void prepareContext(TestContextWrapper context) {
+    protected void prepareContext(TestContext context) {
         super.prepareContext(context);
     }
 
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestContextWrapper context) {
+    void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestContext context) {
         prepareContext(context);
-        Connection connection = context.getContext().getConnection(List.of("Test"));
+        Connection connection = context.getConnection(List.of("Test"));
         //TestContext context = getTestContext().withFreshConnection();
         try {
             executeAnalyzerQuery(connection);

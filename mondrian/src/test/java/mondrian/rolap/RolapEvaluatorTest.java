@@ -15,7 +15,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -23,8 +23,8 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testGetSlicerPredicateInfo(TestContextWrapper context) throws Exception {
-        RolapResult result = (RolapResult) executeQuery(context.createConnection(),
+    void testGetSlicerPredicateInfo(TestContext context) throws Exception {
+        RolapResult result = (RolapResult) executeQuery(context.getConnection(),
             "select  from sales "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
             + "* { Store.[USA].[CA], Store.[USA].[WA]}");
@@ -56,8 +56,8 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testListColumnPredicateInfo(TestContextWrapper context) throws Exception {
-      RolapResult result = (RolapResult) executeQuery(context.createConnection(),
+    void testListColumnPredicateInfo(TestContext context) throws Exception {
+      RolapResult result = (RolapResult) executeQuery(context.getConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink],[Product].[Non-Consumable]} ");
       RolapEvaluator evalulator = (RolapEvaluator) result.getRootEvaluator();
@@ -71,8 +71,8 @@ class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testOrPredicateInfo(TestContextWrapper context) throws Exception {
-      RolapResult result = (RolapResult) executeQuery(context.createConnection(),
+    void testOrPredicateInfo(TestContext context) throws Exception {
+      RolapResult result = (RolapResult) executeQuery(context.getConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink].[Beverages],[Product].[Food].[Produce],[Product].[Non-Consumable]} ");
       RolapEvaluator evalulator = (RolapEvaluator) result.getRootEvaluator();
@@ -84,5 +84,5 @@ class RolapEvaluatorTest {
           slicerPredicateInfo.getPredicateString());
       assertTrue(slicerPredicateInfo.isSatisfiable());
     }
-    
+
 }

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -70,9 +70,9 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTotal(TestContextWrapper context) throws Exception {
+    void testTotal(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -84,13 +84,13 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
         String mdx =
             "select {[Measures].[Total]} on columns from [Fact]";
-        Result result = executeQuery(mdx, context.createConnection());
+        Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
         String mdx2 =
             "select {[Measures].[Total]} on columns from [Fact] where "
             + "{[Product].[Cat One].[Prod Cat One].[One]}";
-        Result aresult = executeQuery(mdx2, context.createConnection());
+        Result aresult = executeQuery(mdx2, context.getConnection());
         Object av = aresult.getCell(new int[]{0}).getValue();
 
         // unless there is a way to flush the cache,
@@ -98,12 +98,12 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
         propSaver.set(props.UseAggregates, true);
         propSaver.set(props.ReadAggregates, false);
 
-        Result result1 = executeQuery(mdx, context.createConnection());
+        Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
 
         assertTrue(v.equals(v1));
 
-        Result aresult2 = executeQuery(mdx2, context.createConnection());
+        Result aresult2 = executeQuery(mdx2, context.getConnection());
         Object av1 = aresult2.getCell(new int[]{0}).getValue();
 
         assertTrue(av.equals(av1));
@@ -111,9 +111,9 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTupleSelection(TestContextWrapper context) throws Exception {
+    void testTupleSelection(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
@@ -124,7 +124,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "{[Store].[All Stores]}) on rows "
             + "from [Fact]";
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -138,16 +138,16 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNativeFilterWithoutMeasures(TestContextWrapper context) throws Exception {
+    void testNativeFilterWithoutMeasures(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
         // Native filter without any measures hit an edge case that
         // could fail to include the Agg star in the WHERE clause,
         // and could also mishandle the field referred to in the native
         // HAVING clause.  ANALYZER-2655
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select "
             + "Filter([Product].[Category].members, "
             + "Product.CurrentMember.Caption MATCHES (\"(?i).*Two.*\") )"
@@ -160,7 +160,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 33\n");
         //  CurrentMember.Name should map to
         // `test_lp_xxx_fact`.`product_category`, with 2 member matches
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select "
             + "Filter([Product].[Product Category].members, "
             + "Product.CurrentMember.Name MATCHES (\"(?i).*Two.*\") )"
@@ -175,7 +175,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 18\n");
         // .Caption is defined as `product_cat`.`cap`.
         // [Cat One].[Prod Cat Two] has just one caption matching -- "PCTwo"
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select "
             + "Filter([Product].[Product Category].Members, "
             + "Product.CurrentMember.Caption MATCHES (\"(?i).*Two.*\") )"
@@ -190,11 +190,11 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContextWrapper context)
+    void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContext context)
         throws Exception
     {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
         // similar to the previous test, but verifies a case where
@@ -206,7 +206,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Product.CurrentMember.Caption MATCHES (\"(?i).*Two.*\") )"
             + " on columns "
             + "from [Fact] ";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             query,
             "Axis #0:\n"
             + "{}\n"
@@ -216,7 +216,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
         // check generated sql only for native evaluation
         if (MondrianProperties.instance().EnableNativeFilter.get()) {
-          assertQuerySql(context.createConnection(),
+          assertQuerySql(context.getConnection(),
               query,
               new SqlPattern[] {
                   new SqlPattern(
@@ -255,7 +255,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
                   + "having\n"
                   + "    c7 IS NOT NULL AND UPPER(c7) REGEXP '.*TWO.*'\n"
                   + "order by\n"
-                  + (getDialect(context.createConnection()).requiresOrderByAlias()
+                  + (getDialect(context.getConnection()).requiresOrderByAlias()
                       ? "    ISNULL(`c2`) ASC, `c2` ASC,\n"
                       + "    ISNULL(`c6`) ASC, `c6` ASC,\n"
                       + "    ISNULL(`c7`) ASC, `c7` ASC"
@@ -264,7 +264,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
                       + "    ISNULL(`test_lp_xx2_fact`.`prodname`) ASC, "
                       + "`test_lp_xx2_fact`.`prodname` ASC"), null)});
         }
-        Axis axis = executeAxis(context.createConnection(), "Fact",
+        Axis axis = executeAxis(context.getConnection(), "Fact",
             "Filter([Product].[Product Name].members, "
             + "Product.CurrentMember.Caption MATCHES (\"(?i).*Two.*\") )");
         assertEquals(
@@ -275,15 +275,15 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testChildSelection(TestContextWrapper context) throws Exception {
+    void testChildSelection(TestContext context) throws Exception {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
         String mdx = "select {[Measures].[Total]} on columns, "
             + "non empty [Product].[Cat One].Children on rows from [Fact]";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"

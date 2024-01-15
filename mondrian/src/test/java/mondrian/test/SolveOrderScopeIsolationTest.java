@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -108,19 +108,19 @@ class SolveOrderScopeIsolationTest {
         MondrianProperties.instance().SolveOrderMode.set(mode.toString());
     }
 
-    public void prepareContext(TestContextWrapper context) {
+    public void prepareContext(TestContext context) {
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales", null, memberDefs));
 
          */
-        withSchema(context.getContext(), SchemaModifiers.SolveOrderScopeIsolationTestModifier::new);
+        withSchema(context, SchemaModifiers.SolveOrderScopeIsolationTestModifier::new);
 
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllSolveOrderModesHandled(TestContextWrapper context)
+    void testAllSolveOrderModesHandled(TestContext context)
     {
         for (SolveOrderMode mode : SolveOrderMode.values()) {
             switch (mode) {
@@ -146,7 +146,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberDoesNotHappenAbsolute(TestContextWrapper context) {
+    void testOverrideCubeMemberDoesNotHappenAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -158,7 +158,7 @@ class SolveOrderScopeIsolationTest {
             + "from sales";
 
         setSolveOrderMode(SolveOrderMode.ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -179,7 +179,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberDoesNotHappenScoped(TestContextWrapper context) {
+    void testOverrideCubeMemberDoesNotHappenScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -191,7 +191,7 @@ class SolveOrderScopeIsolationTest {
             + "from sales";
 
         setSolveOrderMode(SolveOrderMode.SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -217,10 +217,10 @@ class SolveOrderScopeIsolationTest {
     @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContextWrapper context) {
+    public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContext context) {
     	prepareContext(context);
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with\n"
             + "member gender.maleMinusFemale as 'Gender.M - gender.f', "
             + "SOLVE_ORDER=3000, FORMAT_STRING='#.##'\n"
@@ -252,7 +252,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubeMemberEvalBeforeQueryMemberAbsolute(TestContextWrapper context) {
+    void testCubeMemberEvalBeforeQueryMemberAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -262,7 +262,7 @@ class SolveOrderScopeIsolationTest {
             + " {[Measures].[Store Sales], [Measures].[Store Cost], [Measures].[ProfitSolveOrder3000]} ON 1 "
             + "FROM SALES\n";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -287,7 +287,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCubeMemberEvalBeforeQueryMemberScoped(TestContextWrapper context) {
+    void testCubeMemberEvalBeforeQueryMemberScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -297,7 +297,7 @@ class SolveOrderScopeIsolationTest {
             + "FROM SALES\n"
             + "WHERE ProfitSolveOrder3000";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{[Measures].[ProfitSolveOrder3000]}\n"
@@ -312,7 +312,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestContextWrapper context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -324,7 +324,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override, gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -345,7 +345,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestContextWrapper context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -357,7 +357,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override, gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -378,7 +378,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestContextWrapper context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -391,7 +391,7 @@ class SolveOrderScopeIsolationTest {
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -412,7 +412,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestContextWrapper context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -425,7 +425,7 @@ class SolveOrderScopeIsolationTest {
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -446,7 +446,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestContextWrapper context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestContext context) {
         prepareContext(context);
         final String mdx =
             "with\n"
@@ -459,7 +459,7 @@ class SolveOrderScopeIsolationTest {
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -480,7 +480,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestContextWrapper context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -493,7 +493,7 @@ class SolveOrderScopeIsolationTest {
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -521,7 +521,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggregateMemberEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
+    void testAggregateMemberEvalAfterOtherMembersAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -537,7 +537,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -566,7 +566,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAggregateMemberEvalAfterOtherMembersScoped(TestContextWrapper context) {
+    void testAggregateMemberEvalAfterOtherMembersScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -582,7 +582,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -618,7 +618,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -633,7 +633,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -662,7 +662,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestContextWrapper context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -677,7 +677,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -713,7 +713,7 @@ class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestContextWrapper context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -729,7 +729,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -754,7 +754,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestContextWrapper context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -770,7 +770,7 @@ class SolveOrderScopeIsolationTest {
             + "{Time.Total, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -795,7 +795,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestContextWrapper context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"
@@ -809,7 +809,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override1, gender.override2, gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(ABSOLUTE);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -838,7 +838,7 @@ class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestContextWrapper context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestContext context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"
@@ -852,7 +852,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override1, gender.override2, gender.maleMinusFemale} on 1\n"
             + "from sales";
         setSolveOrderMode(SCOPED);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"

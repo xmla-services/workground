@@ -27,7 +27,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -52,7 +52,7 @@ class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyForAllAxesWithPropertySet(TestContextWrapper context) {
+    void testNonEmptyForAllAxesWithPropertySet(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         final String MDX_QUERY =
@@ -99,12 +99,12 @@ class NonEmptyPropertyForAllAxisTest {
             + "Row #3: \n"
             + "Row #3: \n"
             + "Row #3: \n";
-        assertQueryReturns(context.createConnection(), MDX_QUERY, EXPECTED_RESULT);
+        assertQueryReturns(context.getConnection(), MDX_QUERY, EXPECTED_RESULT);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testNonEmptyForAllAxesWithOutPropertySet(TestContextWrapper context) {
+    void testNonEmptyForAllAxesWithOutPropertySet(TestContext context) {
         final String MDX_QUERY =
             "SELECT {customers.USA.CA.[Santa Cruz].[Brian Merlo]} on 0, "
             + "[product].[product category].members on 1 FROM [sales]";
@@ -224,17 +224,17 @@ class NonEmptyPropertyForAllAxisTest {
             + "Row #52: \n"
             + "Row #53: \n"
             + "Row #54: 2\n";
-        assertQueryReturns(context.createConnection(), MDX_QUERY, EXPECTED_RESULT);
+        assertQueryReturns(context.getConnection(), MDX_QUERY, EXPECTED_RESULT);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSlicerAxisDoesNotGetNonEmptyApplied(TestContextWrapper context) {
+    void testSlicerAxisDoesNotGetNonEmptyApplied(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         String mdxQuery = "select from [Sales]\n"
             + "where [Time].[1997]\n";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         QueryImpl query = connection.parseQuery(mdxQuery);
         assertEqualsVerbose(mdxQuery, query.toString());
      }

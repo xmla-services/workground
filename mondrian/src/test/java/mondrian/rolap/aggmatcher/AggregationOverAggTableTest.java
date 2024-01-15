@@ -13,7 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -48,9 +48,9 @@ class AggregationOverAggTableTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testAvgMeasureLowestGranularity(TestContextWrapper context) throws Exception {
+    void testAvgMeasureLowestGranularity(TestContext context) throws Exception {
         prepareContext(context);
-        ExplicitRecognizerTest.setupMultiColDimCube(context.getContext(),
+        ExplicitRecognizerTest.setupMultiColDimCube(context,
             List.of(),
             "the_year",
             "quarter",
@@ -62,7 +62,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
             + "non empty CrossJoin({[TimeExtra].[1997].[Q1].Children},{[Gender].[M]}) on rows "
             + "from [ExtraCol]";
 
-        assertQueryReturns(context.getContext().getConnection(),
+        assertQueryReturns(context.getConnection(),
             query,
             "Axis #0:\n"
             + "{}\n"
@@ -77,7 +77,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
             + "Row #2: 3\n");
 
         assertQuerySqlOrNot(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"

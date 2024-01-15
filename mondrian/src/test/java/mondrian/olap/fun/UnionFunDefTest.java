@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -128,7 +128,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity4TupleUnion(TestContextWrapper context) {
+  void testArity4TupleUnion(TestContext context) {
     String tupleSet =
         "CrossJoin( [Customers].[USA].Children,"
         + " CrossJoin( Time.[1997].children, { (Gender.F, [Marital Status].M ) }) ) ";
@@ -146,12 +146,12 @@ class UnionFunDefTest {
         + "{[Customers].[USA].[WA], [Time].[1997].[Q3], [Gender].[F], [Marital Status].[M]}\n"
         + "{[Customers].[USA].[WA], [Time].[1997].[Q4], [Gender].[F], [Marital Status].[M]}";
 
-    assertAxisReturns(context.createConnection(), "Union( " + tupleSet + ", " + tupleSet + ")", expected);
+    assertAxisReturns(context.getConnection(), "Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity5TupleUnion(TestContextWrapper context) {
+  void testArity5TupleUnion(TestContext context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].lastChild, "
         + "CrossJoin ([Education Level].children,{ (Gender.F, [Marital Status].M ) })) )";
@@ -161,13 +161,13 @@ class UnionFunDefTest {
         + "{[Customers].[Canada].[BC], [Time].[1997].[Q4], [Education Level].[High School Degree], [Gender].[F], [Marital Status].[M]}\n"
         + "{[Customers].[Canada].[BC], [Time].[1997].[Q4], [Education Level].[Partial College], [Gender].[F], [Marital Status].[M]}\n"
         + "{[Customers].[Canada].[BC], [Time].[1997].[Q4], [Education Level].[Partial High School], [Gender].[F], [Marital Status].[M]}";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertAxisReturns(connection, tupleSet, expected);
 
     assertAxisReturns(connection, "Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
-  void testArity5TupleUnionAll(TestContextWrapper context) {
+  void testArity5TupleUnionAll(TestContext context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1998].firstChild, "
         + "CrossJoin ([Education Level].members,{ (Gender.F, [Marital Status].M ) })) )";
@@ -179,7 +179,7 @@ class UnionFunDefTest {
         + "{[Customers].[Canada].[BC], [Time].[1998].[Q1], [Education Level].[Partial College], [Gender].[F], [Marital Status].[M]}\n"
         + "{[Customers].[Canada].[BC], [Time].[1998].[Q1], [Education Level].[Partial High School], [Gender].[F], [Marital Status].[M]}";
 
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertAxisReturns(connection, tupleSet, expected);
 
     assertAxisReturns(connection,
@@ -189,7 +189,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity6TupleUnion(TestContextWrapper context) {
+  void testArity6TupleUnion(TestContext context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"
@@ -203,7 +203,7 @@ class UnionFunDefTest {
 
     String tupleSet1Expected =
         "{[Customers].[Canada].[BC], [Time].[1997].[Q1], [Education Level].[Partial High School], [Yearly Income].[$90K - $110K], [Gender].[F], [Marital Status].[M]}";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertAxisReturns(connection, tupleSet1, tupleSet1Expected);
 
     String tupleSet2Expected =
@@ -225,7 +225,7 @@ class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testArity6TupleUnionAll(TestContextWrapper context) {
+  void testArity6TupleUnionAll(TestContext context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"
@@ -239,7 +239,7 @@ class UnionFunDefTest {
 
     String tupleSet1Expected =
         "{[Customers].[Canada].[BC], [Time].[1997].[Q1], [Education Level].[Partial High School], [Yearly Income].[$90K - $110K], [Gender].[F], [Marital Status].[M]}";
-    Connection connection = context.createConnection();
+    Connection connection = context.getConnection();
     assertAxisReturns(connection, tupleSet1, tupleSet1Expected);
 
     String tupleSet2Expected =

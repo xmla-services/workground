@@ -17,8 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -54,17 +53,17 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     }
 
 
-    protected void prepareContext(TestContextWrapper context) {
+    protected void prepareContext(TestContext context) {
         super.prepareContext(context);
         //TestUtil.withRole(context,  "Test");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestContextWrapper context) {
+    void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestContext context) {
         prepareContext(context);
         try {
-            executeAnalyzerQuery(context.getContext().getConnection(List.of("Test")));
+            executeAnalyzerQuery(context.getConnection(List.of("Test")));
         } catch (Exception e) {
             // that's ok, junit's assertion errors are derived from Error,
             // hence they will not be caught here

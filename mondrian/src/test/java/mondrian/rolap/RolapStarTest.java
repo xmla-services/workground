@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SQLR;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -76,8 +76,8 @@ class RolapStarTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCloneRelationWithFilteredTable(TestContextWrapper context) {
-      RolapStarForTests rs = getStar(context.createConnection(), "sales");
+    void testCloneRelationWithFilteredTable(TestContext context) {
+      RolapStarForTests rs = getStar(context.getConnection(), "sales");
       TableImpl original = new TableImpl();
       original.setName("TestTable");
       original.setAlias("Alias");

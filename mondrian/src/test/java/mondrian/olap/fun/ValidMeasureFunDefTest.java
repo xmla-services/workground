@@ -13,7 +13,6 @@ import mondrian.rolap.SchemaModifiers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -92,8 +91,8 @@ class ValidMeasureFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-  void testValidMeasureWithNullTuple(TestContextWrapper context) {
-    assertQueryReturns(context.createConnection(),
+  void testValidMeasureWithNullTuple(TestContext context) {
+    assertQueryReturns(context.getConnection(),
         "with member measures.vm as "
         + "'ValidMeasure((Measures.[Unit Sales], Store.[All Stores].Parent))' "
         + "select measures.vm on 0 from [warehouse and sales]",

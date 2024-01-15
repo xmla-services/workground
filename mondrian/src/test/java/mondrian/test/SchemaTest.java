@@ -117,7 +117,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
@@ -6252,7 +6251,7 @@ class SchemaTest {
     @Disabled //not implemented yet
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void _testValidatorFindsNumericLevel(TestContextWrapper context) {
+    void _testValidatorFindsNumericLevel(TestContext context) {
 
         class TestValidatorFindsNumericLevelModifier extends RDbMappingSchemaModifier {
             public TestValidatorFindsNumericLevelModifier(MappingSchema mappingSchema) {
@@ -6298,14 +6297,14 @@ class SchemaTest {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>"));
          */
-        withSchema(context.getContext(), TestValidatorFindsNumericLevelModifier::new);
+        withSchema(context, TestValidatorFindsNumericLevelModifier::new);
         final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "todo xxxxx");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testInvalidRoleError(TestContextWrapper context) {
+    void testInvalidRoleError(TestContext context) {
         class TestInvalidRoleErrorModifier extends RDbMappingSchemaModifier {
             public TestInvalidRoleErrorModifier(MappingSchema mappingSchema) {
                 super(mappingSchema);
@@ -6328,7 +6327,7 @@ class SchemaTest {
                 "<Schema name=\"FoodMart\" defaultRole=\"Unknown\"");
         withSchema(context, schema);
          */
-        withSchema(context.getContext(), TestInvalidRoleErrorModifier::new);
+        withSchema(context, TestInvalidRoleErrorModifier::new);
         final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "Role 'Unknown' not found");
     }
@@ -7958,7 +7957,7 @@ class SchemaTest {
      * Implementation of {@link PropertyFormatter} that throws.
      */
     public static class DummyPropertyFormatter implements PropertyFormatter {
-        public DummyPropertyFormatter(TestContextWrapper context) {
+        public DummyPropertyFormatter(TestContext context) {
             throw new RuntimeException("oops");
         }
 
@@ -11494,7 +11493,7 @@ class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrian1275(TestContextWrapper context) throws Exception {
+    void testMondrian1275(TestContext context) throws Exception {
         class TestMondrian1275Modifier extends RDbMappingSchemaModifier {
 
             public TestMondrian1275Modifier(MappingSchema mappingSchema) {
@@ -11583,8 +11582,8 @@ class SchemaTest {
                                         + "</Cube>\n"
                                         + "</Schema>\n");
         */
-        withSchema(context.getContext(), TestMondrian1275Modifier::new);
-        final RolapConnection rolapConn = (RolapConnection) context.getContext().getConnection();
+        withSchema(context, TestMondrian1275Modifier::new);
+        final RolapConnection rolapConn = (RolapConnection) context.getConnection();
         final SchemaReader schemaReader = rolapConn.getSchemaReader();
         final RolapSchema schema = schemaReader.getSchema();
         for (RolapCube cube : schema.getCubeList()) {

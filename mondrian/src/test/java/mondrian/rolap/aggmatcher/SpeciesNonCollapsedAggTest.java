@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -93,10 +93,10 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 
 
     @Override
-	protected void prepareContext(TestContextWrapper context) {
+	protected void prepareContext(TestContext context) {
         super.prepareContext(context);
         //TODO
-        TestUtil.withSchema(context.getContext(), SpeciesNonCollapsedAggTestModifier::new);
+        TestUtil.withSchema(context, SpeciesNonCollapsedAggTestModifier::new);
     }
 
 
@@ -107,14 +107,14 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testBugMondrian1105(TestContextWrapper context) {
+    void testBugMondrian1105(TestContext context) {
         prepareContext(context);
-        if (!isApplicable(context.createConnection())) {
+        if (!isApplicable(context.getConnection())) {
             return;
         }
 
         // If agg table is not used, cell values will be very different.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "SELECT \n"
             + " { [Measures].[Population] } ON COLUMNS,\n"
             + " { [Animal.Animals].[Family].Members } ON ROWS\n"

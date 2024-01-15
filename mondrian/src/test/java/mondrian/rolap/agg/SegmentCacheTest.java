@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -40,7 +40,7 @@ class SegmentCacheTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testCompoundPredicatesCollision(TestContextWrapper context) {
+    void testCompoundPredicatesCollision(TestContext context) {
         String query =
             "SELECT [Gender].[All Gender] ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES";
         String query2 =
@@ -63,7 +63,7 @@ class SegmentCacheTest {
             + "Axis #2:\n"
             + "{[Measures].[Customer Count]}\n"
             + "Row #0: 2,716\n";
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         connection.getCacheControl(null).flushSchemaCache();
         assertQueryReturns(connection, query, result);
         assertQueryReturns(connection, query2, result2);
@@ -71,14 +71,14 @@ class SegmentCacheTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSegmentCacheEvents(TestContextWrapper context) throws Exception {
+    void testSegmentCacheEvents(TestContext context) throws Exception {
         SegmentCache mockCache = new MockSegmentCache();
         SegmentCacheWorker testWorker =
             new SegmentCacheWorker(mockCache, null);
 
         // Flush the cache before we start. Wait a second for the cache
         // flush to propagate.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         connection.getCacheControl(null).flushSchemaCache();
         final CacheControl cc =
                 connection.getCacheControl(null);

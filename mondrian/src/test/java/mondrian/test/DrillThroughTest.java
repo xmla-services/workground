@@ -35,7 +35,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -147,8 +146,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTrivialCalcMemberDrillThrough(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testTrivialCalcMemberDrillThrough(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "WITH MEMBER [Measures].[Formatted Unit Sales]"
             + " AS '[Measures].[Unit Sales]', FORMAT_STRING='$#,###.000'\n"
             + "MEMBER [Measures].[Twice Unit Sales]"
@@ -203,13 +202,13 @@ class DrillThroughTest {
             + " and `product`.`product_class_id` = `product_class`.`product_class_id`"
             + " and `product_class`.`product_family` = 'Drink' "
             + "order by "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "`Year` ASC,"
                 + " `Product Family` ASC"
                 : "`time_by_day`.`the_year` ASC,"
                 + " `product_class`.`product_family` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 7978);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 7978);
 
         // Can drill through a trivial calc member.
         final Cell calcCell = result.getCell(new int[]{1, 0});
@@ -230,22 +229,22 @@ class DrillThroughTest {
             + " and `product`.`product_class_id` = `product_class`.`product_class_id`"
             + " and `product_class`.`product_family` = 'Drink' "
             + "order by "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "`Year` ASC,"
                 + " `Product Family` ASC"
                 : "`time_by_day`.`the_year` ASC,"
                 + " `product_class`.`product_family` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 7978);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 7978);
 
         assertEquals(7978, calcCell.getDrillThroughCount() );
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTrivialCalcMemberNotMeasure(TestContextWrapper context) {
+    void testTrivialCalcMemberNotMeasure(TestContext context) {
         // [Product].[My Food] is trivial because it maps to a single member.
         // First, on ROWS axis.
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         Result result = executeQuery(connection,
             "with member [Product].[My Food]\n"
             + " AS [Product].[Food], FORMAT_STRING = '#,###'\n"
@@ -308,20 +307,20 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillthroughCompoundSlicer(TestContextWrapper context) {
+    void testDrillthroughCompoundSlicer(TestContext context) {
         // Tests a case associated with
         // http://jira.pentaho.com/browse/MONDRIAN-1587
         // hsqldb was failing with SQL that included redundant parentheses
         // around IN list items.
 
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        Result result = executeQuery(context.createConnection(),
+        Result result = executeQuery(context.getConnection(),
             "select from sales where "
             + "{[Promotion Media].[Bulk Mail],[Promotion Media].[Cash Register Handout]}");
         final Cell cell = result.getCell(new int[]{});
         assertTrue(cell.canDrillThrough());
         assertEquals(3584, cell.getDrillThroughCount());
-        assertSqlEquals(context.createConnection(),
+        assertSqlEquals(context.getConnection(),
             "select\n"
             + "    time_by_day.the_year as Year,\n"
             + "    promotion.media_type as Media Type,\n"
@@ -340,7 +339,7 @@ class DrillThroughTest {
             + "    ((promotion.media_type in "
             + "('Bulk Mail', 'Cash Register Handout')))\n"
             + "order by\n"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "    Year ASC"
                 : "    time_by_day.the_year ASC"),
             cell.getDrillThroughSQL(false), 3584);
@@ -348,8 +347,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThrough(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testDrillThrough(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Store Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -371,13 +370,13 @@ class DrillThroughTest {
             + " and `sales_fact_1997`.`product_id` = `product`.`product_id`"
             + " and `product`.`product_class_id` = `product_class`.`product_class_id`"
             + " and `product_class`.`product_family` = 'Drink' "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "order by `Year` ASC,"
                 + " `Product Family` ASC"
                 : "order by `time_by_day`.`the_year` ASC,"
                 + " `product_class`.`product_family` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 7978);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 7978);
 
         // Cannot drill through a calc member.
         final Cell calcCell = result.getCell(new int[]{1, 1});
@@ -413,8 +412,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThrough2(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testDrillThrough2(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Unit Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -470,7 +469,7 @@ class DrillThroughTest {
             + " and `sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id`"
             + " and `sales_fact_1997`.`customer_id` = `customer`.`customer_id` "
             + "order by"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? " `Store Country` ASC,"
                 + " `Store State` ASC,"
                 + " `Store City` ASC,"
@@ -529,7 +528,7 @@ class DrillThroughTest {
                 + " `customer`.`marital_status` ASC,"
                 + " `customer`.`yearly_income` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 7978);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 7978);
 
         // Drillthrough SQL is null for cell based on calc member
         sql = result.getCell(new int[]{1, 1}).getDrillThroughSQL(true);
@@ -538,8 +537,8 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThrough3(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testDrillThrough3(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, \n"
             + "Hierarchize(Union(Union(Crossjoin({[Promotion Media].[All Media]}, {[Product].[All Products]}), \n"
             + "Crossjoin({[Promotion Media].[All Media]}, [Product].[All Products].Children)), Crossjoin({[Promotion Media].[All Media]}, [Product].[All Products].[Drink].Children))) ON ROWS \n"
@@ -603,7 +602,7 @@ class DrillThroughTest {
             + "`sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id` and "
             + "`sales_fact_1997`.`customer_id` = `customer`.`customer_id` "
             + "order by"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? " `Store Country` ASC,"
                 + " `Store State` ASC,"
                 + " `Store City` ASC,"
@@ -661,7 +660,7 @@ class DrillThroughTest {
                 + " `customer`.`marital_status` ASC,"
                 + " `customer`.`yearly_income` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 141);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 141);
     }
 
     /**
@@ -674,8 +673,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThroughBugMondrian180(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testDrillThroughBugMondrian180(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "with set [Date Range] as '{[Time].[1997].[Q1], [Time].[1997].[Q2]}'\n"
             + "member [Time].[Time].[Date Range] as 'Aggregate([Date Range])'\n"
             + "select {[Measures].[Unit Sales]} ON COLUMNS,\n"
@@ -742,7 +741,7 @@ class DrillThroughTest {
             + " `sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id` and"
             + " `sales_fact_1997`.`customer_id` = `customer`.`customer_id`"
             + " order by"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? " `Store State` ASC,"
                 + " `Store City` ASC,"
                 + " `Store Name` ASC,"
@@ -799,7 +798,7 @@ class DrillThroughTest {
                 + " `customer`.`marital_status` ASC,"
                 + " `customer`.`yearly_income` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 6815);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 6815);
     }
 
     /**
@@ -808,8 +807,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testDrillThroughMeasureExp(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testDrillThroughMeasureExp(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Measures].[Promotion Sales]} on columns,\n"
             + " {[Product].Children} on rows\n"
             + "from Sales");
@@ -831,7 +830,7 @@ class DrillThroughTest {
             + " and `sales_fact_1997`.`product_id` = `product`.`product_id`"
             + " and `product`.`product_class_id` = `product_class`.`product_class_id`"
             + " and `product_class`.`product_family` = 'Drink' "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "order by `Year` ASC, `Product Family` ASC"
                 : "order by `time_by_day`.`the_year` ASC, `product_class`.`product_family` ASC");
 
@@ -856,7 +855,7 @@ class DrillThroughTest {
             break;
         }
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 7978);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 7978);
     }
 
     /**
@@ -997,8 +996,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughVirtualCube(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void  testDrillThroughVirtualCube(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "select Crossjoin([Customers].[All Customers].[USA].[OR].Children, {[Measures].[Unit Sales]}) ON COLUMNS, "
             + " [Gender].[All Gender].Children ON ROWS"
             + " from [Warehouse and Sales]"
@@ -1026,7 +1025,7 @@ class DrillThroughTest {
             + " `customer`.`city` = 'Albany' and"
             + " `customer`.`gender` = 'F'"
             + " order by "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "`Year` ASC,"
                 + " `Quarter` ASC,"
                 + " `Month` ASC,"
@@ -1040,7 +1039,7 @@ class DrillThroughTest {
                 + " `customer`.`city` ASC,"
                 + " `customer`.`gender` ASC");
 
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 73);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 73);
     }
 
     /**
@@ -1260,9 +1259,9 @@ class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughExprs(TestContextWrapper context) {
+    void  testDrillThroughExprs(TestContext context) {
     	RolapSchemaPool.instance().clear();
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         assertCanDrillThrough(connection,
             true,
             "Sales",
@@ -1446,8 +1445,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughOneAxis(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void  testDrillThroughOneAxis(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "SELECT [Measures].[Unit Sales] on 0\n"
             + "from Sales");
 
@@ -1463,8 +1462,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughCalcMemberInSlicer(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void  testDrillThroughCalcMemberInSlicer(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "WITH MEMBER [Product].[Aggregate Food Drink] AS \n"
             + " Aggregate({[Product].[Food], [Product].[Drink]})\n"
             + "SELECT [Measures].[Unit Sales] on 0\n"
@@ -1482,11 +1481,11 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillThroughMultiPositionCompoundSlicer(TestContextWrapper context) {
+    void  testDrillThroughMultiPositionCompoundSlicer(TestContext context) {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         // A query with a simple multi-position compound slicer
         Result result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1495,7 +1494,7 @@ class DrillThroughTest {
         assertTrue(cell.canDrillThrough());
         String sql = cell.getDrillThroughSQL(false);
         String expectedSql;
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1528,11 +1527,11 @@ class DrillThroughTest {
         default:
                 return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 41956);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 41956);
 
         // A query with a slightly more complex multi-position compound slicer
         result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1544,7 +1543,7 @@ class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1569,7 +1568,7 @@ class DrillThroughTest {
                 + "and\n"
                 + "    (((time_by_day.the_year, time_by_day.quarter) in ((1997, 'Q1'), (1997, 'Q2'))))\n"
                 + "order by\n"
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    Gender ASC,\n"
                     + "    Marital Status ASC"
                     : "    customer.gender ASC,\n"
@@ -1604,12 +1603,12 @@ class DrillThroughTest {
         default:
             return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 10430);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 10430);
 
         // A query with an even more complex multi-position compound slicer
         // (gender must be in the slicer predicate along with time)
         result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1621,7 +1620,7 @@ class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1662,12 +1661,12 @@ class DrillThroughTest {
         default:
             return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 20971);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 20971);
 
         // A query with a simple multi-position compound slicer with
         // different levels (overlapping)
         result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1678,7 +1677,7 @@ class DrillThroughTest {
 
         // With overlapping slicer members, the first slicer predicate is
         // redundant, but does not affect the query's results
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1713,12 +1712,12 @@ class DrillThroughTest {
         default:
             return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 21588);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 21588);
 
         // A query with a simple multi-position compound slicer with
         // different levels (non-overlapping)
         result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1726,7 +1725,7 @@ class DrillThroughTest {
         cell = result.getCell(new int[]{0, 0});
         assertTrue(cell.canDrillThrough());
         sql = cell.getDrillThroughSQL(false);
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1761,17 +1760,17 @@ class DrillThroughTest {
         default:
             return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 27402);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 27402);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testDrillthroughDisable(TestContextWrapper context) {
+    void  testDrillthroughDisable(TestContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableDrillThrough,
             true);
         Result result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1783,7 +1782,7 @@ class DrillThroughTest {
             MondrianProperties.instance().EnableDrillThrough,
             false);
         result =
-            executeQuery(context.createConnection(),
+            executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
                 + " {[Product].[All Products]} ON ROWS\n"
                 + "FROM [Sales]\n"
@@ -1806,8 +1805,8 @@ class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void  testColumnAliasQuotedInOrderBy(TestContextWrapper context) throws Exception {
-        Result result = executeQuery(context.createConnection(),
+    void  testColumnAliasQuotedInOrderBy(TestContext context) throws Exception {
+        Result result = executeQuery(context.getConnection(),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER([*BASE_MEMBERS__Customers_], NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
             + "SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0]}'\n"
@@ -1825,7 +1824,7 @@ class DrillThroughTest {
         Cell cell = result.getCell(new int[]{0, 0});
         String sql = cell.getDrillThroughSQL(true);
         String expectedSql;
-        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        switch (getDatabaseProduct(getDialect(context.getConnection()).getDialectName())) {
         case VECTORWISE:
             expectedSql =
                 "select \"store\".\"store_country\" as \"Store Country\","
@@ -1892,7 +1891,7 @@ class DrillThroughTest {
         default:
             return;
         }
-        assertSqlEquals(context.createConnection(), expectedSql, sql, 11);
+        assertSqlEquals(context.getConnection(), expectedSql, sql, 11);
     }
 
     @ParameterizedTest

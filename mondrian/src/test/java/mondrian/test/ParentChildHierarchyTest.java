@@ -28,7 +28,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -344,8 +343,8 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAll(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testAll(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
             + " {[Employees]} on rows\n"
             + "from [HR]",
@@ -362,8 +361,8 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testChildrenOfAll(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testChildrenOfAll(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
             + " {[Employees].children} on rows\n"
             + "from [HR]",
@@ -383,9 +382,9 @@ class ParentChildHierarchyTest {
      * <a href="http://jira.pentaho.org/browse/MONDRIAN-75">MONDRIAN-75,
      * "'distinct count' measure cause exception in parent/child"</a>.
      */
-    void testDistinctAll(TestContextWrapper context) {
+    void testDistinctAll(TestContext context) {
         // parent/child dimension not expanded, and the query works
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[Employees]} on rows\n"
@@ -407,11 +406,11 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctChildrenOfAll(TestContextWrapper context) {
+    void testDistinctChildrenOfAll(TestContext context) {
         // parent/child dimension expanded: fails with
         // java.lang.UnsupportedOperationException at
         // mondrian.rolap.RolapAggregator$6.aggregate(RolapAggregator.java:72)
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[Employees].children} on rows\n"
@@ -434,9 +433,9 @@ class ParentChildHierarchyTest {
     // same two tests, but on a subtree
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testDistinctSubtree(TestContextWrapper context) {
+    void testDistinctSubtree(TestContext context) {
         // also fails with UnsupportedOperationException
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Count], [Measures].[Org Salary], \n"
             + "[Measures].[Number Of Employees], [Measures].[Avg Salary]} on columns,\n"
             + "{[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki]} on rows\n"
@@ -537,9 +536,9 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testLeaf(TestContextWrapper context) {
+    void testLeaf(TestContext context) {
         // Juanita Sharp has no reports
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
             + " {[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki].[Juanita Sharp]} on rows\n"
             + "from [HR]",
@@ -556,9 +555,9 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testOneAboveLeaf(TestContextWrapper context) {
+    void testOneAboveLeaf(TestContext context) {
         // Rebecca Kanagaki has 2 direct reports, and they have no reports
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select {[Measures].[Org Salary], [Measures].[Count]} on columns,\n"
             + " {[Employees].[All Employees].[Sheri Nowmer].[Rebecca Kanagaki]} on rows\n"
             + "from [HR]",
@@ -579,8 +578,8 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testParentChildDescendantsLeavesBottom(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testParentChildDescendantsLeavesBottom(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "WITH SET [NonEmptyEmployees] AS 'FILTER(DESCENDANTS([Employees].[All Employees], 10, LEAVES),\n"
             + "  NOT ISEMPTY([Measures].[Employee Salary]))'\n"
             + "SELECT { [Measures].[Employee Salary], [Measures].[Number of Employees] } ON COLUMNS,\n"
@@ -630,11 +629,11 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testParentChildDescendantsLeavesTop(TestContextWrapper context) {
-        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.createConnection()))) {
+    void testParentChildDescendantsLeavesTop(TestContext context) {
+        if (Bug.avoidSlowTestOnLucidDB(getDialect(context.getConnection()))) {
             return;
         }
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with set [Leaves] as 'Descendants([Employees].[All Employees], 15, LEAVES)'\n"
             + " set [Parents] as 'Generate([Leaves], {[Employees].CurrentMember.Parent})'\n"
             + " set [FirstParents] as 'Filter([Parents], \n"
@@ -671,7 +670,7 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testAllMembersParent(TestContextWrapper context) {
+    void testAllMembersParent(TestContext context) {
         final String expected =
             "Axis #0:\n"
             + "{}\n"
@@ -711,7 +710,7 @@ class ParentChildHierarchyTest {
 
         // Query contains 'Head' just to keep the number of rows reasonable. We
         // assume that it does not affect the behavior of <Hierarchy>.Members.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Parent] as '[Employees].CurrentMember.Parent.Name'\n"
             + "select {[Measures].[Parent]}\n"
             + "ON COLUMNS,\n"
@@ -721,7 +720,7 @@ class ParentChildHierarchyTest {
 
         // Similar query, using <Hierarchy>.AllMembers rather than
         // <Hierarchy>.Members, returns the same result.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Parent] as '[Employees].CurrentMember.Parent.Name'\n"
             + "select {[Measures].[Parent]}\n"
             + "ON COLUMNS,\n"
@@ -730,7 +729,7 @@ class ParentChildHierarchyTest {
             expected);
 
         // Similar query use <Level>.Members, same result expected.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Measures].[Parent] as '[Employees].CurrentMember.Parent.Name'\n"
             + "select {[Measures].[Parent]}\n"
             + "ON COLUMNS,\n"
@@ -819,8 +818,8 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGenuineCycle(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testGenuineCycle(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "with member [Measures].[Foo] as \n"
             + "  '([Measures].[Foo], OpeningPeriod([Time].[Month]))'\n"
             + "select\n"
@@ -888,8 +887,8 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testParentChildDrillThrough(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testParentChildDrillThrough(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "select {[Measures].Members} ON columns,\n"
             + "  {[Employees].Members} ON rows\n"
             + "from [HR]");
@@ -898,7 +897,7 @@ class ParentChildHierarchyTest {
         // Note that the SQL does not contain the employees or employee_closure
         // tables.
         final boolean extendedContext = false;
-        checkDrillThroughSql(context.createConnection(),
+        checkDrillThroughSql(context.getConnection(),
             result,
             0,
             extendedContext,
@@ -911,7 +910,7 @@ class ParentChildHierarchyTest {
             + " `time_by_day` =as= `time_by_day` "
             + "where `salary`.`pay_date` = `time_by_day`.`the_date`"
             + " and `time_by_day`.`the_year` = 1997 "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "order by `Year` ASC"
                 : "order by `time_by_day`.`the_year` ASC"),
             7392);
@@ -920,7 +919,7 @@ class ParentChildHierarchyTest {
         // Note that the SQL does not contain the employee_closure table.
         // That's because when we drill through, we don't want to roll up
         // measures along the hierarchy.
-        checkDrillThroughSql(context.createConnection(),
+        checkDrillThroughSql(context.getConnection(),
             result,
             1,
             extendedContext,
@@ -936,14 +935,14 @@ class ParentChildHierarchyTest {
             + " and `time_by_day`.`the_year` = 1997"
             + " and `salary`.`employee_id` = `employee`.`employee_id`"
             + " and `employee`.`employee_id` = 1 "
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "order by `Year` ASC, `Employee Id (Key) ASC"
                 : "order by `time_by_day`.`the_year` ASC, `employee`.`employee_id` ASC"),
             12);
 
         // Drill-through for row #2, [Employees].[All].[Sheri Nowmer].
         // Note that the SQL does not contain the employee_closure table.
-        checkDrillThroughSql(context.createConnection(),
+        checkDrillThroughSql(context.getConnection(),
             result,
             2,
             extendedContext,
@@ -959,7 +958,7 @@ class ParentChildHierarchyTest {
             + " and `time_by_day`.`the_year` = 1997"
             + " and `salary`.`employee_id` = `employee`.`employee_id`"
             + " and `employee`.`employee_id` = 2 "
-                + (getDialect(context.createConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? "order by `Year` ASC, `Employee Id (Key) ASC"
                 : "order by `time_by_day`.`the_year` ASC, `employee`.`employee_id` ASC"),
             12);
@@ -967,15 +966,15 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testParentChildDrillThroughWithContext(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testParentChildDrillThroughWithContext(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "select {[Measures].Members} ON columns,\n"
             + "  {[Employees].Members} ON rows\n"
             + "from [HR]");
 
         // Now with full context.
         final boolean extendedContext = true;
-        checkDrillThroughSql(context.createConnection(),
+        checkDrillThroughSql(context.getConnection(),
             result,
             2,
             extendedContext,
@@ -1014,7 +1013,7 @@ class ParentChildHierarchyTest {
             + " and `salary`.`department_id` = `department`.`department_id`"
             + " and `employee`.`employee_id` = 2 "
             + "order by"
-            + (getDialect(context.createConnection()).requiresOrderByAlias()
+            + (getDialect(context.getConnection()).requiresOrderByAlias()
                 ? " `Year` ASC,"
                 + " `Quarter` ASC,"
                 + " `Month` ASC,"
@@ -1075,8 +1074,8 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testBugMondrian168(TestContextWrapper context) {
-        assertQueryReturns(context.createConnection(),
+    void testBugMondrian168(TestContext context) {
+        assertQueryReturns(context.getConnection(),
             "select \n"
             + "     {[Employee Salary]} on columns, \n"
             + "     {[Employees]} on rows \n"
@@ -1089,7 +1088,7 @@ class ParentChildHierarchyTest {
             + "{[Employees].[All Employees]}\n"
             + "Row #0: \n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select \n"
             + "     {[Position]} on columns,\n"
             + "     {[Employee Salary]} on rows\n"
@@ -1186,9 +1185,9 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testLevelMembers(TestContextWrapper context) {
+    void testLevelMembers(TestContext context) {
         //use  "HR" cube name
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         // <Dimension>.MEMBERS
         assertExprReturns(connection, "HR","[Employees].Members.Count", "1,156");
         // <Level>.MEMBERS
@@ -1201,7 +1200,7 @@ class ParentChildHierarchyTest {
         // Make sure that members of the [Employee] hierarachy don't
         // as calculated (even though they are calculated, internally)
         // but that real calculated members are counted as calculated.
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with member [Employees].[Foo] as ' Sum([Employees].[All Employees].[Sheri Nowmer].[Donna Arnold].Children) '\n"
             + "member [Measures].[Count1] AS [Employees].MEMBERS.Count\n"
             + "member [Measures].[Count2] AS [Employees].ALLMEMBERS.COUNT\n"
@@ -1383,10 +1382,10 @@ class ParentChildHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testSchemaReaderLevelMembers(TestContextWrapper context)
+    void testSchemaReaderLevelMembers(TestContext context)
     {
         final SchemaReader schemaReader =
-                context.createConnection()
+                context.getConnection()
             .getSchemaReader().withLocus();
         int found = 0;
         for (Cube cube : schemaReader.getCubes()) {
@@ -1521,7 +1520,7 @@ class ParentChildHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPCCacheKeyBug(TestContextWrapper context) throws Exception {
+    void testPCCacheKeyBug(TestContext context) throws Exception {
         final String mdx =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Employees],NonEmptyCrossJoin([*BASE_MEMBERS_Store],[*BASE_MEMBERS_Pay Type]))'\n"
@@ -1544,7 +1543,7 @@ class ParentChildHierarchyTest {
             + "[*BASE_MEMBERS_Measures] on columns,\n"
             + "[*SORTED_ROW_AXIS] on rows\n"
             + "From [HR]\n";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -1592,7 +1591,7 @@ class ParentChildHierarchyTest {
             + "Row #18: 444\n"
             + "Row #19: 432\n");
         assertNotNull(
-            executeQuery(context.createConnection(), mdx)
+            executeQuery(context.getConnection(), mdx)
                 .getAxes()[1].getPositions().get(2).iterator().next()
                     .getParentMember());
     }

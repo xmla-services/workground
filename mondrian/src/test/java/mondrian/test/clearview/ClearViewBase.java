@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
@@ -71,7 +71,7 @@ import mondrian.test.SqlPattern;
 
 
     // implement TestCase
-    protected void runTest(TestContextWrapper context) {
+    protected void runTest(TestContext context) {
             DiffRepository diffRepos = getDiffRepos();
             // add calculated member to a cube if specified in the xml file
             /*
@@ -108,7 +108,7 @@ import mondrian.test.SqlPattern;
 
             }
              */
-             updateSchemaIfNeed(context.getContext(), diffRepos.getCurrentTestCaseName(true));
+             updateSchemaIfNeed(context, diffRepos.getCurrentTestCaseName(true));
 
             // Set some properties to match the way we configure them
             // for ClearView.
@@ -118,7 +118,7 @@ import mondrian.test.SqlPattern;
 
             String mdx = diffRepos.expand(null, "${mdx}");
             String result = Util.NL + TestUtil.toString(
-                    executeQuery(mdx, context.createConnection()));
+                    executeQuery(mdx, context.getConnection()));
             diffRepos.assertEquals("result", "${result}", result);
     }
 

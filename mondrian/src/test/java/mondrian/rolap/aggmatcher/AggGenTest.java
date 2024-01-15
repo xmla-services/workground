@@ -25,7 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ class AggGenTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void
-        testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestContextWrapper context)
+        testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestContext context)
         throws Exception
     {
         Logger logger = LoggerFactory.getLogger(AggGen.class);
@@ -79,7 +79,7 @@ class AggGenTest {
         propSaver.set(props.ReadAggregates, true);
         propSaver.set(props.GenerateAggregateSql, true);
 
-        final RolapConnection rolapConn = (RolapConnection) context.createConnection();
+        final RolapConnection rolapConn = (RolapConnection) context.getConnection();
         QueryImpl query =
             rolapConn.parseQuery(
                 "select {[Measures].[Count]} on columns from [HR]");

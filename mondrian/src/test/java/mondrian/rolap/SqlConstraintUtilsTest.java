@@ -51,7 +51,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -223,12 +223,12 @@ class SqlConstraintUtilsTest {
 
         FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
         FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
-        
+
 
         Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
         Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
         Mockito.doReturn("dummy").when(functionAtom).name();
-       
+
 
         FunctionDefinition funDef = new AggregateFunDef(functionInformation);
         Expression[] args = new Expression[]{aggregateArg0};
@@ -403,8 +403,8 @@ class SqlConstraintUtilsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testReplaceCompoundSlicerPlaceholder(TestContextWrapper context) {
-        final Connection connection = context.createConnection();
+    void testReplaceCompoundSlicerPlaceholder(TestContext context) {
+        final Connection connection = context.getConnection();
 
         final String queryText =
             "SELECT {[Measures].[Customer Count]} ON 0 "
@@ -625,8 +625,8 @@ class SqlConstraintUtilsTest {
     // test with a placeholder member
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testExpandSupportedCalculatedMembers2(TestContextWrapper context) {
-      final Connection connection = context.createConnection();
+    void testExpandSupportedCalculatedMembers2(TestContext context) {
+      final Connection connection = context.getConnection();
 
       final String queryText =
           "SELECT {[Measures].[Customer Count]} ON 0 "
@@ -826,14 +826,14 @@ class SqlConstraintUtilsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConstrainLevel(TestContextWrapper context){
+    void testConstrainLevel(TestContext context){
 
         final RolapCubeLevel level = mock( RolapCubeLevel.class);
         final RolapCube baseCube = mock(RolapCube.class);
         final RolapStar.Column column = mock(RolapStar.Column.class);
 
         final AggStar aggStar = null;
-        final Dialect dialect =  context.getContext().getDialect();
+        final Dialect dialect =  context.getDialect();
         final SqlQuery query = new SqlQuery(dialect);
 
         when(level.getBaseStarKeyColumn(baseCube)).thenReturn(column);

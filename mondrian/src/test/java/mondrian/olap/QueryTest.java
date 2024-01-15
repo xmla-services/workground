@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -44,11 +44,11 @@ class QueryTest {
     private QueryImpl queryWithoutCellProps;
 
 
-    private void beforeTest(TestContextWrapper context)
+    private void beforeTest(TestContext context)
     {
 
         ConnectionBase connection =
-                (ConnectionBase) context.createConnection();
+                (ConnectionBase) context.getConnection();
         final Statement statement =
                 connection.getInternalStatement();
 
@@ -74,7 +74,7 @@ class QueryTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testHasCellPropertyWhenQueryHasCellProperties(TestContextWrapper context) {
+    void testHasCellPropertyWhenQueryHasCellProperties(TestContext context) {
         beforeTest(context);
         assertTrue(queryWithCellProps.hasCellProperty("Value"));
         assertFalse(queryWithCellProps.hasCellProperty("Language"));
@@ -82,7 +82,7 @@ class QueryTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testIsCellPropertyEmpty(TestContextWrapper context) {
+    void testIsCellPropertyEmpty(TestContext context) {
         beforeTest(context);
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());
     }

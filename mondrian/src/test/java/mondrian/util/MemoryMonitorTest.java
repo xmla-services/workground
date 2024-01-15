@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestContextWrapper;
+import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -237,7 +237,7 @@ Does not work without the notify on add feature.
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void _testQuery(TestContextWrapper context) throws Exception {
+    public void _testQuery(TestContext context) throws Exception {
         if (!enabled) {
             return;
         }
@@ -318,7 +318,7 @@ Does not work without the notify on add feature.
 //System.out.println("allready notified");
                 return;
             }
-            Connection conn = context.createConnection();
+            Connection conn = context.getConnection();
 
             final int MAX = 100;
 

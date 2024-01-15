@@ -28,7 +28,6 @@ import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -71,9 +70,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitAggExtraColsRequiringJoin(TestContextWrapper context) throws SQLException {
+    void testExplicitAggExtraColsRequiringJoin(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
                 List.of(AggNameRBuilder.builder()
                         .name("agg_g_ms_pcat_sales_fact_1997")
                         .aggFactCount(AggColumnNameRBuilder.builder()
@@ -114,9 +113,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             "select {[Measures].[Unit Sales]} on columns, "
             + "non empty CrossJoin({[TimeExtra].[Month].members},{[Gender].[M]}) on rows "
             + "from [ExtraCol] ";
-        TestUtil.flushSchemaCache(context.getContext().getConnection());
+        TestUtil.flushSchemaCache(context.getConnection());
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -139,7 +138,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `time_by_day`.`the_month`,\n"
                 + "    `agg_g_ms_pcat_sales_fact_1997`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -149,7 +148,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`agg_g_ms_pcat_sales_fact_1997`.`month_of_year`) ASC, `agg_g_ms_pcat_sales_fact_1997`.`month_of_year` ASC,\n"
                     + "    ISNULL(`agg_g_ms_pcat_sales_fact_1997`.`gender`) ASC, `agg_g_ms_pcat_sales_fact_1997`.`gender` ASC")));
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -173,9 +172,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitForeignKey(TestContextWrapper context) {
+    void testExplicitForeignKey(TestContext context) {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("agg_c_14_sales_fact_1997")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -230,7 +229,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         // Run the query twice, verifying both the SqlTupleReader and
         // Segment load queries.
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -262,7 +261,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `store`.`store_name`,\n"
                 + "    `store`.`store_street_address`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -279,7 +278,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`store`.`store_name`) ASC, `store`.`store_name` ASC")));
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -304,9 +303,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitAggOrdinalOnAggTable(TestContextWrapper context) throws SQLException {
+    void testExplicitAggOrdinalOnAggTable(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -350,7 +349,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -370,7 +369,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonthord`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c3`) ASC, `c3` ASC,\n"
@@ -383,9 +382,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitAggCaptionOnAggTable(TestContextWrapper context) throws SQLException {
+    void testExplicitAggCaptionOnAggTable(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -429,7 +428,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -449,7 +448,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonthcap`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -462,9 +461,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitAggNameColumnOnAggTable(TestContextWrapper context) throws SQLException {
+    void testExplicitAggNameColumnOnAggTable(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -517,7 +516,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol] ";
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -539,7 +538,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test`.`testmonprop1`,\n"
                 + "    `exp_agg_test`.`gender`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -553,9 +552,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testExplicitAggPropertiesOnAggTable(TestContextWrapper context) throws SQLException {
+    void testExplicitAggPropertiesOnAggTable(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test_distinct_count")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -617,7 +616,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "non empty CrossJoin({[Gender].Gender.members},{[Store].[USA].[WA].[Spokane].[Store 16]}) on rows "
             + "from [ExtraCol]";
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -639,7 +638,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test_distinct_count`.`store_name`,\n"
                 + "    `exp_agg_test_distinct_count`.`store_add`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -651,7 +650,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_cty`) ASC, `exp_agg_test_distinct_count`.`store_cty` ASC,\n"
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_name`) ASC, `exp_agg_test_distinct_count`.`store_name` ASC")));
 
-        assertQueryReturns(context.getContext().getConnection(),
+        assertQueryReturns(context.getConnection(),
             "Store Address Property should be '5922 La Salle Ct'",
             query,
             "Axis #0:\n"
@@ -671,7 +670,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "Row #1: 11,523\n");
         // Should use agg table for distinct count measure
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -690,9 +689,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testCountDistinctAllowableRollup(TestContextWrapper context) throws SQLException {
+    void testCountDistinctAllowableRollup(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test_distinct_count")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -756,7 +755,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             + "from [ExtraCol]";
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -778,7 +777,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test_distinct_count`.`store_name`,\n"
                 + "    `exp_agg_test_distinct_count`.`store_add`\n"
                 + "order by\n"
-                + (getDialect(context.getContext().getConnection()).requiresOrderByAlias()
+                + (getDialect(context.getConnection()).requiresOrderByAlias()
                     ? "    ISNULL(`c0`) ASC, `c0` ASC,\n"
                     + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
                     + "    ISNULL(`c2`) ASC, `c2` ASC,\n"
@@ -791,7 +790,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test_distinct_count`.`store_name`) ASC, `exp_agg_test_distinct_count`.`store_name` ASC")));
 
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"
@@ -812,9 +811,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testCountDisallowedRollup(TestContextWrapper context) throws SQLException {
+    void testCountDisallowedRollup(TestContext context) throws SQLException {
         prepareContext(context);
-        setupMultiColDimCube(context.getContext(),
+        setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
                 .name("exp_agg_test_distinct_count")
                 .aggFactCount(AggColumnNameRBuilder.builder()
@@ -880,7 +879,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         // attributes for store are on the aggStar bitkey and not part of the
         // request and rollup is not safe
         assertQuerySql(
-            context.getContext().getConnection(),
+            context.getConnection(),
             query,
             mysqlPattern(
                 "select\n"

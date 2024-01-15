@@ -29,7 +29,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -76,13 +75,13 @@ class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetCubesWithNoRole(TestContextWrapper context) {
+    void testGetCubesWithNoRole(TestContext context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2", "HR"
         };
 
-        Connection connection = context.createConnection();
+        Connection connection = context.getConnection();
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();
 
@@ -119,7 +118,7 @@ class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testConnectUseContentChecksum(TestContextWrapper context) {
+    void testConnectUseContentChecksum(TestContext context) {
 //    	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
         //Util.PropertyList properties =
         //       TestUtil.getConnectionProperties().clone();
@@ -128,7 +127,7 @@ class RolapSchemaReaderTest {
         //    "true");
 
         try {
-        	context.createConnection();
+        	context.getConnection();
             //DriverManager.getConnection(
             //    properties,
             //    null);

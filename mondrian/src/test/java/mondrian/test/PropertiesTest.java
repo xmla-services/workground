@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -52,8 +51,8 @@ class PropertiesTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMandatoryMemberProperties(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testMandatoryMemberProperties(TestContext context) {
+        Connection connection = context.getConnection();
         Cube salesCube = connection.getSchema().lookupCube("Sales", true);
         SchemaReader scr = salesCube.getSchemaReader(null).withLocus();
         Member member =
@@ -193,8 +192,8 @@ class PropertiesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testGetChildCardinalityPropertyValue(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testGetChildCardinalityPropertyValue(TestContext context) {
+        Connection connection = context.getConnection();
         Cube salesCube = connection.getSchema().lookupCube("Sales", true);
         SchemaReader scr = salesCube.getSchemaReader(null);
         Member memberForCardinalityTest =
@@ -213,8 +212,8 @@ class PropertiesTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testPropertiesMDX(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testPropertiesMDX(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Customers].[All Customers].[USA].[CA]} DIMENSION PROPERTIES \n"
             + " CATALOG_NAME, SCHEMA_NAME, CUBE_NAME, DIMENSION_UNIQUE_NAME, \n"
             + " HIERARCHY_UNIQUE_NAME, LEVEL_UNIQUE_NAME, LEVEL_NUMBER, MEMBER_UNIQUE_NAME, \n"
@@ -256,8 +255,8 @@ class PropertiesTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberProperties(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testMemberProperties(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
             + " CATALOG_NAME, PARENT_UNIQUE_NAME, [Store Type], FORMAT_EXP\n"
             + " ON COLUMNS\n"
@@ -273,8 +272,8 @@ class PropertiesTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMemberPropertiesBad(TestContextWrapper context) {
-        Result result = executeQuery(context.createConnection(),
+    void testMemberPropertiesBad(TestContext context) {
+        Result result = executeQuery(context.getConnection(),
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
             + " CATALOG_NAME, PARENT_UNIQUE_NAME, [Store Type], BAD\n"
             + " ON COLUMNS\n"
@@ -287,8 +286,8 @@ class PropertiesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMandatoryCellProperties(TestContextWrapper context) {
-        Connection connection = context.createConnection();
+    void testMandatoryCellProperties(TestContext context) {
+        Connection connection = context.getConnection();
         QueryImpl salesCube = connection.parseQuery(
             "select \n"
             + " {[Measures].[Store Sales], [Measures].[Unit Sales]} on columns, \n"

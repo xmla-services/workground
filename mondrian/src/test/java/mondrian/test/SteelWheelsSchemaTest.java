@@ -31,7 +31,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
-import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 
@@ -60,11 +59,11 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMeasures(TestContextWrapper context) {
-        if (!TestUtil.databaseIsValid(context.createConnection())) {
+    void testMeasures(TestContext context) {
+        if (!TestUtil.databaseIsValid(context.getConnection())) {
             return;
         }
-        assertAxisReturns(context.createConnection(),
+        assertAxisReturns(context.getConnection(),
             "Measures.Members",
             "[Measures].[Quantity]\n"
             + "[Measures].[Sales]\n"
@@ -106,11 +105,11 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMarkets(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testMarkets(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select [Markets].[All Markets].[Japan] on 0 from [SteelWheelsSales]",
             "Axis #0:\n"
             + "{}\n"
@@ -118,7 +117,7 @@ class SteelWheelsSchemaTest {
             + "{[Markets].[Japan]}\n"
             + "Row #0: 4,923\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select [Markets].Children on 0 from [SteelWheelsSales]",
             "Axis #0:\n"
             + "{}\n"
@@ -134,7 +133,7 @@ class SteelWheelsSchemaTest {
             + "Row #0: 4,923\n"
             + "Row #0: 37,952\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select Subset([Markets].Members, 130, 8) on 0 from [SteelWheelsSales]",
             "Axis #0:\n"
             + "{}\n"
@@ -156,7 +155,7 @@ class SteelWheelsSchemaTest {
             + "Row #0: 692\n"
             + "Row #0: 692\n");
 
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "select [Markets].[Territory].Members on 0 from "
             + "[SteelWheelsSales]",
             "Axis #0:\n"
@@ -180,9 +179,9 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testBugMondrian755(TestContextWrapper context) {
+    void testBugMondrian755(TestContext context) {
         //getTestContext(context);
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         // One-dimensional query, using set and trivial calc member.
@@ -241,8 +240,8 @@ class SteelWheelsSchemaTest {
             + "From [SteelWheelsSales]");
     }
 
-    private void checkCellZero(TestContextWrapper context, String mdx) {
-        final Result result = executeQuery(context.createConnection(), mdx);
+    private void checkCellZero(TestContext context, String mdx) {
+        final Result result = executeQuery(context.getConnection(), mdx);
         final Cell cell = result.getCell(new int[result.getAxes().length]);
         assertTrue(cell.canDrillThrough());
         assertEquals(2996, cell.getDrillThroughCount());
@@ -258,7 +257,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian756(TestContext context) {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier2::new);
@@ -285,7 +284,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian756b(TestContext context) {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier2::new);
@@ -308,7 +307,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian805(TestContext context) {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         withSchema(context, SchemaModifiers.SteelWheelsSchemaTestModifier3::new);
@@ -391,7 +390,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testBugMondrian935(TestContext context) {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         assertQueryReturns(context.getConnection(),
@@ -442,7 +441,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testPropertyWithParameterOfTimestampType(TestContext context) throws Exception {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
 
@@ -468,11 +467,11 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testEsr1587(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testEsr1587(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_Time]'\n"
             + "  set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS], [Time].CurrentMember.OrderKey, BASC)'\n"
             + "  set [*BASE_MEMBERS_Measures] as '{[Measures].[*ZERO]}'\n"
@@ -490,11 +489,11 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1133(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testMondrian1133(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        executeQuery(context.createConnection(),
+        executeQuery(context.getConnection(),
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Markets], Not IsEmpty ([Measures].[Sales]))'\n"
             + "Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Markets].CurrentMember.OrderKey,BASC,Ancestor([Markets].CurrentMember,[Markets].[Territory]).OrderKey,BASC)'\n"
@@ -521,9 +520,9 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1197(TestContextWrapper context) {
+    void testMondrian1197(TestContext context) {
 
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
 
@@ -946,7 +945,7 @@ class SteelWheelsSchemaTest {
                 + "[*BASE_MEMBERS_Measures] on columns,\n"
                 + "[*SORTED_ROW_AXIS] on rows\n"
                 + "From [SteelWheelsSales]\n";
-            assertQueryReturns(context.createConnection(),
+            assertQueryReturns(context.getConnection(),
                 mdx,
                 results[i]);
         }
@@ -962,9 +961,9 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testRangeSortWithNullKeys(TestContextWrapper context) {
+    void testRangeSortWithNullKeys(TestContext context) {
 
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
     	RolapSchemaPool.instance().clear();
@@ -975,7 +974,7 @@ class SteelWheelsSchemaTest {
             + "{[Measures].[*ZERO]} on columns,\n"
             + "{[Markets].[#null].[Germany].[#null] : [Markets].[EMEA].[France].[#null]} on rows\n"
             + "From [SteelWheelsSales]\n";
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
             + "{}\n"
@@ -1039,11 +1038,11 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testBug1285(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testBug1285(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with set [*NATIVE_CJ_SET] as 'Filter(NonEmptyCrossJoin([*BASE_MEMBERS_Time], [*BASE_MEMBERS_Product]), (NOT IsEmpty([Measures].[Quantity])))'\n"
             + "  set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS], [Product].CurrentMember.OrderKey, BASC)'\n"
             + "  set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS], [Time].CurrentMember.OrderKey, BASC)'\n"
@@ -1129,11 +1128,11 @@ class SteelWheelsSchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testDoubleValueCanBeRankedAmongIntegers(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testDoubleValueCanBeRankedAmongIntegers(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with \n"
             + "  member [Product].[agg] as \n"
             + "    'Aggregate({[Product].[Line].[Motorcycles]})'\n"
@@ -1145,7 +1144,7 @@ class SteelWheelsSchemaTest {
             + "Axis #1:\n"
             + "{[Measures].[rank]}\n"
             + "Row #0: 3\n");
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "with \n"
             + "  member [Product].[agg] as \n"
             + "    'Aggregate({[Product].[Line].[Motorcycles]})'\n"
@@ -1212,15 +1211,15 @@ class SteelWheelsSchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
-    void testMondrian1464(TestContextWrapper context) {
-        //if (!databaseIsValid(context.createConnection())) {
+    void testMondrian1464(TestContext context) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
             true);
-        assertQueryReturns(context.createConnection(),
+        assertQueryReturns(context.getConnection(),
             "WITH \n"
             + "SET [*NATIVE_CJ_SET] AS '[*BASE_MEMBERS_Time]' \n"
             + "SET [*BASE_MEMBERS_Measures] AS '{[Measures].[*ZERO]}' \n"
@@ -1249,7 +1248,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1252(TestContext context) throws Exception {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
 
@@ -1327,7 +1326,7 @@ class SteelWheelsSchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian1750(TestContext context) throws Exception {
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
         assertQueryReturns(context.getConnection(),
@@ -2096,7 +2095,7 @@ class SteelWheelsSchemaTest {
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class )
     void testMondrian2652(TestContext context) {
         // Check if there is a valid SteelWheels database.
-        //if (!databaseIsValid(context.createConnection())) {
+        //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
 
