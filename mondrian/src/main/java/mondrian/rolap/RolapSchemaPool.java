@@ -77,7 +77,7 @@ public class RolapSchemaPool {
                 connectionKey);
         //TODO: schema name
         MappingSchema schemaMapping=context.getDatabaseMappingSchemaProviders().get(0).get();
-        
+
         final SchemaContentKey schemaContentKey =
             SchemaContentKey.create(schemaMapping);
         final SchemaKey key =
@@ -99,7 +99,7 @@ public class RolapSchemaPool {
 
 
         return getByKey(
-             context, connectionProps, 
+             context, connectionProps,
              key);
     }
 
@@ -165,11 +165,7 @@ public class RolapSchemaPool {
             }
             putSchema(schema, null, time,timeUnit);
             return schema;
-        }catch (Exception e) {
-        	e.printStackTrace();
-return null;
-        }
-         finally {
+        } finally {
             lock.writeLock().unlock();
         }
     }
