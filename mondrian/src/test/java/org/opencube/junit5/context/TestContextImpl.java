@@ -11,10 +11,10 @@ import javax.sql.DataSource;
 import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
+import org.eclipse.daanse.olap.core.AbstractBasicContext;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
@@ -25,11 +25,8 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.MondrianServerImpl;
-import mondrian.server.Statement;
-import mondrian.server.monitor.Monitor;
 
-public class TestContextImpl implements TestContext {
+public class TestContextImpl extends AbstractBasicContext implements TestContext {
 
 	private Dialect dialect;
 	private StatisticsProvider statisticsProvider = new NullStatisticsProvider();
@@ -39,10 +36,10 @@ public class TestContextImpl implements TestContext {
 	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 	private String name;
 	private Optional<String> description = Optional.empty();
-	private MondrianServerImpl server;
 
 	public TestContextImpl() {
-		server = new MondrianServerImpl(this);
+	    shepherd = new RolapResultShepherd();
+	    aggMgr = new AggregationManager(this);
 	}
 
 	@Override
@@ -166,48 +163,6 @@ public class TestContextImpl implements TestContext {
 		public long getColumnCardinality(String catalog, String schema, String table, String column) {
 			return 0;
 		}
-	}
-
-
-	/// TODO:
-	@Override
-	public void addConnection(RolapConnection rolapConnection) {
-		 server.addConnection(rolapConnection);
-	}
-
-	@Override
-	public void removeConnection(RolapConnection rolapConnection) {
-		 server.removeConnection(rolapConnection);
-	}
-
-	@Override
-	public RolapResultShepherd getResultShepherd() {
-		return server.getResultShepherd()		;
-	}
-
-	@Override
-	public AggregationManager getAggregationManager() {
-		return server.getAggregationManager();
-	}
-
-	@Override
-	public void addStatement(Statement statement) {
-		 server.addStatement(statement);
-	}
-
-	@Override
-	public void removeStatement(Statement internalStatement) {
-		 server.removeStatement(internalStatement);
-	}
-
-	@Override
-	public Monitor getMonitor() {
-	return server.getMonitor()		;
-	}
-
-	@Override
-	public List<Statement> getStatements(Connection connection) {
-		return null;
 	}
 
 }

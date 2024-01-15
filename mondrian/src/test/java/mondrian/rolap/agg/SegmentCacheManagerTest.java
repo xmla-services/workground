@@ -29,7 +29,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianServer;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 

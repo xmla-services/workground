@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryCanceledException;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;

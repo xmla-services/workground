@@ -64,7 +64,6 @@ import org.junit.jupiter.api.Test;
 import org.opencube.junit5.SchemaUtil;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianServer;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;

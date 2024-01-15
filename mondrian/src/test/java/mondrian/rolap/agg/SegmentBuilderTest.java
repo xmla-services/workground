@@ -50,7 +50,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapUtil;
@@ -777,7 +776,7 @@ class SegmentBuilderTest {
     }
 
     private void clearAggregationCache(Connection connection) {
-    	SegmentCache segmentCache = 
+    	SegmentCache segmentCache =
     			connection.getContext().getAggregationManager()
             .cacheMgr.compositeCache;
     	segmentCache.getSegmentHeaders().stream().forEach(it -> segmentCache.remove(it));
@@ -960,7 +959,7 @@ class SegmentBuilderTest {
     private Map<SegmentHeader, SegmentBody> getReversibleTestMap(Connection connection,
         final Order order)
     {
-        SegmentCache cache = 
+        SegmentCache cache =
                 connection.getContext().getAggregationManager()
             .cacheMgr.compositeCache;
 

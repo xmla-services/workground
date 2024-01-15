@@ -25,7 +25,6 @@ import org.opencube.junit5.context.TestContextWrapper;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianServer;
 import mondrian.rolap.agg.SegmentCacheManager.CompositeSegmentCache;
 import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentHeader;
@@ -71,7 +70,7 @@ class SegmentCacheTest {
     }
 
 	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)	
+	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSegmentCacheEvents(TestContextWrapper context) throws Exception {
         SegmentCache mockCache = new MockSegmentCache();
         SegmentCacheWorker testWorker =

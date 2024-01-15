@@ -34,13 +34,11 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.element.Schema;
 import org.eigenbase.util.property.BooleanProperty;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.SegmentCacheManager;
