@@ -226,7 +226,7 @@ public class CsvDataLoader implements PathListener {
 		while ((r = parser.parseNextRecord()) != null) {
 
 			final Record currentRecord = r;
-			columns.parallelStream().forEach(column -> processingTypeValues(ps, column, currentRecord));
+			columns.stream().forEach(column -> processingTypeValues(ps, column, currentRecord));
 
 			ps.addBatch();
 			ps.clearParameters();
