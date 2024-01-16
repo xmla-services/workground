@@ -1039,7 +1039,7 @@ public class SegmentCacheManager {
 
               // Broadcast the event to anyone who is interested.
               RolapUtil.MONITOR_LOGGER.debug( message.toString() );
-              //TODO: here had log4j Logger been used to broadcast the full message.
+              //TODO: here had  Logger been used to broadcast the full message.
               //if necessary we should use eventadmin or something to broadcast events
 
             }

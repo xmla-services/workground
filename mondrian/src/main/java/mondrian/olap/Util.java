@@ -85,12 +85,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
-import org.apache.commons.vfs2.FileContent;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.VFS;
-import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -127,12 +121,12 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
-import org.eclipse.daanse.olap.impl.IdentifierSegment;
 import org.eclipse.daanse.olap.impl.IdentifierNode;
-import org.eigenbase.xom.XOMUtil;
+import org.eclipse.daanse.olap.impl.IdentifierParser;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
 import org.eclipse.daanse.olap.impl.KeySegment;
 import org.eclipse.daanse.olap.impl.NameSegment;
-import org.eclipse.daanse.olap.impl.IdentifierParser;
+import org.eigenbase.xom.XOMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -3104,95 +3098,7 @@ public class Util extends XOMUtil {
         }
     }
 
-    /**
-     * Gets content via Apache VFS. File must exist and have content
-     *
-     * @param url String
-     * @return Apache VFS FileContent for further processing
-     * @throws FileSystemException on error
-     */
-    public static InputStream readVirtualFile(String url)
-        throws FileSystemException
-    {
-        // Treat catalogUrl as an Apache VFS (Virtual File System) URL.
-        // VFS handles all of the usual protocols (http:, file:)
-        // and then some.
-        FileSystemManager fsManager = VFS.getManager();
-        if (fsManager == null) {
-            throw newError("Cannot get virtual file system manager");
-        }
-
-        // Workaround VFS bug.
-        if (url.startsWith("file://localhost")) {
-            url = url.substring("file://localhost".length());
-        }
-        if (url.startsWith("file:")) {
-            url = url.substring("file:".length());
-        }
-
-        // work around for VFS bug not closing http sockets
-        // (Mondrian-585)
-        if (url.startsWith("http")) {
-            try {
-                return new URL(url).openStream();
-            } catch (IOException e) {
-                throw newError(
-                    "Could not read URL: " + url);
-            }
-        }
-
-        File userDir = new File("").getAbsoluteFile();
-        FileObject file = fsManager.resolveFile(userDir, url);
-        FileContent fileContent = null;
-        try {
-            // Because of VFS caching, make sure we refresh to get the latest
-            // file content. This refresh may possibly solve the following
-            // workaround for defect MONDRIAN-508, but cannot be tested, so we
-            // will leave the work around for now.
-            file.refresh();
-
-            // Workaround to defect MONDRIAN-508. For HttpFileObjects, verifies
-            // the URL of the file retrieved matches the URL passed in.  A VFS
-            // cache bug can cause it to treat URLs with different parameters
-            // as the same file (e.g. http://blah.com?param=A,
-            // http://blah.com?param=B)
-            if (file instanceof HttpFileObject
-                && !file.getName().getURI().equals(url))
-            {
-                fsManager.getFilesCache().removeFile(
-                    file.getFileSystem(),  file.getName());
-
-                file = fsManager.resolveFile(userDir, url);
-            }
-
-            if (!file.isReadable()) {
-                throw newError(
-                    "Virtual file is not readable: " + url);
-            }
-
-            fileContent = file.getContent();
-        } finally {
-            file.close();
-        }
-
-        if (fileContent == null) {
-            throw newError(
-                "Cannot get virtual file content: " + url);
-        }
-
-        return fileContent.getInputStream();
-    }
-
-    public static String readVirtualFileAsString(
-        String catalogUrl)
-        throws IOException
-    {
-        InputStream in = readVirtualFile(catalogUrl);
-        return new String(in.readAllBytes());
-
-    }
-
-    /**
+   /**
      * Converts a {@link Properties} object to a string-to-string {@link Map}.
      *
      * @param properties Properties

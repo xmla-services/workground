@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 
 /**
  * Implementation of {@link MessageRecorder} that writes to a
- * {@link Logger log4j logger}.
+ * {@link Logger logger}.
  *
  * @author Richard M. Emberson
  */

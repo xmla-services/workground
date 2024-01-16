@@ -411,11 +411,11 @@ public class RolapUtil {
         String alertValue = alertProperty.get();
 
         if (alertValue.equalsIgnoreCase(
-                org.apache.logging.log4j.Level.WARN.toString()))
+                "WARN"))
         {
             LOGGER.warn(alertMsg);
         } else if (alertValue.equalsIgnoreCase(
-                org.apache.logging.log4j.Level.ERROR.toString()))
+                "ERROR"))
         {
             LOGGER.error(alertMsg);
             throw MondrianResource.instance().NativeEvaluationUnsupported.ex(

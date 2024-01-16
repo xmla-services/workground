@@ -72,7 +72,7 @@ public class AggregationManager extends RolapAggregationManager {
     }
 
     /**
-     * Returns the log4j logger.
+     * Returns the logger.
      *
      * @return Logger
      */

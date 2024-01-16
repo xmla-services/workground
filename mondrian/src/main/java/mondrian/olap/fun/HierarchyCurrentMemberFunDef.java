@@ -117,7 +117,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       StringProperty alertProperty = MondrianProperties.instance().CurrentMemberWithCompoundSlicerAlert;
       String alertValue = alertProperty.get();
 
-      if ( alertValue.equalsIgnoreCase( org.apache.logging.log4j.Level.OFF.toString() ) ) {
+      if ( alertValue.equalsIgnoreCase( "OFF" ) ) {
         return; // No validation
       }
 
@@ -128,9 +128,9 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
         MondrianException exception =
             MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
 
-        if ( alertValue.equalsIgnoreCase( org.apache.logging.log4j.Level.WARN.toString() ) ) {
+        if ( alertValue.equalsIgnoreCase( "WARN" ) ) {
           HierarchyCurrentMemberFunDef.LOGGER.warn( exception.getMessage() );
-        } else if ( alertValue.equalsIgnoreCase( org.apache.logging.log4j.Level.ERROR.toString() ) ) {
+        } else if ( alertValue.equalsIgnoreCase("ERROR") ) {
           throw MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
         }
       }
