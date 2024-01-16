@@ -25,5 +25,6 @@
     <module>calc</module>
     <module>xmla</module>
     <module>filecatalog</module>
+    <module>udf</module>
   </modules>
 </project>

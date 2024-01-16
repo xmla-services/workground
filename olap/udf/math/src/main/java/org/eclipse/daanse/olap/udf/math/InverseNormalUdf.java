@@ -7,7 +7,7 @@
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
 */
 
-package mondrian.udf;
+package org.eclipse.daanse.olap.udf.math;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.eclipse.daanse.olap.api.Evaluator;
