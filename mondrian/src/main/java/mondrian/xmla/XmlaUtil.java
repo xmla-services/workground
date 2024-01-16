@@ -10,8 +10,6 @@
 */
 package mondrian.xmla;
 
-import java.io.InputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +19,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.daanse.olap.impl.LcidLocale;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
-import mondrian.util.XmlParserFactoryProducer;
 
 /**
  * Utility methods for XML/A implementation.
@@ -146,39 +139,6 @@ public class XmlaUtil implements XmlaConstants {
         }
     }
 
-    public static Element text2Element(String text)
-        throws XmlaException
-    {
-        return toElement(new InputSource(new StringReader(text)));
-    }
-
-    public static Element stream2Element(InputStream stream)
-        throws XmlaException
-    {
-        return toElement(new InputSource(stream));
-    }
-
-    private static Element toElement(InputSource source)
-        throws XmlaException
-    {
-        try {
-            DocumentBuilderFactory factory =
-                XmlParserFactoryProducer.createSecureDocBuilderFactory();
-            factory.setIgnoringElementContentWhitespace(true);
-            factory.setIgnoringComments(true);
-            factory.setNamespaceAware(true);
-
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(source);
-            return doc.getDocumentElement();
-        } catch (Exception e) {
-            throw new XmlaException(
-                CLIENT_FAULT_FC,
-                USM_DOM_PARSE_CODE,
-                USM_DOM_PARSE_FAULT_FS,
-                e);
-        }
-    }
 
     public static Element[] filterChildElements(
         Element parent,
