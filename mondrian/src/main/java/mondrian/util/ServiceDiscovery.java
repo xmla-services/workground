@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import javax.script.ScriptEngineFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +36,7 @@ import mondrian.spi.UserDefinedFunction;
  */
 @Deprecated()
 @ServiceConsumer(UserDefinedFunction.class)
-@ServiceConsumer(ScriptEngineFactory.class)
+//@ServiceConsumer(ScriptEngineFactory.class)
 @ServiceConsumer(org.eclipse.daanse.db.dialect.api.DialectFactory.class)
 public class ServiceDiscovery<T> {
 

@@ -2,8 +2,6 @@
 	@rhino-engine-1.7.14.jar,\
 	@rhino-1.7.14.jar
 
-//Export-Package: \
-//	org.mozilla.javascript.engine
 
 -privatepackage.rhino: \
     org.eclipse.daanse.repackage.rhino.engine
