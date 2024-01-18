@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public abstract class AbstractBasicContext implements Context {
 	 * Id of server. Unique within JVM's lifetime. Not the same as the ID of the
 	 * server within a lockbox.
 	 */
-	private final int id = ID_GENERATOR.incrementAndGet();
+	private final long id = ID_GENERATOR.incrementAndGet();
 
 	protected RolapResultShepherd shepherd;
 
@@ -61,7 +61,7 @@ public abstract class AbstractBasicContext implements Context {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBasicContext.class);
 
-	private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
+	private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
 	public static final List<String> KEYWORD_LIST = Collections.unmodifiableList(Arrays.asList("$AdjustedProbability",
 			"$Distance", "$Probability", "$ProbabilityStDev", "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev",
@@ -109,7 +109,7 @@ public abstract class AbstractBasicContext implements Context {
 		}
 	}
 
-	protected int getId() {
+	protected long getId() {
 		return id;
 	}
 

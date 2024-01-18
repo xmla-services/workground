@@ -57,7 +57,7 @@ class PartialSortTest{
   // calls partialSort() for natural ascending or descending order
   @SuppressWarnings( { "unchecked" } )
   private void doPartialSort( Object[] items, boolean descending, int limit ) {
-    Comparator<Object> comp = (Comparator<Object>) Comparator.naturalOrder();
+    Comparator comp =  Comparator.naturalOrder();
     if ( descending ) {
       comp = comp.reversed();
     }
