@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -99,10 +98,10 @@ public abstract class RolapAggregationManager {
 
         List<OlapElement> applicableMembers = getApplicableReturnClauseMembers(
             cube, members, returnClauseMembers, extendedContext);
-        List<OlapElement> nonApplicableMembers =
-            new ArrayList<>(
-                CollectionUtils
-                    .subtract(returnClauseMembers, applicableMembers));
+        
+        List<OlapElement> nonApplicableMembers =new ArrayList<OlapElement>();
+        nonApplicableMembers.addAll(returnClauseMembers);
+        nonApplicableMembers.removeAll(applicableMembers);
 
         return (DrillThroughCellRequest) makeCellRequest(
             members, true, extendedContext, cube, null, applicableMembers,
@@ -206,7 +205,8 @@ public abstract class RolapAggregationManager {
             // Current request cannot be processed. Per API, return null.
             return null;
         }
-        if (CollectionUtils.isEmpty(evaluator.getAggregationLists())) {
+		List<?> aggList = evaluator.getAggregationLists();
+		if (aggList == null || aggList.isEmpty()) {
             return request;
         }
         // convert aggregation lists to compound predicates

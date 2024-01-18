@@ -84,7 +84,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -4004,7 +4003,7 @@ public class Util extends XOMUtil {
                             if(!hasNext()){
                                 throw new NoSuchElementException();
                             }
-                            return new AbstractMapEntry(
+                            return new AbstractMap.SimpleEntry(
                                 list.get(pt++), null) {};
                         }
                         @Override

@@ -11,9 +11,6 @@
 */
 package mondrian.rolap;
 
-import static org.apache.commons.collections.CollectionUtils.exists;
-import static org.apache.commons.collections.CollectionUtils.filter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.Predicate;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -327,28 +323,23 @@ public abstract class RolapNativeSet extends RolapNative {
      */
     private TupleList filterInaccessibleTuples( TupleList tupleList ) {
       if ( needsFiltering( tupleList ) ) {
-        final Predicate memberInaccessible =
+        final java.util.function.Predicate<Member> memberInaccessible =
           memberInaccessiblePredicate();
-        filter(
-          tupleList, tupleAccessiblePredicate( memberInaccessible ) );
+        List<List<Member>> ret=    tupleList.stream().filter( tupleAccessiblePredicate( memberInaccessible ) ).toList();
+        return new DelegatingTupleList(tupleList.getArity(), ret);
       }
       return tupleList;
     }
 
     private boolean needsFiltering( TupleList tupleList ) {
       return !tupleList.isEmpty()
-        && exists( tupleList.get( 0 ), needsFilterPredicate() );
+        &&  tupleList.get( 0 ).stream().anyMatch( needsFilterPredicate() );
     }
 
-    private Predicate needsFilterPredicate() {
-      return new Predicate() {
-        @Override
-		public boolean evaluate( Object o ) {
-          Member member = (Member) o;
-          return isRaggedLevel( member.getLevel() )
-            || isCustomAccess( member.getHierarchy() );
-        }
-      };
+    private java.util.function.Predicate<Member> needsFilterPredicate() {
+      return member -> isRaggedLevel( member.getLevel() )
+			|| isCustomAccess( member.getHierarchy() );
+
     }
 
     private boolean isRaggedLevel( Level level ) {
@@ -374,37 +365,36 @@ public abstract class RolapNativeSet extends RolapNative {
       return access == Access.CUSTOM;
     }
 
-    private Predicate memberInaccessiblePredicate() {
+    private java.util.function.Predicate<Member> memberInaccessiblePredicate() {
       if ( constraint.getEvaluator() != null ) {
-        return new Predicate() {
+        return new java.util.function.Predicate<Member>() {
           @Override
-		public boolean evaluate( Object o ) {
+		public boolean test( Member member ) {
             Role role =
               constraint
                 .getEvaluator().getSchemaReader().getRole();
-            Member member = (Member) o;
             return member.isHidden() || !role.canAccess( member );
           }
         };
       }
-      return new Predicate() {
+      return new java.util.function.Predicate<Member>() {
         @Override
-		public boolean evaluate( Object o ) {
-          return ( (Member) o ).isHidden();
+		public boolean test( Member member ) {
+          return member.isHidden();
         }
       };
     }
 
-    private Predicate tupleAccessiblePredicate(
-      final Predicate memberInaccessible ) {
-      return new Predicate() {
-        @Override
-		@SuppressWarnings( "unchecked" )
-        public boolean evaluate( Object o ) {
-          return !exists( (List<Member>) o, memberInaccessible );
-        }
-      };
-    }
+	private java.util.function.Predicate<List<Member>> tupleAccessiblePredicate(
+			final java.util.function.Predicate<Member> memberInaccessible) {
+		return new java.util.function.Predicate<List<Member>>() {
+
+			@Override
+			public boolean test(List<Member> memberList) {
+				return memberList.stream().noneMatch(memberInaccessible);
+			}
+		};
+	}
 
     private void addLevel( TupleReader tr, CrossJoinArg arg ) {
       RolapLevel level = arg.getLevel();

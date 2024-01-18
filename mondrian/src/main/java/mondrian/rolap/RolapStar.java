@@ -17,7 +17,6 @@ import static mondrian.rolap.util.JoinUtil.getLeftAlias;
 import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
-import static org.apache.commons.collections.ReferenceMap.WEAK;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -42,7 +41,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.collections.map.ReferenceMap;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -62,6 +60,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ViewR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -260,8 +261,9 @@ public class RolapStar {
      */
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
-        private final Map<AggregationKey, Aggregation> aggregations =
-            new ReferenceMap(WEAK, WEAK);
+    	
+    	
+        private final Cache<AggregationKey, Aggregation> aggregations =Caffeine.newBuilder().weakKeys().weakValues().build();
 
         private final List<SoftReference<SegmentWithData>> segmentRefs =
             new ArrayList<>();
@@ -575,7 +577,7 @@ public class RolapStar {
             }
 
             // Clear aggregation cache for the current thread context.
-            localBars.get().aggregations.clear();
+            localBars.get().aggregations.cleanUp();
             localBars.get().segmentRefs.clear();
         }
     }
@@ -615,7 +617,7 @@ public class RolapStar {
      *
      */
     public Aggregation lookupSegment(AggregationKey aggregationKey) {
-        return localBars.get().aggregations.get(aggregationKey);
+        return localBars.get().aggregations.getIfPresent(aggregationKey);
     }
 
 

@@ -16,6 +16,7 @@ package mondrian.olap.fun.sort;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.IntStream.range;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -25,7 +26,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import org.apache.commons.collections.comparators.ComparatorChain;
+import java.util.Comparator;
+
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -60,8 +62,11 @@ class SorterTest{
   @Mock Hierarchy hierarchy2;
   @Mock Calc calc1;
   @Mock Calc calc2;
-  @Mock ComparatorChain comparatorChain;
-  @Captor ArgumentCaptor<TupleComparator> comparatorCaptor;
+  @Mock Comparator comparatorChain;
+  @Captor ArgumentCaptor<Comparator<?>> comparatorCaptor;
+
+  
+  
 
 
   @BeforeEach
@@ -88,8 +93,15 @@ class SorterTest{
     setupSortKeyMocks( true, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
-    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
-    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( true ) );
+    verify( comparatorChain , times( 2 )).thenComparing( comparatorCaptor.capture());
+    Comparator tc0= comparatorCaptor.getAllValues().get(0);
+    assertThat(tc0).isInstanceOf(TupleExpMemoComparator.BreakTupleComparator.class );
+    Comparator tc1= comparatorCaptor.getAllValues().get(1);
+    assertThat(tc1.reversed()).isInstanceOf(TupleExpMemoComparator.BreakTupleComparator.class );
+
+    
+//    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
+//    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( true ) );
   }
 
   @Test
@@ -97,8 +109,17 @@ class SorterTest{
     setupSortKeyMocks( false, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
-    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
-    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( true ) );
+    verify( comparatorChain , times( 2 )).thenComparing( comparatorCaptor.capture());
+
+    
+    Comparator tc0= comparatorCaptor.getAllValues().get(0);
+    assertThat(tc0).isInstanceOf(TupleExpMemoComparator.BreakTupleComparator.class );
+    Comparator tc1= comparatorCaptor.getAllValues().get(1);
+    assertThat(tc1.reversed()).isInstanceOf(TupleExpMemoComparator.BreakTupleComparator.class );
+
+    
+//    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( false ) );
+//    verify( comparatorChain ).addComparator( any( TupleExpMemoComparator.BreakTupleComparator.class ), eq( true ) );
   }
 
   @Test
@@ -106,8 +127,17 @@ class SorterTest{
     setupSortKeyMocks( true, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
-    verify( comparatorChain ).addComparator( any( HierarchicalTupleKeyComparator.class ), eq( false ) );
-    verify( comparatorChain ).addComparator( any( HierarchicalTupleKeyComparator.class ), eq( true ) );
+    verify( comparatorChain , times( 2 )).thenComparing( comparatorCaptor.capture());
+
+    
+    
+    Comparator tc0= comparatorCaptor.getAllValues().get(0);
+    assertThat(tc0).isInstanceOf(HierarchicalTupleKeyComparator.class );
+    Comparator tc1= comparatorCaptor.getAllValues().get(1);
+    assertThat(tc1.reversed()).isInstanceOf(HierarchicalTupleKeyComparator.class );
+
+//    verify( comparatorChain ).addComparator( any( HierarchicalTupleKeyComparator.class ), eq( false ) );
+//    verify( comparatorChain ).addComparator( any( HierarchicalTupleKeyComparator.class ), eq( true ) );
   }
 
   @Test
@@ -115,7 +145,10 @@ class SorterTest{
     setupSortKeyMocks( false, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
-    verify( comparatorChain, times( 2 ) ).addComparator( comparatorCaptor.capture(), eq( false ) );
+    verify( comparatorChain, times( 2 ) ).thenComparing( comparatorCaptor.capture() );
+    
+    
+//    verify( comparatorChain, times( 2 ) ).addComparator( comparatorCaptor.capture(), eq( false ) );
     assertTrue( comparatorCaptor.getAllValues().get( 0 ) instanceof HierarchicalTupleComparator );
     assertTrue( comparatorCaptor.getAllValues().get( 1 ) instanceof HierarchicalTupleComparator );
   }

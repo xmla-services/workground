@@ -107,7 +107,6 @@
 		<mysql-connector-java.version>8.0.28</mysql-connector-java.version>
 		<eigenbase-resgen.version>1.3.7</eigenbase-resgen.version>
 		<commons-pool.version>1.6</commons-pool.version>
-		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<jsp-api.version>2.0</jsp-api.version>
 		<commons-dbcp.version>1.2.1</commons-dbcp.version>
@@ -827,12 +826,6 @@
 				<version>${mysql-connector-java.version}</version>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>${commons-collections.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>

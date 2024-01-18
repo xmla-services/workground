@@ -23,13 +23,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -453,17 +451,8 @@ class IdBatchResolverTest  {
     private Set<String> getResolvedNames(
         Map<QueryComponent, QueryComponent> resolvedIdents)
     {
-        return new HashSet(
-            CollectionUtils
-            .collect(
-                resolvedIdents.keySet(),
-                new Transformer()
-                {
-                    @Override
-					public Object transform(Object o) {
-                        return o.toString();
-                    }
-                }));
+		return resolvedIdents.keySet().stream().map(Object::toString).collect(Collectors.toSet());
+
     }
 
     public IdBatchResolver makeTestBatchResolver(TestContext context,String mdx) {

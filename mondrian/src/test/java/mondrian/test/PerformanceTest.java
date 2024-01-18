@@ -16,7 +16,6 @@ import mondrian.olap.type.NumericType;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Bug;
-import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -765,7 +764,7 @@ public class PerformanceTest {
             }
         }
         @SuppressWarnings( "unchecked" ) final Comparator<Integer> comp =
-          ComparatorUtils.naturalComparator();
+          Comparator.naturalOrder();
         final long start = System.currentTimeMillis();
         List<Integer> x = sort( list, comp, limit );
         statistician.record( start );

@@ -28,10 +28,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.stream.Stream;
 
-import org.apache.commons.collections.ComparatorUtils;
-import org.apache.commons.collections.comparators.ComparatorChain;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
@@ -45,9 +42,7 @@ import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
-import mondrian.olap.fun.sort.Sorter.SorterFlag;
 import mondrian.olap.type.ScalarType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
@@ -247,7 +242,9 @@ public class Sorter {
       }
     }
 
-    ComparatorChain chain = new ComparatorChain();
+    
+	Comparator<Member> chain = (o1, o2) -> 0;
+	
     for ( SortKeySpec key : keySpecList ) {
       boolean brk = key.getDirection().brk;
       MemberComparator comp;
@@ -259,7 +256,10 @@ public class Sorter {
           evaluator, key.getKey(), key.getDirection().descending );
       }
       comp.preloadValues( memberList );
-      chain.addComparator( comp.wrap(), false );
+
+      chain=chain.thenComparing(comp.wrap());
+
+
     }
 
     memberList.sort( chain );
@@ -414,9 +414,9 @@ public class Sorter {
       return tupleList;
     }
 
-    ComparatorChain chain = new ComparatorChain();
+	Comparator<List<Member>> chain = (o1, o2) -> 0;
     for ( SortKeySpec key : keySpecList ) {
-      applySortSpecToComparator( evaluator, arity, chain, key );
+    	chain= applySortSpecToComparator( evaluator, arity, chain, key );
     }
     tupleList.sort( chain );
     logTuples( tupleList, "Sorter.sortTuples" );
@@ -426,24 +426,31 @@ public class Sorter {
   /*
    * ONLY VisibleForTesting
    */
-  static void applySortSpecToComparator( Evaluator evaluator, int arity, ComparatorChain chain,
+  static Comparator<List<Member>> applySortSpecToComparator( Evaluator evaluator, int arity, Comparator<List<Member>> chain,
                                          SortKeySpec key ) {
     boolean brk = key.getDirection().brk;
     boolean orderByKey =
       key.getKey().isWrapperFor( MemberOrderKeyFunDef.CalcImpl.class );
     boolean direction = key.getDirection().descending;
     if ( brk ) {
-      TupleExpMemoComparator comp =
+    	Comparator<List<Member>> comp =
         new TupleExpMemoComparator.BreakTupleComparator( evaluator, key.getKey(), arity );
-      chain.addComparator( comp, direction );
+		if (direction) {
+			comp =  comp.reversed();
+		}
+     return chain.thenComparing(comp);
     } else if ( orderByKey ) {
-      TupleExpMemoComparator comp =
+    	Comparator<List<Member>>  comp =
         new HierarchicalTupleKeyComparator( evaluator, key.getKey(), arity );
-      chain.addComparator( comp, direction );
+		if (direction) {
+			comp =  comp.reversed();
+		}
+		return chain.thenComparing(comp);
     } else {
-      TupleComparator.TupleExpComparator comp =
+    	Comparator<List<Member>>  comp =
         new HierarchicalTupleComparator( evaluator, key.getKey(), arity, direction );
-      chain.addComparator( comp, false ); // ordering handled in the comparator.
+    	
+    	return chain.thenComparing(comp); // ordering handled in the comparator.
     }
   }
 
@@ -767,7 +774,8 @@ public class Sorter {
   static <T> void partialSort( T[] items, Comparator<T> comp, int limit ) {
     if ( comp == null ) {
       //noinspection unchecked
-      comp = ComparatorUtils.naturalComparator();
+      comp = (Comparator<T>) Comparator.naturalOrder();
+
     }
     new Quicksorter<>( items, comp ).partialSort( limit );
   }

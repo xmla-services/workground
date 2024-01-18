@@ -14,7 +14,8 @@ package mondrian.rolap.cache;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.collections.map.ReferenceMap;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * An implementation of {@link SmartCacheImpl} which uses a
@@ -31,8 +32,7 @@ import org.apache.commons.collections.map.ReferenceMap;
 public class SoftSmartCache<K, V> extends SmartCacheImpl<K, V> {
 
     @SuppressWarnings("unchecked")
-    private final Map<K, V> cache =
-        new ReferenceMap(ReferenceMap.SOFT, ReferenceMap.SOFT);
+    private final Cache<K, V> cache =Caffeine.newBuilder().softValues().build();
 
     @Override
 	public V putImpl(K key, V value) {
@@ -40,35 +40,35 @@ public class SoftSmartCache<K, V> extends SmartCacheImpl<K, V> {
         // Convert the operation because ReferenceMap doesn't
         // like null values.
         if (value == null) {
-            return cache.remove(key);
+            return cache.asMap().remove(key);
         } else {
-            return cache.put(key, value);
+            return cache.asMap().put(key, value);
         }
     }
 
     @Override
 	public V getImpl(K key) {
-        return cache.get(key);
+        return cache.asMap().get(key);
     }
 
     @Override
 	public V removeImpl(K key) {
-        return cache.remove(key);
+        return cache.asMap().remove(key);
     }
 
     @Override
 	public void clearImpl() {
-        cache.clear();
+        cache.asMap().clear();
     }
 
     @Override
 	public int sizeImpl() {
-        return cache.size();
+        return cache.asMap().size();
     }
 
     @Override
 	public Iterator<Map.Entry<K, V>> iteratorImpl() {
-        return cache.entrySet().iterator();
+        return cache.asMap().entrySet().iterator();
     }
 }
 

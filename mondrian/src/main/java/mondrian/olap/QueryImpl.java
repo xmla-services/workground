@@ -23,9 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
@@ -72,8 +71,8 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
-
-
+import org.eclipse.daanse.olap.impl.IdentifierParser;
+import org.eclipse.daanse.olap.impl.IdentifierSegment;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
@@ -86,7 +85,6 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
@@ -97,8 +95,6 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.ProfileHandler;
 import mondrian.util.ArrayStack;
-import org.eclipse.daanse.olap.impl.IdentifierParser;
-import org.eclipse.daanse.olap.impl.IdentifierSegment;
 
 /**
  * <code>Query</code> is an MDX query.
@@ -785,16 +781,16 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      *
      * @return Collection of all axes including slicer
      */
-    private Collection<QueryAxis> allAxes() {
-        if (slicerAxis == null) {
-            return Arrays.asList(axes);
-        } else {
-            //noinspection unchecked
-            return new CompositeCollection(
-                new Collection[] {
-                    Collections.singletonList(slicerAxis),
-                    Arrays.asList(axes)});
-        }
+	private Collection<QueryAxis> allAxes() {
+		if (slicerAxis == null) {
+			return Arrays.asList(axes);
+		} else {
+			// noinspection unchecked
+			Collection<QueryAxis> composite = new ArrayList<>();
+			composite.add(slicerAxis);
+			composite.addAll(Arrays.asList(axes));
+			return composite;
+		}
     }
 
     @Override

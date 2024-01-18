@@ -17,8 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Enumeration;
 
-import org.apache.commons.collections.iterators.EnumerationIterator;
-
 /**
  * Instantiates a class.
  *
@@ -117,9 +115,9 @@ public interface ClassResolver {
 		public Iterable<URL> getResources(String name) throws IOException {
             final Enumeration<URL> resources =
                 getClassLoaderNotNull().getResources(name);
+            
             //noinspection unchecked
-            return new IteratorIterable<URL>(
-                new EnumerationIterator(resources));
+            return new IteratorIterable<URL>(resources.asIterator());
         }
     }
 }

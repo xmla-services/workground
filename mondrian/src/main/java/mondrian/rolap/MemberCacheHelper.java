@@ -11,7 +11,6 @@
 */
 package mondrian.rolap;
 
-import static org.apache.commons.collections.CollectionUtils.filter;
 import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.TreeSet;
-
-import org.apache.commons.collections.Predicate;
 
 import mondrian.rolap.cache.SmartCache;
 import mondrian.rolap.cache.SoftSmartCache;
@@ -160,15 +157,10 @@ public class MemberCacheHelper implements MemberCache {
         {
             return null;
         }
-        filter(
-            children, new Predicate()
-            {
-                @Override
-				public boolean evaluate(Object member) {
-                    return childNames.contains(
-                        ((RolapMember) member).getName());
-                }
-            });
+        
+        children=    children.stream().filter(rolapMember->childNames.contains(
+        		rolapMember.getName())).toList();
+
         boolean foundAll = children.size() == childNames.size();
         return !foundAll ? null : children;
     }

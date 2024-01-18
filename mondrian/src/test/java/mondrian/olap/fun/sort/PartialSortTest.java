@@ -22,8 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.collections.ComparatorUtils;
-import org.apache.commons.collections.comparators.ReverseComparator;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +57,9 @@ class PartialSortTest{
   // calls partialSort() for natural ascending or descending order
   @SuppressWarnings( { "unchecked" } )
   private void doPartialSort( Object[] items, boolean descending, int limit ) {
-    Comparator<Object> comp = ComparatorUtils.naturalComparator();
+    Comparator<Object> comp = (Comparator<Object>) Comparator.naturalOrder();
     if ( descending ) {
-      comp = ComparatorUtils.reversedComparator( comp );
+      comp = comp.reversed();
     }
     Sorter.partialSort( items, comp, limit );
   }
@@ -105,7 +104,7 @@ class PartialSortTest{
     T[] vec, int limit, boolean descending ) {
     //noinspection unchecked
     return isPartiallySorted(
-      vec, limit, (Comparator<T>) ComparatorUtils.naturalComparator(),
+      vec, limit,  Comparator.naturalOrder(),
       descending );
   }
 
@@ -437,7 +436,7 @@ class PartialSortTest{
     Comparator<Item> comp = Item.byKey;
     if ( desc ) {
       //noinspection unchecked
-      comp = new ReverseComparator( comp );
+      comp = comp.reversed();
     }
     List<Item> sorted =
       Sorter.stablePartialSort( Arrays.asList( vec ), comp, limit );
@@ -538,8 +537,7 @@ class PartialSortTest{
 
     // marc's stable partial quicksort vec3
     @SuppressWarnings( { "unchecked" } )
-    Comparator<Integer> comp =
-      new ReverseComparator( ComparatorUtils.naturalComparator() );
+    Comparator<Integer> comp = Comparator.<Integer>naturalOrder().reversed();
     List<Integer> vec3List = Arrays.asList( vec3 );
     now = System.currentTimeMillis();
     Sorter.stablePartialSort( vec3List, comp, limit, 2 );

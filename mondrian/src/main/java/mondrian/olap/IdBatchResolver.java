@@ -9,8 +9,6 @@
  */
 package mondrian.olap;
 
-import static org.apache.commons.collections.CollectionUtils.filter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,10 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Segment;
@@ -282,28 +278,8 @@ public final class IdBatchResolver {
     private List<NameSegment> collectChildrenNameSegments(
         final Member parentMember, List<Id> children)
     {
-        filter(
-            children, new Predicate() {
-            // remove children we can't support
-                @Override
-				public boolean evaluate(Object theId)
-                {
-                    Id id = (Id)theId;
-                    return !Util.matches(parentMember, id.getSegments())
-                        && supportedIdentifier(id);
-                }
-            });
-        return new ArrayList(
-            CollectionUtils.collect(
-                children, new Transformer()
-            {
-                // convert the collection to a list of NameSegments
-            @Override
-			public Object transform(Object theId) {
-                Id id = (Id)theId;
-                return getLastSegment(id);
-            }
-        }));
+		return children.stream().filter(id -> !Util.matches(parentMember, id.getSegments()) && supportedIdentifier(id))
+				.map(this::getLastSegment).map(s -> (NameSegment) s).toList();
     }
 
     private Segment getLastSegment(Id id) {
@@ -366,15 +342,10 @@ public final class IdBatchResolver {
     private Collection<String> getOlapElementNames(
         OlapElement[] olapElements, final boolean uniqueName)
     {
-        return CollectionUtils.collect(
-            Arrays.asList(olapElements),
-            new Transformer() {
-                @Override
-				public Object transform(Object o) {
-                    return uniqueName ? ((OlapElement)o).getUniqueName()
-                        : ((OlapElement)o).getName();
-                }
-            });
+    	
+		return Stream.of(olapElements)
+				.map(olapElement -> uniqueName ? olapElement.getUniqueName() : olapElement.getName()).toList();
+
     }
 
     /**
