@@ -10,6 +10,7 @@
 package mondrian.util;
 
 import java.security.SecureRandom;
+import java.util.Base64.Encoder;
 import java.util.Map;
 import java.util.Random;
 import java.util.WeakHashMap;
@@ -117,7 +118,9 @@ public class LockBox {
 
         // Remove trailing '='. It is padding required by base64 spec but does
         // not help us.
-        String base64 = Base64.encodeBytes(bytes);
+        
+        Encoder encoder=java.util.Base64.getEncoder();
+        String base64 = new String(encoder.encode(bytes));
         while (base64.endsWith("=")) {
             base64 = base64.substring(0, base64.length() - 1);
         }
