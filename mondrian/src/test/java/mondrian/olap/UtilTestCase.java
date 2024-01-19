@@ -13,10 +13,7 @@ package mondrian.olap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -51,7 +48,6 @@ import mondrian.util.ByteString;
 import mondrian.util.CartesianProductList;
 import mondrian.util.CombiningGenerator;
 import mondrian.util.Composite;
-import mondrian.util.LockBox;
 import mondrian.util.Pair;
 import mondrian.util.ServiceDiscovery;
 import mondrian.util.Triple;
@@ -811,103 +807,6 @@ import mondrian.util.UnionIterator;
         }
     }
 
-    /**
-     * Unit test for {@link mondrian.util.LockBox}.
-     */
-    @Test
-     void testLockBox() {
-        final LockBox box =
-            new LockBox();
-
-        final String abc = "abc";
-        final String xy = "xy";
-
-        // Register an object.
-        final LockBox.Entry abcEntry0 = box.register(abc);
-        assertNotNull(abcEntry0);
-        assertSame(abc, abcEntry0.getValue());
-        checkMonikerValid(abcEntry0.getMoniker());
-
-        // Register another object
-        final LockBox.Entry xyEntry = box.register(xy);
-        checkMonikerValid(xyEntry.getMoniker());
-        assertNotSame(abcEntry0.getMoniker(), xyEntry.getMoniker());
-
-        // Register first object again. Moniker is different. It is a different
-        // registration.
-        final LockBox.Entry abcEntry1 = box.register(abc);
-        checkMonikerValid(abcEntry1.getMoniker());
-        assertNotEquals(abcEntry1.getMoniker(), abcEntry0.getMoniker());
-        assertSame(abcEntry1.getValue(), abc);
-
-        // Retrieve.
-        final LockBox.Entry abcEntry0b = box.get(abcEntry0.getMoniker());
-        assertNotNull(abcEntry0b);
-        assertEquals(abcEntry0b.getMoniker(), abcEntry0.getMoniker());
-        assertSame(abcEntry0, abcEntry0b);
-        assertNotSame(abcEntry0b, abcEntry1);
-        assertNotEquals(abcEntry0b.getMoniker(), abcEntry1.getMoniker());
-
-        // Arbitrary moniker retrieves nothing. (A random moniker might,
-        // with very very small probability, happen to match that of one of
-        // the two registered entries. However, I know that our generation
-        // scheme never generates monikers starting with 'x'.)
-        assertNull(box.get("xxx"));
-
-        // Deregister.
-        assertTrue(abcEntry0b.isRegistered());
-        final boolean b = box.deregister(abcEntry0b);
-        assertTrue(b);
-        assertFalse(abcEntry0b.isRegistered());
-        assertNull(box.get(abcEntry0.getMoniker()));
-
-        // The other entry created by the same call to 'register' is also
-        // deregistered.
-        assertFalse(abcEntry0.isRegistered());
-        assertTrue(abcEntry1.isRegistered());
-
-        // Deregister again.
-        final boolean b2 = box.deregister(abcEntry0b);
-        assertFalse(b2);
-        assertFalse(abcEntry0b.isRegistered());
-        assertFalse(abcEntry0.isRegistered());
-        assertNull(box.get(abcEntry0.getMoniker()));
-
-        // Entry it no longer registered, therefore cannot get value.
-        try {
-            Object value = abcEntry0.getValue();
-            fail("expected exception, got " + value);
-        } catch (RuntimeException e) {
-            assertTrue(
-                e.getMessage().startsWith("LockBox has no entry with moniker"));
-        }
-        assertNotNull(abcEntry0.getMoniker());
-
-        // Other registration of same object still works.
-        final LockBox.Entry abcEntry1b = box.get(abcEntry1.getMoniker());
-        assertNotNull(abcEntry1b);
-        assertSame(abcEntry1b, abcEntry1);
-        assertSame(abcEntry1b.getValue(), abc);
-        assertSame(abcEntry1.getValue(), abc);
-
-        // Other entry still exists.
-        final LockBox.Entry xyEntry2 = box.get(xyEntry.getMoniker());
-        assertNotNull(xyEntry2);
-        assertSame(xyEntry2, xyEntry);
-        assertSame(xyEntry2.getValue(), xy);
-        assertSame(xyEntry.getValue(), xy);
-
-        // Register again. Moniker is different. (Monikers are never recycled.)
-        final LockBox.Entry abcEntry3 = box.register(abc);
-        checkMonikerValid(abcEntry3.getMoniker());
-        assertNotEquals(abcEntry3.getMoniker(), abcEntry0.getMoniker());
-        assertNotEquals(abcEntry3.getMoniker(), abcEntry1.getMoniker());
-        assertNotEquals(abcEntry3.getMoniker(), abcEntry0b.getMoniker());
-
-        // Previous entry is no longer valid.
-        assertTrue(abcEntry1.isRegistered());
-        assertFalse(abcEntry0.isRegistered());
-    }
 
     void checkMonikerValid(String moniker) {
         final String digits = "0123456789";
@@ -925,41 +824,7 @@ import mondrian.util.UnionIterator;
         assertFalse(digits.indexOf(moniker.charAt(0)) >= 0,moniker);
     }
 
-    /**
-     * Unit test that ensures that {@link mondrian.util.LockBox} can "forget"
-     * entries whose key has been forgotten.
-     */
-    @Test
-     void testLockBoxFull() {
-        final LockBox box =
-            new LockBox();
 
-        // Generate large, unique strings for values by concatenating a base
-        // of "xxx ... x" with a unique integer.
-        StringBuilder builder = new StringBuilder();
-        final int prevLength = 10000;
-        for (int i = 0; i < prevLength; i++) {
-            builder.append("x");
-        }
-
-        final int max = 1000000;
-        LockBox.Entry[] entries = new LockBox.Entry[567];
-        for (int i = 0; i < max; i++) {
-            builder.setLength(prevLength);
-            builder.append(i);
-            String value = builder.toString();
-
-            final LockBox.Entry entry = box.register(value);
-
-            // Save most recent keys in a circular array to prevent GC. Older
-            // keys are forgotten, therefore the entries can be removed from the
-            // lock box.
-            entries[i % entries.length] = entry;
-
-            // Test one of the previous entries.
-            assertNotNull(entries[Math.min(i, (i * 19) % 567)].getValue());
-        }
-    }
 
     @Test
      void testCartesianProductList() {
