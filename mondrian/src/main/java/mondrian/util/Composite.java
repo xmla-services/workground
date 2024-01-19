@@ -26,18 +26,7 @@ public abstract class Composite {
         // constructor
     }
 
-    /**
-     * Creates a composite list, inferring the element type from the arguments.
-     *
-     * @param lists One or more lists
-     * @param <T> element type
-     * @return composite list
-     */
-    public static <T> List<T> of(
-        List<? extends T>... lists)
-    {
-        return CompositeList.<T>of(lists);
-    }
+
 
     /**
      * Creates a composite iterable, inferring the element type from the

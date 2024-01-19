@@ -98,7 +98,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.util.CompositeList;
 import mondrian.xmla.RowsetDefinitionType;
 import mondrian.xmla.XmlaException;
 import mondrian.xmla.XmlaUtil;
@@ -1117,9 +1116,10 @@ public class Convertor {
         if (queryAxis == null) {
             return defaultProps;
         }
-        return CompositeList.of(
-            defaultProps,
-            queryAxis.getProperties());
+        List<Property> composite=new ArrayList<Property>();
+        composite.addAll(defaultProps);
+        composite.addAll(queryAxis.getProperties());
+        return composite;
     }
 
     private static boolean isValidProp(List<Position> positions, Property prop) {
