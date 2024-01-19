@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
@@ -39,9 +40,9 @@ class FilteredIterableTest{
         final List<Integer> empty =
             new FilteredIterableList<>(
                 base,
-                new FilteredIterableList.Filter<Integer>() {
+                new Predicate<Integer>() {
                     @Override
-					public boolean accept(final Integer i) {
+					public boolean test(final Integer i) {
                         return false;
                     }
                 });
@@ -60,9 +61,9 @@ class FilteredIterableTest{
         final List<Integer> empty =
             new FilteredIterableList<>(
                 base,
-                new FilteredIterableList.Filter<Integer>() {
+                new Predicate<Integer>() {
                     @Override
-					public boolean accept(final Integer i) {
+					public boolean test(final Integer i) {
                         return i < 2;
                     }
                 });
@@ -81,9 +82,9 @@ class FilteredIterableTest{
         final List<Integer> identical =
             new FilteredIterableList<>(
                 base,
-                new FilteredIterableList.Filter<Integer>() {
+                new Predicate<Integer>() {
                     @Override
-					public boolean accept(final Integer i) {
+					public boolean test	(final Integer i) {
                         return true;
                     }
                 });

@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * Iterable list which filters undesirable elements.
@@ -34,13 +37,13 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
     private ListIterator<T> lastListIterator;
 
     private final List<? extends T> internal;
-    private final Filter<T> filter;
+    private final Predicate<T> filter;
 
-    private final Map<Integer, T> cached;
+    private final Cache<Integer, T> cached;
 
     public FilteredIterableList(
         final List<? extends T> list,
-        final Filter filter)
+        final Predicate<T> filter)
     {
         super();
         this.plainList = null;
@@ -48,7 +51,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
         this.internal = list;
         this.isEmpty = ! this.listIterator(0).hasNext();
         this.size = -1;
-        this.cached = new CacheMap<>(4);
+        this.cached = Caffeine.newBuilder().maximumSize(4).weakKeys().weakValues().build();
     }
 
     @Override
@@ -57,9 +60,9 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
             return this.plainList.get(index);
         }
 
-        final T t = cached.get(index);
+        final T t = cached.getIfPresent(index);
         if (t != null) {
-            return cached.get(index);
+            return t;
         } else {
             if (index != this.lastGetIndex || index < 0) {
                 this.lastGet = super.get(index);
@@ -88,7 +91,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
                 T nextTmp = null;
                 while (it.hasNext()) {
                     final T n = it.next();
-                    if (filter.accept(n)) {
+                    if (filter.test(n)) {
                         nextTmp = n;
                         break;
                     }
@@ -100,7 +103,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
                     private void postNext() {
                         while (it.hasNext()) {
                             final T n = it.next();
-                            if (filter.accept(n)) {
+                            if (filter.test(n)) {
                                 nxt = n;
                                 return;
                             }
@@ -232,14 +235,5 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
 */
 
 
-    //
-    // Inner classes ---------------------------------
-    //
 
-    /**
-     * Filter to determine which elements should be shown.
-     */
-    public static interface Filter<T> {
-        public boolean accept(final T element);
-    }
 }

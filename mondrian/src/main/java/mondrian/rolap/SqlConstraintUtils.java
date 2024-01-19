@@ -26,6 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -858,9 +859,9 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
   }
 
   static List<Member> removeCalculatedMembers( List<Member> members ) {
-    return new FilteredIterableList<>( members, new FilteredIterableList.Filter<Member>() {
+    return new FilteredIterableList<>( members, new Predicate<Member>() {
       @Override
-	public boolean accept( final Member m ) {
+	public boolean test( final Member m ) {
         return !m.isCalculated() || m.isParentChildPhysicalMember();
       }
     } );
