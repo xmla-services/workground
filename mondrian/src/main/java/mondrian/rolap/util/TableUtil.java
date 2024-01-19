@@ -14,21 +14,19 @@
 package mondrian.rolap.util;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 public class TableUtil {
-    public static Map<String,String> getHintMap(MappingTable table) {
-        java.util.Map<String,String> h =
-            new java.util.HashMap<>();
-        if (table.hints() != null) {
-            int size = table.hints().size();
-            for (int i = 0; i < size; i++) {
-                h.put(table.hints().get(i).type(), table.hints().get(i).content());
-            }
-        }
-        return h;
-    }
+	public static Map<String, String> getHintMap(MappingTable table) {
+
+		if (table.hints() != null) {
+			return Map.of();
+		}
+		return table.hints().stream().collect(Collectors.toMap(MappingHint::type, MappingHint::content));
+	}
 
     public static String getFilter(MappingTable table) {
         return (table.sql() == null) ? null : table.sql().content();
