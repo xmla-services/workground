@@ -45,7 +45,6 @@ port                              :   17290
 	assertj-core;version='[3.24.2,3.24.3)',\
 	com.sun.activation.jakarta.activation;version='[2.0.1,2.0.2)',\
 	com.sun.xml.messaging.saaj.impl;version='[2.0.1,2.0.2)',\
-	jakarta.activation-api;version='[2.1.0,2.1.1)',\
 	jakarta.xml.soap-api;version='[2.0.1,2.0.2)',\
 	javax.activation-api;version='[1.2.0,1.2.1)',\
 	jaxb-api;version='[2.3.1,2.3.2)',\
