@@ -176,7 +176,7 @@ public abstract class AbstractBasicContext implements Context {
 		if (shutdown) {
 			throw new MondrianException("Server already shutdown.");
 		}
-		connections.remove(connection.getId());
+		connections.remove(connection);
 		monitor.sendEvent(new ConnectionEndEvent(System.currentTimeMillis(), getName(), connection.getId()));
 	}
 

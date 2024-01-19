@@ -21,8 +21,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -433,15 +431,8 @@ class IdBatchResolverTest  {
     }
 
     private String sortedNames(List<NameSegment> items) {
-        Collections.sort(
-            items, new Comparator<NameSegment>()
-        {
-            @Override
-			public int compare(NameSegment o1, NameSegment o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        return Arrays.toString(items.toArray());
+        return Arrays.toString(items.stream()
+            .sorted((o1, o2)->o1.getName().compareTo(o2.getName())).toArray());
     }
 
     private Collection<String> list(String... items) {
