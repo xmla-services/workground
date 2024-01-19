@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.NameSegment;
@@ -50,7 +49,6 @@ import mondrian.util.CombiningGenerator;
 import mondrian.util.Composite;
 import mondrian.util.Pair;
 import mondrian.util.ServiceDiscovery;
-import mondrian.util.Triple;
 import mondrian.util.UnionIterator;
 
 /**
@@ -1280,43 +1278,6 @@ import mondrian.util.UnionIterator;
         checkToString("[]", Util.intersect(empty, empty));
         checkToString("[]", Util.intersect(ace, bdf));
         checkToString("[e]", Util.intersect(ace, bde));
-    }
-
-    /**
-     * Unit test for {@link Triple}.
-     */
-    @Test
-     void testTriple() {
-        final Triple<Integer, String, Boolean> triple0 =
-            Triple.of(5, "foo", true);
-        final Triple<Integer, String, Boolean> triple1 =
-            Triple.of(5, "foo", false);
-        final Triple<Integer, String, Boolean> triple2 =
-            Triple.of(5, "foo", true);
-        final Triple<Integer, String, Boolean> triple3 =
-            Triple.of(null, "foo", true);
-
-        assertNotEquals(triple0, triple1);
-        assertNotEquals(triple1, triple0);
-        assertNotEquals(triple0.hashCode(), triple1.hashCode());
-        assertEquals(triple0, triple2);
-        assertEquals(triple0.hashCode(), triple2.hashCode());
-        assertNotEquals(triple0, triple3);
-        assertNotEquals(triple3, triple0);
-        assertNotEquals(triple0.hashCode(), triple3.hashCode());
-
-        final SortedSet<Triple<Integer, String, Boolean>> set =
-            new TreeSet<>(
-                Arrays.asList(triple0, triple1, triple2, triple3, triple1));
-        assertEquals(3, set.size());
-        assertEquals(
-            "[<null, foo, true>, <5, foo, false>, <5, foo, true>]",
-            set.toString());
-
-        assertEquals("<5, foo, true>", triple0.toString());
-        assertEquals("<5, foo, false>", triple1.toString());
-        assertEquals("<5, foo, true>", triple2.toString());
-        assertEquals("<null, foo, true>", triple3.toString());
     }
 
     @Test
