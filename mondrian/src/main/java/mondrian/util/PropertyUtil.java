@@ -199,7 +199,7 @@ public class PropertyUtil {
             fw.close();
             success = true;
         } catch (Exception e) {
-            throw new UtilRuntimeException("Error while generating " + file, e);
+            throw new RuntimeException("Error while generating " + file, e);
         } finally {
             if (out != null) {
                 out.close();
