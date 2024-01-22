@@ -34,6 +34,9 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import de.siegmar.fastcsv.reader.CloseableIterator;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
@@ -50,11 +53,6 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.univocity.parsers.common.record.Record;
-import com.univocity.parsers.csv.Csv;
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
 
 @Designate(ocd = CsvDataLoaderConfig.class, factory = true)
 @Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
@@ -73,19 +71,11 @@ public class CsvDataLoader implements PathListener {
 
 	private CsvDataLoaderConfig config;
 
-	private CsvParserSettings settings;
 	private Path basePath;
 
 	@Activate
 	public void activate(CsvDataLoaderConfig config) {
 		this.config = config;
-		settings = Csv.parseRfc4180();
-		settings.setLineSeparatorDetectionEnabled(config.lineSeparatorDetectionEnabled());
-		settings.setNullValue(config.nullValue());
-		settings.getFormat().setQuoteEscape(config.quoteEscape());
-		settings.getFormat().setQuote(config.quote());
-		settings.getFormat().setDelimiter(config.delimiter());
-		settings.setQuoteDetectionEnabled(config.quoteDetectionEnabled());
 	}
 
 	@Deactivate
@@ -108,7 +98,7 @@ public class CsvDataLoader implements PathListener {
 
 			try (Connection connection = dataSource.getConnection()) {
 
-				loadTable(connection, dialect, settings, path);
+				loadTable(connection, dialect, path);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				LOGGER.error("Database connection error", e);
@@ -119,7 +109,7 @@ public class CsvDataLoader implements PathListener {
 
 	}
 
-	private void loadTable(Connection connection, Dialect dialect, CsvParserSettings settings, Path path) {
+	private void loadTable(Connection connection, Dialect dialect, Path path) {
 		String fileName = getFileNameWithoutExtension(path.getFileName().toString());
 		LOGGER.debug("Load table {}", fileName);
 		String databaseSchemaName = getDatabaseSchemaNameFromPath(path);
@@ -150,37 +140,42 @@ public class CsvDataLoader implements PathListener {
 			return;
 		}
 		try {
-
-			com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
-			parser.beginParsing(path.toFile(), config.encoding());
-			parser.parseNext();
-			String[] headers = parser.getRecordMetadata().headers();
-			String[] types = parser.parseNext();
-			List<Column> headersTypeList = getHeadersTypeList(headers, types);
-			if (!headersTypeList.isEmpty()) {
-				createTable(connection, dialect, headersTypeList, databaseSchemaName, fileName);
-				StringBuilder b = new StringBuilder();
-				b.append("INSERT INTO ");
-				b.append(dialect.quoteIdentifier(databaseSchemaName, fileName));
-				b.append(" ( ");
-				b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.name()))
-						.collect(Collectors.joining(",")));
-				b.append(" ) VALUES ");
-				b.append(" ( ");
-				b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
-				b.append(" ) ");
-
-				System.out.println(b);
-				try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
-					if (dialect.supportBatchOperations()) {
-						batchExecute(connection, ps, parser, headersTypeList);
-					} else {
-						execute(ps, parser, headersTypeList);
-					}
-				} catch (SQLException e) {
-					throw new CsvDataLoaderException("Load data error", e);
-				}
-			}
+            CsvReader.CsvReaderBuilder builder = CsvReader.builder()
+                .fieldSeparator(config.fieldSeparator())
+                .quoteCharacter(config.quoteCharacter())
+                .skipEmptyLines(config.skipEmptyLines())
+                .commentCharacter(config.commentCharacter())
+                .ignoreDifferentFieldCount(config.ignoreDifferentFieldCount());
+            try (CloseableIterator<NamedCsvRecord> it = builder.ofNamedCsvRecord(path).iterator()) {
+                if (!it.hasNext()) {
+                    throw new IllegalStateException("No header found");
+                }
+                NamedCsvRecord types = it.next();
+                List<Column> headersTypeList = getHeadersTypeList(types);
+                if (it.hasNext()) {
+                    createTable(connection, dialect, headersTypeList, databaseSchemaName, fileName);
+                    StringBuilder b = new StringBuilder();
+                    b.append("INSERT INTO ");
+                    b.append(dialect.quoteIdentifier(databaseSchemaName, fileName));
+                    b.append(" ( ");
+                    b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.name()))
+                        .collect(Collectors.joining(",")));
+                    b.append(" ) VALUES ");
+                    b.append(" ( ");
+                    b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
+                    b.append(" ) ");
+                    System.out.println(b);
+                    try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
+                            if (dialect.supportBatchOperations()) {
+                                batchExecute(connection, ps, it, headersTypeList);
+                            } else {
+                                execute(ps, it, headersTypeList);
+                            }
+                        } catch (SQLException e) {
+                            throw new CsvDataLoaderException("Load data error", e);
+                        }
+                    }
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -194,21 +189,15 @@ public class CsvDataLoader implements PathListener {
 		return parent.getFileName().toString();
 	}
 
-	private void execute(PreparedStatement ps, CsvParser parser, List<Column> columns) throws SQLException {
-		boolean first = true;
+	private void execute(PreparedStatement ps, CloseableIterator<NamedCsvRecord> it, List<Column> columns) throws SQLException {		
 		long start = System.currentTimeMillis();
-		com.univocity.parsers.common.record.Record r;
-		while ((r = parser.parseNextRecord()) != null) {
-			if (first) {
-				first = false;
-			} else {
-				ps.clearParameters();
-			}
-
-			for (Column column : columns) {
-				processingTypeValues(ps, column, r);
-			}
-			ps.executeUpdate();
+        while (it.hasNext()) {
+        	NamedCsvRecord r = it.next();			
+            for (Column column : columns) {
+                 processingTypeValues(ps, column, r);
+            }
+            ps.executeUpdate();
+            ps.clearParameters();
 		}
 
 		LOGGER.debug("---");
@@ -216,29 +205,26 @@ public class CsvDataLoader implements PathListener {
 
 	}
 
-	private void batchExecute(Connection connection, PreparedStatement ps, com.univocity.parsers.csv.CsvParser parser,
+	private void batchExecute(Connection connection, PreparedStatement ps, CloseableIterator<NamedCsvRecord> it,
 			List<Column> columns) throws SQLException {
 
 		connection.setAutoCommit(false);
 		long start = System.currentTimeMillis();
-		com.univocity.parsers.common.record.Record r;
 		int count = 0;
-		while ((r = parser.parseNextRecord()) != null) {
-
-			final Record currentRecord = r;
-			columns.stream().forEach(column -> processingTypeValues(ps, column, currentRecord));
-
-			ps.addBatch();
-			ps.clearParameters();
-			if (count % config.batchSize() == 0) {
-				ps.executeBatch();
-				LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
-				ps.getConnection().commit();
-				LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - start));
-				start = System.currentTimeMillis();
-			}
-		}
-
+        while (it.hasNext()) {     
+            NamedCsvRecord r = it.next();
+            columns.stream().forEach(column -> processingTypeValues(ps, column, r));
+            ps.addBatch();
+            ps.clearParameters();
+            if (count % config.batchSize() == 0) {
+                ps.executeBatch();
+                LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
+                ps.getConnection().commit();
+                LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - start));
+                start = System.currentTimeMillis();
+            }
+            count++;
+        }
 		LOGGER.debug("---");
 
 		ps.executeBatch();
@@ -249,55 +235,58 @@ public class CsvDataLoader implements PathListener {
 		connection.setAutoCommit(true);
 	}
 
-	private void processingTypeValues(PreparedStatement ps, Column column, Record r) {
+	private void processingTypeValues(PreparedStatement ps, Column column, NamedCsvRecord r) {
 		try {
 
 			int i = column.index();
 			String columnName = column.name();
 			SqlType type = column.type();
-			if (r.getString(columnName) == null || r.getString(columnName).equals("NULL")) {
+            String field = r.getField(columnName);
+			if (field == null || field.equals(config.nullValue())) {
 				ps.setObject(i, null);
 			} else if (type.getType().equals(Type.LONG)) {
-				ps.setLong(i, r.getLong(columnName));
+				ps.setLong(i, field.equals("") ? 0l : Long.valueOf(field));
 
 			} else if (type.getType().equals(Type.BOOLEAN)) {
-				ps.setBoolean(i, r.getBoolean(columnName));
+				ps.setBoolean(i, field.equals("") ? Boolean.FALSE : Boolean.valueOf(field));
 
 			} else if (type.getType().equals(Type.DATE)) {
-				ps.setDate(i, Date.valueOf(r.getString(columnName)));
+				ps.setDate(i, Date.valueOf(field));
 
 			} else if (type.getType().equals(Type.INTEGER)) {
-				ps.setInt(i, r.getInt(columnName));
+				ps.setInt(i, field.equals("") ? 0 : Integer.valueOf(field));
 
 			} else if (type.getType().equals(Type.NUMERIC)) {
-				ps.setDouble(i, r.getDouble(columnName));
+				ps.setDouble(i, field.equals("") ? 0.0 : Double.valueOf(field));
 
 			} else if (type.getType().equals(Type.SMALLINT)) {
-				ps.setShort(i, r.getShort(columnName));
+				ps.setShort(i, field.equals("") ? 0 : Short.valueOf(field));
 
 			} else if (type.getType().equals(Type.TIMESTAMP)) {
-				ps.setTimestamp(i, Timestamp.valueOf(r.getString(columnName)));
+				ps.setTimestamp(i, Timestamp.valueOf(field));
 
 			} else if (type.getType().equals(Type.STRING)) {
-				ps.setString(i, r.getString(columnName));
+				ps.setString(i, field);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private List<Column> getHeadersTypeList(String[] headers, String[] types) {
-		List<Column> result = new ArrayList<>(headers.length);
-
-		for (int i = 1; i < headers.length; i++) {
-			try {
-				SqlType sqlType = parseTypeString(types[i]);
-				Column dbc = new Column(i, headers[i], sqlType);
-				result.add(dbc);
-			} catch (Exception e) {
-				LOGGER.error("Load data error: Create data type for Csv loader error", e);
-			}
-		}
+	private List<Column> getHeadersTypeList(NamedCsvRecord types) {
+		List<Column> result = new ArrayList<>();
+		int i = 1;
+        if (types != null) {
+            for (String header : types.getHeader()) {
+                try {
+                    SqlType sqlType = parseTypeString(types.getField(header));
+                    Column dbc = new Column(i++, header, sqlType);
+                    result.add(dbc);
+                } catch (Exception e) {
+                    LOGGER.error("Load data error: Create data type for Csv loader error", e);
+                }
+            }
+        }
 		return result;
 	}
 
