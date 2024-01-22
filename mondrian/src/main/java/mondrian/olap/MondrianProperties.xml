@@ -116,17 +116,6 @@ storing collections of cell values in memory.
         <Type>double</Type>
         <Default>0.5</Default>
     </PropertyDefinition>
-
-    <PropertyDefinition>
-        <Name>Iterations</Name>
-        <Path>mondrian.test.Iterations</Path>
-        <Category>Testing</Category>
-        <Description>
-Not documented.
-        </Description>
-        <Type>int</Type>
-        <Default>1</Default>
-    </PropertyDefinition>
     <PropertyDefinition>
         <Name>WarnIfNoPatternForDialect</Name>
         <Path>mondrian.test.WarnIfNoPatternForDialect</Path>
@@ -467,17 +456,7 @@ false.
         <Type>boolean</Type>
         <Default>false</Default>
     </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>MaxRows</Name>
-        <Path>mondrian.xmla.drillthroughMaxRows</Path>
-        <Category>XML/A</Category>
-        <Description>
-Property that defines
-limit on the number of rows returned by XML/A drill through request.
-        </Description>
-        <Type>int</Type>
-        <Default>1000</Default>
-    </PropertyDefinition>
+
     <PropertyDefinition>
         <Name>MaxConstraints</Name>
         <Path>mondrian.rolap.maxConstraints</Path>
@@ -528,34 +507,6 @@ very complex calculated member), Mondrian will throw an error.</p>
         </Description>
         <Type>int</Type>
         <Default>10</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>JdbcFactoryClass</Name>
-        <Path>mondrian.rolap.aggregates.jdbcFactoryClass</Path>
-        <Category>Aggregate tables</Category>
-        <Description>
-<p>Property that defines the JdbcSchema factory class which
-determines the list of tables and columns of a specific datasource.</p>
-
-@see mondrian.rolap.aggmatcher.JdbcSchema
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>DataSourceResolverClass</Name>
-        <Path>mondrian.spi.dataSourceResolverClass</Path>
-        <Category>Factories</Category>
-        <Description>
-<p>Property that defines
-the name of the plugin class that resolves data source names to
-{@link javax.sql.DataSource} objects. The class must implement the
-{@link mondrian.spi.DataSourceResolver} interface. If not specified,
-the default implementation uses JNDI to perform resolution.</p>
-
-<p>Example:</p>
-<blockquote><code>mondrian.spi.dataSourceResolverClass=mondrian.spi.impl.JndiDataSourceResolver</code></blockquote>
-        </Description>
-        <Type>String</Type>
     </PropertyDefinition>
     <PropertyDefinition>
         <Name>QueryTimeout</Name>
@@ -1046,18 +997,6 @@ table, during your ETL process, and to set this property to
         <Default>300</Default>
     </PropertyDefinition>
 
-    <PropertyDefinition>
-        <Name>IdleOrphanSessionTimeout</Name>
-        <Path>mondrian.server.IdleOrphanSessionTimeout</Path>
-        <Description>
-            <p>
-                The server will close a session if it is not in use for the specified timeout.
-                Default value is 3600 seconds.
-            </p>
-        </Description>
-        <Type>int</Type>
-        <Default>3600</Default>
-    </PropertyDefinition>
     <PropertyDefinition>
         <Name>EnableSessionCaching</Name>
         <Path>mondrian.server.EnableSessionCaching</Path>

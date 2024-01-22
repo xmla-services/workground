@@ -116,23 +116,9 @@ public class JdbcSchema {
         if (factory != null) {
             return;
         }
-        String className =
-            MondrianProperties.instance().JdbcFactoryClass.get();
-        if (className == null) {
+   
             factory = new StdFactory();
-        } else {
-            try {
-                Class<?> clz =
-                    ClassResolver.INSTANCE.forName(className, true);
-                factory = (Factory) clz.newInstance();
-            } catch (ClassNotFoundException ex) {
-                throw mres.BadJdbcFactoryClassName.ex(className);
-            } catch (InstantiationException ex) {
-                throw mres.BadJdbcFactoryInstantiation.ex(className);
-            } catch (IllegalAccessException ex) {
-                throw mres.BadJdbcFactoryAccess.ex(className);
-            }
-        }
+
     }
 
     /**
