@@ -5499,9 +5499,9 @@ public class BasicQueryTest {
     final String product = getDialect(connection).getDialectName();
     final String dialectClassName = getDialect(connection).getClass().getName();
 
-    propSaver.set( new StringProperty( MondrianProperties.instance(), MondrianProperties.instance().StatisticsProviders
-        .getPath() + "." + product, null ), MyJdbcStatisticsProvider.class.getName() + ","
-            + SqlStatisticsProvider.class.getName() );
+//    propSaver.set( new StringProperty( MondrianProperties.instance(), MondrianProperties.instance().StatisticsProviders
+//        .getPath() + "." + product, null ), MyJdbcStatisticsProvider.class.getName() + ","
+//            + SqlStatisticsProvider.class.getName() );
     //final TestContext testContext = getTestContext().withFreshConnection();
     try {
       assertSimpleQuery(connection);

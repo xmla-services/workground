@@ -49,17 +49,6 @@ maximum size of a result set.
         <Default>0</Default>
     </PropertyDefinition>
     <PropertyDefinition>
-        <Name>HighCardChunkSize</Name>
-        <Path>mondrian.result.highCardChunkSize</Path>
-        <Description>
-Property that establishes the amount of chunks for querying cells
-involving high-cardinality dimensions.
-Should prime with {@link #ResultLimit mondrian.result.limit}.
-        </Description>
-        <Type>int</Type>
-        <Default>1</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
         <Name>EnableInMemoryRollup</Name>
         <Path>mondrian.rolap.EnableInMemoryRollup</Path>
         <Description>
@@ -127,34 +116,7 @@ storing collections of cell values in memory.
         <Type>double</Type>
         <Default>0.5</Default>
     </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>QueryFilePattern</Name>
-        <Path>mondrian.test.QueryFilePattern</Path>
-        <Category>Testing</Category>
-        <Description>
-Property that defines
-a pattern for which test XML files to run.  Pattern has to
-match a file name of the form:
-<code>query<i>whatever</i>.xml</code> in the directory.
 
-<p>Example:</p>
-
-<blockquote><code>
-mondrian.test.QueryFilePattern=queryTest_fec[A-Za-z0-9_]*.xml
-</code></blockquote>
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>QueryFileDirectory</Name>
-        <Path>mondrian.test.QueryFileDirectory</Path>
-        <Category>Testing</Category>
-        <Description>
-Property defining
-where the test XML files are.
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
     <PropertyDefinition>
         <Name>Iterations</Name>
         <Path>mondrian.test.Iterations</Path>
@@ -164,47 +126,6 @@ Not documented.
         </Description>
         <Type>int</Type>
         <Default>1</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>VUsers</Name>
-        <Path>mondrian.test.VUsers</Path>
-        <Category>Testing</Category>
-        <Description>
-Not documented.
-        </Description>
-        <Type>int</Type>
-        <Default>1</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>TimeLimit</Name>
-        <Path>mondrian.test.TimeLimit</Path>
-        <Category>Testing</Category>
-        <Description>
-Property that returns the time limit for the test run in seconds.
-If the test is running after that time, it is terminated.
-        </Description>
-        <Type>int</Type>
-        <Default>0</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>Warmup</Name>
-        <Path>mondrian.test.Warmup</Path>
-        <Category>Testing</Category>
-        <Description>
-Property that indicates whether this is a "warmup test".
-        </Description>
-        <Type>boolean</Type>
-        <Default>false</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>CatalogURL</Name>
-        <Path>mondrian.catalogURL</Path>
-        <Category>Testing</Category>
-        <Description>
-Property that contains the URL of the catalog to be used by
-{@link mondrian.tui.CmdRunner} and XML/A Test.
-        </Description>
-        <Type>String</Type>
     </PropertyDefinition>
     <PropertyDefinition>
         <Name>WarnIfNoPatternForDialect</Name>
@@ -1100,33 +1021,6 @@ table, during your ETL process, and to set this property to
         </Description>
         <Type>boolean</Type>
         <Default>true</Default>
-    </PropertyDefinition>
-
-    <PropertyDefinition>
-        <Name>StatisticsProviders</Name>
-        <Path>mondrian.statistics.providers</Path>
-        <Description>
-<p>Comma-separated list of classes to be used to get statistics about the
-number of rows in a table, or the number of distinct values in a column.</p>
-
-<p>If there is a value for mondrian.statistics.providers.DATABASE, where
-DAtABASE is the current database name (e.g. MYSQL or ORACLE), then that
-property overrides.</p>
-
-<p>Example:</p>
-
-<blockquote><code>
-mondrian.statistics.providers=mondrian.spi.impl.JdbcStatisticsProvider<br/>
-mondrian.statistics.providers.MYSQL=mondrian.spi.impl.JdbcStatisticsProvider,mondrian.spi.impl.JdbcStatisticsProvider</code></blockquote>
-
-<p>This would use JDBC's statistics (via the
-java.sql.DatabaseMetaData.getIndexInfo method) for most
-databases, but for connections to a MySQL database, would use
-external statistics first, and fall back to JDBC statistics
-only if external statistics were not available.</p>
-        </Description>
-        <Core>true</Core>
-        <Type>String</Type>
     </PropertyDefinition>
 
     <PropertyDefinition>
