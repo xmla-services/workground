@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import de.siegmar.fastcsv.reader.CloseableIterator;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -139,46 +140,42 @@ public class CsvDataLoader implements PathListener {
 			return;
 		}
 		try {
-            CsvReader<NamedCsvRecord> record = CsvReader.builder()
+            CsvReader.CsvReaderBuilder builder = CsvReader.builder()
                 .fieldSeparator(config.fieldSeparator())
                 .quoteCharacter(config.quoteCharacter())
                 .skipEmptyLines(config.skipEmptyLines())
                 .commentCharacter(config.commentCharacter())
-                .ignoreDifferentFieldCount(config.ignoreDifferentFieldCount())
-                .ofNamedCsvRecord(path);
-            NamedCsvRecord types = record.stream().findFirst().orElse(null);
-            record = CsvReader.builder()
-                .fieldSeparator(config.fieldSeparator())
-                .quoteCharacter(config.quoteCharacter())
-                .skipEmptyLines(config.skipEmptyLines())
-                .commentCharacter(config.commentCharacter())
-                .ignoreDifferentFieldCount(config.ignoreDifferentFieldCount())
-                .ofNamedCsvRecord(path);
-			List<Column> headersTypeList = getHeadersTypeList(types);
-			if (!headersTypeList.isEmpty()) {
-				createTable(connection, dialect, headersTypeList, databaseSchemaName, fileName);
-				StringBuilder b = new StringBuilder();
-				b.append("INSERT INTO ");
-				b.append(dialect.quoteIdentifier(databaseSchemaName, fileName));
-				b.append(" ( ");
-				b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.name()))
-						.collect(Collectors.joining(",")));
-				b.append(" ) VALUES ");
-				b.append(" ( ");
-				b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
-				b.append(" ) ");
-
-				System.out.println(b);
-				try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
-					if (dialect.supportBatchOperations()) {
-						batchExecute(connection, ps, record, headersTypeList);
-					} else {
-						execute(ps, record, headersTypeList);
-					}
-				} catch (SQLException e) {
-					throw new CsvDataLoaderException("Load data error", e);
-				}
-			}
+                .ignoreDifferentFieldCount(config.ignoreDifferentFieldCount());
+            try (CloseableIterator<NamedCsvRecord> it = builder.ofNamedCsvRecord(path).iterator()) {
+                if (!it.hasNext()) {
+                    throw new IllegalStateException("No header found");
+                }
+                NamedCsvRecord types = it.next();
+                List<Column> headersTypeList = getHeadersTypeList(types);
+                if (it.hasNext()) {
+                    createTable(connection, dialect, headersTypeList, databaseSchemaName, fileName);
+                    StringBuilder b = new StringBuilder();
+                    b.append("INSERT INTO ");
+                    b.append(dialect.quoteIdentifier(databaseSchemaName, fileName));
+                    b.append(" ( ");
+                    b.append(headersTypeList.stream().map(e -> dialect.quoteIdentifier(e.name()))
+                        .collect(Collectors.joining(",")));
+                    b.append(" ) VALUES ");
+                    b.append(" ( ");
+                    b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
+                    b.append(" ) ");
+                    System.out.println(b);
+                    try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
+                            if (dialect.supportBatchOperations()) {
+                                batchExecute(connection, ps, it, headersTypeList);
+                            } else {
+                                execute(ps, it, headersTypeList);
+                            }
+                        } catch (SQLException e) {
+                            throw new CsvDataLoaderException("Load data error", e);
+                        }
+                    }
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -192,20 +189,15 @@ public class CsvDataLoader implements PathListener {
 		return parent.getFileName().toString();
 	}
 
-	private void execute(PreparedStatement ps, CsvReader<NamedCsvRecord> records, List<Column> columns) throws SQLException {
-		boolean typeSkiped = false;
+	private void execute(PreparedStatement ps, CloseableIterator<NamedCsvRecord> it, List<Column> columns) throws SQLException {		
 		long start = System.currentTimeMillis();
-		for (NamedCsvRecord r : records) {
-			if (typeSkiped) {
-                for (Column column : columns) {
-                    processingTypeValues(ps, column, r);
-                }
-                ps.executeUpdate();
-                ps.clearParameters();
+        while (it.hasNext()) {
+        	NamedCsvRecord r = it.next();			
+            for (Column column : columns) {
+                 processingTypeValues(ps, column, r);
             }
-			else {
-                typeSkiped = true;
-            }
+            ps.executeUpdate();
+            ps.clearParameters();
 		}
 
 		LOGGER.debug("---");
@@ -213,24 +205,23 @@ public class CsvDataLoader implements PathListener {
 
 	}
 
-	private void batchExecute(Connection connection, PreparedStatement ps, CsvReader<NamedCsvRecord> record,
+	private void batchExecute(Connection connection, PreparedStatement ps, CloseableIterator<NamedCsvRecord> it,
 			List<Column> columns) throws SQLException {
 
 		connection.setAutoCommit(false);
 		long start = System.currentTimeMillis();
 		int count = 0;
-        for (NamedCsvRecord r : record) {
-            if (count != 0) {
-                columns.stream().forEach(column -> processingTypeValues(ps, column, r));
-                ps.addBatch();
-                ps.clearParameters();
-                if (count % config.batchSize() == 0) {
-                    ps.executeBatch();
-                    LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
-                    ps.getConnection().commit();
-                    LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - start));
-                    start = System.currentTimeMillis();
-                }
+        while (it.hasNext()) {     
+            NamedCsvRecord r = it.next();
+            columns.stream().forEach(column -> processingTypeValues(ps, column, r));
+            ps.addBatch();
+            ps.clearParameters();
+            if (count % config.batchSize() == 0) {
+                ps.executeBatch();
+                LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - start));
+                ps.getConnection().commit();
+                LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - start));
+                start = System.currentTimeMillis();
             }
             count++;
         }
