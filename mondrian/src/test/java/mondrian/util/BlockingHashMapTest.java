@@ -12,6 +12,7 @@ package mondrian.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,7 +29,7 @@ import mondrian.olap.Util;
  */
 class BlockingHashMapTest{
 
-    private final Random random = Util.createRandom(-1);
+    private final Random random = new SecureRandom();
     private static final int SLEEP_TIME = 100;
 
     /**

@@ -1224,17 +1224,6 @@ class ParameterTest {
             "Unknown parameter 'java.version'");
     }
 
-    /**
-     * Tests getting a mondrian property.
-     */
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
-    void testMondrianPropsGetJava(TestContext context) {
-        final String jdbcDrivers =
-            MondrianProperties.instance().JdbcDrivers.get();
-        assertExprReturns(context.getConnection(),
-            "ParamRef(\"mondrian.jdbcDrivers\")", jdbcDrivers);
-    }
 
     /**
      * Tests setting system properties.

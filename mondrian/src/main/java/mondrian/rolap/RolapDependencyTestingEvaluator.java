@@ -11,6 +11,7 @@ package mondrian.rolap;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -251,8 +252,8 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         int fakeCount;
         boolean faking;
         boolean disabled;
-        final Random random = Util.createRandom(
-            MondrianProperties.instance().TestSeed.get());
+        final Random random = new SecureRandom();
+        		 
 
         DteRoot(RolapResult result, int expDeps) {
             super(result);

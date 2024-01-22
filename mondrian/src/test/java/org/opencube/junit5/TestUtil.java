@@ -25,14 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.Constants.PROJECT_DIR;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +41,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
@@ -76,7 +71,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.opencube.junit5.context.TestContext;
 
-
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
@@ -85,6 +79,7 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.MemberCacheHelper;
+import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchemaPool;
@@ -1526,91 +1521,12 @@ public class TestUtil {
 				measureValues(resultString2));
 	}
 
-
 	/**
 	 * Truncates the query result to return only measure values.
 	 */
 	private static String measureValues(String resultString) {
 		int index = resultString.indexOf("}");
 		return index != -1 ? resultString.substring(index) : resultString;
-	}
-
-	private static final String getConnectString() {
-		return getConnectionProperties().toString();
-	}
-
-	public static Util.PropertyList getConnectionProperties() {
-		final Util.PropertyList propertyList =
-				Util.parseConnectString( getDefaultConnectString() );
-
-
-		return propertyList;
-	}
-
-	/**
-	 * Constructs a connect string by which the unit tests can talk to the FoodMart database.
-	 * <p>
-	 * The algorithm is as follows:<ul>
-	 * <li>Starts with {@link MondrianProperties#TestConnectString}, if it is
-	 * set.</li>
-	 * <li>If {@link MondrianProperties#FoodmartJdbcURL} is set, this
-	 * overrides the <code>Jdbc</code> property.</li>
-	 * <li>If the <code>catalog</code> URL is unset or invalid, it assumes that
-	 * we are at the root of the source tree, and references
-	 * <code>demo/FoodMart.xml</code></li>.
-	 * </ul>
-	 */
-	public static String getDefaultConnectString() {
-		String connectString =
-				MondrianProperties.instance().TestConnectString.get();
-		final Util.PropertyList connectProperties;
-		if ( connectString == null || connectString.equals( "" ) ) {
-			connectProperties = new Util.PropertyList();
-			connectProperties.put( "Provider", "mondrian" );
-		} else {
-			connectProperties = Util.parseConnectString( connectString );
-		}
-		String jdbcURL = MondrianProperties.instance().FoodmartJdbcURL.get();
-		if ( jdbcURL != null ) {
-			connectProperties.put( "Jdbc", jdbcURL );
-		}
-		String jdbcUser = MondrianProperties.instance().TestJdbcUser.get();
-		if ( jdbcUser != null ) {
-			connectProperties.put( "JdbcUser", jdbcUser );
-		}
-		String jdbcPassword =
-				MondrianProperties.instance().TestJdbcPassword.get();
-		if ( jdbcPassword != null ) {
-			connectProperties.put( "JdbcPassword", jdbcPassword );
-		}
-
-		// Find the catalog. Use the URL specified in the connect string, if
-		// it is specified and is valid. Otherwise, reference FoodMart.xml
-		// assuming we are at the root of the source tree.
-		URL catalogURL = null;
-		String catalog = connectProperties.get( "catalog" );
-		if ( catalog != null ) {
-			try {
-				catalogURL = new URL( catalog );
-			} catch ( MalformedURLException e ) {
-				// ignore
-			}
-		}
-		if ( catalogURL == null ) {
-			// Works if we are running in root directory of source tree
-			File file = new File(PROJECT_DIR +  "demo/FoodMart.xml" );
-			if ( !file.exists() ) {
-				// Works if we are running in bin directory of runtime env
-				file = new File(PROJECT_DIR +  "../demo/FoodMart.xml" );
-			}
-			try {
-				catalogURL = Util.toURL( file );
-			} catch ( MalformedURLException e ) {
-				throw new Error( e.getMessage() );
-			}
-		}
-		connectProperties.put( "catalog", catalogURL.toString() );
-		return connectProperties.toString();
 	}
 
 	public static int getRowCount(Result result) {

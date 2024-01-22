@@ -69,11 +69,6 @@
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.olap4j</groupId>-->
-<!--			<artifactId>olap4j-tck</artifactId>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.servicemix.bundles</groupId>
 			<artifactId>org.apache.servicemix.bundles.xerces</artifactId>
