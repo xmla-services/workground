@@ -679,26 +679,6 @@ to create the implementation.</p>
         <Type>String</Type>
     </PropertyDefinition>
     <PropertyDefinition>
-        <Name>ExpCompilerClass</Name>
-        <Path>mondrian.calc.ExpCompiler.class</Path>
-        <Category>Factories</Category>
-        <Description>
-<p>Property that defines
-the name of the class used to compile scalar expressions.</p>
-
-<p>If the value is
-non-null, it is used by the <code>ExpCompiler.Factory</code>
-to create the implementation.</p>
-
-<p>To test that for all test MDX queries that all functions can
-handle requests for ITERABLE, LIST and MUTABLE_LIST evaluation
-results, use the following:</p>
-
-<blockquote><code>mondrian.calc.ExpCompiler.class=mondrian.olap.fun.ResultStyleCompiler</code></blockquote>
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
-    <PropertyDefinition>
         <Name>SqlMemberSourceValuePoolFactoryClass</Name>
         <Path>mondrian.rolap.SqlMemberSource.ValuePoolFactory.class</Path>
         <Category>Factories</Category>
