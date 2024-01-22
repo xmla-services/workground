@@ -207,7 +207,7 @@ public class RolapSchema implements Schema {
      */
     private FunctionTable funTable;
 
-    private MappingSchema xmlSchema;
+    private MappingSchema mappingSchema;
 
     final List<RolapSchemaParameter > parameterList =
         new ArrayList< >();
@@ -355,15 +355,15 @@ public class RolapSchema implements Schema {
 
 		this.context = context;
 		// TODO: get from schema var
-		xmlSchema = context.getDatabaseMappingSchemaProviders().get(0).get();
+		mappingSchema = context.getDatabaseMappingSchemaProviders().get(0).get();
 
 
-		sha512Bytes = new ByteString((""+xmlSchema.hashCode()).getBytes());
+		sha512Bytes = new ByteString((""+mappingSchema.hashCode()).getBytes());
 
 		//todo: use this >jdk19
 //		sha512Bytes = new ByteString(Objects.toIdentityString(xmlSchema).getBytes());
 
-		load(xmlSchema);
+		load(mappingSchema);
 
 		aggTableManager.initialize(connectionProps);
 		setSchemaLoadDate();
@@ -388,7 +388,7 @@ public class RolapSchema implements Schema {
     }
 
     public MappingSchema getXMLSchema() {
-        return xmlSchema;
+        return mappingSchema;
     }
 
     @Override
@@ -432,21 +432,21 @@ public class RolapSchema implements Schema {
         return context.getDialect();
     }
 
-    private void load(MappingSchema xmlSchema) {
-        this.name = xmlSchema.name();
+    private void load(MappingSchema mappingSchema) {
+        this.name = mappingSchema.name();
         if (name == null || name.equals("")) {
             throw Util.newError("<Schema> name must be set");
         }
 
         this.metadata =
-            RolapHierarchy.createMetadataMap(xmlSchema.annotations());
+            RolapHierarchy.createMetadataMap(mappingSchema.annotations());
         // Validate user-defined functions. Must be done before we validate
         // calculated members, because calculated members will need to use the
         // function table.
         final Map<String, UdfResolver.UdfFactory> mapNameToUdf =
             new HashMap<>();
         for (MappingUserDefinedFunction udf
-            : xmlSchema.userDefinedFunctions())
+            : mappingSchema.userDefinedFunctions())
         {
             final Scripts.ScriptDefinition scriptDef = toScriptDef(udf.script());
             defineFunction(mapNameToUdf, udf.name(), udf.className(), scriptDef);
@@ -457,7 +457,7 @@ public class RolapSchema implements Schema {
         this.funTable = funTable;
 
         // Validate public dimensions.
-        for (MappingPrivateDimension xmlDimension : xmlSchema.dimensions()) {
+        for (MappingPrivateDimension xmlDimension : mappingSchema.dimensions()) {
             if (xmlDimension.foreignKey() != null) {
                 throw MondrianResource.instance()
                     .PublicDimensionMustNotHaveForeignKey.ex(
@@ -467,7 +467,7 @@ public class RolapSchema implements Schema {
 
         // Create parameters.
         Set<String> parameterNames = new HashSet<>();
-        for (MappingParameter xmlParameter : xmlSchema.parameters()) {
+        for (MappingParameter xmlParameter : mappingSchema.parameters()) {
             String name = xmlParameter.name();
             if (!parameterNames.add(name)) {
                 throw MondrianResource.instance().DuplicateSchemaParameter.ex(
@@ -491,39 +491,39 @@ public class RolapSchema implements Schema {
         }
 
         // Create cubes.
-        for (MappingCube xmlCube : xmlSchema.cubes()) {
+        for (MappingCube xmlCube : mappingSchema.cubes()) {
             if (xmlCube.enabled()) {
-                RolapCube cube = new RolapCube(this, xmlSchema, xmlCube, context);
+                RolapCube cube = new RolapCube(this, mappingSchema, xmlCube, context);
                 Util.discard(cube);
             }
         }
 
         // Create virtual cubes.
-        for (MappingVirtualCube xmlVirtualCube : xmlSchema.virtualCubes()) {
+        for (MappingVirtualCube xmlVirtualCube : mappingSchema.virtualCubes()) {
             if (xmlVirtualCube.enabled()) {
                 RolapCube cube =
-                    new RolapCube(this, xmlSchema, xmlVirtualCube, context);
+                    new RolapCube(this, mappingSchema, xmlVirtualCube, context);
                 Util.discard(cube);
             }
         }
 
         // Create named sets.
-        for (MappingNamedSet xmlNamedSet : xmlSchema.namedSets()) {
+        for (MappingNamedSet xmlNamedSet : mappingSchema.namedSets()) {
             mapNameToSet.put(xmlNamedSet.name(), createNamedSet(xmlNamedSet));
         }
 
         // Create roles.
-        for (MappingRole xmlRole : xmlSchema.roles()) {
+        for (MappingRole xmlRole : mappingSchema.roles()) {
             Role role = createRole(xmlRole);
             mapNameToRole.put(xmlRole.name(), role);
         }
 
         // Set default role.
-        if (xmlSchema.defaultRole() != null) {
-            Role role = lookupRole(xmlSchema.defaultRole());
+        if (mappingSchema.defaultRole() != null) {
+            Role role = lookupRole(mappingSchema.defaultRole());
             if (role == null) {
 
-            	String sb= new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString();
+            	String sb= new StringBuilder("Role '").append(mappingSchema.defaultRole()).append("' not found").toString();
 
                     final RuntimeException ex = new RuntimeException(sb);
                     throw ex;
@@ -550,32 +550,32 @@ public class RolapSchema implements Schema {
 
 
 
-    private NamedSet createNamedSet(MappingNamedSet xmlNamedSet) {
-        final String formulaString = getFormula(xmlNamedSet);
+    private NamedSet createNamedSet(MappingNamedSet mappingNamedSet) {
+        final String formulaString = getFormula(mappingNamedSet);
         final Expression exp;
         try {
             exp = getInternalConnection().parseExpression(formulaString);
         } catch (Exception e) {
             throw MondrianResource.instance().NamedSetHasBadFormula.ex(
-                xmlNamedSet.name(), e);
+                mappingNamedSet.name(), e);
         }
         final Formula formula =
             new FormulaImpl(
                 new IdImpl(
                     new IdImpl.NameSegmentImpl(
-                        xmlNamedSet.name(),
+                        mappingNamedSet.name(),
                         Quoting.UNQUOTED)),
                 exp);
         return formula.getNamedSet();
     }
 
-    private Role createRole(MappingRole xmlRole) {
-        if (xmlRole.union() != null) {
-            return createUnionRole(xmlRole);
+    private Role createRole(MappingRole mappingRole) {
+        if (mappingRole.union() != null) {
+            return createUnionRole(mappingRole);
         }
 
         RoleImpl role = new RoleImpl();
-        for (MappingSchemaGrant schemaGrant : xmlRole.schemaGrants()) {
+        for (MappingSchemaGrant schemaGrant : mappingRole.schemaGrants()) {
             handleSchemaGrant(role, schemaGrant);
         }
         role.makeImmutable();
@@ -583,12 +583,12 @@ public class RolapSchema implements Schema {
     }
 
     // package-local visibility for testing purposes
-    Role createUnionRole(MappingRole xmlRole) {
-        if (xmlRole.schemaGrants() != null && !xmlRole.schemaGrants().isEmpty()) {
+    Role createUnionRole(MappingRole mappingRole) {
+        if (mappingRole.schemaGrants() != null && !mappingRole.schemaGrants().isEmpty()) {
             throw MondrianResource.instance().RoleUnionGrants.ex();
         }
 
-        List<? extends MappingRoleUsage> usages = xmlRole.union().roleUsages();
+        List<? extends MappingRoleUsage> usages = mappingRole.union().roleUsages();
         List<Role> roleList = new ArrayList<>(usages.size());
         for (MappingRoleUsage roleUsage : usages) {
             Role role = mapNameToRole.get(roleUsage.roleName());
@@ -787,11 +787,11 @@ public class RolapSchema implements Schema {
         final String calcMemberName,
         final String cubeName)
     {
-        for (final MappingCube cube : xmlSchema.cubes()) {
+        for (final MappingCube cube : mappingSchema.cubes()) {
             if (!Util.equalName(cube.name(), cubeName)) {
                 continue;
             }
-            for (MappingCalculatedMember xmlCalcMember
+            for (MappingCalculatedMember mappingCalcMember
                 : cube.calculatedMembers())
             {
                 // FIXME: Since fully-qualified names are not unique, we
@@ -800,25 +800,25 @@ public class RolapSchema implements Schema {
                 // and CalculatedMember.hierarchy is quoted
                 // (e.g. "[Time].[Weekly]").
                 if (Util.equalName(
-                        calcMemberFqName(xmlCalcMember),
+                        calcMemberFqName(mappingCalcMember),
                         calcMemberName))
                 {
-                    return xmlCalcMember;
+                    return mappingCalcMember;
                 }
             }
         }
         return null;
     }
 
-    public static String calcMemberFqName(MappingCalculatedMember xmlCalcMember)
+    public static String calcMemberFqName(MappingCalculatedMember mappingCalcMember)
     {
-        if (xmlCalcMember.dimension() != null) {
+        if (mappingCalcMember.dimension() != null) {
             return Util.makeFqName(
-                Util.quoteMdxIdentifier(xmlCalcMember.dimension()),
-                xmlCalcMember.name());
+                Util.quoteMdxIdentifier(mappingCalcMember.dimension()),
+                mappingCalcMember.name());
         } else {
             return Util.makeFqName(
-                xmlCalcMember.hierarchy(), xmlCalcMember.name());
+                mappingCalcMember.hierarchy(), mappingCalcMember.name());
     }}
 
     public List<RolapCube> getCubesWithStar(RolapStar star) {

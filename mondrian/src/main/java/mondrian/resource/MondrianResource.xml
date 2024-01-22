@@ -932,12 +932,6 @@
     </text>
 </exception>
 
-<exception id="9000003" name="FinalizerErrorRolapConnection">
-    <text>
-        An exception was encountered while finalizing a RolapConnection object instance.
-    </text>
-</exception>
-
 <!-- End of last error section ============================================ -->
 
 </resourceBundle>
