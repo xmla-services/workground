@@ -44,6 +44,7 @@ import org.w3c.dom.NodeList;
  *
  * @author jhyde
  */
+@Deprecated
 public class PropertyUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtil.class);
     /**

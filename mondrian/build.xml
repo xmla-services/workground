@@ -9,92 +9,14 @@
   == All Rights Reserved.
   -->
 <project name="mondrian">
-  <target name="define-tasks">
 
-    <taskdef name="xomgen" classname="org.eigenbase.xom.XOMGenTask">
-      <classpath path="${classpath}"/>
-    </taskdef>
-
-    <taskdef name="resgen" classname="org.eigenbase.resgen.ResourceGenTask">
-      <classpath path="${classpath}"/>
-    </taskdef>
-  </target>
-
-  <target name="generate.resources" depends="define-tasks">
-
-    <!-- Compile MondrianException first, so that resgen can use
-         reflection on it. -->
-    <javac
-        srcdir="${java.dir}"
-        destdir="${classes.dir}"
-        debug="${project.build.debug}"
-        classpath="${classpath}"
-        includeantruntime="false"
-        source="${java.version}"
-        target="${java.version}">
-      <include name="mondrian/olap/MondrianException.java" />
-      <include name="mondrian/olap/ResultLimitExceededException.java" />
-      <include name="mondrian/olap/InvalidHierarchyException.java" />
-      <include name="mondrian/olap/ResourceLimitExceededException.java" />
-      <include name="mondrian/olap/NativeEvaluationUnsupportedException.java" />
-      <include name="mondrian/olap/QueryCanceledException.java" />
-      <include name="mondrian/olap/QueryTimeoutException.java" />
-    </javac>
-
-    <resgen
-        srcdir="${java.dir}"
-        destdir="${generated.java.dir}"
-        resdir="${generated.resources.dir}"
-        style="functor"
-        locales="en_US,de_DE,de,es_ES">
-      <include name="mondrian/resource/MondrianResource.xml"/>
-    </resgen>
-
-  </target>
-
-  <target name="generate.properties">
-    <!-- Generate MondrianProperties.java,
-         mondrian.properties.template, property.html. -->
-    <javac
-        srcdir="${java.dir}"
-        destdir="${project.build.outputDirectory}"
-        debug="${project.build.debug}"
-        classpath="${classpath}"
-        includeantruntime="false"
-        source="${java.version}"
-        target="${java.version}">
-      <include name="mondrian/util/PropertyUtil.java" />
-    </javac>
-
-    <java classpath="${classpath}"
-        classname="mondrian.util.PropertyUtil"
-        fork="no">
-        <arg value="${java.dir}/mondrian/olap"/>
-        <arg value="${generated.java.dir}/mondrian/olap"/>
-      </java>
-  </target>
-
-  <target name="parser" depends="define-tasks">
+  <target name="parser">
     <!-- New parser. -->
     <copy file="${net.java.dev.javacc:javacc:jar}" tofile="${project.build.directory}/javacc.jar" />
     <javacc
         target="${java.dir}/mondrian/parser/MdxParser.jj"
         outputdirectory="${generated.java.dir}/mondrian/parser"
         javacchome="${project.build.directory}"/>
-  </target>
-
-  <target name="def" depends="define-tasks">
-   <!--xomgen
-        model="${relative.resources.dir}/DefaultRulesSchema.xml"
-        destdir="${relative.generated.java.dir}"
-        classname="mondrian.rolap.aggmatcher.DefaultDef"
-        dtdname="aggregates.dtd"/-->
-
-    <!--xomgen
-        model="${relative.java.dir}/mondrian/xmla/DataSourcesConfig.xml"
-        destdir="${relative.generated.java.dir}"
-        classname="mondrian.xmla.DataSourcesConfig"
-        dtdname="datasourcesconfig.dtd"/-->
   </target>
 
 </project>

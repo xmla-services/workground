@@ -447,15 +447,8 @@
 									value="${project.build.outputDirectory}" />
 								<property name="build.compiler" value="extJavac" />
 								<mkdir dir="${project.build.outputDirectory}" />
-								<mkdir dir="${generated.java.dir}/mondrian/olap" />
-								<mkdir
-									dir="${generated.java.dir}/mondrian/rolap/aggmatcher" />
-								<mkdir dir="${generated.java.dir}/mondrian/xmla" />
 								<mkdir
 									dir="${generated.java.dir}/mondrian/parser" />
-								<ant target="def" />
-								<ant target="generate.properties" />
-								<ant target="generate.resources" />
 								<ant target="parser" />
 							</target>
 						</configuration>
