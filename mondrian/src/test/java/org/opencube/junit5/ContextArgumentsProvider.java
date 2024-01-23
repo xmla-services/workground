@@ -180,8 +180,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 			Optional<AnnotatedElement> oElement = extensionContext.getElement();
 			if (oElement.isPresent()) {
-				if (oElement.get() instanceof Method) {
-					Method method = (Method) oElement.get();
+				if (oElement.get() instanceof Method method) {
 					for (Parameter param : method.getParameters()) {
 						if (TestContext.class.isAssignableFrom(param.getType()) ||
                             Context.class.isAssignableFrom(param.getType())) {
