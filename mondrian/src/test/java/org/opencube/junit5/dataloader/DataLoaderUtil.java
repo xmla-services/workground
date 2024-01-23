@@ -23,7 +23,6 @@ import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.Date;
@@ -32,14 +31,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
+import de.siegmar.fastcsv.reader.CloseableIterator;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-
-import com.univocity.parsers.csv.Csv;
-import com.univocity.parsers.csv.CsvParserSettings;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
@@ -391,13 +391,13 @@ public class DataLoaderUtil {
 
 	public static void importCSV(DataSource dataSource, Dialect dialect, List<Table> tables, Path csvDir)
 			throws SQLException {
-		CsvParserSettings settings = Csv.parseRfc4180();
-		settings.setLineSeparatorDetectionEnabled(true);
-		settings.setNullValue("NULL");
-		settings.getFormat().setQuoteEscape('\\');
-		settings.getFormat().setQuote('"');
+        CsvReader.CsvReaderBuilder builder = CsvReader.builder()
+            .fieldSeparator(',')
+            .quoteCharacter('"')
+            .skipEmptyLines(true)
+            .commentCharacter('#')
+            .ignoreDifferentFieldCount(false);
 
-		settings.setQuoteDetectionEnabled(true);
 
 		tables.parallelStream().forEach(table -> {
 			try (Connection connection = dataSource.getConnection();) {
@@ -415,104 +415,86 @@ public class DataLoaderUtil {
 //					//TODO: also load them
 //					return;
 //				}
-				com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
-				parser.beginParsing(p.toFile(), StandardCharsets.UTF_8);
-				parser.parseNext();
-				String[] headers = parser.getRecordMetadata().headers();
+                try (CloseableIterator<NamedCsvRecord> it = builder.ofNamedCsvRecord(p).iterator()) {
+                    if (!it.hasNext()) {
+                        throw new IllegalStateException("No header found");
+                    }
+                    PreparedStatement ps = null;
+                    boolean first = true;
+                    while (it.hasNext()) {
+                        NamedCsvRecord r = it.next();
+                        if (first) {
+                            first = false;
+                            List<String> headers = r.getHeader();
 
-				StringBuilder b = new StringBuilder();
-				b.append("INSERT INTO ");
-				b.append(dialect.quoteIdentifier(table.schemaName, table.tableName));
-				b.append(" ( ");
-				boolean first1 = true;
-				for (String header : headers) {
-					if (first1) {
-						first1 = false;
-					} else {
-						b.append(",");
-					}
-					b.append(dialect.quoteIdentifier(header));
-				}
-				b.append(" ) VALUES ");
-				b.append(" ( ");
+                            StringBuilder b = new StringBuilder();
+                            b.append("INSERT INTO ");
+                            b.append(dialect.quoteIdentifier(table.schemaName, table.tableName));
+                            b.append(" ( ");
+                            b.append(headers.stream().map(h -> dialect.quoteIdentifier(h)).collect(Collectors.joining(",")));
+                            b.append(" ) VALUES ");
+                            b.append(" ( ");
+                            b.append(headers.stream().map(h -> "?").collect(Collectors.joining(",")));
+                            b.append(" ) ");
+                            ps = connection.prepareStatement(b.toString());
+                            ps.getConnection().setAutoCommit(false);
 
-				boolean first2 = true;
-				for (String header : headers) {
-					if (first2) {
-						first2 = false;
-					} else {
-						b.append(",");
-					}
-					b.append("?");
+                        } else {
+                            ps.clearParameters();
+                        }
+                        int i = 1;
+                        for (Column col : table.columns) {
+                            String field = r.getField(col.name);
+                            if (field == null || field.equals("NULL")) {
+                                ps.setObject(i, null);
+                            } else if (col.type.equals(DataLoaderUtil.Type.Bigint)) {
+                                ps.setLong(i, field.equals("") ? 0l : Long.valueOf(field));
 
-				}
-				b.append(" ) ");
+                            } else if (col.type.equals(DataLoaderUtil.Type.Boolean)) {
+                                ps.setBoolean(i, field.equals("") ? Boolean.FALSE : Boolean.valueOf(field));
 
-				PreparedStatement ps = connection.prepareStatement(b.toString());
+                            } else if (col.type.equals(DataLoaderUtil.Type.Currency)) {
+                                ps.setDouble(i, field.equals("") ? 0.0 : Double.valueOf(field));
 
-				boolean first = true;
-				ps.getConnection().setAutoCommit(false);
-				com.univocity.parsers.common.record.Record r;
-				while ((r = parser.parseNextRecord()) != null) {
+                            } else if (col.type.equals(DataLoaderUtil.Type.Date)) {
+                                ps.setDate(i, Date.valueOf(field));
 
-					if (first) {
-						first = false;
-					} else {
-						ps.clearParameters();
-					}
+                            } else if (col.type.equals(DataLoaderUtil.Type.Integer)) {
+                                ps.setInt(i, field.equals("") ? 0 : Integer.valueOf(field));
 
-					int i = 1;
-					for (Column col : table.columns) {
+                            } else if (col.type.equals(DataLoaderUtil.Type.Real)) {
+                                ps.setDouble(i, field.equals("") ? 0.0 : Double.valueOf(field));
 
-						if (r.getString(col.name) == null || r.getString(col.name).equals("NULL")) {
-							ps.setObject(i, null);
-						} else if (col.type.equals(DataLoaderUtil.Type.Bigint)) {
-							ps.setLong(i, r.getLong(col.name));
+                            } else if (col.type.equals(DataLoaderUtil.Type.Smallint)) {
+                                ps.setShort(i, field.equals("") ? 0 : Short.valueOf(field));
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Boolean)) {
-							ps.setBoolean(i, r.getBoolean(col.name));
+                            } else if (col.type.equals(DataLoaderUtil.Type.Timestamp)) {
+                                ps.setTimestamp(i, Timestamp.valueOf(field));
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Currency)) {
-							ps.setDouble(i, r.getDouble(col.name));
+                            } else if (col.type.equals(DataLoaderUtil.Type.Varchar255)) {
+                                ps.setString(i, field);
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Date)) {
-							ps.setDate(i, Date.valueOf(r.getString(col.name)));
+                            } else if (col.type.equals(DataLoaderUtil.Type.Varchar30)) {
+                                ps.setString(i, field);
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Integer)) {
-							ps.setInt(i, r.getInt(col.name));
+                            } else if (col.type.equals(DataLoaderUtil.Type.Varchar60)) {
+                                ps.setString(i, field);
+                            }
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Real)) {
-							ps.setFloat(i, r.getFloat(col.name));
+                            i++;
+                        }
+                        ps.addBatch();
+                    }
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Smallint)) {
-							ps.setShort(i, r.getShort(col.name));
+                    long start = System.currentTimeMillis();
+                    System.out.println("---");
+                    ps.executeBatch();
+                    System.out.println(System.currentTimeMillis() - start);
 
-						} else if (col.type.equals(DataLoaderUtil.Type.Timestamp)) {
-							ps.setTimestamp(i, Timestamp.valueOf(r.getString(col.name)));
-
-						} else if (col.type.equals(DataLoaderUtil.Type.Varchar255)) {
-							ps.setString(i, r.getString(col.name));
-
-						} else if (col.type.equals(DataLoaderUtil.Type.Varchar30)) {
-							ps.setString(i, r.getString(col.name));
-
-						} else if (col.type.equals(DataLoaderUtil.Type.Varchar60)) {
-							ps.setString(i, r.getString(col.name));
-						}
-
-						i++;
-					}
-					ps.addBatch();
-				}
-
-				long start = System.currentTimeMillis();
-				System.out.println("---");
-				ps.executeBatch();
-				System.out.println(System.currentTimeMillis() - start);
-
-				connection.commit();
-				System.out.println(System.currentTimeMillis() - start);
-				connection.setAutoCommit(true);
+                    connection.commit();
+                    System.out.println(System.currentTimeMillis() - start);
+                    connection.setAutoCommit(true);
+                }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
