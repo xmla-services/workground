@@ -1314,8 +1314,7 @@ class ConcurrentMdxTest {
         final List<Statement> statements = new ArrayList<>();
         ExecutorService executorService =
             Executors.newFixedThreadPool(
-                propSaver.properties
-                    .RolapConnectionShepherdNbThreads.get() - 2);
+                context.getConfig().rolapConnectionShepherdNbThreads() - 2);
 
         for (int i = 0; i < 700; i++) {
             for (final QueryAndResult mdxQuery : mdxQueries) {

@@ -741,8 +741,8 @@ class BatchLoader {
         // for example. Both the measure's aggregator and its rollup
         // aggregator must support raw data aggregation. We call
         // Aggregator.supportsFastAggregates() to verify.
-        if (MondrianProperties.instance()
-                .EnableInMemoryRollup.get()
+        Boolean enableInMemoryRollup = cube.getSchema().getInternalConnection().getContext().getConfig().enableInMemoryRollup();
+        if (enableInMemoryRollup
             && measure.getAggregator().supportsFastAggregates(
                 measure.getDatatype())
             && measure.getAggregator().getRollup().supportsFastAggregates(

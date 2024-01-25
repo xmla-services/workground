@@ -13,11 +13,10 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
 import mondrian.rolap.SchemaModifiers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -49,21 +48,20 @@ import static org.opencube.junit5.TestUtil.withSchema;
  * @since Apr 04, 2008
  */
 class SolveOrderScopeIsolationTest {
-    SolveOrderMode defaultSolveOrderMode;
+    //SolveOrderMode defaultSolveOrderMode;
 
     //private PropertySaver5 propSaver;
 
-    @BeforeEach
-    public void beforeEach() {
-        //propSaver = new PropertySaver5();
-        defaultSolveOrderMode = getSolveOrderMode();
-    }
 
-    @AfterEach
-    public void afterEach() {
-        //propSaver.reset();
-        setSolveOrderMode(defaultSolveOrderMode);
-    }
+    //public void beforeEach(TestContext context) {
+    //    //propSaver = new PropertySaver5();
+    //    defaultSolveOrderMode = getSolveOrderMode(context);
+    //}
+
+    //public void afterEach(TestContext context) {
+    //    //propSaver.reset();
+    //    setSolveOrderMode(context, defaultSolveOrderMode);
+    //}
 
 
     private static final String memberDefs =
@@ -97,15 +95,15 @@ class SolveOrderScopeIsolationTest {
         + "  <CalculatedMemberProperty name=\"SOLVE_ORDER\" value=\"20\"/>\n"
         + "</CalculatedMember>";
 
-    private SolveOrderMode getSolveOrderMode()
+    private SolveOrderMode getSolveOrderMode(TestContext context)
     {
         return Util.lookup(
             SolveOrderMode.class,
-            MondrianProperties.instance().SolveOrderMode.get().toUpperCase());
+            context.getConfig().solveOrderMode().toUpperCase());
     }
 
-    final void setSolveOrderMode(SolveOrderMode mode) {
-        MondrianProperties.instance().SolveOrderMode.set(mode.toString());
+    final void setSolveOrderMode(TestContext context, SolveOrderMode mode) {
+        ((TestConfig)context.getConfig()).setSolveOrderMode(mode.toString());
     }
 
     public void prepareContext(TestContext context) {
@@ -135,13 +133,15 @@ class SolveOrderScopeIsolationTest {
         }
     }
 
-    void testSetSolveOrderMode()
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
+    void testSetSolveOrderMode(TestContext context)
     {
-        setSolveOrderMode(ABSOLUTE);
-        assertEquals(ABSOLUTE, getSolveOrderMode());
+        setSolveOrderMode(context, ABSOLUTE);
+        assertEquals(ABSOLUTE, getSolveOrderMode(context));
 
-        setSolveOrderMode(SCOPED);
-        assertEquals(SCOPED, getSolveOrderMode());
+        setSolveOrderMode(context, SCOPED);
+        assertEquals(SCOPED, getSolveOrderMode(context));
     }
 
     @ParameterizedTest
@@ -157,7 +157,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override,gender.maleMinusFemale} on 1\n"
             + "from sales";
 
-        setSolveOrderMode(SolveOrderMode.ABSOLUTE);
+        setSolveOrderMode(context, SolveOrderMode.ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -190,7 +190,7 @@ class SolveOrderScopeIsolationTest {
             + "{gender.override,gender.maleMinusFemale} on 1\n"
             + "from sales";
 
-        setSolveOrderMode(SolveOrderMode.SCOPED);
+        setSolveOrderMode(context, SolveOrderMode.SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -219,7 +219,7 @@ class SolveOrderScopeIsolationTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void _future_testOverrideCubeMemberHappensWithScopeIsolation(TestContext context) {
     	prepareContext(context);
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             "with\n"
             + "member gender.maleMinusFemale as 'Gender.M - gender.f', "
@@ -261,7 +261,7 @@ class SolveOrderScopeIsolationTest {
             + "SELECT {[Country].[USA],[State Province].[WA], [Customers].USAByWA} ON 0, "
             + " {[Measures].[Store Sales], [Measures].[Store Cost], [Measures].[ProfitSolveOrder3000]} ON 1 "
             + "FROM SALES\n";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -296,7 +296,7 @@ class SolveOrderScopeIsolationTest {
             + "SELECT {[Country].[USA],[State Province].[WA], [Customers].USAByWA} ON 0 "
             + "FROM SALES\n"
             + "WHERE ProfitSolveOrder3000";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -323,7 +323,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{gender.override, gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -356,7 +356,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{gender.override, gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -390,7 +390,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -424,7 +424,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -458,7 +458,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -492,7 +492,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{[Gender].[override], gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -536,7 +536,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -581,7 +581,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -632,7 +632,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -676,7 +676,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, Time.Total1, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -728,7 +728,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -769,7 +769,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{Time.Total, [Time].[1997].[Q1], [Time].[1997].[Q2]} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -808,7 +808,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{gender.override1, gender.override2, gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(ABSOLUTE);
+        setSolveOrderMode(context, ABSOLUTE);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"
@@ -851,7 +851,7 @@ class SolveOrderScopeIsolationTest {
             + "measures.[sales count]} on 0,\n"
             + "{gender.override1, gender.override2, gender.maleMinusFemale} on 1\n"
             + "from sales";
-        setSolveOrderMode(SCOPED);
+        setSolveOrderMode(context, SCOPED);
         assertQueryReturns(context.getConnection(),
             mdx,
             "Axis #0:\n"

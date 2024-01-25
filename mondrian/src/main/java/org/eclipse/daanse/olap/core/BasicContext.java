@@ -96,7 +96,8 @@ public class BasicContext extends AbstractBasicContext  {
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
 		}
 		statisticsProvider.initialize(dataSource, getDialect());
-        shepherd = new RolapResultShepherd();
+        shepherd = new RolapResultShepherd(config.rolapConnectionShepherdThreadPollingInterval(),
+            config.rolapConnectionShepherdNbThreads());
         aggMgr = new AggregationManager(this);
 
         if (LOGGER.isDebugEnabled()) {
