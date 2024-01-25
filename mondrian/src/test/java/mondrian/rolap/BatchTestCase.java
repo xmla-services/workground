@@ -11,6 +11,7 @@
 package mondrian.rolap;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
@@ -509,7 +510,7 @@ public class BatchTestCase{
                     clearCache(connection, (RolapCube)query.getCube());
                 }
                 final Result result = connection.execute(query);
-                Util.discard(result);
+                discard(result);
                 bomb = null;
             } catch (Bomb e) {
                 bomb = e;

@@ -9,7 +9,7 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.ExpressionUtil.genericExpression;
-import static org.eigenbase.xom.XOMUtil.discard;
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;

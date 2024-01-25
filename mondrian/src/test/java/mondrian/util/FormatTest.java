@@ -9,6 +9,7 @@
 
 package mondrian.util;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -18,8 +19,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
-
-import mondrian.olap.Util;
 
 /**
  * Unit test for {@link Format}.
@@ -621,7 +620,7 @@ class FormatTest {
     {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
-        Util.discard(actualResult);
+        discard(actualResult);
         if (o instanceof BigDecimal bigDecimal) {
             checkFormat(locale, bigDecimal.doubleValue(), formatString);
             checkFormat(locale, bigDecimal.floatValue(), formatString);

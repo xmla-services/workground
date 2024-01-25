@@ -10,12 +10,16 @@
 */
 package mondrian.rolap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.olap.DimensionType;
+import mondrian.olap.MemberBase;
+import mondrian.olap.Property;
+import mondrian.olap.Util;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.VisualTotalsFunDef;
+import mondrian.server.Locus;
+import mondrian.spi.PropertyFormatter;
+import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -44,6 +48,11 @@ import mondrian.util.Bug;
 import mondrian.util.CreationException;
 import mondrian.util.ObjectFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Basic implementation of a member in a {@link RolapHierarchy}.

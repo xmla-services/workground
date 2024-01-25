@@ -68,7 +68,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       this.hierarchyCalc = hierarchyCalc;
     }
 
- 
+
 
     @Override
 	public Member evaluate( Evaluator evaluator ) {
