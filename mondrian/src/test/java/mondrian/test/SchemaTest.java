@@ -6328,8 +6328,13 @@ class SchemaTest {
         withSchema(context, schema);
          */
         withSchema(context, TestInvalidRoleErrorModifier::new);
-        final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
-        assertContains(exceptionList, "Role 'Unknown' not found");
+        try {
+        	TestUtil.getSchemaWarnings(context);
+        	fail("should be exception with \"Role 'Unknown'\" ");
+        }
+        catch (Exception e) {
+        	assertTrue(e.getMessage().contains("Role 'Unknown' not found"));
+        }
     }
 
     /**

@@ -12,7 +12,7 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
-import static org.eigenbase.xom.XOMUtil.discard;
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -566,9 +566,9 @@ RME is this right
         if (level.isAll()) {
             return Collections.singletonList(hierarchy.getAllMember());
         }
- 
+
         final TupleReader tupleReader = new SqlTupleReader(constraint);
-    
+
         tupleReader.addLevelMembers(level, this, null);
         final TupleList tupleList =
             tupleReader.readMembers(context, null, null);

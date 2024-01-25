@@ -199,7 +199,7 @@ public class OlapExecuteService implements ExecuteService {
             }
             */
                 ;
-          
+
                 for (mondrian.server.Statement statement : connection.getContext().getStatements(connection)) {
                         statement.cancel();
                 }

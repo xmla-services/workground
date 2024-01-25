@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -303,7 +304,7 @@ class ParameterTest {
         Throwable throwable;
         try {
             result = connection.execute(query);
-            Util.discard(result);
+            discard(result);
             throwable = null;
         } catch (Throwable e) {
             throwable = e;
