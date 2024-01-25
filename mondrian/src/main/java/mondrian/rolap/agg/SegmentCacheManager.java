@@ -247,21 +247,7 @@ public class SegmentCacheManager {
   /**
    * Executor with which to send requests to external caches.
    */
-  public final ExecutorService cacheExecutor =
-    Util.getExecutorService(
-      // We use the same value for coreSize and maxSize
-      // because that's the behavior we want. All extra
-      // tasks will be put on an unbounded queue.
-      MondrianProperties.instance()
-        .SegmentCacheManagerNumberCacheThreads.get(),
-      MondrianProperties.instance()
-        .SegmentCacheManagerNumberCacheThreads.get(),
-      1,
-      "mondrian.rolap.agg.SegmentCacheManager$cacheExecutor",
-      ( r, executor ) -> {
-        throw MondrianResource.instance()
-          .SegmentCacheLimitReached.ex();
-      } );
+  public final ExecutorService cacheExecutor;
 
   /**
    * Executor with which to execute SQL requests.
@@ -269,21 +255,7 @@ public class SegmentCacheManager {
    * <p>TODO: create using factory and/or configuration parameters. Executor
    * should be shared within MondrianServer or target JDBC database.
    */
-  public final ExecutorService sqlExecutor =
-    Util.getExecutorService(
-      // We use the same value for coreSize and maxSize
-      // because that's the behavior we want. All extra
-      // tasks will be put on an unbounded queue.
-      MondrianProperties.instance()
-        .SegmentCacheManagerNumberSqlThreads.get(),
-      MondrianProperties.instance()
-        .SegmentCacheManagerNumberSqlThreads.get(),
-      1,
-      "mondrian.rolap.agg.SegmentCacheManager$sqlExecutor",
-      ( r, executor ) -> {
-        throw MondrianResource.instance()
-          .SqlQueryLimitReached.ex();
-      } );
+  public ExecutorService sqlExecutor;
 
   // NOTE: This list is only mutable for testing purposes. Would rather it
   // were immutable.
@@ -297,9 +269,10 @@ public class SegmentCacheManager {
     LoggerFactory.getLogger( AggregationManager.class );
   private final Context context;
 
-
   public SegmentCacheManager( Context context ) {
     this.context = context;
+    this.sqlExecutor = createSqlExecutor(context);
+    this.cacheExecutor = createCacheExecutor(context);
     actor = new Actor();
     thread = new Thread(
       actor, "mondrian.rolap.agg.SegmentCacheManager$ACTOR" );
@@ -318,7 +291,7 @@ public class SegmentCacheManager {
     }
 
     // Add an external cache, if configured.
-    final List<SegmentCache> externalCache = SegmentCacheWorker.initCache();
+    final List<SegmentCache> externalCache = SegmentCacheWorker.initCache(context.getConfig().segmentCache());
     for ( SegmentCache cache : externalCache ) {
       // Create a worker for this external cache
       segmentCacheWorkers.add(
@@ -340,7 +313,41 @@ public class SegmentCacheManager {
     }
   }
 
-  /**
+    private ExecutorService createCacheExecutor(Context context) {
+        return Util.getExecutorService(
+            // We use the same value for coreSize and maxSize
+            // because that's the behavior we want. All extra
+            // tasks will be put on an unbounded queue.
+            context.getConfig()
+                .segmentCacheManagerNumberCacheThreads(),
+            context.getConfig()
+                .segmentCacheManagerNumberCacheThreads(),
+            1,
+            "mondrian.rolap.agg.SegmentCacheManager$cacheExecutor",
+            ( r, executor ) -> {
+                throw MondrianResource.instance()
+                    .SegmentCacheLimitReached.ex();
+            } );
+    }
+
+    private ExecutorService createSqlExecutor(Context context) {
+        return Util.getExecutorService(
+            // We use the same value for coreSize and maxSize
+            // because that's the behavior we want. All extra
+            // tasks will be put on an unbounded queue.
+            context.getConfig()
+                .segmentCacheManagerNumberSqlThreads(),
+            context.getConfig()
+                .segmentCacheManagerNumberSqlThreads(),
+            1,
+            "mondrian.rolap.agg.SegmentCacheManager$sqlExecutor",
+            ( r, executor ) -> {
+                throw MondrianResource.instance()
+                    .SqlQueryLimitReached.ex();
+            } );
+    }
+
+    /**
    * Load external cached elements for received star. Similar to {@link #externalSegmentCreated(SegmentHeader,
    * MondrianServer) externalSegmentCreated} but the index is created if not there.
    *

@@ -64,13 +64,12 @@ public final class SegmentCacheWorker {
      *
      * @return Cache
      */
-    public static List<SegmentCache> initCache() {
+    public static List<SegmentCache> initCache(final String segmentCache) {
         final List<SegmentCache> caches =
             new ArrayList<>();
         // First try to get the segmentcache impl class from
         // mondrian properties.
-        final String cacheName =
-            MondrianProperties.instance().SegmentCache.get();
+        final String cacheName = segmentCache;
         if (cacheName != null) {
             caches.add(instantiateCache(cacheName));
         }

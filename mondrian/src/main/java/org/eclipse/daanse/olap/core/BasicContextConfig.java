@@ -234,36 +234,36 @@ public interface BasicContextConfig {
         return null;
     }
 
-    /*
-    <p>Property that, with {@link #SparseSegmentDensityThreshold}, determines whether to choose a sparse or dense representation when storing collections of cell values in memory.</p>
-
-    <p>When storing collections of cell values, Mondrian has to choose
-    between a sparse and a dense representation, based upon the
-<code>possible</code> and <code>actual</code> number of values.
-    The <code>density</code> is <code>actual / possible</code>.</p>
-
-    <p>We use a sparse representation if
-<code>(possible -
-    {@link #SparseSegmentCountThreshold countThreshold}) *
-    {@link #SparseSegmentDensityThreshold densityThreshold} &gt;
-    actual</code></p>
-
-    <p>For example, at the default values
-        ({@link #SparseSegmentCountThreshold countThreshold} = 1000,
-    {@link #SparseSegmentDensityThreshold} = 0.5),
-    we use a dense representation for</p>
-
-<ul>
-<li>(1000 possible, 0 actual), or</li>
-<li>(2000 possible, 500 actual), or</li>
-<li>(3000 possible, 1000 actual).</li>
-</ul>
-
-    <p>Any fewer actual values, or any more
-    possible values, and Mondrian will use a sparse representation.</p>
-
-     */
-    @AttributeDefinition(name = "%sparseSegmentCountThreshold.name", description = "%sparseSegmentCountThreshold.description", type = AttributeType.INTEGER)
+    /**
+     * <p>Property that, with {@link #SparseSegmentDensityThreshold}, determines
+     * whether to choose a sparse or dense representation when storing
+     * collections of cell values in memory.</p>
+     *
+     * <p>When storing collections of cell values, Mondrian has to choose
+     * between a sparse and a dense representation, based upon the
+     * <code>possible</code> and <code>actual</code> number of values.
+     * The <code>density</code> is <code>actual / possible</code>.</p>
+     *
+     * <p>We use a sparse representation if
+     * <code>(possible -
+     * {@link #SparseSegmentCountThreshold countThreshold}) *
+     * {@link #SparseSegmentDensityThreshold densityThreshold} &gt;
+     * actual</code></p>
+     *
+     * <p>For example, at the default values
+     * ({@link #SparseSegmentCountThreshold countThreshold} = 1000,
+     * {@link #SparseSegmentDensityThreshold} = 0.5),
+     * we use a dense representation for</p>
+     *
+     * <ul>
+     * <li>(1000 possible, 0 actual), or</li>
+     * <li>(2000 possible, 500 actual), or</li>
+     * <li>(3000 possible, 1000 actual).</li>
+     * </ul>
+     *
+     * <p>Any fewer actual values, or any more
+     * possible values, and Mondrian will use a sparse representation.</p>
+     */    @AttributeDefinition(name = "%sparseSegmentCountThreshold.name", description = "%sparseSegmentCountThreshold.description", type = AttributeType.INTEGER)
     default Integer sparseSegmentCountThreshold() {
         return 1000;
     }
@@ -602,5 +602,4 @@ public interface BasicContextConfig {
     //<p>If true, then MDX functions InStr and InStrRev are case sensitive. Default value is false. </p>
     @AttributeDefinition(name = "%caseSensitiveMdxInstr.name", description = "%caseSensitiveMdxInstr.description", type = AttributeType.BOOLEAN)
     default Boolean caseSensitiveMdxInstr() { return false; }
-
 }

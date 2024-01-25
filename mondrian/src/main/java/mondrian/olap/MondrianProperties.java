@@ -692,68 +692,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new IntegerProperty(
             this, "mondrian.result.limit", 0);
 
-    /**
-     * <p>Maximum number of MDX query threads per Mondrian server instance.
-     * Defaults to 20.</p>
-     */
-    public transient final IntegerProperty RolapConnectionShepherdNbThreads =
-        new IntegerProperty(
-            this, "mondrian.rolap.maxQueryThreads", 20);
 
-    /**
-     * <p>Property that defines the interval value between
-     * polling operations performed by the RolapConnection shepherd thread.
-     * This controls query timeouts and cancellation, so a small value
-     * (a few milliseconds) is best. Setting this to a value higher than
-     * mondrian.rolap.queryTimeout will result the timeout not being enforced
-     * as expected.</p>
-     *
-     * <p>Default value is "1000ms". Default time unit is "ms".</p>
-     */
-    public transient final StringProperty RolapConnectionShepherdThreadPollingInterval =
-        new StringProperty(
-            this, "mondrian.rolap.shepherdThreadPollingInterval", "1000ms");
-
-    /**
-     * Property which defines which SegmentCache implementation to use.
-     * Specify the value as a fully qualified class name, such as
-     * <code>org.example.SegmentCacheImpl</code> where SegmentCacheImpl
-     * is an implementation of {@link mondrian.spi.SegmentCache}.
-     */
-    public transient final StringProperty SegmentCache =
-        new StringProperty(
-            this, "mondrian.rolap.SegmentCache", null);
-
-    /**
-     * <p>Maximum number of threads per Mondrian server instance that
-     * are used to run perform operations on the external caches.
-     * Defaults to 100.</p>
-     */
-    public transient final IntegerProperty SegmentCacheManagerNumberCacheThreads =
-        new IntegerProperty(
-            this, "mondrian.rolap.maxCacheThreads", 100);
-
-    /**
-     * <p>Maximum number of threads per Mondrian server instance that
-     * are used to run SQL queries when populating segments.
-     * Defaults to 100.</p>
-     */
-    public transient final IntegerProperty SegmentCacheManagerNumberSqlThreads =
-        new IntegerProperty(
-            this, "mondrian.rolap.maxSqlThreads", 100);
-
-    /**
-     * Property that controls the behavior of
-     * {@link Property#SOLVE_ORDER solve order} of calculated members and sets.
-     *
-     * <p>Valid values are "scoped" and "absolute" (the default). See
-     * {@link mondrian.olap.SolveOrderMode} for details.</p>
-     */
-    public transient final StringProperty SolveOrderMode =
-        new StringProperty(
-            this, "mondrian.rolap.SolveOrderMode", "ABSOLUTE");
-
-    /**
+     /**
      * <p>Property that, with {@link #SparseSegmentDensityThreshold}, determines
      * whether to choose a sparse or dense representation when storing
      * collections of cell values in memory.</p>

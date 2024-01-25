@@ -22,10 +22,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eigenbase.util.property.IntegerProperty;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
@@ -64,10 +62,9 @@ public class RolapResultShepherd {
     private final Timer timer =
         Util.newTimer("mondrian.rolap.RolapResultShepherd#timer", true);
 
-    public RolapResultShepherd() {
-        final IntegerProperty property =
-            MondrianProperties.instance().RolapConnectionShepherdNbThreads;
-        final int maximumPoolSize = property.get();
+    public RolapResultShepherd(final String rolapConnectionShepherdThreadPollingInterval,  final int rolapConnectionShepherdNbThreads) {
+
+        final int maximumPoolSize = rolapConnectionShepherdNbThreads;
         executor =
             Util.getExecutorService(
                  // We use the same value for coreSize and maxSize
@@ -85,14 +82,12 @@ public class RolapResultShepherd {
                     {
                         throw MondrianResource.instance().QueryLimitReached.ex(
                             maximumPoolSize,
-                            property.getPath());
+                            "rolapConnectionShepherdNbThreads");
                     }
                 });
         final Pair<Long, TimeUnit> interval =
             Util.parseInterval(
-                String.valueOf(
-                    MondrianProperties.instance()
-                        .RolapConnectionShepherdThreadPollingInterval.get()),
+                rolapConnectionShepherdThreadPollingInterval,
                 TimeUnit.MILLISECONDS);
         long period = interval.right.toMillis(interval.left);
         timer.schedule(

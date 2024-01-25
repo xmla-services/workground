@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
 import mondrian.server.Execution;
@@ -63,9 +62,7 @@ class RolapEvaluatorRoot {
   final int[] nonAllPositions;
   int nonAllPositionCount;
 
-  final SolveOrderMode solveOrderMode =
-      Util.lookup( SolveOrderMode.class, MondrianProperties.instance().SolveOrderMode.get().toUpperCase(),
-          SolveOrderMode.ABSOLUTE );
+  SolveOrderMode solveOrderMode;
 
   final Set<Expression> activeNativeExpansions = new HashSet<>();
 
@@ -97,6 +94,9 @@ public RolapEvaluatorRoot( Statement statement ) {
     this.query = statement.getQuery();
     this.cube = (RolapCube) query.getCube();
     this.connection = statement.getMondrianConnection();
+    this.solveOrderMode =
+        Util.lookup( SolveOrderMode.class, connection.getContext().getConfig().solveOrderMode().toUpperCase(),
+            SolveOrderMode.ABSOLUTE );
     this.schemaReader = query.getSchemaReader( true );
     this.queryStartTime = new Date();
     List<RolapMember> list = new ArrayList<>();

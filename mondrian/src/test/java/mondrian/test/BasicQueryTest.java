@@ -57,6 +57,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -5849,7 +5850,8 @@ public class BasicQueryTest {
   public void _testSqlPoolAndQueue(TestContext context) throws Exception {
     // We use 10 SQL threads and the query needs about 30-ish.
     // If the bug exists, it'll fail.
-    propSaver.set( propSaver.properties.SegmentCacheManagerNumberSqlThreads, 10 );
+    ((TestConfig)context.getConfig()).setSegmentCacheManagerNumberSqlThreads(10);
+
     final String mdx =
         "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS__Promotion Media_], NonEmptyCrossJoin"
             + "([*BASE_MEMBERS__Customers_], NonEmptyCrossJoin([*BASE_MEMBERS__Yearly Income_], NonEmptyCrossJoin"
