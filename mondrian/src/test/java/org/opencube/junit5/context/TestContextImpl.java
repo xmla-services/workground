@@ -15,6 +15,7 @@ import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.core.AbstractBasicContext;
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
@@ -36,10 +37,12 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 	private String name;
 	private Optional<String> description = Optional.empty();
+    private TestConfig testConfig;
 
 	public TestContextImpl() {
 	    shepherd = new RolapResultShepherd();
 	    aggMgr = new AggregationManager(this);
+        testConfig = new TestConfig();
 	}
 
 	@Override
@@ -116,6 +119,11 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
     @Override
     public Scenario createScenario() {
         return null;
+    }
+
+    @Override
+    public BasicContextConfig getConfig() {
+        return testConfig;
     }
 
     @Override

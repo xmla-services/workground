@@ -13,11 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
+import org.opencube.junit5.context.TestContextImpl;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
@@ -195,7 +198,8 @@ class SortTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testListTuplesExceedsCellEvalLimit(TestContext context) {
     // cell eval performed within the sort, so cycles to retrieve all cells.
-    propSaver.set( MondrianProperties.instance().CellBatchSize, 2 );
+      ((TestConfig)(context.getConfig())).setCellBatchSize(2);
+    //propSaver.set( MondrianProperties.instance().CellBatchSize, 2 );
     assertAxisReturns(context.getConnection(),
       "ORDER(GENERATE(CROSSJOIN({[Customers].[USA].[WA].Children},{[Product].[Food]}),\n"
         + "{([Customers].CURRENTMEMBER,[Product].CURRENTMEMBER)}), [Measures].[Store Sales], BASC, [Customers]"

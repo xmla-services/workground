@@ -38,6 +38,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1871,7 +1872,8 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCellBatchSizeWithUdf(TestContext context) {
     prepareContext(context);
-    propSaver.set( MondrianProperties.instance().CellBatchSize, 1 );
+    ((TestConfig)(context.getConfig())).setCellBatchSize(1);
+    //propSaver.set( MondrianProperties.instance().CellBatchSize, 1 );
     assertQueryReturns(connection, "select lastnonempty([education level].members, measures.[unit sales]) on 0 from sales",
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Education Level].[Partial High School]}\n" + "Row #0: 79,155\n" );
   }

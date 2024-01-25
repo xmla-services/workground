@@ -24,6 +24,7 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 import mondrian.rolap.RolapConnection;
@@ -116,4 +117,6 @@ public interface Context {
 	Monitor getMonitor();
 
 	List<Statement> getStatements(Connection connection);
+
+    BasicContextConfig getConfig();
 }

@@ -41,6 +41,10 @@ public interface BasicContextConfig {
 
 
     //Integer property that, if set to a value greater than zero, sets a hard limit on the number of cells that are batched together when building segments.
+    /**
+     * Integer property that, if set to a value greater than zero, sets a hard limit on the
+     * number of cells that are batched together when building segments.
+     */
     @AttributeDefinition(name = "%cellBatchSize.name", description = "%cellBatchSize.description", type = AttributeType.INTEGER)
     default Integer cellBatchSize() {
         return -1;

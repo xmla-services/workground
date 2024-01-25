@@ -78,7 +78,7 @@ public class BasicContext extends AbstractBasicContext  {
 	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private ExpressionCompilerFactory expressionCompilerFactory = null;
 
-	private BasicContextConfig config;
+    private BasicContextConfig config;
 
 	private Dialect dialect = null;
 
@@ -164,4 +164,9 @@ public class BasicContext extends AbstractBasicContext  {
 		// TODO
 		return null;
 	}
+
+    @Override
+    public BasicContextConfig getConfig() {
+        return config;
+    }
 }

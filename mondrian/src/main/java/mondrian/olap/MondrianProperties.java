@@ -123,9 +123,9 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * Integer property that, if set to a value greater than zero, sets a hard limit on the
      * number of cells that are batched together when building segments.
      */
-    public transient final IntegerProperty CellBatchSize =
-        new IntegerProperty(
-            this, "mondrian.rolap.cellBatchSize", -1);
+    //public transient final IntegerProperty CellBatchSize =
+    //    new IntegerProperty(
+    //        this, "mondrian.rolap.cellBatchSize", -1);
 
     /**
      * <p>Positive integer property that determines loop iterations number between checks for whether the current mdx query has been cancelled or timeout was exceeded.<br></br>

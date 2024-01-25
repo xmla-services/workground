@@ -10,6 +10,7 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 public interface TestContext extends Context{
@@ -23,5 +24,5 @@ public interface TestContext extends Context{
 	void setExpressionCompilerFactory(ExpressionCompilerFactory expressionCompilerFactory);
 	void setStatisticsProvider(StatisticsProvider statisticsProvider);
     Connection getConnection(List<String> roles);
-
+    BasicContextConfig getConfig();
 }
