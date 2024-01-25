@@ -133,11 +133,11 @@ public class FastBatchingCellReader implements CellReader {
         cacheMgr = aggMgr.getCacheMgr(execution.getMondrianStatement().getMondrianConnection());
         pinnedSegments = this.aggMgr.createPinSet();
         cacheEnabled = !MondrianProperties.instance().DisableCaching.get();
-
+        Integer cellBatchSize = cube.getSchema().getInternalConnection().getContext().getConfig().cellBatchSize();
         cellRequestLimit =
-            MondrianProperties.instance().CellBatchSize.get() <= 0
+            cellBatchSize <= 0
                 ? 100000 // TODO Make this logic into a pluggable algorithm.
-                : MondrianProperties.instance().CellBatchSize.get();
+                : cellBatchSize;
     }
 
     @Override
