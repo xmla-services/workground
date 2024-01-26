@@ -166,7 +166,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testShouldUseGroupingFunctionOnPropertyTrueAndOnSupportedDB(TestContext context) {
     prepareContext(context);
-    propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
+    ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
     BatchLoader fbcr = createFbcr( true, salesCube );
     assertTrue(fbcr.shouldUseGroupingFunction());
   }
@@ -175,7 +175,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testShouldUseGroupingFunctionOnPropertyTrueAndOnNonSupportedDB(TestContext context) {
     prepareContext(context);
-    propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
+      ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
     BatchLoader fbcr = createFbcr( false, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }
@@ -184,7 +184,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testShouldUseGroupingFunctionOnPropertyFalseOnSupportedDB(TestContext context) {
     prepareContext(context);
-    propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
+      ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
     BatchLoader fbcr = createFbcr( true, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }
@@ -193,7 +193,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testShouldUseGroupingFunctionOnPropertyFalseOnNonSupportedDB(TestContext context) {
     prepareContext(context);
-    propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
+      ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
     BatchLoader fbcr = createFbcr( false, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }

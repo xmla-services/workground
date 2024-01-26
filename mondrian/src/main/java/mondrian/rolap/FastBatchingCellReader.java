@@ -621,7 +621,7 @@ class BatchLoader {
     }
 
     final boolean shouldUseGroupingFunction() {
-        return MondrianProperties.instance().EnableGroupingSets.get()
+        return cube.getSchema().getInternalConnection().getContext().getConfig().enableGroupingSets()
             && dialect.supportsGroupingSets();
     }
 

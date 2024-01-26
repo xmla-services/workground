@@ -785,7 +785,7 @@ class InlineTableTest {
         // (zero, in fact). It causes a test exception, but is valid mondrian
         // behavior. (Behavior is unspecified if schema does not have
         // referential integrity.)
-        if (MondrianProperties.instance().EnableGroupingSets.get()) {
+        if (context.getConfig().enableGroupingSets()) {
             return;
         }
         withSchema(context, TestInlineTableDateModifier::new);

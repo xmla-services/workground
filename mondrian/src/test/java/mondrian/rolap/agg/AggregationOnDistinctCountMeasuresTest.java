@@ -61,6 +61,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1077,7 +1078,7 @@ class AggregationOnDistinctCountMeasuresTest {
         // Mondrian does not use GROUPING SETS for distinct-count measures.
         // So, this test should not use GROUPING SETS, even if they are enabled.
         // See change 12310, bug MONDRIAN-470 (aka SF.net 2207515).
-        discard(props.EnableGroupingSets);
+        discard(context.getConfig().enableGroupingSets());
 
         String oraTeraSql =
             "select \"store\".\"store_state\" as \"c0\","
@@ -1124,7 +1125,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCanNotBatchForDifferentCompoundPredicate(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
         String mdxQueryWithFewMembers =
             "WITH "
             + "MEMBER [Store].[COG_OQP_USR_Aggregate(Store)] AS "
@@ -1203,7 +1204,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountInNonGroupingSetsQuery(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
 
         String mdxQueryWithFewMembers =
             "WITH "
@@ -1282,7 +1283,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, false);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(false);
 
         String mdxQueryWithMembers =
             "WITH "
@@ -1740,7 +1741,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
 
       assertQueryReturns(context.getConnection(),
             "WITH "
@@ -1768,7 +1769,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountForAggregatesAtTheSameLevel(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
       assertQueryReturns(context.getConnection(),
             "WITH "
             + "MEMBER GENDER.AGG AS 'AGGREGATE({ GENDER.[F], GENDER.[M] })' "

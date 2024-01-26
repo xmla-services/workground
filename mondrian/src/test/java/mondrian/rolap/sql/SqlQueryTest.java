@@ -44,6 +44,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1060,7 +1061,7 @@ class SqlQueryTest  extends BatchTestCase {
     }
 
     private boolean isGroupingSetsSupported(Connection connection) {
-        return MondrianProperties.instance().EnableGroupingSets.get()
+        return connection.getContext().getConfig().enableGroupingSets()
                 && getDialect(connection).supportsGroupingSets();
     }
 

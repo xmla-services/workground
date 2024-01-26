@@ -10,6 +10,8 @@ public class TestConfig implements BasicContextConfig {
     private String solveOrderMode = "ABSOLUTE";
     private boolean chooseAggregateByVolume = false;
     private boolean disableCaching = false;
+    private boolean disableLocalSegmentCache = false;
+    private boolean enableGroupingSets = false;
 
     @Override
     public Integer cellBatchSize() {
@@ -72,5 +74,23 @@ public class TestConfig implements BasicContextConfig {
     @Override
     public Boolean disableCaching() {
         return disableCaching;
+    }
+
+    @Override
+    public Boolean disableLocalSegmentCache() {
+        return disableLocalSegmentCache;
+    }
+
+    public void setDisableLocalSegmentCache(boolean disableLocalSegmentCache) {
+        this.disableLocalSegmentCache = disableLocalSegmentCache;
+    }
+
+    public void setEnableGroupingSets(boolean enableGroupingSets) {
+        this.enableGroupingSets = enableGroupingSets;
+    }
+
+    @Override
+    public Boolean enableGroupingSets() {
+        return enableGroupingSets;
     }
 }

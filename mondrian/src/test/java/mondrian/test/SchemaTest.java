@@ -8223,7 +8223,7 @@ class SchemaTest {
         */
 
         if (!Bug.BugMondrian747Fixed
-            && MondrianProperties.instance().EnableGroupingSets.get())
+            && context.getConfig().enableGroupingSets())
         {
             // With grouping sets enabled, MONDRIAN-747 behavior is even worse.
             return;

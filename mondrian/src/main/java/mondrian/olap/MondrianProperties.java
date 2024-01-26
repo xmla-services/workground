@@ -188,25 +188,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.olap.fun.currentmemberwithcompoundslicer.alert", "ERROR");
 
     /**
-     * Boolean property that controls whether a RolapStar's
-     * aggregate data cache is cleared after each query.
-     * If true, no RolapStar will cache aggregate data from one
-     * query to the next (the cache is cleared after each query).
-     */
-    public transient final BooleanProperty DisableCaching =
-        new BooleanProperty(
-            this, "mondrian.rolap.star.disableCaching", false);
-
-    /**
-     * Boolean property that controls whether the data from segments
-     * is cached locally. To create custom caches, look for the
-     * SegmentCache SPI.
-     */
-    public transient final BooleanProperty DisableLocalSegmentCache =
-        new BooleanProperty(
-            this, "mondrian.rolap.star.disableLocalSegmentCache", false);
-
-    /**
      * If disabled, Mondrian will throw an exception if someone attempts to
      * perform a drillthrough of any kind.
      */
@@ -225,18 +206,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new BooleanProperty(
             this, "mondrian.expCache.enable", true);
 
-    /**
-     * <p>Property that defines
-     * whether to generate SQL queries using the <code>GROUPING SETS</code>
-     * construct for rollup. By default it is not enabled.</p>
-     *
-     * <p>Ignored on databases which do not support the
-     * <code>GROUPING SETS</code> construct (see
-     * {@link mondrian.spi.Dialect#supportsGroupingSets}).</p>
-     */
-    public transient final BooleanProperty EnableGroupingSets =
-        new BooleanProperty(
-            this, "mondrian.rolap.groupingsets.enable", false);
+
 
     /**
      * Property which turns on or off the in-memory rollup

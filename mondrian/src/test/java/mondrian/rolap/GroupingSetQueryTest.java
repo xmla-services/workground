@@ -97,7 +97,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         // testcase for MONDRIAN-705
         Connection connection = context.getConnection();
         if (getDialect(connection).supportsGroupingSets()) {
-            propSaver.set(prop.EnableGroupingSets, true);
+            ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         }
         assertQueryReturns(connection,
             "with member [Gender].[agg] as ' "
@@ -179,7 +179,7 @@ class GroupingSetQueryTest extends BatchTestCase{
                 26)
         };
 
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         connection = context.getConnection();
 
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -192,7 +192,7 @@ class GroupingSetQueryTest extends BatchTestCase{
                 patternsWithGsets);
         }
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             assertRequestSql(connection,
@@ -227,7 +227,7 @@ class GroupingSetQueryTest extends BatchTestCase{
             cubeNameSales,
             measureUnitSales, null, "", "");
 
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
@@ -258,7 +258,7 @@ class GroupingSetQueryTest extends BatchTestCase{
             return;
         }
         Connection connection = context.getConnection();
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
             measureUnitSales, tableCustomer, fieldGender, "M");
@@ -279,7 +279,7 @@ class GroupingSetQueryTest extends BatchTestCase{
             new CellRequest[] {request1, request2},
             patternsWithGsets);
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
@@ -307,7 +307,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
@@ -343,7 +343,7 @@ class GroupingSetQueryTest extends BatchTestCase{
                 request1, request2, request3, request4, request5, request6},
             patternsWithGsets);
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
@@ -374,7 +374,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
@@ -419,7 +419,7 @@ class GroupingSetQueryTest extends BatchTestCase{
                 request1, request2, request3, request4, request5, request6},
             patternWithGsets);
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         SqlPattern[] patternWithoutGsets = {
             new SqlPattern(
@@ -447,7 +447,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2,
@@ -490,7 +490,7 @@ class GroupingSetQueryTest extends BatchTestCase{
             new CellRequest[] {request3, request1, request2},
             patternsWithGsets);
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
@@ -571,13 +571,13 @@ class GroupingSetQueryTest extends BatchTestCase{
         // related to it (2207515)
         SqlPattern[] patternsGSEnabled = patternsGSDisabled;
 
-        propSaver.set(prop.EnableGroupingSets, true);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
 
         assertRequestSql(connection,
             new CellRequest[] {request3, request1, request2},
             patternsGSEnabled);
 
-        propSaver.set(prop.EnableGroupingSets, false);
+        ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
         assertRequestSql(connection,
             new CellRequest[]{request3, request1, request2},
