@@ -41,9 +41,6 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
 
         // turn off caching
         propSaver.set(
-                props.DisableCaching,
-                true);
-        propSaver.set(
                 props.UseAggregates,
                 true);
         propSaver.set(

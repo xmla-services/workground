@@ -34,6 +34,7 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -65,7 +66,6 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        propSaver.set(propSaver.properties.DisableCaching, true);
         enableAggregates();
     }
 
@@ -82,6 +82,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDefaultRecognition(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         String sqlMysql = ""
                 + "select\n"
@@ -104,6 +105,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggName(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
     	prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -184,6 +186,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testFactColumnNotExists(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -253,6 +256,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnUpperCase(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -333,6 +337,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnNotExist(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -413,6 +418,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testWithoutMeasureFactColumnElement(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
             AggNameRBuilder.builder()
@@ -477,6 +483,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnAndAggFactCountNotExist(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
 
         List<MappingAggTable> aggTables = List.of(
@@ -550,6 +557,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggNameDifferentColumnNames(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
             AggExcludeRBuilder.builder()
@@ -635,6 +643,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggDivideByZero(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
             AggExcludeRBuilder.builder()
@@ -715,6 +724,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggPattern(TestContext context) {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(AggPatternRBuilder.builder()
             .pattern("agg_c_6_fact_csv_2016")

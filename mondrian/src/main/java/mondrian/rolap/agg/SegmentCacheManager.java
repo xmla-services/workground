@@ -284,7 +284,7 @@ public class SegmentCacheManager {
 
     // Add a local cache, if needed.
     if ( !MondrianProperties.instance().DisableLocalSegmentCache.get()
-      && !MondrianProperties.instance().DisableCaching.get() ) {
+      && !context.getConfig().disableCaching() ) {
       final MemorySegmentCache cache = new MemorySegmentCache();
       segmentCacheWorkers.add(
         new SegmentCacheWorker( cache, thread ) );
@@ -302,7 +302,7 @@ public class SegmentCacheManager {
         new AsyncCacheListener( this, context ) );
     }
 
-    compositeCache = new CompositeSegmentCache( segmentCacheWorkers );
+    compositeCache = new CompositeSegmentCache( segmentCacheWorkers, context.getConfig().disableCaching() );
     // sync elements already in external cache:
     // we're not able to have indexes at this point,
     // have to wait until the schema has been loaded
@@ -480,7 +480,7 @@ public class SegmentCacheManager {
   public void externalSegmentCreated(
     SegmentHeader header,
     Context context ) {
-    if ( MondrianProperties.instance().DisableCaching.get() ) {
+    if ( context.getConfig().disableCaching() ) {
       // Ignore cache requests.
       return;
     }
@@ -503,7 +503,7 @@ public class SegmentCacheManager {
   public void externalSegmentDeleted(
     SegmentHeader header,
     Context context ) {
-    if ( MondrianProperties.instance().DisableCaching.get() ) {
+    if ( context.getConfig().disableCaching() ) {
       // Ignore cache requests.
       return;
     }
@@ -1400,9 +1400,11 @@ public class SegmentCacheManager {
    */
   static class CompositeSegmentCache implements SegmentCache {
     final List<SegmentCacheWorker> workers;
+    final boolean disableCaching;
 
-    public CompositeSegmentCache( List<SegmentCacheWorker> workers ) {
+    public CompositeSegmentCache( List<SegmentCacheWorker> workers, boolean disableCaching ) {
       this.workers = workers;
+      this.disableCaching = disableCaching;
     }
 
     @Override
@@ -1418,7 +1420,7 @@ public class SegmentCacheManager {
 
     @Override
 	public List<SegmentHeader> getSegmentHeaders() {
-      if ( MondrianProperties.instance().DisableCaching.get() ) {
+      if ( disableCaching ) {
         return Collections.emptyList();
       }
       // Special case 0 and 1 workers, for which the 'union' operation
@@ -1446,7 +1448,7 @@ public class SegmentCacheManager {
     @Override
 	@SuppressWarnings( "squid:S3516" )
     public boolean put( SegmentHeader header, SegmentBody body ) {
-      if ( MondrianProperties.instance().DisableCaching.get() ) {
+      if ( disableCaching ) {
         return true;
       }
       for ( SegmentCacheWorker worker : workers ) {
@@ -1664,4 +1666,8 @@ public class SegmentCacheManager {
   public static final class AbortException extends RuntimeException {
     private static final long serialVersionUID = 1L;
   }
+
+    public Context getContext() {
+        return context;
+    }
 }

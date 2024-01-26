@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1189,9 +1190,7 @@ class FilterTest extends BatchTestCase {
     propSaver.set(
       MondrianProperties.instance().ReadAggregates,
       false );
-    propSaver.set(
-      MondrianProperties.instance().DisableCaching,
-      false );
+    ((TestConfig) context.getConfig()).setDisableCaching(false);
     propSaver.set(
       MondrianProperties.instance().EnableNativeNonEmpty,
       true );

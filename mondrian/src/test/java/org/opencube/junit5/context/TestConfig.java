@@ -8,7 +8,10 @@ public class TestConfig implements BasicContextConfig {
     private String rolapConnectionShepherdThreadPollingInterval = "1000ms";
     private Integer segmentCacheManagerNumberSqlThreads = 100;
     private String solveOrderMode = "ABSOLUTE";
+    private boolean chooseAggregateByVolume = false;
+    private boolean disableCaching = false;
 
+    @Override
     public Integer cellBatchSize() {
         return cellBatchSize;
     }
@@ -17,6 +20,7 @@ public class TestConfig implements BasicContextConfig {
         this.cellBatchSize = cellBatchSize;
     }
 
+    @Override
     public Integer rolapConnectionShepherdNbThreads() {
         return rolapConnectionShepherdNbThreads;
     }
@@ -25,6 +29,7 @@ public class TestConfig implements BasicContextConfig {
         this.rolapConnectionShepherdNbThreads = rolapConnectionShepherdNbThreads;
     }
 
+    @Override
     public String rolapConnectionShepherdThreadPollingInterval() {
         return rolapConnectionShepherdThreadPollingInterval;
     }
@@ -33,6 +38,7 @@ public class TestConfig implements BasicContextConfig {
         this.rolapConnectionShepherdThreadPollingInterval = rolapConnectionShepherdThreadPollingInterval;
     }
 
+    @Override
     public Integer segmentCacheManagerNumberSqlThreads() {
         return segmentCacheManagerNumberSqlThreads;
     }
@@ -45,7 +51,26 @@ public class TestConfig implements BasicContextConfig {
         this.solveOrderMode = solveOrderMode;
     }
 
+    @Override
     public String solveOrderMode() {
         return solveOrderMode;
+    }
+
+    @Override
+    public Boolean chooseAggregateByVolume() {
+        return chooseAggregateByVolume;
+    }
+
+    public void setChooseAggregateByVolume(boolean chooseAggregateByVolume) {
+        this.chooseAggregateByVolume = chooseAggregateByVolume;
+    }
+
+    public void setDisableCaching(boolean disableCaching) {
+        this.disableCaching = disableCaching;
+    }
+
+    @Override
+    public Boolean disableCaching() {
+        return disableCaching;
     }
 }

@@ -302,7 +302,7 @@ public abstract class RolapNativeSet extends RolapNative {
             context, null, new ArrayList<>() ) );
       }
 
-      if ( !MondrianProperties.instance().DisableCaching.get() ) {
+      if ( !schemaReader.getContext().getConfig().disableCaching() ) {
         if ( hasEnumTargets ) {
           if ( newPartialResult != null ) {
             cache.put(

@@ -261,8 +261,8 @@ public class RolapStar {
      */
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
-    	
-    	
+
+
         private final Cache<AggregationKey, Aggregation> aggregations =Caffeine.newBuilder().weakKeys().weakValues().build();
 
         private final List<SoftReference<SegmentWithData>> segmentRefs =
@@ -462,11 +462,12 @@ public class RolapStar {
      */
     public void addAggStar(AggStar aggStar) {
         // Add it before the first AggStar which is larger, if there is one.
-        long size = aggStar.getSize();
+        boolean chooseAggregateByVolume = schema.getInternalConnection().getContext().getConfig().chooseAggregateByVolume();
+        long size = aggStar.getSize(chooseAggregateByVolume);
         ListIterator<AggStar> lit = aggStars.listIterator();
         while (lit.hasNext()) {
             AggStar as = lit.next();
-            if (as.getSize() >= size) {
+            if (as.getSize(chooseAggregateByVolume) >= size) {
                 lit.previous();
                 lit.add(aggStar);
                 return;
@@ -555,7 +556,7 @@ public class RolapStar {
     }
 
     boolean isCacheDisabled() {
-        return MondrianProperties.instance().DisableCaching.get();
+        return context.getConfig().disableCaching();
     }
 
     /**

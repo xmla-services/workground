@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -71,6 +72,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotal(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -112,6 +114,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -139,6 +142,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasures(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -193,6 +197,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContext context)
         throws Exception
     {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -276,6 +281,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testChildSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;

@@ -121,7 +121,7 @@ public class SegmentLoader {
    */
   public void load( int cellRequestCount, List<GroupingSet> groupingSets, List<StarPredicate> compoundPredicateList,
       List<Future<Map<Segment, SegmentWithData>>> segmentFutures ) {
-    if ( !MondrianProperties.instance().DisableCaching.get() ) {
+    if ( !cacheMgr.getContext().getConfig().disableCaching() ) {
       for ( GroupingSet groupingSet : groupingSets ) {
         for ( Segment segment : groupingSet.getSegments() ) {
           final SegmentCacheIndex index = cacheMgr.getIndexRegistry().getIndex( segment.star );
@@ -234,7 +234,7 @@ public class SegmentLoader {
     // Also note that we push the segments to external cache after we have
     // called cacheMgr.loadSucceeded. That call will allow the current
     // query to proceed.
-    if ( !MondrianProperties.instance().DisableCaching.get() ) {
+    if ( !cacheMgr.getContext().getConfig().disableCaching() ) {
       cacheMgr.compositeCache.put( header, body );
       cacheMgr.loadSucceeded( star, header, body );
     }
@@ -509,7 +509,7 @@ public class SegmentLoader {
       return RolapUtil.executeQuery( star.getContext(), pair.left, pair.right, 0, 0, locus, -1, -1,
           // Only one of the two callbacks are required, depending if we
           // cache the segments or not.
-          MondrianProperties.instance().DisableCaching.get() ? callbackNoCaching : callbackWithCaching );
+          cacheMgr.getContext().getConfig().disableCaching() ? callbackNoCaching : callbackWithCaching );
     } catch ( Throwable t ) {
       if ( Util.getMatchingCause( t, AbortException.class ) != null ) {
         return null;

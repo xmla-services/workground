@@ -1100,7 +1100,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
 
                 LOGGER.debug(
                     "Normal cardinality for {}", hierarchy.getDimension());
-                if (MondrianProperties.instance().DisableCaching.get()) {
+                if (internalConnection.getContext().getConfig().disableCaching()) {
                     // If the cell cache is disabled, we can't cache
                     // the members or else we get undefined results,
                     // depending on the functions used and all.

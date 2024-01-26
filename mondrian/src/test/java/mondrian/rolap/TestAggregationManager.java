@@ -3524,6 +3524,7 @@ class TestAggregationManager extends BatchTestCase {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.UseAggregates, true);
+        boolean chooseAggregateByVolume = context.getConfig().chooseAggregateByVolume();
         /*
         withSchema(context,
                 "<Schema name=\"FoodMart\">"
@@ -3563,7 +3564,7 @@ class TestAggregationManager extends BatchTestCase {
         AggStar aggStarSpy = spy(
             getAggStar(star, "agg_c_10_sales_fact_1997"));
         // make sure the test AggStar will be prioritized first
-        when(aggStarSpy.getSize()).thenReturn(0l);
+        when(aggStarSpy.getSize(chooseAggregateByVolume)).thenReturn(0l);
         context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997").addAggStar(aggStarSpy);
         boolean[] rollup = { false };
@@ -3642,7 +3643,7 @@ class TestAggregationManager extends BatchTestCase {
         AggStar aggStarSpy = spy(
             getAggStar(star, "agg_c_special_sales_fact_1997"));
         // make sure the test AggStar will be prioritized first
-        when(aggStarSpy.getSize()).thenReturn(0l);
+        when(aggStarSpy.getSize(context.getConfig().chooseAggregateByVolume())).thenReturn(0l);
         context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997").addAggStar(aggStarSpy);
 
@@ -3742,7 +3743,7 @@ class TestAggregationManager extends BatchTestCase {
         AggStar aggStarSpy = spy(
             getAggStar(star, "agg_g_ms_pcat_sales_fact_1997"));
         // make sure the test AggStar will be prioritized first
-        when(aggStarSpy.getSize()).thenReturn(0l);
+        when(aggStarSpy.getSize(context.getConfig().chooseAggregateByVolume())).thenReturn(0l);
         context.getConnection().getSchemaReader()
             .getSchema().getStar("sales_fact_1997").addAggStar(aggStarSpy);
         boolean[] rollup = { false };

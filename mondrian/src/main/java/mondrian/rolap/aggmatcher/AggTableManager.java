@@ -282,7 +282,7 @@ public class AggTableManager {
                                 star,
                                 dbTable,
                                 approxRowCount);
-                            if (aggStar.getSize() > 0) {
+                            if (aggStar.getSize(schema.getInternalConnection().getContext().getConfig().chooseAggregateByVolume()) > 0) {
                                 star.addAggStar(aggStar);
                             } else {
                                 String msg = mres.AggTableZeroSize.str(

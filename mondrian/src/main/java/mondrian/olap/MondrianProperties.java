@@ -138,18 +138,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.util.checkCancelOrTimeoutInterval", 1000);
 
     /**
-     * <p>Boolean property that controls whether aggregate tables
-     * are ordered by their volume or row count.</p>
-     *
-     * <p>If true, Mondrian uses the aggregate table with the smallest volume
-     * (number of rows multiplied by number of columns); if false, Mondrian
-     * uses the aggregate table with the fewest rows.</p>
-     */
-    public transient final BooleanProperty ChooseAggregateByVolume =
-        new BooleanProperty(
-            this, "mondrian.rolap.aggregates.ChooseByVolume", false);
-
-    /**
      * Boolean property that controls whether sibling members are
      * compared according to order key value fetched from their ordinal
      * expression.  The default is false (only database ORDER BY is used).

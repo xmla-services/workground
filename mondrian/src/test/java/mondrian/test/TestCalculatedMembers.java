@@ -717,7 +717,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "from [Sales]",
             "mondrian.parser.TokenMgrError: "
             + "Lexical error at line 2, column 0.  "
-            + "Encountered: <EOF> after : \"\\\"quoted string with \\n\"");
+            + "Encountered: <EOF> after prefix \"\\\"quoted string with \\n\"");
 
         // Escaped single quote in double-quoted string literal inside
         // single-quoted member declaration.

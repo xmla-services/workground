@@ -1952,7 +1952,7 @@ public class BasicQueryTest {
     boolean use_agg_orig = props.UseAggregates.get();
 
     // turn off caching
-    propSaver.set( props.DisableCaching, true );
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
 
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales], [Measures].[Customer Count]} on rows,\n"
         + "NON EMPTY {[Time].[1997].[Q1].[1]} ON COLUMNS\n" + "from Sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
@@ -4462,7 +4462,7 @@ public class BasicQueryTest {
     propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
     // this will avoid spamming output with cache failures, but should
     // also work without side effects with cache enabled
-    propSaver.set( props.DisableCaching, true );
+      ((TestConfig)context.getConfig()).setDisableCaching(true);
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
     final String triggerSql = "product_name";

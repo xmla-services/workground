@@ -26,6 +26,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -122,7 +123,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForSingleColumnConstraint(TestContext context) {
         pripareContext(context);
-        propSaver.set(prop.DisableCaching, false);
+        ((TestConfig)context.getConfig()).setDisableCaching(false);
         Connection connection = context.getConnection();
         CellRequest request1 = createRequest(connection,
             cubeNameSales2, measureUnitSales, tableCustomer, fieldGender, "M");

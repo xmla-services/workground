@@ -12,6 +12,7 @@ package mondrian.rolap.agg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.mockito.MockitoAnnotations;
 import mondrian.olap.MondrianException;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
+import org.opencube.junit5.context.TestConfig;
 
 class SegmentCacheManagerTest {
 
@@ -41,6 +43,7 @@ class SegmentCacheManagerTest {
   @BeforeEach
   public void beforeEach() throws Exception {
     MockitoAnnotations.openMocks( this );
+    when(context.getConfig()).thenReturn(new TestConfig());
   }
 
   @Test
