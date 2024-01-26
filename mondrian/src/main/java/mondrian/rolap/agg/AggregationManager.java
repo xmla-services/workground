@@ -569,7 +569,7 @@ System.out.println(buf.toString());
 	private Map<RolapConnection, SegmentCacheManager> segCachStore = new HashMap<>();
 
 	public SegmentCacheManager getCacheMgr(RolapConnection connection) {
-		if (connection == null || !MondrianProperties.instance().EnableSessionCaching.get()) {
+		if (connection == null || !connection.getContext().getConfig().enableSessionCaching()) {
 			return cacheMgr;
 		} else {
 			if (!segCachStore.containsKey(connection)) {

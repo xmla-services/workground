@@ -270,14 +270,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new BooleanProperty(
             this, "mondrian.rolap.EnableRolapCubeMemberCache", true);
 
-    /**
-     * <p>
-     *                 If enable, then data cache will be created for every session.
-     *             </p>
-     */
-    public transient final BooleanProperty EnableSessionCaching =
-        new BooleanProperty(
-            this, "mondrian.server.EnableSessionCaching", false);
 
     /**
      * If enabled, first row in the result of an XML/A drill-through request

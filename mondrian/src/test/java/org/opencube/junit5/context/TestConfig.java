@@ -12,6 +12,7 @@ public class TestConfig implements BasicContextConfig {
     private boolean disableCaching = false;
     private boolean disableLocalSegmentCache = false;
     private boolean enableGroupingSets = false;
+    private boolean enableSessionCaching = false;
 
     @Override
     public Integer cellBatchSize() {
@@ -92,5 +93,14 @@ public class TestConfig implements BasicContextConfig {
     @Override
     public Boolean enableGroupingSets() {
         return enableGroupingSets;
+    }
+
+    @Override
+    public Boolean enableSessionCaching() {
+        return enableSessionCaching;
+    }
+
+    public void setEnableSessionCaching(boolean enableSessionCaching) {
+        this.enableSessionCaching = enableSessionCaching;
     }
 }
