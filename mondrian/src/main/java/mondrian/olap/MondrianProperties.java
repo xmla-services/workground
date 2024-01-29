@@ -147,13 +147,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.compareSiblingsByOrderKey", false);
 
     /**
-     * Property that sets the compound slicer member solve order.
-     */
-    public transient final IntegerProperty CompoundSlicerMemberSolveOrder =
-        new IntegerProperty(
-            this, "mondrian.rolap.CompoundSlicerMemberSolveOrder", -99999);
-
-    /**
      * <p>Property that defines
      * when to apply the crossjoin optimization algorithm.</p>
      *
@@ -187,13 +180,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new StringProperty(
             this, "mondrian.olap.fun.currentmemberwithcompoundslicer.alert", "ERROR");
 
-    /**
-     * If disabled, Mondrian will throw an exception if someone attempts to
-     * perform a drillthrough of any kind.
-     */
-    public transient final BooleanProperty EnableDrillThrough =
-        new BooleanProperty(
-            this, "mondrian.drillthrough.enable", true);
 
     /**
      * Boolean property that controls whether to use a cache for frequently
@@ -205,45 +191,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final BooleanProperty EnableExpCache =
         new BooleanProperty(
             this, "mondrian.expCache.enable", true);
-
-
-
-    /**
-     * Property which turns on or off the in-memory rollup
-     * of segment data. Defaults to <code>true</code>.
-     */
-    public transient final BooleanProperty EnableInMemoryRollup =
-        new BooleanProperty(
-            this, "mondrian.rolap.EnableInMemoryRollup", true);
-
-    /**
-     * If enabled some NON EMPTY CrossJoin will be computed in SQL.
-     */
-    public transient final BooleanProperty EnableNativeCrossJoin =
-        new BooleanProperty(
-            this, "mondrian.native.crossjoin.enable", true);
-
-    /**
-     * If enabled some Filter() will be computed in SQL.
-     */
-    public transient final BooleanProperty EnableNativeFilter =
-        new BooleanProperty(
-            this, "mondrian.native.filter.enable", true);
-
-    /**
-     * <p>If enabled some NON EMPTY set operations like member.children,
-     * level.members and member descendants will be computed in SQL.</p>
-     */
-    public transient final BooleanProperty EnableNativeNonEmpty =
-        new BooleanProperty(
-            this, "mondrian.native.nonempty.enable", true);
-
-    /**
-     * If enabled some TopCount will be computed in SQL.
-     */
-    public transient final BooleanProperty EnableNativeTopCount =
-        new BooleanProperty(
-            this, "mondrian.native.topcount.enable", true);
 
     /**
      * Boolean property that controls whether each query axis implicit has the
@@ -306,15 +253,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.server.monitor.executionHistorySize", 1000);
 
     /**
-     * If this property is true, when looking for native evaluation of an
-     * expression, Mondrian will expand non-native sub-expressions into
-     * lists of members.
-     */
-    public transient final BooleanProperty ExpandNonNative =
-        new BooleanProperty(
-            this, "mondrian.native.ExpandNonNative", false);
-
-    /**
      * <p>Property that defines
      * whether to generate joins to filter out members in a snowflake
      * dimension that do not have any children.</p>
@@ -335,19 +273,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.FilterChildlessSnowflakeMembers", true);
 
     /**
-     * <p>Boolean property that controls whether to print the SQL code
-     * generated for aggregate tables.</p>
-     *
-     * <p>If set, then as each aggregate request is processed, both the lost
-     * and collapsed dimension create and insert sql code is printed.
-     * This is for use in the CmdRunner allowing one to create aggregate table
-     * generation sql.</p>
-     */
-    public transient final BooleanProperty GenerateAggregateSql =
-        new BooleanProperty(
-            this, "mondrian.rolap.aggregates.generateSql", false);
-
-    /**
      * <p>Boolean property that controls pretty-print mode.</p>
      *
      * <p>If true, the all SqlQuery SQL strings will be generated in
@@ -365,96 +290,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final BooleanProperty IgnoreInvalidMembers =
         new BooleanProperty(
             this, "mondrian.rolap.ignoreInvalidMembers", false);
-
-    /**
-     * <p>Property that defines whether non-existent member errors should be
-     * ignored during query validation. If so, the non-existent member is
-     * treated as a null member.</p>
-     */
-    public transient final BooleanProperty IgnoreInvalidMembersDuringQuery =
-        new BooleanProperty(
-            this, "mondrian.rolap.ignoreInvalidMembersDuringQuery", false);
-
-    /**
-     * <p>Property that defines whether to ignore measure when non joining
-     * dimension is in the tuple during aggregation.</p>
-     *
-     * <p>If there are unrelated dimensions to a measure in context during
-     * aggregation, the measure is ignored in the evaluation context. This
-     * behaviour kicks in only if the CubeUsage for this measure has
-     * IgnoreUnrelatedDimensions attribute set to false.</p>
-     *
-     * <p>For example, Gender doesn't join with [Warehouse Sales] measure.</p>
-     *
-     * <p>With mondrian.olap.agg.IgnoreMeasureForNonJoiningDimension=true
-     * Warehouse Sales gets eliminated and is ignored in the aggregate
-     * value.</p>
-     *
-     * <blockquote><code>                                    [Store Sales] + [Warehouse Sales]
-     * SUM({Product.members * Gender.members})    7,913,333.82</code></blockquote>
-     *
-     * <p>With mondrian.olap.agg.IgnoreMeasureForNonJoiningDimension=false
-     * Warehouse Sales with Gender All level member contributes to the aggregate
-     * value.</p>
-     *
-     * <blockquote><code>                                     [Store Sales] + [Warehouse Sales]
-     * SUM({Product.members * Gender.members})    9,290,730.03</code></blockquote>
-     *
-     * <p>On a report where Gender M, F and All members exist a user will see a
-     * large aggregated value compared to the aggregated value that can be
-     * arrived at by summing up values against Gender M and F. This can be
-     * confusing to the user. This feature can be used to eliminate such a
-     * situation.</p>
-     */
-    public transient final BooleanProperty IgnoreMeasureForNonJoiningDimension =
-        new BooleanProperty(
-            this, "mondrian.olap.agg.IgnoreMeasureForNonJoiningDimension", false);
-
-    /**
-     * <p>Integer property indicating the maximum number of iterations
-     * allowed when iterating over members to compute aggregates.  A value of
-     * 0 (the default) indicates no limit.</p>
-     */
-    public transient final IntegerProperty IterationLimit =
-        new IntegerProperty(
-            this, "mondrian.rolap.iterationLimit", 0);
-
-    /**
-     * <p>
-     *                 Property which governs whether child members or members of a level are precached
-     *                 when child or level members are requested within a
-     *                 query expression.  For example,
-     *                 if an expression references two child members in the store dimension,
-     *                 like <code>{ [Store].[USA].[CA], [Store].[USA].[OR] }</code>, precaching will
-     *                 load *all* children under [USA] rather than just the 2 requested.
-     *                 The threshold value is
-     *                 compared against the cardinality of the level to determine
-     *                 whether or not precaching should be performed.  If cardinality is
-     *                 lower than the threshold value Mondrian will precache.  Setting
-     *                 this property to 0 effectively disables precaching.
-     *             </p>
-     */
-    public transient final IntegerProperty LevelPreCacheThreshold =
-        new IntegerProperty(
-            this, "mondrian.rolap.precache.threshold", 300);
-
-    /**
-     * <p>Max number of constraints in a single 'IN' SQL clause.</p>
-     *
-     * <p>This value may be variant among database products and their runtime
-     * settings. Oracle, for example, gives the error "ORA-01795: maximum
-     * number of expressions in a list is 1000".</p>
-     *
-     * <p>Recommended values:</p>
-     * <ul>
-     * <li>Oracle: 1,000</li>
-     * <li>DB2: 2,500</li>
-     * <li>Other: 10,000</li>
-     * </ul>
-     */
-    public transient final IntegerProperty MaxConstraints =
-        new IntegerProperty(
-            this, "mondrian.rolap.maxConstraints", 1000);
 
     /**
      * <p>Boolean property that defines the maximum number of passes

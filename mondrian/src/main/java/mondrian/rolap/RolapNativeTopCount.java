@@ -18,11 +18,9 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Util;
 import mondrian.rolap.aggmatcher.AggStar;
@@ -37,9 +35,9 @@ import mondrian.rolap.sql.SqlQuery;
  */
 public class RolapNativeTopCount extends RolapNativeSet {
 
-    public RolapNativeTopCount() {
+    public RolapNativeTopCount(boolean enableNativeTopCount) {
         super.setEnabled(
-            MondrianProperties.instance().EnableNativeTopCount.get());
+            enableNativeTopCount);
     }
 
     static class TopCountConstraint extends SetConstraint {
@@ -171,7 +169,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Expression[] args)
+        Expression[] args, boolean enableNativeFilter )
     {
         if (!isEnabled() || !isValidContext(evaluator)) {
             return null;
@@ -193,7 +191,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
 
         // extract the set expression
         List<CrossJoinArg[]> allArgs =
-            crossJoinArgFactory().checkCrossJoinArg(evaluator, args[0]);
+            crossJoinArgFactory().checkCrossJoinArg(evaluator, args[0], enableNativeFilter);
 
         // checkCrossJoinArg returns a list of CrossJoinArg arrays.  The first
         // array is the CrossJoin dimensions.  The second array, if any,

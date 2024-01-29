@@ -20,7 +20,6 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
@@ -128,7 +127,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
 
     private static void crossProd(Evaluator evaluator, int currLen) {
         long iterationLimit =
-            MondrianProperties.instance().IterationLimit.get();
+            evaluator.getQuery().getConnection().getContext().getConfig().iterationLimit();
         final int productLen = currLen * evaluator.getIterationLength();
         if (iterationLimit > 0 && productLen > iterationLimit) {
                 throw MondrianResource.instance()
@@ -178,8 +177,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
             {
                 return AbstractAggregateFunDef.ignoreUnrelatedDimensions(
                     tuplesForAggregation, baseCube);
-            } else if (MondrianProperties.instance()
-                .IgnoreMeasureForNonJoiningDimension.get())
+            } else if (evaluator.getQuery().getConnection().getContext().getConfig().ignoreMeasureForNonJoiningDimension())
             {
                 return AbstractAggregateFunDef.ignoreMeasureForNonJoiningDimension(
                     tuplesForAggregation, baseCube);

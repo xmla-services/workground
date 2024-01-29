@@ -14,7 +14,6 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.test.DiffRepository;
 import mondrian.util.Bug;
 
@@ -50,7 +49,7 @@ public class MetricFilterTest extends ClearViewBase {
             diffRepos.setCurrentTestCaseName(name);
             if (!Bug.BugMondrian2452Fixed
                     && (getName().equals("testMetricFiltersWithNoSubtotals"))
-                    && !MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+                    && !context.getConfig().enableNativeCrossJoin()) {
                 // Tests give wrong results if native crossjoin is disabled.
                 return;
             }

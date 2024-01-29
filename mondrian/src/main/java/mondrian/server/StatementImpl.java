@@ -69,7 +69,7 @@ public abstract class StatementImpl implements Statement {
         if (this.execution != null) {
             throw new AssertionError();
         }
-        if (execution.statement != this) {
+        if (execution.getMondrianStatement() != this) {
             throw new AssertionError();
         }
         this.execution = execution;

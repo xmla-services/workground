@@ -46,7 +46,7 @@ public class Execution {
    */
   private static AtomicLong SEQ = new AtomicLong();
 
-  final StatementImpl statement;
+  private final StatementImpl statement;
 
   /**
    * Holds a collection of the SqlStatements which were used by this execution instance. All operations on the map must

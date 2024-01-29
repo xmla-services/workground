@@ -61,7 +61,7 @@ class RolapNativeTopCountTest extends BatchTestCase {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.EnableNativeTopCount, true);
+        //propSaver.set(propSaver.properties.EnableNativeTopCount, true);
     }
 
     @AfterEach

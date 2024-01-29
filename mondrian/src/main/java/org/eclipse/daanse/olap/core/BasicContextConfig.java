@@ -488,7 +488,7 @@ public interface BasicContextConfig {
 
     //Integer property indicating the maximum number of iterations allowed when iterating over members to compute aggregates.  A value of 0 (the default) indicates no limit.
     @AttributeDefinition(name = "%iterationLimit.name", description = "%iterationLimit.description", type = AttributeType.STRING)
-    default String iterationLimit() { return "#null"; }
+    default Integer iterationLimit() { return 0; }
 
     //Positive integer property that determines loop iterations number between checks for whether the current mdx query has been cancelled or timeout was exceeded. Setting the interval too small may result in a performance degradation when reading large result sets; setting it too high can cause a big delay between the query being marked as cancelled or timeout was exceeded and system resources associated to it being released.
     @AttributeDefinition(name = "%checkCancelOrTimeoutInterval.name", description = "%checkCancelOrTimeoutInterval.description", type = AttributeType.INTEGER)

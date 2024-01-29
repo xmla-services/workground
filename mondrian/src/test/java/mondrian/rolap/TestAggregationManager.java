@@ -51,6 +51,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1014,7 +1015,7 @@ class TestAggregationManager extends BatchTestCase {
         {
             return;
         }
-        if (!(MondrianProperties.instance().EnableNativeCrossJoin.get())) {
+        if (!(context.getConfig().enableNativeCrossJoin())) {
             return;
         }
         SqlPattern[] patterns = {
@@ -1583,7 +1584,7 @@ class TestAggregationManager extends BatchTestCase {
         {
             return;
         }
-        if (!(MondrianProperties.instance().EnableNativeCrossJoin.get())) {
+        if (!(context.getConfig().enableNativeCrossJoin())) {
             return;
         }
         Connection connection = context.getConnection();
@@ -1827,13 +1828,13 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggregatingTuples(TestContext context) {
         prepareContext(context);
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 1);
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(1);
         if (!(MondrianProperties.instance().UseAggregates.get()
                 && MondrianProperties.instance().ReadAggregates.get()))
         {
             return;
         }
-        if (!(MondrianProperties.instance().EnableNativeCrossJoin.get())) {
+        if (!(context.getConfig().enableNativeCrossJoin())) {
             return;
         }
         // flush cache, to be sure sql is executed
@@ -1948,7 +1949,7 @@ class TestAggregationManager extends BatchTestCase {
         {
             return;
         }
-        if (!(MondrianProperties.instance().EnableNativeCrossJoin.get())) {
+        if (!(context.getConfig().enableNativeCrossJoin())) {
             return;
         }
         Connection connection = context.getConnection();
@@ -3188,7 +3189,7 @@ class TestAggregationManager extends BatchTestCase {
 
         withSchema(context, SchemaModifiers.TestAggregationManagerModifier9::new);
 
-        if (MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+        if (context.getConfig().enableNativeCrossJoin()) {
             final String sqlMysql =
                 "select\n"
                 + "    `agg_c_14_sales_fact_1997`.`the_year` as `c0`,\n"
@@ -3271,7 +3272,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1271(TestContext context) {
         prepareContext(context);
-        if (!propSaver.properties.EnableNativeCrossJoin.get()) {
+        if (!context.getConfig().enableNativeCrossJoin()) {
             return;
         }
         propSaver.set(

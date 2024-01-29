@@ -47,6 +47,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -266,7 +267,7 @@ protected void assertQuerySql(Connection connection,
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -302,8 +303,8 @@ protected void assertQuerySql(Connection connection,
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
-    if ( propSaver.properties.EnableNativeTopCount.get()
-      && propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( context.getConfig().enableNativeTopCount()
+      && context.getConfig().enableNativeNonEmpty() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -394,8 +395,8 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery );
-    if ( propSaver.properties.EnableNativeFilter.get()
-      && propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( context.getConfig().enableNativeFilter()
+      && context.getConfig().enableNativeNonEmpty() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -506,7 +507,7 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -611,7 +612,7 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       context.getConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
@@ -712,7 +713,7 @@ protected void assertQuerySql(Connection connection,
         + "    ISNULL(`product_class`.`product_department`) ASC, `product_class`.`product_department` ASC,\n"
         + "    ISNULL(`product_class`.`product_category`) ASC, `product_class`.`product_category` ASC" );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       SqlPattern mysqlPattern =
         new SqlPattern(
           DatabaseProduct.MYSQL,
@@ -791,7 +792,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArgWithCrossjoinedSet(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
     propSaver.set(
@@ -811,7 +812,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArgWithCalcMemPresent(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
     propSaver.set(
@@ -867,8 +868,8 @@ protected void assertQuerySql(Connection connection,
     // non-natively, or if the level.members expressions are replaced
     // with enumerated sets.
     // See http://jira.pentaho.com/browse/MONDRIAN-2337
-    propSaver.set( propSaver.properties.LevelPreCacheThreshold, 0 );
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
     final String mdx =
@@ -924,7 +925,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testSlicerTuplesFullCrossJoin(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeCrossJoin.get()
+    if ( !context.getConfig().enableNativeCrossJoin()
       && !Bug.BugMondrian2452Fixed ) {
       // The NonEmptyCrossJoin in the TSET named set below returns
       // extra tuples due to MONDRIAN-2452.
@@ -1026,7 +1027,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       context.getConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
@@ -1281,7 +1282,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( context.getConfig().enableNativeNonEmpty() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1384,7 +1385,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1479,7 +1480,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1693,7 +1694,7 @@ protected void assertQuerySql(Connection connection,
 	// test failed because in native mode system returns limit quantity 6 and then filter by role
 	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
 
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 4 );
+      ((TestConfig)context.getConfig()).setMaxConstraints(4);
     String roleDef =
       "  <Role name=\"Test\">\n"
         + "    <SchemaGrant access=\"none\">\n"
@@ -1829,7 +1830,7 @@ protected void assertQuerySql(Connection connection,
         + "Row #1: 90,413\n"
         + "Row #2: 23,813\n" );
     context.getConnection().getCacheControl(null).flushSchemaCache();
-    if ( !MondrianProperties.instance().EnableNativeFilter.get() ) {
+    if ( !context.getConfig().enableNativeFilter() ) {
       return;
     }
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
@@ -2109,7 +2110,7 @@ protected void assertQuerySql(Connection connection,
       }
     }
     SqlPattern[] patterns = new SqlPattern[] { mysqlPattern };
-    if ( propSaver.properties.EnableNativeFilter.get() ) {
+    if ( context.getConfig().enableNativeFilter() ) {
       assertQuerySqlOrNot(context.getConnection(),
         mdx, patterns, false, false, false );
     }
@@ -2153,7 +2154,7 @@ protected void assertQuerySql(Connection connection,
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
       + "FROM sales where store.agg";
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 24 );
+      ((TestConfig)context.getConfig()).setMaxConstraints(24);
 
     final String message =
       "The results of native and non-native evaluations should be equal";

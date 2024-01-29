@@ -1225,7 +1225,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         return getRolapStarRegistry().getStars();
     }
 
-    final RolapNativeRegistry nativeRegistry = new RolapNativeRegistry();
+    final RolapNativeRegistry nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
+        context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
 
     RolapNativeRegistry getNativeRegistry() {
         return nativeRegistry;

@@ -36,8 +36,8 @@ class AggregationOverAggTableTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 

@@ -65,7 +65,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.Aggregation;
@@ -601,7 +600,7 @@ public class RolapStar {
 
         aggregation =
             new Aggregation(
-                aggregationKey);
+                aggregationKey, context.getConfig().maxConstraints());
 
         localBars.get().aggregations.put(
             aggregationKey, aggregation);

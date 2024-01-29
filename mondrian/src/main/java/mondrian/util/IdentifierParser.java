@@ -63,7 +63,7 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
             this.ignoreInvalid =
                 (load
                     ? props.IgnoreInvalidMembers.get()
-                    : props.IgnoreInvalidMembersDuringQuery.get());
+                    : ((RolapCube) cube).getSchema().getInternalConnection().getContext().getConfig().ignoreInvalidMembersDuringQuery());
         }
 
         protected Member resolveMember(Hierarchy expectedHierarchy) {

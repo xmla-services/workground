@@ -43,6 +43,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1590,8 +1591,8 @@ class VirtualCubeTest extends BatchTestCase {
             return;
         }
 
-        if (!MondrianProperties.instance().EnableNativeCrossJoin.get()
-            && !MondrianProperties.instance().EnableNativeNonEmpty.get())
+        if (!context.getConfig().enableNativeCrossJoin()
+            && !context.getConfig().enableNativeNonEmpty())
         {
             // Only run the tests if either native CrossJoin or native NonEmpty
             // is enabled.
@@ -1616,7 +1617,7 @@ class VirtualCubeTest extends BatchTestCase {
 
         String derbyNecjSql1, derbyNecjSql2;
 
-        if (MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+        if (context.getConfig().enableNativeCrossJoin()) {
             derbyNecjSql1 =
                 "select "
                 + "\"product_class\".\"product_family\", "
@@ -2038,7 +2039,7 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyCJConstraintOnVirtualCube(TestContext context) {
-        if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+        if (!context.getConfig().enableNativeCrossJoin()) {
             // Generated SQL is different if NonEmptyCrossJoin is evaluated in
             // memory.
             return;
@@ -2250,13 +2251,13 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContext context) {
-        if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
+        if (!context.getConfig().enableNativeNonEmpty()) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
         }
         // we want to make sure a SqlConstraint is used for retrieving
         // [Product Family].members
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 0);
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
 
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         String query =

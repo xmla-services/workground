@@ -32,7 +32,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.AggregationManager;
@@ -1284,7 +1283,7 @@ class BatchLoader {
             GroupingSetsCollector groupingSetsCollector,
             List<Future<Map<Segment, SegmentWithData>>> segmentFutures)
         {
-            if (MondrianProperties.instance().GenerateAggregateSql.get()) {
+            if (cube.getSchema().getInternalConnection().getContext().getConfig().generateAggregateSql()) {
                 generateAggregateSql();
             }
             final StarColumnPredicate[] predicates = initPredicates();

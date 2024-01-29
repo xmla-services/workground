@@ -14,7 +14,6 @@ package mondrian.rolap.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapLevel;
@@ -66,7 +65,7 @@ public class MemberListCrossJoinArg implements CrossJoinArg {
 
         // First check that the member list will not result in a predicate
         // longer than the underlying DB could support.
-        if (argSize > MondrianProperties.instance().MaxConstraints.get()) {
+        if (argSize > evaluator.getQuery().getConnection().getContext().getConfig().maxConstraints()) {
             argSizeNotSupported = true;
         }
 

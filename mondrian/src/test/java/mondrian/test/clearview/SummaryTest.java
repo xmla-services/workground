@@ -14,7 +14,6 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.test.DiffRepository;
 import mondrian.util.Bug;
 
@@ -54,13 +53,13 @@ public class SummaryTest extends ClearViewBase {
                     && (getName().equals("testRankExpandNonNative")
                     || getName().equals("testCountExpandNonNative")
                     || getName().equals("testCountOverTimeExpandNonNative"))
-                    && MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+                    && context.getConfig().enableNativeCrossJoin()) {
                 // Tests give wrong results if native crossjoin is disabled.
                 return;
             }
             if (!Bug.BugMondrian2452Fixed
                     && (getName().equals("testRankExpandNonNative"))
-                    && !MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+                    && !context.getConfig().enableNativeCrossJoin()) {
                 // Tests give wrong results if native crossjoin is disabled.
                 return;
             }

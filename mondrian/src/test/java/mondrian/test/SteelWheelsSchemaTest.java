@@ -30,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
@@ -1216,9 +1217,7 @@ class SteelWheelsSchemaTest {
         //    return;
         //}
         propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
         assertQueryReturns(context.getConnection(),
             "WITH \n"
             + "SET [*NATIVE_CJ_SET] AS '[*BASE_MEMBERS_Time]' \n"

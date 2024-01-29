@@ -183,7 +183,7 @@ public class SqlQuery {
 
     /**
      * Creates a SqlQuery using a given dialect and inheriting the formatting
-     * preferences from {@link MondrianProperties#GenerateFormattedSql}
+     * preferences from GenerateFormattedSql
      * property.
      *
      * @param dialect Dialect

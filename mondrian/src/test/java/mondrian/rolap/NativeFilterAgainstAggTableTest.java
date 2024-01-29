@@ -41,9 +41,8 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.UseAggregates, true);
         propSaver.set(propSaver.properties.ReadAggregates, true);
-        propSaver.set(propSaver.properties.EnableNativeFilter, true);
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
     @AfterEach

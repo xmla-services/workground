@@ -18,7 +18,6 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.CrossJoinArgFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -32,8 +31,6 @@ import mondrian.rolap.sql.TupleConstraint;
  */
 public class SqlConstraintFactory {
 
-    static boolean enabled;
-
     private static final SqlConstraintFactory instance =
         new SqlConstraintFactory();
 
@@ -45,19 +42,15 @@ public class SqlConstraintFactory {
 
     private boolean enabled(final Evaluator context) {
         if (context != null) {
-            return enabled && context.nativeEnabled();
+            return context.getQuery().getConnection().getContext().getConfig().enableNativeNonEmpty() && context.nativeEnabled();
         }
-        return enabled;
+        return context.getQuery().getConnection().getContext().getConfig().enableNativeNonEmpty();
     }
 
     public static SqlConstraintFactory instance() {
-        setNativeNonEmptyValue();
         return instance;
     }
 
-    public static void setNativeNonEmptyValue() {
-        enabled = MondrianProperties.instance().EnableNativeNonEmpty.get();
-    }
 
     public MemberChildrenConstraint getMemberChildrenConstraint(
         Evaluator context)
@@ -96,7 +89,7 @@ public class SqlConstraintFactory {
         if (context.isNonEmpty()) {
             Set<CrossJoinArg> joinArgs =
                 new CrossJoinArgFactory(false).buildConstraintFromAllAxes(
-                    (RolapEvaluator) context);
+                    (RolapEvaluator) context, context.getQuery().getConnection().getContext().getConfig().enableNativeFilter());
             if (joinArgs.size() > 0) {
                 return new RolapNativeCrossJoin.NonEmptyCrossJoinConstraint(
                     joinArgs.toArray(
@@ -121,8 +114,8 @@ public class SqlConstraintFactory {
         {
             return true;
         }
-        final int threshold = MondrianProperties.instance()
-            .LevelPreCacheThreshold.get();
+        final int threshold = context.getQuery().getConnection().getContext().getConfig()
+            .levelPreCacheThreshold();
         if (threshold <= 0) {
             return false;
         }
@@ -141,11 +134,11 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildByNameConstraint(
         RolapMember parent,
-        NameSegment childName)
+        NameSegment childName, boolean enableNativeNonEmpty, int levelPreCacheThreshold)
     {
         // Ragged hierarchies span multiple levels, so SQL WHERE does not work
         // there
-        if (useDefaultMemberChildrenConstraint(parent)) {
+        if (useDefaultMemberChildrenConstraint(parent, enableNativeNonEmpty, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childName);
@@ -153,22 +146,20 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildrenByNamesConstraint(
         RolapMember parent,
-        List<NameSegment> childNames)
+        List<NameSegment> childNames, boolean enableNativeNonEmpty, int levelPreCacheThreshold)
     {
-        if (useDefaultMemberChildrenConstraint(parent)) {
+        if (useDefaultMemberChildrenConstraint(parent, enableNativeNonEmpty, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childNames);
     }
 
-    private boolean useDefaultMemberChildrenConstraint(RolapMember parent) {
-        int threshold = MondrianProperties.instance()
-            .LevelPreCacheThreshold.get();
-        return !enabled
+    private boolean useDefaultMemberChildrenConstraint(RolapMember parent, boolean enableNativeNonEmpty, int levelPreCacheThreshold) {
+        return !enableNativeNonEmpty
             || parent.getHierarchy().isRagged()
             || (!isDegenerate(parent.getLevel())
-            && threshold > 0
-            && getChildLevelCardinality(parent) < threshold);
+            && levelPreCacheThreshold > 0
+            && getChildLevelCardinality(parent) < levelPreCacheThreshold);
     }
 
     private boolean isDegenerate(Level level) {

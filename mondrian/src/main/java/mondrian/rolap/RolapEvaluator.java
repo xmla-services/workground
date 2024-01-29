@@ -31,7 +31,6 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -43,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
@@ -229,8 +227,7 @@ public class RolapEvaluator implements Evaluator {
     ancestorCommandCount = 0;
     nonEmpty = false;
     nativeEnabled =
-        MondrianProperties.instance().EnableNativeNonEmpty.get() || MondrianProperties.instance().EnableNativeCrossJoin
-            .get();
+        root.connection.getContext().getConfig().enableNativeNonEmpty() || root.connection.getContext().getConfig().enableNativeCrossJoin();
     evalAxes = false;
     cellReader = null;
     currentMembers = root.defaultMembers.clone();
@@ -272,7 +269,7 @@ public RolapCube getMeasureCube() {
 
   @Override
 public boolean mightReturnNullForUnrelatedDimension() {
-    if ( !MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension.get() ) {
+    if ( !this.getCube().getSchema().getInternalConnection().getContext().getConfig().ignoreMeasureForNonJoiningDimension() ) {
       return false;
     }
     RolapCube virtualCube = getCube();

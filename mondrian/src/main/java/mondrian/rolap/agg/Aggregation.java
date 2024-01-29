@@ -95,14 +95,13 @@ public class Aggregation {
      *                       the RolapStar for this Aggregation
      */
     public Aggregation(
-        AggregationKey aggregationKey)
+        AggregationKey aggregationKey, final int maxConstraints)
     {
         this.compoundPredicateList = aggregationKey.getCompoundPredicateList();
         this.star = aggregationKey.getStar();
         this.constrainedColumnsBitKey =
             aggregationKey.getConstrainedColumnsBitKey();
-        this.maxConstraints =
-            MondrianProperties.instance().MaxConstraints.get();
+        this.maxConstraints = maxConstraints;
         this.creationTimestamp = new Date();
     }
 

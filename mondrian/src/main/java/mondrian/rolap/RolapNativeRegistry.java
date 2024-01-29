@@ -34,13 +34,13 @@ public class RolapNativeRegistry extends RolapNative {
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
-    public RolapNativeRegistry() {
+    public RolapNativeRegistry(boolean enableNativeFilter, boolean enableNativeCrossJoin, boolean enableNativeTopCount) {
         super.setEnabled(true);
         // Mondrian functions which might be evaluated natively.
-        register("NonEmptyCrossJoin".toUpperCase(), new RolapNativeCrossJoin());
-        register("CrossJoin".toUpperCase(), new RolapNativeCrossJoin());
-        register("TopCount".toUpperCase(), new RolapNativeTopCount());
-        register("Filter".toUpperCase(), new RolapNativeFilter());
+        register("NonEmptyCrossJoin".toUpperCase(), new RolapNativeCrossJoin(enableNativeCrossJoin));
+        register("CrossJoin".toUpperCase(), new RolapNativeCrossJoin(enableNativeCrossJoin));
+        register("TopCount".toUpperCase(), new RolapNativeTopCount(enableNativeTopCount));
+        register("Filter".toUpperCase(), new RolapNativeFilter(enableNativeFilter));
     }
 
     /**
@@ -49,7 +49,7 @@ public class RolapNativeRegistry extends RolapNative {
      */
     @Override
 	public NativeEvaluator createEvaluator(
-        RolapEvaluator evaluator, FunctionDefinition fun, Expression[] args)
+        RolapEvaluator evaluator, FunctionDefinition fun, Expression[] args, final boolean enableNativeFilter)
     {
         if (!isEnabled()) {
             return null;
@@ -67,7 +67,7 @@ public class RolapNativeRegistry extends RolapNative {
             return null;
         }
 
-        NativeEvaluator ne = rn.createEvaluator(evaluator, fun, args);
+        NativeEvaluator ne = rn.createEvaluator(evaluator, fun, args, enableNativeFilter);
 
         if (ne != null) {
             if (listener != null) {

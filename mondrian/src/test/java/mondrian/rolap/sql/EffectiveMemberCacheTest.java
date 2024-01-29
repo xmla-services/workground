@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -36,7 +37,7 @@ class EffectiveMemberCacheTest {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
     @AfterEach
@@ -129,7 +130,7 @@ class EffectiveMemberCacheTest {
         // [Store Type] members cardinality falls well below
         // LevelPreCacheThreshold.  All members should be loaded, not
         // just the 2 referenced.
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 300);
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(300);
         String sql = "select\n"
                 + "    `store`.`store_type` as `c0`\n"
                 + "from\n"
@@ -158,7 +159,7 @@ class EffectiveMemberCacheTest {
         // specified.
         Connection connection = context.getConnection();
         clearCache(connection);
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 0);
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
         String sql = "select\n"
                 + "    `store`.`store_type` as `c0`\n"
                 + "from\n"
@@ -191,7 +192,7 @@ class EffectiveMemberCacheTest {
         // to be too high.
         Connection connection = context.getConnection();
         clearCache(connection);
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 1000);
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(1000);
         String sql = "select\n"
                 + "    `store`.`coffee_bar` as `c0`\n"
                 + "from\n"

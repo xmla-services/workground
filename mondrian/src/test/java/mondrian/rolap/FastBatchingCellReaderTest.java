@@ -1339,7 +1339,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   void testAggregateDistinctCount5(TestContext context) {
     prepareContext(context);
     // make sure tuple optimization will be used
-    propSaver.set( propSaver.properties.MaxConstraints, 2 );
+      ((TestConfig)context.getConfig()).setMaxConstraints(2);
 
     String query =
         "With " + "Set [Products] as " + " '{[Product].[Drink], " + "   [Product].[Food], "

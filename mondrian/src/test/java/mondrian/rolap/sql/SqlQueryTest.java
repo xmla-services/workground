@@ -13,7 +13,6 @@ package mondrian.rolap.sql;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
@@ -632,7 +631,7 @@ class SqlQueryTest  extends BatchTestCase {
         }
 
         propSaver.set(prop.IgnoreInvalidMembers, true);
-        propSaver.set(prop.IgnoreInvalidMembersDuringQuery, true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
         // assertQuerySql(testContext, query, patterns);
 

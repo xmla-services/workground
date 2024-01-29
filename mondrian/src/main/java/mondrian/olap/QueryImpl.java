@@ -536,7 +536,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             !strictValidation
             && (load
                 ? props.IgnoreInvalidMembers.get()
-                : props.IgnoreInvalidMembersDuringQuery.get());
+                : ((RolapCube) getCube()).getSchema().getInternalConnection().getContext().getConfig().ignoreInvalidMembersDuringQuery());
     }
 
     /**

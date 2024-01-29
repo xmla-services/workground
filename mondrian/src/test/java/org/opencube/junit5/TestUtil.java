@@ -70,6 +70,7 @@ import org.eclipse.daanse.olap.impl.CoordinateIterator;
 import org.eclipse.daanse.olap.impl.TraditionalCellSetFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 
 import mondrian.calc.impl.UnaryTupleList;
@@ -1911,18 +1912,17 @@ public class TestUtil {
 	public static void verifySameNativeAndNot(Connection connection,
 			String query, String message, PropertySaver5 propSaver)
 	{
-
-		propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-		propSaver.set(propSaver.properties.EnableNativeFilter, true);
-		propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-		propSaver.set(propSaver.properties.EnableNativeTopCount, true);
+        ((TestConfig)connection.getContext()).setEnableNativeCrossJoin(true);
+        ((TestConfig)connection.getContext()).setEnableNativeFilter(true);
+        ((TestConfig)connection.getContext()).setEnableNativeNonEmpty(true);
+        ((TestConfig)connection.getContext()).setEnableNativeTopCount(true);
 
 		Result resultNative = executeQuery(connection, query);
 
-		propSaver.set(propSaver.properties.EnableNativeCrossJoin, false);
-		propSaver.set(propSaver.properties.EnableNativeFilter, false);
-		propSaver.set(propSaver.properties.EnableNativeNonEmpty, false);
-		propSaver.set(propSaver.properties.EnableNativeTopCount, false);
+        ((TestConfig)connection.getContext()).setEnableNativeCrossJoin(false);
+        ((TestConfig)connection.getContext()).setEnableNativeFilter(false);
+        ((TestConfig)connection.getContext()).setEnableNativeNonEmpty(false);
+        ((TestConfig)connection.getContext()).setEnableNativeTopCount(false);
 
 		Result resultNonNative = executeQuery(connection, query);
 

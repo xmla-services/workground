@@ -53,6 +53,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -8070,7 +8071,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testGenerateWillTimeout(TestContext context) {
     propSaver.set( propSaver.properties.QueryTimeout, 5 );
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     try {
       executeAxis(context.getConnection(),
         "Generate([Product].[Product Name].members,"
@@ -8114,7 +8115,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(TestContext context) {
     propSaver.set( propSaver.properties.QueryTimeout, 3 );
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     try {
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
 
@@ -10347,7 +10348,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToMemberIgnoreInvalidMembers(TestContext context) {
     final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     // [Product].[Drugs] is invalid, becomes null member, and is dropped
     // from list
@@ -10399,7 +10400,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
       "StrToMember(\"\")",
       "MDX object '' not found in cube 'Sales'" );
 
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, false );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(false);
     assertQueryThrows(context,
       "select \n"
         + "  {[Product].[Food],\n"
@@ -10432,7 +10433,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToTupleIgnoreInvalidMembers(TestContext context) {
     final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     // If any member is invalid, the whole tuple is null.
     assertAxisReturns(context.getConnection(),
@@ -10565,7 +10566,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToSetIgnoreInvalidMembers(TestContext context) {
     final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     assertAxisReturns(context.getConnection(),
       "StrToSet("
         + "\""

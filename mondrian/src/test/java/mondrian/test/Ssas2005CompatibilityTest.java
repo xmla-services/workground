@@ -10,7 +10,6 @@
 package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1504,9 +1504,7 @@ class Ssas2005CompatibilityTest {
             + "[Time].[Time2].[Quarter].&Q3&[1997] on 1\n"
             + "from [Warehouse and Sales]");
 
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
         // SSAS gives 0 rows
         assertQueryReturns(context.getConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
@@ -1518,9 +1516,7 @@ class Ssas2005CompatibilityTest {
             + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n");
 
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
-            false);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(false);
         assertQueryThrows(context.getConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Time].[Time2].[Quarter].&Q5&[1997] on 1\n"

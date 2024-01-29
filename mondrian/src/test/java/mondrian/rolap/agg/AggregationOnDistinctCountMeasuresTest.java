@@ -199,7 +199,7 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithASingleMember(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-        propSaver.set(propSaver.properties.MaxConstraints, 1);
+      ((TestConfig)context.getConfig()).setMaxConstraints(1);
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -250,7 +250,7 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithSetOfMembers(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-        propSaver.set(propSaver.properties.MaxConstraints, 2);
+      ((TestConfig)context.getConfig()).setMaxConstraints(2);
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -382,8 +382,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountOnTuplesWithSomeNonJoiningDimensions(TestContext context) {
       prepareContext(context);
-        propSaver.set(
-            props.IgnoreMeasureForNonJoiningDimension, false);
+      ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(false);
         String mdx =
             "WITH MEMBER WAREHOUSE.X as 'Aggregate({WAREHOUSE.[STATE PROVINCE].MEMBERS}*"
             + "{[Gender].Members})'"
@@ -399,8 +398,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Warehouse].[X]}\n"
             + "Row #0: \n";
       assertQueryReturns(context.getConnection(), mdx, expectedResult);
-        propSaver.set(
-            props.IgnoreMeasureForNonJoiningDimension, true);
+      ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
       assertQueryReturns(context.getConnection() ,mdx, expectedResult);
     }
 
@@ -530,7 +528,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOverLargeListGeneratesError(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.MaxConstraints, 7);
+      ((TestConfig)context.getConfig()).setMaxConstraints(7);
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
@@ -626,7 +624,7 @@ class AggregationOnDistinctCountMeasuresTest {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
-        propSaver.set(MondrianProperties.instance().MaxConstraints, 5);
+      ((TestConfig)context.getConfig()).setMaxConstraints(5);
         assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "  Measures.[Unit Sales] on columns,\n"

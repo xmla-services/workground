@@ -45,7 +45,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.BitKey;
@@ -124,9 +123,7 @@ class SegmentLoaderTest extends BatchTestCase {
             context.getConnection().getCacheControl(pw).flushSchemaCache();
             pw.flush();
             ((TestConfig)context.getConfig()).setDisableCaching(false);
-            propSaver.set(
-                MondrianProperties.instance().EnableInMemoryRollup,
-                rollup);
+            ((TestConfig)context.getConfig()).setEnableInMemoryRollup(rollup);
             final String queryOracle =
                 "select \"time_by_day\".\"the_year\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" from \"sales_fact_1997\" \"sales_fact_1997\", \"time_by_day\" \"time_by_day\" where \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" group by \"time_by_day\".\"the_year\"";
             final String queryMySQL =

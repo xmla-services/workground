@@ -15,7 +15,6 @@ package mondrian.test;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapSchemaPool;
@@ -34,6 +33,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1766,9 +1766,7 @@ class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void  testDrillthroughDisable(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().EnableDrillThrough,
-            true);
+        ((TestConfig)context.getConfig()).setEnableDrillThrough(true);
         Result result =
             executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
@@ -1777,10 +1775,7 @@ class DrillThroughTest {
                 + "WHERE {[Time].[1997].[Q1], [Time].[1997].[Q2]}");
         Cell cell = result.getCell(new int[]{0, 0});
         assertTrue(cell.canDrillThrough());
-
-        propSaver.set(
-            MondrianProperties.instance().EnableDrillThrough,
-            false);
+        ((TestConfig)context.getConfig()).setEnableDrillThrough(false);
         result =
             executeQuery(context.getConnection(),
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"

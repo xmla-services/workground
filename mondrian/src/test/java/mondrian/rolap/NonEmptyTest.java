@@ -57,12 +57,12 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDi
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -112,12 +112,12 @@ class NonEmptyTest extends BatchTestCase {
   @BeforeEach
   public void beforeEach() {
     propSaver = new PropertySaver5();
-    propSaver.set(
-            MondrianProperties.instance().EnableNativeCrossJoin, true );
-    propSaver.set(
-            MondrianProperties.instance().EnableNativeNonEmpty, true );
-    propSaver.set(
-            MondrianProperties.instance().LevelPreCacheThreshold, 0 );
+    //propSaver.set(
+    //        MondrianProperties.instance().EnableNativeCrossJoin, true );
+    //propSaver.set(
+    //        MondrianProperties.instance().EnableNativeNonEmpty, true );
+    //propSaver.set(
+    //        MondrianProperties.instance().LevelPreCacheThreshold, 0 );
   }
 
   @AfterEach
@@ -128,6 +128,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian584EnumOrder(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // The interpreter results include males before females, which is
     // correct because it is consistent with the explicit order present
     // in the query. Native evaluation returns the females before males,
@@ -147,6 +148,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugCantRestrictSlicerToCalcMember(TestContext context) throws Exception {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "WITH Member [Time].[Time].[Aggr] AS 'Aggregate({[Time].[1998].[Q1], [Time].[1998].[Q2]})' "
         + "SELECT {[Measures].[Store Sales]} ON COLUMNS, "
@@ -172,10 +174,11 @@ class NonEmptyTest extends BatchTestCase {
   void testAnalyzerPerformanceIssue(TestContext context) {
     final MondrianProperties mondrianProperties =
       MondrianProperties.instance();
-    propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
-    propSaver.set( mondrianProperties.EnableNativeTopCount, false );
-    propSaver.set( mondrianProperties.EnableNativeFilter, true );
-    propSaver.set( mondrianProperties.EnableNativeNonEmpty, false );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
+    ((TestConfig)context.getConfig()).setEnableNativeTopCount(false);
+    ((TestConfig)context.getConfig()).setEnableNativeFilter(true);
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     propSaver.set( mondrianProperties.ResultLimit, 5000000 );
 
     assertQueryReturns(context.getConnection(),
@@ -683,6 +686,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testTopCountWithCalcMemberInSlicer(TestContext context) {
     // Internal error: can not restrict SQL to calculated Members
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Time].[Time].[First Term] as 'Aggregate({[Time].[1997].[Q1], [Time].[1997].[Q2]})' "
         + "select {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -709,6 +713,7 @@ class NonEmptyTest extends BatchTestCase {
      * When caching topcount results, the number of elements must
      * be part of the cache key
      */
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
         + "TopCount([Product].[Product Subcategory].Members, 2, [Measures].[Unit Sales]) ON ROWS "
@@ -743,6 +748,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrMeasure(TestContext context) {
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       class TestStrMeasureModifier extends RDbMappingSchemaModifier {
           public TestStrMeasureModifier(MappingSchema mappingSchema) {
               super(mappingSchema);
@@ -816,6 +822,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBug1515302(TestContext context) {
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       RolapSchemaPool.instance().clear();
       class TestBug1515302Modifier extends RDbMappingSchemaModifier {
           public TestBug1515302Modifier(MappingSchema mappingSchema) {
@@ -981,6 +988,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCube(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
@@ -996,6 +1004,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeMembers(TestContext context) throws Exception {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
@@ -1016,8 +1025,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCJWithRedundantSetBraces(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1040,15 +1049,15 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandAllNonNativeInputs(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This query will not run natively unless the <Dimension>.Children
     // expression is expanded to a member list.
     //
     // Note: Both dimensions only have one hierarchy, which has the All
     // member. <Dimension>.Children is interpreted as the children of
     // the All member.
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1075,11 +1084,11 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandOneNonNativeInput(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This query will not be evaluated natively unless the Filter
     // expression is expanded to a member list.
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1106,9 +1115,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandNonNativeResourceLimitFailure(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     propSaver.set( MondrianProperties.instance().ResultLimit, 2 );
 
     try {
@@ -1134,9 +1143,9 @@ class NonEmptyTest extends BatchTestCase {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     checkNotNative(context,
       1, "select NON EMPTY {[Time].[1997]} ON COLUMNS,\n"
         + "       NON EMPTY Crossjoin(Hierarchize(Union({[Store].[All Stores]},\n"
@@ -1163,9 +1172,9 @@ class NonEmptyTest extends BatchTestCase {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     checkNotNative(context,
       1,
       "With "
@@ -1189,7 +1198,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandCalcMemberInputNECJ(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       1,
       "With \n"
@@ -1215,7 +1225,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandCalcMembers(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       9,
       "with "
@@ -1257,9 +1268,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandNestedNonNativeInputs(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1296,8 +1307,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandLowMaxConstraints(TestContext context) {
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setMaxConstraints(2);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       12,
       "select NonEmptyCrossJoin("
@@ -1340,7 +1352,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandDifferentLevels(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       278,
       "select NonEmptyCrossJoin("
@@ -1356,7 +1369,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandTupleInputs1(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       1,
       "with "
@@ -1378,7 +1392,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandTupleInputs2(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       1,
       "with "
@@ -1400,7 +1415,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandWithOneEmptyInput(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     boolean requestFreshConnection = true;
     // Query should return empty result.
     checkNative(context,
@@ -1431,8 +1447,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandWithTwoEmptyInputs(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     context.getConnection().getCacheControl( null ).flushSchemaCache();
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     // Query should return empty result.
     checkNotNative(context,
       0,
@@ -1463,7 +1480,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testEnumLowMaxConstraints(TestContext context) {
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setMaxConstraints(2);
     checkNotNative(context,
       12,
       "with "
@@ -1517,9 +1535,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAllMembersNECJ1(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This query cannot be evaluated natively because of the "All" member.
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     checkNotNative(context,
       1,
       "select "
@@ -1538,6 +1556,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAllMembersNECJ2(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This query can be evaluated natively because there is at least one
     // non "All" member.
     //
@@ -1545,8 +1564,7 @@ class NonEmptyTest extends BatchTestCase {
     // Filter([Product].Children, Is
     // NotEmpty([Measures].[Unit Sales]))
     // which can be natively evaluated
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1575,6 +1593,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAllLevelMembers(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       14,
       14,
@@ -1589,6 +1608,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjDescendantsEnumAllOnly(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       9,
       9,
@@ -1605,6 +1625,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testResultIsModifyableCopy(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       3,
       3,
@@ -1623,6 +1644,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCount(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -1638,7 +1660,7 @@ class NonEmptyTest extends BatchTestCase {
         + "  [Store].[All Stores].[USA].[CA].[San Francisco].[Store 14],"
         + "  [Time].[1997].[Q1].[1])";
 
-    propSaver.set( MondrianProperties.instance().EnableNativeTopCount, true );
+      ((TestConfig)context.getConfig()).setEnableNativeTopCount(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1652,6 +1674,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCmNativeTopCount(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -1666,7 +1689,7 @@ class NonEmptyTest extends BatchTestCase {
         + "        3, [Measures].[Store Profit Rate] / 2) ON ROWS"
         + " from [Sales]";
 
-    propSaver.set( MondrianProperties.instance().EnableNativeTopCount, true );
+    ((TestConfig)context.getConfig()).setEnableNativeTopCount(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -1677,6 +1700,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMeasureAndAggregateInSlicer(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Store Type].[All Store Types].[All Types] as 'Aggregate({[Store Type].[All Store Types].[Deluxe "
         + "Supermarket],  "
@@ -1709,6 +1733,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMeasureInSlicer(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,   "
         + "NON EMPTY [Store].[All Stores].[USA].[CA].Children ON ROWS  "
@@ -1735,6 +1760,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCmInTopCount(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNotNative(context,
       1,
       "with member [Time].[Time].[Jan] as  "
@@ -1749,6 +1775,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCmInSlicer(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNotNative(context,
       3,
       "with member [Time].[Time].[Jan] as  "
@@ -1761,6 +1788,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCmInSlicerResults(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Time].[Time].[Jan] as  "
         + "'Aggregate({[Time].[1998].[Q1].[1], [Time].[1997].[Q1].[1]})'  "
@@ -1783,6 +1811,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testSetInSlicerResults(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Measures].[Unit Sales]} ON columns,  "
         + "NON EMPTY [Product].Children ON rows from [Sales] "
@@ -1804,6 +1833,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersMembersMembers(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       0,
       67,
@@ -1821,6 +1851,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankLeafAndNoAll(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1854,6 +1885,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankLeaf(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1891,6 +1923,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfParentsNameLeaf(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1927,6 +1960,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfBlankNameAncestor(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1960,6 +1994,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersWithHideIfParentsNameAncestor(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -1993,6 +2028,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumWithHideIfBlankLeaf(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -2043,12 +2079,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumEnum(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+      ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
     checkNative(context,
       4,
@@ -2067,9 +2103,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjNullInEnum(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
-      true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     checkNative(context,
       20,
       0,
@@ -2098,13 +2133,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjDescendantsEnum(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints,
-        minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
     checkNative(context,
       11,
@@ -2120,14 +2154,13 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumChildren(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints,
-        minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
     checkNative(context,
       3,
@@ -2146,6 +2179,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumDifferentLevelsChildren(TestContext context) {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -2168,6 +2202,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjDescendantsMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       0,
       67,
@@ -2199,6 +2234,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersDescendantsWithNumericArgument(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       0,
       67,
@@ -2228,6 +2264,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersChildren(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       0,
       67,
@@ -2242,6 +2279,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjMembersMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       0,
       67,
@@ -2275,6 +2313,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintNonNullParent(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     String query =
       "with "
         + "set [Filtered Store City Set] as "
@@ -2379,6 +2418,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintNullParent(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
@@ -2565,6 +2605,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintMixedNullNonNullParent(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
@@ -2743,6 +2784,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintWithMixedNullNonNullChild(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -2926,6 +2968,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyUnionQuery(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     Result result = executeQuery(
       "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} on columns,\n"
         + " NON EMPTY Hierarchize(\n"
@@ -2951,6 +2994,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLookupMemberCache(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
@@ -3003,6 +3047,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLookupMember(TestContext context)  {
     // ok if no exception occurs
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     executeQuery(
       "SELECT DESCENDANTS([Time].[1997], [Month]) ON COLUMNS FROM [Sales]", context.getConnection() );
   }
@@ -3015,18 +3060,17 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyCrossJoinList(TestContext context)  {
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, false );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
     boolean oldEnableNativeNonEmpty =
-      MondrianProperties.instance().EnableNativeNonEmpty.get();
-    MondrianProperties.instance().EnableNativeNonEmpty.set( false );
+        context.getConfig().enableNativeNonEmpty();
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( false );
 
     executeQuery(
       "select non empty CrossJoin([Customers].[Name].Members, "
         + "{[Promotions].[All Promotions].[Fantastic Discounts]}) "
         + "ON COLUMNS FROM [Sales]", context.getConnection());
-    MondrianProperties.instance().EnableNativeNonEmpty.set(
-      oldEnableNativeNonEmpty );
+      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( oldEnableNativeNonEmpty );
   }
 
   /**
@@ -3035,6 +3079,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLookupMember2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // ok if no exception occurs
     executeQuery(
       "select {[Store].[USA].[Washington]} on columns from [Sales Ragged]", context.getConnection());
@@ -3046,6 +3091,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalcMemberWithNonEmptyCrossJoin(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     //etCacheControl( null );
     flushSchemaCache(context.getConnection());
     Result result = executeQuery(
@@ -3066,6 +3112,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
@@ -3134,6 +3181,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMembersWithoutNonEmpty(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
 	context.getConnection().getCacheControl(null).flushSchemaCache();
     SmartMemberReader smr = getSmartMemberReader(context.getConnection(), "Customers" );
 
@@ -3202,6 +3250,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDimensionMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // No query should return more than 20 rows. (1 row at 'all' level,
     // 1 row at nation level, 1 at state level, 20 at city level, and 11
     // at customers level = 34.)
@@ -3222,6 +3271,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMemberChildrenOfRolapMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     TestCase c = new TestCase(context.getConnection(),
       50,
       4,
@@ -3239,6 +3289,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMemberChildrenOfAllMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     TestCase c = new TestCase(context.getConnection(),
       50,
       14,
@@ -3254,6 +3305,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMemberChildrenNoWhere(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // The time dimension is joined because there is no (All) level in the
     // Time hierarchy:
     //
@@ -3289,6 +3341,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMemberChildrenNameCol(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Expression dependency testing casues false negatives.
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
@@ -3314,6 +3367,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossjoin(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and makes this
       // test fail.
@@ -3340,6 +3394,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyDescendants(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -3418,6 +3473,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBug1412384(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Bug 1412384 causes a NPE in SqlConstraintUtils.
     assertQueryReturns(context.getConnection(),
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,\n"
@@ -3439,6 +3495,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeCrossJoin(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       18,
       3,
@@ -3452,6 +3509,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeNonEmptyCrossJoin(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       18,
       3,
@@ -3465,6 +3523,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeNonEmptyCrossJoin3Args(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       3,
       3,
@@ -3479,6 +3538,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNotNativeVirtualCubeCrossJoin1(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -3503,6 +3563,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNotNativeVirtualCubeCrossJoin2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // native cross join cannot be used due to the range operator
     checkNotNative(context,
       3,
@@ -3516,16 +3577,17 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNotNativeVirtualCubeCrossJoinUnsupported(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     switch ( getDatabaseProduct(getDialect(context.getConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
     }
-    final BooleanProperty enableProperty =
-      MondrianProperties.instance().EnableNativeCrossJoin;
+    final Boolean enableProperty =
+      context.getConfig().enableNativeCrossJoin();
     final StringProperty alertProperty =
       MondrianProperties.instance().AlertNativeEvaluationUnsupported;
-    if ( !enableProperty.get() ) {
+    if ( !enableProperty ) {
       // When native cross joins are explicitly disabled, no alerts
       // are supposed to be raised.
       return;
@@ -3598,8 +3660,7 @@ class NonEmptyTest extends BatchTestCase {
     // explicitly disabled
     propSaver.set(
       alertProperty, org.apache.logging.log4j.Level.WARN.toString() );
-    propSaver.set(
-      enableProperty, false );
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
     try {
       checkNotNative(context, 3, mdx );
     } finally {
@@ -3643,6 +3704,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeCrossJoinCalculatedMember1(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // calculated member appears in query
     checkNative(context,
       18,
@@ -3659,6 +3721,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeCrossJoinCalculatedMember2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // calculated member defined in schema
     checkNative(context,
       18,
@@ -3673,6 +3736,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNotNativeVirtualCubeCrossJoinCalculatedMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // native cross join cannot be used due to CurrentMember in the
     // calculated member
     checkNotNative(context,
@@ -3689,6 +3753,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumCalcMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // 3 cross joins -- 2 of the 4 arguments to the cross joins are
     // enumerated sets with calculated members
     // should be non-native due to the fix to testCjEnumCalcMembersBug()
@@ -3725,12 +3790,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumCalcMembersBug(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // make sure NECJ is forced to be non-native
     // before the fix, the query is natively evaluated and result
     // has empty rows for [Store Type].[All Store Types].[HeadQuarters]
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       9,
       "with "
@@ -3771,12 +3836,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjEnumEmptyCalcMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
 
     // enumerated list of calculated members results in some empty cells
@@ -3804,6 +3869,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCjUnionEnumCalcMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // non-native due to the fix to testCjEnumCalcMembersBug()
     checkNotNative(context,
       46,
@@ -3829,6 +3895,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyWithWeirdDefaultMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( !Bug.BugMondrian229Fixed ) {
       return;
     }
@@ -3879,6 +3946,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinNamedSets1(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       3,
       3,
@@ -3893,12 +3961,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinNamedSets2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
 
     checkNative(context,
@@ -3916,6 +3984,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinSetWithDifferentParents(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Verify that only the members explicitly referenced in the set
     // are returned.  Note that different members are referenced in
     // each level in the time dimension.
@@ -3931,12 +4000,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinSetWithCrossProdMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 6;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
 
     // members in set are a cross product of (1997, 1998) and (Q1, Q2, Q3)
@@ -3953,12 +4022,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinSetWithSameParent(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);;
     }
 
     // members in set have the same parent
@@ -3975,12 +4044,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinSetWithUniqueLevel(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
 
     // members in set have different parents but there is a unique level
@@ -3997,6 +4066,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinMultiInExprAllMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       10,
       10,
@@ -4011,6 +4081,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinEvaluatorContext1(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This test ensures that the proper measure members context is
     // set when evaluating a non-empty cross join.  The context should
     // not include the calculated measure [*TOP_BOTTOM_SET].  If it
@@ -4071,12 +4142,12 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinEvaluatorContext2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( context.getConfig().maxConstraints()
       < minConstraints ) {
-      propSaver.set(
-        MondrianProperties.instance().MaxConstraints, minConstraints );
+        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
     }
 
     // calculated measure contains a calculated member
@@ -4145,6 +4216,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVCNativeCJWithIsEmptyOnMeasure(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Don't use checkNative method here because in the case where
     // native cross join isn't used, the query causes a stack overflow.
     //
@@ -4179,6 +4251,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVCNativeCJWithTopPercent(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // The reference to [Store Sales] inside the topPercent function
     // should not prevent native cross joins from being used
     checkNative(context,
@@ -4193,6 +4266,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVCOrdinalExpression(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // [Customers].[Name] is an ordinal expression.  Make sure ordering
     // is done on the column corresponding to that expression.
     checkNative(context,
@@ -4212,6 +4286,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyWithCalcMeasure(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkNative(context,
       15,
       6,
@@ -4249,6 +4324,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalculatedSlicerMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This test verifies that members(the FILTER members in the query
     // below) on the slicer are ignored in CrossJoin emptiness check.
     // Otherwise, if they are not ignored, stack over flow will occur
@@ -4284,18 +4360,20 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testIndependentSlicerMemberNonNative(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkIndependentSlicerMemberNative(context, false );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testIndependentSlicerMemberNative(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     checkIndependentSlicerMemberNative(context, true );
   }
 
   private void checkIndependentSlicerMemberNative(TestContext context, boolean useNative ) {
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, useNative );
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+      ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(useNative);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -4326,8 +4404,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDependentSlicerMemberNonNative(TestContext context)  {
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, false );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -4352,8 +4430,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDependentSlicerMemberNative(TestContext context)  {
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
 
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
@@ -4381,6 +4459,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBug1791609NonEmptyCrossJoinEliminatesCalcMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( !Bug.BugMondrian328Fixed ) {
       return;
     }
@@ -4477,19 +4556,20 @@ class NonEmptyTest extends BatchTestCase {
   }
 
   /**
-   * Test that executes &lt;Level&gt;.Members and applies a non-empty constraint. Must work regardless of whether {@link
-   * MondrianProperties#EnableNativeNonEmpty native} is enabled. Testcase for bug 1722959, "NON EMPTY Level.MEMBERS
+   * Test that executes &lt;Level&gt;.Members and applies a non-empty constraint. Must work regardless of whether
+   * EnableNativeNonEmpty  is enabled. Testcase for bug 1722959, "NON EMPTY Level.MEMBERS
    * fails if nonempty.enable=false"
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyLevelMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     boolean currentNativeNonEmpty =
-      MondrianProperties.instance().EnableNativeNonEmpty.get();
+      context.getConfig().enableNativeNonEmpty();
     boolean currentNonEmptyOnAllAxis =
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.get();
     try {
-      MondrianProperties.instance().EnableNativeNonEmpty.set( false );
+      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( false );
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.set( true );
       assertQueryReturns(context.getConnection(),
         "WITH MEMBER [Measures].[One] AS '1' "
@@ -4535,7 +4615,7 @@ class NonEmptyTest extends BatchTestCase {
           + "Row #1: 263,793.22\n" );
 
       if ( Bug.BugMondrian446Fixed ) {
-        MondrianProperties.instance().EnableNativeNonEmpty.set( true );
+        ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
         assertQueryReturns(context.getConnection(),
           "WITH MEMBER [Measures].[One] AS '1' "
             + "SELECT "
@@ -4580,8 +4660,7 @@ class NonEmptyTest extends BatchTestCase {
             + "Row #1: 263,793.22\n" );
       }
     } finally {
-      MondrianProperties.instance().EnableNativeNonEmpty.set(
-        currentNativeNonEmpty );
+        ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( currentNativeNonEmpty );
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.set(
         currentNonEmptyOnAllAxis );
     }
@@ -4590,6 +4669,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyResults(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This unit test was failing with a NullPointerException in JPivot
     // after the highcardinality feature was added, I've included it
     // here to make sure it continues to work.
@@ -4610,6 +4690,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian412(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Measures].[AvgRevenue] as 'Avg([Store].[Store Name].Members, [Measures].[Store Sales])' "
         + "select NON EMPTY {[Measures].[Store Sales], [Measures].[AvgRevenue]} ON COLUMNS, "
@@ -4654,6 +4735,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmpyOnVirtualCubeWithNonJoiningDimension(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "select non empty {[Warehouse].[Warehouse name].members} on 0,"
         + "{[Measures].[Units Shipped],[Measures].[Unit Sales]} on 1"
@@ -4708,6 +4790,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyOnNonJoiningValidMeasure(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Unit Sales])'"
         + "select non empty {[Warehouse].[Warehouse name].members} on 0,"
@@ -4763,6 +4846,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossjoinWithTwoDimensionsJoiningToOppositeBaseCubes(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // This test formerly expected an empty result set,
     // which is actually inconsistent with SSAS.  Since ValidMeasure forces
     // Warehouse to the [All] level when evaluating the [vm] measure,
@@ -4862,6 +4946,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossjoinWithOneDimensionThatDoesNotJoinToBothBaseCubes(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Units Shipped])'"
         + "select non empty Crossjoin([Store].[Store Name].members, [Gender].[Gender].members) on 0,"
@@ -4956,6 +5041,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLeafMembersOfParentChildDimensionAreNativelyEvaluated(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -4979,6 +5065,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonLeafMembersOfPCDimensionAreNotNativelyEvaluated(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -5000,6 +5087,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeWithOverriddenNullMemberRepAndNullConstraint(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     String preMdx = "SELECT FROM [Sales]";
 
     String mdx =
@@ -5030,6 +5118,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian321(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "WITH SET [#DataSet#] AS 'Crossjoin({Descendants([Customers].[All Customers], 2)}, {[Product].[All Products]})'"
         + " \n"
@@ -5063,6 +5152,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -5128,6 +5218,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMembersWillConstrainUsingArgsFromAllAxes(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -5175,6 +5266,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillExpandFirstLastChild(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].firstChild,[Gender].lastChild},{[Measures].[Unit Sales]}) on 0,"
@@ -5240,6 +5332,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillExpandLagInNamedSet(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx =
       "with set [blah] as '{[Gender].lastChild.lag(1),[Gender].[M]}' "
@@ -5307,6 +5400,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testConstrainedMeasureGetsOptimized(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Female] as '([Measures].[Unit Sales],[Gender].[Gender].[F])' "
@@ -5354,6 +5448,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNestedMeasureConstraintsGetOptimized(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Male Married] as '([Measures].[unit sales Male],[Marital Status].[Marital "
@@ -5414,6 +5509,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonUniformNestedMeasureConstraintsGetOptimized(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().UseAggregates.get() ) {
       // This test can't work with aggregates becaused
       // the aggregate table doesn't include member properties.
@@ -5463,6 +5559,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonUniformConstraintsAreNotUsedForOptimization(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Married] as '([Measures].[Unit Sales],[Marital Status].[Marital Status].[M])' "
@@ -5493,8 +5590,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMeasureConstraintsInACrossjoinHaveCorrectResults(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     //http://jira.pentaho.com/browse/MONDRIAN-715
-    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
     String mdx =
       "with "
         + "  member [Measures].[aa] as '([Measures].[Store Cost],[Gender].[M])'"
@@ -5525,6 +5623,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testContextAtAllWorksWithConstraint(TestContext context)  {
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       class TestContextAtAllWorksWithConstraintModifier extends RDbMappingSchemaModifier {
 
           public TestContextAtAllWorksWithConstraintModifier(MappingSchema mappingSchema) {
@@ -5619,7 +5718,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException(TestContext context)  {
-    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
       class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends RDbMappingSchemaModifier {
 
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(MappingSchema mappingSchema) {
@@ -5819,10 +5919,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandNonNativeWithEnableNativeCrossJoin(TestContext context)  {
-    final MondrianProperties mondrianProperties =
-      MondrianProperties.instance();
-    propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
-    propSaver.set( mondrianProperties.ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
 
     String mdx =
       "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS,"
@@ -5870,6 +5969,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyCJWithMultiPositionSlicer(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     final String mdx =
       "select NON EMPTY NonEmptyCrossJoin([Measures].[Sales Count], [Store].[USA].Children) ON COLUMNS, "
         + "       NON EMPTY CrossJoin({[Customers].[All Customers]}, {([Promotions].[Bag Stuffers] : [Promotions]"
@@ -5905,12 +6005,8 @@ class NonEmptyTest extends BatchTestCase {
         + "Row #4: 1\n"
         + "Row #4: 21\n"
         + "Row #4: \n";
-    propSaver.set(
-      MondrianProperties.instance().EnableNativeCrossJoin,
-      true );
-    propSaver.set(
-      MondrianProperties.instance().ExpandNonNative,
-      true );
+    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     // Get a fresh connection; Otherwise the mondrian property setting
     // is not refreshed for this parameter.
     checkNative(context,
@@ -5958,6 +6054,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterChildlessSnowflakeMembers2(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
       // If FilterChildlessSnowflakeMembers is true, then
       // [Product].[Drink].[Baking Goods].[Coffee] does not even exist!
@@ -5975,6 +6072,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterChildlessSnowflakeMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       MondrianProperties.instance().FilterChildlessSnowflakeMembers,
       false );
@@ -6088,6 +6186,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian897DoubleNamedSetDefinitions(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "WITH SET [CustomerSet] as {[Customers].[Canada].[BC].[Burnaby].[Alexandra Wellington], [Customers].[USA].[WA]"
         + ".[Tacoma].[Eric Coleman]} "
@@ -6121,6 +6220,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian1133(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.UseAggregates,
       false );
@@ -6319,6 +6419,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian1133WithAggs(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -6505,6 +6606,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyAggregateSlicerIsNative(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
 	RolapSchemaPool.instance().clear();
     final String mdx =
       "select NON EMPTY\n"
@@ -6675,7 +6777,8 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian1658(TestContext context)  {
-    propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     String mdx =
       "Select\n"
         + "  [Measures].[Unit Sales] on columns,\n"
@@ -6703,6 +6806,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithConflictingMemberInSlicer(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Validates correct behavior of the crossjoin optimizer and
     // native non empty when a calculated member should override the
     // slicer context.
@@ -6751,6 +6855,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithCrossjoin(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // the [overrideContext] measure should have a value for the tuple
     // on rows, given it overrides the time member on the axis.
     assertQueryReturns(context.getConnection(),
@@ -6784,6 +6889,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithLevelMembers(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // verifies SqlConstraintFactory.getLevelMembersConstraint() doesn't
     // generate a conflicting constraint.  Since CJAF attempts to collect
     // constraints from all axes, it's possible for it to construct
@@ -6813,6 +6919,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithAggTopCountSet(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // in slicer
     assertQueryReturns(context.getConnection(),
       "with member measures.top5Prod as "
@@ -6852,6 +6959,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithParameter(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "WITH "
         + "member measures.[overrideContext] as "
@@ -6885,6 +6993,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithFilter(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Validates correct results when a filtered set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
@@ -6910,6 +7019,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithTopCount(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Validates correct results when a topcount set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
@@ -6936,6 +7046,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian2202WithMeasureContainingCJ(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // NECJ nested within a measure expression
     assertQueryReturns(context.getConnection(),
       "with  "
@@ -6960,6 +7071,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202RunningSum(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN"
@@ -7027,6 +7139,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerTopCount(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // will throw an exception if native cj is not used.
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
@@ -7067,6 +7180,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerFilter(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(context.getConnection(),
@@ -7140,6 +7254,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerPercOfMeasure(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(context.getConnection(),
@@ -7223,6 +7338,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerRunningSum(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(context.getConnection(),
@@ -7316,6 +7432,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(context.getConnection(),
@@ -7394,6 +7511,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(context.getConnection(),
@@ -7486,6 +7604,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonEmptyCrossJoinCalcMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(), new StringBuilder()
         .append( "WITH \n" )
         .append( "MEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\n" )
@@ -7520,6 +7639,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossJoinCalcMember(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     assertQueryReturns(context.getConnection(), String.format(
       "WITH \nMEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\nMEMBER Product.Conditional as 'Iif"
         + "(Measures.CurrentMember IS Measures.[Calc], + Measures.CurrentMember, null)', SOLVE_ORDER=2000\nSET [S2] AS "
@@ -7551,6 +7671,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDefaultMemberNonEmptyContext(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     /*
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
       "Sales",
@@ -7593,8 +7714,9 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContext context)  {
+    ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // http://jira.pentaho.com/browse/ANALYZER-3630
-    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
     /*
     withSchema(context,
         "<Schema name=\"FoodMart\">"

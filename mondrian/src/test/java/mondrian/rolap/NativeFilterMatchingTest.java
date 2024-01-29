@@ -70,7 +70,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPositiveMatching(TestContext context) throws Exception {
-        if (!MondrianProperties.instance().EnableNativeFilter.get()) {
+        if (!context.getConfig().enableNativeFilter()) {
             // No point testing these if the native filters
             // are turned off.
             return;
@@ -154,7 +154,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNegativeMatching(TestContext context) throws Exception {
-        if (!MondrianProperties.instance().EnableNativeFilter.get()) {
+        if (!context.getConfig().enableNativeFilter()) {
              // No point testing these if the native filters
              // are turned off.
             return;
@@ -441,8 +441,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
 
-        if (MondrianProperties.instance().EnableNativeFilter.get()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+        if (context.getConfig().enableNativeFilter()
+            && context.getConfig().enableNativeNonEmpty())
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
@@ -540,8 +540,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
-        if (MondrianProperties.instance().EnableNativeFilter.get()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+        if (context.getConfig().enableNativeFilter()
+            && context.getConfig().enableNativeNonEmpty())
         {
             final String sqlMysql =
                 "select\n"
@@ -606,8 +606,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
             + "select [measures].[avgQtrs] on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )";
-        if (MondrianProperties.instance().EnableNativeFilter.get()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+        if (context.getConfig().enableNativeFilter()
+            && context.getConfig().enableNativeNonEmpty())
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();

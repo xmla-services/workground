@@ -220,7 +220,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 6\n");
 
         // check generated sql only for native evaluation
-        if (MondrianProperties.instance().EnableNativeFilter.get()) {
+        if (context.getConfig().enableNativeFilter()) {
           assertQuerySql(context.getConnection(),
               query,
               new SqlPattern[] {

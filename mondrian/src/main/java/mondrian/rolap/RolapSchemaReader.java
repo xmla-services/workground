@@ -552,7 +552,9 @@ public class RolapSchemaReader
                 && matchType.isExact())
             {
                 constraint = sqlConstraintFactory.getChildByNameConstraint(
-                    (RolapMember) parent, (NameSegment) childName);
+                    (RolapMember) parent, (NameSegment) childName,
+                    context.getConfig().enableNativeNonEmpty(),
+                    context.getConfig().levelPreCacheThreshold());
             } else {
                 constraint =
                     sqlConstraintFactory.getMemberChildrenConstraint(null);
@@ -591,7 +593,9 @@ public class RolapSchemaReader
     {
         MemberChildrenConstraint constraint = sqlConstraintFactory
             .getChildrenByNamesConstraint(
-                (RolapMember) parent, childNames);
+                (RolapMember) parent, childNames,
+                context.getConfig().enableNativeNonEmpty(),
+                context.getConfig().levelPreCacheThreshold());
         List<RolapMember> children =
             internalGetMemberChildren(parent, constraint);
         List<Member> childMembers = new ArrayList<>();
@@ -775,7 +779,7 @@ public class RolapSchemaReader
 ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         if (evaluator.nativeEnabled()) {
             return schema.getNativeRegistry().createEvaluator(
-                revaluator, fun, args);
+                revaluator, fun, args, context.getConfig().enableNativeFilter());
         }
         return null;
     }

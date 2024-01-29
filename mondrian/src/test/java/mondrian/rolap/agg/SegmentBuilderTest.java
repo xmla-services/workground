@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -76,10 +77,10 @@ class SegmentBuilderTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableInMemoryRollup,
-                true);
-        propSaver.set(MondrianProperties.instance().EnableNativeNonEmpty, true);
+        //propSaver.set(
+        //        MondrianProperties.instance().EnableInMemoryRollup,
+        //        true);
+        //propSaver.set(MondrianProperties.instance().EnableNativeNonEmpty, true);
         propSaver.set(
                 MondrianProperties.instance().SparseSegmentDensityThreshold, .5);
         propSaver.set(
@@ -594,12 +595,12 @@ class SegmentBuilderTest {
         flushSchemaCache(connection);
         //TestContext context = getTestContext().withFreshConnection();
         final String query = "select customers.[name].members on 0 from sales";
-        propSaver.set(propSaver.properties.EnableInMemoryRollup, false);
+        ((TestConfig)context.getConfig()).setEnableInMemoryRollup(false);
         Result result = executeQuery(connection, query);
 
         flushSchemaCache(connection);
         //context = getTestContext().withFreshConnection();
-        propSaver.set(propSaver.properties.EnableInMemoryRollup, true);
+        ((TestConfig)context.getConfig()).setEnableInMemoryRollup(true);
         executeQuery(connection,
             "select "
             + "{[customers].[name].members} on 0 from sales where gender.f");

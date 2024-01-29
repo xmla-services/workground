@@ -50,7 +50,6 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -2338,7 +2337,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCrossjoinWithDescendantsAndUnknownMember(TestContext context) {
-    propSaver.set( MondrianProperties.instance().IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales]} on columns,\n" + "NON EMPTY CrossJoin(\n"
         + " Descendants([Product].[All Products], [Product].[Product Family]),\n"
         + " Descendants([Store].[All Stores].[Foo], [Store].[Store State])) on rows\n" + "from [Sales]", "Axis #0:\n"
@@ -3624,7 +3623,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testNonEmptyCrossJoin(TestContext context) {
     Connection connection = context.getConnection();
-    if ( !props.EnableNativeCrossJoin.get() ) {
+    if ( !context.getConfig().enableNativeCrossJoin() ) {
       // If we try to evaluate the crossjoin in memory we run out of
       // memory.
       return;
@@ -4196,7 +4195,7 @@ public class BasicQueryTest {
 
     // Now set property
 
-    propSaver.set( props.IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     assertQueryReturns( context.getConnection(),mdx, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
         + "{[Time].[1997].[Q1]}\n" + "Row #0: 66,291\n" );
@@ -4225,7 +4224,7 @@ public class BasicQueryTest {
     // this issue takes place only for the case when ordinalColumn is defined
     // and CompareSiblingsByOrderKey=false and ExpandNonNative=true
     propSaver.set( props.CompareSiblingsByOrderKey, false );
-    propSaver.set( props.ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     if ( !props.EnableRolapCubeMemberCache.get() ) {
       propSaver.set( props.EnableRolapCubeMemberCache, true );
     }
@@ -4726,7 +4725,7 @@ public class BasicQueryTest {
             + "select crossjoin({[Time].[*SUBTOTAL_MEMBER_SEL~SUM]}, {[Store].[*SUBTOTAL_MEMBER_SEL~SUM]}) "
             + "on columns from [Sales]";
 
-    propSaver.set( props.IterationLimit, 11 );
+    ((TestConfig)context.getConfig()).setIterationLimit(11);
 
     Throwable throwable = null;
     Connection connection = context.getConnection();
@@ -5090,7 +5089,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testEmptyAggregationListDueToFilterDoesNotThrowException(TestContext context) {
-    propSaver.set( props.IgnoreMeasureForNonJoiningDimension, true );
+    ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
     assertQueryReturns( context.getConnection(),"WITH \n" + "MEMBER [GENDER].[AGG] "
         + "AS 'AGGREGATE(FILTER([S1], (NOT ISEMPTY([MEASURES].[STORE SALES]))))' " + "SET [S1] "
         + "AS 'CROSSJOIN({[GENDER].[GENDER].MEMBERS},{[STORE].[CANADA].CHILDREN})' " + "SELECT\n"

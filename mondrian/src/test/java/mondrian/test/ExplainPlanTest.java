@@ -383,7 +383,8 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAggBelowSlicerSolveOrder(TestContext context) throws SQLException {
     ((TestConfig)context.getConfig()).setDisableCaching(true);
-    propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
+      ((TestConfig)context.getConfig()).setCompoundSlicerMemberSolveOrder(0);
+
 
     final String mdx =
         "WITH\r\n"

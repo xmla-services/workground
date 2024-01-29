@@ -150,7 +150,7 @@ class SelectNotInGroupByTest extends BatchTestCase {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
     @AfterEach

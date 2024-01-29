@@ -56,8 +56,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
                 MondrianProperties.instance().UseAggregates, false);
         propSaver.set(
                 MondrianProperties.instance().ReadAggregates, false);
-        propSaver.set(
-                MondrianProperties.instance().EnableNativeCrossJoin, true);
+        //propSaver.set(
+        //        MondrianProperties.instance().EnableNativeCrossJoin, true);
         // SSAS-compatible naming causes <dimension>.<level>.members to be
         // interpreted as <dimension>.<hierarchy>.members, and that happens a
         // lot in this test. There is little to be gained by having this test

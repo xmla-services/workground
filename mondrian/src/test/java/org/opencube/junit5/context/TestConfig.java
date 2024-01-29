@@ -13,6 +13,20 @@ public class TestConfig implements BasicContextConfig {
     private boolean disableLocalSegmentCache = false;
     private boolean enableGroupingSets = false;
     private boolean enableSessionCaching = false;
+    private int compoundSlicerMemberSolveOrder = -99999;
+    private boolean enableDrillThrough = true;
+    private boolean enableNativeFilter = true;
+    private boolean enableNativeCrossJoin = true;
+    private boolean enableNativeNonEmpty = true;
+    private boolean enableNativeTopCount = true;
+    private boolean enableInMemoryRollup = true;
+    private boolean expandNonNative = false;
+    private boolean generateAggregateSql = false;
+    private boolean ignoreInvalidMembersDuringQuery = false;
+    private boolean ignoreMeasureForNonJoiningDimension = false;
+    private int iterationLimit = 0;
+    private int levelPreCacheThreshold = 300;
+    private int maxConstraints = 1000;
 
     @Override
     public Integer cellBatchSize() {
@@ -102,5 +116,131 @@ public class TestConfig implements BasicContextConfig {
 
     public void setEnableSessionCaching(boolean enableSessionCaching) {
         this.enableSessionCaching = enableSessionCaching;
+    }
+
+    public void setCompoundSlicerMemberSolveOrder(int compoundSlicerMemberSolveOrder) {
+        this.compoundSlicerMemberSolveOrder = compoundSlicerMemberSolveOrder;
+    }
+
+    @Override
+    public Integer compoundSlicerMemberSolveOrder() {
+        return compoundSlicerMemberSolveOrder;
+    }
+
+    public void setEnableDrillThrough(boolean enableDrillThrough) {
+        this.enableDrillThrough = enableDrillThrough;
+    }
+
+    @Override
+    public Boolean enableDrillThrough() {
+        return enableDrillThrough;
+    }
+
+    public void setEnableNativeFilter(boolean enableNativeFilter) {
+        this.enableNativeFilter = enableNativeFilter;
+    }
+
+    @Override
+    public Boolean enableNativeFilter() {
+        return enableNativeFilter;
+    }
+
+    public void setEnableNativeCrossJoin(boolean enableNativeCrossJoin) {
+        this.enableNativeCrossJoin = enableNativeCrossJoin;
+    }
+
+    @Override
+    public Boolean enableNativeCrossJoin() {
+        return enableNativeCrossJoin;
+    }
+
+    public void setEnableNativeNonEmpty(boolean enableNativeNonEmpty) {
+        this.enableNativeNonEmpty = enableNativeNonEmpty;
+    }
+
+    @Override
+    public Boolean enableNativeNonEmpty() {
+        return enableNativeNonEmpty;
+    }
+
+    public void setEnableNativeTopCount(boolean enableNativeTopCount) {
+        this.enableNativeTopCount = enableNativeTopCount;
+    }
+
+    @Override
+    public Boolean enableNativeTopCount() {
+        return enableNativeTopCount;
+    }
+
+    public void setEnableInMemoryRollup(boolean enableInMemoryRollup) {
+        this.enableInMemoryRollup = enableInMemoryRollup;
+    }
+
+    @Override
+    public Boolean enableInMemoryRollup() {
+        return enableInMemoryRollup;
+    }
+
+    public void setExpandNonNative(boolean expandNonNative) {
+        this.expandNonNative = expandNonNative;
+    }
+
+    @Override
+    public Boolean expandNonNative() {
+        return expandNonNative;
+    }
+
+    public void setGenerateAggregateSql(boolean generateAggregateSql) {
+        this.generateAggregateSql = generateAggregateSql;
+    }
+
+    @Override
+    public Boolean generateAggregateSql() {
+        return generateAggregateSql;
+    }
+
+    public void setIgnoreInvalidMembersDuringQuery(boolean ignoreInvalidMembersDuringQuery) {
+        this.ignoreInvalidMembersDuringQuery = ignoreInvalidMembersDuringQuery;
+    }
+
+    @Override
+    public Boolean ignoreInvalidMembersDuringQuery() {
+        return ignoreInvalidMembersDuringQuery;
+    }
+
+    public void setIgnoreMeasureForNonJoiningDimension(boolean ignoreMeasureForNonJoiningDimension) {
+        this.ignoreMeasureForNonJoiningDimension = ignoreMeasureForNonJoiningDimension;
+    }
+
+    public Boolean ignoreMeasureForNonJoiningDimension() {
+        return ignoreMeasureForNonJoiningDimension;
+    }
+
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
+    }
+
+    @Override
+    public Integer iterationLimit() {
+        return iterationLimit;
+    }
+
+    public void setLevelPreCacheThreshold(int levelPreCacheThreshold) {
+        this.levelPreCacheThreshold = levelPreCacheThreshold;
+    }
+
+    @Override
+    public Integer levelPreCacheThreshold() {
+        return levelPreCacheThreshold;
+    }
+
+    public void setMaxConstraints(int maxConstraints) {
+        this.maxConstraints = maxConstraints;
+    }
+
+
+    @Override
+    public Integer maxConstraints() {
+        return maxConstraints;
     }
 }

@@ -45,7 +45,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
@@ -112,6 +111,7 @@ public class RolapResult extends ResultBase {
   private final CellReader aggregatingReader;
   private Modulos modulos = null;
   private final int maxEvalDepth = MondrianProperties.instance().MaxEvalDepth.get();
+  private int solveOrder;
 
   private final Map<Integer, Boolean> positionsHighCardinality = new HashMap<>();
   private final Map<Integer, TupleCursor> positionsIterators = new HashMap<>();
@@ -128,7 +128,9 @@ public class RolapResult extends ResultBase {
    */
   RolapResult( final Execution execution, boolean execute ) {
     super( execution, null );
-
+    this.solveOrder = execution
+        .getMondrianStatement().getMondrianConnection()
+        .getContext().getConfig().compoundSlicerMemberSolveOrder();
     this.point = CellKey.Generator.newCellKey( axes.length );
     final AggregationManager aggMgr =
         execution.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
@@ -508,13 +510,13 @@ public class RolapResult extends ResultBase {
           if ( tupleList.get( 0 ).size() > 1 ) {
             for ( int i = 1; i < tupleList.get( 0 ).size(); i++ ) {
               Member placeholder =
-                  setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( i ), calc, false, tupleList );
+                  setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( i ), calc, false, tupleList, solveOrder );
               prevSlicerMembers.add( evaluator.setContext( placeholder ) );
             }
           }
 
           Member placeholder =
-              setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( 0 ), calc, true, tupleList );
+              setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( 0 ), calc, true, tupleList, solveOrder );
 
           Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (FILTER):", query.getSlicerCalc(), evaluator
               .getTiming() );
@@ -696,7 +698,7 @@ public class RolapResult extends ResultBase {
    * slicer.
    */
   private Member setPlaceholderSlicerAxis( final RolapMember member, final Calc calc, boolean setAxis,
-      TupleList tupleList ) {
+      TupleList tupleList, int solveOrder ) {
     ValueFormatter formatter;
     if ( member.getDimension().isMeasures() ) {
       formatter = ( (RolapMeasure) member ).getFormatter();
@@ -706,7 +708,7 @@ public class RolapResult extends ResultBase {
 
     CompoundSlicerRolapMember placeholderMember =
         new CompoundSlicerRolapMember( (RolapMember) member.getHierarchy().getNullMember(), calc, formatter,
-            tupleList );
+            tupleList, solveOrder );
 
     placeholderMember.setProperty( Property.FORMAT_STRING.getName(), member.getPropertyValue( Property.FORMAT_STRING
         .getName() ) );
@@ -2235,12 +2237,12 @@ public Cell getCell( int[] pos ) {
     private final int solveOrder;
 
     public CompoundSlicerRolapMember( RolapMember placeholderMember, Calc calc, ValueFormatter formatter,
-        TupleList tupleList ) {
+        TupleList tupleList, int solveOrder ) {
       super( placeholderMember );
       this.calc = calc;
       valueFormatter = formatter;
       this.tupleList = tupleList;
-      this.solveOrder = MondrianProperties.instance().CompoundSlicerMemberSolveOrder.get();
+      this.solveOrder = solveOrder;
     }
 
     @Override
