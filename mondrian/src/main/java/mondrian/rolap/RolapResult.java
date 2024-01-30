@@ -135,7 +135,7 @@ public class RolapResult extends ResultBase {
     final AggregationManager aggMgr =
         execution.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
     this.aggregatingReader = aggMgr.getCacheCellReader();
-    final int expDeps = MondrianProperties.instance().TestExpDependencies.get();
+    final int expDeps = execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().testExpDependencies();
     if ( expDeps > 0 ) {
       this.evaluator = new RolapDependencyTestingEvaluator( this, expDeps );
     } else {

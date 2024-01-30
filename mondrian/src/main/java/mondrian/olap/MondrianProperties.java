@@ -573,21 +573,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.olap.SsasCompatibleNaming", false);
 
     /**
-     * <p>Integer property that controls whether to test operators'
-     * dependencies, and how much time to spend doing it.</p>
-     *
-     * <p>If this property is positive, Mondrian's test framework allocates an
-     * expression evaluator which evaluates each expression several times, and
-     * makes sure that the results of the expression are independent of
-     * dimensions which the expression claims to be independent of.</p>
-     *
-     * <p>The default is 0.</p>
-     */
-    public transient final IntegerProperty TestExpDependencies =
-        new IntegerProperty(
-            this, "mondrian.test.ExpDependencies", 0);
-
-    /**
      * <p>Boolean property that controls whether Mondrian uses aggregate
      * tables.</p>
      *

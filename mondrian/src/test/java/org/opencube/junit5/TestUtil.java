@@ -1104,7 +1104,7 @@ public class TestUtil {
 	    // value when cells are null. TestExpDependencies isn't the perfect
 	    // switch to enable this, but it will do for now.
 	    //TODO: activate this for all tests
-	    if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
+	    if ( connection.getContext().getConfig().testExpDependencies() == 1 ) {
 	      assertCellSetValid( cellSet );
 	    }
 	    return cellSet;
@@ -1127,7 +1127,7 @@ public class TestUtil {
         // value when cells are null. TestExpDependencies isn't the perfect
         // switch to enable this, but it will do for now.
         //TODO: activate this for all tests
-        if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
+        if ( connection.getContext().getConfig().testExpDependencies() == 1 ) {
             assertCellSetValid( cellSet );
         }
         return cellSet;

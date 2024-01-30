@@ -27,6 +27,7 @@ public class TestConfig implements BasicContextConfig {
     private int iterationLimit = 0;
     private int levelPreCacheThreshold = 300;
     private int maxConstraints = 1000;
+    private int testExpDependencies = 0;
 
     @Override
     public Integer cellBatchSize() {
@@ -242,5 +243,14 @@ public class TestConfig implements BasicContextConfig {
     @Override
     public Integer maxConstraints() {
         return maxConstraints;
+    }
+
+    @Override
+    public Integer testExpDependencies() {
+        return testExpDependencies;
+    }
+
+    public void setTestExpDependencies(int testExpDependencies) {
+        this.testExpDependencies = testExpDependencies;
     }
 }

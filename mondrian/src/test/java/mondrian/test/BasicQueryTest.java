@@ -1711,7 +1711,7 @@ public class BasicQueryTest {
    * was validated twice, hence the validation time was <code>O(2 ^ depth)</code>.)
    */
   public void _testBug793616(TestContext context) {
-    if ( props.TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       // Don't run this test if dependency-checking is enabled.
       // Dependency checking will hugely slow down evaluation, and give
       // the false impression that the validation performance bug has

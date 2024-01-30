@@ -924,7 +924,7 @@ public class BatchTestCase{
         // Don't run the test if we're testing expression dependencies.
         // Expression dependencies cause spurious interval calls to
         // 'level.getMembers()' which create false negatives in this test.
-        if (MondrianProperties.instance().TestExpDependencies.get() > 0) {
+        if (context.getConfig().testExpDependencies() > 0) {
             return;
         }
 

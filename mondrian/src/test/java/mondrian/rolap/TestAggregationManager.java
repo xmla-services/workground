@@ -1007,7 +1007,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggMembers(TestContext context) {
         prepareContext(context);
-        if (MondrianProperties.instance().TestExpDependencies.get() > 0) {
+        if (context.getConfig().testExpDependencies() > 0) {
             return;
         }
         if (!(MondrianProperties.instance().UseAggregates.get()

@@ -1469,7 +1469,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 		ExpressionCompiler compiler = factory.createExpressionCompiler(evaluator, validator, resultStyleList);
 
         final int expDeps =
-            MondrianProperties.instance().TestExpDependencies.get();
+            statement.getQuery().getConnection().getContext().getConfig().testExpDependencies();
         final ProfileHandler profileHandler = statement.getProfileHandler();
         if (profileHandler != null) {
             // Cannot test dependencies and profile at the same time. Profiling

@@ -10977,7 +10977,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     final String actualCalc =
       compileExpression(connection, expr, true);
     final int expDeps =
-      MondrianProperties.instance().TestExpDependencies.get();
+      connection.getContext().getConfig().testExpDependencies();
     if ( expDeps > 0 ) {
       // Don't bother checking the compiled output if we are also
       // testing dependencies. The compiled code will have extra
@@ -10996,7 +10996,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     final String actualCalc =
       compileExpression(connection, expr, false);
     final int expDeps =
-      MondrianProperties.instance().TestExpDependencies.get();
+      connection.getContext().getConfig().testExpDependencies();
     if ( expDeps > 0 ) {
       // Don't bother checking the compiled output if we are also
       // testing dependencies. The compiled code will have extra

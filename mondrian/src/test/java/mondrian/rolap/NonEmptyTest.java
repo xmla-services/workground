@@ -989,7 +989,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCube(TestContext context) {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       return;
     }
     TestCase c = new TestCase(context.getConnection(),
@@ -1005,7 +1005,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testVirtualCubeMembers(TestContext context) throws Exception {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       return;
     }
     // ok to use native sql optimization for members on a virtual cube
@@ -2186,7 +2186,7 @@ class NonEmptyTest extends BatchTestCase {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       return;
     }
 
@@ -2998,7 +2998,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLookupMemberCache(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
       return;
@@ -3117,7 +3117,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMembers(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
       return;
@@ -3347,7 +3347,7 @@ class NonEmptyTest extends BatchTestCase {
   void testMemberChildrenNameCol(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Expression dependency testing casues false negatives.
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       return;
     }
     TestCase c = new TestCase(context.getConnection(),
@@ -3372,7 +3372,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCrossjoin(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       // Dependency testing causes extra SQL reads, and makes this
       // test fail.
       return;
@@ -3402,7 +3402,7 @@ class NonEmptyTest extends BatchTestCase {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
-    if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       return;
     }
 
