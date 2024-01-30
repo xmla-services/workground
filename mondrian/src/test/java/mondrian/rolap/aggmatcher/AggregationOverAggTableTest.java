@@ -50,6 +50,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAvgMeasureLowestGranularity(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         ExplicitRecognizerTest.setupMultiColDimCube(context,

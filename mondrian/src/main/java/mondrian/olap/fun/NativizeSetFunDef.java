@@ -145,7 +145,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
         Expression funArg = call.getArg(0);
 
         if (MondrianProperties.instance().UseAggregates.get()
-            || MondrianProperties.instance().ReadAggregates.get())
+            || compiler.getEvaluator().getQuery().getConnection().getContext().getConfig().readAggregates())
         {
             return funArg.accept(compiler);
         }

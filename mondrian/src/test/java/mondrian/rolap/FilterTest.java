@@ -408,7 +408,7 @@ class FilterTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   public void  testNotInMultiLevelMemberConstraintNonNullParent(TestContext context) {
-    if ( MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       // If aggregate tables are enabled, generates similar SQL involving
       // agg tables.
       return;
@@ -484,7 +484,7 @@ class FilterTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   public void  testNotInMultiLevelMemberConstraintNonNullSameParent(TestContext context) {
-    if ( MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       // If aggregate tables are enabled, generates similar SQL involving
       // agg tables.
       return;
@@ -1187,9 +1187,7 @@ class FilterTest extends BatchTestCase {
     propSaver.set(
       MondrianProperties.instance().UseAggregates,
       false );
-    propSaver.set(
-      MondrianProperties.instance().ReadAggregates,
-      false );
+      ((TestConfig) context.getConfig()).setReadAggregates(false);
     ((TestConfig) context.getConfig()).setDisableCaching(false);
     ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     propSaver.set(
@@ -1401,7 +1399,7 @@ class FilterTest extends BatchTestCase {
     // when checking for nulls
     //TestContext context = getTestContext();
     if ( !context.getConfig().enableNativeCrossJoin()
-      || !propSaver.properties.ReadAggregates.get()
+      || !context.getConfig().readAggregates()
       || !propSaver.properties.UseAggregates.get() ) {
       return;
     }

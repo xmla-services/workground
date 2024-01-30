@@ -484,18 +484,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.queryTimeout", 0);
 
     /**
-     * <p>Boolean property that determines whether Mondrian should read
-     * aggregate tables.</p>
-     *
-     * <p>If set to true, then Mondrian scans the database for aggregate tables.
-     * Unless mondrian.rolap.aggregates.Use is set to true, the aggregates
-     * found will not be used.</p>
-     */
-    public transient final BooleanProperty ReadAggregates =
-        new BooleanProperty(
-            this, "mondrian.rolap.aggregates.Read", false);
-
-    /**
      * Integer property that, if set to a value greater than zero, limits the
      * maximum size of a result set.
      */
@@ -581,7 +569,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * property dynamically (not just at startup) is meaningful.</p>
      *
      * <p>Aggregates can be read from the database using the
-     * {@link #ReadAggregates} property but will not be used unless this
+     * ReadAggregates property but will not be used unless this
      * property is set to true.</p>
      */
     public transient final BooleanProperty UseAggregates =

@@ -54,8 +54,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
                 MondrianProperties.instance().NativizeMinThreshold, 0);
         propSaver.set(
                 MondrianProperties.instance().UseAggregates, false);
-        propSaver.set(
-                MondrianProperties.instance().ReadAggregates, false);
+        //propSaver.set(
+        //        MondrianProperties.instance().ReadAggregates, false);
         //propSaver.set(
         //        MondrianProperties.instance().EnableNativeCrossJoin, true);
         // SSAS-compatible naming causes <dimension>.<level>.members to be

@@ -428,7 +428,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     // Until MONDRIAN-1001 is fixed, behavior is flaky due to interaction
     // with previous tests.
     if ( Bug.BugMondrian1001Fixed ) {
-      if ( MondrianProperties.instance().UseAggregates.get() && MondrianProperties.instance().ReadAggregates.get() ) {
+      if ( MondrianProperties.instance().UseAggregates.get() && context.getConfig().readAggregates() ) {
         assertEquals( 4, groupedBatchCount );
       } else {
         assertEquals( 2, groupedBatchCount );
@@ -637,7 +637,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCanBatchForBatchWithDistinctCountInDetailedBatch(TestContext context) {
     prepareContext(context);
-    if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( !MondrianProperties.instance().UseAggregates.get() || !context.getConfig().readAggregates() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
@@ -660,7 +660,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCanBatchForBatchWithDistinctCountInAggregateBatch(TestContext context) {
     prepareContext(context);
-    if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( !MondrianProperties.instance().UseAggregates.get() || !context.getConfig().readAggregates() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
@@ -683,7 +683,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCanBatchSummaryBatchWithDetailedBatchWithDistinctCount(TestContext context) {
     prepareContext(context);
-    if ( MondrianProperties.instance().UseAggregates.get() || MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( MondrianProperties.instance().UseAggregates.get() || context.getConfig().readAggregates() ) {
       return;
     }
     final BatchLoader fbcr = createFbcr( null, salesCube );
@@ -770,7 +770,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     final boolean batch2CanBatch1 = batch2.canBatch( batch1 );
     final boolean batch1CanBatch2 = batch1.canBatch( batch2 );
     if ( Bug.BugMondrian1001Fixed ) {
-      if ( MondrianProperties.instance().UseAggregates.get() && MondrianProperties.instance().ReadAggregates.get() ) {
+      if ( MondrianProperties.instance().UseAggregates.get() && context.getConfig().readAggregates() ) {
         assertFalse( batch2CanBatch1 );
         assertFalse( batch1CanBatch2 );
       } else {
@@ -829,7 +829,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
         createBatch(connection, fbcr, new String[] { tableTime, tableCustomer }, new String[] { fieldYear, fieldGender },
             new String[][] { fieldValuesYear, fieldValuesGender }, cubeNameSales, measureUnitSales );
 
-    if ( MondrianProperties.instance().UseAggregates.get() && MondrianProperties.instance().ReadAggregates.get() ) {
+    if ( MondrianProperties.instance().UseAggregates.get() && context.getConfig().readAggregates() ) {
       assertFalse( detailedBatch.canBatch( summaryBatch ) );
       assertFalse( summaryBatch.canBatch( detailedBatch ) );
     } else {

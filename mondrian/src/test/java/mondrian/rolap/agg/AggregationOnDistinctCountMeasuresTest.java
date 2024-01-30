@@ -2050,7 +2050,7 @@ class AggregationOnDistinctCountMeasuresTest {
         //    + "</Schema>";
         // should skip aggregate table, cannot aggregate
         propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+      ((TestConfig)context.getConfig()).setReadAggregates(true);
       class TestDistinctCountAggMeasureModifier extends RDbMappingSchemaModifier {
 
           public TestDistinctCountAggMeasureModifier(MappingSchema mappingSchema) {
@@ -2205,7 +2205,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "Row #0: 5,581\n");
         // aggregate table has count for months, make sure it is used
         propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+      ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         final String expectedSql =
             "select\n"

@@ -242,7 +242,7 @@ protected void assertQuerySql(Connection connection,
     // which is not a safe scenario for nativization.
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
 
     final String mdx =
       "with\n"
@@ -282,7 +282,7 @@ protected void assertQuerySql(Connection connection,
 	RolapSchemaPool.instance().clear();
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
     final String mdx =
       "with set TO_AGGREGATE as '{[Time.Weekly].[1997].[1] : [Time.Weekly].[1997].[39]}'\n"
         + "member [Time.Weekly].x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
@@ -317,7 +317,7 @@ protected void assertQuerySql(Connection connection,
 	  context.getConnection().getCacheControl(null).flushSchemaCache();
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
     final String mdx =
       "with\n"
         + "  set QUARTERS as Descendants([Time].[1997], [Time].[Time].[Quarter])\n"
@@ -428,7 +428,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -533,7 +533,7 @@ protected void assertQuerySql(Connection connection,
 
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -638,7 +638,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -971,9 +971,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
-    propSaver.set(
-      propSaver.properties.ReadAggregates,
-      true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
@@ -1801,10 +1799,10 @@ protected void assertQuerySql(Connection connection,
     propSaver.reset();
   }
 
-  private static boolean isUseAgg() {
+  private static boolean isUseAgg(TestContext context) {
     return
       MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+        && context.getConfig().readAggregates();
   }
 
   @ParameterizedTest
@@ -1835,7 +1833,7 @@ protected void assertQuerySql(Connection connection,
       return;
     }
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
-    final String mysql = !isUseAgg()
+    final String mysql = !isUseAgg(context)
       ? "select\n"
       + "    `store`.`store_country` as `c0`,\n"
       + "    `store`.`store_state` as `c1`,\n"
@@ -2065,7 +2063,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeSetsCacheClearing(TestContext context) {
-    if ( MondrianProperties.instance().ReadAggregates.get()
+    if ( context.getConfig().readAggregates()
       && MondrianProperties.instance().UseAggregates.get() ) {
       return;
     }

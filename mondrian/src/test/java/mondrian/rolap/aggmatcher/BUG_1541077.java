@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -39,6 +40,7 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testStoreCount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -65,6 +67,7 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testSalesCount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -91,6 +94,7 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testTotalAmount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -117,6 +121,7 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testBug1541077(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;

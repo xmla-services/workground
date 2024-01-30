@@ -82,6 +82,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDefaultRecognition(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         String sqlMysql = ""
@@ -105,6 +106,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggName(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
     	prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
@@ -186,6 +188,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testFactColumnNotExists(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
@@ -256,6 +259,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnUpperCase(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
@@ -337,6 +341,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnNotExist(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
@@ -418,6 +423,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testWithoutMeasureFactColumnElement(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(
@@ -483,6 +489,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureFactColumnAndAggFactCountNotExist(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
 
@@ -557,6 +564,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggNameDifferentColumnNames(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
@@ -643,6 +651,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggDivideByZero(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggExclude> aggExcludes = List.of(
@@ -724,6 +733,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAggPattern(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         List<MappingAggTable> aggTables = List.of(AggPatternRBuilder.builder()
@@ -818,6 +828,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
         Result resultWithAgg =
                 executeQuery(query, context.getConnection());
         disableAggregates();
+        ((TestConfig)context.getConfig()).setReadAggregates(false);
         Result result = executeQuery(query, context.getConnection());
 
         String resultStr = TestUtil.toString(result);
@@ -831,6 +842,7 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
     private void verifySameAggAndNot
             (TestContext context, String query, Function<MappingSchema, RDbMappingSchemaModifier> mf, String aggSql) {
         enableAggregates();
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         // check that agg tables are used
         assertQuerySql(context, QUERY, mf, aggSql);
 
@@ -854,11 +866,11 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
 
     private void enableAggregates() {
         propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+        //propSaver.set(propSaver.properties.ReadAggregates, true);
     }
 
     private void disableAggregates() {
         propSaver.set(propSaver.properties.UseAggregates, false);
-        propSaver.set(propSaver.properties.ReadAggregates, false);
+        //propSaver.set(propSaver.properties.ReadAggregates, false);
     }
 }

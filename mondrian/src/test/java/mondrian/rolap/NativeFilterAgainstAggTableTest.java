@@ -40,7 +40,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+        //propSaver.set(propSaver.properties.ReadAggregates, true);
         //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
@@ -53,6 +53,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFilteringOnAggregated_ByCount(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         // http://jira.pentaho.com/browse/MONDRIAN-2155
         // Aggregation table can have fact's count value exceeding 1,
         // so that to compute the overall amount of facts it is necessary
@@ -106,6 +107,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFilteringOnAggregated_BySum(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         String query = ""
             + "SELECT "
             + "   {FILTER("
@@ -151,6 +153,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggTableWithNotAllMeasures(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         // http://jira.pentaho.com/browse/MONDRIAN-1703
         // If a filter condition contains one or more measures that are
         // not present in the aggregate table, the SQL should omit the

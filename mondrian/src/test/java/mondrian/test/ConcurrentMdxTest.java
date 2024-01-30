@@ -1279,7 +1279,7 @@ class ConcurrentMdxTest {
     @Test
     void testConcurrentValidatingQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
-        propSaver.set(props.ReadAggregates, false);
+        //propSaver.set(props.ReadAggregates, false);
         //propSaver.set(props.DisableCaching, false);
 
         QueryAndResult[] singleQuery = {mdxQueries[0]};

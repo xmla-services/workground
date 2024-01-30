@@ -43,12 +43,12 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
         propSaver.set(
                 props.UseAggregates,
                 true);
-        propSaver.set(
-                props.ReadAggregates,
-                false);
-        propSaver.set(
-                props.ReadAggregates,
-                true);
+        //propSaver.set(
+        //        props.ReadAggregates,
+        //        false);
+        //propSaver.set(
+        //        props.ReadAggregates,
+        //        true);
     }
 
     @AfterEach

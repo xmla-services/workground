@@ -2375,7 +2375,7 @@ class NonEmptyTest extends BatchTestCase {
           + "ASC, `product_class`.`product_family` ASC" );
 
     if ( MondrianProperties.instance().UseAggregates.get()
-      && MondrianProperties.instance().ReadAggregates.get() ) {
+      && context.getConfig().readAggregates() ) {
       // slightly different sql expected, uses agg table now for join
       necjSqlMySql = necjSqlMySql.replaceAll(
         "sales_fact_1997", "agg_c_14_sales_fact_1997" );
@@ -6235,9 +6235,7 @@ class NonEmptyTest extends BatchTestCase {
     propSaver.set(
       propSaver.properties.UseAggregates,
       false );
-    propSaver.set(
-      propSaver.properties.ReadAggregates,
-      false );
+      ((TestConfig)context.getConfig()).setReadAggregates(false);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
@@ -6434,9 +6432,7 @@ class NonEmptyTest extends BatchTestCase {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
-    propSaver.set(
-      propSaver.properties.ReadAggregates,
-      true );
+      ((TestConfig)context.getConfig()).setReadAggregates(true);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
@@ -6689,7 +6685,7 @@ class NonEmptyTest extends BatchTestCase {
         + "    `product_class`.`product_family` as `c3`,\n";
 
     if ( MondrianProperties.instance().UseAggregates.get()
-      && MondrianProperties.instance().ReadAggregates.get() ) {
+      && context.getConfig().readAggregates() ) {
       mysqlNativeCrossJoinQuery =
         "select\n"
           + "    `agg_c_14_sales_fact_1997`.`the_year` as `c0`,\n"

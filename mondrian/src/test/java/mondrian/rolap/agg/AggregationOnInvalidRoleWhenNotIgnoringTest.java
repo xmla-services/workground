@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -43,7 +44,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+        //propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.IgnoreInvalidMembers, false);
     }
 
@@ -61,6 +62,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestContext context) {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         try {
             executeAnalyzerQuery(context.getConnection(List.of("Test")));

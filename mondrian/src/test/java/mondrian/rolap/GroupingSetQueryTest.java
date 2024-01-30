@@ -182,7 +182,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
         connection = context.getConnection();
 
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             assertRequestSql(connection,
                 new CellRequest[] {request3, request1, request2},
                 patternsWithAggs);
@@ -194,7 +194,7 @@ class GroupingSetQueryTest extends BatchTestCase{
 
         ((TestConfig)context.getConfig()).setEnableGroupingSets(false);
 
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             assertRequestSql(connection,
                 new CellRequest[] {request3, request1, request2},
                 patternsWithAggs);
@@ -209,7 +209,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestContext context) {
         pripareContext(context);
         if (!(prop.UseAggregates.get()
-              && prop.ReadAggregates.get()))
+              && context.getConfig().readAggregates()))
         {
             return;
         }
@@ -254,7 +254,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNotUsingGroupingSet(TestContext context) {
         pripareContext(context);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             return;
         }
         Connection connection = context.getConnection();
@@ -304,7 +304,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForMultipleMeasureAndSingleConstraint(TestContext context) {
         pripareContext(context);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             return;
         }
         ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
@@ -371,7 +371,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestContext context) {
         pripareContext(context);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             return;
         }
         ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
@@ -444,7 +444,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGroupingSetForMultipleColumnConstraint(TestContext context) {
         pripareContext(context);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             return;
         }
         ((TestConfig)context.getConfig()).setEnableGroupingSets(true);
@@ -527,7 +527,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(TestContext context)
     {
         pripareContext(context);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             return;
         }
         List<String[]> compoundMembers = new ArrayList<>();

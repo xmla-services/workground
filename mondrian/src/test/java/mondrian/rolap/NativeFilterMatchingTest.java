@@ -38,6 +38,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -535,7 +536,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicerWithAggs(TestContext context) {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
-        propSaver.set(MondrianProperties.instance().ReadAggregates, true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "

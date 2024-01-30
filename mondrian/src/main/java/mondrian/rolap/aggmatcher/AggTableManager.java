@@ -259,7 +259,7 @@ public class AggTableManager {
                         }
                         // Is it handled by the DefaultRules
                         if (! makeAggStar
-                            && MondrianProperties.instance().ReadAggregates.get()
+                            && schema.getInternalConnection().getContext().getConfig().readAggregates()
                             && rules.matchesTableName(factTableName, name)) {
                             // load columns
                             dbTable.load();

@@ -40,6 +40,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
@@ -84,7 +85,7 @@ class SteelWheelsAggregationTest {
     public void beforeEach() {
         propertySaver = new PropertySaver5();
         propertySaver.set(propertySaver.properties.UseAggregates, true);
-        propertySaver.set(propertySaver.properties.ReadAggregates, true);
+        //propertySaver.set(propertySaver.properties.ReadAggregates, true);
     }
 
     @AfterEach
@@ -175,6 +176,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregation(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
                 (List.of(RoleRBuilder.builder()
                     .name("Power User")
@@ -222,6 +224,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationNoRestrictionsOnTopLevel(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(RoleRBuilder.builder()
                 .name("Power User")
@@ -266,6 +269,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testUnionWithAggregation(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(
                 RoleRBuilder.builder()
@@ -332,6 +336,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationUnionRolesWithSameGrants(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(
                 RoleRBuilder.builder()

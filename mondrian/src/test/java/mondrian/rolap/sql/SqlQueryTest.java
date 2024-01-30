@@ -308,7 +308,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testPredicatesAreOptimizedWhenPropertyIsTrue(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
             // only check sql pattern when aggregate tables are not used.
@@ -395,7 +395,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testPredicatesAreNotOptimizedWhenPropertyIsFalse(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
             // only check sql pattern when aggregate tables are not used.
@@ -442,7 +442,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testPredicatesAreOptimizedWhenAllTheMembersAreIncluded(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && context.getConfig().useAggregates()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
             // only check sql pattern when aggregate tables are not used.

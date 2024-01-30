@@ -75,7 +75,7 @@ class AggGenTest {
         // If run in Ant and with mondrian.jar, please comment out this line:
         propSaver.set(props.AggregateRules, "/DefaultRules.xml");
         propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setGenerateAggregateSql(true);
 
         final RolapConnection rolapConn = (RolapConnection) context.getConnection();

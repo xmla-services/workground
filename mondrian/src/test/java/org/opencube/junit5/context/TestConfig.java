@@ -28,6 +28,7 @@ public class TestConfig implements BasicContextConfig {
     private int levelPreCacheThreshold = 300;
     private int maxConstraints = 1000;
     private int testExpDependencies = 0;
+    private boolean readAggregates = false;
 
     @Override
     public Integer cellBatchSize() {
@@ -252,5 +253,13 @@ public class TestConfig implements BasicContextConfig {
 
     public void setTestExpDependencies(int testExpDependencies) {
         this.testExpDependencies = testExpDependencies;
+    }
+
+    public void setReadAggregates(boolean readAggregates) {
+        this.readAggregates = readAggregates;
+    }
+
+    public Boolean readAggregates() {
+        return readAggregates;
     }
 }

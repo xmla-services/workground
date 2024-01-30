@@ -1792,7 +1792,7 @@ public class BasicQueryTest {
   void testCatalogHierarchyBasedOnView(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
-    if ( props.ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       return;
     }
     /*
@@ -1870,7 +1870,7 @@ public class BasicQueryTest {
   void testCatalogHierarchyBasedOnView2(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
-    if ( props.ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       return;
     }
     if ( TestUtil.getDialect(context.getConnection()).allowsFromQuery() ) {
@@ -2004,7 +2004,7 @@ public class BasicQueryTest {
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier14::new);
     propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
     executeQuery(context.getConnection(), mdx);
   }
 
@@ -2040,7 +2040,7 @@ public class BasicQueryTest {
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier15::new);
     propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     // no exception is thrown
     executeQuery(context.getConnection(), mdx);
@@ -2143,7 +2143,7 @@ public class BasicQueryTest {
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier17::new);
     propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -2154,7 +2154,7 @@ public class BasicQueryTest {
 
     // check that consistent with fact table
     propSaver.set( props.UseAggregates, false );
-    propSaver.set( props.ReadAggregates, false );
+    ((TestConfig)context.getConfig()).setReadAggregates(false);
 
     assertQueryReturns(context.getConnection(), mdx, desiredResult );
   }
@@ -2195,7 +2195,7 @@ public class BasicQueryTest {
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier18::new);
     propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -2240,7 +2240,7 @@ public class BasicQueryTest {
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier19::new);
     propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
