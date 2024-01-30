@@ -193,6 +193,13 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.expCache.enable", true);
 
     /**
+     * <p>If enabled some NON EMPTY set operations like member.children,
+     * level.members and member descendants will be computed in SQL.</p>
+     */
+    public transient final BooleanProperty EnableNativeNonEmpty =
+        new BooleanProperty(
+            this, "mondrian.native.nonempty.enable", true);
+    /**
      * Boolean property that controls whether each query axis implicit has the
      * NON EMPTY option set. The default is false.
      */
@@ -290,6 +297,25 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final BooleanProperty IgnoreInvalidMembers =
         new BooleanProperty(
             this, "mondrian.rolap.ignoreInvalidMembers", false);
+
+    /**
+     * <p>Max number of constraints in a single 'IN' SQL clause.</p>
+     *
+     * <p>This value may be variant among database products and their runtime
+     * settings. Oracle, for example, gives the error "ORA-01795: maximum
+     * number of expressions in a list is 1000".</p>
+     *
+     * <p>Recommended values:</p>
+     * <ul>
+     * <li>Oracle: 1,000</li>
+     * <li>DB2: 2,500</li>
+     * <li>Other: 10,000</li>
+     * </ul>
+     */
+    public transient final IntegerProperty MaxConstraints =
+        new IntegerProperty(
+            this, "mondrian.rolap.maxConstraints", 1000);
+
 
     /**
      * <p>Boolean property that defines the maximum number of passes

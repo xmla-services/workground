@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -227,7 +228,7 @@ public class RolapEvaluator implements Evaluator {
     ancestorCommandCount = 0;
     nonEmpty = false;
     nativeEnabled =
-        root.connection.getContext().getConfig().enableNativeNonEmpty() || root.connection.getContext().getConfig().enableNativeCrossJoin();
+        MondrianProperties.instance().EnableNativeNonEmpty.get() || root.connection.getContext().getConfig().enableNativeCrossJoin();
     evalAxes = false;
     cellReader = null;
     currentMembers = root.defaultMembers.clone();

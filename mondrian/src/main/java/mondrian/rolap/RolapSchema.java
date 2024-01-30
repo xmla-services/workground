@@ -234,6 +234,8 @@ public class RolapSchema implements Schema {
 
     private Context context;
 
+    RolapNativeRegistry nativeRegistry;
+
     /**
      * This is ONLY called by other constructors (and MUST be called
      * by them) and NEVER by the Pool.
@@ -261,7 +263,8 @@ public class RolapSchema implements Schema {
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
-
+        this.nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
+            context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
 
         load(context, rolapConnectionProps);
     }
@@ -272,12 +275,16 @@ public class RolapSchema implements Schema {
     @Deprecated
     RolapSchema(
         SchemaKey key,
-        RolapConnection internalConnection)
+        RolapConnection internalConnection,
+        final Context context)
     {
     	this.id = UUID.randomUUID().toString();
     	this.key = key;
         this.defaultRole = RoleImpl.createRootRole(this);
         this.internalConnection = internalConnection;
+        this.nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
+            context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
+
     }
 
     protected void flushSegments() {
@@ -1224,9 +1231,6 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     public Collection<RolapStar> getStars() {
         return getRolapStarRegistry().getStars();
     }
-
-    final RolapNativeRegistry nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
-        context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
 
     RolapNativeRegistry getNativeRegistry() {
         return nativeRegistry;

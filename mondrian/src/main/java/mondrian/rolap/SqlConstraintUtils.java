@@ -1752,7 +1752,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
   private static String generateSingleValueInExpr( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar,
       List<RolapMember> members, RolapLevel fromLevel, boolean restrictMemberTypes, boolean exclude,
       boolean includeParentLevels ) {
-    int maxConstraints = baseCube.getSchema().getInternalConnection().getContext().getConfig().maxConstraints();
+    int maxConstraints = MondrianProperties.instance().MaxConstraints.get();
     Dialect dialect = sqlQuery.getDialect();
 
     StringBuilder condition = new StringBuilder();

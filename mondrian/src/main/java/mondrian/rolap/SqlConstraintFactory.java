@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 
+import mondrian.olap.MondrianProperties;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.CrossJoinArgFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -31,6 +32,8 @@ import mondrian.rolap.sql.TupleConstraint;
  */
 public class SqlConstraintFactory {
 
+    static boolean enabled;
+
     private static final SqlConstraintFactory instance =
         new SqlConstraintFactory();
 
@@ -42,15 +45,19 @@ public class SqlConstraintFactory {
 
     private boolean enabled(final Evaluator context) {
         if (context != null) {
-            return context.getQuery().getConnection().getContext().getConfig().enableNativeNonEmpty() && context.nativeEnabled();
+            return enabled && context.nativeEnabled();
         }
-        return context.getQuery().getConnection().getContext().getConfig().enableNativeNonEmpty();
+        return enabled;
     }
 
     public static SqlConstraintFactory instance() {
+        setNativeNonEmptyValue();
         return instance;
     }
 
+    public static void setNativeNonEmptyValue() {
+        enabled = MondrianProperties.instance().EnableNativeNonEmpty.get();
+    }
 
     public MemberChildrenConstraint getMemberChildrenConstraint(
         Evaluator context)

@@ -1912,17 +1912,17 @@ public class TestUtil {
 	public static void verifySameNativeAndNot(Connection connection,
 			String query, String message, PropertySaver5 propSaver)
 	{
-        ((TestConfig)connection.getContext()).setEnableNativeCrossJoin(true);
-        ((TestConfig)connection.getContext()).setEnableNativeFilter(true);
-        ((TestConfig)connection.getContext()).setEnableNativeNonEmpty(true);
-        ((TestConfig)connection.getContext()).setEnableNativeTopCount(true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeNonEmpty(true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(true);
 
 		Result resultNative = executeQuery(connection, query);
 
-        ((TestConfig)connection.getContext()).setEnableNativeCrossJoin(false);
-        ((TestConfig)connection.getContext()).setEnableNativeFilter(false);
-        ((TestConfig)connection.getContext()).setEnableNativeNonEmpty(false);
-        ((TestConfig)connection.getContext()).setEnableNativeTopCount(false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeNonEmpty(false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(false);
 
 		Result resultNonNative = executeQuery(connection, query);
 

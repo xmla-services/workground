@@ -1592,7 +1592,7 @@ class VirtualCubeTest extends BatchTestCase {
         }
 
         if (!context.getConfig().enableNativeCrossJoin()
-            && !context.getConfig().enableNativeNonEmpty())
+            && !MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             // Only run the tests if either native CrossJoin or native NonEmpty
             // is enabled.
@@ -2251,7 +2251,7 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContext context) {
-        if (!context.getConfig().enableNativeNonEmpty()) {
+        if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
         }

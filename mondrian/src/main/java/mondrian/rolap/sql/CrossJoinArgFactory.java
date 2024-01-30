@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -469,7 +470,7 @@ public class CrossJoinArgFactory {
             }
         } else {
             if (!"{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
-                || !isArgSizeSupported(args.length, evaluator.getQuery().getConnection().getContext().getConfig().maxConstraints()))
+                || !isArgSizeSupported(args.length, MondrianProperties.instance().MaxConstraints.get()))
             {
                 return null;
             }

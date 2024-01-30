@@ -442,7 +442,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
 
         if (context.getConfig().enableNativeFilter()
-            && context.getConfig().enableNativeNonEmpty())
+            && MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
@@ -541,7 +541,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
         if (context.getConfig().enableNativeFilter()
-            && context.getConfig().enableNativeNonEmpty())
+            && MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             final String sqlMysql =
                 "select\n"
@@ -607,7 +607,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
             + "select [measures].[avgQtrs] on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )";
         if (context.getConfig().enableNativeFilter()
-            && context.getConfig().enableNativeNonEmpty())
+            && MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();

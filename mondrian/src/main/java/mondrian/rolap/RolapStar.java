@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -600,7 +601,7 @@ public class RolapStar {
 
         aggregation =
             new Aggregation(
-                aggregationKey, context.getConfig().maxConstraints());
+                aggregationKey, MondrianProperties.instance().MaxConstraints.get());
 
         localBars.get().aggregations.put(
             aggregationKey, aggregation);

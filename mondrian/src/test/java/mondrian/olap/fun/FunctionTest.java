@@ -8071,7 +8071,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testGenerateWillTimeout(TestContext context) {
     propSaver.set( propSaver.properties.QueryTimeout, 5 );
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
+    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false);
     try {
       executeAxis(context.getConnection(),
         "Generate([Product].[Product Name].members,"

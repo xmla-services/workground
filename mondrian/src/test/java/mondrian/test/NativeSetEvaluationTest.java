@@ -304,7 +304,7 @@ protected void assertQuerySql(Connection connection,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
     if ( context.getConfig().enableNativeTopCount()
-      && context.getConfig().enableNativeNonEmpty() ) {
+      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -396,7 +396,7 @@ protected void assertQuerySql(Connection connection,
         mysqlQuery,
         mysqlQuery );
     if ( context.getConfig().enableNativeFilter()
-      && context.getConfig().enableNativeNonEmpty() ) {
+      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -1282,7 +1282,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( context.getConfig().enableNativeNonEmpty() ) {
+    if ( MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1694,7 +1694,8 @@ protected void assertQuerySql(Connection connection,
 	// test failed because in native mode system returns limit quantity 6 and then filter by role
 	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
 
-      ((TestConfig)context.getConfig()).setMaxConstraints(4);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 4 );
     String roleDef =
       "  <Role name=\"Test\">\n"
         + "    <SchemaGrant access=\"none\">\n"
@@ -2154,7 +2155,8 @@ protected void assertQuerySql(Connection connection,
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
       + "FROM sales where store.agg";
-      ((TestConfig)context.getConfig()).setMaxConstraints(24);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 24 );
 
     final String message =
       "The results of native and non-native evaluations should be equal";

@@ -58,6 +58,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.SchemaUtil;
+import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
 import mondrian.resource.MondrianResource;
@@ -98,8 +99,9 @@ class RolapSchemaTest {
         SegmentCacheManager scManagerMock = mock(SegmentCacheManager.class);
         when(rolapConnectionMock.getContext()).thenReturn(contextMock);
         when(contextMock.getAggregationManager()).thenReturn(aggManagerMock);
+        when(contextMock.getConfig()).thenReturn(new TestConfig());
         when(aggManagerMock.getCacheMgr(rolapConnectionMock)).thenReturn(scManagerMock);
-        return new RolapSchema(key,  rolapConnectionMock);
+        return new RolapSchema(key,  rolapConnectionMock, contextMock);
     }
 
     private SchemaReader mockSchemaReader(DataType category, OlapElement element) {

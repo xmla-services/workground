@@ -199,7 +199,8 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithASingleMember(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-      ((TestConfig)context.getConfig()).setMaxConstraints(1);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 1 );
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -250,7 +251,8 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithSetOfMembers(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-      ((TestConfig)context.getConfig()).setMaxConstraints(2);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 2 );
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -528,7 +530,8 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOverLargeListGeneratesError(TestContext context) {
       prepareContext(context);
-      ((TestConfig)context.getConfig()).setMaxConstraints(7);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 7 );
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
@@ -552,7 +555,7 @@ class AggregationOnDistinctCountMeasuresTest {
               + "Axis #2:\n"
               + "{[Product].[X]}\n"
               + "Row #0: #ERR: mondrian.olap.fun.MondrianEvaluationException: "
-              + "Aggregation is not supported over a list with more than 7 predicates (see property mondrian.rolap.maxConstraints)\n");
+              + "Aggregation is not supported over a list with more than 7 predicates (see property MaxConstraints)\n");
 
         // aggregation over a non-distinct-count measure is OK
       assertQueryReturns(context.getConnection(),
@@ -624,7 +627,8 @@ class AggregationOnDistinctCountMeasuresTest {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
-      ((TestConfig)context.getConfig()).setMaxConstraints(5);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 5 );
         assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "  Measures.[Unit Sales] on columns,\n"

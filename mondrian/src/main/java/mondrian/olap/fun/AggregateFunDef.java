@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -212,7 +213,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
 //            }
             boolean tupleSizeWithinInListSize =
                 tupleList.size()
-                    <= evaluator.getQuery().getConnection().getContext().getConfig().maxConstraints();
+                    <= MondrianProperties.instance().MaxConstraints.get();
             if (unlimitedIn || tupleSizeWithinInListSize) {
                 // If the DBMS does not have an upper limit on IN list
                 // predicate size, then don't attempt any list
@@ -287,7 +288,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     evaluator.getSchemaReader(),
                     evaluator.getMeasureCube());
             if (checkSize) {
-                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList, evaluator.getQuery().getConnection().getContext().getConfig().maxConstraints());
+                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList, MondrianProperties.instance().MaxConstraints.get());
             }
             return tupleList;
         }

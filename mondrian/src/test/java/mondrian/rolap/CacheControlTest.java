@@ -415,10 +415,12 @@ class CacheControlTest {
         // Make sure MaxConstraint is high enough
         int minConstraints = 3;
 
-        if (context.getConfig().maxConstraints()
+        if (MondrianProperties.instance().MaxConstraints.get()
             < minConstraints)
         {
-            ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+            propSaver.set(
+                MondrianProperties.instance().MaxConstraints,
+                minConstraints);
         }
 
         // Execute a query, to bring data into the cache.
@@ -1249,10 +1251,12 @@ class CacheControlTest {
         // Make sure MaxConstraint is high enough
         int minConstraints = 3;
 
-        if (context.getConfig().maxConstraints()
+        if (MondrianProperties.instance().MaxConstraints.get()
             < minConstraints)
         {
-            ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+            propSaver.set(
+                MondrianProperties.instance().MaxConstraints,
+                minConstraints);
         }
 
         StringWriter sw = new StringWriter();

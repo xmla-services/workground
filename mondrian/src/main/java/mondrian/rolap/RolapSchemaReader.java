@@ -553,7 +553,7 @@ public class RolapSchemaReader
             {
                 constraint = sqlConstraintFactory.getChildByNameConstraint(
                     (RolapMember) parent, (NameSegment) childName,
-                    context.getConfig().enableNativeNonEmpty(),
+                    MondrianProperties.instance().EnableNativeNonEmpty.get(),
                     context.getConfig().levelPreCacheThreshold());
             } else {
                 constraint =
@@ -594,7 +594,7 @@ public class RolapSchemaReader
         MemberChildrenConstraint constraint = sqlConstraintFactory
             .getChildrenByNamesConstraint(
                 (RolapMember) parent, childNames,
-                context.getConfig().enableNativeNonEmpty(),
+                MondrianProperties.instance().EnableNativeNonEmpty.get(),
                 context.getConfig().levelPreCacheThreshold());
         List<RolapMember> children =
             internalGetMemberChildren(parent, constraint);

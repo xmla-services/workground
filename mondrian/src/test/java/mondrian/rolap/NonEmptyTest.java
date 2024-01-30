@@ -114,8 +114,8 @@ class NonEmptyTest extends BatchTestCase {
     propSaver = new PropertySaver5();
     //propSaver.set(
     //        MondrianProperties.instance().EnableNativeCrossJoin, true );
-    //propSaver.set(
-    //        MondrianProperties.instance().EnableNativeNonEmpty, true );
+    propSaver.set(
+            MondrianProperties.instance().EnableNativeNonEmpty, true );
     //propSaver.set(
     //        MondrianProperties.instance().LevelPreCacheThreshold, 0 );
   }
@@ -178,7 +178,7 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     ((TestConfig)context.getConfig()).setEnableNativeTopCount(false);
     ((TestConfig)context.getConfig()).setEnableNativeFilter(true);
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
+    propSaver.set( mondrianProperties.EnableNativeNonEmpty, false );
     propSaver.set( mondrianProperties.ResultLimit, 5000000 );
 
     assertQueryReturns(context.getConnection(),
@@ -1308,7 +1308,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandLowMaxConstraints(TestContext context) {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    ((TestConfig)context.getConfig()).setMaxConstraints(2);
+    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       12,
@@ -1481,7 +1481,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testEnumLowMaxConstraints(TestContext context) {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    ((TestConfig)context.getConfig()).setMaxConstraints(2);
+    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     checkNotNative(context,
       12,
       "with "
@@ -2082,9 +2082,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-      ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
     checkNative(context,
       4,
@@ -2136,9 +2137,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
     checkNative(context,
       11,
@@ -2158,9 +2160,10 @@ class NonEmptyTest extends BatchTestCase {
     // Make sure maxConstraint settting is high enough
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
     checkNative(context,
       3,
@@ -3063,14 +3066,15 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
     boolean oldEnableNativeNonEmpty =
-        context.getConfig().enableNativeNonEmpty();
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( false );
+        MondrianProperties.instance().EnableNativeNonEmpty.get();
+    MondrianProperties.instance().EnableNativeNonEmpty.set( false );
 
     executeQuery(
       "select non empty CrossJoin([Customers].[Name].Members, "
         + "{[Promotions].[All Promotions].[Fantastic Discounts]}) "
         + "ON COLUMNS FROM [Sales]", context.getConnection());
-      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( oldEnableNativeNonEmpty );
+    MondrianProperties.instance().EnableNativeNonEmpty.set(
+      oldEnableNativeNonEmpty );
   }
 
   /**
@@ -3839,9 +3843,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     // enumerated list of calculated members results in some empty cells
@@ -3964,9 +3969,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     checkNative(context,
@@ -4003,9 +4009,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 6;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     // members in set are a cross product of (1997, 1998) and (Q1, Q2, Q3)
@@ -4025,9 +4032,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);;
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     // members in set have the same parent
@@ -4047,9 +4055,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     // members in set have different parents but there is a unique level
@@ -4145,9 +4154,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( context.getConfig().maxConstraints()
+    if ( MondrianProperties.instance().MaxConstraints.get()
       < minConstraints ) {
-        ((TestConfig)context.getConfig()).setMaxConstraints(minConstraints);
+        propSaver.set(
+            MondrianProperties.instance().MaxConstraints, minConstraints );
     }
 
     // calculated measure contains a calculated member
@@ -4565,11 +4575,11 @@ class NonEmptyTest extends BatchTestCase {
   void testNonEmptyLevelMembers(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     boolean currentNativeNonEmpty =
-      context.getConfig().enableNativeNonEmpty();
+        MondrianProperties.instance().EnableNativeNonEmpty.get();
     boolean currentNonEmptyOnAllAxis =
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.get();
     try {
-      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( false );
+      MondrianProperties.instance().EnableNativeNonEmpty.set( false );
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.set( true );
       assertQueryReturns(context.getConnection(),
         "WITH MEMBER [Measures].[One] AS '1' "
@@ -4615,7 +4625,7 @@ class NonEmptyTest extends BatchTestCase {
           + "Row #1: 263,793.22\n" );
 
       if ( Bug.BugMondrian446Fixed ) {
-        ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
+        MondrianProperties.instance().EnableNativeNonEmpty.set( true );
         assertQueryReturns(context.getConnection(),
           "WITH MEMBER [Measures].[One] AS '1' "
             + "SELECT "
@@ -4660,7 +4670,8 @@ class NonEmptyTest extends BatchTestCase {
             + "Row #1: 263,793.22\n" );
       }
     } finally {
-        ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( currentNativeNonEmpty );
+      MondrianProperties.instance().EnableNativeNonEmpty.set(
+        currentNativeNonEmpty );
       MondrianProperties.instance().EnableNonEmptyOnAllAxis.set(
         currentNonEmptyOnAllAxis );
     }
@@ -5592,7 +5603,7 @@ class NonEmptyTest extends BatchTestCase {
   void testMeasureConstraintsInACrossjoinHaveCorrectResults(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     //http://jira.pentaho.com/browse/MONDRIAN-715
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
+    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     String mdx =
       "with "
         + "  member [Measures].[aa] as '([Measures].[Store Cost],[Gender].[M])'"
@@ -5719,7 +5730,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException(TestContext context)  {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-      ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
+      propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
       class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends RDbMappingSchemaModifier {
 
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(MappingSchema mappingSchema) {
@@ -7716,7 +7727,7 @@ class NonEmptyTest extends BatchTestCase {
   void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // http://jira.pentaho.com/browse/ANALYZER-3630
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty( true );
+    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     /*
     withSchema(context,
         "<Schema name=\"FoodMart\">"
