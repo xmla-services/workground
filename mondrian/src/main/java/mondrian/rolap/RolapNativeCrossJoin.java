@@ -318,7 +318,9 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
         if (!evaluator.getQuery().shouldAlertForNonNative(fun)) {
             return;
         }
-        RolapUtil.alertNonNative("NonEmptyCrossJoin", reason);
+        RolapUtil.alertNonNative("NonEmptyCrossJoin", reason,
+            evaluator.getCube().getSchema().getInternalConnection().getContext()
+                .getConfig().alertNativeEvaluationUnsupported());
     }
 }
 

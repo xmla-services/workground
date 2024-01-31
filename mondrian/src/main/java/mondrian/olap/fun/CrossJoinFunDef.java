@@ -24,7 +24,6 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionAtom;
@@ -61,14 +60,12 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.SqlConstraintUtils;
 import mondrian.server.Execution;
@@ -549,7 +546,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
   }
 
   protected TupleList nonEmptyOptimizeList( Evaluator evaluator, TupleList list, ResolvedFunCall call ) {
-    int opSize = MondrianProperties.instance().CrossJoinOptimizerSize.get();
+    int opSize = evaluator.getSchemaReader().getContext().getConfig().crossJoinOptimizerSize();
     if ( list.isEmpty() ) {
       return list;
     }
@@ -1043,7 +1040,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
             return null;
           }
         }
-        
+
 
 		FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Returns the cross product of two sets.", "Crossjoin(<Set1>, <Set2>[, <Set3>...])",
 				org.eclipse.daanse.olap.api.DataType.SET, Expressions.categoriesOf(args));

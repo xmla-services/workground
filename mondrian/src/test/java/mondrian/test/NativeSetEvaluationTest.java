@@ -762,9 +762,10 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArg(TestContext context) {
     // will throw an error if native eval is not used
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    // native should be used and Canada/Mexico should be returned
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      // native should be used and Canada/Mexico should be returned
     // even though Canada and Mexico have no associated data.
     assertQueryReturns(context.getConnection(),
       "select TopCount(Customers.Country.members, 2) "
@@ -795,9 +796,10 @@ protected void assertQuerySql(Connection connection,
     if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.getConnection();
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      Connection connection = context.getConnection();
     try {
       executeQuery(
         "select TopCount( CrossJoin(Gender.Gender.members, Product.Drink.Children), 2) "
@@ -815,9 +817,10 @@ protected void assertQuerySql(Connection connection,
     if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.getConnection();
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      Connection connection = context.getConnection();
     try {
       executeQuery(
         "with member Gender.foo as '1'"

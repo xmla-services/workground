@@ -97,7 +97,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunTableImpl;
@@ -678,7 +677,7 @@ public class RolapSchema implements Schema {
             hierarchy, hierarchyAccess, topLevel, bottomLevel, rollupPolicy);
 
         final boolean ignoreInvalidMembers =
-            MondrianProperties.instance().IgnoreInvalidMembers.get();
+            reader.getContext().getConfig().ignoreInvalidMembers();
 
         int membersRejected = 0;
         if (!grant.memberGrants().isEmpty()) {

@@ -375,8 +375,6 @@ class RolapSchemaTest {
         Access expectedHierarchyAccess,
         Access expectedMemberAccess)
     {
-        propSaver.set(propSaver.properties.IgnoreInvalidMembers, true);
-
         RolapSchema schema = createSchema();
         RolapCube cube = mockCube(schema);
         mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
@@ -398,6 +396,12 @@ class RolapSchemaTest {
         when(hierarchy.getDimension()).thenReturn(dimension);
 
         SchemaReader reader = mockSchemaReader(DataType.HIERARCHY, hierarchy);
+        Context context = mock(Context.class);
+        TestConfig config = new TestConfig();
+        config.setIgnoreInvalidMembers(true);
+        when(context.getConfig()).thenReturn(config);
+        when(reader.getContext()).thenReturn(context);
+
 
         Member member = mock(Member.class);
         when(member.getHierarchy()).thenReturn(hierarchy);

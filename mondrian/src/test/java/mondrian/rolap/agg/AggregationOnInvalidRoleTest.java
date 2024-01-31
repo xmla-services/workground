@@ -45,7 +45,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.UseAggregates, true);
         //propSaver.set(propSaver.properties.ReadAggregates, true);
-        propSaver.set(propSaver.properties.IgnoreInvalidMembers, true);
+        //propSaver.set(propSaver.properties.IgnoreInvalidMembers, true);
     }
 
     @AfterEach
@@ -63,6 +63,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestContext context) {
         ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
         prepareContext(context);
         Connection connection = context.getConnection(List.of("Test"));
         //TestContext context = getTestContext().withFreshConnection();

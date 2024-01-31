@@ -199,14 +199,16 @@ public class RolapNativeTopCount extends RolapNativeSet {
         // or the first array is null, then native cross join is not feasible.
         if (allArgs == null || allArgs.isEmpty() || allArgs.get(0) == null) {
             alertNonNativeTopCount(
-                "Set in 1st argument does not support native eval.");
+                "Set in 1st argument does not support native eval.",
+                evaluator.getSchemaReader().getContext().getConfig().alertNativeEvaluationUnsupported());
             return null;
         }
 
         CrossJoinArg[] cjArgs = allArgs.get(0);
         if (isPreferInterpreter(cjArgs, false)) {
             alertNonNativeTopCount(
-                "One or more args prefer non-native.");
+                "One or more args prefer non-native.",
+                evaluator.getSchemaReader().getContext().getConfig().alertNativeEvaluationUnsupported());
             return null;
         }
 
@@ -215,7 +217,8 @@ public class RolapNativeTopCount extends RolapNativeSet {
 		if ((args[1] instanceof NumericLiteral numericLiteral)) {
 			count = numericLiteral.getIntValue();
 		} else {
-			alertNonNativeTopCount("TopCount value cannot be determined.");
+			alertNonNativeTopCount("TopCount value cannot be determined.",
+                evaluator.getSchemaReader().getContext().getConfig().alertNativeEvaluationUnsupported());
 			return null;
 		}
 
@@ -237,7 +240,8 @@ public class RolapNativeTopCount extends RolapNativeSet {
             StringBuilder orderBySQL = sql.generateTopCountOrderBy(args[2]);
             if (orderBySQL == null) {
                 alertNonNativeTopCount(
-                    "Cannot convert order by expression to SQL.");
+                    "Cannot convert order by expression to SQL.",
+                    evaluator.getSchemaReader().getContext().getConfig().alertNativeEvaluationUnsupported());
                 return null;
             }
         }
@@ -265,7 +269,8 @@ public class RolapNativeTopCount extends RolapNativeSet {
                     count, combinedArgs, evaluator, orderByExpr, ascending);
             if (!constraint.isValid()) {
                 alertNonNativeTopCount(
-                    "Constraint constructed cannot be used for native eval.");
+                    "Constraint constructed cannot be used for native eval.",
+                    evaluator.getSchemaReader().getContext().getConfig().alertNativeEvaluationUnsupported());
                 return null;
             }
             LOGGER.debug("using native topcount");
@@ -279,8 +284,8 @@ public class RolapNativeTopCount extends RolapNativeSet {
         }
     }
 
-    private void alertNonNativeTopCount(String msg) {
-        RolapUtil.alertNonNative("TopCount", msg);
+    private void alertNonNativeTopCount(String msg, String alertNativeEvaluationUnsupported) {
+        RolapUtil.alertNonNative("TopCount", msg, alertNativeEvaluationUnsupported);
     }
 
     // package-local visibility for testing purposes

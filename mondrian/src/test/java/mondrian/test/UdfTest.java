@@ -278,7 +278,7 @@ public class UdfTest {
      * Tests a performance issue with LastNonEmpty (bug 1533677). The naive
      * implementation of LastNonEmpty crawls backward one period at a time,
      * generates a cache miss, and the next iteration reads precisely one cell.
-     * So the query soon exceeds the {@link MondrianProperties#MaxEvalDepth}
+     * So the query soon exceeds the MaxEvalDepth
      * property.
      */
     @ParameterizedTest

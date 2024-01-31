@@ -29,6 +29,14 @@ public class TestConfig implements BasicContextConfig {
     private int maxConstraints = 1000;
     private int testExpDependencies = 0;
     private boolean readAggregates = false;
+    private String aggregateRuleTag = "default";
+    private String aggregateRules = "/DefaultRules.xml";
+    private String alertNativeEvaluationUnsupported = "OFF";
+    private int crossJoinOptimizerSize = 0;
+    private String currentMemberWithCompoundSlicerAlert = "ERROR";
+    private boolean ignoreInvalidMembers = false;
+    private int maxEvalDepth = 10;
+    private int checkCancelOrTimeoutInterval = 1000;
 
     @Override
     public Integer cellBatchSize() {
@@ -259,7 +267,80 @@ public class TestConfig implements BasicContextConfig {
         this.readAggregates = readAggregates;
     }
 
+    @Override
     public Boolean readAggregates() {
         return readAggregates;
+    }
+
+    @Override
+    public String aggregateRuleTag() {
+        return aggregateRuleTag;
+    }
+
+    public void setAggregateRuleTag(String aggregateRuleTag) {
+        this.aggregateRuleTag = aggregateRuleTag;
+    }
+
+    @Override
+    public String aggregateRules() {
+        return aggregateRules;
+    }
+
+    public void setAggregateRules(String aggregateRules) {
+        this.aggregateRules = aggregateRules;
+    }
+
+    public void setAlertNativeEvaluationUnsupported(String alertNativeEvaluationUnsupported) {
+        this.alertNativeEvaluationUnsupported = alertNativeEvaluationUnsupported;
+    }
+
+    @Override
+    public String alertNativeEvaluationUnsupported() {
+        return alertNativeEvaluationUnsupported;
+    }
+
+    public void setCrossJoinOptimizerSize(int crossJoinOptimizerSize) {
+        this.crossJoinOptimizerSize = crossJoinOptimizerSize;
+    }
+
+    @Override
+    public Integer crossJoinOptimizerSize() {
+        return crossJoinOptimizerSize;
+    }
+
+    public void setCurrentMemberWithCompoundSlicerAlert(String currentMemberWithCompoundSlicerAlert) {
+        this.currentMemberWithCompoundSlicerAlert = currentMemberWithCompoundSlicerAlert;
+    }
+
+    @Override
+    public String currentMemberWithCompoundSlicerAlert() {
+        return currentMemberWithCompoundSlicerAlert;
+    }
+
+    public void setIgnoreInvalidMembers(boolean ignoreInvalidMembers) {
+        this.ignoreInvalidMembers = ignoreInvalidMembers;
+    }
+
+    @Override
+    public Boolean ignoreInvalidMembers() {
+        return ignoreInvalidMembers;
+    }
+
+    public void setMaxEvalDepth(int maxEvalDepth) {
+        this.maxEvalDepth = maxEvalDepth;
+    }
+
+    @Override
+    public Integer maxEvalDepth() {
+        return maxEvalDepth;
+    }
+
+    public void setCheckCancelOrTimeoutInterval(int checkCancelOrTimeoutInterval) {
+        this.checkCancelOrTimeoutInterval = checkCancelOrTimeoutInterval;
+    }
+
+    @Override
+    public Integer checkCancelOrTimeoutInterval() {
+        return checkCancelOrTimeoutInterval;
     }
 }

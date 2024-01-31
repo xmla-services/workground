@@ -2367,7 +2367,7 @@ public class BasicQueryTest {
   void testMembersOfLargeDimensionTheHardWay(TestContext context) {
     final Connection connection = context.getConnection();
     // Avoid this test if memory is scarce.
-    if ( Bug.avoidMemoryOverflow( getDialect(connection) ) ) {
+    if ( Bug.avoidMemoryOverflow( getDialect(connection), context.getConfig().memoryMonitor() ) ) {
       return;
     }
 
@@ -3450,8 +3450,7 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelMutliple(TestContext context) {
-    propSaver.set(
-            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+      ((TestConfig)context.getConfig()).setMaxEvalDepth(MAX_EVAL_DEPTH_VALUE);
     Connection connection = context.getConnection();
     for ( int i = 0; i < 5; i++ ) {
       runParallelQueries(connection, 1, 1, false );
@@ -3476,16 +3475,14 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelFlushCache(TestContext context) {
-    propSaver.set(
-            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+      ((TestConfig)context.getConfig()).setMaxEvalDepth(MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.getConnection(), 4, 6, true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelVery(TestContext context) {
-	propSaver.set(
-	            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+      ((TestConfig)context.getConfig()).setMaxEvalDepth( MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.getConnection(), 6, 10, false );
   }
 
@@ -4206,9 +4203,10 @@ public class BasicQueryTest {
     // Verify that invalid members in query do NOT prevent
     // usage of native NECJ (LER-5165).
 
-    propSaver.set( props.AlertNativeEvaluationUnsupported, "ERROR" );
+        ((TestConfig)context.getConfig())
+            .setAlertNativeEvaluationUnsupported("ERROR");
 
-    assertQueryReturns( context.getConnection(),mdx2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
+        assertQueryReturns( context.getConnection(),mdx2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
         + "{[Time].[1997].[Q1], [Customers].[USA].[CA]}\n" + "{[Time].[1997].[Q1], [Customers].[USA].[OR]}\n"
         + "{[Time].[1997].[Q1], [Customers].[USA].[WA]}\n" + "Row #0: 16,890\n" + "Row #1: 19,287\n"
         + "Row #2: 30,114\n" );
@@ -6039,7 +6037,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicerIgnoreException(TestContext context) {
-    propSaver.set( props.CurrentMemberWithCompoundSlicerAlert, "OFF" );
+        ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF" );
 
     //final TestContext context = getTestContext().withFreshConnection();
     String mdx =
@@ -6079,7 +6077,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicer2IgnoreException(TestContext context) {
-    propSaver.set( props.CurrentMemberWithCompoundSlicerAlert, "OFF" );
+        ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF");
 
     //final TestContext context = getTestContext().withFreshConnection();
     String mdx =

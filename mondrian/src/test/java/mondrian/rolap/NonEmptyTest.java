@@ -3551,9 +3551,7 @@ class NonEmptyTest extends BatchTestCase {
     // for this test, verify that no alert is raised even though
     // native evaluation isn't supported, because query
     // doesn't use explicit NonEmptyCrossJoin
-    propSaver.set(
-      MondrianProperties.instance().AlertNativeEvaluationUnsupported,
-      "ERROR" );
+      ((TestConfig)context.getConfig()).setAlertNativeEvaluationUnsupported("ERROR" );
     // native cross join cannot be used due to AllMembers
     checkNotNative(context,
       3,
@@ -3589,8 +3587,8 @@ class NonEmptyTest extends BatchTestCase {
     }
     final Boolean enableProperty =
       context.getConfig().enableNativeCrossJoin();
-    final StringProperty alertProperty =
-      MondrianProperties.instance().AlertNativeEvaluationUnsupported;
+    final String alertProperty =
+      context.getConfig().alertNativeEvaluationUnsupported();
     if ( !enableProperty ) {
       // When native cross joins are explicitly disabled, no alerts
       // are supposed to be raised.
@@ -3616,8 +3614,8 @@ class NonEmptyTest extends BatchTestCase {
       "Unable to use native SQL evaluation for 'NonEmptyCrossJoin'";
     */
     // verify that exception is thrown if alerting is set to ERROR
-    propSaver.set(
-      alertProperty, org.apache.logging.log4j.Level.ERROR.toString() );
+    ((TestConfig)context.getConfig())
+        .setAlertNativeEvaluationUnsupported(org.apache.logging.log4j.Level.ERROR.toString());
     try {
       checkNotNative(context, 3, mdx );
       fail( "Expected NativeEvaluationUnsupportedException" );
@@ -3632,6 +3630,8 @@ class NonEmptyTest extends BatchTestCase {
       // Expected
     } finally {
       propSaver.reset();
+      ((TestConfig)context.getConfig())
+            .setAlertNativeEvaluationUnsupported("OFF");
       //propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
     }
 
@@ -3662,14 +3662,15 @@ class NonEmptyTest extends BatchTestCase {
     */
     // verify that no warning is posted if native evaluation is
     // explicitly disabled
-    propSaver.set(
-      alertProperty, org.apache.logging.log4j.Level.WARN.toString() );
-    ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported(org.apache.logging.log4j.Level.ERROR.toString());
     try {
       checkNotNative(context, 3, mdx );
     } finally {
       propSaver.reset();
-      //propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
+        ((TestConfig)context.getConfig())
+            .setAlertNativeEvaluationUnsupported("OFF");
+        //propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
     }
     //TODO test loging
     /*
@@ -7148,8 +7149,8 @@ class NonEmptyTest extends BatchTestCase {
   void testMon2202AnalyzerTopCount(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // will throw an exception if native cj is not used.
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
     executeQuery(
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Marital Status_],NONEMPTYCROSSJOIN"
@@ -7188,9 +7189,9 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerFilter(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.getConnection(),
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+      assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_]))'\n"
@@ -7262,9 +7263,9 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerPercOfMeasure(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.getConnection(),
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+      assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_]))'\n"
@@ -7346,9 +7347,9 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerRunningSum(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.getConnection(),
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+      assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'FILTER(NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Time_])), NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
@@ -7440,9 +7441,9 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.getConnection(),
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+      assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Promotion Media_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Store_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
@@ -7519,9 +7520,9 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    assertQueryReturns(context.getConnection(),
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+      assertQueryReturns(context.getConnection(),
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Promotion Media_],NONEMPTYCROSSJOIN"
         + "([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],[*BASE_MEMBERS__Time_])))'\n"

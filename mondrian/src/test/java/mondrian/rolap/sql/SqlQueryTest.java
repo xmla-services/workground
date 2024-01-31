@@ -630,7 +630,7 @@ class SqlQueryTest  extends BatchTestCase {
             return;
         }
 
-        propSaver.set(prop.IgnoreInvalidMembers, true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
         ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
         // assertQuerySql(testContext, query, patterns);

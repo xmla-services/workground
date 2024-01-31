@@ -2604,9 +2604,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian722(TestContext foodMartContext) {
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembers,
-            true);
+        ((TestConfig)foodMartContext.getConfig()).setIgnoreInvalidMembers(true);
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier15::new);
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("CTO"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);

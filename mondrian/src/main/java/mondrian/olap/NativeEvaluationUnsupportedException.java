@@ -12,7 +12,7 @@ package mondrian.olap;
 /**
  * Exception which indicates that native evaluation of a function
  * was enabled but not supported, and
- * {@link MondrianProperties#AlertNativeEvaluationUnsupported} was
+ * AlertNativeEvaluationUnsupported was
  * set to <code>ERROR</code>.
  *
  * @author John Sichi

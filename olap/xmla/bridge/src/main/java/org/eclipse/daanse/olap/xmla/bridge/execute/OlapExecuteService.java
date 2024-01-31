@@ -154,7 +154,6 @@ import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 
-import mondrian.olap.MondrianProperties;
 
 import mondrian.xmla.XmlaException;
 
@@ -655,7 +654,7 @@ public class OlapExecuteService implements ExecuteService {
     private StatementResponse executeDrillThroughQuery(Context context, StatementRequest statementRequest) {
         Optional<String> tabFields = statementRequest.properties().tableFields();
         Optional<Boolean> advanced = statementRequest.properties().advancedFlag();
-        final boolean enableRowCount = MondrianProperties.instance().EnableTotalCount.booleanValue();
+        final boolean enableRowCount = context.getConfig().enableTotalCount();
         final int[] rowCountSlot = enableRowCount ? new int[]{0} : null;
         Connection connection = null;
         Statement statement;

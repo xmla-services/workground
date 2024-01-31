@@ -57,48 +57,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
         return instance;
     }
 
-    /**
-     * <p>String property that is the AggRule element's tag value.</p>
-     *
-     * <p>Normally, this property is not set by a user.</p>
-     */
-    public transient final StringProperty AggregateRuleTag =
-        new StringProperty(
-            this, "mondrian.rolap.aggregates.rule.tag", "default");
 
-    /**
-     * <p>String property containing the name of the file which defines the
-     * rules for recognizing an aggregate table. Can be either a resource in
-     * the Mondrian jar or a URL.</p>
-     *
-     * <p>The default value is "/DefaultRules.xml", which is in the
-     * mondrian.rolap.aggmatcher package in Mondrian.jar.</p>
-     *
-     * <p>Normally, this property is not set by a user.</p>
-     */
-    public transient final StringProperty AggregateRules =
-        new StringProperty(
-            this, "mondrian.rolap.aggregates.rules", "/DefaultRules.xml");
-
-    /**
-     * <p>Alerting action to take in case native evaluation of a function is
-     * enabled but not supported for that function's usage in a particular
-     * query.  (No alert is ever raised in cases where native evaluation would
-     * definitely have been wasted effort.)</p>
-     *
-     * <p>Recognized actions:</p>
-     *
-     * <ul>
-     * <li><code>OFF</code>:  do nothing (default action, also used if
-     * unrecognized action is specified)</li>
-     * <li><code>WARN</code>:  log a warning to RolapUtil logger</li>
-     * <li><code>ERROR</code>:  throw an instance of
-     * {@link NativeEvaluationUnsupportedException}</li>
-     * </ul>
-     */
-    public transient final StringProperty AlertNativeEvaluationUnsupported =
-        new StringProperty(
-            this, "mondrian.native.unsupported.alert", "OFF");
 
     /**
      * Boolean property that controls whether the MDX parser resolves uses
@@ -147,41 +106,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.compareSiblingsByOrderKey", false);
 
     /**
-     * <p>Property that defines
-     * when to apply the crossjoin optimization algorithm.</p>
-     *
-     * <p>If a crossjoin input list's size is larger than this property's
-     * value and the axis has the "NON EMPTY" qualifier, then
-     * the crossjoin non-empty optimizer is applied.
-     * Setting this value to '0' means that for all crossjoin
-     * input lists in non-empty axes will have the optimizer applied.
-     * On the other hand, if the value is set larger than any possible
-     * list, say <code>Integer.MAX_VALUE</code>, then the optimizer
-     * will never be applied.</p>
-     */
-    public transient final IntegerProperty CrossJoinOptimizerSize =
-        new IntegerProperty(
-            this, "mondrian.olap.fun.crossjoin.optimizer.size", 0);
-
-    /**
-     * <p>Alerting action to take when a CurrentMember function is applied to
-     *                 a dimension that is also a compound slicer</p>
-     *
-     *             <p>Recognized actions:</p>
-     *
-     *             <ul>
-     *                 <li><code>OFF</code>:  do nothing</li>
-     *                 <li><code>WARN</code>:  log a warning</li>
-     *                 <li><code>ERROR</code>:  throw an CurrentMemberWithCompoundSlicer
-     *                     MondrianException</li>
-     *             </ul>
-     */
-    public transient final StringProperty CurrentMemberWithCompoundSlicerAlert =
-        new StringProperty(
-            this, "mondrian.olap.fun.currentmemberwithcompoundslicer.alert", "ERROR");
-
-
-    /**
      * Boolean property that controls whether to use a cache for frequently
      * evaluated expressions. With the cache disabled, an expression like
      * <code>Rank([Product].CurrentMember,
@@ -224,14 +148,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new BooleanProperty(
             this, "mondrian.rolap.EnableRolapCubeMemberCache", true);
 
-
-    /**
-     * If enabled, first row in the result of an XML/A drill-through request
-     * will be filled with the total count of rows in underlying database.
-     */
-    public transient final BooleanProperty EnableTotalCount =
-        new BooleanProperty(
-            this, "mondrian.xmla.drillthroughTotalCount.enable", true);
 
     /**
      * <p>Boolean property that controls whether to notify the Mondrian system
@@ -290,15 +206,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.generate.formatted.sql", false);
 
     /**
-     * <p>Property that defines whether non-existent member errors should be
-     * ignored during schema load. If so, the non-existent member is treated
-     * as a null member.</p>
-     */
-    public transient final BooleanProperty IgnoreInvalidMembers =
-        new BooleanProperty(
-            this, "mondrian.rolap.ignoreInvalidMembers", false);
-
-    /**
      * <p>Max number of constraints in a single 'IN' SQL clause.</p>
      *
      * <p>This value may be variant among database products and their runtime
@@ -315,27 +222,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final IntegerProperty MaxConstraints =
         new IntegerProperty(
             this, "mondrian.rolap.maxConstraints", 1000);
-
-
-    /**
-     * <p>Boolean property that defines the maximum number of passes
-     * allowable while evaluating an MDX expression.</p>
-     *
-     * <p>If evaluation exceeds this depth (for example, while evaluating a
-     * very complex calculated member), Mondrian will throw an error.</p>
-     */
-    public transient final IntegerProperty MaxEvalDepth =
-        new IntegerProperty(
-            this, "mondrian.rolap.evaluate.MaxEvalDepth", 10);
-
-    /**
-     * <p>Property that defines whether the <code>MemoryMonitor</code> should
-     * be enabled. By default it is disabled; memory monitor is not available
-     * before Java version 1.5.</p>
-     */
-    public transient final BooleanProperty MemoryMonitor =
-        new BooleanProperty(
-            this, "mondrian.util.memoryMonitor.enable", false);
 
     /**
      * <p>Property that defines

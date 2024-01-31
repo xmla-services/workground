@@ -19,11 +19,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 
@@ -77,17 +77,13 @@ public class Checkin_7634 extends CsvDBTestCase {
 
 
         // Execute query but do not used the CrossJoin nonEmptyList optimization
-        propSaver.set(
-            MondrianProperties.instance().CrossJoinOptimizerSize,
-            Integer.MAX_VALUE);
+        ((TestConfig)context.getConfig()).setCrossJoinOptimizerSize(Integer.MAX_VALUE);
         Result result1 = executeQuery(mdx, context.getConnection());
         String resultString1 = TestUtil.toString(result1);
 
         // Execute query using the new version of the CrossJoin
         // nonEmptyList optimization
-        propSaver.set(
-            MondrianProperties.instance().CrossJoinOptimizerSize,
-            Integer.MAX_VALUE);
+        ((TestConfig)context.getConfig()).setCrossJoinOptimizerSize(Integer.MAX_VALUE);
         Result result2 = executeQuery(mdx, context.getConnection());
         String resultString2 = TestUtil.toString(result2);
 

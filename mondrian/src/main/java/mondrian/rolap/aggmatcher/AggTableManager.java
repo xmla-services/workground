@@ -181,7 +181,9 @@ public class AggTableManager {
     {
         ListRecorder msgRecorder = new ListRecorder();
         try {
-            DefaultRules rules = DefaultRules.getInstance();
+            DefaultRules rules = DefaultRules.getInstance(
+                schema.getInternalConnection().getContext().getConfig().aggregateRuleTag(),
+                schema.getInternalConnection().getContext().getConfig().aggregateRules());
             JdbcSchema db = getJdbcSchema();
             // if we don't synchronize this on the db object,
             // we may end up getting a Concurrency exception due to

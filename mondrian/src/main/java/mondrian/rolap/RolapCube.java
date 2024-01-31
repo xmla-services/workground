@@ -3617,4 +3617,8 @@ public class RolapCube extends CubeBase {
         }
         return null;
     }
+
+    public Context getContext() {
+        return context;
+    }
 }

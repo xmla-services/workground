@@ -31,7 +31,6 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
@@ -40,7 +39,6 @@ import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
@@ -89,7 +87,7 @@ class SqlMemberSource
             hierarchy.getRolapSchema().getSchemaReader().getContext();
         assignOrderKeys =
             MondrianProperties.instance().CompareSiblingsByOrderKey.get();
-        valuePool = ValuePoolFactoryFactory.getValuePoolFactory().create(this);
+        valuePool = ValuePoolFactoryFactory.getValuePoolFactory(context.getConfig().memoryMonitor()).create(this);
     }
 
     // implement MemberSource
@@ -1580,8 +1578,8 @@ RME is this right
          *
          * @return the <code>Map</code>.
          */
-        public static ValuePoolFactory getValuePoolFactory() {
-            return factory.getObject();
+        public static ValuePoolFactory getValuePoolFactory(boolean memoryMonitor) {
+            return factory.getObject(memoryMonitor);
         }
 
         /**
@@ -1602,7 +1600,8 @@ RME is this right
         @Override
 		protected ValuePoolFactory getDefault(
             Class[] parameterTypes,
-            Object[] parameterValues)
+            Object[] parameterValues,
+            boolean memoryMonitor)
             throws CreationException
         {
             return new NullValuePoolFactory();

@@ -1216,7 +1216,7 @@ class SteelWheelsSchemaTest {
         //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
         ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
         assertQueryReturns(context.getConnection(),
             "WITH \n"

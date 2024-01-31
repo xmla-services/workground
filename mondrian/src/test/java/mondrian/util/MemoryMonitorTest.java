@@ -17,9 +17,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -28,7 +26,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MemoryLimitExceededException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 
 /**
@@ -89,15 +86,9 @@ class MemoryMonitorTest {
         return false;
     }
 
-    protected boolean enabled;
+    protected boolean enabled = false;
 
-    @BeforeEach
-    protected void setUp() throws Exception {
-        enabled = MondrianProperties.instance().MemoryMonitor.get();
-    }
-    @AfterEach
-    protected void tearDown() throws Exception {
-    }
+
 
 /*
 Does not work without the notify on add feature.
@@ -142,7 +133,7 @@ Does not work without the notify on add feature.
             }
         }
         Listener listener = new Listener();
-        MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor();
+        MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(false);
         // we will set a percentage slightly above the current
         // used level, and then allocate some objects that will
         // force a notification.
@@ -276,7 +267,7 @@ Does not work without the notify on add feature.
         try {
             MemoryMonitorFactory.setThreadLocalClassName(
                 TestMM.class.getName());
-            mm = MemoryMonitorFactory.getMemoryMonitor();
+            mm = MemoryMonitorFactory.getMemoryMonitor(false);
             boolean b = causeGC(mm);
 //System.out.println("causeGC="+b);
             long neededMemory = 5000000;

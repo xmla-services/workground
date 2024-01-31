@@ -110,7 +110,7 @@ public class RolapResult extends ResultBase {
   private FastBatchingCellReader batchingReader;
   private final CellReader aggregatingReader;
   private Modulos modulos = null;
-  private final int maxEvalDepth = MondrianProperties.instance().MaxEvalDepth.get();
+  private final int maxEvalDepth;
   private int solveOrder;
 
   private final Map<Integer, Boolean> positionsHighCardinality = new HashMap<>();
@@ -128,6 +128,7 @@ public class RolapResult extends ResultBase {
    */
   RolapResult( final Execution execution, boolean execute ) {
     super( execution, null );
+    this.maxEvalDepth = query.getConnection().getContext().getConfig().maxEvalDepth();
     this.solveOrder = execution
         .getMondrianStatement().getMondrianConnection()
         .getContext().getConfig().compoundSlicerMemberSolveOrder();

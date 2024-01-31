@@ -45,7 +45,7 @@ class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
         propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.UseAggregates, true);
         //propSaver.set(propSaver.properties.ReadAggregates, true);
-        propSaver.set(propSaver.properties.IgnoreInvalidMembers, false);
+        //propSaver.set(propSaver.properties.IgnoreInvalidMembers, false);
     }
 
     @AfterEach

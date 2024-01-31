@@ -12852,8 +12852,8 @@ Intel platforms):
     // make sure all aggregates referenced in the OR expression are
     // processed in a single load request by setting the eval depth to
     // a value smaller than the number of measures
-    int origDepth = MondrianProperties.instance().MaxEvalDepth.get();
-    MondrianProperties.instance().MaxEvalDepth.set( 3 );
+    int origDepth = context.getConfig().maxEvalDepth();
+    ((TestConfig)context.getConfig()).setMaxEvalDepth( 3 );
     assertQueryReturns(connection,
       "with set [*NATIVE_CJ_SET] as '[Store].[Store Country].members' "
         + "set [*GENERATED_MEMBERS_Measures] as "
@@ -12891,7 +12891,7 @@ Intel platforms):
         + "Row #0: 86,837\n"
         + "Row #0: 5,581\n"
         + "Row #0: 151,211.21\n" );
-    MondrianProperties.instance().MaxEvalDepth.set( origDepth );
+      ((TestConfig)context.getConfig()).setMaxEvalDepth( origDepth );
   }
 
   @ParameterizedTest

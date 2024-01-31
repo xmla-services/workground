@@ -57,8 +57,8 @@ public final class MemoryMonitorFactory
      *
      * @return the <code>MemoryMonitor</code>.
      */
-    public static MemoryMonitor getMemoryMonitor() {
-        return factory.getObject();
+    public static MemoryMonitor getMemoryMonitor(boolean memoryMonitor) {
+        return factory.getObject(memoryMonitor);
     }
 
     /**
@@ -118,15 +118,6 @@ public final class MemoryMonitorFactory
     }
 
     /**
-     * Returns whether the use of a <code>MemoryMonitor</code> is enabled.
-     *
-     * @return <code>true</code> if enabled and <code>false</code> otherwise.
-     */
-    protected boolean enabled() {
-        return MondrianProperties.instance().MemoryMonitor.get();
-    }
-
-    /**
      * Get the class name set in the <code>ThreadLocal</code> or null.
      *
      * @return class name or null.
@@ -165,10 +156,10 @@ public final class MemoryMonitorFactory
     @Override
 	protected MemoryMonitor getDefault(
         Class[] parameterTypes,
-        Object[] parameterValues)
+        Object[] parameterValues, boolean memoryMonitor)
         throws CreationException
     {
-        return (! enabled())
+        return (! memoryMonitor)
                     // not enabled
                 ? new FauxMemoryMonitor()
                     // enabled
