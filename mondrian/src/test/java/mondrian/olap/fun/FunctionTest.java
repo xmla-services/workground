@@ -7357,11 +7357,10 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
     assertExprReturns(context.getConnection(), NullNumericExpr + " / " + NullNumericExpr, "" );
 
     boolean origNullDenominatorProducesNull =
-      MondrianProperties.instance().NullDenominatorProducesNull.get();
+      context.getConfig().nullDenominatorProducesNull();
     try {
       // default behavior
-      MondrianProperties.instance().NullDenominatorProducesNull.set(
-        false );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull(false);
 
       assertExprReturns(context.getConnection(), "-2 / " + NullNumericExpr, "Infinity" );
       assertExprReturns(context.getConnection(), "0 / 0", "NaN" );
@@ -7372,7 +7371,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
       assertExprReturns(context.getConnection(), "1/NULL", "Infinity" );
 
       // when NullOrZeroDenominatorProducesNull is set to true
-      MondrianProperties.instance().NullDenominatorProducesNull.set( true );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( true );
 
       assertExprReturns(context.getConnection(), "-2 / " + NullNumericExpr, "" );
       assertExprReturns(context.getConnection(), "0 / 0", "NaN" );
@@ -7382,8 +7381,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
       assertExprReturns(context.getConnection(), "NULL/NULL", "" );
       assertExprReturns(context.getConnection(), "1/NULL", "" );
     } finally {
-      MondrianProperties.instance().NullDenominatorProducesNull.set(
-        origNullDenominatorProducesNull );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( origNullDenominatorProducesNull );
     }
   }
 
@@ -8070,7 +8068,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testGenerateWillTimeout(TestContext context) {
-    propSaver.set( propSaver.properties.QueryTimeout, 5 );
+    ((TestConfig)context.getConfig()).setQueryTimeout(5);
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false);
     try {
       executeAxis(context.getConnection(),
@@ -8114,7 +8112,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(TestContext context) {
-    propSaver.set( propSaver.properties.QueryTimeout, 3 );
+    ((TestConfig)context.getConfig()).setQueryTimeout(3);
     ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     try {
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {

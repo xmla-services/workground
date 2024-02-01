@@ -350,7 +350,7 @@ public class Execution {
     return startTimeMillis;
   }
 
-  public final mondrian.server.Statement getMondrianStatement() {
+  public mondrian.server.Statement getMondrianStatement() {
     return statement;
   }
 

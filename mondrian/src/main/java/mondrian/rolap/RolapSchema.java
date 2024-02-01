@@ -372,7 +372,7 @@ public class RolapSchema implements Schema {
 
 		load(mappingSchema);
 
-		aggTableManager.initialize(connectionProps);
+		aggTableManager.initialize(connectionProps, context.getConfig().useAggregates());
 		setSchemaLoadDate();
 	}
 

@@ -74,7 +74,7 @@ class AggGenTest {
         MondrianProperties props = MondrianProperties.instance();
         // If run in Ant and with mondrian.jar, please comment out this line:
         ((TestConfig)context.getConfig()).setAggregateRules("/DefaultRules.xml");
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setGenerateAggregateSql(true);
 

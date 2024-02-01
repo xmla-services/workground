@@ -241,7 +241,7 @@ protected void assertQuerySql(Connection connection,
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
 
     final String mdx =
@@ -281,7 +281,7 @@ protected void assertQuerySql(Connection connection,
   void testNativeTopCountWithAggMemberNamedSet(TestContext context) {
 	RolapSchemaPool.instance().clear();
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
     final String mdx =
       "with set TO_AGGREGATE as '{[Time.Weekly].[1997].[1] : [Time.Weekly].[1997].[39]}'\n"
@@ -316,7 +316,7 @@ protected void assertQuerySql(Connection connection,
 	  RolapSchemaPool.instance().clear();
 	  context.getConnection().getCacheControl(null).flushSchemaCache();
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
     final String mdx =
       "with\n"
@@ -427,7 +427,7 @@ protected void assertQuerySql(Connection connection,
 	RolapSchemaPool.instance().clear();
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
@@ -532,7 +532,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
 
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
@@ -637,7 +637,7 @@ protected void assertQuerySql(Connection connection,
 	RolapSchemaPool.instance().clear();
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
@@ -971,9 +971,7 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testTopCountWithAggregatedMemberAggStar(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true );
     ((TestConfig)context.getConfig()).setReadAggregates(true);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1229,9 +1227,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select NON EMPTY [Customers].[USA].[CA].[San Francisco].Children ON COLUMNS \n"
         + "from [Sales] \n"
@@ -1318,9 +1314,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, measures.[unit sales]) ON COLUMNS \n"
         + "  from sales where \n"
@@ -1416,9 +1410,7 @@ protected void assertQuerySql(Connection connection,
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
       true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, "
         + "measures.[unit sales]) ON COLUMNS \n"
@@ -1804,7 +1796,7 @@ protected void assertQuerySql(Connection connection,
 
   private static boolean isUseAgg(TestContext context) {
     return
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
   }
 
@@ -2067,7 +2059,7 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeSetsCacheClearing(TestContext context) {
     if ( context.getConfig().readAggregates()
-      && MondrianProperties.instance().UseAggregates.get() ) {
+      && context.getConfig().useAggregates() ) {
       return;
     }
     final String mdx =

@@ -76,7 +76,7 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
     public void beforeEach() {
         super.beforeEach();
         final MondrianProperties props = MondrianProperties.instance();
-        propSaver.set(props.UseAggregates, true);
+        //propSaver.set(props.UseAggregates, true);
         //propSaver.set(props.ReadAggregates, true);
         //super.getConnection().getCacheControl(null).flushSchemaCache();
     }
@@ -110,6 +110,8 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian1105(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {

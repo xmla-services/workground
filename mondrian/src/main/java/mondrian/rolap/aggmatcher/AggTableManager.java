@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.recorder.ListRecorder;
@@ -92,8 +91,8 @@ public class AggTableManager {
      * This method should only be called once.
      * @param connectInfo The Mondrian connection properties
      */
-    public void initialize(RolapConnectionProps connectionProps) {
-        if (MondrianProperties.instance().UseAggregates.get()) {
+    public void initialize(RolapConnectionProps connectionProps, boolean useAggregates) {
+        if (useAggregates) {
             try {
                 loadRolapStarAggregates(connectionProps);
             } catch (SQLException ex) {

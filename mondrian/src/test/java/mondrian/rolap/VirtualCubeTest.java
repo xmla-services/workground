@@ -2062,7 +2062,7 @@ class VirtualCubeTest extends BatchTestCase {
         // but ISNULL(1) isn't valid SQL, so we forego correct ordering of NULL
         // values.
         String mysqlSQL =
-            MondrianProperties.instance().UseAggregates.get()
+            context.getConfig().useAggregates()
             ? "select\n"
             + "    *\n"
             + "from\n"
@@ -2274,7 +2274,7 @@ class VirtualCubeTest extends BatchTestCase {
         // clause should be "order by ISNULL(1), 1 ASC" but we will settle for
         // "order by 1 ASC" and forego correct sorting of NULL values.
         String mysqlSQL =
-            MondrianProperties.instance().UseAggregates.get()
+            context.getConfig().useAggregates()
                 ? "select\n"
                 + "    *\n"
                 + "from\n"

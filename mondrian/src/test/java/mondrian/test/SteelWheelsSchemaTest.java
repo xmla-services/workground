@@ -1845,7 +1845,7 @@ class SteelWheelsSchemaTest {
     void testMondrian2411_3(TestContext context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
-        if ((MondrianProperties.instance().UseAggregates.get()
+        if ((context.getConfig().useAggregates()
                     && !Bug.BugMondrian2440Fixed))
         {
             return;

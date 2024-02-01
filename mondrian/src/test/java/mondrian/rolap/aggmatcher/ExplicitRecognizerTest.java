@@ -72,6 +72,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggExtraColsRequiringJoin(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -176,6 +177,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitForeignKey(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -309,6 +311,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggOrdinalOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -390,6 +393,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggCaptionOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -471,6 +475,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggNameColumnOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -564,6 +569,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggPropertiesOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -703,6 +709,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDistinctAllowableRollup(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -827,6 +834,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDisallowedRollup(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);

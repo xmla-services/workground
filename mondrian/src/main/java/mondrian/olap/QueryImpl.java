@@ -111,7 +111,7 @@ import mondrian.util.ArrayStack;
  * three ways to control rogue queries:<ul>
  *
  * <li>You can set a query timeout by setting the
- *     {@link MondrianProperties#QueryTimeout} parameter. If the query
+ *     QueryTimeout parameter. If the query
  *     takes longer to execute than the value of this parameter, the system
  *     will kill it.</li>
  *

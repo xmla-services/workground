@@ -280,6 +280,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testSingleJoin(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
     	super.prepareContext(context);
         if (!isApplicable(context.getConnection())) {
@@ -308,6 +309,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testComplexJoin(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
@@ -351,6 +353,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testComplexJoinDefaultRecognizer(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
@@ -391,6 +394,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testSsasCompatNamingInAgg(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         // MONDRIAN-1085
@@ -641,6 +645,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMondrian1325(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         final String query1 =

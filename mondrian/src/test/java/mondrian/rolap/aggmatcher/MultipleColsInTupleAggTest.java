@@ -72,6 +72,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotal(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -82,7 +83,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
         ((TestConfig)context.getConfig()).setReadAggregates(false);
 
         String mdx =
@@ -98,7 +99,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
         // unless there is a way to flush the cache,
         // I'm skeptical about these results
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(false);
 
         Result result1 = executeQuery(mdx, context.getConnection());
@@ -115,6 +116,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -144,6 +146,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasures(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -200,6 +203,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContext context)
         throws Exception
     {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
@@ -285,6 +289,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testChildSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);

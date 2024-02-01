@@ -31,7 +31,6 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.CacheControlImpl;
@@ -102,7 +101,8 @@ public class AggregationManager extends RolapAggregationManager {
         AggregationKey aggregationKey,
         StarColumnPredicate[] predicates,
         GroupingSetsCollector groupingSetsCollector,
-        List<Future<Map<Segment, SegmentWithData>>> segmentFutures)
+        List<Future<Map<Segment, SegmentWithData>>> segmentFutures,
+        boolean optimizePredicates)
     {
         RolapStar star = measures.get(0).getStar();
         Aggregation aggregation =
@@ -110,7 +110,7 @@ public class AggregationManager extends RolapAggregationManager {
 
         // try to eliminate unnecessary constraints
         // for Oracle: prevent an IN-clause with more than 1000 elements
-        predicates = aggregation.optimizePredicates(columns, predicates);
+        predicates = aggregation.optimizePredicates(columns, predicates, optimizePredicates);
         aggregation.load(
             cacheMgr, cellRequestCount, columns, measures, predicates,
             groupingSetsCollector, segmentFutures);
@@ -231,7 +231,7 @@ public class AggregationManager extends RolapAggregationManager {
      */
     public static Pair<String, List<BestFitColumnType>> generateSql(
         GroupingSetsList groupingSetsList,
-        List<StarPredicate> compoundPredicateList)
+        List<StarPredicate> compoundPredicateList, boolean useAggregates)
     {
         final RolapStar star = groupingSetsList.getStar();
         BitKey levelBitKey = groupingSetsList.getDefaultLevelBitKey();
@@ -243,7 +243,7 @@ public class AggregationManager extends RolapAggregationManager {
             // Do not use Aggregate tables if compound predicates are present.
             hasCompoundPredicates = true;
         }
-        if (MondrianProperties.instance().UseAggregates.get()
+        if (useAggregates
              && !hasCompoundPredicates)
         {
             final boolean[] rollup = {false};

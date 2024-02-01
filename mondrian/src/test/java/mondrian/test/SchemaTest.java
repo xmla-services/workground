@@ -1407,7 +1407,7 @@ class SchemaTest {
         // this test breaks when using aggregates at the moment
         // due to a known limitation
         if ((context.getConfig().readAggregates()
-             || MondrianProperties.instance().UseAggregates.get())
+             || context.getConfig().useAggregates())
             && !Bug.BugMondrian361Fixed)
         {
             return;
@@ -5719,7 +5719,7 @@ class SchemaTest {
             ((TestConfig)context.getConfig()).setDisableCaching(true);
 
             // re-read aggregates
-            propSaver.set(props.UseAggregates, true);
+            ((TestConfig)context.getConfig()).setUseAggregates(true);
             ((TestConfig)context.getConfig()).setReadAggregates(false);
             ((TestConfig)context.getConfig()).setReadAggregates(true);
 
@@ -6926,7 +6926,7 @@ class SchemaTest {
 
         // skip this test if using aggregates, the agg tables do not
         // enforce the SQL element in the fact table
-        if (MondrianProperties.instance().UseAggregates.booleanValue()) {
+        if (context.getConfig().useAggregates()) {
             return;
         }
         class TestBugMondrian482Modifier extends RDbMappingSchemaModifier {
@@ -8513,7 +8513,7 @@ class SchemaTest {
         checkBugMondrian463(context);
         // As above, but using shared dimension.
         if (context.getConfig().readAggregates()
-            && MondrianProperties.instance().UseAggregates.get())
+            && context.getConfig().useAggregates())
         {
             // With aggregates enabled, query gives different answer. This is
             // expected because some of the foreign keys have referential
@@ -9607,7 +9607,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonCollapsedAggregate(TestContext context) throws Exception {
-        if (MondrianProperties.instance().UseAggregates.get() == false
+        if (context.getConfig().useAggregates() == false
             && context.getConfig().readAggregates() == false)
         {
             return;
@@ -9803,7 +9803,7 @@ class SchemaTest {
     void testNonCollapsedAggregateOnNonUniqueLevelFails(TestContext context)
         throws Exception
     {
-        if (MondrianProperties.instance().UseAggregates.get() == false
+        if (context.getConfig().useAggregates() == false
             && context.getConfig().readAggregates() == false)
         {
             return;
@@ -9986,7 +9986,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoNonCollapsedAggregate(TestContext context) throws Exception {
-        if (MondrianProperties.instance().UseAggregates.get() == false
+        if (context.getConfig().useAggregates() == false
             && context.getConfig().readAggregates() == false)
         {
             return;
@@ -10367,7 +10367,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCollapsedError(TestContext context) throws Exception {
-        if (MondrianProperties.instance().UseAggregates.get() == false
+        if (context.getConfig().useAggregates() == false
             && context.getConfig().readAggregates() == false)
         {
             return;
@@ -10868,7 +10868,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian1499(TestContext context) throws Exception {
-        propSaver.set(propSaver.properties.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
         ((TestConfig)context.getConfig()).setReadAggregates(false);
         class TestMondrian1499Modifier extends RDbMappingSchemaModifier {
 

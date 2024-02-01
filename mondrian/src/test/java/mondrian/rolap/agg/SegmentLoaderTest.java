@@ -167,7 +167,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 final GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -250,7 +250,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -286,7 +286,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -295,7 +295,9 @@ class SegmentLoaderTest extends BatchTestCase {
             }
 
             @Override
-			boolean useSparse(boolean sparse, int n, RowList rows) {
+			boolean useSparse(boolean sparse, int n, RowList rows,
+                              int sparseSegmentCountThreshold,
+                              double sparseSegmentDensityThreshold) {
                 return true;
             }
         };
@@ -368,7 +370,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -416,7 +418,7 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return stmt;
             }
@@ -494,7 +496,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList,
+                boolean useAggregates)
             {
                 return stmt;
             }
@@ -546,7 +549,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                     int cellRequestCount,
                     GroupingSetsList groupingSetsList,
-                    List<StarPredicate> compoundPredicateList)
+                    List<StarPredicate> compoundPredicateList,
+                    boolean useAggregates)
             {
                 return stmt;
             }
@@ -592,7 +596,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList,
+                boolean useAggregates)
             {
                 return stmt;
             }

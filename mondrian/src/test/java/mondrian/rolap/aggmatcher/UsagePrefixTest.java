@@ -36,6 +36,7 @@ class UsagePrefixTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefix(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
@@ -44,7 +45,7 @@ class UsagePrefixTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
 
         String mdx =
@@ -71,6 +72,7 @@ class UsagePrefixTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefixTwoDims(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
@@ -79,7 +81,7 @@ class UsagePrefixTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
 
         String mdx =

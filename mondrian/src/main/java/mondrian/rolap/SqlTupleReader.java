@@ -1199,7 +1199,7 @@ public TupleList readTuples(
 
 
     Evaluator evaluator = getEvaluator( constraint );
-    AggStar aggStar = chooseAggStar( constraint, evaluator, baseCube );
+    AggStar aggStar = chooseAggStar( constraint, evaluator, baseCube, context.getConfig().useAggregates() );
 
     // add the selects for all levels to fetch
     for ( TargetBase target : targetGroup ) {
@@ -1574,8 +1574,9 @@ public TupleList readTuples(
   AggStar chooseAggStar(
     TupleConstraint constraint,
     Evaluator evaluator,
-    RolapCube baseCube ) {
-    if ( !MondrianProperties.instance().UseAggregates.get() ) {
+    RolapCube baseCube,
+    boolean useAggregates) {
+    if ( !useAggregates ) {
       return null;
     }
 

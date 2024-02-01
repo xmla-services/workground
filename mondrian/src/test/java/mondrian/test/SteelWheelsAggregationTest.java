@@ -84,7 +84,7 @@ class SteelWheelsAggregationTest {
     @BeforeEach
     public void beforeEach() {
         propertySaver = new PropertySaver5();
-        propertySaver.set(propertySaver.properties.UseAggregates, true);
+        //propertySaver.set(propertySaver.properties.UseAggregates, true);
         //propertySaver.set(propertySaver.properties.ReadAggregates, true);
     }
 
@@ -176,6 +176,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregation(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
                 (List.of(RoleRBuilder.builder()
@@ -224,6 +225,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationNoRestrictionsOnTopLevel(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(RoleRBuilder.builder()
@@ -269,6 +271,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testUnionWithAggregation(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(
@@ -336,6 +339,7 @@ class SteelWheelsAggregationTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalog.class, dataloader = SteelWheelsDataLoader.class)
     void testWithAggregationUnionRolesWithSameGrants(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         final MappingSchema schema = getSchemaWith
             (List.of(

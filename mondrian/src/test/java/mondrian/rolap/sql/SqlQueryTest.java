@@ -86,15 +86,15 @@ class SqlQueryTest  extends BatchTestCase {
     private void prepareContext(Connection connection) {
         // This test warns of missing sql patterns for MYSQL.
         final Dialect dialect = getDialect(connection);
-        if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
+        if (connection.getContext().getConfig().warnIfNoPatternForDialect().equals("ANY")
                 || getDatabaseProduct(dialect.getDialectName()) == MYSQL)
         {
-        	propSaver.set(prop.WarnIfNoPatternForDialect,
+            ((TestConfig)connection.getContext().getConfig()).setWarnIfNoPatternForDialect(
                     getDatabaseProduct(dialect.getDialectName()).toString());
         } else {
             // Do not warn unless the dialect is "MYSQL", or
             // if the test chooses to warn regardless of the dialect.
-        	propSaver.set(prop.WarnIfNoPatternForDialect, "NONE");
+            ((TestConfig)connection.getContext().getConfig()).setWarnIfNoPatternForDialect("NONE");
         }
 
     }
@@ -292,7 +292,7 @@ class SqlQueryTest  extends BatchTestCase {
         // dialect.
         if (!patternFound) {
             String warnDialect =
-                MondrianProperties.instance().WarnIfNoPatternForDialect.get();
+                connection.getContext().getConfig().warnIfNoPatternForDialect();
 
             if (warnDialect.equals(d.toString())) {
                 System.out.println(
@@ -308,7 +308,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testPredicatesAreOptimizedWhenPropertyIsTrue(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && context.getConfig().useAggregates()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
             // only check sql pattern when aggregate tables are not used.
@@ -395,7 +395,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testPredicatesAreNotOptimizedWhenPropertyIsFalse(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        if (context.getConfig().readAggregates() && prop.UseAggregates.get()) {
+        if (context.getConfig().readAggregates() && context.getConfig().useAggregates()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
             // only check sql pattern when aggregate tables are not used.
@@ -489,13 +489,13 @@ class SqlQueryTest  extends BatchTestCase {
         SqlPattern[] sqlPatterns)
     {
         boolean intialValueOptimize =
-            prop.OptimizePredicates.get();
+            context.getConfig().optimizePredicates();
 
         try {
-        	propSaver.set(prop.OptimizePredicates, optimizePredicatesValue);
+            ((TestConfig)context.getConfig()).setOptimizePredicates(optimizePredicatesValue);
             assertQuerySql(context.getConnection(), inputMdx, sqlPatterns);
         } finally {
-        	propSaver.set(prop.OptimizePredicates, intialValueOptimize);
+            ((TestConfig)context.getConfig()).setOptimizePredicates(intialValueOptimize);
         }
     }
 

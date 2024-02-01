@@ -1948,7 +1948,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCountDistinctAgg(TestContext context) {
-    boolean use_agg_orig = props.UseAggregates.get();
+    boolean use_agg_orig = context.getConfig().useAggregates();
 
     // turn off caching
         ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -1959,9 +1959,9 @@ public class BasicQueryTest {
             + "{[Measures].[Customer Count]}\n" + "Row #0: 21,628\n" + "Row #1: 1,396\n" );
 
     if ( use_agg_orig ) {
-      propSaver.set( props.UseAggregates, false );
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
     } else {
-      propSaver.set( props.UseAggregates, true );
+      ((TestConfig)context.getConfig()).setUseAggregates(true);
     }
 
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales], [Measures].[Customer Count]} on rows,\n"
@@ -2003,7 +2003,7 @@ public class BasicQueryTest {
             + "      formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier14::new);
-    propSaver.set( props.UseAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
     ((TestConfig)context.getConfig()).setReadAggregates(true);
     executeQuery(context.getConnection(), mdx);
   }
@@ -2039,7 +2039,7 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier15::new);
-    propSaver.set( props.UseAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
     ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     // no exception is thrown
@@ -2142,7 +2142,7 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier17::new);
-    propSaver.set( props.UseAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
     ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
@@ -2153,8 +2153,9 @@ public class BasicQueryTest {
     assertQueryReturns( context.getConnection(),mdx, desiredResult );
 
     // check that consistent with fact table
-    propSaver.set( props.UseAggregates, false );
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
     ((TestConfig)context.getConfig()).setReadAggregates(false);
+    RolapSchemaPool.instance().clear();
 
     assertQueryReturns(context.getConnection(), mdx, desiredResult );
   }
@@ -2194,7 +2195,7 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier18::new);
-    propSaver.set( props.UseAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
     ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
@@ -2239,7 +2240,7 @@ public class BasicQueryTest {
             + "</Schema>";
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier19::new);
-    propSaver.set( props.UseAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
     ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
@@ -2945,6 +2946,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testTopmost2(TestContext context) {
+    RolapSchemaPool.instance().clear();
     assertQueryReturns( context.getConnection(),"SELECT {Measures.[Unit Sales]} ON COLUMNS,\n" + "  CROSSJOIN(Customers.CHILDREN,\n"
         + "    TOPCOUNT(DESCENDANTS([Store].CURRENTMEMBER, [Store].[Store Name]),\n"
         + "             1, [Measures].[Unit Sales])) ON ROWS\n" + "FROM Sales",
@@ -3450,6 +3452,7 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelMutliple(TestContext context) {
+	  RolapSchemaPool.instance().clear();
       ((TestConfig)context.getConfig()).setMaxEvalDepth(MAX_EVAL_DEPTH_VALUE);
     Connection connection = context.getConnection();
     for ( int i = 0; i < 5; i++ ) {
@@ -4170,9 +4173,10 @@ public class BasicQueryTest {
         "must contain either a source column or a source expression, but not both" );
   }
 
-    @ParameterizedTest
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testInvalidMembersInQuery(TestContext context) {
+	RolapSchemaPool.instance().clear();
     String mdx =
         "select {[Measures].[Unit Sales]} on columns,\n" + " {[Time].[1997].[Q1], [Time].[1997].[QTOO]} on rows\n"
             + "from [Sales]";
@@ -4438,7 +4442,7 @@ public class BasicQueryTest {
     final int cancelInterval = 50;
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
     final String triggerSql = "product_name";
 
     Long rows =
@@ -4456,7 +4460,7 @@ public class BasicQueryTest {
   void testCancelSqlFetchSegmentLoad(TestContext context) throws Exception {
     // 512 rows
     final int cancelInterval = 101;
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
     // this will avoid spamming output with cache failures, but should
     // also work without side effects with cache enabled
       ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -4481,7 +4485,7 @@ public class BasicQueryTest {
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
             + "  {[Customers].[Mexico].[Guerrero].[Acapulco].Children} ON ROWS\n" + "FROM [Sales]";
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
 
     Long rows = executeAndCancelAtSqlFetch(context, query, "customer_id", "SqlMemberSource.getMemberChildren" );
     assertEquals(new Long( cancelInterval ), rows, "Query not aborted at first interval");
@@ -4594,7 +4598,7 @@ public class BasicQueryTest {
         "WITH\n" + "  MEMBER [Measures].[Sleepy]\n" + "    AS 'SleepUdf([Measures].[Unit Sales])'\n"
             + "SELECT {[Measures].[Sleepy]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
     Throwable throwable = null;
-    propSaver.set( props.QueryTimeout, 2 );
+    ((TestConfig)context.getConfig()).setQueryTimeout(2);
     try {
     	executeQueryTimeoutTest(context.getConnection(), query);
     } catch ( Throwable ex ) {
@@ -4738,7 +4742,7 @@ public class BasicQueryTest {
     checkThrowable( throwable, "Number of iterations exceeded limit of 11" );
 
     // make sure the query runs without the limit set
-    propSaver.reset();
+    ((TestConfig)context.getConfig()).setIterationLimit(0);
     executeQuery(connection, queryString );
   }
 
@@ -6037,6 +6041,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicerIgnoreException(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF" );
 
     //final TestContext context = getTestContext().withFreshConnection();
@@ -6058,6 +6063,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicer2(TestContext context) {
+    RolapSchemaPool.instance().clear();
     String mdx =
         "with\n" + "member [Measures].[Drink Sales Previous Period] as\n"
             + "'( Time.CurrentMember.lag(1), [Product].[All Products].[Drink]," + " measures.[unit sales] )'\n"
@@ -6077,6 +6083,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicer2IgnoreException(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF");
 
     //final TestContext context = getTestContext().withFreshConnection();

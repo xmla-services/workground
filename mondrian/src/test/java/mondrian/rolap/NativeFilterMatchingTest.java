@@ -448,7 +448,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
             final String sqlMysql =
-                propSaver.properties.UseAggregates.get() == false
+                context.getConfig().useAggregates() == false
                     ? "select\n"
                     + "    `time_by_day`.`the_year` as `c0`,\n"
                     + "    `time_by_day`.`quarter` as `c1`\n"
@@ -535,7 +535,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicerWithAggs(TestContext context) {
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
@@ -613,7 +613,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
             final String sqlMysql =
-                propSaver.properties.UseAggregates.get() == false
+                context.getConfig().useAggregates() == false
                     ? "select\n"
                     + "    `customer`.`country` as `c0`,\n"
                     + "    `customer`.`state_province` as `c1`,\n"

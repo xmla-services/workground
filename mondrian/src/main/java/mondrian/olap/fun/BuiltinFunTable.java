@@ -102,8 +102,8 @@ public class BuiltinFunTable extends FunTableImpl {
         FunctionMetaData functionMetaDataEmpty = new FunctionMetaDataR(functionAtom,
         		"Dummy function representing the empty expression", "", DataType.EMPTY,
     			new DataType[] { });
-    		
-        
+
+
 		FunctionDefinition functionDefinitionEmpty = new AbstractFunctionDefinition(functionMetaDataEmpty) {
 
 			@Override
@@ -311,14 +311,14 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AncestorFunDef.Resolver);
         builder.define(AncestorsFunDef.Resolver);
 
-        
+
         FunctionAtom functionAtomCousin = new FunctionAtomR("Cousin",Syntax.Function);
         FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtomCousin,
         		"Returns the member with the same relative position under <ancestor member> as the member specified.", "<Member> Cousin(<Member>, <Ancestor Member>)",  DataType.MEMBER,
     			new DataType[] { DataType.MEMBER,DataType.MEMBER});
-    		
-    					
-    			
+
+
+
         builder.define(
             new AbstractFunctionDefinition(functionMetaData)
         {
@@ -381,7 +381,7 @@ public class BuiltinFunTable extends FunTableImpl {
 				 DataType.MEMBER, new DataType[] { DataType.DIMENSION }));
 
         // "<Hierarchy>.DefaultMember"
-		
+
         builder.define(
             new AbstractFunctionDefinition(
             		new FunctionMetaDataR(
@@ -655,7 +655,7 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AggregateFunDef.resolver);
 
         // Obsolete??
-             
+
         builder.define(
         		 new AggregateChildrenFunbDef()
         );
@@ -958,9 +958,9 @@ public class BuiltinFunTable extends FunTableImpl {
 
         // <Dimension>.Members is really just shorthand for <Hierarchy>.Members
     	 FunctionAtom functionAtomMembers =new FunctionAtomR(MEMBERS, Syntax.Property);
-		builder.define(	new FunctionMetaDataR(functionAtomMembers, "Returns the set of members in a dimension.", "", 
+		builder.define(	new FunctionMetaDataR(functionAtomMembers, "Returns the set of members in a dimension.", "",
 						DataType.SET, new DataType[] { DataType.DIMENSION }));
-  
+
 
         // <Hierarchy>.Members
         builder.define(
@@ -1539,7 +1539,7 @@ public class BuiltinFunTable extends FunTableImpl {
 					public Double evaluate(Evaluator evaluator) {
                         final Double v0 = calc0.evaluate(evaluator);
                         final Double v1 = calc1.evaluate(evaluator);
-                        
+
                         if (v0 == FunUtil.DOUBLE_NULL || v0 == null) {
                             if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 return FunUtil.DOUBLE_NULL;
@@ -1635,8 +1635,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
                 final boolean isNullDenominatorProducesNull =
-                    MondrianProperties.instance().NullDenominatorProducesNull
-                        .get();
+                    compiler.getEvaluator().getQuery().getConnection()
+                        .getContext().getConfig().nullDenominatorProducesNull();
 
                 // If the mondrian property
                 //   mondrian.olap.NullOrZeroDenominatorProducesNull

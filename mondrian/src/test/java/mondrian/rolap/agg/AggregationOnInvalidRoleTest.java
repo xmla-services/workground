@@ -43,7 +43,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        //propSaver.set(propSaver.properties.UseAggregates, true);
         //propSaver.set(propSaver.properties.ReadAggregates, true);
         //propSaver.set(propSaver.properties.IgnoreInvalidMembers, true);
     }
@@ -62,6 +62,7 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
         prepareContext(context);
@@ -113,7 +114,6 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     static void executeAnalyzerQuery(Connection connection) {
         // select measures on columns
         // and sorted lexicography products on rows
-
         String queryFromAnalyzer = ""
             + "with "
             + "  set [*NATIVE_CJ_SET_WITH_SLICER] as 'Filter([*BASE_MEMBERS__Product Code_], (NOT IsEmpty([Measures].[Measure])))'"

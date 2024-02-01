@@ -1115,6 +1115,7 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandNonNativeResourceLimitFailure(TestContext context) {
+	RolapSchemaPool.instance().clear();
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
@@ -2374,7 +2375,7 @@ class NonEmptyTest extends BatchTestCase {
           + "ISNULL(`store`.`store_city`) ASC, `store`.`store_city` ASC, ISNULL(`product_class`.`product_family`) "
           + "ASC, `product_class`.`product_family` ASC" );
 
-    if ( MondrianProperties.instance().UseAggregates.get()
+    if ( context.getConfig().useAggregates()
       && context.getConfig().readAggregates() ) {
       // slightly different sql expected, uses agg table now for join
       necjSqlMySql = necjSqlMySql.replaceAll(
@@ -5173,7 +5174,7 @@ class NonEmptyTest extends BatchTestCase {
       + " from [Warehouse and Sales]";
     SqlPattern oraclePattern = new SqlPattern(
       DatabaseProduct.ORACLE,
-      propSaver.properties.UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select\n"
         + "    \"agg_c_14_sales_fact_1997\".\"the_year\" as \"c0\",\n"
         + "    \"promotion\".\"promotion_name\" as \"c1\"\n"
@@ -5238,7 +5239,7 @@ class NonEmptyTest extends BatchTestCase {
       + " from [Warehouse and Sales]";
     SqlPattern oraclePattern = new SqlPattern(
       DatabaseProduct.ORACLE,
-      propSaver.properties.UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select\n"
         + "    \"promotion\".\"promotion_name\" as \"c0\"\n"
         + "from\n"
@@ -5287,7 +5288,7 @@ class NonEmptyTest extends BatchTestCase {
       + " from [Warehouse and Sales]";
     final SqlPattern pattern = new SqlPattern(
       DatabaseProduct.ORACLE,
-      propSaver.properties.UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select\n"
         + "    \"agg_c_14_sales_fact_1997\".\"the_year\" as \"c0\",\n"
         + "    \"promotion\".\"promotion_name\" as \"c1\"\n"
@@ -5355,7 +5356,7 @@ class NonEmptyTest extends BatchTestCase {
         + " from [Warehouse and Sales]";
     final SqlPattern pattern = new SqlPattern(
       DatabaseProduct.ORACLE,
-      propSaver.properties.UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select\n"
         + "    \"agg_c_14_sales_fact_1997\".\"the_year\" as \"c0\",\n"
         + "    \"promotion\".\"promotion_name\" as \"c1\"\n"
@@ -5424,7 +5425,7 @@ class NonEmptyTest extends BatchTestCase {
         + "non empty [Customers].[name].members on 1 "
         + "from Sales";
     final String sqlOracle =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select \"customer\".\"country\" as \"c0\","
         + " \"customer\".\"state_province\" as \"c1\", \"customer\".\"city\" as \"c2\", \"customer\".\"customer_id\" "
         + "as \"c3\", \"fname\" || ' ' || \"lname\" as \"c4\", \"fname\" || ' ' || \"lname\" as \"c5\", \"customer\""
@@ -5470,7 +5471,7 @@ class NonEmptyTest extends BatchTestCase {
         + "non empty [Customers].[name].members on 1 "
         + "from Sales";
     final String sqlOracle =
-      MondrianProperties.instance().UseAggregates.get()
+      context.getConfig().useAggregates()
         ? "select \"customer\".\"country\" as \"c0\","
         + " \"customer\".\"state_province\" as \"c1\", \"customer\".\"city\" as \"c2\", \"customer\".\"customer_id\" "
         + "as \"c3\", \"fname\" || ' ' || \"lname\" as \"c4\", \"fname\" || ' ' || \"lname\" as \"c5\", \"customer\""
@@ -5522,7 +5523,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNonUniformNestedMeasureConstraintsGetOptimized(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().UseAggregates.get() ) {
+    if ( context.getConfig().useAggregates() ) {
       // This test can't work with aggregates becaused
       // the aggregate table doesn't include member properties.
       return;
@@ -6233,9 +6234,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian1133(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
       ((TestConfig)context.getConfig()).setReadAggregates(false);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -6430,9 +6429,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian1133WithAggs(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      true );
+      ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -6685,7 +6682,7 @@ class NonEmptyTest extends BatchTestCase {
         + "    `time_by_day`.`month_of_year` as `c2`,\n"
         + "    `product_class`.`product_family` as `c3`,\n";
 
-    if ( MondrianProperties.instance().UseAggregates.get()
+    if ( context.getConfig().useAggregates()
       && context.getConfig().readAggregates() ) {
       mysqlNativeCrossJoinQuery =
         "select\n"

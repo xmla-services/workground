@@ -221,7 +221,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFemaleUnitSalesSql(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -282,7 +282,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleMeasures(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -438,7 +438,7 @@ class TestAggregationManager extends BatchTestCase {
 
         // Note: the following aggregate loading sqls contain no
         // references to the parent level column "store_country".
-        if (MondrianProperties.instance().UseAggregates.get()
+        if (context.getConfig().useAggregates()
             && context.getConfig().readAggregates())
         {
             accessMysqlSql =
@@ -693,7 +693,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountDistinctAggMatch(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -819,7 +819,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountDistinctRollupAlongDim(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -885,7 +885,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountDistinctRollup2(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -1010,7 +1010,7 @@ class TestAggregationManager extends BatchTestCase {
         if (context.getConfig().testExpDependencies() > 0) {
             return;
         }
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
                 && context.getConfig().readAggregates()))
         {
             return;
@@ -1496,7 +1496,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountDistinctWithConstraintAggMiss(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
               && context.getConfig().readAggregates()))
         {
             return;
@@ -1579,7 +1579,7 @@ class TestAggregationManager extends BatchTestCase {
         // this verifies that we can load properties, ordinals, etc out of
         // agg tables in member lookups (tuples and children)
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
                 && context.getConfig().readAggregates()))
         {
             return;
@@ -1829,7 +1829,7 @@ class TestAggregationManager extends BatchTestCase {
     void testAggregatingTuples(TestContext context) {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(1);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
                 && context.getConfig().readAggregates()))
         {
             return;
@@ -1944,7 +1944,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCollapsedChildren(TestContext context) {
         prepareContext(context);
-        if (!(MondrianProperties.instance().UseAggregates.get()
+        if (!(context.getConfig().useAggregates()
                 && context.getConfig().readAggregates()))
         {
             return;
@@ -2011,7 +2011,7 @@ class TestAggregationManager extends BatchTestCase {
             p = false;
             break;
         }
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         final String mdxQuery =
             "select non empty{[Promotions].[All Promotions].Children} ON rows, "
@@ -2181,7 +2181,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggNameApproxRowCount(TestContext context) {
         prepareContext(context);
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         /*
         withSchema(context,
@@ -2367,7 +2367,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonCollapsedAggregate(TestContext context) {
         prepareContext(context);
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         /*
         final String cube =
@@ -2587,7 +2587,7 @@ class TestAggregationManager extends BatchTestCase {
     {
         prepareContext(context);
         // MONDRIAN-1072.
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         /*
         final String cube =
@@ -2676,7 +2676,7 @@ class TestAggregationManager extends BatchTestCase {
     {
         prepareContext(context);
         // MONDRIAN-1072
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         /*
         final String cube =
@@ -2777,7 +2777,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoNonCollapsedAggregate(TestContext context) throws Exception {
         prepareContext(context);
-        propSaver.set(MondrianProperties.instance().UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         /*
@@ -3076,9 +3076,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeAggBugMondrian1221(TestContext context) {
         prepareContext(context);
-        propSaver.set(
-            MondrianProperties.instance().UseAggregates,
-            true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(
             propSaver.properties.GenerateFormattedSql,
@@ -3273,9 +3271,7 @@ class TestAggregationManager extends BatchTestCase {
         if (!context.getConfig().enableNativeCrossJoin()) {
             return;
         }
-        propSaver.set(
-            MondrianProperties.instance().UseAggregates,
-            true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(
             propSaver.properties.GenerateFormattedSql,
@@ -3520,7 +3516,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         boolean chooseAggregateByVolume = context.getConfig().chooseAggregateByVolume();
         /*
         withSchema(context,
@@ -3615,7 +3611,7 @@ class TestAggregationManager extends BatchTestCase {
     void testAggStarWithUnusedColumnsRequiresRollup(TestContext context) {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         /*
         withSchema(context,
@@ -3698,7 +3694,7 @@ class TestAggregationManager extends BatchTestCase {
     void testAggStarWithIgnoredColumnsAndCountDistinct(TestContext context) {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         /*
         withSchema(context,
@@ -3802,7 +3798,7 @@ class TestAggregationManager extends BatchTestCase {
     	RolapSchemaPool.instance().clear();
         prepareContext(context);
         ((TestConfig)context.getConfig()).setReadAggregates(false);
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         String sql =
             "select count(*) as `c0` from `agg_c_10_sales_fact_1997` as `agg_c_10_sales_fact_1997`";
         assertQuerySqlOrNot(

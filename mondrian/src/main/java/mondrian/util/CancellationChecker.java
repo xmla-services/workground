@@ -9,7 +9,6 @@
 */
 package mondrian.util;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.server.Execution;
 
 /**
@@ -33,8 +32,8 @@ public class CancellationChecker {
   public static void checkCancelOrTimeout(
       long currentIteration, Execution execution)
   {
-    int checkCancelOrTimeoutInterval = MondrianProperties.instance()
-        .CheckCancelOrTimeoutInterval.get();
+    int checkCancelOrTimeoutInterval = execution.getMondrianStatement().getMondrianConnection().getContext().getConfig()
+        .checkCancelOrTimeoutInterval();
     if (execution != null) {
       synchronized (execution) {
         if (checkCancelOrTimeoutInterval > 0

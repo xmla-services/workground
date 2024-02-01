@@ -1184,18 +1184,14 @@ class FilterTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   public void  testBugMondrian706(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().UseAggregates,
-      false );
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
       ((TestConfig) context.getConfig()).setReadAggregates(false);
     ((TestConfig) context.getConfig()).setDisableCaching(false);
     ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey,
       true );
-    propSaver.set(
-      MondrianProperties.instance().NullDenominatorProducesNull,
-      true );
+    ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( true );
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     ((TestConfig)context.getConfig()).setEnableNativeFilter(true);
     // With bug MONDRIAN-706, would generate
@@ -1400,7 +1396,7 @@ class FilterTest extends BatchTestCase {
     //TestContext context = getTestContext();
     if ( !context.getConfig().enableNativeCrossJoin()
       || !context.getConfig().readAggregates()
-      || !propSaver.properties.UseAggregates.get() ) {
+      || !context.getConfig().useAggregates() ) {
       return;
     }
 

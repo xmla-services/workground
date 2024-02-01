@@ -50,7 +50,7 @@ class BatchedFillTest extends ClearViewBase {
 
             if (getName().equals("testBatchedFill2")
                     && context.getConfig().readAggregates()
-                    && MondrianProperties.instance().UseAggregates.get()) {
+                    && context.getConfig().useAggregates()) {
                 // If agg tables are enabled, the SQL generated is 'better' than
                 // expected.
             } else {

@@ -622,7 +622,7 @@ RME is this right
         // If this is a non-empty constraint, it is more efficient to join to
         // an aggregate table than to the fact table. See whether a suitable
         // aggregate table exists.
-        AggStar aggStar = chooseAggStar(constraint, member);
+        AggStar aggStar = chooseAggStar(constraint, member, context.getConfig().useAggregates());
 
         // Create the condition, which is either the parent member or
         // the full context (non empty).
@@ -751,9 +751,9 @@ RME is this right
 
     private static AggStar chooseAggStar(
         MemberChildrenConstraint constraint,
-        RolapMember member)
+        RolapMember member, boolean useAggregates)
     {
-        if (!MondrianProperties.instance().UseAggregates.get()
+        if (!useAggregates
                 || !(constraint instanceof SqlContextConstraint contextConstraint))
         {
             return null;

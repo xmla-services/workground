@@ -14,7 +14,6 @@
 package mondrian.olap;
 
 import org.eigenbase.util.property.BooleanProperty;
-import org.eigenbase.util.property.DoubleProperty;
 import org.eigenbase.util.property.IntegerProperty;
 import org.eigenbase.util.property.StringProperty;
 
@@ -86,15 +85,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     //    new IntegerProperty(
     //        this, "mondrian.rolap.cellBatchSize", -1);
 
-    /**
-     * <p>Positive integer property that determines loop iterations number between checks for whether the current mdx query has been cancelled or timeout was exceeded.<br></br>
-     * Setting the interval too small may result in a performance degradation when reading large result sets;
-     * setting it too high can cause a big delay between the query being marked as cancelled or timeout was exceeded and system resources associated to it being released.
-     * </p>
-     */
-    public transient final IntegerProperty CheckCancelOrTimeoutInterval =
-        new IntegerProperty(
-            this, "mondrian.util.checkCancelOrTimeoutInterval", 1000);
 
     /**
      * Boolean property that controls whether sibling members are
@@ -246,87 +236,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.util.memoryMonitor.percentage.threshold", 90);
 
     /**
-     * <p>Property that controls the maximum number of results contained in a
-     * NativizeSet result set.</p>
-     *
-     * <p>If the number of tuples contained in the result set exceeds this
-     * value Mondrian throws a LimitExceededDuringCrossjoin error.</p>
-     */
-    public transient final IntegerProperty NativizeMaxResults =
-        new IntegerProperty(
-            this, "mondrian.native.NativizeMaxResults", 150000);
-
-    /**
-     * <p>Property that controls minimum expected cardinality required in
-     * order for NativizeSet to natively evaluate a query.</p>
-     *
-     * <p>If the expected cardinality falls below this level the query is
-     * executed non-natively.</p>
-     *
-     * <p>It is possible for the actual cardinality to fall below this
-     * threshold even though the expected cardinality falls above this
-     * threshold.  In this case the query will be natively evaluated.</p>
-     */
-    public transient final IntegerProperty NativizeMinThreshold =
-        new IntegerProperty(
-            this, "mondrian.native.NativizeMinThreshold", 100000);
-
-    /**
-     * <p>Property determines if elements of dimension (levels, hierarchies,
-     * members) need to be prefixed with dimension name in MDX query.</p>
-     *
-     * <p>For example when the property is true, the following queries
-     * will error out. The same queries will work when this property
-     * is set to false.</p>
-     *
-     * <blockquote><code>select {[M]} on 0 from sales<br></br>
-     * select {[USA]} on 0 from sales<br></br>
-     * select {[USA].[CA].[Santa Monica]}  on 0 from sales</code></blockquote>
-     *
-     * <p>When the property is set to true, any query where elements are
-     * prefixed with dimension name as below will work</p>
-     *
-     * <blockquote><code>select {[Gender].[F]} on 0 from sales<br></br>
-     * select {[Customers].[Santa Monica]} on 0 from sales</code></blockquote>
-     *
-     * <p>Please note that this property does not govern the behaviour
-     * wherein</p>
-     *
-     * <blockquote><code>[Gender].[M]</code></blockquote>
-     *
-     * <p>is resolved into a fully qualified</p>
-     *
-     * <blockquote><code>[Gender].[M]</code></blockquote>
-     *
-     * <p> In a scenario where the schema is very large and dimensions have
-     * large number of members a MDX query that has a invalid member in it will
-     * cause mondrian to to go through all the dimensions, levels, hierarchies,
-     * members and properties trying to resolve the element name. This behavior
-     * consumes considerable time and resources on the server. Setting this
-     * property to true will make it fail fast in a scenario where it is
-     * desirable.</p>
-     */
-    public transient final BooleanProperty NeedDimensionPrefix =
-        new BooleanProperty(
-            this, "mondrian.olap.elements.NeedDimensionPrefix", false);
-
-    /**
-     * <p>Property that defines
-     * the behavior of division if the denominator evaluates to zero.</p>
-     *
-     * <p>If false (the default), if a division has a non-null numerator and
-     * a null denominator, it evaluates to "Infinity", which conforms to SSAS
-     * behavior.</p>
-     *
-     * <p>If true, the result is null if the denominator is null. Setting to
-     * true enables the old semantics of evaluating this to null; this does
-     * not conform to SSAS, but is useful in some applications.</p>
-     */
-    public transient final BooleanProperty NullDenominatorProducesNull =
-        new BooleanProperty(
-            this, "mondrian.olap.NullDenominatorProducesNull", false);
-
-    /**
      * <p>Property that determines how a null member value is represented in the
      * result output.</p>
      * <p>AS 2000 shows this as empty value</p>
@@ -335,20 +244,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final StringProperty NullMemberRepresentation =
         new StringProperty(
             this, "mondrian.olap.NullMemberRepresentation", "#null");
-
-    /**
-     * <p>Boolean property that determines whether Mondrian optimizes predicates.</p>
-     *
-     * <p>If true, Mondrian may retrieve a little more data than specified in
-     * MDX query and cache it for future use.  For example, if you ask for
-     * data on 48 states of the United States for 3 quarters of 2011,
-     * Mondrian will round out to all 50 states and all 4 quarters.  If
-     * false, Mondrian still optimizes queries that involve all members of a
-     * dimension.</p>
-     */
-    public transient final BooleanProperty OptimizePredicates =
-        new BooleanProperty(
-            this, "mondrian.rolap.aggregates.optimizePredicates", true);
 
     /**
      * <p>Maximum number of simultaneous queries the system will allow.</p>
@@ -362,64 +257,12 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.query.limit", 40);
 
     /**
-     * <p>Property that defines the timeout value (in seconds) for queries. A
-     * value of 0 (the default) indicates no timeout.</p>
-     */
-    public transient final IntegerProperty QueryTimeout =
-        new IntegerProperty(
-            this, "mondrian.rolap.queryTimeout", 0);
-
-    /**
      * Integer property that, if set to a value greater than zero, limits the
      * maximum size of a result set.
      */
     public transient final IntegerProperty ResultLimit =
         new IntegerProperty(
             this, "mondrian.result.limit", 0);
-
-
-     /**
-     * <p>Property that, with {@link #SparseSegmentDensityThreshold}, determines
-     * whether to choose a sparse or dense representation when storing
-     * collections of cell values in memory.</p>
-     *
-     * <p>When storing collections of cell values, Mondrian has to choose
-     * between a sparse and a dense representation, based upon the
-     * <code>possible</code> and <code>actual</code> number of values.
-     * The <code>density</code> is <code>actual / possible</code>.</p>
-     *
-     * <p>We use a sparse representation if
-     * <code>(possible -
-     * {@link #SparseSegmentCountThreshold countThreshold}) *
-     * {@link #SparseSegmentDensityThreshold densityThreshold} &gt;
-     * actual</code></p>
-     *
-     * <p>For example, at the default values
-     * ({@link #SparseSegmentCountThreshold countThreshold} = 1000,
-     * {@link #SparseSegmentDensityThreshold} = 0.5),
-     * we use a dense representation for</p>
-     *
-     * <ul>
-     * <li>(1000 possible, 0 actual), or</li>
-     * <li>(2000 possible, 500 actual), or</li>
-     * <li>(3000 possible, 1000 actual).</li>
-     * </ul>
-     *
-     * <p>Any fewer actual values, or any more
-     * possible values, and Mondrian will use a sparse representation.</p>
-     */
-    public transient final IntegerProperty SparseSegmentCountThreshold =
-        new IntegerProperty(
-            this, "mondrian.rolap.SparseSegmentValueThreshold", 1000);
-
-    /**
-     * Property that, with {@link #SparseSegmentCountThreshold},
-     * determines whether to choose a sparse or dense representation when
-     * storing collections of cell values in memory.
-     */
-    public transient final DoubleProperty SparseSegmentDensityThreshold =
-        new DoubleProperty(
-            this, "mondrian.rolap.SparseSegmentDensityThreshold", 0.5);
 
     /**
      * <p>Property that defines the name of the class used in SqlMemberSource
@@ -445,51 +288,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final BooleanProperty SsasCompatibleNaming =
         new BooleanProperty(
             this, "mondrian.olap.SsasCompatibleNaming", false);
-
-    /**
-     * <p>Boolean property that controls whether Mondrian uses aggregate
-     * tables.</p>
-     *
-     * <p>If true, then Mondrian uses aggregate tables. This property is
-     * queried prior to each aggregate query so that changing the value of this
-     * property dynamically (not just at startup) is meaningful.</p>
-     *
-     * <p>Aggregates can be read from the database using the
-     * ReadAggregates property but will not be used unless this
-     * property is set to true.</p>
-     */
-    public transient final BooleanProperty UseAggregates =
-        new BooleanProperty(
-            this, "mondrian.rolap.aggregates.Use", false);
-
-    /**
-     * <p>Property that controls whether warning messages should be printed if a SQL
-     * comparison test does not contain expected SQL statements for the specified
-     * dialect. The tests are skipped if no expected SQL statements are
-     * found for the current dialect.</p>
-     *
-     * <p>Possible values are the following:</p>
-     *
-     * <ul>
-     * <li>"NONE": no warning (default)</li>
-     * <li>"ANY": any dialect</li>
-     * <li>"ACCESS"</li>
-     * <li>"DERBY"</li>
-     * <li>"LUCIDDB"</li>
-     * <li>"MYSQL"</li>
-     * <li>... and any Dialect enum in SqlPattern.Dialect</li>
-     * </ul>
-     *
-     * <p>Specific tests can overwrite the default setting. The priority is:<ul>
-     * <li>Settings besides "ANY" in mondrian.properties file</li>
-     * <li>&lt; Any setting in the test</li>
-     * <li>&lt; "ANY"</li>
-     * </ul>
-     * </p>
-     */
-    public transient final StringProperty WarnIfNoPatternForDialect =
-        new StringProperty(
-            this, "mondrian.test.WarnIfNoPatternForDialect", "NONE");
 
 }
 

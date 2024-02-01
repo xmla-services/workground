@@ -341,7 +341,9 @@ public class FastBatchingCellReader implements CellReader {
                         keepColumns,
                         rollup.constrainedColumnsBitKey,
                         rollup.measure.getAggregator().getRollup(),
-                        rollup.measure.getDatatype());
+                        rollup.measure.getDatatype(),
+                        cacheMgr.getContext().getConfig().sparseSegmentCountThreshold(),
+                        cacheMgr.getContext().getConfig().sparseSegmentDensityThreshold());
 
                 final SegmentHeader header = rollupHeaderBody.left;
                 final SegmentBody body = rollupHeaderBody.right;
@@ -1286,6 +1288,8 @@ class BatchLoader {
             if (cube.getSchema().getInternalConnection().getContext().getConfig().generateAggregateSql()) {
                 generateAggregateSql();
             }
+            boolean optimizePredicates =
+                cube.getSchema().getInternalConnection().getContext().getConfig().optimizePredicates();
             final StarColumnPredicate[] predicates = initPredicates();
             final long t1 = System.currentTimeMillis();
 
@@ -1308,7 +1312,7 @@ class BatchLoader {
                 doSpecialHandlingOfDistinctCountMeasures(
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures, optimizePredicates);
             }
 
             // Load agg(distinct <SQL expression>) measures individually
@@ -1334,7 +1338,8 @@ class BatchLoader {
                         batchKey,
                         predicates,
                         groupingSetsCollector,
-                        segmentFutures);
+                        segmentFutures,
+                        optimizePredicates);
                     measuresList.remove(measure);
                 }
             }
@@ -1349,7 +1354,8 @@ class BatchLoader {
                     batchKey,
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures,
+                    optimizePredicates);
             }
 
             if (BATCH_LOGGER.isDebugEnabled()) {
@@ -1362,7 +1368,8 @@ class BatchLoader {
         private void doSpecialHandlingOfDistinctCountMeasures(
             StarColumnPredicate[] predicates,
             GroupingSetsCollector groupingSetsCollector,
-            List<Future<Map<Segment, SegmentWithData>>> segmentFutures)
+            List<Future<Map<Segment, SegmentWithData>>> segmentFutures,
+            boolean optimizePredicates)
         {
             while (true) {
                 // Scan for a measure based upon a distinct aggregation.
@@ -1398,7 +1405,8 @@ class BatchLoader {
                     batchKey,
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures,
+                    optimizePredicates);
             }
         }
 

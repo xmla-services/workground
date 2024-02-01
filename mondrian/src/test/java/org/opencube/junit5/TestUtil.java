@@ -1671,7 +1671,7 @@ public class TestUtil {
 		// dialect.
 		if (!patternFound) {
 			String warnDialect =
-					MondrianProperties.instance().WarnIfNoPatternForDialect.get();
+					connection.getContext().getConfig().warnIfNoPatternForDialect();
 
 			if (warnDialect.equals(d.toString())) {
 				System.out.println(

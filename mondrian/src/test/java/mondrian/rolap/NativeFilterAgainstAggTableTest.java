@@ -39,7 +39,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        //propSaver.set(propSaver.properties.UseAggregates, true);
         //propSaver.set(propSaver.properties.ReadAggregates, true);
         //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
@@ -54,6 +54,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFilteringOnAggregated_ByCount(TestContext context) {
         ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         // http://jira.pentaho.com/browse/MONDRIAN-2155
         // Aggregation table can have fact's count value exceeding 1,
         // so that to compute the overall amount of facts it is necessary
@@ -107,6 +108,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFilteringOnAggregated_BySum(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         String query = ""
             + "SELECT "
@@ -153,6 +155,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggTableWithNotAllMeasures(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         // http://jira.pentaho.com/browse/MONDRIAN-1703
         // If a filter condition contains one or more measures that are

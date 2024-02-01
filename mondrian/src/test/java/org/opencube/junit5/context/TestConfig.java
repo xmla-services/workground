@@ -37,6 +37,17 @@ public class TestConfig implements BasicContextConfig {
     private boolean ignoreInvalidMembers = false;
     private int maxEvalDepth = 10;
     private int checkCancelOrTimeoutInterval = 1000;
+    private boolean memoryMonitor = false;
+    private String warnIfNoPatternForDialect = "NONE";
+    private boolean useAggregates = false;
+    private int queryTimeout = 0;
+    private boolean optimizePredicates = true;
+    private boolean nullDenominatorProducesNull = false;
+    private boolean needDimensionPrefix = false;
+    private int nativizeMinThreshold = 100000;
+    private int nativizeMaxResults = 150000;
+    private int sparseSegmentCountThreshold = 1000;
+    private double sparseSegmentDensityThreshold = 0.5;
 
     @Override
     public Integer cellBatchSize() {
@@ -342,5 +353,104 @@ public class TestConfig implements BasicContextConfig {
     @Override
     public Integer checkCancelOrTimeoutInterval() {
         return checkCancelOrTimeoutInterval;
+    }
+
+    @Override
+    public Boolean memoryMonitor() {
+        return memoryMonitor;
+    }
+
+
+    public void setMemoryMonitor(boolean memoryMonitor) {
+        this.memoryMonitor = memoryMonitor;
+    }
+
+    public void setWarnIfNoPatternForDialect(String warnIfNoPatternForDialect) {
+        this.warnIfNoPatternForDialect = warnIfNoPatternForDialect;
+    }
+
+    @Override
+    public String warnIfNoPatternForDialect() {
+        return warnIfNoPatternForDialect;
+    }
+
+    public void setUseAggregates(boolean useAggregates) {
+        this.useAggregates = useAggregates;
+    }
+
+    @Override
+    public Boolean useAggregates() {
+        return useAggregates;
+    }
+
+    public void setQueryTimeout(int queryTimeout) {
+        this.queryTimeout = queryTimeout;
+    }
+
+    @Override
+    public Integer queryTimeout() {
+        return queryTimeout;
+    }
+
+    public void setOptimizePredicates(boolean optimizePredicates) {
+        this.optimizePredicates = optimizePredicates;
+    }
+
+    @Override
+    public Boolean optimizePredicates() {
+        return optimizePredicates;
+    }
+
+    public void setNullDenominatorProducesNull(boolean nullDenominatorProducesNull) {
+        this.nullDenominatorProducesNull = nullDenominatorProducesNull;
+    }
+
+    @Override
+    public Boolean nullDenominatorProducesNull() {
+        return nullDenominatorProducesNull;
+    }
+
+    public void setNeedDimensionPrefix(boolean needDimensionPrefix) {
+        this.needDimensionPrefix = needDimensionPrefix;
+    }
+
+    @Override
+    public Boolean needDimensionPrefix() {
+        return needDimensionPrefix;
+    }
+
+    public void setNativizeMinThreshold(int nativizeMinThreshold) {
+        this.nativizeMinThreshold = nativizeMinThreshold;
+    }
+
+    public Integer nativizeMinThreshold() {
+        return nativizeMinThreshold;
+    }
+
+    public void setNativizeMaxResults(int nativizeMaxResults) {
+        this.nativizeMaxResults = nativizeMaxResults;
+    }
+
+    @Override
+    public Integer nativizeMaxResults() {
+        return nativizeMaxResults;
+    }
+
+    @Override
+    public Integer sparseSegmentCountThreshold() {
+        return sparseSegmentCountThreshold;
+    }
+
+    public void setSparseSegmentCountThreshold(int sparseSegmentCountThreshold) {
+        this.sparseSegmentCountThreshold = sparseSegmentCountThreshold;
+    }
+
+    @Override
+    public Double sparseSegmentDensityThreshold() {
+        return sparseSegmentDensityThreshold;
+    }
+
+    public void setSparseSegmentDensityThreshold(double sparseSegmentDensityThreshold) {
+        this.sparseSegmentDensityThreshold = sparseSegmentDensityThreshold;
     }
 }

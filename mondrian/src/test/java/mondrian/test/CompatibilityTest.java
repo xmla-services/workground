@@ -32,13 +32,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
 
 
 /**
@@ -54,12 +54,10 @@ import mondrian.olap.Util;
  */
 class CompatibilityTest {
 	private PropertySaver5 propSaver;
-    private static boolean originalNeedDimensionPrefix;
     private final MondrianProperties props = MondrianProperties.instance();
 
     @BeforeAll
     public static void beforeAll() {
-    	originalNeedDimensionPrefix = MondrianProperties.instance().NeedDimensionPrefix.get();
     }
 
 	@BeforeEach
@@ -627,9 +625,7 @@ class CompatibilityTest {
     }
 
     private void assertAxisWithDimensionPrefix(Connection connection, boolean prefixNeeded) {
-        propSaver.set(
-            props.NeedDimensionPrefix,
-            prefixNeeded);
+        ((TestConfig)connection.getContext().getConfig()).setNeedDimensionPrefix(prefixNeeded);
         TestUtil.assertAxisReturns(connection, "[Gender].[M]", "[Gender].[M]");
         TestUtil.assertAxisReturns(connection, "[Gender].[All Gender].[M]", "[Gender].[M]");
         TestUtil.assertAxisReturns(connection, "[Store].[USA]", "[Store].[USA]");
@@ -640,16 +636,12 @@ class CompatibilityTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testWithNoDimensionPrefix(TestContext foodMartContext) {
     	Connection connection = foodMartContext.getConnection();
-        propSaver.set(
-            props.NeedDimensionPrefix,
-            false);
+        ((TestConfig)foodMartContext.getConfig()).setNeedDimensionPrefix(false);
         TestUtil.assertAxisReturns(connection, "{[M]}", "[Gender].[M]");
         TestUtil.assertAxisReturns(connection, "{M}", "[Gender].[M]");
         TestUtil.assertAxisReturns(connection, "{[USA].[CA]}", "[Store].[USA].[CA]");
         TestUtil.assertAxisReturns(connection, "{USA.CA}", "[Store].[USA].[CA]");
-        propSaver.set(
-            props.NeedDimensionPrefix,
-            true);
+        ((TestConfig)foodMartContext.getConfig()).setNeedDimensionPrefix(true);
         TestUtil.assertAxisThrows(
     		connection,
             "{[M]}",

@@ -2049,7 +2049,7 @@ class AggregationOnDistinctCountMeasuresTest {
         //String simpleSchema = "<Schema name=\"FoodMart\">" + dimension + cube
         //    + "</Schema>";
         // should skip aggregate table, cannot aggregate
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
       class TestDistinctCountAggMeasureModifier extends RDbMappingSchemaModifier {
 
@@ -2204,7 +2204,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Time].[1997]}\n"
             + "Row #0: 5,581\n");
         // aggregate table has count for months, make sure it is used
-        propSaver.set(propSaver.properties.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         final String expectedSql =
