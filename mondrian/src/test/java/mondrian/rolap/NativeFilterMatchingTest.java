@@ -437,7 +437,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer(TestContext context) {
-        propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
@@ -537,7 +537,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     void testNativeFilterWithCompoundSlicerWithAggs(TestContext context) {
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
@@ -603,7 +603,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_1(TestContext context) {
-        propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
             + "select [measures].[avgQtrs] on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )";

@@ -1021,7 +1021,7 @@ class SqlQueryTest  extends BatchTestCase {
     void testAvgAggregator(TestContext context) {
         Connection connection = context.getConnection();
         prepareContext(connection);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",

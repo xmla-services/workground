@@ -186,16 +186,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
             this, "mondrian.rolap.FilterChildlessSnowflakeMembers", true);
 
     /**
-     * <p>Boolean property that controls pretty-print mode.</p>
-     *
-     * <p>If true, the all SqlQuery SQL strings will be generated in
-     * pretty-print mode, formatted for ease of reading.</p>
-     */
-    public transient final BooleanProperty GenerateFormattedSql =
-        new BooleanProperty(
-            this, "mondrian.rolap.generate.formatted.sql", false);
-
-    /**
      * <p>Max number of constraints in a single 'IN' SQL clause.</p>
      *
      * <p>This value may be variant among database products and their runtime
@@ -224,16 +214,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final StringProperty MemoryMonitorClass =
         new StringProperty(
             this, "mondrian.util.MemoryMonitor.class", null);
-
-    /**
-     * <p>Property that defines the default <code>MemoryMonitor</code>
-     * percentage threshold. If enabled, when Java's memory monitor detects
-     * that post-garbage collection is above this value, notifications are
-     * generated.</p>
-     */
-    public transient final IntegerProperty MemoryMonitorThreshold =
-        new IntegerProperty(
-            this, "mondrian.util.memoryMonitor.percentage.threshold", 90);
 
     /**
      * <p>Property that determines how a null member value is represented in the

@@ -48,6 +48,8 @@ public class TestConfig implements BasicContextConfig {
     private int nativizeMaxResults = 150000;
     private int sparseSegmentCountThreshold = 1000;
     private double sparseSegmentDensityThreshold = 0.5;
+    private int memoryMonitorThreshold = 90;
+    private boolean generateFormattedSql = false;
 
     @Override
     public Integer cellBatchSize() {
@@ -452,5 +454,23 @@ public class TestConfig implements BasicContextConfig {
 
     public void setSparseSegmentDensityThreshold(double sparseSegmentDensityThreshold) {
         this.sparseSegmentDensityThreshold = sparseSegmentDensityThreshold;
+    }
+
+    @Override
+    public Integer memoryMonitorThreshold() {
+        return memoryMonitorThreshold;
+    }
+
+    public void setMemoryMonitorThreshold(int memoryMonitorThreshold) {
+        this.memoryMonitorThreshold = memoryMonitorThreshold;
+    }
+
+    public void setGenerateFormattedSql(boolean generateFormattedSql) {
+        this.generateFormattedSql = generateFormattedSql;
+    }
+
+    @Override
+    public Boolean generateFormattedSql() {
+        return generateFormattedSql;
     }
 }

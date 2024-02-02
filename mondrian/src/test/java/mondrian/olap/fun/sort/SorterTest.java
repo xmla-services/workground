@@ -28,12 +28,15 @@ import static org.mockito.Mockito.when;
 
 import java.util.Comparator;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -44,6 +47,7 @@ import org.mockito.MockitoAnnotations;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
+import mondrian.rolap.RolapConnection;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 
@@ -63,7 +67,12 @@ class SorterTest{
   @Mock Calc calc1;
   @Mock Calc calc2;
   @Mock Comparator comparatorChain;
+  @Mock Connection connection; 
+  @Mock Context context;
+  @Mock BasicContextConfig config;
+  @Mock RolapConnection rolapConnection;
   @Captor ArgumentCaptor<Comparator<?>> comparatorCaptor;
+ 
 
   
   
@@ -76,8 +85,15 @@ class SorterTest{
     when( sortKeySpec1.getKey() ).thenReturn( calc1 );
     when( sortKeySpec2.getKey() ).thenReturn( calc2 );
     when( evaluator.getQuery() ).thenReturn( query );
+    when( evaluator.getQuery() ).thenReturn( query );
     when( query.getStatement() ).thenReturn( statement );
     when( statement.getCurrentExecution() ).thenReturn( execution );
+    when(execution.getMondrianStatement()).thenReturn( statement );
+    when( statement.getMondrianConnection() ).thenReturn( rolapConnection );      
+    when( rolapConnection.getContext()).thenReturn( context );
+    when( context.getConfig()).thenReturn( config );
+    when( config.checkCancelOrTimeoutInterval()).thenReturn( 1000 );
+   
   }
 
   // tuple sort paths:

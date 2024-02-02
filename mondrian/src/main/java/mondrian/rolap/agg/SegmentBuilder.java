@@ -791,7 +791,7 @@ public class SegmentBuilder {
             buf.setLength(0);
             SqlQuery query =
                 new SqlQuery(
-                    segment.star.getSqlQueryDialect());
+                    segment.star.getSqlQueryDialect(), segment.star.getContext().getConfig().generateFormattedSql());
             compoundPredicate.toSql(query, buf);
             cp.add(buf.toString());
         }

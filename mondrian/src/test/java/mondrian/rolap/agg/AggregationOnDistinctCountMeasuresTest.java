@@ -17,6 +17,7 @@ import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
@@ -2206,7 +2207,7 @@ class AggregationOnDistinctCountMeasuresTest {
         // aggregate table has count for months, make sure it is used
         ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String expectedSql =
             "select\n"
             + "    `agg_c_10_sales_fact_1997`.`the_year` as `c0`,\n"

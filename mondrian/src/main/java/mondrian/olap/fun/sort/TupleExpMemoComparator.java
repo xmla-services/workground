@@ -63,7 +63,7 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
         throw CellRequestQuantumExceededException.INSTANCE;
       }
       throw e;
-    } 
+    }
   }
 
   private List<Member> dependentMembers( List<Member> tuple ) {

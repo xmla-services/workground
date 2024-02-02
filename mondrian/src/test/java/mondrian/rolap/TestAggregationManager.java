@@ -11,7 +11,6 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
@@ -1578,7 +1577,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         // this verifies that we can load properties, ordinals, etc out of
         // agg tables in member lookups (tuples and children)
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         if (!(context.getConfig().useAggregates()
                 && context.getConfig().readAggregates()))
         {
@@ -2779,7 +2778,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         final String cube =
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
@@ -3078,9 +3077,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(
-            propSaver.properties.GenerateFormattedSql,
-            true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         final String schema =
             "<?xml version=\"1.0\"?>\n"
@@ -3273,9 +3270,7 @@ class TestAggregationManager extends BatchTestCase {
         }
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-        propSaver.set(
-            propSaver.properties.GenerateFormattedSql,
-            true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         final String schema =
             "<?xml version=\"1.0\"?>\n"
@@ -3514,7 +3509,7 @@ class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAggStarWithIgnoredColumnsRequiresRollup(TestContext context) {
         prepareContext(context);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         boolean chooseAggregateByVolume = context.getConfig().chooseAggregateByVolume();
@@ -3612,7 +3607,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         withSchema(context,
                 "<Schema name=\"FoodMart\">"
@@ -3695,7 +3690,7 @@ class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         /*
         withSchema(context,
                 "<Schema name=\"FoodMart\">"

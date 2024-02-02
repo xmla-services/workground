@@ -338,7 +338,7 @@ public Result execute( QueryImpl query ) {
     MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(context.getConfig().memoryMonitor());
     final long currId = execution.getId();
     try {
-      mm.addListener( listener );
+      mm.addListener( listener, context.getConfig().memoryMonitorThreshold() );
       // Check to see if we must punt
       execution.checkCancelOrTimeout();
 

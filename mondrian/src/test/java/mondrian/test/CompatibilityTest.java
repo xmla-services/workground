@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -635,6 +636,7 @@ class CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testWithNoDimensionPrefix(TestContext foodMartContext) {
+    	RolapSchemaPool.instance().clear();
     	Connection connection = foodMartContext.getConnection();
         ((TestConfig)foodMartContext.getConfig()).setNeedDimensionPrefix(false);
         TestUtil.assertAxisReturns(connection, "{[M]}", "[Gender].[M]");

@@ -205,16 +205,16 @@ Does not work without the notify on add feature.
         public TestMM() {
         }
         @Override
-		public int getDefaultThresholdPercentage() {
-            return THRESHOLD_PERCENTAGE;
+        public boolean addListener(Listener listener, int percentage) {
+            return  super.addListener(listener, THRESHOLD_PERCENTAGE);
         }
     }
     public static class TestMM2 extends NotificationMemoryMonitor {
         public TestMM2() {
         }
         @Override
-		public int getDefaultThresholdPercentage() {
-            return 98;
+        public boolean addListener(Listener listener, int percentage) {
+            return  super.addListener(listener, 98);
         }
     }
 
@@ -302,7 +302,7 @@ Does not work without the notify on add feature.
 
             byte[] bytes = new byte[(int) ((buf > 0) ? buf : 0)];
 
-            mm.addListener(listener);
+            mm.addListener(listener, context.getConfig().memoryMonitorThreshold());
             // Check to see if we have been notified.
             // We might be notified if memory usage is already above 90%!!
             if (listener.wasNotified) {

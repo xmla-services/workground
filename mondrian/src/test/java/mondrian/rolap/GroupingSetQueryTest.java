@@ -63,7 +63,7 @@ class GroupingSetQueryTest extends BatchTestCase{
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(prop.GenerateFormattedSql, false);
+        //propSaver.set(prop.GenerateFormattedSql, false);
     }
 
     @AfterEach

@@ -37,7 +37,7 @@ class DefaultRecognizerTest {
         propSaver = new PropertySaver5();
         //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         //propSaver.set(propSaver.properties.UseAggregates, true);
         //propSaver.set(propSaver.properties.ReadAggregates, true);
         //TestContext.instance().flushSchemaCache();
@@ -58,6 +58,7 @@ class DefaultRecognizerTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDefaultRecognizerWithFactAlias(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         Connection connection = context.getConnection();
@@ -124,6 +125,7 @@ class DefaultRecognizerTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleReaderWithDistinctCountMeasureInContext(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         Connection connection = context.getConnection();

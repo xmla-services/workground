@@ -257,7 +257,7 @@ protected void assertQuerySql(Connection connection,
         + "FROM [Sales] where [Time.Weekly].x";
 
     Connection connection = context.getConnection();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern = useAgg
       ? new SqlPattern(
       DatabaseProduct.MYSQL,
@@ -294,7 +294,7 @@ protected void assertQuerySql(Connection connection,
         + "NON EMPTY {[Measures].[Store Sales], Measures.x1, Measures.x2, Measures.x3} ON 0\n"
         + "FROM [Sales] where [Time.Weekly].x";
     Connection connection = context.getConnection();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern = useAgg ? new SqlPattern(
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysqlAgg(connection),
@@ -389,7 +389,7 @@ protected void assertQuerySql(Connection connection,
         + "    ISNULL(`product`.`brand_name`) ASC, `product`.`brand_name` ASC,\n"
         + "    ISNULL(`product`.`product_name`) ASC, `product`.`product_name` ASC" );
 
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern =
       new SqlPattern(
         DatabaseProduct.MYSQL,
@@ -425,7 +425,7 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberOnlySlicer(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final boolean useAggregates =
       context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
@@ -529,7 +529,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithParenthesesMemberSlicer(TestContext context) {
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
 
     final boolean useAggregates =
       context.getConfig().useAggregates()
@@ -635,7 +635,7 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberSumSlicer(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final boolean useAggregates =
       context.getConfig().useAggregates()
         && context.getConfig().readAggregates();
@@ -738,7 +738,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCNoExplicitMeasure(TestContext context) {
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3)'\n"
@@ -973,9 +973,7 @@ protected void assertQuerySql(Connection connection,
 	RolapSchemaPool.instance().clear();
     ((TestConfig)context.getConfig()).setUseAggregates(true );
     ((TestConfig)context.getConfig()).setReadAggregates(true);
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
 
     final String mdx =
       "with member [Time.Weekly].x as Aggregate([Time.Weekly].[1997].Children) "
@@ -1224,9 +1222,7 @@ protected void assertQuerySql(Connection connection,
   void testCompoundSlicerNativeEval(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1404
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+      ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
       ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select NON EMPTY [Customers].[USA].[CA].[San Francisco].Children ON COLUMNS \n"
@@ -1311,9 +1307,7 @@ protected void assertQuerySql(Connection connection,
   void testSnowflakeDimInSlicerBug1407(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1407
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, measures.[unit sales]) ON COLUMNS \n"
@@ -1407,9 +1401,7 @@ protected void assertQuerySql(Connection connection,
   void testCompoundSlicerNonUniqueMemberNames1413(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1413
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, "
@@ -1827,7 +1819,7 @@ protected void assertQuerySql(Connection connection,
     if ( !context.getConfig().enableNativeFilter() ) {
       return;
     }
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final String mysql = !isUseAgg(context)
       ? "select\n"
       + "    `store`.`store_country` as `c0`,\n"
@@ -2086,7 +2078,7 @@ protected void assertQuerySql(Connection connection,
       ? "    ISNULL(`c0`) ASC, `c0` ASC"
       : "    ISNULL(`customer`.`gender`) ASC, `customer`.`gender` ASC" );
 
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern =
       new SqlPattern(
         DatabaseProduct.MYSQL,

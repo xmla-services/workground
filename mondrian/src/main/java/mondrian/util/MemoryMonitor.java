@@ -58,19 +58,6 @@ public interface MemoryMonitor {
     boolean addListener(Listener listener, int thresholdPercentage);
 
     /**
-     * Adds a <code>Listener</code> using the default threshold percentage.
-     *
-     * <p>If the threshold is below the Java5 memory managment system's
-     * threshold, then the Listener is notified from within this
-     * method.
-     *
-     * @param listener the <code>Listener</code> to be added.
-     * @return <code>true</code> if the <code>Listener</code> was
-     * added and <code>false</code> otherwise.
-     */
-    boolean addListener(final Listener listener);
-
-    /**
      * Changes the threshold percentage of a given <code>Listener</code>.
      *
      * <p>If the new value is below the system's current value, then the

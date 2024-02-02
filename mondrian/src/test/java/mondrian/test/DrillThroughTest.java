@@ -313,7 +313,7 @@ class DrillThroughTest {
         // hsqldb was failing with SQL that included redundant parentheses
         // around IN list items.
 
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         Result result = executeQuery(context.getConnection(),
             "select from sales where "
             + "{[Promotion Media].[Bulk Mail],[Promotion Media].[Cash Register Handout]}");
@@ -1482,7 +1482,7 @@ class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void  testDrillThroughMultiPositionCompoundSlicer(TestContext context) {
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         // A query with a simple multi-position compound slicer
         Result result =
             executeQuery(context.getConnection(),

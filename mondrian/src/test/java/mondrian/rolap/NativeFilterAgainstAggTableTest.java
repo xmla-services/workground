@@ -162,7 +162,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
         // not present in the aggregate table, the SQL should omit the
         // having clause altogether.
         ((TestConfig)context.getConfig()).setDisableCaching(true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
 
         String sqlMysqlNoHaving =
             "select\n"

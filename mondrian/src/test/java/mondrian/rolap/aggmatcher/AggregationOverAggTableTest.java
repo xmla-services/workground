@@ -38,7 +38,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
         super.beforeEach();
         //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @Override
@@ -50,6 +50,7 @@ class AggregationOverAggTableTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testAvgMeasureLowestGranularity(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);

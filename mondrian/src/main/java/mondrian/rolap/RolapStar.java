@@ -519,7 +519,7 @@ public class RolapStar {
      * with an empty sql query).
      */
     public SqlQuery getSqlQuery() {
-        return new SqlQuery(getSqlQueryDialect());
+        return new SqlQuery(getSqlQueryDialect(), context.getConfig().generateFormattedSql());
     }
 
     /**
@@ -1099,8 +1099,8 @@ public class RolapStar {
          * @param dialect Dialect
          * @return String representation of column's datatype
          */
-        public String getDatatypeString(Dialect dialect) {
-            final SqlQuery query = new SqlQuery(dialect);
+        public String getDatatypeString(Dialect dialect, boolean formatted) {
+            final SqlQuery query = new SqlQuery(dialect, formatted);
             query.addFrom(
                 table.star.factTable.relation, table.star.factTable.alias,
                 false);

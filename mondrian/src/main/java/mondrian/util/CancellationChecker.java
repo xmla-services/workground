@@ -32,9 +32,9 @@ public class CancellationChecker {
   public static void checkCancelOrTimeout(
       long currentIteration, Execution execution)
   {
-    int checkCancelOrTimeoutInterval = execution.getMondrianStatement().getMondrianConnection().getContext().getConfig()
-        .checkCancelOrTimeoutInterval();
-    if (execution != null) {
+    if (execution != null && execution.getMondrianStatement() != null) {
+      int checkCancelOrTimeoutInterval = execution.getMondrianStatement().getMondrianConnection().getContext().getConfig()
+                .checkCancelOrTimeoutInterval();
       synchronized (execution) {
         if (checkCancelOrTimeoutInterval > 0
             && currentIteration % checkCancelOrTimeoutInterval == 0)

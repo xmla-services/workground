@@ -1035,7 +1035,7 @@ public TupleList readTuples(
           selectString.append( pair.left );
           types = pair.right;
           prependString =
-            MondrianProperties.instance().GenerateFormattedSql.get()
+            context.getConfig().generateFormattedSql()
               ? new StringBuilder(Util.NL).append(UNION).append(Util.NL).toString()
               : new StringBuilder(" ").append(UNION).append(" ").toString();
         }

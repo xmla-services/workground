@@ -2044,7 +2044,7 @@ class VirtualCubeTest extends BatchTestCase {
             // memory.
             return;
         }
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         String query =
             "with "
             + "set [foo] as [Time].[Month].members "
@@ -2257,9 +2257,10 @@ class VirtualCubeTest extends BatchTestCase {
         }
         // we want to make sure a SqlConstraint is used for retrieving
         // [Product Family].members
+        RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
 
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         String query =
             "with "
             + "set [bar] as {[Store].[USA]} "

@@ -26,6 +26,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
@@ -36,7 +37,7 @@ class EffectiveMemberCacheTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
@@ -48,6 +49,7 @@ class EffectiveMemberCacheTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachedLevelMembers(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         Connection connection = context.getConnection();
         clearCache(connection);
         // verify query for specific members can be fulfilled by members cached
@@ -86,6 +88,8 @@ class EffectiveMemberCacheTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCachedChildMembers(TestContext context) {
+    	RolapSchemaPool.instance().clear();
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         Connection connection = context.getConnection();
         clearCache(connection);
         // verify query for specific members can be fulfilled by members cached
@@ -125,6 +129,7 @@ class EffectiveMemberCacheTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThreshold(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         Connection connection = context.getConnection();
         clearCache(connection);
         // [Store Type] members cardinality falls well below
@@ -154,6 +159,7 @@ class EffectiveMemberCacheTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThresholdDisabled(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         // with LevelPreCacheThreshold set to 0, we should not load
         // all [store type] members, we should only retrieve the 2
         // specified.
@@ -187,6 +193,7 @@ class EffectiveMemberCacheTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelPreCacheThresholdParentDegenerate(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         // we should avoid pulling all deg members, regardless of cardinality.
         // The cost of doing full scans of the fact table is assumed
         // to be too high.

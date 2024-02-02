@@ -2423,7 +2423,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintNullParent(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -2610,7 +2610,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMultiLevelMemberConstraintMixedNullNonNullParent(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -5166,7 +5166,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
       + "non empty Crossjoin({[Time].[1997]},{[Promotions].[All Promotions].[Bag Stuffers],[Promotions].[All "
@@ -5232,7 +5232,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMembersWillConstrainUsingArgsFromAllAxes(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
       + "non empty [Promotions].[Promotions].members on 1"
@@ -5280,7 +5280,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillExpandFirstLastChild(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mdx = "select "
       + "non empty Crossjoin({[Gender].firstChild,[Gender].lastChild},{[Measures].[Unit Sales]}) on 0,"
       + "non empty Crossjoin({[Time].[1997]},{[Promotions].[All Promotions].[Bag Stuffers],[Promotions].[All "
@@ -5346,7 +5346,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeCrossjoinWillExpandLagInNamedSet(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mdx =
       "with set [blah] as '{[Gender].lastChild.lag(1),[Gender].[M]}' "
         + "select "
@@ -6236,9 +6236,7 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       ((TestConfig)context.getConfig()).setUseAggregates(false);
       ((TestConfig)context.getConfig()).setReadAggregates(false);
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+      ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     /*
     final String schema =
       "<?xml version=\"1.0\"?>\n"
@@ -6431,9 +6429,7 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+      ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     /*
     final String schema =
       "<?xml version=\"1.0\"?>\n"
@@ -6620,7 +6616,7 @@ class NonEmptyTest extends BatchTestCase {
         + "from [Sales]\n"
         + "where ([Time].[1997].[Q1].[2] : [Time].[1997].[Q2].[5])";
 
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mysqlNativeCrossJoinQuery =
       "select\n"
         + "    `time_by_day`.`the_year` as `c0`,\n"

@@ -26,11 +26,6 @@ public class FauxMemoryMonitor implements MemoryMonitor {
     }
 
     @Override
-	public boolean addListener(final Listener listener) {
-        return true;
-    }
-
-    @Override
 	public void updateListenerThreshold(Listener listener, int percentage) {
         // empty
     }

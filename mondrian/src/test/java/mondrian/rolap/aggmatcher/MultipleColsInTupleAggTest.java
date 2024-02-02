@@ -53,7 +53,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @Override
@@ -72,6 +72,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotal(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -116,6 +117,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -146,6 +148,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasures(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -203,6 +206,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContext context)
         throws Exception
     {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -289,6 +293,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testChildSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         ((TestConfig)context.getConfig()).setDisableCaching(true);
