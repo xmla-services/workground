@@ -560,7 +560,7 @@ public interface BasicContextConfig {
 
     //<p>Property that controls minimum expected cardinality required in order for NativizeSet to natively evaluate a query.</p> <p>If the expected cardinality falls below this level the query is executed non-natively.</p> <p>It is possible for the actual cardinality to fall below this threshold even though the expected cardinality falls above this threshold. In this case the query will be natively evaluated.</p>
     @AttributeDefinition(name = "%nativizeMinThreshold.name", description = "%nativizeMinThreshold.description", type = AttributeType.INTEGER)
-    default Integer nativizeMinThreshold() { return -100000; }
+    default Integer nativizeMinThreshold() { return 100000; }
 
     //<p>Property that controls the maximum number of results contained in a NativizeSet result set.</p> <p>If the number of tuples contained in the result set exceeds this value Mondrian throws a LimitExceededDuringCrossjoin error.</p>
     @AttributeDefinition(name = "%nativizeMaxResults.name", description = "%nativizeMaxResults.description", type = AttributeType.INTEGER)

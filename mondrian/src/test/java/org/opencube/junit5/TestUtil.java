@@ -1914,14 +1914,14 @@ public class TestUtil {
 	{
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(true);
-        ((TestConfig)connection.getContext().getConfig()).setEnableNativeNonEmpty(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(true);
 
 		Result resultNative = executeQuery(connection, query);
 
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(false);
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(false);
-        ((TestConfig)connection.getContext().getConfig()).setEnableNativeNonEmpty(false);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(false);
 
 		Result resultNonNative = executeQuery(connection, query);

@@ -2259,7 +2259,7 @@ class AccessControlTest {
     void testBugMondrian436(TestContext foodMartContext) {
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
-        ((TestConfig)foodMartContext.getConfig()).setEnableNativeNonEmpty(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
         ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 
@@ -3359,7 +3359,7 @@ class AccessControlTest {
         // connected with MONDRIAN-1568
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
-        ((TestConfig)foodMartContext.getConfig()).setEnableNativeNonEmpty(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
         ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 

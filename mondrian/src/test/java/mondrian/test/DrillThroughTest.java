@@ -147,6 +147,7 @@ class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTrivialCalcMemberDrillThrough(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         Result result = executeQuery(context.getConnection(),
             "WITH MEMBER [Measures].[Formatted Unit Sales]"
             + " AS '[Measures].[Unit Sales]', FORMAT_STRING='$#,###.000'\n"

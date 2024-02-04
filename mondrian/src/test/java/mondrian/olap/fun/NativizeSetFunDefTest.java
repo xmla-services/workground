@@ -676,6 +676,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAcceptsCrossJoinAsInput(TestContext context) {
+        ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
         checkNative(context,
             "SELECT NativizeSet( CrossJoin({ Gender.F, Gender.M }, "
             + "{[Marital Status].[Marital Status].members})) on 0 from sales");
@@ -983,6 +984,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGenderAggAndMembersAndAllByMaritalStatus(TestContext context) {
+    	((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("

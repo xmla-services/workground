@@ -105,8 +105,8 @@
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
 
-#-runproperties.tester: \
-    #tester.names='mondrian.olap.HierarchyBugTest,\
+-runproperties.tester: \
+    tester.names='mondrian.rolap.FilterTest'
     #mondrian.olap.fun.VisualTotalsTest,\
     #mondrian.rolap.agg.DrillThroughQuerySpecTest,\
     #mondrian.test.I18nTest,\

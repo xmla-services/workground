@@ -453,6 +453,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testTupleQueryShouldBeCachedForVirtualCube(TestContext context) {
+	  RolapSchemaPool.instance().clear();
       ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mySqlMembersQuery =
             "select\n"

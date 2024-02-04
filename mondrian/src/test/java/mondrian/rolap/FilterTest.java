@@ -1187,7 +1187,7 @@ class FilterTest extends BatchTestCase {
       ((TestConfig)context.getConfig()).setUseAggregates(false);
       ((TestConfig) context.getConfig()).setReadAggregates(false);
     ((TestConfig) context.getConfig()).setDisableCaching(false);
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
+    propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
     propSaver.set(
       MondrianProperties.instance().CompareSiblingsByOrderKey,
       true );

@@ -3630,7 +3630,7 @@ class NonEmptyTest extends BatchTestCase {
       }
       // Expected
     } finally {
-      propSaver.reset();
+      RolapSchemaPool.instance().clear();
       ((TestConfig)context.getConfig())
             .setAlertNativeEvaluationUnsupported("OFF");
       //propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
@@ -3668,7 +3668,7 @@ class NonEmptyTest extends BatchTestCase {
     try {
       checkNotNative(context, 3, mdx );
     } finally {
-      propSaver.reset();
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig())
             .setAlertNativeEvaluationUnsupported("OFF");
         //propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );

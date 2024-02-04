@@ -6634,6 +6634,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMemberExpressions(TestContext context) {
+	RolapSchemaPool.instance().clear();
     // Should return Beverly Hills in California.
     assertAxisReturns(context.getConnection(),
       "[Store].[Store City].[Beverly Hills]",
@@ -8113,7 +8114,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(TestContext context) {
     ((TestConfig)context.getConfig()).setQueryTimeout(3);
-    ((TestConfig)context.getConfig()).setEnableNativeNonEmpty(false);
+    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
 
@@ -10345,7 +10346,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToMemberIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
+	RolapSchemaPool.instance().clear();
     ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     // [Product].[Drugs] is invalid, becomes null member, and is dropped
@@ -10430,9 +10431,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToTupleIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
+	RolapSchemaPool.instance().clear();
     ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
-
     // If any member is invalid, the whole tuple is null.
     assertAxisReturns(context.getConnection(),
       "StrToTuple(\"([Gender].[M], [Marital Status].[Separated])\","
@@ -10563,7 +10563,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToSetIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
+	RolapSchemaPool.instance().clear();
     ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     assertAxisReturns(context.getConnection(),
       "StrToSet("

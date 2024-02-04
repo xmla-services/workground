@@ -141,11 +141,11 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildByNameConstraint(
         RolapMember parent,
-        NameSegment childName, boolean enableNativeNonEmpty, int levelPreCacheThreshold)
+        NameSegment childName, int levelPreCacheThreshold)
     {
         // Ragged hierarchies span multiple levels, so SQL WHERE does not work
         // there
-        if (useDefaultMemberChildrenConstraint(parent, enableNativeNonEmpty, levelPreCacheThreshold)) {
+        if (useDefaultMemberChildrenConstraint(parent, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childName);
@@ -153,16 +153,16 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildrenByNamesConstraint(
         RolapMember parent,
-        List<NameSegment> childNames, boolean enableNativeNonEmpty, int levelPreCacheThreshold)
+        List<NameSegment> childNames, int levelPreCacheThreshold)
     {
-        if (useDefaultMemberChildrenConstraint(parent, enableNativeNonEmpty, levelPreCacheThreshold)) {
+        if (useDefaultMemberChildrenConstraint(parent, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childNames);
     }
 
-    private boolean useDefaultMemberChildrenConstraint(RolapMember parent, boolean enableNativeNonEmpty, int levelPreCacheThreshold) {
-        return !enableNativeNonEmpty
+    private boolean useDefaultMemberChildrenConstraint(RolapMember parent, int levelPreCacheThreshold) {
+        return !enabled
             || parent.getHierarchy().isRagged()
             || (!isDegenerate(parent.getLevel())
             && levelPreCacheThreshold > 0
