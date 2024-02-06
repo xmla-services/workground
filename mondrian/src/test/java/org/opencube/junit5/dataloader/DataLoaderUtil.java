@@ -19,7 +19,6 @@
 package org.opencube.junit5.dataloader;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -37,11 +36,11 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+
 import de.siegmar.fastcsv.reader.CloseableIterator;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
 
@@ -319,7 +318,7 @@ public class DataLoaderUtil {
 
 			String line;
 			int lineNumber = 0;
-			discard(lineNumber);
+//			discard(lineNumber);
 
 			StringBuilder buf = new StringBuilder();
 

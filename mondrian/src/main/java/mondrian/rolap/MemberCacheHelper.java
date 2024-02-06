@@ -11,8 +11,6 @@
 */
 package mondrian.rolap;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -318,7 +316,7 @@ public class MemberCacheHelper implements MemberCache {
                             {
                                 List<RolapMember> siblings = entry.getValue();
                                 boolean removedIt = siblings.remove(member);
-                                discard(removedIt);
+//                                discard(removedIt);
                             } else {
                                 iter.remove();
                             }

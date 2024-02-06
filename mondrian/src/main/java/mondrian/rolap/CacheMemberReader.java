@@ -11,8 +11,6 @@
 
 package mondrian.rolap;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +45,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         this.source = source;
         if (false) {
             // we don't want the reader to write back to our cache
-            discard(source.setCache(this));
+        	source.setCache(this);
+//            discard();
         }
         this.mapKeyToMember = new HashMap<>();
         this.members = source.getMembers();

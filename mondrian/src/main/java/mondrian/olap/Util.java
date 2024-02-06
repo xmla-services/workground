@@ -1583,68 +1583,15 @@ public class Util {
         }
     }
 
-    private static final Map<String, String> TIME_UNITS =
-        Olap4jUtil.mapOf(
-            "ns", "NANOSECONDS",
-            "us", "MICROSECONDS",
-            "ms", "MILLISECONDS",
-            "s", "SECONDS",
-            "m", "MINUTES",
-            "h", "HOURS",
-            "d", "DAYS");
-
-    /**
-     * Parses an interval.
-     *
-     * <p>For example, "30s" becomes (30, {@link TimeUnit#SECONDS});
-     * "2us" becomes (2, {@link TimeUnit#MICROSECONDS}).</p>
-     *
-     * <p>Units m (minutes), h (hours) and d (days) are only available
-     * in JDK 1.6 or later, because the corresponding constants are missing
-     * from {@link TimeUnit} in JDK 1.5.</p>
-     *
-     * @param s String to parse
-     * @param unit Default time unit; may be null
-     *
-     * @return Pair of value and time unit. Neither pair or its components are
-     * null
-     *
-     * @throws NumberFormatException if unit is not present and there is no
-     * default, or if number is not valid
-     */
-    public static Pair<Long, TimeUnit> parseInterval(
-        String s,
-        TimeUnit unit)
-        throws NumberFormatException
-    {
-        final String original = s;
-        for (Map.Entry<String, String> entry : TIME_UNITS.entrySet()) {
-            final String abbrev = entry.getKey();
-            if (s.endsWith(abbrev)) {
-                final String full = entry.getValue();
-                try {
-                    unit = TimeUnit.valueOf(full);
-                    s = s.substring(0, s.length() - abbrev.length());
-                    break;
-                } catch (IllegalArgumentException e) {
-                    // ignore - MINUTES, HOURS, DAYS are not defined in JDK1.5
-                }
-            }
-        }
-        if (unit == null) {
-            throw new NumberFormatException(
-                new StringBuilder("Invalid time interval '").append(original).append("'. Does not contain a ")
-                    .append("time unit. (Suffix may be ns (nanoseconds), ")
-                    .append("us (microseconds), ms (milliseconds), s (seconds), ")
-                    .append("h (hours), d (days). For example, '20s' means 20 seconds.)").toString());
-        }
-        try {
-            return Pair.of(new BigDecimal(s).longValue(), unit);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(
-                new StringBuilder("Invalid time interval '").append(original).append("'").toString());
-        }
-    }
+    private static final Map<String, TimeUnit> TIME_UNITS =
+        Map.of(
+            "ns", TimeUnit.NANOSECONDS,
+            "us", TimeUnit.MICROSECONDS,
+            "ms", TimeUnit.MILLISECONDS,
+            "s", TimeUnit.SECONDS,
+            "m", TimeUnit.MINUTES,
+            "h", TimeUnit.HOURS,
+            "d", TimeUnit.DAYS);
 
     /**
      * Converts a list of olap4j-style segments to a list of mondrian-style

@@ -9,9 +9,21 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.getCubeByNameFromArray;
+import static org.opencube.junit5.TestUtil.getDimensionByNameFromArray;
+import static org.opencube.junit5.TestUtil.getHierarchyByNameFromArray;
+import static org.opencube.junit5.TestUtil.getLevelByNameFromArray;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -31,21 +43,9 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.sql.SQLException;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertExprThrows;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.getCubeByNameFromArray;
-import static org.opencube.junit5.TestUtil.getDimensionByNameFromArray;
-import static org.opencube.junit5.TestUtil.getHierarchyByNameFromArray;
-import static org.opencube.junit5.TestUtil.getLevelByNameFromArray;
-import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * Unit tests that check compatibility with Microsoft SQL Server Analysis
@@ -102,7 +102,8 @@ class Ssas2005CompatibilityTest {
         prepareContext(context);
         RolapSchemaPool.instance().clear();
         Result result = TestUtil.executeQuery(context.getConnection(), s);
-        discard(TestUtil.toString(result));
+        TestUtil.toString(result);
+//        discard();
     }
 
 

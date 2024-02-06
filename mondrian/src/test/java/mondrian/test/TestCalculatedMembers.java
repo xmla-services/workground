@@ -11,11 +11,17 @@
 
 package mondrian.test;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -33,17 +39,11 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.opentest4j.AssertionFailedError;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertExprThrows;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeExprRaw;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync
@@ -507,7 +507,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             "with member [Measures].[Foo] as ' ([Measures].[Unit Sales], [Gender].[F]) '"
             + "select {[Measures].[Foo]} on columns from [Sales]";
         final Result result = executeQuery(queryString, context.getConnection());
-        discard(result);
+//        discard(result);
 
         // Level cannot be converted.
         assertExprThrows(context,

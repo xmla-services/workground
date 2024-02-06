@@ -16,9 +16,12 @@
 */
 package org.eclipse.daanse.olap.core;
 
+import java.util.concurrent.TimeUnit;
+
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.osgi.service.metatype.annotations.Option;
 
 @ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx", factoryPid =  BasicContext.PID)
 public interface BasicContextConfig {
@@ -459,8 +462,11 @@ public interface BasicContextConfig {
     default Integer queryTimeout() { return 0; }
 
     //This controls query timeouts and cancellation, so a small value (a few milliseconds) is best. Setting this to a value higher than mondrian.rolap.queryTimeout will result the timeout not being enforced as expected. Default value is 1000ms. Default time unit is ms.
-    @AttributeDefinition(name = "%rolapConnectionShepherdThreadPollingInterval.name", description = "%rolapConnectionShepherdThreadPollingInterval.description", type = AttributeType.STRING)
-    default String rolapConnectionShepherdThreadPollingInterval() { return "1000ms"; }
+    @AttributeDefinition(name = "%rolapConnectionShepherdThreadPollingInterval.name", description = "%rolapConnectionShepherdThreadPollingInterval.description", type = AttributeType.LONG)
+    default Long rolapConnectionShepherdThreadPollingInterval() { return 1000L; }
+    
+    @AttributeDefinition(name = "%rolapConnectionShepherdThreadPollingIntervalUnit.name", description = "%rolapConnectionShepherdThreadPollingIntervalUnit.description")
+    default TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit() { return TimeUnit.MILLISECONDS; }
 
     //Maximum number of MDX query threads per Mondrian server instance. Defaults to 20.
     @AttributeDefinition(name = "%rolapConnectionShepherdNbThreads.name", description = "%rolapConnectionShepherdNbThreads.description", type = AttributeType.INTEGER)

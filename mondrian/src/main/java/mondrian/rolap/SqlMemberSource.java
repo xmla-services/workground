@@ -12,7 +12,6 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -1248,7 +1247,8 @@ RME is this right
         } else {
             // Quote the value if it doesn't seem to be a number.
             try {
-                discard(Double.parseDouble(level.getNullParentValue()));
+            	Double.parseDouble(level.getNullParentValue());
+//                discard(Double.parseDouble(level.getNullParentValue()));
                 condition.append(" = ");
                 condition.append(level.getNullParentValue());
             } catch (NumberFormatException e) {

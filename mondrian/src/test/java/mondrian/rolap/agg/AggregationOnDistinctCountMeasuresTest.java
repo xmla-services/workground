@@ -8,21 +8,30 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.calc.impl.ArrayTupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.ResultBase;
-import mondrian.olap.Util;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.CrossJoinFunDef;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.allMember;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQuerySql;
+import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
+import static org.opencube.junit5.TestUtil.cubeByName;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.member;
+import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
+import static org.opencube.junit5.TestUtil.upgradeActual;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -67,30 +76,20 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.allMember;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQuerySql;
-import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
-import static org.opencube.junit5.TestUtil.cubeByName;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.member;
-import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
-import static org.opencube.junit5.TestUtil.upgradeActual;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.ResultBase;
+import mondrian.olap.Util;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.CrossJoinFunDef;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * <code>AggregationOnDistinctCountMeasureTest</code> tests the
@@ -1081,7 +1080,8 @@ class AggregationOnDistinctCountMeasuresTest {
         // Mondrian does not use GROUPING SETS for distinct-count measures.
         // So, this test should not use GROUPING SETS, even if they are enabled.
         // See change 12310, bug MONDRIAN-470 (aka SF.net 2207515).
-        discard(context.getConfig().enableGroupingSets());
+      context.getConfig().enableGroupingSets();
+//        discard(context.getConfig().enableGroupingSets());
 
         String oraTeraSql =
             "select \"store\".\"store_state\" as \"c0\","

@@ -1,12 +1,15 @@
 package org.opencube.junit5.context;
 
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.daanse.olap.core.BasicContextConfig;
 
 public class TestConfig implements BasicContextConfig {
     private Integer cellBatchSize = -1;
     private Integer rolapConnectionShepherdNbThreads = 20;
-    private String rolapConnectionShepherdThreadPollingInterval = "1000ms";
-    private Integer segmentCacheManagerNumberSqlThreads = 100;
+    private Long rolapConnectionShepherdThreadPollingInterval = 1000L;
+    private TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit = TimeUnit.MILLISECONDS;
+private Integer segmentCacheManagerNumberSqlThreads = 100;
     private String solveOrderMode = "ABSOLUTE";
     private boolean chooseAggregateByVolume = false;
     private boolean disableCaching = false;
@@ -70,12 +73,20 @@ public class TestConfig implements BasicContextConfig {
     }
 
     @Override
-    public String rolapConnectionShepherdThreadPollingInterval() {
+    public Long rolapConnectionShepherdThreadPollingInterval() {
         return rolapConnectionShepherdThreadPollingInterval;
     }
 
-    public void setRolapConnectionShepherdThreadPollingInterval(String rolapConnectionShepherdThreadPollingInterval) {
+    public void setRolapConnectionShepherdThreadPollingInterval(Long rolapConnectionShepherdThreadPollingInterval) {
         this.rolapConnectionShepherdThreadPollingInterval = rolapConnectionShepherdThreadPollingInterval;
+    }
+    @Override
+    public TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit() {
+        return rolapConnectionShepherdThreadPollingIntervalUnit;
+    }
+
+    public void setRolapConnectionShepherdThreadPollingIntervalUnit(TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit) {
+        this.rolapConnectionShepherdThreadPollingIntervalUnit = rolapConnectionShepherdThreadPollingIntervalUnit;
     }
 
     @Override

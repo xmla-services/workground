@@ -27,8 +27,6 @@ import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentHeader;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 /**
  * Mock implementation of {@link SegmentCache} that is used for automated
  * testing.
@@ -76,7 +74,7 @@ public class MockSegmentCache implements SegmentCache {
             InputStream in = new ByteArrayInputStream(pickled);
             ObjectInputStream ois = new ObjectInputStream(in);
             SegmentHeader o = (SegmentHeader) ois.readObject();
-            discard(o);
+//            discard(o);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -91,7 +89,7 @@ public class MockSegmentCache implements SegmentCache {
             InputStream in = new ByteArrayInputStream(pickled);
             ObjectInputStream ois = new ObjectInputStream(in);
             SegmentBody o = (SegmentBody) ois.readObject();
-            discard(o);
+//            discard(o);
         } catch (NotSerializableException e) {
             throw new RuntimeException(
                 "while serializing " + body,
@@ -126,7 +124,8 @@ public class MockSegmentCache implements SegmentCache {
             for (Iterator<SegmentHeader> iterator = cache.keySet().iterator();
                  iterator.hasNext();)
             {
-                discard(iterator.next());
+            	iterator.next();
+//                discard(iterator.next());
                 if (index-- == 0) {
                     iterator.remove();
                     break;

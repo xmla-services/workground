@@ -12,26 +12,52 @@
 */
 package mondrian.test;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Property;
-import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.Util;
-import mondrian.olap.type.NumericType;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapSchema;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.RolapUtil;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.server.Execution;
-import mondrian.spi.StatisticsProvider;
-import mondrian.spi.UserDefinedFunction;
-import mondrian.spi.impl.JdbcStatisticsProvider;
-import mondrian.spi.impl.SqlStatisticsProvider;
-import mondrian.spi.impl.SqlStatisticsProviderNew;
-import mondrian.util.Bug;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.olap.Util.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertAxisThrows;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSimpleQuery;
+import static org.opencube.junit5.TestUtil.assertSize;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.executeQueryTimeoutTest;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Pattern;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -62,52 +88,26 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Pattern;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static mondrian.olap.Util.assertTrue;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertAxisThrows;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertExprThrows;
-import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.assertSimpleQuery;
-import static org.opencube.junit5.TestUtil.assertSize;
-import static org.opencube.junit5.TestUtil.checkThrowable;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.executeQueryTimeoutTest;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.Util;
+import mondrian.olap.type.NumericType;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.server.Execution;
+import mondrian.spi.StatisticsProvider;
+import mondrian.spi.UserDefinedFunction;
+import mondrian.spi.impl.JdbcStatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
+import mondrian.util.Bug;
 
 /**
  * <code>BasicQueryTest</code> is a test case which tests simple queries against the FoodMart database.
@@ -1005,9 +1005,9 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCyclicalCalculatedMembers(TestContext context) {
-    discard( executeQuery(context.getConnection(), "WITH\n" + "   MEMBER [Product].[X] AS '[Product].[Y]'\n"
+     executeQuery(context.getConnection(), "WITH\n" + "   MEMBER [Product].[X] AS '[Product].[Y]'\n"
         + "   MEMBER [Product].[Y] AS '[Product].[X]'\n" + "SELECT\n" + "   {[Product].[X]} ON COLUMNS,\n"
-        + "   {Store.[Store Name].Members} ON ROWS\n" + "FROM Sales" ) );
+        + "   {Store.[Store Name].Members} ON ROWS\n" + "FROM Sales" ) ;
   }
 
   /**
@@ -1030,33 +1030,33 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testHalfYears(TestContext context) {
-    discard( executeQuery(context.getConnection(), "WITH MEMBER [Measures].[ProfitPercent] AS\n"
+    executeQuery(context.getConnection(), "WITH MEMBER [Measures].[ProfitPercent] AS\n"
         + "     '([Measures].[Store Sales]-[Measures].[Store Cost])/([Measures].[Store Cost])',\n"
         + " FORMAT_STRING = '#.00%', SOLVE_ORDER = 1\n"
         + " Member [Time].[Time].[1997].[First Half] AS  '[Time].[1997].[Q1] + [Time].[1997].[Q2]'\n"
         + " Member [Time].[Time].[1997].[Second Half] AS '[Time].[1997].[Q3] + [Time].[1997].[Q4]'\n"
         + " SELECT {[Time].[1997].[First Half],\n" + "     [Time].[1997].[Second Half],\n"
         + "     [Time].[1997].CHILDREN} ON COLUMNS,\n" + " {[Store].[Store Country].[USA].CHILDREN} ON ROWS\n"
-        + " FROM [Sales]\n" + " WHERE ([Measures].[ProfitPercent])" ) );
+        + " FROM [Sales]\n" + " WHERE ([Measures].[ProfitPercent])" ) ;
   }
 
   public void _testHalfYearsTrickyCase(TestContext context) {
-    discard( executeQuery(context.getConnection(), "WITH MEMBER MEASURES.ProfitPercent AS\n"
+    executeQuery(context.getConnection(), "WITH MEMBER MEASURES.ProfitPercent AS\n"
         + "     '([Measures].[Store Sales]-[Measures].[Store Cost])/([Measures].[Store Cost])',\n"
         + " FORMAT_STRING = '#.00%', SOLVE_ORDER = 1\n"
         + " Member [Time].[Time].[First Half 97] AS  '[Time].[1997].[Q1] + [Time].[1997].[Q2]'\n"
         + " Member [Time].[Time].[Second Half 97] AS '[Time].[1997].[Q3] + [Time].[1997].[Q4]'\n"
         + " SELECT {[Time].[First Half 97],\n" + "     [Time].[Second Half 97],\n"
         + "     [Time].[1997].CHILDREN} ON COLUMNS,\n" + " {[Store].[Store Country].[USA].CHILDREN} ON ROWS\n"
-        + " FROM [Sales]\n" + " WHERE (MEASURES.ProfitPercent)" ) );
+        + " FROM [Sales]\n" + " WHERE (MEASURES.ProfitPercent)" ) ;
   }
 
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testAsSample7ButUsingVirtualCube(TestContext context) {
-    discard( executeQuery(context.getConnection(), "with member [Measures].[Accumulated Sales] as 'Sum(YTD(),[Measures].[Store Sales])'\n"
+    executeQuery(context.getConnection(), "with member [Measures].[Accumulated Sales] as 'Sum(YTD(),[Measures].[Store Sales])'\n"
         + "select\n" + "    {[Measures].[Store Sales],[Measures].[Accumulated Sales]} on columns,\n"
-        + "    {Descendants([Time].[1997],[Time].[Month])} on rows\n" + "from [Warehouse and Sales]" ) );
+        + "    {Descendants([Time].[1997],[Time].[Month])} on rows\n" + "from [Warehouse and Sales]" );
   }
 
     @ParameterizedTest
@@ -1094,13 +1094,13 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testUseDimensionAsShorthandForMember(TestContext context) {
-    discard( executeQuery(context.getConnection(), "select {[Measures].[Unit Sales]} on columns,\n"
-        + " {[Store], [Store].children} on rows\n" + "from [Sales]" ) );
+ executeQuery(context.getConnection(), "select {[Measures].[Unit Sales]} on columns,\n"
+        + " {[Store], [Store].children} on rows\n" + "from [Sales]" ) ;
   }
 
   public void _testMembersFunction(TestContext context) {
-    discard( executeQuery(context.getConnection(), "select {[Measures].[Unit Sales]} on columns,\n"
-        + " {[Customers].members(0)} on rows\n" + "from [Sales]" ) );
+    executeQuery(context.getConnection(), "select {[Measures].[Unit Sales]} on columns,\n"
+        + " {[Customers].members(0)} on rows\n" + "from [Sales]" ) ;
   }
 
   public void _testProduct2(TestContext context) {

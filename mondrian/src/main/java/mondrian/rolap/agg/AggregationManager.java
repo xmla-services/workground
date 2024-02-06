@@ -12,8 +12,6 @@
 */
 package mondrian.rolap.agg;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -144,7 +142,8 @@ public class AggregationManager extends RolapAggregationManager {
                     futures.add(segmentCacheManager.cacheExecutor.submit(task));
                 }
                 for (Future<Boolean> future : futures) {
-                    discard(Util.safeGet(future, "Flush cache"));
+                	Util.safeGet(future, "Flush cache");
+//                    discard();
                 }
             }
 

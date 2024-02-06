@@ -16,6 +16,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ class GroupingSetQueryTest extends BatchTestCase{
         "[Measures].[Customer Count]";
 
     private static final Set<DatabaseProduct> ORACLE_TERADATA =
-        Olap4jUtil.enumSetOf(
+    		EnumSet.of(
             DatabaseProduct.ORACLE,
             DatabaseProduct.TERADATA);
 

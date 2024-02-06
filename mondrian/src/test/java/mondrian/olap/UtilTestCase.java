@@ -10,7 +10,6 @@
 */
 package mondrian.olap;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -1065,7 +1064,7 @@ import mondrian.util.UnionIterator;
         for (List<String> xx
             : CombiningGenerator.of(Collections.nCopies(20, "x")))
         {
-            discard(xx);
+//            discard(xx);
             i++;
         }
         assertEquals(1 << 20, i);
@@ -1354,106 +1353,7 @@ import mondrian.util.UnionIterator;
         assertFalse(nullValuesMap.keySet().contains("Something"));
     }
 
-    /**
-     * Unit test for {@link Util#parseInterval}.
-     */
-    @Test
-     void testParseInterval() {
-        // no default unit
-        assertEquals(
-            Pair.of(1L, TimeUnit.SECONDS),
-            Util.parseInterval("1s", null));
-        // same default unit as actual
-        assertEquals(
-            Pair.of(1L, TimeUnit.SECONDS),
-            Util.parseInterval("1s", TimeUnit.SECONDS));
-        // different default than actual
-        assertEquals(
-            Pair.of(1L, TimeUnit.SECONDS),
-            Util.parseInterval("1s", TimeUnit.MILLISECONDS));
-        assertEquals(
-            Pair.of(2L, TimeUnit.NANOSECONDS),
-            Util.parseInterval("2ns", TimeUnit.MICROSECONDS));
-        // now each unit in turn (ns, us, ms, s, h, m, d)
-        assertEquals(
-            Pair.of(5L, TimeUnit.NANOSECONDS),
-            Util.parseInterval("5ns", null));
-        assertEquals(
-            Pair.of(3L, TimeUnit.MICROSECONDS),
-            Util.parseInterval("3us", null));
-        assertEquals(
-            Pair.of(4L, TimeUnit.MILLISECONDS),
-            Util.parseInterval("4ms", null));
-        assertEquals(
-            Pair.of(5L, TimeUnit.valueOf("MINUTES")),
-            Util.parseInterval("5m", null));
-        assertEquals(
-            Pair.of(6L, TimeUnit.valueOf("HOURS")),
-            Util.parseInterval("6h", null));
-        assertEquals(
-            Pair.of(7L, TimeUnit.valueOf("DAYS")),
-            Util.parseInterval("7d", null));
-        // negative
-        assertEquals(
-            Pair.of(-8L, TimeUnit.SECONDS),
-            Util.parseInterval("-8s", null));
-        assertEquals(
-            Pair.of(3L, TimeUnit.MICROSECONDS),
-            Util.parseInterval("3", TimeUnit.MICROSECONDS));
-        try {
-            Pair<Long, TimeUnit> x = Util.parseInterval("4", null);
-            fail("expected error, got " + x);
-        } catch (NumberFormatException e) {
-            assertTrue(
-                e.getMessage().startsWith(
-                    "Invalid time interval '4'. Does not contain a time "
-                    + "unit."),
-            e.getMessage());
-        }
-        // fractional part rounded away
-        assertEquals(
-            Pair.of(1234L, TimeUnit.SECONDS),
-            Util.parseInterval("1234.567s", TimeUnit.MICROSECONDS));
-        // Invalid unit means that interval cannot be parsed.
-        // (No 'S' is not valid for 's'. See 'man sleep'.)
-        try {
-            Pair<Long, TimeUnit> x = Util.parseInterval("40S", null);
-            fail("expected error, got " + x);
-        } catch (NumberFormatException e) {
-            assertTrue(
-                e.getMessage().startsWith(
-                    "Invalid time interval '40S'. Does not contain a time "
-                    + "unit."),
-            e.getMessage());
-        }
-        // Even a space is not allowed.
-        try {
-            Pair<Long, TimeUnit> x = Util.parseInterval("40 m", null);
-            fail("expected error, got " + x);
-        } catch (NumberFormatException e) {
-            assertTrue(
-                e.getMessage().startsWith(
-                    "Invalid time interval '40 m'"),
-            e.getMessage());
-        }
-        // Two time units.
-        try {
-            Pair<Long, TimeUnit> x = Util.parseInterval("40sms", null);
-            fail("expected error, got " + x);
-        } catch (NumberFormatException e) {
-            assertTrue(
-                e.getMessage().startsWith(
-                    "Invalid time interval '40sms'"),
-            e.getMessage());
-        }
-        // Null
-        try {
-            Pair<Long, TimeUnit> x = Util.parseInterval(null, null);
-            fail("expected error, got " + x);
-        } catch (NullPointerException e) {
-            // ok
-        }
-    }
+   
 
 
 }

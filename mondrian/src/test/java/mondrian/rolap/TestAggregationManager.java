@@ -56,6 +56,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +80,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class TestAggregationManager extends BatchTestCase {
     private static final Set<DatabaseProduct> ACCESS_MYSQL =
-        Olap4jUtil.enumSetOf(
+    		EnumSet.of(
             DatabaseProduct.ACCESS,
             DatabaseProduct.MYSQL);
 

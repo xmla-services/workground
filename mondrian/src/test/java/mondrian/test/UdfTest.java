@@ -11,20 +11,29 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Property;
-import mondrian.olap.Util;
-import mondrian.olap.type.HierarchyType;
-import mondrian.olap.type.MemberType;
-import mondrian.olap.type.NumericType;
-import mondrian.olap.type.SetType;
-import mondrian.olap.type.StringType;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
-import mondrian.spi.PropertyFormatter;
-import mondrian.spi.UserDefinedFunction;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertMatchesVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Statement;
@@ -48,29 +57,20 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertMatchesVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeExprRaw;
-import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.Util;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.spi.CellFormatter;
+import mondrian.spi.MemberFormatter;
+import mondrian.spi.PropertyFormatter;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * Unit-test for {@link UserDefinedFunction user-defined functions}.
@@ -197,7 +197,7 @@ public class UdfTest {
                 "SELECT { CurrentDateMember([Time].[Time], "
                 + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\", BEFORE)} "
                 + "ON COLUMNS FROM [Sales]");
-            discard(TestUtil.toString(x));
+            TestUtil.toString(x);
         } finally {
             Util.close(x, ((StatementImpl) statement), connection);
         }
@@ -1843,7 +1843,7 @@ public class UdfTest {
 		public Object execute(Evaluator evaluator, Argument[] arguments) {
             // Simply ignore first parameter
             Member member = (Member)arguments[0].evaluate(evaluator);
-            discard(member);
+//            discard(member);
             Hierarchy hierarchy = (Hierarchy)arguments[1].evaluate(evaluator);
             return hierarchy.getDefaultMember();
         }

@@ -11,8 +11,6 @@
 */
 package mondrian.rolap;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1264,7 +1262,7 @@ public Cell getCell( int[] pos ) {
           LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
         } catch ( Exception e ) {
           LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
-            discard( e );
+//            discard( e );
         }
 
         if (ci != null && o != RolapUtil.valueNotReadyException ) {
@@ -1274,7 +1272,7 @@ public Cell getCell( int[] pos ) {
     } else {
       RolapAxis axis = (RolapAxis) axes[axisOrdinal];
       TupleList tupleList = axis.getTupleList();
-      discard( tupleList.size() ); // force materialize
+     tupleList.size();  // force materialize
 
         for ( List<Member> tuple : tupleList ) {
           List<Member> measures = new ArrayList<>( statement.getQuery().getMeasuresMembers() );

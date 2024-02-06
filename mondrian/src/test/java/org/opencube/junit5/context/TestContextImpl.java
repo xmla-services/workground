@@ -41,7 +41,7 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 
 	public TestContextImpl() {
         testConfig = new TestConfig();
-	    shepherd = new RolapResultShepherd(testConfig.rolapConnectionShepherdThreadPollingInterval(),
+	    shepherd = new RolapResultShepherd(testConfig.rolapConnectionShepherdThreadPollingInterval(),testConfig.rolapConnectionShepherdThreadPollingIntervalUnit(),
             testConfig.rolapConnectionShepherdNbThreads());
 	    aggMgr = new AggregationManager(this);
 	}

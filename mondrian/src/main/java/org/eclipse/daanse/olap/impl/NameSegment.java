@@ -74,7 +74,7 @@ public class NameSegment implements IdentifierSegment {
             case QUOTED:
                 return IdentifierNode.quoteMdxIdentifier(name);
             default:
-                throw Olap4jUtil.unexpected(quoting);
+                throw unexpected(quoting);
         }
     }
 
@@ -87,7 +87,7 @@ public class NameSegment implements IdentifierSegment {
                 IdentifierNode.quoteMdxIdentifier(name, buf);
                 return;
             default:
-                throw Olap4jUtil.unexpected(quoting);
+                throw unexpected(quoting);
         }
     }
     public ParseRegion getRegion() {
@@ -104,6 +104,20 @@ public class NameSegment implements IdentifierSegment {
 
     public List<NameSegment> getKeyParts() {
         return null;
+    }
+    
+    /**
+     * Returns an exception indicating that we didn't expect to find this value
+     * here.
+     *
+     * @param value Value
+     * @return an AssertionError which can be thrown
+     */
+    public static IllegalArgumentException unexpected(Enum value) {
+        return new IllegalArgumentException(
+            "Was not expecting value '" + value
+                + "' for enumeration '" + value.getClass().getName()
+                + "' in this context");
     }
 }
 

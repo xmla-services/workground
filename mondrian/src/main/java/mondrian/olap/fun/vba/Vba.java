@@ -10,8 +10,6 @@
 */
 package mondrian.olap.fun.vba;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
@@ -2144,7 +2142,7 @@ public class Vba {
         int compare)
     {
         // compare is currently ignored
-        discard(compare);
+//        discard(compare);
         return _replace(expression, find, replace, start, count);
     }
 
@@ -2471,7 +2469,7 @@ public class Vba {
         private final int dateField;
 
         Interval(String desc, int dateField) {
-            discard(desc);
+//            discard(desc);
             this.dateField = dateField;
         }
 

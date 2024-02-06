@@ -22,9 +22,9 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 import mondrian.util.Pair;
 
@@ -70,26 +70,6 @@ public class ArrayMap<K, V>
         }
     }
 
-    /**
-     * Returns an array map with given contents.
-     *
-     * @param key First key
-     * @param value First value
-     * @param keyValues Second and sequent key/value pairs
-     * @param <K> Key type
-     * @param <V> Value type
-     * @return Map with given contents
-     */
-    public static <K, V> Map<K, V> of(
-        K key,
-        V value,
-        Object... keyValues)
-    {
-        // Because ArrayMap is so bad at bulk inserts, it makes sense to build
-        // another map (HashMap) just so we can populate the ArrayMap in one
-        // shot.
-        return new ArrayMap<K, V>(Olap4jUtil.mapOf(key, value, keyValues));
-    }
 
     public boolean equals(Object o) {
         if (o == this) {
@@ -148,7 +128,7 @@ public class ArrayMap<K, V>
 
     private int indexOfKey(Object key) {
         for (int i = 0; i < keyValues.length; i += 2) {
-            if (Olap4jUtil.equal(keyValues[i], key)) {
+            if (Objects.equals(keyValues[i], key)) {
                 return i;
             }
         }
@@ -157,7 +137,7 @@ public class ArrayMap<K, V>
 
     public boolean containsValue(Object value) {
         for (int i = 1; i < keyValues.length; i += 2) {
-            if (Olap4jUtil.equal(keyValues[i], value)) {
+            if (Objects.equals(keyValues[i], value)) {
                 return true;
             }
         }

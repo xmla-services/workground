@@ -12,7 +12,6 @@
 package mondrian.test;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -21,8 +20,6 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Cell;
@@ -40,6 +37,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 
 
 /**
@@ -401,7 +400,8 @@ class CompatibilityTest {
         connection = foodMartContext.getConnection();
 
         // This test should work irrespective of the case-sensitivity setting.
-        discard(props.CaseSensitive.get());
+        props.CaseSensitive.get();
+//        discard();
 
         TestUtil.assertQueryReturns(
     		connection,

@@ -20,7 +20,6 @@ package org.opencube.junit5;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -209,7 +208,7 @@ public class TestUtil {
 			Throwable throwable;
 			try {
 				Result result = executeQuery(connection, queryString);
-				discard(result);
+//				discard(result);
 				throwable = null;
 			} catch (Throwable e) {
 				throwable = e;
@@ -228,7 +227,7 @@ public class TestUtil {
 		Throwable throwable;
 		try {
 			Result result = executeQuery(context.getConnection(), queryString);
-			discard(result);
+//			discard(result);
 			throwable = null;
 		} catch (Throwable e) {
 			throwable = e;
@@ -240,7 +239,7 @@ public class TestUtil {
         Throwable throwable;
         try {
             Result result = executeQuery(context.getConnection(roles), queryString);
-            discard(result);
+//            discard(result);
             throwable = null;
         } catch (Throwable e) {
             throwable = e;
@@ -259,7 +258,7 @@ public class TestUtil {
         Throwable throwable;
         try {
             Result result = executeQuery(context.getConnection(props), queryString);
-            discard(result);
+//            discard(result);
             throwable = null;
         } catch (Throwable e) {
             throwable = e;
@@ -633,11 +632,11 @@ public class TestUtil {
 			}
 			QueryImpl query = connection.parseQuery( "select from " + cubeName );
 			Result result = connection.execute( query );
-			discard( result );
+//			discard( result );
 			connection.close();
 			return true;
 		} catch ( RuntimeException e ) {
-			discard( e );
+//			discard( e );
 			return false;
 		}
 	}
@@ -1635,7 +1634,7 @@ public class TestUtil {
 					clearCache(connection, (RolapCube)query.getCube());
 				}
 				final Result result = connection.execute(query);
-				discard(result);
+//				discard(result);
 				bomb = null;
 			} catch (Bomb e) {
 				bomb = e;

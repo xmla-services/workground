@@ -30,7 +30,6 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.NamedSetUtil.getFormula;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -71,7 +71,6 @@ import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.impl.IdentifierSegment;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
@@ -125,23 +124,23 @@ public class RolapSchema implements Schema {
     static final Logger LOGGER = LoggerFactory.getLogger(RolapSchema.class);
 
     private static final Set<Access> schemaAllowed =
-        Olap4jUtil.enumSetOf(
+        EnumSet.of(
             Access.NONE,
             Access.ALL,
             Access.ALL_DIMENSIONS,
             Access.CUSTOM);
 
     private static final Set<Access> cubeAllowed =
-        Olap4jUtil.enumSetOf(Access.NONE, Access.ALL, Access.CUSTOM);
+        EnumSet.of(Access.NONE, Access.ALL, Access.CUSTOM);
 
     private static final Set<Access> dimensionAllowed =
-        Olap4jUtil.enumSetOf(Access.NONE, Access.ALL, Access.CUSTOM);
+        EnumSet.of(Access.NONE, Access.ALL, Access.CUSTOM);
 
     private static final Set<Access> hierarchyAllowed =
-        Olap4jUtil.enumSetOf(Access.NONE, Access.ALL, Access.CUSTOM);
+        EnumSet.of(Access.NONE, Access.ALL, Access.CUSTOM);
 
     private static final Set<Access> memberAllowed =
-        Olap4jUtil.enumSetOf(Access.NONE, Access.ALL);
+        EnumSet.of(Access.NONE, Access.ALL);
     public static final String WHILE_PARSING_CATALOG = "while parsing catalog ";
 
     private String name;
@@ -494,14 +493,14 @@ public class RolapSchema implements Schema {
             RolapSchemaParameter param =
                 new RolapSchemaParameter(
                     this, name, defaultValue, description, type, modifiable);
-            discard(param);
+//            discard(param);
         }
 
         // Create cubes.
         for (MappingCube xmlCube : mappingSchema.cubes()) {
             if (xmlCube.enabled()) {
                 RolapCube cube = new RolapCube(this, mappingSchema, xmlCube, context);
-                discard(cube);
+//                discard(cube);
             }
         }
 
@@ -510,7 +509,7 @@ public class RolapSchema implements Schema {
             if (xmlVirtualCube.enabled()) {
                 RolapCube cube =
                     new RolapCube(this, mappingSchema, xmlVirtualCube, context);
-                discard(cube);
+//                discard(cube);
             }
         }
 
@@ -979,7 +978,7 @@ public class RolapSchema implements Schema {
         }
         // It's OK for the description to be null.
         final String description = udf.getDescription();
-        discard(description);
+//        discard(description);
         final Type[] parameterTypes = udf.getParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {
             Type parameterType = parameterTypes[i];

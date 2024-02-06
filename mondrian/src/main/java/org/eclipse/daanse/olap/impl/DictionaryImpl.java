@@ -19,6 +19,7 @@ package org.eclipse.daanse.olap.impl;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ class DictionaryImpl<E extends Enum<E> & XmlaConstant>
         int xmlaOrdinalMask)
     {
         init();
-        Set<E> set = Olap4jUtil.enumSetNoneOf(clazz);
+        Set<E> set = EnumSet.noneOf(clazz);
         for (E e : values) {
             if ((xmlaOrdinalMask & e.xmlaOrdinal()) != 0) {
                 set.add(e);

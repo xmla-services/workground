@@ -10,8 +10,6 @@
 */
 package mondrian.rolap.agg;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -129,7 +127,7 @@ public class SegmentLoader {
               compoundPredicateList ), true );
           // Make sure that we are registered as a client of
           // the segment by invoking getFuture.
-          discard( index.getFuture( Locus.peek().execution, segment.getHeader() ) );
+          index.getFuture( Locus.peek().execution, segment.getHeader() ) ;
         }
       }
     }

@@ -11,8 +11,6 @@
 
 package mondrian.olap.fun;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -170,7 +168,8 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       // but we cannot yet guarantee that it is mutable.
       // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code
       final TupleList list = null;
-      discard( tupleIteratorCalc.getResultStyle() );
+      tupleIteratorCalc.getResultStyle();
+//      discard( tupleIteratorCalc.getResultStyle() );
       return handleSortWithOneKeySpec( subEvaluator, iterable, list );
     }
 

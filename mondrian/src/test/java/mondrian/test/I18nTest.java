@@ -9,7 +9,6 @@
 
 package mondrian.test;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
 
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-
-import mondrian.rolap.RolapConnectionPropsR;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.eclipse.daanse.olap.api.Connection;
@@ -33,7 +30,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.QueryImpl;
-import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.util.Format;
 
 /**
@@ -54,7 +51,7 @@ class I18nTest {
     void testFormat() {
         // Make sure Util is loaded, so that the LocaleFormatFactory gets
         // registered.
-        discard(Util.NL);
+//        discard(Util.NL);
 
         Locale spanish = new Locale("es", "ES");
         Locale german = new Locale("de", "DE");

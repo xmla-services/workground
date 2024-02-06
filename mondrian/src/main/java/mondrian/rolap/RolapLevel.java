@@ -29,7 +29,6 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.impl.UnmodifiableArrayMap;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -531,7 +530,7 @@ public class RolapLevel extends LevelBase {
     }
 
     private static final Map<String, BestFitColumnType> VALUES =
-        UnmodifiableArrayMap.of(
+        Map.of(
             "int", BestFitColumnType.INT,
             "double", BestFitColumnType.DOUBLE,
             "Object", BestFitColumnType.OBJECT,

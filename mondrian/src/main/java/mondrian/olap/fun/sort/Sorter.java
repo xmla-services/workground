@@ -13,7 +13,6 @@ package mondrian.olap.fun.sort;
 
 import static mondrian.olap.Util.newInternal;
 import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -912,7 +911,7 @@ public class Sorter {
           ObjIntPair<T> item = new ObjIntPair<>( element, filled++ );
           if ( comp2.compare( item, head ) >= 0 ) {
             ObjIntPair<T> poll = queue.remove();
-            discard( poll );
+//            discard( poll );
             queue.offer( item );
           }
         }

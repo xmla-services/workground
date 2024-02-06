@@ -13,7 +13,6 @@
 package mondrian.test;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
@@ -47,7 +46,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
 
 /**
  * Unit-test for named sets, in all their various forms: <code>WITH SET</code>,
@@ -965,14 +963,14 @@ class NamedSetTest {
             "with set [Foo] as ' CrossJoin([Gender].members, [Marital Status].members) '"
             + "select {[Foo]} on columns from [Sales]";
         result = executeQuery(connection, queryString);
-        discard(result);
+//        discard(result);
 
         // Formula for a named set may be a set of members.
         queryString =
             "with set [Foo] as ' [Gender].members '"
             + "select {[Foo]} on columns from [Sales]";
         result = executeQuery(connection, queryString);
-        discard(result);
+//        discard(result);
     }
 
     @ParameterizedTest

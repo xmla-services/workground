@@ -62,7 +62,7 @@ public class RolapResultShepherd {
     private final Timer timer =
         Util.newTimer("mondrian.rolap.RolapResultShepherd#timer", true);
 
-    public RolapResultShepherd(final String rolapConnectionShepherdThreadPollingInterval,  final int rolapConnectionShepherdNbThreads) {
+    public RolapResultShepherd(final long rolapConnectionShepherdThreadPollingInterval, TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit, final int rolapConnectionShepherdNbThreads) {
 
         final int maximumPoolSize = rolapConnectionShepherdNbThreads;
         executor =
@@ -85,11 +85,8 @@ public class RolapResultShepherd {
                             "rolapConnectionShepherdNbThreads");
                     }
                 });
-        final Pair<Long, TimeUnit> interval =
-            Util.parseInterval(
-                rolapConnectionShepherdThreadPollingInterval,
-                TimeUnit.MILLISECONDS);
-        long period = interval.right.toMillis(interval.left);
+
+        long period = rolapConnectionShepherdThreadPollingIntervalUnit.toMillis(rolapConnectionShepherdThreadPollingInterval);
         timer.schedule(
             new TimerTask() {
                 @Override

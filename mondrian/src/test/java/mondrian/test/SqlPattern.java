@@ -11,12 +11,12 @@
 
 package mondrian.test;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import mondrian.enums.DatabaseProduct;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Pattern for a SQL statement (or fragment thereof) expected to be produced
@@ -79,7 +79,7 @@ public class SqlPattern {
          final String sql,
          final String triggerSql)
     {
-        this(Olap4jUtil.enumSetOf(databaseProduct), sql, triggerSql);
+        this(EnumSet.of(databaseProduct), sql, triggerSql);
     }
 
     /**

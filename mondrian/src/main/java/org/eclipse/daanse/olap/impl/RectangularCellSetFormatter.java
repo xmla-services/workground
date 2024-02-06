@@ -25,13 +25,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.result.Position;
+
 
 /**
  * Formatter that can convert a {@link CellSet} into a two-dimensional text
@@ -371,7 +372,7 @@ public class RectangularCellSetFormatter {
                 same =
                     same
                         && i > 0
-                        && Olap4jUtil.equal(prevMembers[y], member);
+                        && Objects.equals(prevMembers[y], member);
                 String value =
                     member == null
                         ? ""

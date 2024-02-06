@@ -14,8 +14,6 @@
 
 package mondrian.util;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -1449,8 +1447,8 @@ public class Format {
     private static Token nfe(
         int code, int flags, String token, String purpose, String description)
     {
-        discard(purpose);
-        discard(description);
+//        discard(purpose);
+//        discard(description);
         formatTokenToFormatString.put(code, token);
         return new Token(code, flags, token);
     }

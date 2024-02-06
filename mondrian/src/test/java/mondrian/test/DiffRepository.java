@@ -9,25 +9,6 @@
 
 package mondrian.test;
 
-import mondrian.olap.Util;
-import org.junit.jupiter.api.Assertions;
-import org.opentest4j.AssertionFailedError;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -39,7 +20,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.junit.jupiter.api.Assertions;
+import org.opentest4j.AssertionFailedError;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.SAXException;
+
+import mondrian.olap.Util;
 
 /**
  * A collection of resources used by tests.
@@ -219,7 +219,7 @@ public class DiffRepository
             throw new IllegalArgumentException("url must not be null");
         }
         this.refFile = refFile;
-        discard(this.refFile);
+//        discard(this.refFile);
         this.logFile = logFile;
 
         // Load the document.

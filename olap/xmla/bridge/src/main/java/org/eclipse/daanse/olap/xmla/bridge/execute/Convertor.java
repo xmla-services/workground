@@ -21,7 +21,6 @@ import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_DOUBLE;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_INTEGER_LONG;
 import static org.eclipse.daanse.xmla.api.common.properties.XsdType.XSD_STRING;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -386,7 +385,7 @@ public class Convertor {
             }
 
             ++cellOrdinal;
-            discard(cellOrdinal);
+//            discard(cellOrdinal);
 
             if (axis >= 2) {
                 result.addAll(getRowSetRowList(cellSet, axis - 1, ho, cellOrdinal, columns, members, pos, posList));
@@ -412,7 +411,7 @@ public class Convertor {
     private static List<RowSetRow> getRowSetRowList(Cell cell, int cellOrdinal, List<Column> columns, Member[] members) {
         List<RowSetRow> rows = new ArrayList<>();
         ++cellOrdinal;
-        discard(cellOrdinal);
+//        discard(cellOrdinal);
 
         // Ignore empty cells.
         final Object cellValue = cell.getValue();

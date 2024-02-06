@@ -12,10 +12,10 @@
 
 package mondrian.xmla;
 
+import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.impl.XmlaConstants;
 
 /**
@@ -27,7 +27,7 @@ import org.eclipse.daanse.olap.impl.XmlaConstants;
 public enum PropertyDefinition {
     AxisFormat(
         RowsetDefinitionType.ENUMERATION,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.AxisFormat.class),
+        EnumSet.allOf(XmlaConstants.AxisFormat.class),
         XmlaConstants.Access.Write,
         "",
         XmlaConstants.Method.EXECUTE,
@@ -57,7 +57,7 @@ public enum PropertyDefinition {
 
     Content(
         RowsetDefinitionType.ENUM_STRING,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.Content.class),
+        EnumSet.allOf(XmlaConstants.Content.class),
         XmlaConstants.Access.Write,
         XmlaConstants.Content.DEFAULT.name(),
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
@@ -115,7 +115,7 @@ public enum PropertyDefinition {
 
     Format(
         RowsetDefinitionType.ENUM_STRING,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.Format.class),
+        EnumSet.allOf(XmlaConstants.Format.class),
         XmlaConstants.Access.Write,
         "Native",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
@@ -139,7 +139,7 @@ public enum PropertyDefinition {
 
     MDXSupport(
         RowsetDefinitionType.ENUM_STRING,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.MdxSupport.class),
+        EnumSet.allOf(XmlaConstants.MdxSupport.class),
         XmlaConstants.Access.Read,
         "Core",
         XmlaConstants.Method.DISCOVER,
@@ -187,7 +187,7 @@ public enum PropertyDefinition {
 
     StateSupport(
         RowsetDefinitionType.ENUM_STRING,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.StateSupport.class),
+        EnumSet.allOf(XmlaConstants.StateSupport.class),
         XmlaConstants.Access.Read,
         "None",
         XmlaConstants.Method.DISCOVER,
@@ -215,7 +215,7 @@ public enum PropertyDefinition {
 
     VisualMode(
         RowsetDefinitionType.ENUMERATION,
-        Olap4jUtil.enumSetAllOf(XmlaConstants.VisualMode.class),
+        EnumSet.allOf(XmlaConstants.VisualMode.class),
         XmlaConstants.Access.Write,
         Integer.toString(XmlaConstants.VisualMode.VISUAL.ordinal()),
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,

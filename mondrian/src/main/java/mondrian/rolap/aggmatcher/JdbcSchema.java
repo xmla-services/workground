@@ -21,6 +21,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -526,7 +527,7 @@ public class JdbcSchema {
              * This contains the enums of all of the column's usages.
              */
             private final Set<UsageType> usageTypes =
-                Olap4jUtil.enumSetNoneOf(UsageType.class);
+            		EnumSet.noneOf(UsageType.class);
 
             private Column(final String name) {
                 this.name = name;

@@ -19,7 +19,6 @@ import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
 import static mondrian.rolap.util.RelationUtil.getAlias;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -677,7 +676,8 @@ public class RolapCube extends CubeBase {
                         Integer.valueOf(
                             expr.substring(1, expr.length() - 1));
                 } catch (NumberFormatException e) {
-                    discard(e);
+                	e.printStackTrace();
+//                    discard(e);
                 }
             }
         }
@@ -1258,7 +1258,7 @@ public class RolapCube extends CubeBase {
         List<Formula> formulaList)
     {
         MappingNamedSet xmlNamedSet = xmlNamedSets.get(i);
-        discard(xmlNamedSet);
+//        discard(xmlNamedSet);
         Formula formula = queryExp.getFormulas()[offset + i];
         final SetBase namedSet = (SetBase) formula.getNamedSet();
         if (xmlNamedSet.caption() != null

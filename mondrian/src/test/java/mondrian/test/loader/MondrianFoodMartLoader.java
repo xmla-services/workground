@@ -11,7 +11,6 @@
 package mondrian.test.loader;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -920,7 +919,7 @@ public class MondrianFoodMartLoader {
 
             String line;
             int lineNumber = 0;
-            discard(lineNumber);
+//            discard(lineNumber);
 
             StringBuilder buf = new StringBuilder();
 

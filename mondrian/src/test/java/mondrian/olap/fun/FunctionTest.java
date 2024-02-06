@@ -11,16 +11,42 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryTimeoutException;
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.test.BasicQueryTest;
-import mondrian.test.PropertySaver5;
-import mondrian.util.Bug;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.olap.Util.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertAxisThrows;
+import static org.opencube.junit5.TestUtil.assertBooleanExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprDependsOn;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertMemberExprDependsOn;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
+import static org.opencube.junit5.TestUtil.assertStubbedEqualsVerbose;
+import static org.opencube.junit5.TestUtil.compileExpression;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.executeSingletonAxis;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CancellationException;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -61,41 +87,16 @@ import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CancellationException;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static mondrian.olap.Util.assertTrue;
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertAxisThrows;
-import static org.opencube.junit5.TestUtil.assertBooleanExprReturns;
-import static org.opencube.junit5.TestUtil.assertExprDependsOn;
-import static org.opencube.junit5.TestUtil.assertExprThrows;
-import static org.opencube.junit5.TestUtil.assertMemberExprDependsOn;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
-import static org.opencube.junit5.TestUtil.assertStubbedEqualsVerbose;
-import static org.opencube.junit5.TestUtil.compileExpression;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.executeExpr;
-import static org.opencube.junit5.TestUtil.executeExprRaw;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.executeSingletonAxis;
-import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.test.BasicQueryTest;
+import mondrian.test.PropertySaver5;
+import mondrian.util.Bug;
 
 //import mondrian.spi.DialectManager;
 
@@ -12670,7 +12671,7 @@ Intel platforms):
 
     // This case demonstrates the relative precedence of 'AS' in 'CAST'
     // and 'AS' for creating inline named sets. See also bug MONDRIAN-648.
-    discard( Bug.BugMondrian648Fixed );
+//    discard( Bug.BugMondrian648Fixed );
     assertExprReturns(context.getConnection(),
       "'xxx' || Cast(1 = 1 AND 1 = 2 AS String)",
       "xxxfalse" );

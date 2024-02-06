@@ -18,6 +18,7 @@
 package org.eclipse.daanse.olap.api.result;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Set;
 
 public interface Property {
@@ -71,10 +72,10 @@ public interface Property {
 
         public static final Set<Property.TypeFlag> CELL_TYPE_FLAG =
             Collections.unmodifiableSet(
-                Olap4jUtil.enumSetOf(Property.TypeFlag.CELL));
+            		EnumSet.of(Property.TypeFlag.CELL));
         public static final Set<Property.TypeFlag> MEMBER_TYPE_FLAG =
             Collections.unmodifiableSet(
-                Olap4jUtil.enumSetOf(Property.TypeFlag.MEMBER));
+            		EnumSet.of(Property.TypeFlag.MEMBER));
         private static final DictionaryImpl<Property.TypeFlag> DICTIONARY =
             DictionaryImpl.forClass(Property.TypeFlag.class);
 
