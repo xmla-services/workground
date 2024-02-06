@@ -30,7 +30,7 @@
 	bnd.identity;id=junit-platform-launcher,\
 	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.xml',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl',\
-	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle',\
+	bnd.identity;id='org.apache.aries.spifly.dynamic.framework.extension',\
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator'
 
 # -runbundles is calculated by the bnd-resolver-maven-plugin
@@ -48,7 +48,7 @@
 	junit-platform-engine;version='[1.9.2,1.9.3)',\
 	junit-platform-launcher;version='[1.9.2,1.9.3)',\
 	net.bytebuddy.byte-buddy;version='[1.12.16,1.12.17)',\
-	org.apache.aries.spifly.dynamic.bundle;version='[1.3.6,1.3.7)',\
+	org.apache.aries.spifly.dynamic.framework.extension;version='[1.3.7,1.3.8)',\
 	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
@@ -58,11 +58,6 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.xml-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;version='[0.0.1,0.0.2)',\
 	org.glassfish.hk2.osgi-resource-locator;version='[2.4.0,2.4.1)',\
-	org.objectweb.asm;version='[9.6.0,9.6.1)',\
-	org.objectweb.asm.commons;version='[9.6.0,9.6.1)',\
-	org.objectweb.asm.tree;version='[9.6.0,9.6.1)',\
-	org.objectweb.asm.tree.analysis;version='[9.6.0,9.6.1)',\
-	org.objectweb.asm.util;version='[9.6.0,9.6.1)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
 	org.osgi.test.common;version='[1.2.1,1.2.2)',\
