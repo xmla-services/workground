@@ -313,7 +313,7 @@ class DrillThroughTest {
         // http://jira.pentaho.com/browse/MONDRIAN-1587
         // hsqldb was failing with SQL that included redundant parentheses
         // around IN list items.
-
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         Result result = executeQuery(context.getConnection(),
             "select from sales where "
@@ -1483,6 +1483,7 @@ class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void  testDrillThroughMultiPositionCompoundSlicer(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         // A query with a simple multi-position compound slicer
         Result result =
