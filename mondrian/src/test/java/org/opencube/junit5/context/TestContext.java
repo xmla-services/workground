@@ -2,6 +2,7 @@ package org.opencube.junit5.context;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 import javax.sql.DataSource;
 
@@ -25,4 +26,5 @@ public interface TestContext extends Context{
 	void setStatisticsProvider(StatisticsProvider statisticsProvider);
     Connection getConnection(List<String> roles);
     BasicContextConfig getConfig();
+	void setQueryLimitSemaphore(Semaphore semaphore);
 }

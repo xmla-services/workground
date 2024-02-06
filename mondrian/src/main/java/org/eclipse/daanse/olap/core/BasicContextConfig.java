@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-import org.osgi.service.metatype.annotations.Option;
 
 @ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx", factoryPid =  BasicContext.PID)
 public interface BasicContextConfig {
@@ -41,7 +40,6 @@ public interface BasicContextConfig {
     default Integer queryLimit() {
         return 40;
     }
-
 
     //Integer property that, if set to a value greater than zero, sets a hard limit on the number of cells that are batched together when building segments.
     /**

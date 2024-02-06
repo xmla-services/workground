@@ -14,32 +14,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.executeQuery;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.concurrent.Semaphore;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
-
 class DeadlockTest {
+	
+	public static class QueryLimitFoodMart extends AppandFoodMartCatalog{
+		
+		@Override
+		public void updateContext(TestContext context) {
+			super.updateContext(context);
+			Semaphore queryLimimitSemaphore=new Semaphore(20);
+			context.setQueryLimitSemaphore(queryLimimitSemaphore);
+		}
+	}
 
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-    }
-
-    @AfterEach
-    public void afterEach() {
-        propSaver.reset();
-    }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = QueryLimitFoodMart.class, dataloader = FastFoodmardDataLoader.class )
     void testSegmentLoadDeadlock(TestContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1726
         // Deadlock can occur if a cardinality query is fired after
@@ -48,8 +45,8 @@ class DeadlockTest {
         // The query below can cause this issue. Each aggregate() member
         // results in a separate segment load (which will exceed the available
         // 20), and cardinality is checked as a part of segment loads.
-        propSaver.set(
-            MondrianProperties.instance().QueryLimit, 20);
+    	
+
         Thread bigQueryThread = new Thread(
             new Runnable() {
             @Override
@@ -138,6 +135,5 @@ class DeadlockTest {
         } catch (InterruptedException e) {
             fail();
         }
-        propSaver.reset();
     }
 }

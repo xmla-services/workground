@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 import javax.sql.DataSource;
 
@@ -48,7 +49,7 @@ import mondrian.rolap.agg.AggregationManager;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
-public class BasicContext extends AbstractBasicContext  {
+public class BasicContext extends AbstractBasicContext {
 
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
 
@@ -79,9 +80,11 @@ public class BasicContext extends AbstractBasicContext  {
 	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private ExpressionCompilerFactory expressionCompilerFactory = null;
 
-    private BasicContextConfig config;
+	private BasicContextConfig config;
 
 	private Dialect dialect = null;
+
+	private Semaphore queryLimitSemaphore;
 
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
@@ -92,18 +95,20 @@ public class BasicContext extends AbstractBasicContext  {
 
 		this.config = configuration;
 
+		queryLimitSemaphore = new Semaphore(config.queryLimit());
+
 		try (Connection connection = dataSource.getConnection()) {
 			Optional<Dialect> optionalDialect = dialectResolver.resolve(dataSource);
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
 		}
 		statisticsProvider.initialize(dataSource, getDialect());
-        shepherd = new RolapResultShepherd(config.rolapConnectionShepherdThreadPollingInterval(),config.rolapConnectionShepherdThreadPollingIntervalUnit(),
-            config.rolapConnectionShepherdNbThreads());
-        aggMgr = new AggregationManager(this);
+		shepherd = new RolapResultShepherd(config.rolapConnectionShepherdThreadPollingInterval(),
+				config.rolapConnectionShepherdThreadPollingIntervalUnit(), config.rolapConnectionShepherdNbThreads());
+		aggMgr = new AggregationManager(this);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("new MondrianServer: id=" + getId());
-        }
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("new MondrianServer: id=" + getId());
+		}
 	}
 
 	@Deactivate
@@ -156,19 +161,24 @@ public class BasicContext extends AbstractBasicContext  {
 		return getConnection(new RolapConnectionPropsR());
 	}
 
-    @Override
-    public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
-        return new RolapConnection(this, props);
-    }
+	@Override
+	public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
+		return new RolapConnection(this, props);
+	}
 
-    @Override
+	@Override
 	public Scenario createScenario() {
 		// TODO
 		return null;
 	}
 
-    @Override
-    public BasicContextConfig getConfig() {
-        return config;
-    }
+	@Override
+	public BasicContextConfig getConfig() {
+		return config;
+	}
+
+	@Override
+	public Semaphore getQueryLimitSemaphore() {
+		return queryLimitSemaphore;
+	}
 }

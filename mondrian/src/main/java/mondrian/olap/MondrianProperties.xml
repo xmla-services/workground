@@ -14,20 +14,6 @@
   == configuration.html).
   -->
 <PropertyDefinitions>
-    <PropertyDefinition>
-        <Name>QueryLimit</Name>
-        <Path>mondrian.query.limit</Path>
-        <Description>
-<p>Maximum number of simultaneous queries the system will allow.</p>
-
-<p>Oracle fails if you try to run more than the 'processes' parameter in
-init.ora, typically 150. The throughput of Oracle and other databases
-will probably reduce long before you get to their limit.</p>
-</Description>
-        <Type>int</Type>
-        <Default>40</Default>
-    </PropertyDefinition>
-
 	<PropertyDefinition>
         <Name>CellBatchSize</Name>
         <Path>mondrian.rolap.cellBatchSize</Path>

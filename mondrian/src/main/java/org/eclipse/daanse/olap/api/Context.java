@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.api;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 import javax.sql.DataSource;
 
@@ -119,4 +120,8 @@ public interface Context {
 	List<Statement> getStatements(Connection connection);
 
     BasicContextConfig getConfig();
+    
+    Semaphore getQueryLimitSemaphore();
+    
+    
 }

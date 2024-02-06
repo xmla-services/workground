@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
@@ -38,12 +39,16 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	private String name;
 	private Optional<String> description = Optional.empty();
     private TestConfig testConfig;
+    private Semaphore queryLimimitSemaphore;
+    
+    
 
 	public TestContextImpl() {
         testConfig = new TestConfig();
 	    shepherd = new RolapResultShepherd(testConfig.rolapConnectionShepherdThreadPollingInterval(),testConfig.rolapConnectionShepherdThreadPollingIntervalUnit(),
             testConfig.rolapConnectionShepherdNbThreads());
 	    aggMgr = new AggregationManager(this);
+	    queryLimimitSemaphore=new Semaphore(testConfig.queryLimit());
 	}
 
 	@Override
@@ -172,6 +177,17 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 		public long getColumnCardinality(String catalog, String schema, String table, String column) {
 			return 0;
 		}
+	}
+
+	@Override
+	public Semaphore getQueryLimitSemaphore() {
+		return queryLimimitSemaphore;
+	}
+
+	@Override
+	public void setQueryLimitSemaphore(Semaphore queryLimimitSemaphore) {
+		this.queryLimimitSemaphore = queryLimimitSemaphore;
+		
 	}
 
 }

@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
@@ -27,7 +26,6 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
@@ -72,9 +70,6 @@ public class SqlStatement {
 
   // used for SQL logging, allows for a SQL Statement UID
   private static final AtomicLong ID_GENERATOR = new AtomicLong();
-
-  private static final Semaphore querySemaphore = new Semaphore(
-    MondrianProperties.instance().QueryLimit.get(), true );
 
   private final Context context;
   private Connection jdbcConnection;
@@ -145,7 +140,7 @@ public class SqlStatement {
       locus.execution.checkCancelOrTimeout();
 
       this.jdbcConnection = context.getDataSource().getConnection();
-      querySemaphore.acquire();
+      context.getQueryLimitSemaphore().acquire();
       haveSemaphore = true;
       // Trace start of execution.
       if ( RolapUtil.SQL_LOGGER.isDebugEnabled() ) {
@@ -288,7 +283,7 @@ public class SqlStatement {
 
     if ( haveSemaphore ) {
       haveSemaphore = false;
-      querySemaphore.release();
+      context.getQueryLimitSemaphore().release();
     }
 
     // According to the JDBC spec, closing a statement automatically closes

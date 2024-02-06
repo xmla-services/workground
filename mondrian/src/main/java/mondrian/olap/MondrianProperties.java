@@ -225,16 +225,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new StringProperty(
             this, "mondrian.olap.NullMemberRepresentation", "#null");
 
-    /**
-     * <p>Maximum number of simultaneous queries the system will allow.</p>
-     *
-     * <p>Oracle fails if you try to run more than the 'processes' parameter in
-     * init.ora, typically 150. The throughput of Oracle and other databases
-     * will probably reduce long before you get to their limit.</p>
-     */
-    public transient final IntegerProperty QueryLimit =
-        new IntegerProperty(
-            this, "mondrian.query.limit", 40);
+
 
     /**
      * Integer property that, if set to a value greater than zero, limits the
