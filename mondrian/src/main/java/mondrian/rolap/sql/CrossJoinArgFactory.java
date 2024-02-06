@@ -201,10 +201,10 @@ public class CrossJoinArgFactory {
         // strip off redundant set braces, for example
         // { Gender.Gender.members }, or {{{ Gender.M }}}
         if ("{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
-            return checkCrossJoinArg(evaluator, args[0], returnAny);
+            return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
         if ("NativizeSet".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
-            return checkCrossJoinArg(evaluator, args[0], returnAny);
+            return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
         return checkCrossJoin(evaluator, fun, args, returnAny);
     }
@@ -397,7 +397,7 @@ public class CrossJoinArgFactory {
             new CrossJoinArg[2][];
 
         for (int i = 0; i < 2; i++) {
-            allArgsOneInput = checkCrossJoinArg(evaluator, args[i], returnAny);
+            allArgsOneInput = checkCrossJoinArg(evaluator, args[i], returnAny, evaluator.getQuery().getConnection().getContext().getConfig().enableNativeFilter());
 
             if (allArgsOneInput == null
                 || allArgsOneInput.isEmpty()

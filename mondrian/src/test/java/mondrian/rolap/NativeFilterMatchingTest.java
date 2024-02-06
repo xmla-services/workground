@@ -71,6 +71,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPositiveMatching(TestContext context) throws Exception {
+    	RolapSchemaPool.instance().clear();
         if (!context.getConfig().enableNativeFilter()) {
             // No point testing these if the native filters
             // are turned off.
@@ -155,6 +156,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNegativeMatching(TestContext context) throws Exception {
+    	RolapSchemaPool.instance().clear();
         if (!context.getConfig().enableNativeFilter()) {
              // No point testing these if the native filters
              // are turned off.
@@ -603,6 +605,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNativeFilterWithCompoundSlicer_1(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
