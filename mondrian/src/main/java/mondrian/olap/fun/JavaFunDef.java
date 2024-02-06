@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,7 +19,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,25 +53,22 @@ import mondrian.olap.Util;
  * @since Jan 5, 2008
 */
 public class JavaFunDef extends AbstractFunctionDefinition {
-    private static final Map<Class, DataType> mapClazzToCategory =
-        new HashMap<>();
-    private static final String CLASS_NAME = JavaFunDef.class.getName();
+	
+	private static final Map<Class, DataType> mapClazzToCategory = Map.ofEntries(
+			Map.entry(String.class, DataType.STRING), //
+			Map.entry(Double.class, DataType.NUMERIC), //
+			Map.entry(double.class, DataType.NUMERIC), //
+			Map.entry(Integer.class, DataType.INTEGER), //
+			Map.entry(int.class, DataType.INTEGER), //
+			Map.entry(boolean.class, DataType.LOGICAL), //
+			Map.entry(Object.class, DataType.VALUE), //
+			Map.entry(Date.class, DataType.DATE_TIME), //
+			Map.entry(float.class, DataType.NUMERIC), //
+			Map.entry(long.class, DataType.NUMERIC), //
+			Map.entry(double[].class, DataType.ARRAY), //
+			Map.entry(char.class, DataType.STRING), //
+			Map.entry(byte.class, DataType.INTEGER));
 
-    static {
-        JavaFunDef.mapClazzToCategory.put(String.class, DataType.STRING);
-        JavaFunDef.mapClazzToCategory.put(Double.class, DataType.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(double.class, DataType.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(Integer.class, DataType.INTEGER);
-        JavaFunDef.mapClazzToCategory.put(int.class, DataType.INTEGER);
-        JavaFunDef.mapClazzToCategory.put(boolean.class, DataType.LOGICAL);
-        JavaFunDef.mapClazzToCategory.put(Object.class, DataType.VALUE);
-        JavaFunDef.mapClazzToCategory.put(Date.class, DataType.DATE_TIME);
-        JavaFunDef.mapClazzToCategory.put(float.class, DataType.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(long.class, DataType.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(double[].class, DataType.ARRAY);
-        JavaFunDef.mapClazzToCategory.put(char.class, DataType.STRING);
-        JavaFunDef.mapClazzToCategory.put(byte.class, DataType.INTEGER);
-    }
 
     private final Method method;
 
@@ -123,14 +120,14 @@ public class JavaFunDef extends AbstractFunctionDefinition {
 
     private static FunctionDefinition generateFunDef(final Method method) {
         String name =
-            Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$FunctionName").toString(), method.getName());
+            getAnnotation(
+                method, FunctionName.class, method.getName());
         String desc =
-            Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$Description").toString(), "");
+            getAnnotation(
+                method, Description.class, "");
         Syntax syntax =
-            Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$SyntaxDef").toString(), Syntax.Function);
+            getAnnotation(
+                method, SyntaxDef.class, Syntax.Function);
 
         DataType returnCategory = JavaFunDef.getReturnCategory(method);
 
@@ -429,4 +426,22 @@ public class JavaFunDef extends AbstractFunctionDefinition {
             }
         }
     }
+    
+    public static <T> T getAnnotation(
+            Method method, Class<? extends Annotation> annotationClass, T defaultValue)
+        {
+    	
+            try {
+                if (method.isAnnotationPresent(annotationClass)) {
+                    final Annotation annotation =
+                        method.getAnnotation(annotationClass);
+                    final Method method1 =
+                        annotation.getClass().getMethod("value");
+                    return (T) method1.invoke(annotation);
+                }
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException  e) {
+                return defaultValue;
+            }
+            return defaultValue;
+        }
 }

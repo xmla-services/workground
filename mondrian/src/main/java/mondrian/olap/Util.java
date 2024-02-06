@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.lang.annotation.Annotation;
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -1282,14 +1283,14 @@ public class Util {
                 int underscore = value.indexOf('_', i);
                 if (percent == -1 && underscore == -1) {
                     if (i < value.length()) {
-                        buf.append(quotePattern(value.substring(i)));
+                        buf.append(Pattern.quote(value.substring(i)));
                     }
                     break;
                 }
                 if (underscore >= 0 && (underscore < percent || percent < 0)) {
                     if (i < underscore) {
                         buf.append(
-                            quotePattern(value.substring(i, underscore)));
+                        		Pattern.quote(value.substring(i, underscore)));
                     }
                     buf.append('.');
                     i = underscore + 1;
@@ -1298,7 +1299,7 @@ public class Util {
                 {
                     if (i < percent) {
                     buf.append(
-                        quotePattern(value.substring(i, percent)));
+                    		Pattern.quote(value.substring(i, percent)));
                     }
                     buf.append(".*");
                     i = percent + 1;
@@ -1397,24 +1398,6 @@ public class Util {
     }
 
     /**
-     * Returns an annotation of a particular class on a method. Returns the
-     * default value if the annotation is not present, or in JDK 1.4.
-     *
-     * @param method Method containing annotation
-     * @param annotationClassName Name of annotation class to find
-     * @param defaultValue Value to return if annotation is not present
-     * @return value of annotation
-     */
-    public static <T> T getAnnotation(
-        Method method,
-        String annotationClassName,
-        T defaultValue)
-    {
-        return compatible.getAnnotation(
-            method, annotationClassName, defaultValue);
-    }
-
-    /**
      * Closes and cancels a {@link Statement} using the correct methods
      * available on the current Java runtime.
      * <p>If errors are encountered while canceling a statement,
@@ -1423,10 +1406,6 @@ public class Util {
      */
     public static void cancelStatement(Statement stmt) {
         compatible.cancelStatement(stmt);
-    }
-
-    public static MemoryInfo getMemoryInfo() {
-        return compatible.getMemoryInfo();
     }
 
     /**
@@ -1878,87 +1857,6 @@ public class Util {
         }
     }
 
-    public static <T> Set<T> newIdentityHashSetFake() {
-        final HashMap<T, Boolean> map = new HashMap<>();
-        return new Set<>() {
-            @Override
-			public int size() {
-                return map.size();
-            }
-
-            @Override
-			public boolean isEmpty() {
-                return map.isEmpty();
-            }
-
-            @Override
-			public boolean contains(Object o) {
-                return map.containsKey(o);
-            }
-
-            @Override
-			public Iterator<T> iterator() {
-                return map.keySet().iterator();
-            }
-
-            @Override
-			public Object[] toArray() {
-                return map.keySet().toArray();
-            }
-
-            @Override
-			public <T> T[] toArray(T[] a) {
-                return map.keySet().toArray(a);
-            }
-
-            @Override
-			public boolean add(T t) {
-                return map.put(t, Boolean.TRUE) == null;
-            }
-
-            @Override
-			public boolean remove(Object o) {
-                return map.remove(o) == Boolean.TRUE;
-            }
-
-            @Override
-			public boolean containsAll(Collection<?> c) {
-                return map.keySet().containsAll(c);
-            }
-
-            @Override
-			public boolean addAll(Collection<? extends T> c) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-			public boolean retainAll(Collection<?> c) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-			public boolean removeAll(Collection<?> c) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-			public void clear() {
-                map.clear();
-            }
-        };
-    }
-
-    /**
-     * Equivalent to {@link Timer#Timer(String, boolean)}.
-     * (Introduced in JDK 1.5.)
-     *
-     * @param name the name of the associated thread
-     * @param isDaemon true if the associated thread should run as a daemon
-     * @return timer
-     */
-    public static Timer newTimer(String name, boolean isDaemon) {
-        return compatible.newTimer(name, isDaemon);
-    }
 
     /**
      * As Arrays#binarySearch(Object[], int, int, Object), but
@@ -3213,21 +3111,9 @@ public class Util {
      * @return the BigDecimal
      */
     public static BigDecimal makeBigDecimalFromDouble(double d) {
-        return compatible.makeBigDecimalFromDouble(d);
+        return BigDecimal.valueOf(d);
     }
 
-    /**
-     * Returns a literal pattern String for the specified String.
-     *
-     * <p>Specification as for {@link Pattern#quote(String)}, which was
-     * introduced in JDK 1.5.
-     *
-     * @param s The string to be literalized
-     * @return A literal string replacement
-     */
-    public static String quotePattern(String s) {
-        return compatible.quotePattern(s);
-    }
 
 
     /**
@@ -3249,18 +3135,6 @@ public class Util {
         return compatible.compileScript(iface, script, engineName);
     }
 
-    /**
-     * Removes a thread local from the current thread.
-     *
-     * <p>From JDK 1.5 onwards, calls {@link ThreadLocal#remove()}; before
-     * that, no-ops.</p>
-     *
-     * @param threadLocal Thread local
-     * @param <T> Type
-     */
-    public static <T> void threadLocalRemove(ThreadLocal<T> threadLocal) {
-        compatible.threadLocalRemove(threadLocal);
-    }
 
 
     /**
@@ -3812,22 +3686,6 @@ public class Util {
         @Override
 		public void remove() {
             throw new UnsupportedOperationException();
-        }
-    }
-
-
-    /**
-     * Information about memory usage.
-     *
-     * @see mondrian.olap.Util#getMemoryInfo()
-     */
-    public interface MemoryInfo {
-        Usage get();
-
-        public interface Usage {
-            long getUsed();
-            long getCommitted();
-            long getMax();
         }
     }
 

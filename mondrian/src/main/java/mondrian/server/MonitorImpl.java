@@ -9,6 +9,10 @@
 */
 package mondrian.server;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryType;
+import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -89,7 +93,7 @@ public class MonitorImpl implements Monitor, MonitorMXBean {
   private static final Logger LOGGER = LoggerFactory.getLogger( MonitorImpl.class );
   private final Handler handler = new Handler();
 
-  protected static final Util.MemoryInfo MEMORY_INFO = Util.getMemoryInfo();
+  protected static final MemoryInfo MEMORY_INFO = getMemoryInfo();
 
   private static final Actor ACTOR = new Actor();
 
@@ -247,7 +251,7 @@ public List<SqlStatementInfo> getSqlStatements() {
     }
 
     public ServerInfo fix() {
-      Util.MemoryInfo.Usage memoryUsage = MEMORY_INFO.get();
+      MemoryInfo.Usage memoryUsage = MEMORY_INFO.get();
       return new ServerInfo( stack, aggConn.startCount, aggConn.endCount, aggStmt.startCount, aggStmt.endCount,
           aggSql.startCount, aggSql.executeCount, aggSql.endCount, aggSql.rowFetchCount, aggSql.executeNanos,
           aggSql.cellRequestCount, aggExec.cellCacheHitCount, aggExec.cellCacheRequestCount,
@@ -892,4 +896,54 @@ public List<SqlStatementInfo> getSqlStatements() {
       }
     }
   }
+  
+  /**
+   * Information about memory usage.
+   *
+   */
+  public interface MemoryInfo {
+      Usage get();
+
+      public interface Usage {
+          long getUsed();
+          long getCommitted();
+          long getMax();
+      }
+  }
+  
+	public static MemoryInfo getMemoryInfo() {
+		return new MemoryInfo() {
+			protected static final MemoryPoolMXBean TENURED_POOL = findTenuredGenPool();
+
+			@Override
+			public MemoryInfo.Usage get() {
+				final MemoryUsage memoryUsage = TENURED_POOL.getUsage();
+				return new Usage() {
+					@Override
+					public long getUsed() {
+						return memoryUsage.getUsed();
+					}
+
+					@Override
+					public long getCommitted() {
+						return memoryUsage.getCommitted();
+					}
+
+					@Override
+					public long getMax() {
+						return memoryUsage.getMax();
+					}
+				};
+			}
+		};
+	}
+
+	private static MemoryPoolMXBean findTenuredGenPool() {
+		for (MemoryPoolMXBean pool : ManagementFactory.getMemoryPoolMXBeans()) {
+			if (pool.getType() == MemoryType.HEAP) {
+				return pool;
+			}
+		}
+		throw new AssertionError("Could not find tenured space");
+	}
 }

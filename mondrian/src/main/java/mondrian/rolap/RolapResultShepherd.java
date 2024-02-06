@@ -60,7 +60,7 @@ public class RolapResultShepherd {
         new CopyOnWriteArrayList<>();
 
     private final Timer timer =
-        Util.newTimer("mondrian.rolap.RolapResultShepherd#timer", true);
+    		new Timer("mondrian.rolap.RolapResultShepherd#timer", true);
 
     public RolapResultShepherd(final long rolapConnectionShepherdThreadPollingInterval, TimeUnit rolapConnectionShepherdThreadPollingIntervalUnit, final int rolapConnectionShepherdNbThreads) {
 

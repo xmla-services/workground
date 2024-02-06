@@ -40,7 +40,7 @@ import mondrian.rolap.RolapUtil;
  *
  * @author jhyde
  */
-public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
+public class UtilCompatibleJdk16 implements UtilCompatible  {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Util.class);
 

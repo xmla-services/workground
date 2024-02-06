@@ -9,38 +9,14 @@
 
 package mondrian.util;
 
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.Statement;
 import java.util.Set;
-import java.util.Timer;
 
 import mondrian.olap.Util;
 
-/**
- * Interface containing methods which are implemented differently in different
- * versions of the JDK.
- *
- * <p>The methods should not be called directly, only via the corresponding
- * static methods in {@link mondrian.olap.Util}, namely:<ul>
- * <li>{@link mondrian.olap.Util#makeBigDecimalFromDouble(double)}</li>
- * <li>{@link mondrian.olap.Util#quotePattern(String)}</li>
- * </ul></p>
- *
- * <p>This interface could in principle be extended to allow native
- * implementations of methods, or to serve as a factory for entire classes
- * which have different implementations in different environments.</p>
- *
- * @author jhyde
- * @since Feb 5, 2007
- */
+
 public interface UtilCompatible {
-    BigDecimal makeBigDecimalFromDouble(double d);
 
-    String quotePattern(String s);
-
-    <T> T getAnnotation(
-        Method method, String annotationClassName, T defaultValue);
 
 
     /**
@@ -64,16 +40,7 @@ public interface UtilCompatible {
         String script,
         String engineName);
 
-    /**
-     * Removes a thread local from the current thread.
-     *
-     * <p>From JDK 1.5 onwards, calls {@link ThreadLocal#remove()}; before
-     * that, no-ops.</p>
-     *
-     * @param threadLocal Thread local
-     * @param <T> Type
-     */
-    <T> void threadLocalRemove(ThreadLocal<T> threadLocal);
+
 
     /**
      * Creates a hash set that, like {@link java.util.IdentityHashMap},
@@ -90,22 +57,6 @@ public interface UtilCompatible {
      */
     <T extends Comparable<T>> int binarySearch(T[] ts, int start, int end, T t);
 
-    /**
-     * Creates an object from which to get information about system memory
-     * use. From JDK 1.5 onwards, uses
-     * {@link java.lang.management.MemoryPoolMXBean}.
-     *
-     * @return Memory info
-     */
-    Util.MemoryInfo getMemoryInfo();
 
-    /**
-     * Equivalent to {@link Timer#Timer(String, boolean)}.
-     * (Introduced in JDK 1.5.)
-     *
-     * @param name the name of the associated thread
-     * @param isDaemon true if the associated thread should run as a daemon
-     * @return timer
-     */
-    Timer newTimer(String name, boolean isDaemon);
+
 }
