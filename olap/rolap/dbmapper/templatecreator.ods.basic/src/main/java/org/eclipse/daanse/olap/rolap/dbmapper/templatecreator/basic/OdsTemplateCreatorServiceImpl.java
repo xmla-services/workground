@@ -13,8 +13,13 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.basic;
 
-import com.github.miachm.sods.Sheet;
-import com.github.miachm.sods.SpreadSheet;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.db.jdbc.util.impl.SqlType;
@@ -32,12 +37,8 @@ import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
+import com.github.miachm.sods.Sheet;
+import com.github.miachm.sods.SpreadSheet;
 
 @Designate(ocd = OdsTemplateCreatorServiceConfig.class, factory = true)
 @Component(service = TemplateCreatorService.class, scope = ServiceScope.SINGLETON)

@@ -12,8 +12,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.daanse.util.io.watcher.api.PathListener;
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherListener;
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
+import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
+
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -29,8 +31,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @Component()
 @RequireConfigurationAdmin
 @RequireServiceComponentRuntime
-@PathListenerConfig(initialFiles = true, recursive = false)
-public class FileContextRepositoryConfigurator implements PathListener {
+@FileSystemWatcherListenerProperties( recursive = false)
+public class FileContextRepositoryConfigurator implements FileSystemWatcherListener {
 
 //	public static final String PID="org.eclipse.daanse.db.jdbc.dataloader.csvtoh2.FileContextRepositoryConfigurator";
 	public static final String PID_H2 = "org.eclipse.daanse.db.datasource.h2.H2DataSource";
@@ -50,7 +52,7 @@ public class FileContextRepositoryConfigurator implements PathListener {
 	@interface ConfigA {
 
 		@AttributeDefinition
-		String pathListener_path();
+		String io_fs_watcher_path();
 
 	}
 
@@ -114,7 +116,7 @@ public class FileContextRepositoryConfigurator implements PathListener {
 		try {
 			Configuration cH2 = configurationAdmin.getFactoryConfiguration(PID_H2, UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> props = new Hashtable<>();
-			props.put("pathListener.path", pathString);
+			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, pathString);
 			props.put("url", "jdbc:h2:" + tempPath.toAbsolutePath().toString()+"/"+path.getFileName());
 			props.put("file.context.matcher", pathString);
 			cH2.update(props);
@@ -122,7 +124,7 @@ public class FileContextRepositoryConfigurator implements PathListener {
 
 			Configuration cCSV = configurationAdmin.getFactoryConfiguration(PID_CSV, UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> propsCSV = new Hashtable<>();
-			propsCSV.put("pathListener.path", pathString+"/data");
+			propsCSV.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, pathString+"/data");
 			propsCSV.put("dataSource.target", "(file.context.matcher=" + pathString + ")");
 			cCSV.update(propsCSV);
 			catalogFolderConfigsCSV.put(path, cCSV);

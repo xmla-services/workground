@@ -37,13 +37,13 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.common.io.fs.watcher.api.EventKind;
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherListener;
+import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
-import org.eclipse.daanse.util.io.watcher.api.EventKind;
-import org.eclipse.daanse.util.io.watcher.api.PathListener;
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -60,9 +60,9 @@ import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
 
 @Designate(ocd = OdsDataLoaderConfig.class, factory = true)
-@Component(scope = ServiceScope.SINGLETON, service = PathListener.class)
-@PathListenerConfig(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.ods")
-public class OdsDataLoader  implements PathListener {
+@Component(scope = ServiceScope.SINGLETON, service = FileSystemWatcherListener.class)
+@FileSystemWatcherListenerProperties(kinds = EventKind.ENTRY_MODIFY,pattern = ".*.ods")
+public class OdsDataLoader  implements FileSystemWatcherListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(OdsDataLoader.class);
     public static final Converter CONVERTER = Converters.standardConverter();
     private Queue<Path> initialPaths = new ArrayDeque<>();

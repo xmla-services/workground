@@ -1,12 +1,12 @@
 package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
+import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.osgi.service.metatype.annotations.Option;
 
 @ObjectClassDefinition()
-@PathListenerConfig
+@FileSystemWatcherListenerProperties
 public @interface CsvDataLoaderConfig {
 
 	/**

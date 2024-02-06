@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
 import org.eclipse.daanse.olap.core.BasicContextGroup;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -70,9 +71,10 @@ public class DemoSetup {
 
 		cDs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_DS, "1", "?");
 
-		String PATH_TO_OBSERVE = "./catalogs";
+//		String PATH_TO_OBSERVE = "./catalogs";
 
-//		String PATH_TO_OBSERVE = "./../../../../../catalogs";
+		
+		String PATH_TO_OBSERVE = "./../../../../../catalogs";
 
 		String path=Paths.get(PATH_TO_OBSERVE).toAbsolutePath().normalize().toString();
 		
@@ -82,14 +84,14 @@ public class DemoSetup {
 		System.out.println(path);
 		
 		Dictionary<String, Object> propsDS = new Hashtable<>();
-		propsDS.put("pathListener.path", path);
+		propsDS.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path);
 
 		cDs.update(propsDS);
 
 		cCtxs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_CONTEXT, "1", "?");
 
 		Dictionary<String, Object> propsCtxs = new Hashtable<>();
-		propsCtxs.put("pathListener.path", PATH_TO_OBSERVE);
+		propsCtxs.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, PATH_TO_OBSERVE);
 
 		cCtxs.update(propsDS);
 

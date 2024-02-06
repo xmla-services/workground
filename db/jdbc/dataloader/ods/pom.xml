@@ -49,9 +49,7 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.util.io</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
+      <artifactId>org.eclipse.daanse.common.io.fs.watcher.api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>

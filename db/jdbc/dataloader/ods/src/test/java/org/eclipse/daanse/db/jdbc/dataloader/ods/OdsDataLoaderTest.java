@@ -1,5 +1,6 @@
 package org.eclipse.daanse.db.jdbc.dataloader.ods;
 
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
@@ -140,7 +141,7 @@ class OdsDataLoaderTest {
             dict.put("clearTableBeforeLoad", clearTableBeforeLoad);
         }
 
-        dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
+        dict.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
             : path.toAbsolutePath().toString());
 
 

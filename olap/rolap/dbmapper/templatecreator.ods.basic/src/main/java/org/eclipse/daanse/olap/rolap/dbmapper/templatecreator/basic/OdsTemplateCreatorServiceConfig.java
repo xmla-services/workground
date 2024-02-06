@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.basic;
 
+import java.nio.charset.StandardCharsets;
+
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-
-import java.nio.charset.StandardCharsets;
 
 @ObjectClassDefinition
 public interface OdsTemplateCreatorServiceConfig {

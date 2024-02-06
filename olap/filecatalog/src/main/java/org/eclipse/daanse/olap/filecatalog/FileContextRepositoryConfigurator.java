@@ -12,8 +12,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.daanse.util.io.watcher.api.PathListener;
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherListener;
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
+import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -28,8 +29,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @Component()
 @RequireConfigurationAdmin
 @RequireServiceComponentRuntime
-@PathListenerConfig(initialFiles = true, recursive = false)
-public class FileContextRepositoryConfigurator implements PathListener {
+@FileSystemWatcherListenerProperties(recursive = false)
+public class FileContextRepositoryConfigurator implements FileSystemWatcherListener {
 
 	public static final String PID_FileContextConfigurator = FileContextConfigurator.class.getName();
 
@@ -42,7 +43,7 @@ public class FileContextRepositoryConfigurator implements PathListener {
 	@ObjectClassDefinition
 	@interface Config {
 		@AttributeDefinition
-		String pathListener_path();
+		String io_fs_watcher_path();
 
 	}
 
@@ -92,7 +93,7 @@ public class FileContextRepositoryConfigurator implements PathListener {
 			Configuration c = configurationAdmin.getFactoryConfiguration(PID_FileContextConfigurator,
 					UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> props = new Hashtable<>();
-			props.put("pathListener.path", path.toString());
+			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path.toString());
 			props.put("name", basePath.resolve(path).toString());
 			c.update(props);
 			

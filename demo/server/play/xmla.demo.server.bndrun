@@ -125,7 +125,6 @@
 	org.eclipse.daanse.db.dialect.resolver.basic;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.csv;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.util;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.util.io;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.csvtoh2;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.filecatalog;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;version='[0.0.1,0.0.2)',\
@@ -137,4 +136,6 @@
 	org.objectweb.asm.commons;version='[9.6.0,9.6.1)',\
 	org.objectweb.asm.tree;version='[9.6.0,9.6.1)',\
 	org.objectweb.asm.tree.analysis;version='[9.6.0,9.6.1)',\
-	org.objectweb.asm.util;version='[9.6.0,9.6.1)'
+	org.objectweb.asm.util;version='[9.6.0,9.6.1)',\
+	org.eclipse.daanse.common.io.fs.watcher.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.common.io.fs.watcher.watchservice;version='[0.0.1,0.0.2)'

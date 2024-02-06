@@ -36,6 +36,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.junit.jupiter.api.AfterEach;
@@ -145,9 +146,9 @@ class CsvDataLoaderTest {
 		if (quoteDetectionEnabled != null) {
 			dict.put("clearTableBeforeLoad", quoteDetectionEnabled);
 		}
-		dict.put("pathListener.path", stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
+		dict.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, stringPath != null ? path.resolve(stringPath).toAbsolutePath().toString()
 				: path.toAbsolutePath().toString());
-		dict.put("pathListener.recursive", true);
+		dict.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_RECURSIVE, true);
 		conf.update(dict);
 	}
 

@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherListener;
+import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
 import org.eclipse.daanse.olap.core.BasicContext;
-import org.eclipse.daanse.util.io.watcher.api.PathListener;
-import org.eclipse.daanse.util.io.watcher.api.PathListenerConfig;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -33,13 +33,13 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @Component()
 @RequireConfigurationAdmin
 @RequireServiceComponentRuntime
-@PathListenerConfig(initialFiles = true, pattern = ".*.xml")
-public class FileContextConfigurator implements PathListener {
+@FileSystemWatcherListenerProperties(pattern = ".*.xml")
+public class FileContextConfigurator implements FileSystemWatcherListener {
 
 	@ObjectClassDefinition
 	@interface Config {
 		@AttributeDefinition
-		String pathListener_path();
+		String io_fs_watcher_path();
 		@AttributeDefinition
 		String name();
 
@@ -74,7 +74,7 @@ public class FileContextConfigurator implements PathListener {
 	@Activate
 	public void activate(Config config) throws IOException {
 		this.config = config;
-		matcher_value = config.pathListener_path();
+		matcher_value = config.io_fs_watcher_path();
 		contextSpecificFilter = "(" + MATCHER_KEY + "=" + matcher_value + ")";
 		initContext();
 	}
@@ -91,8 +91,8 @@ public class FileContextConfigurator implements PathListener {
 		props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, contextSpecificFilter);
 		// props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 
-		String catalog_path = config.pathListener_path();
-		String theDescription = "theDescription for " + config.pathListener_path();
+		String catalog_path = config.io_fs_watcher_path();
+		String theDescription = "theDescription for " + config.io_fs_watcher_path();
 
 		String name=config.name();
 		if(name==null || name.isEmpty()) {
