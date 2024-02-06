@@ -21,7 +21,7 @@
 
 -runfw: org.apache.felix.framework
 
--runee: JavaSE-17
+-runee: JavaSE-21
 
 -runrequires: \
     bnd.identity;id='${project.artifactId}-tests',\
@@ -40,11 +40,11 @@
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common-tests;version='[0.0.1,0.0.2)',\
-	org.objectweb.asm;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.commons;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree.analysis;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.commons;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree.analysis;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.util;version='[9.6.0,9.6.1)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	slf4j.api;version='[2.0.9,2.0.10)',\
 	slf4j.simple;version='[2.0.9,2.0.10)'

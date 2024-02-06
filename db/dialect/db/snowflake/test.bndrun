@@ -21,7 +21,7 @@
 
 -runfw: org.apache.felix.framework
 
--runee: JavaSE-17
+-runee: JavaSE-21
 
 -runrequires: \
     bnd.identity;id='${project.artifactId}-tests',\
@@ -48,11 +48,11 @@
 	org.eclipse.daanse.db.dialect.db.redshift;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.redshift-tests;version='[0.0.1,0.0.2)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\
-	org.objectweb.asm;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.commons;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree.analysis;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.commons;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree.analysis;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.util;version='[9.6.0,9.6.1)',\
 	org.objenesis;version='[3.3.0,3.3.1)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\

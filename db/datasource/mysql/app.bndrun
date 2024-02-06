@@ -12,7 +12,7 @@
 
 -runfw: org.apache.felix.framework
 
--runee: JavaSE-17
+-runee: JavaSE-21
 
 -runrequires: \
 	bnd.identity;id='org.eclipse.daanse.db.datasource.mysql',\
@@ -40,11 +40,11 @@
 	org.eclipse.daanse.db.datasource.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.datasource.mysql;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.tooling.webconsole.branding;version='[0.0.1,0.0.2)',\
-	org.objectweb.asm;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.commons;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.tree.analysis;version='[9.4.0,9.4.1)',\
-	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.commons;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.tree.analysis;version='[9.6.0,9.6.1)',\
+	org.objectweb.asm.util;version='[9.6.0,9.6.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
 	org.osgi.service.log;version='[1.4.0,1.4.1)',\
 	org.osgi.util.converter;version='[1.0.9,1.0.10)',\
