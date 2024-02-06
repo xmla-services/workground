@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -406,7 +407,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testShouldUseCache(TestContext context) {
     // verify cache does get used for applicable grouped target tuple queries
-    propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mySqlGenderQuery = "select\n"
       + "    `customer`.`gender` as `c0`\n"
       + "from\n"
@@ -452,7 +453,8 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testTupleQueryShouldBeCachedForVirtualCube(TestContext context) {
-    propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+	  RolapSchemaPool.instance().clear();
+      ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     String mySqlMembersQuery =
             "select\n"
             + "    *\n"

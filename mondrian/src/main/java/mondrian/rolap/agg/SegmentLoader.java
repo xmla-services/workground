@@ -121,7 +121,7 @@ public class SegmentLoader {
    */
   public void load( int cellRequestCount, List<GroupingSet> groupingSets, List<StarPredicate> compoundPredicateList,
       List<Future<Map<Segment, SegmentWithData>>> segmentFutures ) {
-    if ( !MondrianProperties.instance().DisableCaching.get() ) {
+    if ( !cacheMgr.getContext().getConfig().disableCaching() ) {
       for ( GroupingSet groupingSet : groupingSets ) {
         for ( Segment segment : groupingSet.getSegments() ) {
           final SegmentCacheIndex index = cacheMgr.getIndexRegistry().getIndex( segment.star );
@@ -161,7 +161,10 @@ public class SegmentLoader {
 	public Map<Segment, SegmentWithData> call() throws Exception {
       Locus.push( locus );
       try {
-        return segmentLoader.loadImpl( cellRequestCount, groupingSets, compoundPredicateList );
+          boolean useAggregates = locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().memoryMonitor();
+        return segmentLoader.loadImpl( cellRequestCount, groupingSets, compoundPredicateList, useAggregates,
+            locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentCountThreshold(),
+            locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentDensityThreshold());
       } finally {
         Locus.pop( locus );
       }
@@ -169,7 +172,8 @@ public class SegmentLoader {
   }
 
   private Map<Segment, SegmentWithData> loadImpl( int cellRequestCount, List<GroupingSet> groupingSets,
-      List<StarPredicate> compoundPredicateList ) {
+      List<StarPredicate> compoundPredicateList, boolean useAggregates, int sparseSegmentCountThreshold,
+                                                  double sparseSegmentDensityThreshold) {
     SqlStatement stmt = null;
     GroupingSetsList groupingSetsList = new GroupingSetsList( groupingSets );
     RolapStar.Column[] defaultColumns = groupingSetsList.getDefaultColumns();
@@ -180,7 +184,7 @@ public class SegmentLoader {
       int arity = defaultColumns.length;
       SortedSet<Comparable>[] axisValueSets = getDistinctValueWorkspace( arity );
 
-      stmt = createExecuteSql( cellRequestCount, groupingSetsList, compoundPredicateList );
+      stmt = createExecuteSql( cellRequestCount, groupingSetsList, compoundPredicateList, useAggregates );
 
       if ( stmt == null ) {
         // Nothing to do. We're done here.
@@ -191,7 +195,8 @@ public class SegmentLoader {
 
       RowList rows = processData( stmt, axisContainsNull, axisValueSets, groupingSetsList );
 
-      boolean sparse = setAxisDataAndDecideSparseUse( axisValueSets, axisContainsNull, groupingSetsList, rows );
+      boolean sparse = setAxisDataAndDecideSparseUse( axisValueSets, axisContainsNull, groupingSetsList, rows,
+          sparseSegmentCountThreshold, sparseSegmentDensityThreshold);
 
       final Map<BitKey, GroupingSetsList.Cohort> groupingDataSetsMap =
           createDataSetsForGroupingSets( groupingSetsList, sparse, rows.getTypes().subList( arity, rows.getTypes()
@@ -234,7 +239,7 @@ public class SegmentLoader {
     // Also note that we push the segments to external cache after we have
     // called cacheMgr.loadSucceeded. That call will allow the current
     // query to proceed.
-    if ( !MondrianProperties.instance().DisableCaching.get() ) {
+    if ( !cacheMgr.getContext().getConfig().disableCaching() ) {
       cacheMgr.compositeCache.put( header, body );
       cacheMgr.loadSucceeded( star, header, body );
     }
@@ -318,7 +323,8 @@ public class SegmentLoader {
   }
 
   private boolean setAxisDataAndDecideSparseUse( SortedSet<Comparable>[] axisValueSets, boolean[] axisContainsNull,
-      GroupingSetsList groupingSetsList, RowList rows ) {
+      GroupingSetsList groupingSetsList, RowList rows, int sparseSegmentCountThreshold,
+                                                 double sparseSegmentDensityThreshold) {
     SegmentAxis[] axes = groupingSetsList.getDefaultAxes();
     RolapStar.Column[] allColumns = groupingSetsList.getDefaultColumns();
     // Figure out size of dense array, and allocate it, or use a sparse
@@ -338,11 +344,14 @@ public class SegmentLoader {
         sparse = true;
       }
     }
-    return useSparse( sparse, n, rows );
+    return useSparse( sparse, n, rows, sparseSegmentCountThreshold, sparseSegmentDensityThreshold );
   }
 
-  boolean useSparse( boolean sparse, int n, RowList rows ) {
-    sparse = sparse || useSparse( n, rows.size() );
+  boolean useSparse( boolean sparse, int n, RowList rows, int sparseSegmentCountThreshold,
+                     double sparseSegmentDensityThreshold) {
+    sparse = sparse || useSparse( n, rows.size(),
+        sparseSegmentCountThreshold,
+        sparseSegmentDensityThreshold);
     return sparse;
   }
 
@@ -450,10 +459,10 @@ public class SegmentLoader {
    * @return An executed SQL statement, or null
    */
   SqlStatement createExecuteSql( int cellRequestCount, final GroupingSetsList groupingSetsList,
-      List<StarPredicate> compoundPredicateList ) {
+      List<StarPredicate> compoundPredicateList, boolean useAggregates ) {
     RolapStar star = groupingSetsList.getStar();
     Pair<String, List<BestFitColumnType>> pair =
-        AggregationManager.generateSql( groupingSetsList, compoundPredicateList );
+        AggregationManager.generateSql( groupingSetsList, compoundPredicateList, useAggregates );
     final Locus locus =
         new SqlStatement.StatementLocus( Locus.peek().execution, "Segment.load", "Error while loading segment",
             SqlStatementEvent.Purpose.CELL_SEGMENT, cellRequestCount );
@@ -509,7 +518,7 @@ public class SegmentLoader {
       return RolapUtil.executeQuery( star.getContext(), pair.left, pair.right, 0, 0, locus, -1, -1,
           // Only one of the two callbacks are required, depending if we
           // cache the segments or not.
-          MondrianProperties.instance().DisableCaching.get() ? callbackNoCaching : callbackWithCaching );
+          cacheMgr.getContext().getConfig().disableCaching() ? callbackNoCaching : callbackWithCaching );
     } catch ( Throwable t ) {
       if ( Util.getMatchingCause( t, AbortException.class ) != null ) {
         return null;
@@ -773,7 +782,7 @@ public class SegmentLoader {
 
   /**
    * Decides whether to use a sparse representation for this segment, using the formula described
-   * {@link mondrian.olap.MondrianProperties#SparseSegmentCountThreshold here}.
+   * SparseSegmentCountThreshold here.
    *
    * @param possibleCount
    *          Number of values in the space.
@@ -781,29 +790,29 @@ public class SegmentLoader {
    *          Actual number of values.
    * @return Whether to use a sparse representation.
    */
-  static boolean useSparse( final double possibleCount, final double actualCount ) {
-    final MondrianProperties properties = MondrianProperties.instance();
-    double densityThreshold = properties.SparseSegmentDensityThreshold.get();
-    if ( densityThreshold < 0 ) {
-      densityThreshold = 0;
+  static boolean useSparse( final double possibleCount, final double actualCount,
+                            int sparseSegmentCountThreshold,
+                            double sparseSegmentDensityThreshold) {
+    if ( sparseSegmentDensityThreshold < 0 ) {
+        sparseSegmentDensityThreshold = 0;
     }
-    if ( densityThreshold > 1 ) {
-      densityThreshold = 1;
+    if ( sparseSegmentDensityThreshold > 1 ) {
+        sparseSegmentDensityThreshold = 1;
     }
-    int countThreshold = properties.SparseSegmentCountThreshold.get();
+    int countThreshold = sparseSegmentCountThreshold;
     if ( countThreshold < 0 ) {
       countThreshold = 0;
     }
-    boolean sparse = ( possibleCount - countThreshold ) * densityThreshold > actualCount;
+    boolean sparse = ( possibleCount - countThreshold ) * sparseSegmentDensityThreshold > actualCount;
     if ( possibleCount < countThreshold ) {
       assert !sparse : new StringBuilder("Should never use sparse if count is less than threshold, possibleCount=")
           .append(possibleCount).append(", actualCount=").append(actualCount).append(", countThreshold=")
-          .append(countThreshold).append(", densityThreshold=").append(densityThreshold).toString();
+          .append(countThreshold).append(", densityThreshold=").append(sparseSegmentDensityThreshold).toString();
     }
     if ( possibleCount == actualCount ) {
       assert !sparse : new StringBuilder("Should never use sparse if result is 100% dense: possibleCount=")
           .append(possibleCount).append(", actualCount=").append(actualCount).append(", countThreshold=")
-          .append(countThreshold).append(", densityThreshold=").append(densityThreshold).toString();
+          .append(countThreshold).append(", densityThreshold=").append(sparseSegmentDensityThreshold).toString();
     }
     return sparse;
   }

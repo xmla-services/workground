@@ -13,8 +13,8 @@ package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -27,6 +27,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -141,6 +142,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberInCubeWithProps(TestContext context) {
+    	RolapSchemaPool.instance().clear();
         Cube salesCube = getSalesCube(context.getConnection(), "Sales");
 
         // member with a property
@@ -217,9 +219,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
         // should succeed if we switch the property to ignore invalid
         // members; the create will succeed and in the select, it will
         // return null for the member and therefore a 0 in the calculation
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembers,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
         salesCube.createCalculatedMember(
             "<CalculatedMember name='Profit4'"
             + "  dimension='Measures'"
@@ -717,7 +717,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
             + "from [Sales]",
             "mondrian.parser.TokenMgrError: "
             + "Lexical error at line 2, column 0.  "
-            + "Encountered: <EOF> after : \"\\\"quoted string with \\n\"");
+            + "Encountered: <EOF> after prefix \"\\\"quoted string with \\n\"");
 
         // Escaped single quote in double-quoted string literal inside
         // single-quoted member declaration.

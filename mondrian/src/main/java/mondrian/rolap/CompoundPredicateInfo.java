@@ -84,7 +84,7 @@ public class CompoundPredicateInfo {
       return null;
     }
     final StringBuilder buf = new StringBuilder();
-    SqlQuery query = new SqlQuery( star.getSqlQueryDialect() );
+    SqlQuery query = new SqlQuery( star.getSqlQueryDialect(), star.getContext().getConfig().generateFormattedSql() );
     buf.setLength( 0 );
     predicate.toSql( query, buf );
     return buf.toString();

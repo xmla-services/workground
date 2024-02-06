@@ -12,16 +12,14 @@ package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.SchemaModifiers;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
-import java.util.List;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withSchema;
@@ -220,9 +218,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testIgnoreUnrelatedDimsOnSlicer(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -246,9 +242,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testIgnoreUnrelatedDimsOnCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -274,9 +268,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRelatedAndUnrelatedDimsOnCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -305,9 +297,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testPartiallyRelatedMeasureWithCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -358,9 +348,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNonJoiningDimWithMeasureInCompoundSlicer(TestContext context) {
         // MONDRIAN-2072
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
         prepareContext(context);
         assertQueryReturns(context.getConnection(),
             " SELECT "
@@ -538,9 +526,7 @@ class IgnoreUnrelatedDimensionsTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUnrelatedDimPropOverridesIgnoreMeasure(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
 
         prepareContext(context);
         assertQueryReturns(context.getConnection(),

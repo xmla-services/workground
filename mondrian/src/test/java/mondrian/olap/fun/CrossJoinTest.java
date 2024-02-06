@@ -13,6 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -20,6 +21,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Statement;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -39,12 +43,14 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -126,7 +132,15 @@ private PropertySaver5 propSaver;
   @Test
   void testListTupleListTupleIterCalc() {
     if ( !Util.RETROWOVEN) {
-      propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 0 );
+        Statement statement = mock(Statement.class);
+        RolapConnection rolapConnection = mock(RolapConnection.class);
+        Context context = mock(Context.class);
+        BasicContextConfig config = mock(BasicContextConfig.class);
+        when(config.checkCancelOrTimeoutInterval()).thenReturn(0);
+        when(context.getConfig()).thenReturn(config);
+        when(rolapConnection.getContext()).thenReturn(context);
+        when(statement.getMondrianConnection()).thenReturn(rolapConnection);
+        when(excMock.getMondrianStatement()).thenReturn(statement);
       CrossJoinFunDef.CrossJoinIterCalc calc =
         crossJoinFunDef.new CrossJoinIterCalc( getResolvedFunCall(), null );
 
@@ -134,7 +148,7 @@ private PropertySaver5 propSaver;
     }
   }
 
-  private void doTupleTupleIterTest(
+    private void doTupleTupleIterTest(
     CrossJoinFunDef.CrossJoinIterCalc calc, Execution execution ) {
     TupleList l4 = makeListTuple( m4 );
     String s4 = toString( l4 );
@@ -165,7 +179,7 @@ private PropertySaver5 propSaver;
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCrossJoinIterCalc_IterationCancellationOnForward(TestContext foodMartContext) {
-    propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 1 );
+   ((TestConfig)foodMartContext.getConfig()).setCheckCancelOrTimeoutInterval(1);
     // Get product members as TupleList
    Connection con= foodMartContext.getConnection();
     RolapCube salesCube =

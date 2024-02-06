@@ -27,6 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -51,9 +52,9 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         //TestContext.instance().flushSchemaCache();
     }
 
@@ -71,6 +72,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggExtraColsRequiringJoin(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
                 List.of(AggNameRBuilder.builder()
@@ -173,6 +178,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitForeignKey(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -304,6 +313,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggOrdinalOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -383,6 +396,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggCaptionOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -462,6 +479,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggNameColumnOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -553,6 +574,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testExplicitAggPropertiesOnAggTable(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -690,6 +715,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDistinctAllowableRollup(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()
@@ -812,6 +841,10 @@ class ExplicitRecognizerTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCountDisallowedRollup(TestContext context) throws SQLException {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         setupMultiColDimCube(context,
             List.of(AggNameRBuilder.builder()

@@ -17,6 +17,7 @@ import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
@@ -61,6 +62,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -198,7 +200,8 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithASingleMember(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-        propSaver.set(propSaver.properties.MaxConstraints, 1);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 1 );
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -249,7 +252,8 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithSetOfMembers(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-        propSaver.set(propSaver.properties.MaxConstraints, 2);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 2 );
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -381,8 +385,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountOnTuplesWithSomeNonJoiningDimensions(TestContext context) {
       prepareContext(context);
-        propSaver.set(
-            props.IgnoreMeasureForNonJoiningDimension, false);
+      ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(false);
         String mdx =
             "WITH MEMBER WAREHOUSE.X as 'Aggregate({WAREHOUSE.[STATE PROVINCE].MEMBERS}*"
             + "{[Gender].Members})'"
@@ -398,8 +401,7 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Warehouse].[X]}\n"
             + "Row #0: \n";
       assertQueryReturns(context.getConnection(), mdx, expectedResult);
-        propSaver.set(
-            props.IgnoreMeasureForNonJoiningDimension, true);
+      ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
       assertQueryReturns(context.getConnection() ,mdx, expectedResult);
     }
 
@@ -529,7 +531,8 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOverLargeListGeneratesError(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.MaxConstraints, 7);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 7 );
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
@@ -553,7 +556,7 @@ class AggregationOnDistinctCountMeasuresTest {
               + "Axis #2:\n"
               + "{[Product].[X]}\n"
               + "Row #0: #ERR: mondrian.olap.fun.MondrianEvaluationException: "
-              + "Aggregation is not supported over a list with more than 7 predicates (see property mondrian.rolap.maxConstraints)\n");
+              + "Aggregation is not supported over a list with more than 7 predicates (see property MaxConstraints)\n");
 
         // aggregation over a non-distinct-count measure is OK
       assertQueryReturns(context.getConnection(),
@@ -625,7 +628,8 @@ class AggregationOnDistinctCountMeasuresTest {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
-        propSaver.set(MondrianProperties.instance().MaxConstraints, 5);
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 5 );
         assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "  Measures.[Unit Sales] on columns,\n"
@@ -1077,7 +1081,7 @@ class AggregationOnDistinctCountMeasuresTest {
         // Mondrian does not use GROUPING SETS for distinct-count measures.
         // So, this test should not use GROUPING SETS, even if they are enabled.
         // See change 12310, bug MONDRIAN-470 (aka SF.net 2207515).
-        discard(props.EnableGroupingSets);
+        discard(context.getConfig().enableGroupingSets());
 
         String oraTeraSql =
             "select \"store\".\"store_state\" as \"c0\","
@@ -1124,7 +1128,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCanNotBatchForDifferentCompoundPredicate(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
         String mdxQueryWithFewMembers =
             "WITH "
             + "MEMBER [Store].[COG_OQP_USR_Aggregate(Store)] AS "
@@ -1203,7 +1207,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountInNonGroupingSetsQuery(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
 
         String mdxQueryWithFewMembers =
             "WITH "
@@ -1282,7 +1286,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, false);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(false);
 
         String mdxQueryWithMembers =
             "WITH "
@@ -1740,7 +1744,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
 
       assertQueryReturns(context.getConnection(),
             "WITH "
@@ -1768,7 +1772,7 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testDistinctCountForAggregatesAtTheSameLevel(TestContext context) {
       prepareContext(context);
-        propSaver.set(props.EnableGroupingSets, true);
+      ((TestConfig) context.getConfig()).setEnableGroupingSets(true);
       assertQueryReturns(context.getConnection(),
             "WITH "
             + "MEMBER GENDER.AGG AS 'AGGREGATE({ GENDER.[F], GENDER.[M] })' "
@@ -2046,8 +2050,8 @@ class AggregationOnDistinctCountMeasuresTest {
         //String simpleSchema = "<Schema name=\"FoodMart\">" + dimension + cube
         //    + "</Schema>";
         // should skip aggregate table, cannot aggregate
-        propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+      ((TestConfig)context.getConfig()).setReadAggregates(true);
       class TestDistinctCountAggMeasureModifier extends RDbMappingSchemaModifier {
 
           public TestDistinctCountAggMeasureModifier(MappingSchema mappingSchema) {
@@ -2201,9 +2205,9 @@ class AggregationOnDistinctCountMeasuresTest {
             + "{[Time].[1997]}\n"
             + "Row #0: 5,581\n");
         // aggregate table has count for months, make sure it is used
-        propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+      ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         final String expectedSql =
             "select\n"
             + "    `agg_c_10_sales_fact_1997`.`the_year` as `c0`,\n"

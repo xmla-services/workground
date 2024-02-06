@@ -47,6 +47,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -240,8 +241,8 @@ protected void assertQuerySql(Connection connection,
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
 
     final String mdx =
       "with\n"
@@ -256,7 +257,7 @@ protected void assertQuerySql(Connection connection,
         + "FROM [Sales] where [Time.Weekly].x";
 
     Connection connection = context.getConnection();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern = useAgg
       ? new SqlPattern(
       DatabaseProduct.MYSQL,
@@ -266,7 +267,7 @@ protected void assertQuerySql(Connection connection,
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -280,8 +281,8 @@ protected void assertQuerySql(Connection connection,
   void testNativeTopCountWithAggMemberNamedSet(TestContext context) {
 	RolapSchemaPool.instance().clear();
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
     final String mdx =
       "with set TO_AGGREGATE as '{[Time.Weekly].[1997].[1] : [Time.Weekly].[1997].[39]}'\n"
         + "member [Time.Weekly].x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
@@ -293,7 +294,7 @@ protected void assertQuerySql(Connection connection,
         + "NON EMPTY {[Measures].[Store Sales], Measures.x1, Measures.x2, Measures.x3} ON 0\n"
         + "FROM [Sales] where [Time.Weekly].x";
     Connection connection = context.getConnection();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern = useAgg ? new SqlPattern(
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysqlAgg(connection),
@@ -302,8 +303,8 @@ protected void assertQuerySql(Connection connection,
       DatabaseProduct.MYSQL,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
-    if ( propSaver.properties.EnableNativeTopCount.get()
-      && propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( context.getConfig().enableNativeTopCount()
+      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -315,8 +316,8 @@ protected void assertQuerySql(Connection connection,
 	  RolapSchemaPool.instance().clear();
 	  context.getConnection().getCacheControl(null).flushSchemaCache();
     final boolean useAgg =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
     final String mdx =
       "with\n"
         + "  set QUARTERS as Descendants([Time].[1997], [Time].[Time].[Quarter])\n"
@@ -388,14 +389,14 @@ protected void assertQuerySql(Connection connection,
         + "    ISNULL(`product`.`brand_name`) ASC, `product`.`brand_name` ASC,\n"
         + "    ISNULL(`product`.`product_name`) ASC, `product`.`product_name` ASC" );
 
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern =
       new SqlPattern(
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery );
-    if ( propSaver.properties.EnableNativeFilter.get()
-      && propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( context.getConfig().enableNativeFilter()
+      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -424,10 +425,10 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberOnlySlicer(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -506,7 +507,7 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -528,11 +529,11 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithParenthesesMemberSlicer(TestContext context) {
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
 
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -611,7 +612,7 @@ protected void assertQuerySql(Connection connection,
         DatabaseProduct.MYSQL,
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       context.getConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
@@ -634,10 +635,10 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithMemberSumSlicer(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final boolean useAggregates =
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3, [Measures].[Unit Sales] )'\n"
@@ -712,7 +713,7 @@ protected void assertQuerySql(Connection connection,
         + "    ISNULL(`product_class`.`product_department`) ASC, `product_class`.`product_department` ASC,\n"
         + "    ISNULL(`product_class`.`product_category`) ASC, `product_class`.`product_category` ASC" );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       SqlPattern mysqlPattern =
         new SqlPattern(
           DatabaseProduct.MYSQL,
@@ -737,7 +738,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCNoExplicitMeasure(TestContext context) {
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     final String mdx =
       "WITH\n"
         + "  SET TC AS 'TopCount([Product].[Drink].[Alcoholic Beverages].Children, 3)'\n"
@@ -761,9 +762,10 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArg(TestContext context) {
     // will throw an error if native eval is not used
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    // native should be used and Canada/Mexico should be returned
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      // native should be used and Canada/Mexico should be returned
     // even though Canada and Mexico have no associated data.
     assertQueryReturns(context.getConnection(),
       "select TopCount(Customers.Country.members, 2) "
@@ -791,12 +793,13 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArgWithCrossjoinedSet(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.getConnection();
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      Connection connection = context.getConnection();
     try {
       executeQuery(
         "select TopCount( CrossJoin(Gender.Gender.members, Product.Drink.Children), 2) "
@@ -811,12 +814,13 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggTCTwoArgWithCalcMemPresent(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
-    propSaver.set(
-      propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
-    Connection connection = context.getConnection();
+      ((TestConfig)context.getConfig())
+          .setAlertNativeEvaluationUnsupported("ERROR");
+
+      Connection connection = context.getConnection();
     try {
       executeQuery(
         "with member Gender.foo as '1'"
@@ -867,8 +871,8 @@ protected void assertQuerySql(Connection connection,
     // non-natively, or if the level.members expressions are replaced
     // with enumerated sets.
     // See http://jira.pentaho.com/browse/MONDRIAN-2337
-    propSaver.set( propSaver.properties.LevelPreCacheThreshold, 0 );
-    if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
+      ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
+    if ( !context.getConfig().enableNativeTopCount() ) {
       return;
     }
     final String mdx =
@@ -924,7 +928,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testSlicerTuplesFullCrossJoin(TestContext context) {
-    if ( !MondrianProperties.instance().EnableNativeCrossJoin.get()
+    if ( !context.getConfig().enableNativeCrossJoin()
       && !Bug.BugMondrian2452Fixed ) {
       // The NonEmptyCrossJoin in the TSET named set below returns
       // extra tuples due to MONDRIAN-2452.
@@ -967,15 +971,9 @@ protected void assertQuerySql(Connection connection,
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testTopCountWithAggregatedMemberAggStar(TestContext context) {
 	RolapSchemaPool.instance().clear();
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      true );
-    propSaver.set(
-      propSaver.properties.ReadAggregates,
-      true );
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true );
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
 
     final String mdx =
       "with member [Time.Weekly].x as Aggregate([Time.Weekly].[1997].Children) "
@@ -1026,7 +1024,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       context.getConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
@@ -1224,12 +1222,8 @@ protected void assertQuerySql(Connection connection,
   void testCompoundSlicerNativeEval(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1404
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+      ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select NON EMPTY [Customers].[USA].[CA].[San Francisco].Children ON COLUMNS \n"
         + "from [Sales] \n"
@@ -1281,7 +1275,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( propSaver.properties.EnableNativeNonEmpty.get() ) {
+    if ( MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1313,12 +1307,8 @@ protected void assertQuerySql(Connection connection,
   void testSnowflakeDimInSlicerBug1407(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1407
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, measures.[unit sales]) ON COLUMNS \n"
         + "  from sales where \n"
@@ -1384,7 +1374,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1411,12 +1401,8 @@ protected void assertQuerySql(Connection connection,
   void testCompoundSlicerNonUniqueMemberNames1413(TestContext context) {
 	RolapSchemaPool.instance().clear();
     // MONDRIAN-1413
-    propSaver.set(
-      propSaver.properties.GenerateFormattedSql,
-      true );
-    propSaver.set(
-      propSaver.properties.UseAggregates,
-      false );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
     final String mdx =
       "select TopCount([Customers].[Name].members, 5, "
         + "measures.[unit sales]) ON COLUMNS \n"
@@ -1479,7 +1465,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+    if ( context.getConfig().enableNativeTopCount() ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1693,7 +1679,8 @@ protected void assertQuerySql(Connection connection,
 	// test failed because in native mode system returns limit quantity 6 and then filter by role
 	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
 
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 4 );
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 4 );
     String roleDef =
       "  <Role name=\"Test\">\n"
         + "    <SchemaGrant access=\"none\">\n"
@@ -1799,10 +1786,10 @@ protected void assertQuerySql(Connection connection,
     propSaver.reset();
   }
 
-  private static boolean isUseAgg() {
+  private static boolean isUseAgg(TestContext context) {
     return
-      MondrianProperties.instance().UseAggregates.get()
-        && MondrianProperties.instance().ReadAggregates.get();
+      context.getConfig().useAggregates()
+        && context.getConfig().readAggregates();
   }
 
   @ParameterizedTest
@@ -1829,11 +1816,11 @@ protected void assertQuerySql(Connection connection,
         + "Row #1: 90,413\n"
         + "Row #2: 23,813\n" );
     context.getConnection().getCacheControl(null).flushSchemaCache();
-    if ( !MondrianProperties.instance().EnableNativeFilter.get() ) {
+    if ( !context.getConfig().enableNativeFilter() ) {
       return;
     }
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
-    final String mysql = !isUseAgg()
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+    final String mysql = !isUseAgg(context)
       ? "select\n"
       + "    `store`.`store_country` as `c0`,\n"
       + "    `store`.`store_state` as `c1`,\n"
@@ -2063,8 +2050,8 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeSetsCacheClearing(TestContext context) {
-    if ( MondrianProperties.instance().ReadAggregates.get()
-      && MondrianProperties.instance().UseAggregates.get() ) {
+    if ( context.getConfig().readAggregates()
+      && context.getConfig().useAggregates() ) {
       return;
     }
     final String mdx =
@@ -2091,7 +2078,7 @@ protected void assertQuerySql(Connection connection,
       ? "    ISNULL(`c0`) ASC, `c0` ASC"
       : "    ISNULL(`customer`.`gender`) ASC, `customer`.`gender` ASC" );
 
-    propSaver.set( propSaver.properties.GenerateFormattedSql, true );
+    ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
     SqlPattern mysqlPattern =
       new SqlPattern(
         DatabaseProduct.MYSQL,
@@ -2109,7 +2096,7 @@ protected void assertQuerySql(Connection connection,
       }
     }
     SqlPattern[] patterns = new SqlPattern[] { mysqlPattern };
-    if ( propSaver.properties.EnableNativeFilter.get() ) {
+    if ( context.getConfig().enableNativeFilter() ) {
       assertQuerySqlOrNot(context.getConnection(),
         mdx, patterns, false, false, false );
     }
@@ -2153,7 +2140,8 @@ protected void assertQuerySql(Connection connection,
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
       + "FROM sales where store.agg";
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 24 );
+      propSaver.set(
+          MondrianProperties.instance().MaxConstraints, 24 );
 
     final String message =
       "The results of native and non-native evaluations should be equal";

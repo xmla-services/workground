@@ -70,6 +70,7 @@ import org.eclipse.daanse.olap.impl.CoordinateIterator;
 import org.eclipse.daanse.olap.impl.TraditionalCellSetFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 
 import mondrian.calc.impl.UnaryTupleList;
@@ -1103,7 +1104,7 @@ public class TestUtil {
 	    // value when cells are null. TestExpDependencies isn't the perfect
 	    // switch to enable this, but it will do for now.
 	    //TODO: activate this for all tests
-	    if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
+	    if ( connection.getContext().getConfig().testExpDependencies() == 1 ) {
 	      assertCellSetValid( cellSet );
 	    }
 	    return cellSet;
@@ -1126,7 +1127,7 @@ public class TestUtil {
         // value when cells are null. TestExpDependencies isn't the perfect
         // switch to enable this, but it will do for now.
         //TODO: activate this for all tests
-        if ( MondrianProperties.instance().TestExpDependencies.booleanValue() ) {
+        if ( connection.getContext().getConfig().testExpDependencies() == 1 ) {
             assertCellSetValid( cellSet );
         }
         return cellSet;
@@ -1670,7 +1671,7 @@ public class TestUtil {
 		// dialect.
 		if (!patternFound) {
 			String warnDialect =
-					MondrianProperties.instance().WarnIfNoPatternForDialect.get();
+					connection.getContext().getConfig().warnIfNoPatternForDialect();
 
 			if (warnDialect.equals(d.toString())) {
 				System.out.println(
@@ -1911,18 +1912,17 @@ public class TestUtil {
 	public static void verifySameNativeAndNot(Connection connection,
 			String query, String message, PropertySaver5 propSaver)
 	{
-
-		propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-		propSaver.set(propSaver.properties.EnableNativeFilter, true);
-		propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-		propSaver.set(propSaver.properties.EnableNativeTopCount, true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(true);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(true);
 
 		Result resultNative = executeQuery(connection, query);
 
-		propSaver.set(propSaver.properties.EnableNativeCrossJoin, false);
-		propSaver.set(propSaver.properties.EnableNativeFilter, false);
-		propSaver.set(propSaver.properties.EnableNativeNonEmpty, false);
-		propSaver.set(propSaver.properties.EnableNativeTopCount, false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(false);
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(false);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+        ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(false);
 
 		Result resultNonNative = executeQuery(connection, query);
 

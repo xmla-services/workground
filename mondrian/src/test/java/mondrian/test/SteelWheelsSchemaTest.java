@@ -30,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
@@ -1215,10 +1216,8 @@ class SteelWheelsSchemaTest {
         //if (!databaseIsValid(context.getConnection())) {
         //    return;
         //}
-        propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
-            true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
+        ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
         assertQueryReturns(context.getConnection(),
             "WITH \n"
             + "SET [*NATIVE_CJ_SET] AS '[*BASE_MEMBERS_Time]' \n"
@@ -1846,7 +1845,7 @@ class SteelWheelsSchemaTest {
     void testMondrian2411_3(TestContext context) throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
-        if ((MondrianProperties.instance().UseAggregates.get()
+        if ((context.getConfig().useAggregates()
                     && !Bug.BugMondrian2440Fixed))
         {
             return;

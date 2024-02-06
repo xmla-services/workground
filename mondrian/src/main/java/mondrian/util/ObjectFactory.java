@@ -313,8 +313,8 @@ public abstract class ObjectFactory<V> {
      * @return the newly created object
      * @throws CreationException if unable to create the object
      */
-    protected final V getObject() throws CreationException {
-        return getObject(System.getProperties());
+    protected final V getObject(boolean memoryMonitor) throws CreationException {
+        return getObject(System.getProperties(), memoryMonitor);
     }
 
     /**
@@ -328,10 +328,10 @@ public abstract class ObjectFactory<V> {
      * @return the newly created object
      * @throws CreationException if unable to create the object
      */
-    protected final V getObject(final Properties props)
+    protected final V getObject(final Properties props, boolean memoryMonitor)
         throws CreationException
     {
-        return getObject(props, EMPTY_CLASS_ARRAY, EMPTY_OBJECT_ARRAY);
+        return getObject(props, EMPTY_CLASS_ARRAY, EMPTY_OBJECT_ARRAY, memoryMonitor);
     }
 
     /**
@@ -348,11 +348,12 @@ public abstract class ObjectFactory<V> {
      */
     protected final V getObject(
         final Class[] parameterTypes,
-        final Object[] parameterValues)
+        final Object[] parameterValues,
+        boolean memoryMonitor)
         throws CreationException
     {
         return getObject(
-            System.getProperties(), parameterTypes, parameterValues);
+            System.getProperties(), parameterTypes, parameterValues, memoryMonitor);
     }
 
     /**
@@ -376,7 +377,7 @@ public abstract class ObjectFactory<V> {
     protected V getObject(
         final Properties props,
         final Class[] parameterTypes,
-        final Object[] parameterValues) throws CreationException
+        final Object[] parameterValues, boolean memoryMonitor) throws CreationException
     {
         // Unit test override
         final String className = getClassName();
@@ -389,7 +390,7 @@ public abstract class ObjectFactory<V> {
             // User overriding application default
             ? getObject(propClassName, parameterTypes, parameterValues)
             // Get application default
-            : getDefault(parameterTypes, parameterValues);
+            : getDefault(parameterTypes, parameterValues, memoryMonitor);
     }
 
     /**
@@ -505,7 +506,8 @@ public abstract class ObjectFactory<V> {
      */
     protected abstract V getDefault(
         Class<?>[] parameterTypes,
-        Object[] parameterValues)
+        Object[] parameterValues,
+        boolean memoryMonitor)
         throws CreationException;
 
     /**
@@ -586,7 +588,8 @@ public abstract class ObjectFactory<V> {
 		protected T getObject(
             final Properties props,
             final Class[] parameterTypes,
-            final Object[] parameterValues) throws CreationException
+            final Object[] parameterValues,
+            boolean memoryMonitor) throws CreationException
         {
             // Unit test override, do not use application instance.
             final String className = getClassName();
@@ -616,7 +619,7 @@ public abstract class ObjectFactory<V> {
                     // The user overriding application default
                     ? getObject(propClassName, parameterTypes, parameterValues)
                     // Get application default
-                    : getDefault(parameterTypes, parameterValues);
+                    : getDefault(parameterTypes, parameterValues, memoryMonitor);
             }
             return this.singleInstance;
         }

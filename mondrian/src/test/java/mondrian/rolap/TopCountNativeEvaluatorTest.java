@@ -20,19 +20,15 @@ import java.math.BigDecimal;
 
 import mondrian.olap.NumericLiteralImpl;
 
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
-import mondrian.test.PropertySaver5;
 
 /**
  * This class contains tests for some cases related to creating
@@ -43,25 +39,12 @@ import mondrian.test.PropertySaver5;
  */
 class TopCountNativeEvaluatorTest {
 
-    private PropertySaver5 propSaver;
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.EnableNativeTopCount, true);
-    }
-
-    @AfterEach
-    public void afterEach() {
-        propSaver.reset();
-    }
-
     @Test
     void testNonNative_WhenExplicitlyDisabled() throws Exception {
-        propSaver.set(propSaver.properties.EnableNativeTopCount, false);
-        RolapNativeTopCount nativeTopCount = new RolapNativeTopCount();
+        RolapNativeTopCount nativeTopCount = new RolapNativeTopCount(false);
 
         assertNull(
-                nativeTopCount.createEvaluator(null, null, null),
+                nativeTopCount.createEvaluator(null, null, null, true),
                 "Native evaluator should not be created when "
                         + "'mondrian.native.topcount.enable' is 'false'");
     }
@@ -73,7 +56,7 @@ class TopCountNativeEvaluatorTest {
             .isValidContext(any(RolapEvaluator.class));
 
         assertNull(
-            nativeTopCount.createEvaluator(null, null, null), "Native evaluator should not be created when "
+            nativeTopCount.createEvaluator(null, null, null, true), "Native evaluator should not be created when "
                         + "evaluation context is invalid");
     }
 
@@ -99,12 +82,12 @@ class TopCountNativeEvaluatorTest {
 
         assertNull(
             nativeTopCount.createEvaluator(
-                null, mockFunctionDef(), arguments),  "Native evaluator should not be created when "
+                null, mockFunctionDef(), arguments, true),  "Native evaluator should not be created when "
                         + "two parameters are passed");
     }
 
     private RolapNativeTopCount createTopCountSpy() {
-        RolapNativeTopCount nativeTopCount = new RolapNativeTopCount();
+        RolapNativeTopCount nativeTopCount = new RolapNativeTopCount(true);
         nativeTopCount = spy(nativeTopCount);
         return nativeTopCount;
     }
@@ -113,7 +96,7 @@ class TopCountNativeEvaluatorTest {
         FunctionDefinition topCountFunMock = mock(FunctionDefinition.class);
         FunctionMetaData functionInformation = mock(FunctionMetaData.class);
         FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
-                
+
         when(topCountFunMock.getFunctionMetaData()).thenReturn(functionInformation);
         when(functionInformation.functionAtom()).thenReturn(functionAtom);
         when(functionAtom.name()).thenReturn("TOPCOUNT");

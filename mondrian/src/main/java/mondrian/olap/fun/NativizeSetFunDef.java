@@ -144,8 +144,8 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Expression funArg = call.getArg(0);
 
-        if (MondrianProperties.instance().UseAggregates.get()
-            || MondrianProperties.instance().ReadAggregates.get())
+        if (compiler.getEvaluator().getQuery().getConnection().getContext().getConfig().useAggregates()
+            || compiler.getEvaluator().getQuery().getConnection().getContext().getConfig().readAggregates())
         {
             return funArg.accept(compiler);
         }
@@ -188,8 +188,8 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
             int cardinality =
                 evaluator.getSchemaReader()
                     .getLevelCardinality(level, false, true);
-            final int minThreshold = MondrianProperties.instance()
-                .NativizeMinThreshold.get();
+            final int minThreshold = evaluator.getQuery().getConnection().getContext()
+                .getConfig().nativizeMinThreshold();
             final boolean isHighCard = cardinality > minThreshold;
             NativizeSetFunDef.logHighCardinality(
                 NativizeSetFunDef.ESTIMATE_MESSAGE, minThreshold, cardinality, isHighCard);
@@ -397,7 +397,8 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
             Evaluator evaluator, TupleList simplifiedList)
         {
             CrossJoinAnalyzer analyzer =
-                new CrossJoinAnalyzer(simplifiedList, substitutionMap);
+                new CrossJoinAnalyzer(simplifiedList, substitutionMap,
+                    evaluator.getQuery().getConnection().getContext().getConfig().nativizeMaxResults());
             String crossJoin = analyzer.getCrossJoinExpression();
 
             // If the crossjoin expression is empty, then the simplified list
@@ -446,7 +447,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
             SchemaReader schema = evaluator.getSchemaReader();
             List<Member> tuple = simplifiedList.get(0);
             long nativizeMinThreshold =
-                MondrianProperties.instance().NativizeMinThreshold.get();
+                evaluator.getQuery().getConnection().getContext().getConfig().nativizeMinThreshold();
             long estimatedCardinality = simplifiedList.size();
 
             for (Member member : tuple) {
@@ -835,10 +836,9 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
         private final TupleList resultList;
 
         public CrossJoinAnalyzer(
-            TupleList simplifiedList, SubstitutionMap substitutionMap)
+            TupleList simplifiedList, SubstitutionMap substitutionMap,
+            long nativizeMaxResults)
         {
-            long nativizeMaxResults =
-                MondrianProperties.instance().NativizeMaxResults.get();
             arity = simplifiedList.getArity();
             tempTuple = new Member[arity];
             tempTupleAsList = Arrays.asList(tempTuple);

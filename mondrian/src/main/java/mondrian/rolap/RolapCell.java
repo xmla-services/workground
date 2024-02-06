@@ -45,11 +45,9 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
-import org.eclipse.daanse.olap.api.result.AllocationPolicy;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Scenario;
 import org.slf4j.Logger;
 
 import mondrian.mdx.MdxVisitorImpl;
@@ -160,13 +158,12 @@ public class RolapCell implements Cell {
         boolean extendedContext,
         int maxRowCount)
     {
-        if (!MondrianProperties.instance()
-            .EnableDrillThrough.get())
+        if (!result.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig()
+            .enableDrillThrough())
         {
             throw MondrianResource.instance()
                 .DrillthroughDisabled.ex(
-                    MondrianProperties.instance()
-                        .EnableDrillThrough.getPath());
+                        "enableDrillThrough");
         }
         final Member[] currentMembers = getMembersForDrillThrough();
         // Create a StarPredicate to represent the compound slicer
@@ -392,8 +389,8 @@ public class RolapCell implements Cell {
      */
     @Override
 	public boolean canDrillThrough() {
-        if (!MondrianProperties.instance()
-            .EnableDrillThrough.get())
+        if (!result.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig()
+            .enableDrillThrough())
         {
             return false;
         }

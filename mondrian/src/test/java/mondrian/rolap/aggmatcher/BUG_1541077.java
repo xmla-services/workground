@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -39,6 +40,8 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testStoreCount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -47,14 +50,14 @@ public class BUG_1541077 extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
 
         String mdx =
             "select {[Measures].[Store Count]} on columns from Cheques";
         Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
 
         Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
@@ -65,6 +68,8 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testSalesCount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -73,14 +78,14 @@ public class BUG_1541077 extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
 
         String mdx =
             "select {[Measures].[Sales Count]} on columns from Cheques";
         Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
 
         Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
@@ -91,6 +96,8 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testTotalAmount(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -99,14 +106,14 @@ public class BUG_1541077 extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
 
         String mdx =
             "select {[Measures].[Total Amount]} on columns from Cheques";
         Result result = executeQuery(mdx, context.getConnection());
         Object v = result.getCell(new int[]{0}).getValue();
 
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
 
         Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
@@ -117,6 +124,8 @@ public class BUG_1541077 extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     public void testBug1541077(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -125,7 +134,7 @@ public class BUG_1541077 extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
 
         String mdx = "select {[Measures].[Avg Amount]} on columns from Cheques";
 
@@ -133,7 +142,7 @@ public class BUG_1541077 extends AggTableTestCase {
         Object v = result.getCell(new int[]{0}).getFormattedValue();
 
         // get value with aggregates
-        propSaver.set(props.UseAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
 
         Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getFormattedValue();

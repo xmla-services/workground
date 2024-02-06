@@ -488,7 +488,7 @@ public interface BasicContextConfig {
 
     //Integer property indicating the maximum number of iterations allowed when iterating over members to compute aggregates.  A value of 0 (the default) indicates no limit.
     @AttributeDefinition(name = "%iterationLimit.name", description = "%iterationLimit.description", type = AttributeType.STRING)
-    default String iterationLimit() { return "#null"; }
+    default Integer iterationLimit() { return 0; }
 
     //Positive integer property that determines loop iterations number between checks for whether the current mdx query has been cancelled or timeout was exceeded. Setting the interval too small may result in a performance degradation when reading large result sets; setting it too high can cause a big delay between the query being marked as cancelled or timeout was exceeded and system resources associated to it being released.
     @AttributeDefinition(name = "%checkCancelOrTimeoutInterval.name", description = "%checkCancelOrTimeoutInterval.description", type = AttributeType.INTEGER)
@@ -560,7 +560,7 @@ public interface BasicContextConfig {
 
     //<p>Property that controls minimum expected cardinality required in order for NativizeSet to natively evaluate a query.</p> <p>If the expected cardinality falls below this level the query is executed non-natively.</p> <p>It is possible for the actual cardinality to fall below this threshold even though the expected cardinality falls above this threshold. In this case the query will be natively evaluated.</p>
     @AttributeDefinition(name = "%nativizeMinThreshold.name", description = "%nativizeMinThreshold.description", type = AttributeType.INTEGER)
-    default Integer nativizeMinThreshold() { return -100000; }
+    default Integer nativizeMinThreshold() { return 100000; }
 
     //<p>Property that controls the maximum number of results contained in a NativizeSet result set.</p> <p>If the number of tuples contained in the result set exceeds this value Mondrian throws a LimitExceededDuringCrossjoin error.</p>
     @AttributeDefinition(name = "%nativizeMaxResults.name", description = "%nativizeMaxResults.description", type = AttributeType.INTEGER)

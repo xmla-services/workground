@@ -74,7 +74,7 @@ public abstract class RolapNative {
     abstract NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Expression[] args);
+        Expression[] args, final boolean enableNativeFilter);
 
     /**
      * if enabled == false, then createEvaluator will always return null

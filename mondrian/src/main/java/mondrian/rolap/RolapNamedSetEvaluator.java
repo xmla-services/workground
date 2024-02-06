@@ -34,8 +34,6 @@ class RolapNamedSetEvaluator implements Evaluator.NamedSetEvaluator, TupleList.P
   private final RolapResult.RolapResultEvaluatorRoot rrer;
   private final NamedSet namedSet;
 
-  private final int RECURSION_TOLERANCE = MondrianProperties.instance().IterationLimit.get();
-
   private int recursionCount;
 
   /** Value of this named set; set on first use. */
@@ -78,7 +76,8 @@ public TupleIterable evaluateTupleIterable( Evaluator evaluator ) {
     if ( list != null ) {
       if ( list == DUMMY_LIST ) {
         recursionCount++;
-        if ( RECURSION_TOLERANCE > 0 && recursionCount > RECURSION_TOLERANCE ) {
+        Integer iterationLimit = evaluator.getQuery().getConnection().getContext().getConfig().iterationLimit();
+        if ( iterationLimit > 0 && recursionCount > iterationLimit ) {
           throw rrer.result.slicerEvaluator.newEvalException( null,
               new StringBuilder("Illegal attempt to reference value of named set '")
               .append(namedSet.getName()).append("' while evaluating itself").toString() );

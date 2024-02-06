@@ -49,7 +49,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ViewImpl;
-import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -398,7 +397,7 @@ public class RolapUtil {
      */
     public static void alertNonNative(
         String functionName,
-        String reason)
+        String reason, String alertNativeEvaluationUnsupported)
         throws NativeEvaluationUnsupportedException
     {
         // No i18n for log message, but yes for excn
@@ -406,15 +405,12 @@ public class RolapUtil {
             new StringBuilder("Unable to use native SQL evaluation for '").append(functionName)
             .append("'; reason:  ").append(reason).toString();
 
-        StringProperty alertProperty =
-            MondrianProperties.instance().AlertNativeEvaluationUnsupported;
-        String alertValue = alertProperty.get();
 
-        if (alertValue.equalsIgnoreCase(
+        if (alertNativeEvaluationUnsupported.equalsIgnoreCase(
                 "WARN"))
         {
             LOGGER.warn(alertMsg);
-        } else if (alertValue.equalsIgnoreCase(
+        } else if (alertNativeEvaluationUnsupported.equalsIgnoreCase(
                 "ERROR"))
         {
             LOGGER.error(alertMsg);

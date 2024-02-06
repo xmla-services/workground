@@ -32,7 +32,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.AggregationManager;
@@ -132,7 +131,7 @@ public class FastBatchingCellReader implements CellReader {
         this.aggMgr = aggMgr;
         cacheMgr = aggMgr.getCacheMgr(execution.getMondrianStatement().getMondrianConnection());
         pinnedSegments = this.aggMgr.createPinSet();
-        cacheEnabled = !MondrianProperties.instance().DisableCaching.get();
+        cacheEnabled = !cube.getSchema().getInternalConnection().getContext().getConfig().disableCaching();
         Integer cellBatchSize = cube.getSchema().getInternalConnection().getContext().getConfig().cellBatchSize();
         cellRequestLimit =
             cellBatchSize <= 0
@@ -342,7 +341,9 @@ public class FastBatchingCellReader implements CellReader {
                         keepColumns,
                         rollup.constrainedColumnsBitKey,
                         rollup.measure.getAggregator().getRollup(),
-                        rollup.measure.getDatatype());
+                        rollup.measure.getDatatype(),
+                        cacheMgr.getContext().getConfig().sparseSegmentCountThreshold(),
+                        cacheMgr.getContext().getConfig().sparseSegmentDensityThreshold());
 
                 final SegmentHeader header = rollupHeaderBody.left;
                 final SegmentBody body = rollupHeaderBody.right;
@@ -366,7 +367,7 @@ public class FastBatchingCellReader implements CellReader {
                 // Then we insert the segment body into the SlotFuture.
                 // This has to be done on the SegmentCacheManager's
                 // Actor thread to ensure thread safety.
-                if (!MondrianProperties.instance().DisableCaching.get()) {
+                if (!cacheMgr.getContext().getConfig().disableCaching()) {
                     final Locus locus = Locus.peek();
                     cacheMgr.execute(
                         new SegmentCacheManager.Command<Void>() {
@@ -621,7 +622,7 @@ class BatchLoader {
     }
 
     final boolean shouldUseGroupingFunction() {
-        return MondrianProperties.instance().EnableGroupingSets.get()
+        return cube.getSchema().getInternalConnection().getContext().getConfig().enableGroupingSets()
             && dialect.supportsGroupingSets();
     }
 
@@ -655,7 +656,7 @@ class BatchLoader {
         final AggregationKey key,
         final SegmentBuilder.SegmentConverterImpl converter)
     {
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (cacheMgr.getContext().getConfig().disableCaching()) {
             // Caching is disabled. Return always false.
             return false;
         }
@@ -1284,9 +1285,11 @@ class BatchLoader {
             GroupingSetsCollector groupingSetsCollector,
             List<Future<Map<Segment, SegmentWithData>>> segmentFutures)
         {
-            if (MondrianProperties.instance().GenerateAggregateSql.get()) {
+            if (cube.getSchema().getInternalConnection().getContext().getConfig().generateAggregateSql()) {
                 generateAggregateSql();
             }
+            boolean optimizePredicates =
+                cube.getSchema().getInternalConnection().getContext().getConfig().optimizePredicates();
             final StarColumnPredicate[] predicates = initPredicates();
             final long t1 = System.currentTimeMillis();
 
@@ -1309,7 +1312,7 @@ class BatchLoader {
                 doSpecialHandlingOfDistinctCountMeasures(
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures, optimizePredicates);
             }
 
             // Load agg(distinct <SQL expression>) measures individually
@@ -1335,7 +1338,8 @@ class BatchLoader {
                         batchKey,
                         predicates,
                         groupingSetsCollector,
-                        segmentFutures);
+                        segmentFutures,
+                        optimizePredicates);
                     measuresList.remove(measure);
                 }
             }
@@ -1350,7 +1354,8 @@ class BatchLoader {
                     batchKey,
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures,
+                    optimizePredicates);
             }
 
             if (BATCH_LOGGER.isDebugEnabled()) {
@@ -1363,7 +1368,8 @@ class BatchLoader {
         private void doSpecialHandlingOfDistinctCountMeasures(
             StarColumnPredicate[] predicates,
             GroupingSetsCollector groupingSetsCollector,
-            List<Future<Map<Segment, SegmentWithData>>> segmentFutures)
+            List<Future<Map<Segment, SegmentWithData>>> segmentFutures,
+            boolean optimizePredicates)
         {
             while (true) {
                 // Scan for a measure based upon a distinct aggregation.
@@ -1399,7 +1405,8 @@ class BatchLoader {
                     batchKey,
                     predicates,
                     groupingSetsCollector,
-                    segmentFutures);
+                    segmentFutures,
+                    optimizePredicates);
             }
         }
 

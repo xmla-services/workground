@@ -96,7 +96,7 @@ public class SqlConstraintFactory {
         if (context.isNonEmpty()) {
             Set<CrossJoinArg> joinArgs =
                 new CrossJoinArgFactory(false).buildConstraintFromAllAxes(
-                    (RolapEvaluator) context);
+                    (RolapEvaluator) context, context.getQuery().getConnection().getContext().getConfig().enableNativeFilter());
             if (joinArgs.size() > 0) {
                 return new RolapNativeCrossJoin.NonEmptyCrossJoinConstraint(
                     joinArgs.toArray(
@@ -121,8 +121,8 @@ public class SqlConstraintFactory {
         {
             return true;
         }
-        final int threshold = MondrianProperties.instance()
-            .LevelPreCacheThreshold.get();
+        final int threshold = context.getQuery().getConnection().getContext().getConfig()
+            .levelPreCacheThreshold();
         if (threshold <= 0) {
             return false;
         }
@@ -141,11 +141,11 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildByNameConstraint(
         RolapMember parent,
-        NameSegment childName)
+        NameSegment childName, int levelPreCacheThreshold)
     {
         // Ragged hierarchies span multiple levels, so SQL WHERE does not work
         // there
-        if (useDefaultMemberChildrenConstraint(parent)) {
+        if (useDefaultMemberChildrenConstraint(parent, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childName);
@@ -153,22 +153,20 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildrenByNamesConstraint(
         RolapMember parent,
-        List<NameSegment> childNames)
+        List<NameSegment> childNames, int levelPreCacheThreshold)
     {
-        if (useDefaultMemberChildrenConstraint(parent)) {
+        if (useDefaultMemberChildrenConstraint(parent, levelPreCacheThreshold)) {
             return DefaultMemberChildrenConstraint.instance();
         }
         return new ChildByNameConstraint(childNames);
     }
 
-    private boolean useDefaultMemberChildrenConstraint(RolapMember parent) {
-        int threshold = MondrianProperties.instance()
-            .LevelPreCacheThreshold.get();
+    private boolean useDefaultMemberChildrenConstraint(RolapMember parent, int levelPreCacheThreshold) {
         return !enabled
             || parent.getHierarchy().isRagged()
             || (!isDegenerate(parent.getLevel())
-            && threshold > 0
-            && getChildLevelCardinality(parent) < threshold);
+            && levelPreCacheThreshold > 0
+            && getChildLevelCardinality(parent) < levelPreCacheThreshold);
     }
 
     private boolean isDegenerate(Level level) {

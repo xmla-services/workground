@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -44,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.ParenthesesFunDef;
 import mondrian.olap.fun.SetFunDef;
@@ -71,13 +71,13 @@ public class CrossJoinArgFactory {
     }
 
     public Set<CrossJoinArg> buildConstraintFromAllAxes(
-        final RolapEvaluator evaluator)
+        final RolapEvaluator evaluator, final boolean enableNativeFilter)
     {
         Set<CrossJoinArg> joinArgs =
             new LinkedHashSet<>();
         for (QueryAxis ax : evaluator.getQuery().getAxes()) {
             List<CrossJoinArg[]> axesArgs =
-                checkCrossJoinArg(evaluator, ax.getSet(), true);
+                checkCrossJoinArg(evaluator, ax.getSet(), true, enableNativeFilter);
             if (axesArgs != null) {
                 for (CrossJoinArg[] axesArg : axesArgs) {
                     joinArgs.addAll(Arrays.asList(axesArg));
@@ -125,9 +125,9 @@ public class CrossJoinArgFactory {
      */
     public List<CrossJoinArg[]> checkCrossJoinArg(
         RolapEvaluator evaluator,
-        Expression exp)
+        Expression exp, final boolean enableNativeFilter)
     {
-        return checkCrossJoinArg(evaluator, exp, false);
+        return checkCrossJoinArg(evaluator, exp, false, enableNativeFilter);
     }
 
     /**
@@ -152,7 +152,8 @@ public class CrossJoinArgFactory {
     List<CrossJoinArg[]> checkCrossJoinArg(
         RolapEvaluator evaluator,
         Expression exp,
-        final boolean returnAny)
+        final boolean returnAny,
+        final boolean enableNativeFilter)
     {
         if (exp instanceof NamedSetExpression namedSetExpr) {
             NamedSet namedSet = namedSetExpr.getNamedSet();
@@ -193,17 +194,17 @@ public class CrossJoinArgFactory {
         }
 
         List<CrossJoinArg[]> allArgs =
-            checkDimensionFilter(evaluator, fun, args);
+            checkDimensionFilter(evaluator, fun, args, enableNativeFilter);
         if (allArgs != null) {
             return allArgs;
         }
         // strip off redundant set braces, for example
         // { Gender.Gender.members }, or {{{ Gender.M }}}
         if ("{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
-            return checkCrossJoinArg(evaluator, args[0], returnAny);
+            return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
         if ("NativizeSet".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
-            return checkCrossJoinArg(evaluator, args[0], returnAny);
+            return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
         return checkCrossJoin(evaluator, fun, args, returnAny);
     }
@@ -396,7 +397,7 @@ public class CrossJoinArgFactory {
             new CrossJoinArg[2][];
 
         for (int i = 0; i < 2; i++) {
-            allArgsOneInput = checkCrossJoinArg(evaluator, args[i], returnAny);
+            allArgsOneInput = checkCrossJoinArg(evaluator, args[i], returnAny, evaluator.getQuery().getConnection().getContext().getConfig().enableNativeFilter());
 
             if (allArgsOneInput == null
                 || allArgsOneInput.isEmpty()
@@ -469,7 +470,7 @@ public class CrossJoinArgFactory {
             }
         } else {
             if (!"{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
-                || !isArgSizeSupported(args.length))
+                || !isArgSizeSupported(args.length, MondrianProperties.instance().MaxConstraints.get()))
             {
                 return null;
             }
@@ -607,7 +608,7 @@ public class CrossJoinArgFactory {
 
 
     private static boolean isArgSizeSupported(
-        int argSize)
+        int argSize, int maxConstraints)
     {
         boolean argSizeNotSupported = false;
 
@@ -618,7 +619,7 @@ public class CrossJoinArgFactory {
 
         // First check that the member list will not result in a predicate
         // longer than the underlying DB could support.
-        if (argSize > MondrianProperties.instance().MaxConstraints.get()) {
+        if (argSize > maxConstraints) {
             argSizeNotSupported = true;
         }
 
@@ -704,9 +705,9 @@ public class CrossJoinArgFactory {
     private List<CrossJoinArg[]> checkDimensionFilter(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Expression[] filterArgs)
+        Expression[] filterArgs, boolean enableNativeFilter)
     {
-        if (!MondrianProperties.instance().EnableNativeFilter.get()) {
+        if (!enableNativeFilter) {
             return null;
         }
 
@@ -724,7 +725,7 @@ public class CrossJoinArgFactory {
         // dimensions. If either the list or the first array is null, then
         // native cross join is not feasible.
         List<CrossJoinArg[]> allArgs =
-            checkCrossJoinArg(evaluator, filterArgs[0]);
+            checkCrossJoinArg(evaluator, filterArgs[0], enableNativeFilter);
 
         if (allArgs == null || allArgs.isEmpty() || allArgs.get(0) == null) {
             return null;
@@ -954,7 +955,8 @@ public class CrossJoinArgFactory {
     {
         ExpressionCompiler compiler = evaluator.getQuery().createCompiler();
         CrossJoinArg[] arg0 = null;
-        if (shouldExpandNonEmpty(exp)
+        if (shouldExpandNonEmpty(exp,
+            evaluator.getCube().getSchema().getInternalConnection().getContext().getConfig().expandNonNative())
             && evaluator.getActiveNativeExpansions().add(exp))
         {
             TupleListCalc listCalc0 = compiler.compileList(exp);
@@ -978,8 +980,8 @@ public class CrossJoinArgFactory {
         return arg0;
     }
 
-    private boolean shouldExpandNonEmpty(Expression exp) {
-        return MondrianProperties.instance().ExpandNonNative.get()
+    private boolean shouldExpandNonEmpty(Expression exp, boolean expandNonNative) {
+        return expandNonNative
 //               && !MondrianProperties.instance().EnableNativeCrossJoin.get()
             || isCheapSet(exp);
     }

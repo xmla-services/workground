@@ -138,7 +138,7 @@ public class RolapConnection extends ConnectionBase {
     if ( schema == null ) {
       // If RolapSchema.Pool.get were to call this with schema == null,
       // we would loop.
-      Statement bootstrapStatement = createInternalStatement( false );
+      Statement bootstrapStatement = createInternalStatement( false, context.getConfig().queryTimeout() );
       final Locus locus =
         new Locus(
           new Execution( bootstrapStatement, 0 ),
@@ -188,7 +188,7 @@ public class RolapConnection extends ConnectionBase {
         }
       }
     } else {
-      this.internalStatement = createInternalStatement( true );
+      this.internalStatement = createInternalStatement( true, context.getConfig().queryTimeout() );
     }
 
     if ( roleInner == null ) {
@@ -335,10 +335,10 @@ public Result execute( QueryImpl query ) {
         );
       }
     };
-    MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor();
+    MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(context.getConfig().memoryMonitor());
     final long currId = execution.getId();
     try {
-      mm.addListener( listener );
+      mm.addListener( listener, context.getConfig().memoryMonitorThreshold() );
       // Check to see if we must punt
       execution.checkCancelOrTimeout();
 
@@ -432,7 +432,7 @@ public Role getRole() {
 
   @Override
 public QueryComponent parseStatement(String query ) {
-    Statement statement = createInternalStatement( false );
+    Statement statement = createInternalStatement( false, context.getConfig().queryTimeout() );
     final Locus locus =
       new Locus(
         new Execution( statement, 0 ),
@@ -483,11 +483,11 @@ public Statement getInternalStatement() {
     }
   }
 
-  private Statement createInternalStatement( boolean reentrant ) {
+  private Statement createInternalStatement( boolean reentrant, int queryTimeout ) {
     final Statement statement =
       reentrant
-        ? new ReentrantInternalStatement()
-        : new InternalStatement();
+        ? new ReentrantInternalStatement(queryTimeout)
+        : new InternalStatement(queryTimeout);
     context.addStatement( statement );
     return statement;
   }
@@ -641,7 +641,16 @@ public Context getContext() {
   private class InternalStatement extends StatementImpl {
     private boolean closed = false;
 
-    @Override
+      /**
+       * Creates a StatementImpl.
+       *
+       * @param queryTimeout
+       */
+      protected InternalStatement(int queryTimeout) {
+          super(queryTimeout);
+      }
+
+      @Override
 	public void close() {
       if ( !closed ) {
         closed = true;
@@ -673,7 +682,17 @@ public Context getContext() {
    * {@link InternalStatement} for each operation.</p>
    */
   private class ReentrantInternalStatement extends InternalStatement {
-    @Override
+
+      /**
+       * Creates a StatementImpl.
+       *
+       * @param queryTimeout
+       */
+      protected ReentrantInternalStatement(int queryTimeout) {
+          super(queryTimeout);
+      }
+
+      @Override
     public synchronized void start( Execution execution ) {
       // Unlike StatementImpl, there is not a unique execution. An
       // internal statement can execute several at the same time. So,

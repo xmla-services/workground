@@ -25,6 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -59,9 +60,7 @@ class AggGenTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    public void
-        testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestContext context)
-        throws Exception
+    void testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestContext context) throws Exception
     {
         Logger logger = LoggerFactory.getLogger(AggGen.class);
         StringWriter writer = new StringWriter();
@@ -74,10 +73,10 @@ class AggGenTest {
 
         MondrianProperties props = MondrianProperties.instance();
         // If run in Ant and with mondrian.jar, please comment out this line:
-        propSaver.set(props.AggregateRules, "/DefaultRules.xml");
-        propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, true);
-        propSaver.set(props.GenerateAggregateSql, true);
+        ((TestConfig)context.getConfig()).setAggregateRules("/DefaultRules.xml");
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setGenerateAggregateSql(true);
 
         final RolapConnection rolapConn = (RolapConnection) context.getConnection();
         QueryImpl query =

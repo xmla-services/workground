@@ -100,7 +100,7 @@ public class Locus {
     }
 
     public final Context getContext() {
-        return execution.statement.getMondrianConnection().getContext();
+        return execution.getMondrianStatement().getMondrianConnection().getContext();
     }
 
     public interface Action<T> {

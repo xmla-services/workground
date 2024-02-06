@@ -53,6 +53,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -6633,6 +6634,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testLevelMemberExpressions(TestContext context) {
+	RolapSchemaPool.instance().clear();
     // Should return Beverly Hills in California.
     assertAxisReturns(context.getConnection(),
       "[Store].[Store City].[Beverly Hills]",
@@ -7356,11 +7358,10 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
     assertExprReturns(context.getConnection(), NullNumericExpr + " / " + NullNumericExpr, "" );
 
     boolean origNullDenominatorProducesNull =
-      MondrianProperties.instance().NullDenominatorProducesNull.get();
+      context.getConfig().nullDenominatorProducesNull();
     try {
       // default behavior
-      MondrianProperties.instance().NullDenominatorProducesNull.set(
-        false );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull(false);
 
       assertExprReturns(context.getConnection(), "-2 / " + NullNumericExpr, "Infinity" );
       assertExprReturns(context.getConnection(), "0 / 0", "NaN" );
@@ -7371,7 +7372,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
       assertExprReturns(context.getConnection(), "1/NULL", "Infinity" );
 
       // when NullOrZeroDenominatorProducesNull is set to true
-      MondrianProperties.instance().NullDenominatorProducesNull.set( true );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( true );
 
       assertExprReturns(context.getConnection(), "-2 / " + NullNumericExpr, "" );
       assertExprReturns(context.getConnection(), "0 / 0", "NaN" );
@@ -7381,8 +7382,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
       assertExprReturns(context.getConnection(), "NULL/NULL", "" );
       assertExprReturns(context.getConnection(), "1/NULL", "" );
     } finally {
-      MondrianProperties.instance().NullDenominatorProducesNull.set(
-        origNullDenominatorProducesNull );
+      ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( origNullDenominatorProducesNull );
     }
   }
 
@@ -8069,8 +8069,8 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testGenerateWillTimeout(TestContext context) {
-    propSaver.set( propSaver.properties.QueryTimeout, 5 );
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+    ((TestConfig)context.getConfig()).setQueryTimeout(5);
+    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false);
     try {
       executeAxis(context.getConnection(),
         "Generate([Product].[Product Name].members,"
@@ -8113,7 +8113,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(TestContext context) {
-    propSaver.set( propSaver.properties.QueryTimeout, 3 );
+    ((TestConfig)context.getConfig()).setQueryTimeout(3);
     propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
     try {
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
@@ -10346,8 +10346,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToMemberIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
+	RolapSchemaPool.instance().clear();
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     // [Product].[Drugs] is invalid, becomes null member, and is dropped
     // from list
@@ -10399,7 +10399,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
       "StrToMember(\"\")",
       "MDX object '' not found in cube 'Sales'" );
 
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, false );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(false);
     assertQueryThrows(context,
       "select \n"
         + "  {[Product].[Food],\n"
@@ -10431,9 +10431,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToTupleIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
-
+	RolapSchemaPool.instance().clear();
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     // If any member is invalid, the whole tuple is null.
     assertAxisReturns(context.getConnection(),
       "StrToTuple(\"([Gender].[M], [Marital Status].[Separated])\","
@@ -10564,8 +10563,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrToSetIgnoreInvalidMembers(TestContext context) {
-    final MondrianProperties properties = MondrianProperties.instance();
-    propSaver.set( properties.IgnoreInvalidMembersDuringQuery, true );
+	RolapSchemaPool.instance().clear();
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     assertAxisReturns(context.getConnection(),
       "StrToSet("
         + "\""
@@ -10976,7 +10975,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     final String actualCalc =
       compileExpression(connection, expr, true);
     final int expDeps =
-      MondrianProperties.instance().TestExpDependencies.get();
+      connection.getContext().getConfig().testExpDependencies();
     if ( expDeps > 0 ) {
       // Don't bother checking the compiled output if we are also
       // testing dependencies. The compiled code will have extra
@@ -10995,7 +10994,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     final String actualCalc =
       compileExpression(connection, expr, false);
     final int expDeps =
-      MondrianProperties.instance().TestExpDependencies.get();
+      connection.getContext().getConfig().testExpDependencies();
     if ( expDeps > 0 ) {
       // Don't bother checking the compiled output if we are also
       // testing dependencies. The compiled code will have extra
@@ -12851,8 +12850,8 @@ Intel platforms):
     // make sure all aggregates referenced in the OR expression are
     // processed in a single load request by setting the eval depth to
     // a value smaller than the number of measures
-    int origDepth = MondrianProperties.instance().MaxEvalDepth.get();
-    MondrianProperties.instance().MaxEvalDepth.set( 3 );
+    int origDepth = context.getConfig().maxEvalDepth();
+    ((TestConfig)context.getConfig()).setMaxEvalDepth( 3 );
     assertQueryReturns(connection,
       "with set [*NATIVE_CJ_SET] as '[Store].[Store Country].members' "
         + "set [*GENERATED_MEMBERS_Measures] as "
@@ -12890,7 +12889,7 @@ Intel platforms):
         + "Row #0: 86,837\n"
         + "Row #0: 5,581\n"
         + "Row #0: 151,211.21\n" );
-    MondrianProperties.instance().MaxEvalDepth.set( origDepth );
+      ((TestConfig)context.getConfig()).setMaxEvalDepth( origDepth );
   }
 
   @ParameterizedTest

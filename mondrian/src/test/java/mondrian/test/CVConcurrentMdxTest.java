@@ -77,9 +77,9 @@ class CVConcurrentMdxTest {
 
     @Test
     void testConcurrentQueriesInRandomOrder() {
-        propSaver.set(props.UseAggregates, false);
-        propSaver.set(props.ReadAggregates, false);
-        propSaver.set(props.DisableCaching, false);
+        //propSaver.set(props.UseAggregates, false);
+        //propSaver.set(props.ReadAggregates, false);
+        //propSaver.set(props.DisableCaching, false);
 
         // test partially filled aggregation cache
         // add test classes
@@ -108,9 +108,9 @@ class CVConcurrentMdxTest {
 
     @Test
     void testConcurrentQueriesInRandomOrderOnVirtualCube() {
-        propSaver.set(props.UseAggregates, false);
-        propSaver.set(props.ReadAggregates, false);
-        propSaver.set(props.DisableCaching, false);
+        //propSaver.set(props.UseAggregates, false);
+        //propSaver.set(props.ReadAggregates, false);
+        //propSaver.set(props.DisableCaching, false);
 
         // test partially filled aggregation cache
         // add test classes
@@ -139,9 +139,9 @@ class CVConcurrentMdxTest {
 
     @Test
     void testConcurrentCVQueriesInRandomOrder() {
-        propSaver.set(props.UseAggregates, false);
-        propSaver.set(props.ReadAggregates, false);
-        propSaver.set(props.DisableCaching, false);
+        //propSaver.set(props.UseAggregates, false);
+        //propSaver.set(props.ReadAggregates, false);
+        //propSaver.set(props.DisableCaching, false);
 
         // test partially filled aggregation cache
         // add test classes

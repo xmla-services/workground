@@ -40,18 +40,15 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // turn off caching
-        propSaver.set(
-                props.DisableCaching,
-                true);
-        propSaver.set(
-                props.UseAggregates,
-                true);
-        propSaver.set(
-                props.ReadAggregates,
-                false);
-        propSaver.set(
-                props.ReadAggregates,
-                true);
+        //propSaver.set(
+        //        props.UseAggregates,
+        //        true);
+        //propSaver.set(
+        //        props.ReadAggregates,
+        //        false);
+        //propSaver.set(
+        //        props.ReadAggregates,
+        //        true);
     }
 
     @AfterEach

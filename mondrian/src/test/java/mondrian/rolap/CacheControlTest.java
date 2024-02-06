@@ -34,6 +34,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -405,7 +406,7 @@ class CacheControlTest {
             + "Row #2: 16,284\n"
             + "Row #2: 27,038\n"
             + "Row #2: 4,294\n");
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (context.getConfig().disableCaching()) {
             return;
         }
 
@@ -454,7 +455,7 @@ class CacheControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlush(TestContext context) {
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (context.getConfig().disableCaching()) {
             return;
         }
         Connection connection = context.getConnection();
@@ -522,7 +523,7 @@ class CacheControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlush_2(TestContext context) throws Exception {
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (context.getConfig().disableCaching()) {
             return;
         }
 
@@ -560,7 +561,7 @@ class CacheControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPartialFlushRange(TestContext context) {
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (context.getConfig().disableCaching()) {
             return;
         }
 
@@ -1243,7 +1244,7 @@ class CacheControlTest {
             + "{[Store].[USA]}\n"
             + "Row #0: 266,773\n");
 
-        if (MondrianProperties.instance().DisableCaching.get()) {
+        if (context.getConfig().disableCaching()) {
             return;
         }
 

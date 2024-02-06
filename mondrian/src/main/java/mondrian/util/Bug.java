@@ -267,9 +267,9 @@ public class Bug {
      * @param dialect Dialect
      * @return Whether to avoid a test
      */
-    public static boolean avoidMemoryOverflow(Dialect dialect) {
+    public static boolean avoidMemoryOverflow(Dialect dialect, boolean memoryMonitor) {
         return dialect.getDialectName().equals("access")
-            && MondrianProperties.instance().MemoryMonitor.get();
+            && memoryMonitor;
     }
 
     /**

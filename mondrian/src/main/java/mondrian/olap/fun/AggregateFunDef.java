@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -39,14 +40,12 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
-import org.eigenbase.util.property.IntegerProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
@@ -289,7 +288,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     evaluator.getSchemaReader(),
                     evaluator.getMeasureCube());
             if (checkSize) {
-                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList);
+                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList, MondrianProperties.instance().MaxConstraints.get());
             }
             return tupleList;
         }
@@ -366,16 +365,13 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             return parentLevelCount > 0;
         }
 
-        private static void checkIfAggregationSizeIsTooLarge(List list) {
-            final IntegerProperty property =
-                MondrianProperties.instance().MaxConstraints;
-            final int maxConstraints = property.get();
+        private static void checkIfAggregationSizeIsTooLarge(List list, int maxConstraints) {
             if (list.size() > maxConstraints) {
                 throw FunUtil.newEvalException(
                     null,
                     new StringBuilder("Aggregation is not supported over a list").
                     append(" with more than ").append(maxConstraints).append(" predicates").
-                    append(" (see property ").append(property.getPath()).append(")").toString());
+                    append(" (see property ").append("MaxConstraints").append(")").toString());
             }
         }
 

@@ -41,8 +41,7 @@ public abstract class StatementImpl implements Statement {
     /**
      * Query timeout, in milliseconds
      */
-    protected long queryTimeout =
-        MondrianProperties.instance().QueryTimeout.get() * 1000l;
+    protected long queryTimeout;
 
     /**
      * The current execution context, or null if query is not executing.
@@ -60,7 +59,8 @@ public abstract class StatementImpl implements Statement {
     /**
      * Creates a StatementImpl.
      */
-    protected StatementImpl() {
+    protected StatementImpl(int queryTimeout) {
+        this.queryTimeout = queryTimeout * 1000l;
         this.id = SEQ.getAndIncrement();
     }
 
@@ -69,7 +69,7 @@ public abstract class StatementImpl implements Statement {
         if (this.execution != null) {
             throw new AssertionError();
         }
-        if (execution.statement != this) {
+        if (execution.getMondrianStatement() != this) {
             throw new AssertionError();
         }
         this.execution = execution;

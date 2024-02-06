@@ -17,9 +17,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -28,7 +26,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MemoryLimitExceededException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 
 /**
@@ -89,15 +86,9 @@ class MemoryMonitorTest {
         return false;
     }
 
-    protected boolean enabled;
+    protected boolean enabled = false;
 
-    @BeforeEach
-    protected void setUp() throws Exception {
-        enabled = MondrianProperties.instance().MemoryMonitor.get();
-    }
-    @AfterEach
-    protected void tearDown() throws Exception {
-    }
+
 
 /*
 Does not work without the notify on add feature.
@@ -142,7 +133,7 @@ Does not work without the notify on add feature.
             }
         }
         Listener listener = new Listener();
-        MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor();
+        MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(false);
         // we will set a percentage slightly above the current
         // used level, and then allocate some objects that will
         // force a notification.
@@ -214,16 +205,16 @@ Does not work without the notify on add feature.
         public TestMM() {
         }
         @Override
-		public int getDefaultThresholdPercentage() {
-            return THRESHOLD_PERCENTAGE;
+        public boolean addListener(Listener listener, int percentage) {
+            return  super.addListener(listener, THRESHOLD_PERCENTAGE);
         }
     }
     public static class TestMM2 extends NotificationMemoryMonitor {
         public TestMM2() {
         }
         @Override
-		public int getDefaultThresholdPercentage() {
-            return 98;
+        public boolean addListener(Listener listener, int percentage) {
+            return  super.addListener(listener, 98);
         }
     }
 
@@ -276,7 +267,7 @@ Does not work without the notify on add feature.
         try {
             MemoryMonitorFactory.setThreadLocalClassName(
                 TestMM.class.getName());
-            mm = MemoryMonitorFactory.getMemoryMonitor();
+            mm = MemoryMonitorFactory.getMemoryMonitor(false);
             boolean b = causeGC(mm);
 //System.out.println("causeGC="+b);
             long neededMemory = 5000000;
@@ -311,7 +302,7 @@ Does not work without the notify on add feature.
 
             byte[] bytes = new byte[(int) ((buf > 0) ? buf : 0)];
 
-            mm.addListener(listener);
+            mm.addListener(listener, context.getConfig().memoryMonitorThreshold());
             // Check to see if we have been notified.
             // We might be notified if memory usage is already above 90%!!
             if (listener.wasNotified) {

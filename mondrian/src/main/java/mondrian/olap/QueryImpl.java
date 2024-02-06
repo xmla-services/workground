@@ -111,7 +111,7 @@ import mondrian.util.ArrayStack;
  * three ways to control rogue queries:<ul>
  *
  * <li>You can set a query timeout by setting the
- *     {@link MondrianProperties#QueryTimeout} parameter. If the query
+ *     QueryTimeout parameter. If the query
  *     takes longer to execute than the value of this parameter, the system
  *     will kill it.</li>
  *
@@ -535,8 +535,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return
             !strictValidation
             && (load
-                ? props.IgnoreInvalidMembers.get()
-                : props.IgnoreInvalidMembersDuringQuery.get());
+                ? ((RolapCube) getCube()).getContext().getConfig().ignoreInvalidMembers()
+                : ((RolapCube) getCube()).getContext().getConfig().ignoreInvalidMembersDuringQuery());
     }
 
     /**
@@ -1469,7 +1469,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 		ExpressionCompiler compiler = factory.createExpressionCompiler(evaluator, validator, resultStyleList);
 
         final int expDeps =
-            MondrianProperties.instance().TestExpDependencies.get();
+            statement.getQuery().getConnection().getContext().getConfig().testExpDependencies();
         final ProfileHandler profileHandler = statement.getProfileHandler();
         if (profileHandler != null) {
             // Cannot test dependencies and profile at the same time. Profiling

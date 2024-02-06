@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -75,8 +76,8 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
     public void beforeEach() {
         super.beforeEach();
         final MondrianProperties props = MondrianProperties.instance();
-        propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, true);
+        //propSaver.set(props.UseAggregates, true);
+        //propSaver.set(props.ReadAggregates, true);
         //super.getConnection().getCacheControl(null).flushSchemaCache();
     }
 
@@ -94,6 +95,7 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 
     @Override
 	protected void prepareContext(TestContext context) {
+        //((TestConfig)context.getConfig()).setDisableCaching(true);
         super.prepareContext(context);
         //TODO
         TestUtil.withSchema(context, SpeciesNonCollapsedAggTestModifier::new);
@@ -108,6 +110,8 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian1105(TestContext context) {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;

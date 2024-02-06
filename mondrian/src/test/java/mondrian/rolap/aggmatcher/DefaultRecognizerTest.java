@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -34,11 +35,11 @@ class DefaultRecognizerTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        propSaver.set(propSaver.properties.UseAggregates, true);
-        propSaver.set(propSaver.properties.ReadAggregates, true);
+        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.UseAggregates, true);
+        //propSaver.set(propSaver.properties.ReadAggregates, true);
         //TestContext.instance().flushSchemaCache();
     }
 
@@ -57,6 +58,9 @@ class DefaultRecognizerTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testDefaultRecognizerWithFactAlias(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         Connection connection = context.getConnection();
         flushSchemaCache(connection);
         /*
@@ -121,6 +125,9 @@ class DefaultRecognizerTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleReaderWithDistinctCountMeasureInContext(TestContext context) {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         Connection connection = context.getConnection();
         flushSchemaCache(connection);
         // Validates that if a distinct count measure is in context

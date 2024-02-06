@@ -56,6 +56,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -2256,11 +2257,11 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian436(TestContext foodMartContext) {
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeFilter, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.EnableNativeTopCount, true);
-        propSaver.set(propSaver.properties.ExpandNonNative, true);
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
+        ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 
         // Run with native enabled, then with whatever properties are set for
         // this test run.
@@ -2603,9 +2604,7 @@ class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testBugMondrian722(TestContext foodMartContext) {
-        propSaver.set(
-            MondrianProperties.instance().IgnoreInvalidMembers,
-            true);
+        ((TestConfig)foodMartContext.getConfig()).setIgnoreInvalidMembers(true);
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier15::new);
         RolapConnectionProps props = new RolapConnectionPropsR(List.of("CTO"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
@@ -3358,11 +3357,11 @@ class AccessControlTest {
         // all variations of rollup policy
         // Also verifies consistent results with a non-all default member.
         // connected with MONDRIAN-1568
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeFilter, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        propSaver.set(propSaver.properties.EnableNativeTopCount, true);
-        propSaver.set(propSaver.properties.ExpandNonNative, true);
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
+        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
+        ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 
         String dimension =
             "<Dimension name=\"Store2\">\n"

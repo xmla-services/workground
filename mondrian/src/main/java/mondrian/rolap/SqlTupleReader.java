@@ -1035,7 +1035,7 @@ public TupleList readTuples(
           selectString.append( pair.left );
           types = pair.right;
           prependString =
-            MondrianProperties.instance().GenerateFormattedSql.get()
+            context.getConfig().generateFormattedSql()
               ? new StringBuilder(Util.NL).append(UNION).append(Util.NL).toString()
               : new StringBuilder(" ").append(UNION).append(" ").toString();
         }
@@ -1199,7 +1199,7 @@ public TupleList readTuples(
 
 
     Evaluator evaluator = getEvaluator( constraint );
-    AggStar aggStar = chooseAggStar( constraint, evaluator, baseCube );
+    AggStar aggStar = chooseAggStar( constraint, evaluator, baseCube, context.getConfig().useAggregates() );
 
     // add the selects for all levels to fetch
     for ( TargetBase target : targetGroup ) {
@@ -1574,8 +1574,9 @@ public TupleList readTuples(
   AggStar chooseAggStar(
     TupleConstraint constraint,
     Evaluator evaluator,
-    RolapCube baseCube ) {
-    if ( !MondrianProperties.instance().UseAggregates.get() ) {
+    RolapCube baseCube,
+    boolean useAggregates) {
+    if ( !useAggregates ) {
       return null;
     }
 

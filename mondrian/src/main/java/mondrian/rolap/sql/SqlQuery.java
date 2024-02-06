@@ -181,18 +181,6 @@ public class SqlQuery {
         this.allowHints = false;
     }
 
-    /**
-     * Creates a SqlQuery using a given dialect and inheriting the formatting
-     * preferences from {@link MondrianProperties#GenerateFormattedSql}
-     * property.
-     *
-     * @param dialect Dialect
-     */
-    public SqlQuery(Dialect dialect) {
-        this(
-            dialect,
-            MondrianProperties.instance().GenerateFormattedSql.get());
-    }
 
     /**
      * Creates an empty <code>SqlQuery</code> with the same environment as this
@@ -200,7 +188,7 @@ public class SqlQuery {
      */
     public SqlQuery cloneEmpty()
     {
-        return new SqlQuery(dialect);
+        return new SqlQuery(dialect, generateFormattedSql);
     }
 
     public void setDistinct(final boolean distinct) {
@@ -726,7 +714,7 @@ public class SqlQuery {
 
     public static SqlQuery newQuery(Context context, String err) {
 
-        return new SqlQuery(context.getDialect());
+        return new SqlQuery(context.getDialect(), context.getConfig().generateFormattedSql());
     }
 
     public void addGroupingSet(List<String> groupingColumnsExpr) {

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -52,7 +53,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @Override
@@ -71,6 +72,10 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTotal(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -79,8 +84,8 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, false);
-        propSaver.set(props.ReadAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(false);
+        ((TestConfig)context.getConfig()).setReadAggregates(false);
 
         String mdx =
             "select {[Measures].[Total]} on columns from [Fact]";
@@ -95,8 +100,8 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 
         // unless there is a way to flush the cache,
         // I'm skeptical about these results
-        propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, false);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(false);
 
         Result result1 = executeQuery(mdx, context.getConnection());
         Object v1 = result1.getCell(new int[]{0}).getValue();
@@ -112,6 +117,10 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -139,6 +148,10 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNativeFilterWithoutMeasures(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -193,6 +206,10 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     void testNativeFilterWithoutMeasuresAndLevelWithProps(TestContext context)
         throws Exception
     {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -215,7 +232,7 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 6\n");
 
         // check generated sql only for native evaluation
-        if (MondrianProperties.instance().EnableNativeFilter.get()) {
+        if (context.getConfig().enableNativeFilter()) {
           assertQuerySql(context.getConnection(),
               query,
               new SqlPattern[] {
@@ -276,6 +293,10 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testChildSelection(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;

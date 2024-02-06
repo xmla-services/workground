@@ -50,7 +50,6 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -1712,7 +1711,7 @@ public class BasicQueryTest {
    * was validated twice, hence the validation time was <code>O(2 ^ depth)</code>.)
    */
   public void _testBug793616(TestContext context) {
-    if ( props.TestExpDependencies.get() > 0 ) {
+    if ( context.getConfig().testExpDependencies() > 0 ) {
       // Don't run this test if dependency-checking is enabled.
       // Dependency checking will hugely slow down evaluation, and give
       // the false impression that the validation performance bug has
@@ -1793,7 +1792,7 @@ public class BasicQueryTest {
   void testCatalogHierarchyBasedOnView(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
-    if ( props.ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       return;
     }
     /*
@@ -1871,7 +1870,7 @@ public class BasicQueryTest {
   void testCatalogHierarchyBasedOnView2(TestContext context) {
     // Don't run this test if aggregates are enabled: two levels mapped to
     // the "gender" column confuse the agg engine.
-    if ( props.ReadAggregates.get() ) {
+    if ( context.getConfig().readAggregates() ) {
       return;
     }
     if ( TestUtil.getDialect(context.getConnection()).allowsFromQuery() ) {
@@ -1949,10 +1948,10 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCountDistinctAgg(TestContext context) {
-    boolean use_agg_orig = props.UseAggregates.get();
+    boolean use_agg_orig = context.getConfig().useAggregates();
 
     // turn off caching
-    propSaver.set( props.DisableCaching, true );
+        ((TestConfig)context.getConfig()).setDisableCaching(true);
 
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales], [Measures].[Customer Count]} on rows,\n"
         + "NON EMPTY {[Time].[1997].[Q1].[1]} ON COLUMNS\n" + "from Sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n"
@@ -1960,9 +1959,9 @@ public class BasicQueryTest {
             + "{[Measures].[Customer Count]}\n" + "Row #0: 21,628\n" + "Row #1: 1,396\n" );
 
     if ( use_agg_orig ) {
-      propSaver.set( props.UseAggregates, false );
+      ((TestConfig)context.getConfig()).setUseAggregates(false);
     } else {
-      propSaver.set( props.UseAggregates, true );
+      ((TestConfig)context.getConfig()).setUseAggregates(true);
     }
 
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales], [Measures].[Customer Count]} on rows,\n"
@@ -2004,8 +2003,8 @@ public class BasicQueryTest {
             + "      formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier14::new);
-    propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
     executeQuery(context.getConnection(), mdx);
   }
 
@@ -2040,8 +2039,8 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier15::new);
-    propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     // no exception is thrown
     executeQuery(context.getConnection(), mdx);
@@ -2143,8 +2142,8 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier17::new);
-    propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -2154,8 +2153,9 @@ public class BasicQueryTest {
     assertQueryReturns( context.getConnection(),mdx, desiredResult );
 
     // check that consistent with fact table
-    propSaver.set( props.UseAggregates, false );
-    propSaver.set( props.ReadAggregates, false );
+    ((TestConfig)context.getConfig()).setUseAggregates(false);
+    ((TestConfig)context.getConfig()).setReadAggregates(false);
+    RolapSchemaPool.instance().clear();
 
     assertQueryReturns(context.getConnection(), mdx, desiredResult );
   }
@@ -2195,8 +2195,8 @@ public class BasicQueryTest {
     */
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier18::new);
-    propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -2240,8 +2240,8 @@ public class BasicQueryTest {
             + "</Schema>";
     */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier19::new);
-    propSaver.set( props.UseAggregates, true );
-    propSaver.set( props.ReadAggregates, true );
+    ((TestConfig)context.getConfig()).setUseAggregates(true);
+    ((TestConfig)context.getConfig()).setReadAggregates(true);
 
     String desiredResult =
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
@@ -2338,7 +2338,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCrossjoinWithDescendantsAndUnknownMember(TestContext context) {
-    propSaver.set( MondrianProperties.instance().IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales]} on columns,\n" + "NON EMPTY CrossJoin(\n"
         + " Descendants([Product].[All Products], [Product].[Product Family]),\n"
         + " Descendants([Store].[All Stores].[Foo], [Store].[Store State])) on rows\n" + "from [Sales]", "Axis #0:\n"
@@ -2368,7 +2368,7 @@ public class BasicQueryTest {
   void testMembersOfLargeDimensionTheHardWay(TestContext context) {
     final Connection connection = context.getConnection();
     // Avoid this test if memory is scarce.
-    if ( Bug.avoidMemoryOverflow( getDialect(connection) ) ) {
+    if ( Bug.avoidMemoryOverflow( getDialect(connection), context.getConfig().memoryMonitor() ) ) {
       return;
     }
 
@@ -2946,6 +2946,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testTopmost2(TestContext context) {
+    RolapSchemaPool.instance().clear();
     assertQueryReturns( context.getConnection(),"SELECT {Measures.[Unit Sales]} ON COLUMNS,\n" + "  CROSSJOIN(Customers.CHILDREN,\n"
         + "    TOPCOUNT(DESCENDANTS([Store].CURRENTMEMBER, [Store].[Store Name]),\n"
         + "             1, [Measures].[Unit Sales])) ON ROWS\n" + "FROM Sales",
@@ -3451,8 +3452,8 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelMutliple(TestContext context) {
-    propSaver.set(
-            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+	  RolapSchemaPool.instance().clear();
+      ((TestConfig)context.getConfig()).setMaxEvalDepth(MAX_EVAL_DEPTH_VALUE);
     Connection connection = context.getConnection();
     for ( int i = 0; i < 5; i++ ) {
       runParallelQueries(connection, 1, 1, false );
@@ -3477,16 +3478,14 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelFlushCache(TestContext context) {
-    propSaver.set(
-            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+      ((TestConfig)context.getConfig()).setMaxEvalDepth(MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.getConnection(), 4, 6, true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelVery(TestContext context) {
-	propSaver.set(
-	            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
+      ((TestConfig)context.getConfig()).setMaxEvalDepth( MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.getConnection(), 6, 10, false );
   }
 
@@ -3624,7 +3623,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testNonEmptyCrossJoin(TestContext context) {
     Connection connection = context.getConnection();
-    if ( !props.EnableNativeCrossJoin.get() ) {
+    if ( !context.getConfig().enableNativeCrossJoin() ) {
       // If we try to evaluate the crossjoin in memory we run out of
       // memory.
       return;
@@ -4174,9 +4173,10 @@ public class BasicQueryTest {
         "must contain either a source column or a source expression, but not both" );
   }
 
-    @ParameterizedTest
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testInvalidMembersInQuery(TestContext context) {
+	RolapSchemaPool.instance().clear();
     String mdx =
         "select {[Measures].[Unit Sales]} on columns,\n" + " {[Time].[1997].[Q1], [Time].[1997].[QTOO]} on rows\n"
             + "from [Sales]";
@@ -4196,7 +4196,7 @@ public class BasicQueryTest {
 
     // Now set property
 
-    propSaver.set( props.IgnoreInvalidMembersDuringQuery, true );
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
 
     assertQueryReturns( context.getConnection(),mdx, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
         + "{[Time].[1997].[Q1]}\n" + "Row #0: 66,291\n" );
@@ -4207,9 +4207,10 @@ public class BasicQueryTest {
     // Verify that invalid members in query do NOT prevent
     // usage of native NECJ (LER-5165).
 
-    propSaver.set( props.AlertNativeEvaluationUnsupported, "ERROR" );
+        ((TestConfig)context.getConfig())
+            .setAlertNativeEvaluationUnsupported("ERROR");
 
-    assertQueryReturns( context.getConnection(),mdx2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
+        assertQueryReturns( context.getConnection(),mdx2, "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
         + "{[Time].[1997].[Q1], [Customers].[USA].[CA]}\n" + "{[Time].[1997].[Q1], [Customers].[USA].[OR]}\n"
         + "{[Time].[1997].[Q1], [Customers].[USA].[WA]}\n" + "Row #0: 16,890\n" + "Row #1: 19,287\n"
         + "Row #2: 30,114\n" );
@@ -4225,7 +4226,7 @@ public class BasicQueryTest {
     // this issue takes place only for the case when ordinalColumn is defined
     // and CompareSiblingsByOrderKey=false and ExpandNonNative=true
     propSaver.set( props.CompareSiblingsByOrderKey, false );
-    propSaver.set( props.ExpandNonNative, true );
+    ((TestConfig)context.getConfig()).setExpandNonNative(true);
     if ( !props.EnableRolapCubeMemberCache.get() ) {
       propSaver.set( props.EnableRolapCubeMemberCache, true );
     }
@@ -4441,7 +4442,7 @@ public class BasicQueryTest {
     final int cancelInterval = 50;
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
     final String triggerSql = "product_name";
 
     Long rows =
@@ -4459,10 +4460,10 @@ public class BasicQueryTest {
   void testCancelSqlFetchSegmentLoad(TestContext context) throws Exception {
     // 512 rows
     final int cancelInterval = 101;
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
     // this will avoid spamming output with cache failures, but should
     // also work without side effects with cache enabled
-    propSaver.set( props.DisableCaching, true );
+      ((TestConfig)context.getConfig()).setDisableCaching(true);
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
     final String triggerSql = "product_name";
@@ -4484,7 +4485,7 @@ public class BasicQueryTest {
     final String query =
         "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
             + "  {[Customers].[Mexico].[Guerrero].[Acapulco].Children} ON ROWS\n" + "FROM [Sales]";
-    propSaver.set( props.CheckCancelOrTimeoutInterval, cancelInterval );
+    ((TestConfig)context.getConfig()).setCheckCancelOrTimeoutInterval(cancelInterval);
 
     Long rows = executeAndCancelAtSqlFetch(context, query, "customer_id", "SqlMemberSource.getMemberChildren" );
     assertEquals(new Long( cancelInterval ), rows, "Query not aborted at first interval");
@@ -4597,7 +4598,7 @@ public class BasicQueryTest {
         "WITH\n" + "  MEMBER [Measures].[Sleepy]\n" + "    AS 'SleepUdf([Measures].[Unit Sales])'\n"
             + "SELECT {[Measures].[Sleepy]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
     Throwable throwable = null;
-    propSaver.set( props.QueryTimeout, 2 );
+    ((TestConfig)context.getConfig()).setQueryTimeout(2);
     try {
     	executeQueryTimeoutTest(context.getConnection(), query);
     } catch ( Throwable ex ) {
@@ -4726,7 +4727,7 @@ public class BasicQueryTest {
             + "select crossjoin({[Time].[*SUBTOTAL_MEMBER_SEL~SUM]}, {[Store].[*SUBTOTAL_MEMBER_SEL~SUM]}) "
             + "on columns from [Sales]";
 
-    propSaver.set( props.IterationLimit, 11 );
+    ((TestConfig)context.getConfig()).setIterationLimit(11);
 
     Throwable throwable = null;
     Connection connection = context.getConnection();
@@ -4741,7 +4742,7 @@ public class BasicQueryTest {
     checkThrowable( throwable, "Number of iterations exceeded limit of 11" );
 
     // make sure the query runs without the limit set
-    propSaver.reset();
+    ((TestConfig)context.getConfig()).setIterationLimit(0);
     executeQuery(connection, queryString );
   }
 
@@ -5090,7 +5091,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testEmptyAggregationListDueToFilterDoesNotThrowException(TestContext context) {
-    propSaver.set( props.IgnoreMeasureForNonJoiningDimension, true );
+    ((TestConfig)context.getConfig()).setIgnoreMeasureForNonJoiningDimension(true);
     assertQueryReturns( context.getConnection(),"WITH \n" + "MEMBER [GENDER].[AGG] "
         + "AS 'AGGREGATE(FILTER([S1], (NOT ISEMPTY([MEASURES].[STORE SALES]))))' " + "SET [S1] "
         + "AS 'CROSSJOIN({[GENDER].[GENDER].MEMBERS},{[STORE].[CANADA].CHILDREN})' " + "SELECT\n"
@@ -6040,7 +6041,8 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicerIgnoreException(TestContext context) {
-    propSaver.set( props.CurrentMemberWithCompoundSlicerAlert, "OFF" );
+    	RolapSchemaPool.instance().clear();
+        ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF" );
 
     //final TestContext context = getTestContext().withFreshConnection();
     String mdx =
@@ -6061,6 +6063,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicer2(TestContext context) {
+    RolapSchemaPool.instance().clear();
     String mdx =
         "with\n" + "member [Measures].[Drink Sales Previous Period] as\n"
             + "'( Time.CurrentMember.lag(1), [Product].[All Products].[Drink]," + " measures.[unit sales] )'\n"
@@ -6080,7 +6083,8 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberWithCompoundSlicer2IgnoreException(TestContext context) {
-    propSaver.set( props.CurrentMemberWithCompoundSlicerAlert, "OFF" );
+    	RolapSchemaPool.instance().clear();
+        ((TestConfig)context.getConfig()).setCurrentMemberWithCompoundSlicerAlert("OFF");
 
     //final TestContext context = getTestContext().withFreshConnection();
     String mdx =

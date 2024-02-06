@@ -21,12 +21,10 @@ import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
@@ -114,8 +112,8 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
   private static void validateSlicerMembers( Hierarchy hierarchy, Evaluator evaluator ) {
     if ( evaluator instanceof RolapEvaluator rev ) {
-      StringProperty alertProperty = MondrianProperties.instance().CurrentMemberWithCompoundSlicerAlert;
-      String alertValue = alertProperty.get();
+
+      String alertValue = evaluator.getSchemaReader().getContext().getConfig().currentMemberWithCompoundSlicerAlert();
 
       if ( alertValue.equalsIgnoreCase( "OFF" ) ) {
         return; // No validation

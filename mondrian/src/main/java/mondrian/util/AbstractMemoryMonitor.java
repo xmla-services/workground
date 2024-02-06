@@ -97,23 +97,6 @@ public abstract class AbstractMemoryMonitor
         return lowThreshold;
     }
 
-    /**
-     * Returns the default memory notification percentage.
-     *
-     * <p>This is the value of the Mondrian
-     * {@link MondrianProperties#MemoryMonitorThreshold} property.
-     *
-     * @return the default threshold percentage.
-     */
-    public int getDefaultThresholdPercentage() {
-        return MondrianProperties.instance().MemoryMonitorThreshold.get();
-    }
-
-    @Override
-	public boolean addListener(final Listener listener) {
-        return addListener(listener, getDefaultThresholdPercentage());
-    }
-
     @Override
 	public boolean addListener(Listener listener, int percentage) {
         getLogger().info("addListener enter");

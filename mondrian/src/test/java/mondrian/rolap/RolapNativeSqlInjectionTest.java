@@ -35,8 +35,8 @@ class RolapNativeSqlInjectionTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(propSaver.properties.EnableNativeFilter, true);
-        propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+        //propSaver.set(propSaver.properties.EnableNativeFilter, true);
+        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
     }
 
     @AfterEach

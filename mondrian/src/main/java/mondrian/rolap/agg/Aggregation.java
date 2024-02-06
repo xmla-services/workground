@@ -27,7 +27,6 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.CellKey;
@@ -95,14 +94,13 @@ public class Aggregation {
      *                       the RolapStar for this Aggregation
      */
     public Aggregation(
-        AggregationKey aggregationKey)
+        AggregationKey aggregationKey, final int maxConstraints)
     {
         this.compoundPredicateList = aggregationKey.getCompoundPredicateList();
         this.star = aggregationKey.getStar();
         this.constrainedColumnsBitKey =
             aggregationKey.getConstrainedColumnsBitKey();
-        this.maxConstraints =
-            MondrianProperties.instance().MaxConstraints.get();
+        this.maxConstraints = maxConstraints;
         this.creationTimestamp = new Date();
     }
 
@@ -210,7 +208,8 @@ public class Aggregation {
      */
     public StarColumnPredicate[] optimizePredicates(
         RolapStar.Column[] columns,
-        StarColumnPredicate[] predicates)
+        StarColumnPredicate[] predicates,
+        boolean optimizePredicates)
     {
         RolapStar star = getStar();
         Util.assertTrue(predicates.length == columns.length);
@@ -354,7 +353,7 @@ public class Aggregation {
                 break;
             }
             // eliminate this constraint
-            if (MondrianProperties.instance().OptimizePredicates.get()
+            if (optimizePredicates
                 || bloats[j] == 1)
             {
                 newPredicates[j] = new LiteralStarPredicate(columns[j], true);

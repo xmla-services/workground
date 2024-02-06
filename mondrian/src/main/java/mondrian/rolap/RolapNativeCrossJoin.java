@@ -21,7 +21,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Util;
 import mondrian.olap.fun.NonEmptyCrossJoinFunDef;
@@ -58,9 +57,8 @@ import mondrian.rolap.sql.TupleConstraint;
  */
 public class RolapNativeCrossJoin extends RolapNativeSet {
 
-    public RolapNativeCrossJoin() {
-        super.setEnabled(
-            MondrianProperties.instance().EnableNativeCrossJoin.get());
+    public RolapNativeCrossJoin(boolean enableNativeCrossJoin) {
+        super.setEnabled(enableNativeCrossJoin);
     }
 
     /**
@@ -106,7 +104,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Expression[] args)
+        Expression[] args, final boolean enableNativeFilter)
     {
         if (!isEnabled()) {
             // native crossjoins were explicitly disabled, so no need
@@ -244,7 +242,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
             // dimensions and the additional filter on them. It will make a
             // copy of the evaluator.
             TupleConstraint constraint =
-                buildConstraint(evaluator, fun, cargs);
+                buildConstraint(evaluator, fun, cargs, enableNativeFilter);
             // Use the just the CJ CrossJoiArg for the evaluator context,
             // which will be translated to select list in sql.
             final SchemaReader schemaReader = evaluator.getSchemaReader();
@@ -282,11 +280,11 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
     private TupleConstraint buildConstraint(
         final RolapEvaluator evaluator,
         final FunctionDefinition fun,
-        final CrossJoinArg[] cargs)
+        final CrossJoinArg[] cargs, final boolean enableNativeFilter)
     {
         CrossJoinArg[] myArgs;
         if (safeToConstrainByOtherAxes(fun)) {
-            myArgs = buildArgs(evaluator, cargs);
+            myArgs = buildArgs(evaluator, cargs, enableNativeFilter);
         } else {
             myArgs = cargs;
         }
@@ -294,10 +292,10 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
     }
 
     private CrossJoinArg[] buildArgs(
-        final RolapEvaluator evaluator, final CrossJoinArg[] cargs)
+        final RolapEvaluator evaluator, final CrossJoinArg[] cargs, final boolean enableNativeFilter)
     {
         Set<CrossJoinArg> joinArgs =
-            crossJoinArgFactory().buildConstraintFromAllAxes(evaluator);
+            crossJoinArgFactory().buildConstraintFromAllAxes(evaluator, enableNativeFilter);
         joinArgs.addAll(Arrays.asList(cargs));
         return joinArgs.toArray(new CrossJoinArg[joinArgs.size()]);
     }
@@ -320,7 +318,9 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
         if (!evaluator.getQuery().shouldAlertForNonNative(fun)) {
             return;
         }
-        RolapUtil.alertNonNative("NonEmptyCrossJoin", reason);
+        RolapUtil.alertNonNative("NonEmptyCrossJoin", reason,
+            evaluator.getCube().getSchema().getInternalConnection().getContext()
+                .getConfig().alertNativeEvaluationUnsupported());
     }
 }
 

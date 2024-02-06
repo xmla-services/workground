@@ -834,7 +834,7 @@ class SqlConstraintUtilsTest {
 
         final AggStar aggStar = null;
         final Dialect dialect =  context.getDialect();
-        final SqlQuery query = new SqlQuery(dialect);
+        final SqlQuery query = new SqlQuery(dialect, context.getConfig().generateFormattedSql());
 
         when(level.getBaseStarKeyColumn(baseCube)).thenReturn(column);
         when(column.getNameColumn()).thenReturn(column);

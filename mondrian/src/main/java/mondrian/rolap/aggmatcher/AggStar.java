@@ -301,11 +301,11 @@ public class AggStar {
     /**
      * Returns a measure of the IO cost of querying this table. It can be
      * either the row count or the row count times the size of a row.
-     * If the property {@link MondrianProperties#ChooseAggregateByVolume}
+     * If the property ChooseAggregateByVolume}
      * is true, then volume is returned, otherwise row count.
      */
-    public long getSize() {
-        return MondrianProperties.instance().ChooseAggregateByVolume.get()
+    public long getSize(boolean chooseAggregateByVolume) {
+        return chooseAggregateByVolume
             ? getFactTable().getVolume()
             : getFactTable().getNumberOfRows();
     }

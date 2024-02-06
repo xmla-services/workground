@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -65,7 +66,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.Aggregation;
@@ -261,8 +261,8 @@ public class RolapStar {
      */
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
-    	
-    	
+
+
         private final Cache<AggregationKey, Aggregation> aggregations =Caffeine.newBuilder().weakKeys().weakValues().build();
 
         private final List<SoftReference<SegmentWithData>> segmentRefs =
@@ -462,11 +462,12 @@ public class RolapStar {
      */
     public void addAggStar(AggStar aggStar) {
         // Add it before the first AggStar which is larger, if there is one.
-        long size = aggStar.getSize();
+        boolean chooseAggregateByVolume = schema.getInternalConnection().getContext().getConfig().chooseAggregateByVolume();
+        long size = aggStar.getSize(chooseAggregateByVolume);
         ListIterator<AggStar> lit = aggStars.listIterator();
         while (lit.hasNext()) {
             AggStar as = lit.next();
-            if (as.getSize() >= size) {
+            if (as.getSize(chooseAggregateByVolume) >= size) {
                 lit.previous();
                 lit.add(aggStar);
                 return;
@@ -518,7 +519,7 @@ public class RolapStar {
      * with an empty sql query).
      */
     public SqlQuery getSqlQuery() {
-        return new SqlQuery(getSqlQueryDialect());
+        return new SqlQuery(getSqlQueryDialect(), context.getConfig().generateFormattedSql());
     }
 
     /**
@@ -555,7 +556,7 @@ public class RolapStar {
     }
 
     boolean isCacheDisabled() {
-        return MondrianProperties.instance().DisableCaching.get();
+        return context.getConfig().disableCaching();
     }
 
     /**
@@ -600,7 +601,7 @@ public class RolapStar {
 
         aggregation =
             new Aggregation(
-                aggregationKey);
+                aggregationKey, MondrianProperties.instance().MaxConstraints.get());
 
         localBars.get().aggregations.put(
             aggregationKey, aggregation);
@@ -1098,8 +1099,8 @@ public class RolapStar {
          * @param dialect Dialect
          * @return String representation of column's datatype
          */
-        public String getDatatypeString(Dialect dialect) {
-            final SqlQuery query = new SqlQuery(dialect);
+        public String getDatatypeString(Dialect dialect, boolean formatted) {
+            final SqlQuery query = new SqlQuery(dialect, formatted);
             query.addFrom(
                 table.star.factTable.relation, table.star.factTable.alias,
                 false);

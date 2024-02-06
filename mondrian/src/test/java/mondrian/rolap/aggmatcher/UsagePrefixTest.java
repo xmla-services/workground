@@ -15,6 +15,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import mondrian.rolap.SchemaModifiers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -35,6 +36,8 @@ class UsagePrefixTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefix(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -42,8 +45,8 @@ class UsagePrefixTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
 
         String mdx =
             "select {[StoreX].[Store Value].members} on columns, "
@@ -69,6 +72,8 @@ class UsagePrefixTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testUsagePrefixTwoDims(TestContext context) throws Exception {
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         if (!isApplicable(context.getConnection())) {
             return;
@@ -76,8 +81,8 @@ class UsagePrefixTest extends AggTableTestCase {
         MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
-        propSaver.set(props.UseAggregates, true);
-        propSaver.set(props.ReadAggregates, true);
+        ((TestConfig)context.getConfig()).setUseAggregates(true);
+        ((TestConfig)context.getConfig()).setReadAggregates(true);
 
         String mdx =
             "select Crossjoin([StoreX].[Store Value].members, "

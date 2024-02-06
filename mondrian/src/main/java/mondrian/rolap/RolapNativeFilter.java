@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
@@ -42,8 +41,8 @@ import mondrian.rolap.sql.SqlQuery;
  */
 public class RolapNativeFilter extends RolapNativeSet {
 
-  public RolapNativeFilter() {
-    super.setEnabled( MondrianProperties.instance().EnableNativeFilter.get() );
+  public RolapNativeFilter(boolean enableNativeFilter) {
+    super.setEnabled( enableNativeFilter );
   }
 
   static class FilterConstraint extends SetConstraint {
@@ -112,7 +111,8 @@ public class RolapNativeFilter extends RolapNativeSet {
       }
 
       RolapCube cube = (RolapCube) evaluator.getCube();
-      this.addConstraint( testQuery, cube, sqlTupleReader.chooseAggStar( this, evaluator, cube ) );
+      this.addConstraint( testQuery, cube, sqlTupleReader.chooseAggStar( this, evaluator, cube,
+          context.getConfig().useAggregates() ) );
       return testQuery.isSupported();
     }
 
@@ -160,7 +160,7 @@ protected boolean restrictMemberTypes() {
   }
 
   @Override
-NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Expression[] args ) {
+NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Expression[] args, final boolean enableNativeFilter ) {
     if ( !isEnabled() ) {
       return null;
     }
@@ -178,7 +178,7 @@ NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fu
     }
 
     // extract the set expression
-    List<CrossJoinArg[]> allArgs = crossJoinArgFactory().checkCrossJoinArg( evaluator, args[0] );
+    List<CrossJoinArg[]> allArgs = crossJoinArgFactory().checkCrossJoinArg( evaluator, args[0], enableNativeFilter );
 
     // checkCrossJoinArg returns a list of CrossJoinArg arrays. The first
     // array is the CrossJoin dimensions. The second array, if any,

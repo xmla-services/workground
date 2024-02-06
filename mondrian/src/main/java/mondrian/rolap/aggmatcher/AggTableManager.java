@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.recorder.ListRecorder;
@@ -92,8 +91,8 @@ public class AggTableManager {
      * This method should only be called once.
      * @param connectInfo The Mondrian connection properties
      */
-    public void initialize(RolapConnectionProps connectionProps) {
-        if (MondrianProperties.instance().UseAggregates.get()) {
+    public void initialize(RolapConnectionProps connectionProps, boolean useAggregates) {
+        if (useAggregates) {
             try {
                 loadRolapStarAggregates(connectionProps);
             } catch (SQLException ex) {
@@ -181,7 +180,9 @@ public class AggTableManager {
     {
         ListRecorder msgRecorder = new ListRecorder();
         try {
-            DefaultRules rules = DefaultRules.getInstance();
+            DefaultRules rules = DefaultRules.getInstance(
+                schema.getInternalConnection().getContext().getConfig().aggregateRuleTag(),
+                schema.getInternalConnection().getContext().getConfig().aggregateRules());
             JdbcSchema db = getJdbcSchema();
             // if we don't synchronize this on the db object,
             // we may end up getting a Concurrency exception due to
@@ -259,7 +260,7 @@ public class AggTableManager {
                         }
                         // Is it handled by the DefaultRules
                         if (! makeAggStar
-                            && MondrianProperties.instance().ReadAggregates.get()
+                            && schema.getInternalConnection().getContext().getConfig().readAggregates()
                             && rules.matchesTableName(factTableName, name)) {
                             // load columns
                             dbTable.load();
@@ -282,7 +283,7 @@ public class AggTableManager {
                                 star,
                                 dbTable,
                                 approxRowCount);
-                            if (aggStar.getSize() > 0) {
+                            if (aggStar.getSize(schema.getInternalConnection().getContext().getConfig().chooseAggregateByVolume()) > 0) {
                                 star.addAggStar(aggStar);
                             } else {
                                 String msg = mres.AggTableZeroSize.str(

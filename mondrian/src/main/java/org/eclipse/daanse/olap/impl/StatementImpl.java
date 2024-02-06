@@ -44,6 +44,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
     CellSetImpl openCellSet;
 
     public StatementImpl(Connection connection) {
+        super(connection.getContext().getConfig().queryTimeout());
         assert connection != null;
         this.connection = connection;
         this.context = connection.getContext();

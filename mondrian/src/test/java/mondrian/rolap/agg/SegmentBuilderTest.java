@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -76,14 +77,14 @@ class SegmentBuilderTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableInMemoryRollup,
-                true);
-        propSaver.set(MondrianProperties.instance().EnableNativeNonEmpty, true);
-        propSaver.set(
-                MondrianProperties.instance().SparseSegmentDensityThreshold, .5);
-        propSaver.set(
-                MondrianProperties.instance().SparseSegmentCountThreshold, 1000);
+        //propSaver.set(
+        //        MondrianProperties.instance().EnableInMemoryRollup,
+        //        true);
+        //propSaver.set(MondrianProperties.instance().EnableNativeNonEmpty, true);
+        //propSaver.set(
+        //        MondrianProperties.instance().SparseSegmentDensityThreshold, .5);
+        //propSaver.set(
+        //        MondrianProperties.instance().SparseSegmentCountThreshold, 1000);
     }
 
     @AfterEach
@@ -102,7 +103,7 @@ class SegmentBuilderTest {
                 new String[] {"col1", "col2"}, null, 3, 9, true,
                 new boolean[] {false, false}),// each axis sets null axis flag=F
             Collections.singleton("col2"),
-            null, RolapAggregator.Sum, Datatype.NUMERIC);
+            null, RolapAggregator.Sum, Datatype.NUMERIC, 1000, 0.5);
         Pair<SegmentHeader, SegmentBody> rollupWithNullMembers =
             SegmentBuilder.rollup(
                 makeSegmentMap(
@@ -110,7 +111,7 @@ class SegmentBuilderTest {
                     // each axis sets null axis flag=T
                     new boolean[] {true, true}),
                 Collections.singleton("col2"),
-                null, RolapAggregator.Sum, Datatype.NUMERIC);
+                null, RolapAggregator.Sum, Datatype.NUMERIC, 1000, 0.5);
         assertArraysAreEqual(
             (double[]) rollupNoNulls.getValue().getValueArray(),
             (double[]) rollupWithNullMembers.getValue().getValueArray());
@@ -134,7 +135,7 @@ class SegmentBuilderTest {
                 // col2 & col3 have nullAxisFlag=T
                 new boolean[] {false, true, true}),
             Collections.singleton("col2"),
-            null, RolapAggregator.Sum, Datatype.NUMERIC);
+            null, RolapAggregator.Sum, Datatype.NUMERIC, 1000, 0.5);
 
         // expected value is 6 * MOCK_CELL_VALUE for each of 3 column values,
         // since each of the 18 cells are being rolled up to 3 buckets
@@ -163,7 +164,7 @@ class SegmentBuilderTest {
                 // col2 & col3 have nullAxisFlag=T
                 new boolean[] {false, true, false}),
             new HashSet<>(Arrays.asList("col1", "col2")),
-            null, RolapAggregator.Sum, Datatype.NUMERIC);
+            null, RolapAggregator.Sum, Datatype.NUMERIC, 1000, 0.5);
 
         // expected value is 2 * MOCK_CELL_VALUE for each of 3 column values,
         // since each of the 12 cells are being rolled up to 3 * 2 buckets
@@ -216,7 +217,9 @@ class SegmentBuilderTest {
         Pair<SegmentHeader, SegmentBody> rollup = SegmentBuilder.rollup(
             map,
             Collections.singleton("col2"),
-            null, RolapAggregator.Sum, Datatype.NUMERIC);
+            null, RolapAggregator.Sum, Datatype.NUMERIC,
+            1000,
+            0.5);
         // expected value is 10 * MOCK_CELL_VALUE for each of 2 column values,
         // since the 20 cells across 2 segments are being rolled up to 2 buckets
         double expectedVal = 10 * MOCK_CELL_VALUE;
@@ -424,7 +427,8 @@ class SegmentBuilderTest {
                     new String[] {"col1", "col2", "col3"},
                     null, 47000, 4, false, null),
                 new HashSet<>(Arrays.asList("col1", "col2")),
-                null, RolapAggregator.Sum, Datatype.NUMERIC);
+                null, RolapAggregator.Sum, Datatype.NUMERIC,
+                1000, 0.5);
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
 
@@ -442,7 +446,8 @@ class SegmentBuilderTest {
                     new String[] {"col1", "col2", "col3"},
                     null, 44000, 4, false, null),
                 new HashSet<>(Arrays.asList("col1", "col2")),
-                null, RolapAggregator.Sum, Datatype.NUMERIC);
+                null, RolapAggregator.Sum, Datatype.NUMERIC,
+                1000, 0.5);
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
 
@@ -455,7 +460,8 @@ class SegmentBuilderTest {
                     new String[] {"col1", "col2", "col3"},
                     null, 10, 15, false, null),
                 new HashSet<>(Arrays.asList("col1", "col2")),
-                null, RolapAggregator.Sum, Datatype.NUMERIC);
+                null, RolapAggregator.Sum, Datatype.NUMERIC,
+                1000, 0.5);
         assertTrue(rollup.right instanceof DenseDoubleSegmentBody);
 
         // greater than 1K col vals, above density ratio
@@ -466,7 +472,8 @@ class SegmentBuilderTest {
                     null, 11, 10000, false, null),
                     // 1331 possible intersections (11*3)
                 new HashSet<>(Arrays.asList("col1", "col2", "col3")),
-                null, RolapAggregator.Sum, Datatype.NUMERIC);
+                null, RolapAggregator.Sum, Datatype.NUMERIC,
+                1000, 0.5);
         assertTrue(rollup.right instanceof DenseDoubleSegmentBody);
     }
 
@@ -511,7 +518,8 @@ class SegmentBuilderTest {
       Pair<SegmentHeader, SegmentBody> rollup =
           SegmentBuilder.rollup(
               segmentsMap, singleton("col1"),
-              null, RolapAggregator.Sum, Datatype.NUMERIC);
+              null, RolapAggregator.Sum, Datatype.NUMERIC,
+              1000, 0.5);
 
       double[] result = (double[])rollup.right.getValueArray();
       double[] expected = {3, 2, 1};
@@ -594,12 +602,12 @@ class SegmentBuilderTest {
         flushSchemaCache(connection);
         //TestContext context = getTestContext().withFreshConnection();
         final String query = "select customers.[name].members on 0 from sales";
-        propSaver.set(propSaver.properties.EnableInMemoryRollup, false);
+        ((TestConfig)context.getConfig()).setEnableInMemoryRollup(false);
         Result result = executeQuery(connection, query);
 
         flushSchemaCache(connection);
         //context = getTestContext().withFreshConnection();
-        propSaver.set(propSaver.properties.EnableInMemoryRollup, true);
+        ((TestConfig)context.getConfig()).setEnableInMemoryRollup(true);
         executeQuery(connection,
             "select "
             + "{[customers].[name].members} on 0 from sales where gender.f");
@@ -902,9 +910,7 @@ class SegmentBuilderTest {
         String[] keepColumns,
         String expectedHeader)
     {
-        propSaver.set(
-            MondrianProperties.instance().OptimizePredicates,
-            false);
+        ((TestConfig)connection.getContext().getConfig()).setOptimizePredicates(false);
         loadCacheWithQueries(connection, cachePopulatingQueries);
         Map<SegmentHeader, SegmentBody> map = getReversibleTestMap(connection, Order.FORWARD);
         Set<String> keepColumnsSet = new HashSet<>(Arrays.asList(keepColumns));
@@ -915,7 +921,7 @@ class SegmentBuilderTest {
                    // use a dummy
             BitKey.Factory.makeBitKey(new BitSet()),
             RolapAggregator.Sum,
-            Datatype.NUMERIC);
+            Datatype.NUMERIC, 1000, 0.5);
         // Now try reversing the order the segments are retrieved
         loadCacheWithQueries(connection, cachePopulatingQueries);
         map = getReversibleTestMap(connection, Order.REVERSE);
@@ -924,7 +930,7 @@ class SegmentBuilderTest {
             keepColumnsSet,
             BitKey.Factory.makeBitKey(new BitSet()),
             RolapAggregator.Sum,
-            Datatype.NUMERIC);
+            Datatype.NUMERIC, 1000, 0.5);
         assertEquals(expectedHeader, removeJdkDependentStrings(rolledForward.getKey().toString()));
         // the header of the rolled up segment should be the same
         // regardless of the order the segments were processed
@@ -1123,7 +1129,8 @@ class SegmentBuilderTest {
                   new String[][] {{"0.0"}, {"0.0"}, {"0.0"}, {"0.0"}},
                   10, 15, false, null),
               new HashSet<>(Arrays.asList("col1", "col2")),
-              null, RolapAggregator.Sum, Datatype.NUMERIC);
+              null, RolapAggregator.Sum, Datatype.NUMERIC,
+              1000, 0.5);
       assertEquals(3, rollup.left.getConstrainedColumns().size());
   }
 

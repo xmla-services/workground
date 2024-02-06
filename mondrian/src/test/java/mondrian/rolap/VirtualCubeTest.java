@@ -43,6 +43,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
@@ -1590,7 +1591,7 @@ class VirtualCubeTest extends BatchTestCase {
             return;
         }
 
-        if (!MondrianProperties.instance().EnableNativeCrossJoin.get()
+        if (!context.getConfig().enableNativeCrossJoin()
             && !MondrianProperties.instance().EnableNativeNonEmpty.get())
         {
             // Only run the tests if either native CrossJoin or native NonEmpty
@@ -1616,7 +1617,7 @@ class VirtualCubeTest extends BatchTestCase {
 
         String derbyNecjSql1, derbyNecjSql2;
 
-        if (MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+        if (context.getConfig().enableNativeCrossJoin()) {
             derbyNecjSql1 =
                 "select "
                 + "\"product_class\".\"product_family\", "
@@ -2038,12 +2039,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyCJConstraintOnVirtualCube(TestContext context) {
-        if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
+        if (!context.getConfig().enableNativeCrossJoin()) {
             // Generated SQL is different if NonEmptyCrossJoin is evaluated in
             // memory.
             return;
         }
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         String query =
             "with "
             + "set [foo] as [Time].[Month].members "
@@ -2061,7 +2062,7 @@ class VirtualCubeTest extends BatchTestCase {
         // but ISNULL(1) isn't valid SQL, so we forego correct ordering of NULL
         // values.
         String mysqlSQL =
-            MondrianProperties.instance().UseAggregates.get()
+            context.getConfig().useAggregates()
             ? "select\n"
             + "    *\n"
             + "from\n"
@@ -2256,9 +2257,10 @@ class VirtualCubeTest extends BatchTestCase {
         }
         // we want to make sure a SqlConstraint is used for retrieving
         // [Product Family].members
-        propSaver.set(propSaver.properties.LevelPreCacheThreshold, 0);
+        RolapSchemaPool.instance().clear();
+        ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
 
-        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        ((TestConfig)context.getConfig()).setGenerateFormattedSql(true);
         String query =
             "with "
             + "set [bar] as {[Store].[USA]} "
@@ -2273,7 +2275,7 @@ class VirtualCubeTest extends BatchTestCase {
         // clause should be "order by ISNULL(1), 1 ASC" but we will settle for
         // "order by 1 ASC" and forego correct sorting of NULL values.
         String mysqlSQL =
-            MondrianProperties.instance().UseAggregates.get()
+            context.getConfig().useAggregates()
                 ? "select\n"
                 + "    *\n"
                 + "from\n"

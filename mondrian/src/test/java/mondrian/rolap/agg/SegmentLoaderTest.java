@@ -39,12 +39,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.BitKey;
@@ -122,12 +122,8 @@ class SegmentLoaderTest extends BatchTestCase {
             PrintWriter pw = new PrintWriter(System.out);
             context.getConnection().getCacheControl(pw).flushSchemaCache();
             pw.flush();
-            propSaver.set(
-                MondrianProperties.instance().DisableCaching,
-                false);
-            propSaver.set(
-                MondrianProperties.instance().EnableInMemoryRollup,
-                rollup);
+            ((TestConfig)context.getConfig()).setDisableCaching(false);
+            ((TestConfig)context.getConfig()).setEnableInMemoryRollup(rollup);
             final String queryOracle =
                 "select \"time_by_day\".\"the_year\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" from \"sales_fact_1997\" \"sales_fact_1997\", \"time_by_day\" \"time_by_day\" where \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" group by \"time_by_day\".\"the_year\"";
             final String queryMySQL =
@@ -171,7 +167,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 final GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -254,7 +250,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -290,7 +286,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -299,7 +295,9 @@ class SegmentLoaderTest extends BatchTestCase {
             }
 
             @Override
-			boolean useSparse(boolean sparse, int n, RowList rows) {
+			boolean useSparse(boolean sparse, int n, RowList rows,
+                              int sparseSegmentCountThreshold,
+                              double sparseSegmentDensityThreshold) {
                 return true;
             }
         };
@@ -372,7 +370,7 @@ class SegmentLoaderTest extends BatchTestCase {
 			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return new MockSqlStatement(
                     cellRequestCount,
@@ -420,7 +418,7 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList, boolean useAggregates)
             {
                 return stmt;
             }
@@ -498,7 +496,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList,
+                boolean useAggregates)
             {
                 return stmt;
             }
@@ -550,7 +549,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                     int cellRequestCount,
                     GroupingSetsList groupingSetsList,
-                    List<StarPredicate> compoundPredicateList)
+                    List<StarPredicate> compoundPredicateList,
+                    boolean useAggregates)
             {
                 return stmt;
             }
@@ -596,7 +596,8 @@ class SegmentLoaderTest extends BatchTestCase {
             SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
-                List<StarPredicate> compoundPredicateList)
+                List<StarPredicate> compoundPredicateList,
+                boolean useAggregates)
             {
                 return stmt;
             }

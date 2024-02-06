@@ -97,7 +97,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunTableImpl;
@@ -234,6 +233,8 @@ public class RolapSchema implements Schema {
 
     private Context context;
 
+    RolapNativeRegistry nativeRegistry;
+
     /**
      * This is ONLY called by other constructors (and MUST be called
      * by them) and NEVER by the Pool.
@@ -261,7 +262,8 @@ public class RolapSchema implements Schema {
             internalConnection.getInternalStatement());
 
         this.aggTableManager = new AggTableManager(this);
-
+        this.nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
+            context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
 
         load(context, rolapConnectionProps);
     }
@@ -272,12 +274,16 @@ public class RolapSchema implements Schema {
     @Deprecated
     RolapSchema(
         SchemaKey key,
-        RolapConnection internalConnection)
+        RolapConnection internalConnection,
+        final Context context)
     {
     	this.id = UUID.randomUUID().toString();
     	this.key = key;
         this.defaultRole = RoleImpl.createRootRole(this);
         this.internalConnection = internalConnection;
+        this.nativeRegistry = new RolapNativeRegistry(context.getConfig().enableNativeFilter(),
+            context.getConfig().enableNativeCrossJoin(), context.getConfig().enableNativeTopCount());
+
     }
 
     protected void flushSegments() {
@@ -366,7 +372,7 @@ public class RolapSchema implements Schema {
 
 		load(mappingSchema);
 
-		aggTableManager.initialize(connectionProps);
+		aggTableManager.initialize(connectionProps, context.getConfig().useAggregates());
 		setSchemaLoadDate();
 	}
 
@@ -671,7 +677,7 @@ public class RolapSchema implements Schema {
             hierarchy, hierarchyAccess, topLevel, bottomLevel, rollupPolicy);
 
         final boolean ignoreInvalidMembers =
-            MondrianProperties.instance().IgnoreInvalidMembers.get();
+            reader.getContext().getConfig().ignoreInvalidMembers();
 
         int membersRejected = 0;
         if (!grant.memberGrants().isEmpty()) {
@@ -1100,7 +1106,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
 
                 LOGGER.debug(
                     "Normal cardinality for {}", hierarchy.getDimension());
-                if (MondrianProperties.instance().DisableCaching.get()) {
+                if (internalConnection.getContext().getConfig().disableCaching()) {
                     // If the cell cache is disabled, we can't cache
                     // the members or else we get undefined results,
                     // depending on the functions used and all.
@@ -1224,8 +1230,6 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     public Collection<RolapStar> getStars() {
         return getRolapStarRegistry().getStars();
     }
-
-    final RolapNativeRegistry nativeRegistry = new RolapNativeRegistry();
 
     RolapNativeRegistry getNativeRegistry() {
         return nativeRegistry;
