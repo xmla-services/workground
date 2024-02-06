@@ -161,7 +161,7 @@ public class SegmentLoader {
 	public Map<Segment, SegmentWithData> call() throws Exception {
       Locus.push( locus );
       try {
-          boolean useAggregates = locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().memoryMonitor();
+          boolean useAggregates = locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().useAggregates();
         return segmentLoader.loadImpl( cellRequestCount, groupingSets, compoundPredicateList, useAggregates,
             locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentCountThreshold(),
             locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentDensityThreshold());
