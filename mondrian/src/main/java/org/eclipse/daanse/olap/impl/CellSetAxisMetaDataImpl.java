@@ -1,9 +1,11 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.Util;
-import mondrian.olap.type.TypeUtil;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -17,11 +19,10 @@ import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.IAxis;
 import org.eclipse.daanse.olap.api.result.Property;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.Util;
+import mondrian.olap.type.TypeUtil;
 
 public class CellSetAxisMetaDataImpl implements CellSetAxisMetaData {
 

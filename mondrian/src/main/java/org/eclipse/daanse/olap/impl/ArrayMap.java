@@ -17,10 +17,16 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.util.Pair;
+import java.util.AbstractList;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
-import java.util.*;
+import mondrian.util.Pair;
 
 /**
  * Implementation of {@link java.util.Map} which uses an array and is therefore

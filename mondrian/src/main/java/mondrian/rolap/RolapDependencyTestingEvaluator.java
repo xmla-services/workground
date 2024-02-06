@@ -31,7 +31,6 @@ import mondrian.calc.impl.DelegatingExpCompiler;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.SetType;
 

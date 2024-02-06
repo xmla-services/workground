@@ -13,8 +13,12 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.rolap.RolapCube;
-import mondrian.server.Statement;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -28,11 +32,8 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import mondrian.rolap.RolapCube;
+import mondrian.server.Statement;
 
 public non-sealed interface Query extends QueryComponent {
 

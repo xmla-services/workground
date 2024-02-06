@@ -13,12 +13,12 @@
 */
 package org.eclipse.daanse.olap.api;
 
+import java.sql.ResultSet;
+import java.util.Optional;
+
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
-
-import java.sql.ResultSet;
-import java.util.Optional;
 
 public interface Statement  {
 

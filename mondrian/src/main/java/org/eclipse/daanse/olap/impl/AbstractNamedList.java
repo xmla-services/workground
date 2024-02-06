@@ -17,7 +17,8 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Map;
 
 /**
  * Partial implementation of {@link org.olap4j.metadata.NamedList}.

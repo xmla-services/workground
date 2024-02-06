@@ -14,8 +14,6 @@ import java.util.ListIterator;
 
 import org.slf4j.Logger;
 
-import mondrian.olap.MondrianProperties;
-
 /**
  *  Abstract implementation of {@link MemoryMonitor}. Base class
  *  for different memory monitoring strategies.

@@ -1,5 +1,7 @@
 package org.eclipse.daanse.olap.impl;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -7,8 +9,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.Property;
-
-import java.util.List;
 
 public class CellSetMetaDataImpl implements CellSetMetaData {
 

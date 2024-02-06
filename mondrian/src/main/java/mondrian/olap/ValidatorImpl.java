@@ -33,7 +33,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
-import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.TypeUtil;

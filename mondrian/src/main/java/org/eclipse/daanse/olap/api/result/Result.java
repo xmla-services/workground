@@ -16,10 +16,11 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.io.PrintWriter;
 
-import mondrian.rolap.RolapMember;
-import mondrian.server.Execution;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.query.component.Query;
+
+import mondrian.rolap.RolapMember;
+import mondrian.server.Execution;
 
 /**
  * A <code>Result</code> is the result of running an MDX query. See {@link

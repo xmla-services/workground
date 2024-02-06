@@ -17,15 +17,11 @@ package org.eclipse.daanse.olap.impl;
 // limitations under the License.
 */
 
-import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
-import org.eclipse.daanse.olap.impl.IdentifierSegment;
-import org.eclipse.daanse.olap.impl.KeySegment;
-import org.eclipse.daanse.olap.impl.NameSegment;
-import org.eclipse.daanse.olap.impl.ParseRegion;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,

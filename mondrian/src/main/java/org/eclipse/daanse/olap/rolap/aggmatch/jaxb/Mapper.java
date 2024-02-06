@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import java.util.Arrays;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
-
-import java.util.Arrays;
 
 /**
  * This allows one to create an element that matches against a

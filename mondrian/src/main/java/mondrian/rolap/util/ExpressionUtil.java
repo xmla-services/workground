@@ -15,11 +15,11 @@ package mondrian.rolap.util;
 
 import java.util.Objects;
 
-import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 
+import mondrian.rolap.RolapRuntimeException;
 import mondrian.rolap.sql.SqlQuery;
 
 public class ExpressionUtil {

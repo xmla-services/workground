@@ -17,15 +17,21 @@
 */
 package org.eclipse.daanse.olap.impl;
 
+import java.io.PrintWriter;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.api.result.Position;
-
-import java.io.PrintWriter;
-import java.util.*;
 
 /**
  * Formatter that can convert a {@link CellSet} into a two-dimensional text

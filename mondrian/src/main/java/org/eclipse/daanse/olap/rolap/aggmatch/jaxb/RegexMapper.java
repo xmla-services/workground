@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -20,9 +23,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @XmlType(name = "RegexMapper", propOrder = {
     "regexs"

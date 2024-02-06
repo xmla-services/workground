@@ -20,9 +20,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import mondrian.rolap.RolapConnectionProps;
-import mondrian.rolap.RolapResultShepherd;
-import mondrian.rolap.agg.AggregationManager;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
@@ -41,9 +38,13 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import aQute.bnd.metatype.annotations.Designate;
 import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapConnectionPropsR;
+import mondrian.rolap.RolapResultShepherd;
+import mondrian.rolap.agg.AggregationManager;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)

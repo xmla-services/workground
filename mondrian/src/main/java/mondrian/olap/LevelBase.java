@@ -11,6 +11,8 @@
 
 package mondrian.olap;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -24,8 +26,6 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
-
-import java.util.List;
 
 /**
  * Skeleton implementation of {@link Level}.

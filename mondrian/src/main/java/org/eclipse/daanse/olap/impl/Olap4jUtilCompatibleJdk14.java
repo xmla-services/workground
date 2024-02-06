@@ -17,7 +17,9 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Implementation of {@link org.olap4j.impl.Olap4jUtilCompatible} which runs in

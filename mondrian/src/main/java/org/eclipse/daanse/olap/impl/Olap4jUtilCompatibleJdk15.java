@@ -20,6 +20,8 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
+
 /**
  * Implementation of {@link org.olap4j.impl.Olap4jUtilCompatible} which runs in
  * JDK 1.5 and later.

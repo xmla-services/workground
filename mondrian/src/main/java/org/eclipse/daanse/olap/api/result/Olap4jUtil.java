@@ -17,10 +17,6 @@
 */
 package org.eclipse.daanse.olap.api.result;
 
-import org.eclipse.daanse.olap.impl.AbstractNamedList;
-import org.eclipse.daanse.olap.impl.NamedList;
-import org.eclipse.daanse.olap.impl.Olap4jUtilCompatible;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +31,10 @@ import java.util.RandomAccess;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclipse.daanse.olap.impl.AbstractNamedList;
+import org.eclipse.daanse.olap.impl.NamedList;
+import org.eclipse.daanse.olap.impl.Olap4jUtilCompatible;
 
 /**
  * Utility methods common to multiple olap4j driver implementations.

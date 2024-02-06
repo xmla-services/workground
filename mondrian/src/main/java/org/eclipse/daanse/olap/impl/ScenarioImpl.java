@@ -1,5 +1,20 @@
 package org.eclipse.daanse.olap.impl;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.result.AllocationPolicy;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.Scenario;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.QueryImpl;
@@ -17,21 +32,6 @@ import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapStoredMeasure;
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.eclipse.daanse.olap.api.result.AllocationPolicy;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.api.result.Scenario;
-import org.eclipse.daanse.olap.calc.api.Calc;
-
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 public class ScenarioImpl implements Scenario {
 

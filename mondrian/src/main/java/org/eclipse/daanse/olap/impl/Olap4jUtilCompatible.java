@@ -19,6 +19,8 @@ package org.eclipse.daanse.olap.impl;
 
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
+
 /**
  * Interface containing methods which are implemented differently in different
  * versions of the JDK.

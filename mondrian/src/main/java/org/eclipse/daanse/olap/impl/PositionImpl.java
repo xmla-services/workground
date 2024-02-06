@@ -1,11 +1,11 @@
 package org.eclipse.daanse.olap.impl;
 
+import java.util.AbstractList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-
-import java.util.AbstractList;
-import java.util.List;
 
 public class PositionImpl extends AbstractList<Member> implements Position {
 

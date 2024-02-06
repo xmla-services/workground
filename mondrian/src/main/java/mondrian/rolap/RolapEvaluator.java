@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -43,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;

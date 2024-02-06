@@ -11,8 +11,6 @@ package mondrian.util;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
-
 /**
  * Holder for constants which indicate whether particular issues have been
  * fixed. Reference one of those constants in your code, and it is clear which

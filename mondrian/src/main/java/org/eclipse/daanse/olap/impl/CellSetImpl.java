@@ -1,10 +1,8 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.QueryAxisImpl;
-import mondrian.rolap.RolapCell;
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Execution;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
@@ -17,8 +15,11 @@ import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.Result;
 
-import java.util.ArrayList;
-import java.util.List;
+import mondrian.olap.MondrianException;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.rolap.RolapCell;
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Execution;
 
 public class CellSetImpl extends Execution implements CellSet {
 

@@ -14,9 +14,9 @@
 
 package org.eclipse.daanse.olap.api.result;
 
-import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
  * A <code>Axis</code> is a component of a {@link Result}.

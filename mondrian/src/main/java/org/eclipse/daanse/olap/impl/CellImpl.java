@@ -1,9 +1,10 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.olap.Util;
-import mondrian.rolap.RolapCell;
-import mondrian.rolap.RolapMember;
-import mondrian.rolap.SqlStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
@@ -15,10 +16,10 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.slf4j.Logger;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapCell;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.SqlStatement;
 
 public class CellImpl implements Cell {
     private final int[] coordinates;

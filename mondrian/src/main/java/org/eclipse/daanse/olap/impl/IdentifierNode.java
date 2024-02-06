@@ -17,10 +17,10 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
-
 import java.util.AbstractList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Multi-part identifier.

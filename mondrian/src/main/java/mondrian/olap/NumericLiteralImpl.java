@@ -24,9 +24,9 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
+import org.eclipse.daanse.olap.impl.UnmodifiableArrayMap;
 
 import mondrian.olap.type.NumericType;
-import org.eclipse.daanse.olap.impl.UnmodifiableArrayMap;
 
 public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implements NumericLiteral {
 	private static final NumericLiteralImpl negativeOne = new NumericLiteralImpl(BigDecimal.ONE.negate());

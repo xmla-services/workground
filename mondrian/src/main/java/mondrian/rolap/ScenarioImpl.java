@@ -9,6 +9,8 @@
 
 package mondrian.rolap;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,6 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * Implementation of {@link org.olap4j.Scenario}.

@@ -28,13 +28,10 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.element.Schema;
 
 /**
  * API for controlling the contents of the cell cache and the member cache.

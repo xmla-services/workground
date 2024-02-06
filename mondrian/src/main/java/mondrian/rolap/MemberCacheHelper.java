@@ -11,6 +11,8 @@
 */
 package mondrian.rolap;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,8 +28,6 @@ import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.Pair;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * Encapsulation of member caching.

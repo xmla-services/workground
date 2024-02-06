@@ -24,7 +24,6 @@ import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.HierarchyUsage;

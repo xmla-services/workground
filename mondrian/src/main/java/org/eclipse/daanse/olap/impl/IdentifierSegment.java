@@ -17,9 +17,9 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import org.eclipse.daanse.olap.api.Quoting;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Quoting;
 
 /**
  * Component in a compound identifier. It is described by its name and how

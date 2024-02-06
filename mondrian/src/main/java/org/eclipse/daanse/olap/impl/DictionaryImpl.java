@@ -17,9 +17,14 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Implementation of {@link org.olap4j.metadata.XmlaConstant.Dictionary}.

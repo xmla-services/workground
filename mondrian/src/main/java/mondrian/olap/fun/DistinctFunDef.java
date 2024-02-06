@@ -23,7 +23,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 
 /**
  * Definition of the <code>Distinct</code> MDX function.

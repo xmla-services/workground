@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Segment;
 
-import mondrian.olap.IdImpl;
-
 /**
  * A <code>MemberSource</code> has the basic operations to read the members of a
  * {@link RolapHierarchy hierarchy}.

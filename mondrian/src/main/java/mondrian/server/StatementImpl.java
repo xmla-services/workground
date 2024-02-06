@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
 

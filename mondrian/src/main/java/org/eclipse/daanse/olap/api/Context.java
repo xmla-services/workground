@@ -18,7 +18,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import mondrian.rolap.RolapConnectionProps;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
@@ -28,6 +27,7 @@ import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Statement;

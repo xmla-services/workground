@@ -11,6 +11,8 @@
 
 package mondrian.olap.fun;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -52,8 +54,6 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.fun.sort.SortKeySpec;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.fun.sort.Sorter.SorterFlag;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * Definition of the <code>Order</code> MDX function.

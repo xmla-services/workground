@@ -21,7 +21,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 
 /**

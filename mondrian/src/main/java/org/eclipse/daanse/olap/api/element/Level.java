@@ -14,12 +14,12 @@
 
 package org.eclipse.daanse.olap.api.element;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.SchemaReader;
 
 import mondrian.olap.Property;
 import mondrian.spi.MemberFormatter;
-
-import java.util.List;
 
 /**
  * A <code>Level</code> is a group of {@link Member}s in a {@link Hierarchy},

@@ -17,10 +17,10 @@
 */
 package org.eclipse.daanse.olap.impl;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.result.Olap4jUtil;
-
-import java.util.List;
 
 /**
  * Component in a compound identifier that describes the name of an object.

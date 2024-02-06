@@ -10,6 +10,8 @@
 */
 package mondrian.rolap.agg;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -50,8 +52,6 @@ import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * <p>

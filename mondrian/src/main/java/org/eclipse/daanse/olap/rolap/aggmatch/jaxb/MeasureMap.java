@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.olap.rolap.aggmatch.jaxb;
 
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import mondrian.rolap.aggmatcher.Recognizer;
-
-import java.util.List;
 
 /**
  * This is the template that maps from a combination of measure

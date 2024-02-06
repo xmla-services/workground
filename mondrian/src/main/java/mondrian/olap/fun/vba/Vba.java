@@ -10,6 +10,8 @@
 */
 package mondrian.olap.fun.vba;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
@@ -26,8 +28,6 @@ import mondrian.olap.InvalidArgumentException;
 import mondrian.olap.fun.JavaFunDef.Description;
 import mondrian.olap.fun.JavaFunDef.FunctionName;
 import mondrian.olap.fun.JavaFunDef.Signature;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * Implementations of functions in the Visual Basic for Applications (VBA)

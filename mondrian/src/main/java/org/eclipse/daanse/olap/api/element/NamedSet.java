@@ -14,11 +14,11 @@
 
 package org.eclipse.daanse.olap.api.element;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
-
-import java.util.List;
 
 /**
  * A named set of members or tuples.

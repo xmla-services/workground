@@ -1,19 +1,20 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
-import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
-import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.result.Axis;
-import org.eclipse.daanse.olap.api.result.IAxis;
-import org.eclipse.daanse.olap.api.result.CellSet;
-import org.eclipse.daanse.olap.api.result.CellSetAxis;
-import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
-import org.eclipse.daanse.olap.api.result.Position;
-
 import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.api.result.CellSetAxis;
+import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
+import org.eclipse.daanse.olap.api.result.IAxis;
+import org.eclipse.daanse.olap.api.result.Position;
+
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Locus;
 
 public class CellSetAxisImpl implements CellSetAxis {
 

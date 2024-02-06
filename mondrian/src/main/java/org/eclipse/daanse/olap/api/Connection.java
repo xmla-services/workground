@@ -42,9 +42,9 @@ import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.Scenario;
 
 import mondrian.olap.QueryImpl;
-import org.eclipse.daanse.olap.api.result.Scenario;
 
 /**
  * Connection to a multi-dimensional database.

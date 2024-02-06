@@ -1,11 +1,11 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.util.Pair;
-
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import mondrian.util.Pair;
 
 class NamedListMap<T> extends AbstractMap<String, T> {
     private final NamedList<T> namedList;

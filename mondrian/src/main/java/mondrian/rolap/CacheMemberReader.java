@@ -11,6 +11,8 @@
 
 package mondrian.rolap;
 
+import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +26,6 @@ import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
-
-import static org.eclipse.daanse.olap.api.result.Olap4jUtil.discard;
 
 /**
  * <code>CacheMemberReader</code> implements {@link MemberReader} by reading

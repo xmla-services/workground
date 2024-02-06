@@ -13,12 +13,12 @@
  */
 package mondrian.rolap.util;
 
-import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 import mondrian.olap.Util;
+import mondrian.rolap.RolapRuntimeException;
 
 public class JoinUtil {
 

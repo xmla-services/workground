@@ -1,9 +1,10 @@
 package org.eclipse.daanse.olap.api.result;
 
-import mondrian.rolap.RolapMember;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Connection;
 
-import java.util.List;
+import mondrian.rolap.RolapMember;
 
 /**
  * Context for a set of writeback operations.

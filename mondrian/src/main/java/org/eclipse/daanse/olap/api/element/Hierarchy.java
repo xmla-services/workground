@@ -13,12 +13,12 @@
 
 package org.eclipse.daanse.olap.api.element;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
 import mondrian.olap.MondrianProperties;
-
-import java.util.List;
 
 /**
  * A <code>Hierarchy</code> is a set of members, organized into levels.

@@ -11,12 +11,12 @@ package mondrian.rolap;
 
 import java.util.Map;
 
-import mondrian.olap.StringLiteralImpl;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
 import mondrian.olap.Property;
+import mondrian.olap.StringLiteralImpl;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
 

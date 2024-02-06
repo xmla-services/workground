@@ -17,7 +17,9 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Unmodifiable list backed by an array.

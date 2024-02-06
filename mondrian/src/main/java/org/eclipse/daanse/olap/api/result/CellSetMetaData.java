@@ -1,8 +1,8 @@
 package org.eclipse.daanse.olap.api.result;
 
-import org.eclipse.daanse.olap.api.element.Cube;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.element.Cube;
 
 public interface CellSetMetaData {
     List<Property> getCellProperties();

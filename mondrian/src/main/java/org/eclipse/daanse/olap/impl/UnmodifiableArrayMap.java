@@ -17,10 +17,10 @@
 */
 package org.eclipse.daanse.olap.impl;
 
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
-
 import java.util.Collections;
 import java.util.Map;
+
+import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 
 /**
  * Unmodifiable map backed by an array.

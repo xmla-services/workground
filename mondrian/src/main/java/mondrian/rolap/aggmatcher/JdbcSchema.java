@@ -37,13 +37,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
-import mondrian.util.ClassResolver;
 
 /**
  * Metadata gleaned from JDBC about the tables and columns in the star schema.

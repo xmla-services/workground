@@ -16,9 +16,9 @@
 // limitations under the License.
 */
 package org.eclipse.daanse.olap.impl;
-import org.eclipse.daanse.olap.api.Quoting;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Quoting;
 
 /**
  * Segment that represents a key or compound key.

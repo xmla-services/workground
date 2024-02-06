@@ -14,8 +14,8 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
-import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.resource.MondrianResource;

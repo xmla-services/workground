@@ -20,7 +20,10 @@ package org.eclipse.daanse.olap.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Mapping between {@link Locale} and Locale identifier (LCID).

@@ -15,7 +15,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentCache;

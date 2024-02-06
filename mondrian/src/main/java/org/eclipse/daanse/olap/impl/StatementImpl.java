@@ -1,14 +1,12 @@
 package org.eclipse.daanse.olap.impl;
 
-import mondrian.olap.ConnectionBase;
-import mondrian.olap.MondrianException;
-import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryTimeoutException;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapDrillThroughAction;
-import mondrian.server.Locus;
-import mondrian.util.Pair;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Statement;
@@ -22,12 +20,15 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import mondrian.olap.ConnectionBase;
+import mondrian.olap.MondrianException;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapDrillThroughAction;
+import mondrian.server.Locus;
+import mondrian.util.Pair;
 
 public class StatementImpl extends mondrian.server.StatementImpl implements Statement, mondrian.server.Statement {
 

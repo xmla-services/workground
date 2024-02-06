@@ -12,6 +12,7 @@
 
 package mondrian.xmla;
 
+import java.util.Enumeration;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.result.Olap4jUtil;
