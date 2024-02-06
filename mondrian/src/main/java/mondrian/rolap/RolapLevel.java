@@ -135,7 +135,7 @@ public class RolapLevel extends LevelBase {
         MappingExpression ordinalExp,
         MappingExpression parentExp,
         String nullParentValue,
-        MappingClosure xmlClosure,
+        MappingClosure mappingClosure,
         RolapProperty[] properties,
         int flags,
         Datatype datatype,
@@ -199,7 +199,7 @@ public class RolapLevel extends LevelBase {
         Util.assertPrecondition(
             parentExp != null || nullParentValue == null,
             "parentExp != null || nullParentValue == null");
-        this.xmlClosure = xmlClosure;
+        this.xmlClosure = mappingClosure;
         for (RolapProperty property : properties) {
             if (property.getExp() instanceof MappingColumn) {
                 checkColumn((MappingColumn) property.getExp());
@@ -353,43 +353,43 @@ public class RolapLevel extends LevelBase {
     RolapLevel(
         RolapHierarchy hierarchy,
         int depth,
-        MappingLevel xmlLevel)
+        MappingLevel mappingLevel)
     {
 
         this(
             hierarchy,
-            xmlLevel.name(),
-            xmlLevel.caption(),
-            xmlLevel.visible(),
-            xmlLevel.description(),
+            mappingLevel.name(),
+            mappingLevel.caption(),
+            mappingLevel.visible(),
+            mappingLevel.description(),
             depth,
-            LevelUtil.getKeyExp(xmlLevel),
-            LevelUtil.getNameExp(xmlLevel),
-            LevelUtil.getCaptionExp(xmlLevel),
-            LevelUtil.getOrdinalExp(xmlLevel),
-            LevelUtil.getParentExp(xmlLevel),
-            xmlLevel.nullParentValue(),
-            xmlLevel.closure(),
-            createProperties(xmlLevel),
-            (xmlLevel.uniqueMembers() ? FLAG_UNIQUE : 0),
-            org.eclipse.daanse.db.dialect.api.Datatype.fromValue(xmlLevel.type().getValue()),
-            toInternalType(xmlLevel.internalType()),
-            HideMemberCondition.valueOf(xmlLevel.hideMemberIf().getValue()),
+            LevelUtil.getKeyExp(mappingLevel),
+            LevelUtil.getNameExp(mappingLevel),
+            LevelUtil.getCaptionExp(mappingLevel),
+            LevelUtil.getOrdinalExp(mappingLevel),
+            LevelUtil.getParentExp(mappingLevel),
+            mappingLevel.nullParentValue(),
+            mappingLevel.closure(),
+            createProperties(mappingLevel),
+            (mappingLevel.uniqueMembers() ? FLAG_UNIQUE : 0),
+            org.eclipse.daanse.db.dialect.api.Datatype.fromValue(mappingLevel.type().getValue()),
+            toInternalType(mappingLevel.internalType()),
+            HideMemberCondition.valueOf(mappingLevel.hideMemberIf().getValue()),
             LevelType.fromValue(
-                xmlLevel.levelType().getValue().equals("TimeHalfYear")
+                mappingLevel.levelType().getValue().equals("TimeHalfYear")
                     ? "TimeHalfYears"
-                    : xmlLevel.levelType().getValue()),
-            xmlLevel.approxRowCount(),
-            RolapHierarchy.createMetadataMap(xmlLevel.annotations()));
+                    : mappingLevel.levelType().getValue()),
+            mappingLevel.approxRowCount(),
+            RolapHierarchy.createMetadataMap(mappingLevel.annotations()));
 
-        if (!Util.isEmpty(xmlLevel.caption())) {
-            setCaption(xmlLevel.caption());
+        if (!Util.isEmpty(mappingLevel.caption())) {
+            setCaption(mappingLevel.caption());
         }
 
         FormatterCreateContext memberFormatterContext =
             new FormatterCreateContext.Builder(getUniqueName())
-                .formatterDef(xmlLevel.memberFormatter())
-                .formatterAttr(xmlLevel.formatter())
+                .formatterDef(mappingLevel.memberFormatter())
+                .formatterAttr(mappingLevel.formatter())
                 .build();
         memberFormatter =
             FormatterFactory.instance()
@@ -538,7 +538,11 @@ public class RolapLevel extends LevelBase {
             "long", BestFitColumnType.LONG);
 
     private static BestFitColumnType toInternalType(InternalTypeEnum internalType) {
-        BestFitColumnType type = VALUES.get(internalType == null ? null : internalType.getValue());
+        BestFitColumnType type = null;
+        if(internalType!=null) {
+        	
+        	type=VALUES.getOrDefault( internalType.getValue(),null);
+        }
         if (type == null && internalType != null) {
             throw Util.newError(
                 new StringBuilder("Invalid value '").append(internalType.getValue())

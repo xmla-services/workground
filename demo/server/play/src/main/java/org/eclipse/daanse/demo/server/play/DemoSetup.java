@@ -52,9 +52,7 @@ public class DemoSetup {
 
 	private Configuration cXmlaEndpoint3;
 
-
 	private Configuration cCtxs;
-
 
 	@Activate
 	public void activate() throws IOException {
@@ -73,16 +71,14 @@ public class DemoSetup {
 
 		String PATH_TO_OBSERVE = "./catalogs";
 
-		
 //		String PATH_TO_OBSERVE = "./../../../../../catalogs";
 
-		String path=Paths.get(PATH_TO_OBSERVE).toAbsolutePath().normalize().toString();
-		
-		
+		String path = Paths.get(PATH_TO_OBSERVE).toAbsolutePath().normalize().toString();
+
 		System.out.println(path);
 		System.out.println(path);
 		System.out.println(path);
-		
+
 		Dictionary<String, Object> propsDS = new Hashtable<>();
 		propsDS.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path);
 
@@ -91,7 +87,7 @@ public class DemoSetup {
 		cCtxs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_CONTEXT, "1", "?");
 
 		Dictionary<String, Object> propsCtxs = new Hashtable<>();
-		propsCtxs.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, PATH_TO_OBSERVE);
+		propsCtxs.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path);
 
 		cCtxs.update(propsDS);
 
@@ -133,7 +129,6 @@ public class DemoSetup {
 		dict = new Hashtable<>();
 		dict.put("xmlaService.target", "(service.pid=*)");
 		dict.put("osgi.http.whiteboard.servlet.pattern", "/xmla3");
-		       
 
 		cXmlaEndpoint3.update(dict);
 
@@ -143,8 +138,6 @@ public class DemoSetup {
 		dict = new Hashtable<>();
 		dict.put("osgi.soap.endpoint.selector", "(service.pid=*)");
 		cLoggingHandler.update(dict);
-		
-
 
 	}
 
