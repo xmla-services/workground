@@ -105,7 +105,7 @@ public abstract class AbstractBasicContext implements Context {
 			super.finalize();
 			shutdown(true);
 		} catch (Throwable t) {
-			LOGGER.info(MondrianResource.instance().FinalizerErrorMondrianServerImpl.baseMessage, t);
+			LOGGER.info("An exception was encountered while finalizing a RolapSchema object instance.", t);
 		}
 	}
 
