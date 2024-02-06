@@ -71,10 +71,10 @@ public class DemoSetup {
 
 		cDs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_DS, "1", "?");
 
-//		String PATH_TO_OBSERVE = "./catalogs";
+		String PATH_TO_OBSERVE = "./catalogs";
 
 		
-		String PATH_TO_OBSERVE = "./../../../../../catalogs";
+//		String PATH_TO_OBSERVE = "./../../../../../catalogs";
 
 		String path=Paths.get(PATH_TO_OBSERVE).toAbsolutePath().normalize().toString();
 		
