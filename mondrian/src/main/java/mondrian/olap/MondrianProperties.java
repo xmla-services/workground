@@ -152,18 +152,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new BooleanProperty(
             this, "mondrian.olap.triggers.enable", true);
 
-    /**
-     * <p>Property that defines how many previous execution instances the
-     * <code>Monitor</code> keeps in its history so that it can send the events
-     * which happen after the fact. Setting this property too high will make the
-     * JVM run out of memory. Setting it too low might prevent some events from
-     * reaching the listeners of the monitor.</p>
-     * <p>This property is for internal use only and should not be changed
-     * unless required. Defaults to 1,000.</p>
-     */
-    public transient final IntegerProperty ExecutionHistorySize =
-        new IntegerProperty(
-            this, "mondrian.server.monitor.executionHistorySize", 1000);
+
 
     /**
      * <p>Property that defines

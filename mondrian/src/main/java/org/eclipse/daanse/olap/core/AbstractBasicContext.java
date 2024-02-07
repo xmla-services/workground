@@ -52,7 +52,7 @@ public abstract class AbstractBasicContext implements Context {
 	@SuppressWarnings("unchecked")
 	private final List<Statement> statements =Collections.synchronizedList(new ArrayList<>());
 
-	private final MonitorImpl monitor = new MonitorImpl();
+	private final MonitorImpl monitor = new MonitorImpl(getConfig().executionHistorySize());
 
 	protected AggregationManager aggMgr;
 

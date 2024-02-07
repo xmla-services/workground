@@ -91,7 +91,7 @@ import mondrian.util.Pair;
  */
 public class MonitorImpl implements Monitor, MonitorMXBean {
   private static final Logger LOGGER = LoggerFactory.getLogger( MonitorImpl.class );
-  private final Handler handler = new Handler();
+  private final Handler handler;
 
   protected static final MemoryInfo MEMORY_INFO = getMemoryInfo();
 
@@ -115,9 +115,8 @@ public class MonitorImpl implements Monitor, MonitorMXBean {
   /**
    * Creates a Monitor.
    */
-  public MonitorImpl() {
-      //constructor
-  }
+  public MonitorImpl(int executionHistorySize) {
+	  handler = new Handler( executionHistorySize);  }
 
   // Commands
 
@@ -392,109 +391,113 @@ public List<SqlStatementInfo> getSqlStatements() {
 
   private static class Handler implements CommandVisitor<Object> {
 
-    private final MutableServerInfo server = new MutableServerInfo( null );
+		private final MutableServerInfo server = new MutableServerInfo(null);
 
-    private final Map<Integer, MutableConnectionInfo> connectionMap =
-        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(),
-            0.8f, false ) {
-          private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
-          private static final long serialVersionUID = 1L;
+		private final Map<Integer, MutableConnectionInfo> connectionMap;
+		private final Map<Long, MutableSqlStatementInfo> sqlStatementMap;
+		private final Map<Long, MutableStatementInfo> statementMap;
+		private final Map<Long, MutableExecutionInfo> executionMap;
+	    /**
+	     * Holds info for executions that have ended. Cell cache events may arrive late, and this map lets them get into the
+	     * system.
+	     */
+	    private final Map<Long, MutableExecutionInfo> retiredExecutionMap;
 
-          @Override
-		protected boolean removeEldestEntry( Map.Entry<Integer, MutableConnectionInfo> e ) {
-            if ( size() > maxSize ) {
-              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ConnectionInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.NL)
-                    .append(e.getValue().stack).toString()
-                );
-              }
-              return true;
-            }
-            return false;
-          }
-        };
+		Handler(int executionHistorySize) {
 
-    private final Map<Long, MutableSqlStatementInfo> sqlStatementMap =
-        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(),
-            0.8f, false ) {
-          private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
-          private static final long serialVersionUID = 1L;
+			connectionMap = new LinkedHashMap<>(executionHistorySize, 0.8f, false) {
+				private final int maxSize = executionHistorySize;
+				private static final long serialVersionUID = 1L;
 
-          @Override
-		protected boolean removeEldestEntry( Map.Entry<Long, MutableSqlStatementInfo> e ) {
-            if ( size() > maxSize ) {
-              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
-              }
-              return true;
-            }
-            return false;
-          }
-        };
+				@Override
+				protected boolean removeEldestEntry(Map.Entry<Integer, MutableConnectionInfo> e) {
+					if (size() > maxSize) {
+						if (RolapUtil.MONITOR_LOGGER.isTraceEnabled()) {
+							RolapUtil.MONITOR_LOGGER.trace(new StringBuilder("ConnectionInfo(").append(e.getKey())
+									.append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack)
+									.toString());
+						}
+						return true;
+					}
+					return false;
+				}
+			};
 
-    private final Map<Long, MutableStatementInfo> statementMap =
-        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
-            false ) {
-          private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
-          private static final long serialVersionUID = 1L;
+			sqlStatementMap = new LinkedHashMap<>(executionHistorySize, 0.8f, false) {
+				private final int maxSize = executionHistorySize;
+				private static final long serialVersionUID = 1L;
 
-          @Override
-		protected boolean removeEldestEntry( Map.Entry<Long, MutableStatementInfo> e ) {
-            if ( size() > maxSize ) {
-              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
-              }
-              return true;
-            }
-            return false;
-          }
-        };
+				@Override
+				protected boolean removeEldestEntry(Map.Entry<Long, MutableSqlStatementInfo> e) {
+					if (size() > maxSize) {
+						if (RolapUtil.MONITOR_LOGGER.isTraceEnabled()) {
+							RolapUtil.MONITOR_LOGGER.trace(new StringBuilder("StatementInfo(").append(e.getKey())
+									.append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack)
+									.toString());
+						}
+						return true;
+					}
+					return false;
+				}
+			};
+			statementMap = new LinkedHashMap<>(executionHistorySize, 0.8f, false) {
+				private final int maxSize = executionHistorySize;
+				private static final long serialVersionUID = 1L;
 
-    private final Map<Long, MutableExecutionInfo> executionMap =
-        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
-            false ) {
-          private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
-          private static final long serialVersionUID = 1L;
+				@Override
+				protected boolean removeEldestEntry(Map.Entry<Long, MutableStatementInfo> e) {
+					if (size() > maxSize) {
+						if (RolapUtil.MONITOR_LOGGER.isTraceEnabled()) {
+							RolapUtil.MONITOR_LOGGER.trace(new StringBuilder("StatementInfo(").append(e.getKey())
+									.append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack)
+									.toString());
+						}
+						return true;
+					}
+					return false;
+				}
+			};
+			executionMap = new LinkedHashMap<>(executionHistorySize, 0.8f, false) {
+				private final int maxSize = executionHistorySize;
+				private static final long serialVersionUID = 1L;
 
-          @Override
-		protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
-            if ( size() > maxSize ) {
-              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ExecutionInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
-              }
-              return true;
-            }
-            return false;
-          }
-        };
+				@Override
+				protected boolean removeEldestEntry(Map.Entry<Long, MutableExecutionInfo> e) {
+					if (size() > maxSize) {
+						if (RolapUtil.MONITOR_LOGGER.isTraceEnabled()) {
+							RolapUtil.MONITOR_LOGGER.trace(new StringBuilder("ExecutionInfo(").append(e.getKey())
+									.append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack)
+									.toString());
+						}
+						return true;
+					}
+					return false;
+				}
+			};
+			
+			retiredExecutionMap =
+			        new LinkedHashMap<>( executionHistorySize, 0.8f,
+			            false ) {
+			          private final int maxSize = executionHistorySize;
+			          private static final long serialVersionUID = 1L;
 
-    /**
-     * Holds info for executions that have ended. Cell cache events may arrive late, and this map lets them get into the
-     * system.
-     */
-    private final Map<Long, MutableExecutionInfo> retiredExecutionMap =
-        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
-            false ) {
-          private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
-          private static final long serialVersionUID = 1L;
+			          @Override
+					protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
+			            if ( size() > maxSize ) {
+			              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
+			                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Retired ExecutionInfo(").append(e.getKey())
+			                    .append(") evicted. Stack is:")
+			                    .append(Util.NL).append(e.getValue().stack).toString() );
+			              }
+			              return true;
+			            }
+			            return false;
+			          }
+			        };
 
-          @Override
-		protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
-            if ( size() > maxSize ) {
-              if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Retired ExecutionInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:")
-                    .append(Util.NL).append(e.getValue().stack).toString() );
-              }
-              return true;
-            }
-            return false;
-          }
-        };
+		}
+
+
 
     /**
      * Method for debugging that does nothing, but is a place to put a break point to find out places where an event or
