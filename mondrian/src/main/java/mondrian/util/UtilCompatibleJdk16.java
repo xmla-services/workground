@@ -25,8 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
+
+import static mondrian.resource.MondrianResource.ExecutionStatementCleanupException;
+import static mondrian.resource.MondrianResource.message;
 
 // Only in Java6 and above
 
@@ -87,9 +89,9 @@ public class UtilCompatibleJdk16 implements UtilCompatible  {
             // side.
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("",
-                    MondrianResource.instance()
-                        .ExecutionStatementCleanupException
-                            .ex(t.getMessage(), t),
+                    new IllegalArgumentException(message(
+                        ExecutionStatementCleanupException,
+                            t.getMessage()), t),
                     t);
             }
         }

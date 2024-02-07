@@ -12,6 +12,8 @@
 package mondrian.test.loader;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.resource.MondrianResource.CreateTableFailed;
+import static mondrian.resource.MondrianResource.message;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -1086,8 +1088,8 @@ public abstract class DBLoader {
             }
             return true;
         } catch (Exception e) {
-            throw MondrianResource.instance().CreateTableFailed.ex(
-                table.getName(), e);
+            throw new IllegalArgumentException(message(CreateTableFailed,
+                table.getName()), e);
         } finally {
             closeFileWriter();
         }

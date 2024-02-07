@@ -26,13 +26,15 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.olap.type.SetType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AndPredicate;
 import mondrian.rolap.agg.ListColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.UnsupportedCalculatedMember;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Constructs a Pair<BitKey, StarPredicate> based on an tuple list and measure, along with the string representation of
@@ -356,7 +358,7 @@ public class CompoundPredicateInfo {
     } else if ( type.getArity() == 1 ) {
       return makeUnaryPredicate( member, baseCube, evaluator );
     } else {
-      throw MondrianResource.instance().UnsupportedCalculatedMember.ex( member.getName(), null );
+      throw new IllegalArgumentException(message(UnsupportedCalculatedMember, member.getName(), null ));
     }
   }
 
@@ -366,7 +368,7 @@ public class CompoundPredicateInfo {
     List<Member> expandedMemberList = constraint.getMembers();
     for ( Member checkMember : expandedMemberList ) {
       if ( checkMember == null || checkMember.isCalculated() || !( checkMember instanceof RolapCubeMember ) ) {
-        throw MondrianResource.instance().UnsupportedCalculatedMember.ex( member.getName(), null );
+        throw new IllegalArgumentException(message(UnsupportedCalculatedMember, member.getName(), null ));
       }
     }
     List<StarPredicate> predicates = new ArrayList<>( expandedMemberList.size() );

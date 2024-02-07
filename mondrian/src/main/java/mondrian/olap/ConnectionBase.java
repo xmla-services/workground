@@ -22,8 +22,10 @@ import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.FailedToParseQuery;
 
 /**
  * <code>ConnectionBase</code> implements some of the methods in
@@ -89,7 +91,7 @@ public abstract class ConnectionBase implements Connection {
                 parser.parseInternal(
                     statement, query, debug, funTable, strictValidation);
         } catch (Exception e) {
-            throw MondrianResource.instance().FailedToParseQuery.ex(query, e);
+            throw new IllegalArgumentException(message(FailedToParseQuery, query), e);
         }
     }
 
@@ -122,7 +124,7 @@ public abstract class ConnectionBase implements Connection {
                 parser.parseInternal(
                     statement, query, debug, funTable, strictValidation);
         } catch (Exception e) {
-            throw MondrianResource.instance().FailedToParseQuery.ex(query, e);
+            throw new IllegalArgumentException(message(FailedToParseQuery, query), e);
         }
     }
 }

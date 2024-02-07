@@ -20,7 +20,8 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.type.Type;
 
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.DupHierarchiesInTuple;
 
 /**
  * Tuple type.
@@ -211,8 +212,8 @@ public class TupleType implements Type {
                 final Hierarchy hierarchy = memberType.getHierarchy();
                 final Hierarchy hierarchy1 = member1.getHierarchy();
                 if (hierarchy != null && hierarchy == hierarchy1) {
-                    throw MondrianResource.instance().DupHierarchiesInTuple.ex(
-                        hierarchy.getUniqueName());
+                    throw new IllegalArgumentException(message(DupHierarchiesInTuple,
+                        hierarchy.getUniqueName()));
                 }
             }
         }

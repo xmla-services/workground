@@ -17,8 +17,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnu
 
 import mondrian.olap.Property;
 import mondrian.olap.StringLiteralImpl;
-import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
+
+import static mondrian.resource.MondrianResource.CastInvalidType;
+import static mondrian.resource.MondrianResource.UnknownAggregator;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Measure which is computed from a SQL column (or expression) and which is
@@ -127,9 +130,9 @@ public class RolapBaseCubeMeasure
                 buf.append(aggName);
                 buf.append('\'');
             }
-            throw MondrianResource.instance().UnknownAggregator.ex(
+            throw new IllegalArgumentException(message(UnknownAggregator,
                 aggregatorName,
-                buf.toString());
+                buf.toString()));
         }
 
         setProperty(Property.AGGREGATION_TYPE.name, aggregator);
@@ -143,7 +146,7 @@ public class RolapBaseCubeMeasure
             }
         }
         if (RolapBaseCubeMeasure.DataType.valueOf(datatype.getValue()) == null) {
-            throw MondrianResource.instance().CastInvalidType.ex(datatype.getValue());
+            throw new IllegalArgumentException(message(CastInvalidType, datatype.getValue()));
         }
         setProperty(Property.DATATYPE.name, datatype.getValue());
     }

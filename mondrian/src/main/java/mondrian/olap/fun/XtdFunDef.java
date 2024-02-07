@@ -33,9 +33,11 @@ import mondrian.olap.DimensionType;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.TimeArgNeeded;
 
 /**
  * Definition of <code>Ytd</code>, <code>Qtd</code>, <code>Mtd</code>, and <code>Wtd</code> MDX builtin functions.
@@ -84,7 +86,7 @@ public Type getResultType( Validator validator, Expression[] args ) {
     }
     final Type type = args[0].getType();
     if ( type.getDimension().getDimensionType() != DimensionType.TIME_DIMENSION) {
-      throw MondrianResource.instance().TimeArgNeeded.ex( getFunctionMetaData().functionAtom().name() );
+      throw new IllegalArgumentException(message(TimeArgNeeded, getFunctionMetaData().functionAtom().name() ));
     }
     return super.getResultType( validator, args );
   }

@@ -63,12 +63,16 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
+
+import static mondrian.resource.MondrianResource.CousinHierarchyMismatch;
+import static mondrian.resource.MondrianResource.MdxChildObjectNotFound;
+import static mondrian.resource.MondrianResource.MemberNotInLevelHierarchy;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.
@@ -1158,8 +1162,8 @@ public class FunUtil extends Util {
       return ancestorMember;
     }
     if ( member.getHierarchy() != ancestorMember.getHierarchy() ) {
-      throw MondrianResource.instance().CousinHierarchyMismatch.ex(
-        member.getUniqueName(), ancestorMember.getUniqueName() );
+      throw new IllegalArgumentException(message(CousinHierarchyMismatch,
+        member.getUniqueName(), ancestorMember.getUniqueName() ));
     }
     if ( member.getLevel().getDepth()
       < ancestorMember.getLevel().getDepth() ) {
@@ -1217,8 +1221,8 @@ public class FunUtil extends Util {
     Level targetLevel ) {
     if ( ( targetLevel != null )
       && ( member.getHierarchy() != targetLevel.getHierarchy() ) ) {
-      throw MondrianResource.instance().MemberNotInLevelHierarchy.ex(
-        member.getUniqueName(), targetLevel.getUniqueName() );
+      throw new IllegalArgumentException(message(MemberNotInLevelHierarchy,
+        member.getUniqueName(), targetLevel.getUniqueName() ));
     }
 
     if ( distance == 0 ) {
@@ -1696,8 +1700,8 @@ public class FunUtil extends Util {
     // todo: check for garbage at end of string
     final Member member = members[ 0 ];
     if ( member == null ) {
-      throw MondrianResource.instance().MdxChildObjectNotFound.ex(
-        string, evaluator.getCube().getQualifiedName() );
+      throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+        string, evaluator.getCube().getQualifiedName() ));
     }
     return member;
   }

@@ -10,6 +10,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.NonTimeLevelInTimeHierarchy;
+import static mondrian.resource.MondrianResource.TimeLevelInNonTimeHierarchy;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 import static mondrian.rolap.util.LevelUtil.getPropertyExp;
 
@@ -46,7 +49,6 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.LevelBase;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
 import mondrian.rolap.util.ExpressionUtil;
@@ -231,16 +233,16 @@ public class RolapLevel extends LevelBase {
         Dimension dim = hierarchy.getDimension();
         if (dim.getDimensionType() == DimensionType.TIME_DIMENSION) {
             if (!levelType.isTime() && !isAll()) {
-                throw MondrianResource.instance()
-                    .NonTimeLevelInTimeHierarchy.ex(getUniqueName());
+                throw new IllegalArgumentException(message(
+                    NonTimeLevelInTimeHierarchy, getUniqueName()));
             }
         } else if (dim.getDimensionType() == null) {
             // there was no dimension type assigned to the dimension
             // - check later
         } else {
             if (levelType.isTime()) {
-                throw MondrianResource.instance()
-                    .TimeLevelInNonTimeHierarchy.ex(getUniqueName());
+                throw new IllegalArgumentException(message(
+                    TimeLevelInNonTimeHierarchy, getUniqueName()));
             }
         }
         this.internalType = internalType;
@@ -540,7 +542,7 @@ public class RolapLevel extends LevelBase {
     private static BestFitColumnType toInternalType(InternalTypeEnum internalType) {
         BestFitColumnType type = null;
         if(internalType!=null) {
-        	
+
         	type=VALUES.getOrDefault( internalType.getValue(),null);
         }
         if (type == null && internalType != null) {

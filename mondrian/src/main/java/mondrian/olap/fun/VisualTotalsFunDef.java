@@ -36,11 +36,12 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Property;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapMemberBase;
 import mondrian.rolap.RolapUtil;
+
+import static mondrian.resource.MondrianResource.VisualTotalsAppliedToTuples;
 
 /**
  * Definition of the <code>VisualTotals</code> MDX function.
@@ -73,8 +74,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
             final SetType setType = (SetType) validatedArg.getType();
             final Type elementType = setType.getElementType();
             if (!(elementType instanceof MemberType)) {
-                throw MondrianResource.instance().VisualTotalsAppliedToTuples
-                    .ex();
+                throw new IllegalArgumentException(VisualTotalsAppliedToTuples);
             }
         }
         return validatedArg;

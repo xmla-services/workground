@@ -14,6 +14,8 @@ import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.LEVEL_MEMBER
 import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.NON_NATIVE;
 import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.OTHER_NATIVE;
 import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.SENTINEL;
+import static mondrian.resource.MondrianResource.LimitExceededDuringCrossjoin;
+import static mondrian.resource.MondrianResource.message;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -76,7 +78,6 @@ import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 
 /**
  * Definition of the <code>NativizeSet</code> MDX function.
@@ -1174,8 +1175,8 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
             // Throw an exeption if the size of the crossjoin exceeds the result
             // limit.
             if (resultLimit < resultSize) {
-                throw MondrianResource.instance()
-                    .LimitExceededDuringCrossjoin.ex(resultSize, resultLimit);
+                throw new IllegalArgumentException(message(
+                    LimitExceededDuringCrossjoin, resultSize, resultLimit));
             }
         }
 

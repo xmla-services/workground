@@ -69,7 +69,6 @@ import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.parser.MdxParserValidator;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
@@ -77,6 +76,8 @@ import mondrian.server.StatementImpl;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.MemoryMonitorFactory;
 
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.FailedToParseQuery;
 
 public class RolapConnection extends ConnectionBase {
   private static final Logger LOGGER =
@@ -468,8 +469,8 @@ public Expression parseExpression( String expr ) {
       final FunctionTable funTable = getSchema().getFunTable();
       return parser.parseExpression( statement, expr, debug, funTable );
     } catch ( Throwable exception ) {
-      throw MondrianResource.instance().FailedToParseQuery.ex(
-        expr,
+      throw new IllegalArgumentException(message(FailedToParseQuery,
+        expr),
         exception );
     }
   }

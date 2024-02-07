@@ -25,7 +25,8 @@ import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxCubeName;
 
 /**
  * <code>CubeBase</code> is an abstract implementation of {@link Cube}.
@@ -77,7 +78,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
 
     @Override
 	public String getQualifiedName() {
-        return MondrianResource.instance().MdxCubeName.str(getName());
+        return message(MdxCubeName, getName());
     }
 
     @Override

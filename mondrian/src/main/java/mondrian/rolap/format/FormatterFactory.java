@@ -12,11 +12,15 @@ package mondrian.rolap.format;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.impl.Scripts;
+
+import static mondrian.resource.MondrianResource.CellFormatterLoadFailed;
+import static mondrian.resource.MondrianResource.MemberFormatterLoadFailed;
+import static mondrian.resource.MondrianResource.PropertyFormatterLoadFailed;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Formatter factory to provide a single point
@@ -70,10 +74,10 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw MondrianResource.instance().CellFormatterLoadFailed.ex(
+            throw new IllegalArgumentException(message(CellFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
-                e);
+                e));
         }
         return null;
     }
@@ -99,10 +103,10 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw MondrianResource.instance().MemberFormatterLoadFailed.ex(
+            throw new IllegalArgumentException(message(MemberFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
-                e);
+                e));
         }
         return DEFAULT_MEMBER_FORMATTER;
     }
@@ -129,10 +133,10 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw MondrianResource.instance().PropertyFormatterLoadFailed.ex(
+            throw new IllegalArgumentException(message(PropertyFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
-                e);
+                e));
         }
         return DEFAULT_PROPERTY_FORMATTER;
     }

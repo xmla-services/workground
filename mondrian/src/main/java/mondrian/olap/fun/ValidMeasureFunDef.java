@@ -31,9 +31,11 @@ import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapVirtualCubeMeasure;
+
+import static mondrian.resource.MondrianResource.ValidMeasureUsingCalculatedMember;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>ValidMeasure</code> MDX function.
@@ -115,9 +117,7 @@ public class ValidMeasureFunDef extends AbstractFunctionDefinition
                 .isAssignableFrom(vcMeasure.getClass()))
             {
                 // Cannot use calculated members in ValidMeasure.
-                throw MondrianResource.instance()
-                    .ValidMeasureUsingCalculatedMember
-                    .ex(vcMeasure.getUniqueName());
+                throw new IllegalArgumentException(message(ValidMeasureUsingCalculatedMember,vcMeasure.getUniqueName()));
             }
 
             baseCube = ((RolapVirtualCubeMeasure)vcMeasure).getCube();

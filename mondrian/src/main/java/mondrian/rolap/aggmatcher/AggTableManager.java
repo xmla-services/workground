@@ -30,11 +30,16 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.recorder.ListRecorder;
 import mondrian.recorder.MessageRecorder;
 import mondrian.recorder.RecorderException;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
+
+import static mondrian.resource.MondrianResource.AggLoadingError;
+import static mondrian.resource.MondrianResource.AggLoadingExceededErrorCount;
+import static mondrian.resource.MondrianResource.AggTableZeroSize;
+import static mondrian.resource.MondrianResource.UnknownFactTableColumn;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Manages aggregate tables.
@@ -55,8 +60,6 @@ public class AggTableManager {
         LoggerFactory.getLogger(AggTableManager.class);
 
     private final RolapSchema schema;
-
-    private static final MondrianResource mres = MondrianResource.instance();
 
     public AggTableManager(final RolapSchema schema) {
         this.schema = schema;
@@ -96,7 +99,7 @@ public class AggTableManager {
             try {
                 loadRolapStarAggregates(connectionProps);
             } catch (SQLException ex) {
-                throw mres.AggLoadingError.ex(ex);
+                throw new IllegalArgumentException(AggLoadingError, ex);
             }
         }
         printResults();
@@ -286,7 +289,7 @@ public class AggTableManager {
                             if (aggStar.getSize(schema.getInternalConnection().getContext().getConfig().chooseAggregateByVolume()) > 0) {
                                 star.addAggStar(aggStar);
                             } else {
-                                String msg = mres.AggTableZeroSize.str(
+                                String msg = message(AggTableZeroSize,
                                     aggStar.getFactTable().getName(),
                                     factTableName);
                                 getLogger().warn(msg);
@@ -307,8 +310,8 @@ public class AggTableManager {
             msgRecorder.logWarningMessage(getLogger());
             msgRecorder.logErrorMessage(getLogger());
             if (msgRecorder.hasErrors()) {
-                throw mres.AggLoadingExceededErrorCount.ex(
-                    msgRecorder.getErrorCount());
+                throw new IllegalArgumentException(message(AggLoadingExceededErrorCount,
+                    msgRecorder.getErrorCount()));
             }
         }
     }
@@ -417,7 +420,7 @@ public class AggTableManager {
                 // warn if it has not been identified
                 if (!factColumn.hasUsage() && getLogger().isDebugEnabled()) {
                     getLogger().debug(
-                        mres.UnknownFactTableColumn.str(
+                        message(UnknownFactTableColumn,
                             msgRecorder.getContext(),
                             dbFactTable.getName(),
                             factColumn.getName()));

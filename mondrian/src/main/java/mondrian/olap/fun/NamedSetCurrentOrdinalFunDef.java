@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.NotANamedSet;
 
 /**
  * Definition of the <code>&lt;Named Set&gt;.CurrentOrdinal</code> MDX builtin
@@ -44,7 +44,7 @@ public class NamedSetCurrentOrdinalFunDef extends AbstractFunctionDefinition {
         assert args.length == 1;
         final Expression arg0 = args[0];
         if (!(arg0 instanceof NamedSetExpression)) {
-            throw MondrianResource.instance().NotANamedSet.ex();
+            throw new IllegalArgumentException(NotANamedSet);
         }
         return super.createCall(validator, args);
     }

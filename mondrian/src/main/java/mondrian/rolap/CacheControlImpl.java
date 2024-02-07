@@ -8,6 +8,10 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.CacheFlushCrossjoinDimensionsInCommon;
+import static mondrian.resource.MondrianResource.CacheFlushRegionMustContainMembers;
+import static mondrian.resource.MondrianResource.CacheFlushUnionDimensionalityMismatch;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 import java.io.PrintWriter;
@@ -37,7 +41,6 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.server.Execution;
@@ -121,9 +124,8 @@ public class CacheControlImpl implements CacheControl {
             List<Dimension> dimensionality = region.getDimensionality();
             set.addAll(dimensionality);
             if (set.size() < prevSize + dimensionality.size()) {
-                throw MondrianResource.instance()
-                    .CacheFlushCrossjoinDimensionsInCommon.ex(
-                        getDimensionalityList(regions));
+                throw new IllegalArgumentException(
+                    message(CacheFlushCrossjoinDimensionsInCommon, getDimensionalityList(regions)));
             }
 
             flattenCrossjoin((CellRegionImpl) region, list);
@@ -160,10 +162,10 @@ public class CacheControlImpl implements CacheControl {
             if (!region.getDimensionality().equals(
                     regions[0].getDimensionality()))
             {
-                throw MondrianResource.instance()
-                    .CacheFlushUnionDimensionalityMismatch.ex(
+                throw new IllegalArgumentException(message(
+                    CacheFlushUnionDimensionalityMismatch,
                         regions[0].getDimensionality().toString(),
-                        region.getDimensionality().toString());
+                        region.getDimensionality().toString()));
             }
             list.add((CellRegionImpl) region);
         }
@@ -221,8 +223,7 @@ public class CacheControlImpl implements CacheControl {
             }
         }
         if (!found) {
-            throw MondrianResource.instance().CacheFlushRegionMustContainMembers
-                .ex();
+            throw new IllegalArgumentException(CacheFlushRegionMustContainMembers);
         }
         final UnionCellRegion union = normalize((CellRegionImpl) region);
         for (CellRegionImpl cellRegion : union.regions) {

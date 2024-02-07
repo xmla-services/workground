@@ -23,12 +23,13 @@ import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.server.monitor.ExecutionEndEvent;
 import mondrian.server.monitor.ExecutionPhaseEvent;
 import mondrian.server.monitor.ExecutionStartEvent;
+
+import static mondrian.resource.MondrianResource.QueryCanceled;
 
 /**
  * Execution context.
@@ -196,7 +197,7 @@ public class Execution {
             Thread.currentThread().interrupt();
           }
         }
-        throw MondrianResource.instance().QueryCanceled.ex();
+        throw new IllegalArgumentException(QueryCanceled);
       case RUNNING:
       case TIMEOUT:
         if ( timeoutTimeMillis > 0 ) {
@@ -204,7 +205,7 @@ public class Execution {
 //          if ( currTime > timeoutTimeMillis ) {
 //            this.state = State.TIMEOUT;
 //            fireExecutionEndEvent();
-//            throw MondrianResource.instance().QueryTimeout.ex( timeoutIntervalMillis / 1000 );
+//            throw new InvalidArgumentException(message(QueryTimeout, timeoutIntervalMillis / 1000 ));
 //          }
         }
         break;

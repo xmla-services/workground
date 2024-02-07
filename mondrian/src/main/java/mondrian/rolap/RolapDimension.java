@@ -27,8 +27,11 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.DimensionBase;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.util.DimensionTypeUtil;
+
+import static mondrian.resource.MondrianResource.NonTimeLevelInTimeHierarchy;
+import static mondrian.resource.MondrianResource.TimeLevelInNonTimeHierarchy;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * <code>RolapDimension</code> implements {@link Dimension}for a ROLAP
@@ -153,16 +156,16 @@ class RolapDimension extends DimensionBase {
                             && !lev.getLevelType().isTime()
                             && !lev.isAll())
                         {
-                            throw MondrianResource.instance()
-                                .NonTimeLevelInTimeHierarchy.ex(
-                                    getUniqueName());
+                            throw new IllegalArgumentException(message(
+                                NonTimeLevelInTimeHierarchy,
+                                    getUniqueName()));
                         }
                         if (dimensionType != DimensionType.TIME_DIMENSION
                             && lev.getLevelType().isTime())
                         {
-                            throw MondrianResource.instance()
-                                .TimeLevelInNonTimeHierarchy.ex(
-                                    getUniqueName());
+                            throw new IllegalArgumentException(message(
+                                TimeLevelInNonTimeHierarchy,
+                                    getUniqueName()));
                         }
                     }
                 }

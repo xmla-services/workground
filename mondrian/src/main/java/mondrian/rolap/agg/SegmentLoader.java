@@ -34,7 +34,6 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapUtil;
@@ -50,6 +49,10 @@ import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
+import static mondrian.resource.MondrianResource.SegmentFetchLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * <p>
@@ -635,8 +638,8 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw MondrianResource.instance().JavaDoubleOverflow.ex( rawRows.getMetaData().getColumnName(
-                    columnIndex + 1 ) );
+                throw new IllegalArgumentException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                    columnIndex + 1 ) ));
               }
               axisValueSets[axisIndex].add( val );
               processedRows.setDouble( columnIndex, val );
@@ -709,8 +712,8 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw MondrianResource.instance().JavaDoubleOverflow.ex( rawRows.getMetaData().getColumnName(
-                    columnIndex + 1 ) );
+                throw new IllegalArgumentException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                    columnIndex + 1 ) ));
               }
               processedRows.setDouble( columnIndex, val );
             }
@@ -731,7 +734,7 @@ public class SegmentLoader {
   private void checkResultLimit( int currentCount ) {
     final int limit = MondrianProperties.instance().ResultLimit.get();
     if ( limit > 0 && currentCount > limit ) {
-      throw MondrianResource.instance().SegmentFetchLimitExceeded.ex( limit );
+      throw new IllegalArgumentException(message(SegmentFetchLimitExceeded, limit ));
     }
   }
 

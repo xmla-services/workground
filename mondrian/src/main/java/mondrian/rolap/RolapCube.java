@@ -11,6 +11,21 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.BadMeasureSource;
+import static mondrian.resource.MondrianResource.CalcMemberHasBadDimension;
+import static mondrian.resource.MondrianResource.CalcMemberHasBothDimensionAndHierarchy;
+import static mondrian.resource.MondrianResource.CalcMemberHasDifferentParentAndHierarchy;
+import static mondrian.resource.MondrianResource.CalcMemberHasUnknownParent;
+import static mondrian.resource.MondrianResource.CalcMemberNotUnique;
+import static mondrian.resource.MondrianResource.ExprAndValueForMemberProperty;
+import static mondrian.resource.MondrianResource.HierarchyInvalidForeignKey;
+import static mondrian.resource.MondrianResource.HierarchyMustHaveForeignKey;
+import static mondrian.resource.MondrianResource.MeasureOrdinalsNotUnique;
+import static mondrian.resource.MondrianResource.NamedSetNotUnique;
+import static mondrian.resource.MondrianResource.NeitherExprNorValueForCalcMemberProperty;
+import static mondrian.resource.MondrianResource.NoTimeDimensionInCube;
+import static mondrian.resource.MondrianResource.UnknownNamedSetHasBadFormula;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.CalculatedMemberUtil.getFormatString;
 import static mondrian.rolap.util.CalculatedMemberUtil.getFormula;
 import static mondrian.rolap.util.JoinUtil.changeLeftRight;
@@ -129,7 +144,6 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.format.FormatterCreateContext;
@@ -599,8 +613,8 @@ public class RolapCube extends CubeBase {
         MappingExpression measureExp;
         if (xmlMeasure.column() != null) {
             if (xmlMeasure.measureExpression() != null) {
-                throw MondrianResource.instance().BadMeasureSource.ex(
-                    xmlCube.name(), xmlMeasure.name());
+                throw new IllegalArgumentException(message(BadMeasureSource,
+                    xmlCube.name(), xmlMeasure.name()));
             }
             measureExp = new ColumnR(
                 getAlias(fact), xmlMeasure.column());
@@ -610,8 +624,8 @@ public class RolapCube extends CubeBase {
             // it's ok if count has no expression; it means 'count(*)'
             measureExp = null;
         } else {
-            throw MondrianResource.instance().BadMeasureSource.ex(
-                xmlCube.name(), xmlMeasure.name());
+            throw new IllegalArgumentException(message(BadMeasureSource,
+                xmlCube.name(), xmlMeasure.name()));
         }
 
         // Validate aggregator name. Substitute deprecated "distinct count"
@@ -1145,11 +1159,11 @@ public class RolapCube extends CubeBase {
             if (!ordinals.containsKey(ordinal)) {
                 ordinals.put(ordinal, measure.getUniqueName());
             } else {
-                throw MondrianResource.instance().MeasureOrdinalsNotUnique.ex(
+                throw new IllegalArgumentException(message(MeasureOrdinalsNotUnique,
                     cubeName,
                     ordinal.toString(),
                     ordinals.get(ordinal),
-                    measure.getUniqueName());
+                    measure.getUniqueName()));
             }
         }
     }
@@ -1245,8 +1259,7 @@ public class RolapCube extends CubeBase {
                     }
                 });
         } catch (Exception e) {
-            throw MondrianResource.instance().UnknownNamedSetHasBadFormula.ex(
-                getName(), e);
+            throw new IllegalArgumentException(message(UnknownNamedSetHasBadFormula, getName()), e);
         }
     }
 
@@ -1292,8 +1305,8 @@ public class RolapCube extends CubeBase {
         StringBuilder buf)
     {
         if (!nameSet.add(xmlNamedSet.name())) {
-            throw MondrianResource.instance().NamedSetNotUnique.ex(
-                xmlNamedSet.name(), getName());
+            throw new IllegalArgumentException(message(NamedSetNotUnique,
+                xmlNamedSet.name(), getName()));
         }
 
         buf.append("SET ")
@@ -1367,9 +1380,9 @@ public class RolapCube extends CubeBase {
         if (xmlCalcMember.hierarchy() != null
             && xmlCalcMember.dimension() != null)
         {
-            throw MondrianResource.instance()
-                .CalcMemberHasBothDimensionAndHierarchy.ex(
-                    xmlCalcMember.name(), getName());
+            throw  new IllegalArgumentException(message(
+                CalcMemberHasBothDimensionAndHierarchy,
+                    xmlCalcMember.name(), getName()));
         }
 
         // Lookup dimension
@@ -1395,8 +1408,8 @@ public class RolapCube extends CubeBase {
                     DataType.HIERARCHY);
         }
         if (hierarchy == null) {
-            throw MondrianResource.instance().CalcMemberHasBadDimension.ex(
-                dimName, xmlCalcMember.name(), getName());
+            throw new IllegalArgumentException(message(CalcMemberHasBadDimension,
+                dimName, xmlCalcMember.name(), getName()));
         }
 
         // Root of fully-qualified name.
@@ -1418,15 +1431,15 @@ public class RolapCube extends CubeBase {
                     DataType.UNKNOWN);
 
             if (parent == null) {
-                throw MondrianResource.instance()
-                    .CalcMemberHasUnknownParent.ex(
-                        parentFqName, xmlCalcMember.name(), getName());
+                throw new IllegalArgumentException(message(
+                    CalcMemberHasUnknownParent,
+                        parentFqName, xmlCalcMember.name(), getName()));
             }
 
             if (parent.getHierarchy() != hierarchy) {
-                throw MondrianResource.instance()
-                .CalcMemberHasDifferentParentAndHierarchy.ex(
-                    xmlCalcMember.name(), getName(), hierarchy.getUniqueName());
+                throw  new IllegalArgumentException(message(
+                CalcMemberHasDifferentParentAndHierarchy,
+                    xmlCalcMember.name(), getName(), hierarchy.getUniqueName()));
             }
         }
 
@@ -1443,9 +1456,9 @@ public class RolapCube extends CubeBase {
                     hierarchy))
             {
                 if (errOnDup) {
-                    throw MondrianResource.instance().CalcMemberNotUnique.ex(
+                    throw new IllegalArgumentException(message(CalcMemberNotUnique,
                         fqName,
-                        getName());
+                        getName()));
                 } else {
                     calculatedMemberList.remove(i);
                     --i;
@@ -1456,9 +1469,9 @@ public class RolapCube extends CubeBase {
         // Check this calc member doesn't clash with one earlier in this
         // batch.
         if (!fqNames.add(fqName)) {
-            throw MondrianResource.instance().CalcMemberNotUnique.ex(
+            throw new IllegalArgumentException(message(CalcMemberNotUnique,
                 fqName,
-                getName());
+                getName()));
         }
 
         final List<? extends MappingCalculatedMemberProperty> xmlProperties =
@@ -1578,14 +1591,13 @@ public class RolapCube extends CubeBase {
         }
         for (MappingCalculatedMemberProperty xmlProperty : xmlProperties) {
             if (xmlProperty.expression() == null && xmlProperty.value() == null) {
-                throw MondrianResource.instance()
-                    .NeitherExprNorValueForCalcMemberProperty.ex(
-                        xmlProperty.name(), memberName, getName());
+                throw  new IllegalArgumentException(message(
+                    NeitherExprNorValueForCalcMemberProperty,
+                        xmlProperty.name(), memberName, getName()));
             }
             if (xmlProperty.expression() != null && xmlProperty.value() != null) {
-                throw MondrianResource.instance().ExprAndValueForMemberProperty
-                    .ex(
-                        xmlProperty.name(), memberName, getName());
+                throw new IllegalArgumentException(
+                    message(ExprAndValueForMemberProperty, xmlProperty.name(), memberName, getName()));
             }
             propNames.add(xmlProperty.name());
             if (xmlProperty.expression() != null) {
@@ -2090,20 +2102,20 @@ public class RolapCube extends CubeBase {
                 if (relation != null && !relation.equals(table.getRelation())) {
                     // HierarchyUsage should have checked this.
                     if (hierarchyUsage.getForeignKey() == null) {
-                        throw MondrianResource.instance()
-                            .HierarchyMustHaveForeignKey.ex(
-                                hierarchy.getName(), getName());
+                        throw new IllegalArgumentException(message(
+                            HierarchyMustHaveForeignKey,
+                                hierarchy.getName(), getName()));
                     }
                     // jhyde: check is disabled until we handle <View> correctly
                     if (false
                         && !starInner.getFactTable().containsColumn(
                             hierarchyUsage.getForeignKey()))
                     {
-                        throw MondrianResource.instance()
-                            .HierarchyInvalidForeignKey.ex(
+                        throw  new IllegalArgumentException(message(
+                            HierarchyInvalidForeignKey,
                                 hierarchyUsage.getForeignKey(),
                                 hierarchy.getName(),
-                                getName());
+                                getName()));
                     }
                     // parameters:
                     //   fact table,
@@ -2705,7 +2717,7 @@ public class RolapCube extends CubeBase {
             }
         }
 
-        throw MondrianResource.instance().NoTimeDimensionInCube.ex(funName);
+        throw new IllegalArgumentException(message(NoTimeDimensionInCube, funName));
     }
 
     /**

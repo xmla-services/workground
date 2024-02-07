@@ -13,6 +13,11 @@
 
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.DimensionUsageHasUnknownLevel;
+import static mondrian.resource.MondrianResource.MustSpecifyForeignKeyForHierarchy;
+import static mondrian.resource.MondrianResource.MustSpecifyPrimaryKeyForHierarchy;
+import static mondrian.resource.MondrianResource.MustSpecifyPrimaryKeyTableForHierarchy;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 import static mondrian.rolap.util.RelationUtil.find;
 import static mondrian.rolap.util.RelationUtil.getAlias;
@@ -33,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context
@@ -359,11 +363,11 @@ public class HierarchyUsage {
             RolapLevel joinLevel = (RolapLevel)
                     Util.lookupHierarchyLevel(hierarchy, cubeDim.level());
             if (joinLevel == null) {
-                throw MondrianResource.instance()
-                    .DimensionUsageHasUnknownLevel.ex(
+                throw new IllegalArgumentException(message(
+                    DimensionUsageHasUnknownLevel,
                         hierarchy.getUniqueName(),
                         cube.getName(),
-                        cubeDim.level());
+                        cubeDim.level()));
             }
             this.joinTable =
                 findJoinTable(hierarchy, getTableAlias(joinLevel.getKeyExp()));
@@ -399,16 +403,16 @@ public class HierarchyUsage {
         final boolean inFactTable = this.joinTable.equals(cube.getFact());
         if (!inFactTable) {
             if (this.joinExp == null) {
-                throw MondrianResource.instance()
-                    .MustSpecifyPrimaryKeyForHierarchy.ex(
+                throw new IllegalArgumentException(message(
+                    MustSpecifyPrimaryKeyForHierarchy,
                         hierarchy.getUniqueName(),
-                        cube.getName());
+                        cube.getName()));
             }
             if (foreignKey == null) {
-                throw MondrianResource.instance()
-                    .MustSpecifyForeignKeyForHierarchy.ex(
+                throw new IllegalArgumentException(message(
+                    MustSpecifyForeignKeyForHierarchy,
                         hierarchy.getUniqueName(),
-                        cube.getName());
+                        cube.getName()));
             }
         }
     }
@@ -429,9 +433,9 @@ public class HierarchyUsage {
         if (tableName == null) {
             table = hierarchy.getUniqueTable();
             if (table == null) {
-                throw MondrianResource.instance()
-                    .MustSpecifyPrimaryKeyTableForHierarchy.ex(
-                        hierarchy.getUniqueName());
+                throw new IllegalArgumentException(message(
+                    MustSpecifyPrimaryKeyTableForHierarchy,
+                        hierarchy.getUniqueName()));
             }
         } else {
             table = find(hierarchy.getRelation(), tableName);

@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.CacheControlImpl;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
@@ -55,6 +54,9 @@ import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.BlockingHashMap;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.SegmentCacheLimitReached;
+import static mondrian.resource.MondrianResource.SqlQueryLimitReached;
 
 @SuppressWarnings( { "JavaDoc", "squid:S1192", "squid:S4274" } )
 // suppressing warnings for asserts, duplicated string constants
@@ -324,8 +326,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$cacheExecutor",
             ( r, executor ) -> {
-                throw MondrianResource.instance()
-                    .SegmentCacheLimitReached.ex();
+                throw new IllegalArgumentException(SegmentCacheLimitReached);
             } );
     }
 
@@ -341,8 +342,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$sqlExecutor",
             ( r, executor ) -> {
-                throw MondrianResource.instance()
-                    .SqlQueryLimitReached.ex();
+                throw new IllegalArgumentException(SqlQueryLimitReached);
             } );
     }
 

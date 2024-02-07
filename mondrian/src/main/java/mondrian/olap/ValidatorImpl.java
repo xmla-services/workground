@@ -36,8 +36,13 @@ import org.eclipse.daanse.olap.query.base.Expressions;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.util.ArrayStack;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxMemberExpIsSet;
+import static mondrian.resource.MondrianResource.MoreThanOneFunctionMatchesSignature;
+import static mondrian.resource.MondrianResource.NoFunctionMatchesSignature;
+import static mondrian.resource.MondrianResource.UnknownParameter;
 
 /**
  * Default implementation of {@link org.eclipse.daanse.olap.api.Validator}.
@@ -114,8 +119,8 @@ abstract class ValidatorImpl implements Validator {
             final Type type = resolved.getType();
             if (!TypeUtil.canEvaluate(type)) {
                 String exprString = Util.unparse(resolved);
-                throw MondrianResource.instance().MdxMemberExpIsSet.ex(
-                    exprString);
+                throw new IllegalArgumentException(message(MdxMemberExpIsSet,
+                    exprString));
             }
         }
 
@@ -233,8 +238,8 @@ abstract class ValidatorImpl implements Validator {
         }
         switch (matchDefs.size()) {
         case 0:
-            throw MondrianResource.instance().NoFunctionMatchesSignature.ex(
-                signature);
+            throw new IllegalArgumentException(message(NoFunctionMatchesSignature,
+                signature));
         case 1:
             break;
         default:
@@ -245,10 +250,10 @@ abstract class ValidatorImpl implements Validator {
                 }
                 buf.append(matchDef.getSignature());
             }
-            throw MondrianResource.instance()
-                .MoreThanOneFunctionMatchesSignature.ex(
+            throw new IllegalArgumentException(message(
+                MoreThanOneFunctionMatchesSignature,
                     signature,
-                    buf.toString());
+                    buf.toString()));
         }
 
         final FunctionDefinition matchDef = matchDefs.get(0);
@@ -402,7 +407,7 @@ abstract class ValidatorImpl implements Validator {
             if (param != null) {
                 return param;
             }
-            throw MondrianResource.instance().UnknownParameter.ex(name);
+            throw new IllegalArgumentException(message(UnknownParameter, name));
         }
     }
 

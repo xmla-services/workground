@@ -9,6 +9,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.QueryCanceled;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -61,7 +62,7 @@ class SqlStatementTest {
 
     execution = new Execution(statMock, 0);
     execution = spy(execution);
-    doThrow(MondrianResource.instance().QueryCanceled.ex())
+    doThrow(new IllegalArgumentException(QueryCanceled))
             .when(execution).checkCancelOrTimeout();
 
     locus = new Locus(execution, "component", "message");

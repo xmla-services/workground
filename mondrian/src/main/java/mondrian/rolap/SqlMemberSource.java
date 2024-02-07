@@ -11,6 +11,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.MemberFetchLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.sql.ResultSet;
@@ -41,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
@@ -384,8 +385,7 @@ class SqlMemberSource
                 if (limit > 0 && limit < stmt.rowCount) {
                     // result limit exceeded, throw an exception
                     throw stmt.handle(
-                        MondrianResource.instance().MemberFetchLimitExceeded.ex(
-                            limit));
+                        new IllegalArgumentException(message(MemberFetchLimitExceeded, limit)));
                 }
 
                 int column = 0;
@@ -1044,8 +1044,8 @@ RME is this right
 
                 if (limit > 0 && limit < stmt.rowCount) {
                     // result limit exceeded, throw an exception
-                    throw MondrianResource.instance().MemberFetchLimitExceeded
-                        .ex(limit);
+                    throw new IllegalArgumentException(message(MemberFetchLimitExceeded,
+                        limit));
                 }
 
                 Object value = accessors.get(0).get();

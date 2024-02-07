@@ -34,7 +34,9 @@ import org.eclipse.daanse.olap.query.base.Expressions;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.CastInvalidType;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>CAST</code> MDX operator.
@@ -162,9 +164,9 @@ public class CastFunDef extends AbstractFunctionDefinition {
             } else if (typeName.equalsIgnoreCase("Integer")) {
                 returnCategory = DataType.INTEGER;
             } else {
-                throw MondrianResource.instance().CastInvalidType.ex(typeName);
+                throw new IllegalArgumentException(message(CastInvalidType, typeName));
             }
-            
+
 
 			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Converts values to another type.",
 					"Cast(<Expression> AS <Type>)", returnCategory, Expressions.categoriesOf(args));

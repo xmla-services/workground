@@ -43,7 +43,11 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.NullValue;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxFuncArgumentsNum;
+import static mondrian.resource.MondrianResource.MdxFuncNotHier;
 
 /**
  * Definition of the <code>StrToSet</code> MDX builtin function.
@@ -52,7 +56,7 @@ import mondrian.resource.MondrianResource;
  * @since Mar 23, 2006
  */
 class StrToSetFunDef extends AbstractFunctionDefinition {
-	
+
 	private static final String NAME = "StrToSet";
 	private static final Syntax SYNTAX = Syntax.Function;
 	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
@@ -75,7 +79,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            MondrianResource.instance().NullValue.ex());
+                            new IllegalArgumentException(NullValue));
                     }
                     return new UnaryTupleList(
                         FunUtil.parseMemberList(evaluator, string, hierarchy));
@@ -90,7 +94,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            MondrianResource.instance().NullValue.ex());
+                            new IllegalArgumentException(NullValue));
                     }
                     return FunUtil.parseTupleList(evaluator, string, hierarchyList);
                 }
@@ -102,7 +106,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().functionAtom().name());
+            throw new IllegalArgumentException( message( MdxFuncArgumentsNum, getFunctionMetaData().functionAtom().name() ));
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -112,8 +116,8 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
             } else if (arg instanceof HierarchyExpressionImpl) {
                 // nothing
             } else {
-                throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getFunctionMetaData().functionAtom().name());
+                throw new IllegalArgumentException( message( MdxFuncNotHier,
+                    String.valueOf(i + 1), getFunctionMetaData().functionAtom().name()));
             }
         }
         return super.createCall(validator, args);
@@ -203,7 +207,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
 			return functionMetaData;
 		}
 
-        
+
 		@Override
 		public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
 			return List.of(functionMetaDataFor(new DataType[] { DataType.STRING }));

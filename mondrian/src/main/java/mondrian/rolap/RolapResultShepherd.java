@@ -28,9 +28,11 @@ import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.QueryLimitReached;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * A utility class for {@link RolapConnection}. It specializes in
@@ -80,9 +82,9 @@ public class RolapResultShepherd {
                         Runnable r,
                         ThreadPoolExecutor executor)
                     {
-                        throw MondrianResource.instance().QueryLimitReached.ex(
+                        throw new IllegalArgumentException(message(QueryLimitReached,
                             maximumPoolSize,
-                            "rolapConnectionShepherdNbThreads");
+                            "rolapConnectionShepherdNbThreads"));
                     }
                 });
 

@@ -25,9 +25,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
+
+import static mondrian.resource.MondrianResource.CurrentMemberWithCompoundSlicer;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>&lt;Hierarchy&gt;.CurrentMember</code> MDX builtin function.
@@ -123,13 +125,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       Set<Member> members = map.get( hierarchy );
 
       if ( members != null && members.size() > 1 ) {
-        MondrianException exception =
-            MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
+          IllegalArgumentException exception =
+            new IllegalArgumentException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
 
         if ( alertValue.equalsIgnoreCase( "WARN" ) ) {
           HierarchyCurrentMemberFunDef.LOGGER.warn( exception.getMessage() );
         } else if ( alertValue.equalsIgnoreCase("ERROR") ) {
-          throw MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
+          throw new IllegalArgumentException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
         }
       }
     }

@@ -29,8 +29,9 @@ import org.eclipse.daanse.olap.api.query.component.*;
 import org.eclipse.daanse.olap.api.function.*;
 import mondrian.mdx.*;
 import mondrian.parser.*;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
+import static mondrian.resource.MondrianResource.InvalidAxis;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * MDX parser, generated from MdxParser.jj.
@@ -1451,8 +1452,8 @@ QueryAxis axisSpecification() :
             if (number.doubleValue() < 0
                 || number.doubleValue() != number.intValue())
             {
-                throw MondrianResource.instance().InvalidAxis.ex(
-                    number.doubleValue());
+                throw new IllegalArgumentException(message(InvalidAxis,
+                    number.doubleValue()));
             }
 
             axis = AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(

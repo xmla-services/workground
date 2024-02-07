@@ -25,7 +25,8 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxHierarchyName;
 
 /**
  * Skeleton implementation for {@link Hierarchy}.
@@ -146,8 +147,7 @@ public abstract class HierarchyBase
 
     @Override
 	public String getQualifiedName() {
-        return MondrianResource.instance().MdxHierarchyName.str(
-            getUniqueName());
+        return message(MdxHierarchyName, getUniqueName());
     }
 
     public abstract boolean isRagged();
