@@ -21,6 +21,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.sql.DataSource;
 
+import mondrian.server.MonitorImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
@@ -94,6 +95,7 @@ public class BasicContext extends AbstractBasicContext {
 	public void activate1(BasicContextConfig configuration) throws Exception {
 
 		this.config = configuration;
+		this.monitor = new MonitorImpl(getConfig().executionHistorySize());
 
 		queryLimitSemaphore = new Semaphore(config.queryLimit());
 
