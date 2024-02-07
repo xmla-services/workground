@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
@@ -122,6 +123,8 @@ public interface Context {
     BasicContextConfig getConfig();
     
     Semaphore getQueryLimitSemaphore();
+
+	Optional<Map<Object, Object>> getSqlMemberSourceValuePool();
     
     
 }

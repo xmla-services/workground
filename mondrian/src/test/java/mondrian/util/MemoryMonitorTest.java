@@ -133,7 +133,7 @@ Does not work without the notify on add feature.
             }
         }
         Listener listener = new Listener();
-        MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(false);
+        MemoryMonitor mm = new NotificationMemoryMonitor();
         // we will set a percentage slightly above the current
         // used level, and then allocate some objects that will
         // force a notification.
@@ -263,11 +263,9 @@ Does not work without the notify on add feature.
             + "from [Sales]";
 
         List<Result> list = new ArrayList<>();
-        MemoryMonitor mm = null;
+        MemoryMonitor mm = new TestMM();
         try {
-            MemoryMonitorFactory.setThreadLocalClassName(
-                TestMM.class.getName());
-            mm = MemoryMonitorFactory.getMemoryMonitor(false);
+
             boolean b = causeGC(mm);
 //System.out.println("causeGC="+b);
             long neededMemory = 5000000;
@@ -342,7 +340,7 @@ Does not work without the notify on add feature.
             for (Result result : list) {
                 result.close();
             }
-            MemoryMonitorFactory.clearThreadLocalClassName();
+
 //System.out.println("MemoryMonitorTest: BOTTOM");
 //System.out.flush();
         }

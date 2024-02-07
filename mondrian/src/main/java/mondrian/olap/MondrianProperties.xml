@@ -650,36 +650,7 @@ generated.</p>
         <Type>int</Type>
         <Default>90</Default>
     </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>MemoryMonitorClass</Name>
-        <Path>mondrian.util.MemoryMonitor.class</Path>
-        <Category>Factories</Category>
-        <Description>
-<p>Property that defines
-the name of the class used as a memory monitor.</p>
 
-<p>If the value is
-non-null, it is used by the <code>MemoryMonitorFactory</code>
-to create the implementation.</p>
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
-    <PropertyDefinition>
-        <Name>SqlMemberSourceValuePoolFactoryClass</Name>
-        <Path>mondrian.rolap.SqlMemberSource.ValuePoolFactory.class</Path>
-        <Category>Factories</Category>
-        <Description>
-<p>Property that defines the name of the class used in SqlMemberSource
-to pool common values.</p>
-
-<p>If the value is non-null, it is used by the
-<code>SqlMemberSource.ValueMapFactory</code>
-to create the implementation.  If it is not set, then
-{@link mondrian.rolap.SqlMemberSource.NullValuePoolFactory}
-will be used, meaning common values will not be pooled.</p>
-        </Description>
-        <Type>String</Type>
-    </PropertyDefinition>
     <PropertyDefinition>
         <Name>CrossJoinOptimizerSize</Name>
         <Path>mondrian.olap.fun.crossjoin.optimizer.size</Path>

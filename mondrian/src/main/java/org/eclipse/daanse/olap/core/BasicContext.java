@@ -181,4 +181,9 @@ public class BasicContext extends AbstractBasicContext {
 	public Semaphore getQueryLimitSemaphore() {
 		return queryLimitSemaphore;
 	}
+
+	@Override
+	public Optional<Map<Object, Object>> getSqlMemberSourceValuePool() {
+		return Optional.empty(); //Caffein Cache is an option
+	}
 }

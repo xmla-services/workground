@@ -510,10 +510,6 @@ public interface BasicContextConfig {
     @AttributeDefinition(name = "%memoryMonitorThreshold.name", description = "%memoryMonitorThreshold.description", type = AttributeType.BOOLEAN)
     default Integer memoryMonitorThreshold() { return 90; }
 
-    //Property that defines the name of the class used as a memory monitor. If the value is non-null, it is used by the MemoryMonitorFactory to create the implementation.
-    @AttributeDefinition(name = "%memoryMonitorClass.name", description = "%memoryMonitorClass.description", type = AttributeType.STRING)
-    default String memoryMonitorClass() { return null; }
-
     //Property that defines the name of the class used to compile scalar expressions. If the value is non-null, it is used by the ExpCompiler.Factory to create the implementation. To test that for all test MDX queries that all functions can handle requests for ITERABLE, LIST and MUTABLE_LIST evaluation results, use the following: mondrian.calc.ExpCompiler.class=mondrian.olap.fun.ResultStyleCompiler
     @AttributeDefinition(name = "%expCompilerClass.name", description = "%expCompilerClass.description", type = AttributeType.STRING)
     default String expCompilerClass() { return null; }
@@ -521,10 +517,6 @@ public interface BasicContextConfig {
     //Property that defines the name of the factory class used to create maps of member properties to their respective values. If the value is non-null, it is used by the PropertyValueFactory to create the implementation.  If unset, mondrian.rolap.RolapMemberBase.DefaultPropertyValueMapFactory will be used.
     @AttributeDefinition(name = "%propertyValueMapFactoryClass.name", description = "%propertyValueMapFactoryClass.description", type = AttributeType.STRING)
     default String propertyValueMapFactoryClass() { return null; }
-
-    //Property that defines the name of the class used in SqlMemberSource to pool common values. If the value is non-null, it is used by the SqlMemberSource.ValueMapFactory to create the implementation.  If it is not set, then  {@link mondrian.rolap.SqlMemberSource.NullValuePoolFactory} will be used, meaning common values will not be pooled.
-    @AttributeDefinition(name = "%sqlMemberSourceValuePoolFactoryClass.name", description = "%sqlMemberSourceValuePoolFactoryClass.description", type = AttributeType.STRING)
-    default String sqlMemberSourceValuePoolFactoryClass() { return null; }
 
     //Property that defines when to apply the crossjoin optimization algorithm. If a crossjoin input list's size is larger than this property's value and the axis has the "NON EMPTY" qualifier, then the crossjoin non-empty optimizer is applied. Setting this value to '0' means that for all crossjoin input lists in non-empty axes will have the optimizer applied. On the other hand, if the value is set larger than any possible list, say <code>Integer.MAX_VALUE</code>, then the optimizer will never be applied.
     @AttributeDefinition(name = "%crossJoinOptimizerSize.name", description = "%crossJoinOptimizerSize.description", type = AttributeType.INTEGER)

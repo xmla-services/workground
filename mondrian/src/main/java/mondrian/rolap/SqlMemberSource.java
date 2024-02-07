@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
@@ -34,7 +35,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
-import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +54,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.CancellationChecker;
-import mondrian.util.CreationException;
-import mondrian.util.ObjectFactory;
 import mondrian.util.Pair;
 
 /**
@@ -78,7 +76,7 @@ class SqlMemberSource
     private MemberCache cache;
     private int lastOrdinal = 0;
     private boolean assignOrderKeys;
-    private Map<Object, Object> valuePool;
+    private Optional<Map<Object, Object>> oValuePool;
 
     SqlMemberSource(RolapHierarchy hierarchy) {
         this.hierarchy = hierarchy;
@@ -86,7 +84,7 @@ class SqlMemberSource
             hierarchy.getRolapSchema().getSchemaReader().getContext();
         assignOrderKeys =
             MondrianProperties.instance().CompareSiblingsByOrderKey.get();
-        valuePool = ValuePoolFactoryFactory.getValuePoolFactory(context.getConfig().memoryMonitor()).create(this);
+        oValuePool = context.getSqlMemberSourceValuePool();
     }
 
     // implement MemberSource
@@ -1190,14 +1188,15 @@ RME is this right
      *        or caching is disabled.
      */
     private Object getPooledValue(Object incoming) {
-        if (valuePool == null) {
+        if (oValuePool.isEmpty()) {
             return incoming;
         } else {
-            Object ret = this.valuePool.get(incoming);
+        	Map<Object,Object> valuePool=oValuePool.get();
+            Object ret = valuePool.get(incoming);
             if (ret != null) {
                 return ret;
             } else {
-                this.valuePool.put(incoming, incoming);
+                valuePool.put(incoming, incoming);
                 return incoming;
             }
         }
@@ -1509,102 +1508,5 @@ RME is this right
         }
     }
 
-    /**
-     * <p>Interface definition for the pluggable factory used to decide
-     * which implementation of {@link java.util.Map} to use to pool
-     * reusable values.</p>
-     */
-    public interface ValuePoolFactory {
-        /**
-         * <p>Create a new {@link java.util.Map} to be used to pool values.
-         * The value pool permits us to reuse references to existing objects
-         * rather than create new references to what are essentially duplicates
-         * of the same object.  The intent is to allow the duplicate object
-         * to be garbage collected earlier, thus keeping overall memory
-         * requirements down.</p>
-         *
-         * @param source The {@link SqlMemberSource} in which values are
-         * being pooled.
-         * @return a new value pool map
-         */
-        Map<Object, Object> create(SqlMemberSource source);
-    }
-
-    /**
-     * Default {@link mondrian.rolap.SqlMemberSource.ValuePoolFactory}
-     * implementation, used if
-     * {@link mondrian.olap.MondrianProperties#SqlMemberSourceValuePoolFactoryClass}
-     * is not set.
-     */
-    public static final class NullValuePoolFactory
-        implements ValuePoolFactory
-    {
-        /**
-         * {@inheritDoc}
-         * <p>This version returns null, meaning that
-         * by default values will not be pooled.</p>
-         *
-         * @param source {@inheritDoc}
-         * @return {@inheritDoc}
-         */
-        @Override
-		public Map<Object, Object> create(SqlMemberSource source) {
-            return null;
-        }
-    }
-
-    /**
-     * <p>Creates the ValuePoolFactory which is in turn used
-     * to create property-value maps for member properties.</p>
-     *
-     * <p>The name of the ValuePoolFactory is drawn from
-     * {@link mondrian.olap.MondrianProperties#SqlMemberSourceValuePoolFactoryClass}
-     * in mondrian.properties.  If unset, it defaults to
-     * {@link mondrian.rolap.SqlMemberSource.NullValuePoolFactory}. </p>
-     */
-    public static final class ValuePoolFactoryFactory
-        extends ObjectFactory.Singleton<ValuePoolFactory>
-    {
-        /**
-         * Single instance of the <code>ValuePoolFactoryFactory</code>.
-         */
-        private static final ValuePoolFactoryFactory factory;
-        static {
-            factory = new ValuePoolFactoryFactory();
-        }
-
-        /**
-         * Access the <code>ValuePoolFactory</code> instance.
-         *
-         * @return the <code>Map</code>.
-         */
-        public static ValuePoolFactory getValuePoolFactory(boolean memoryMonitor) {
-            return factory.getObject(memoryMonitor);
-        }
-
-        /**
-         * The constructor for the <code>ValuePoolFactoryFactory</code>.
-         * This passes the <code>ValuePoolFactory</code> class to the
-         * <code>ObjectFactory</code> base class.
-         */
-        private ValuePoolFactoryFactory() {
-            super(ValuePoolFactory.class);
-        }
-
-        @Override
-		protected StringProperty getStringProperty() {
-            return MondrianProperties.instance()
-               .SqlMemberSourceValuePoolFactoryClass;
-        }
-
-        @Override
-		protected ValuePoolFactory getDefault(
-            Class[] parameterTypes,
-            Object[] parameterValues,
-            boolean memoryMonitor)
-            throws CreationException
-        {
-            return new NullValuePoolFactory();
-        }
-    }
+  
 }

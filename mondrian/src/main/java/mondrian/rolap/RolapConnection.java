@@ -74,8 +74,9 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.server.StatementImpl;
+import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
-import mondrian.util.MemoryMonitorFactory;
+import mondrian.util.NotificationMemoryMonitor;
 
 
 public class RolapConnection extends ConnectionBase {
@@ -335,7 +336,9 @@ public Result execute( QueryImpl query ) {
         );
       }
     };
-    MemoryMonitor mm = MemoryMonitorFactory.getMemoryMonitor(context.getConfig().memoryMonitor());
+    
+	MemoryMonitor mm = context.getConfig().memoryMonitor() ? new NotificationMemoryMonitor() : new FauxMemoryMonitor();
+	
     final long currId = execution.getId();
     try {
       mm.addListener( listener, context.getConfig().memoryMonitorThreshold() );

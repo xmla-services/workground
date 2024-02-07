@@ -102,7 +102,7 @@ public class NotificationMemoryMonitor extends AbstractMemoryMonitor {
      * Construct a <code>NotificationMemoryMonitor</code> instance and
      * register it with the Java5 memory management system.
      */
-    NotificationMemoryMonitor() {
+    public NotificationMemoryMonitor() {
         super();
         final MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
         final NotificationEmitter emitter = (NotificationEmitter) mbean;

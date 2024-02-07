@@ -3,6 +3,7 @@ package org.opencube.junit5.context;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -188,6 +189,11 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	public void setQueryLimitSemaphore(Semaphore queryLimimitSemaphore) {
 		this.queryLimimitSemaphore = queryLimimitSemaphore;
 		
+	}
+
+	@Override
+	public Optional<Map<Object, Object>> getSqlMemberSourceValuePool() {
+		return Optional.empty();
 	}
 
 }

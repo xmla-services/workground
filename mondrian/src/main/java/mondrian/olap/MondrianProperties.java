@@ -203,17 +203,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
         new IntegerProperty(
             this, "mondrian.rolap.maxConstraints", 1000);
 
-    /**
-     * <p>Property that defines
-     * the name of the class used as a memory monitor.</p>
-     *
-     * <p>If the value is
-     * non-null, it is used by the <code>MemoryMonitorFactory</code>
-     * to create the implementation.</p>
-     */
-    public transient final StringProperty MemoryMonitorClass =
-        new StringProperty(
-            this, "mondrian.util.MemoryMonitor.class", null);
 
     /**
      * <p>Property that determines how a null member value is represented in the
@@ -234,20 +223,6 @@ public class MondrianProperties extends MondrianPropertiesBase {
     public transient final IntegerProperty ResultLimit =
         new IntegerProperty(
             this, "mondrian.result.limit", 0);
-
-    /**
-     * <p>Property that defines the name of the class used in SqlMemberSource
-     * to pool common values.</p>
-     *
-     * <p>If the value is non-null, it is used by the
-     * <code>SqlMemberSource.ValueMapFactory</code>
-     * to create the implementation.  If it is not set, then
-     * {@link mondrian.rolap.SqlMemberSource.NullValuePoolFactory}
-     * will be used, meaning common values will not be pooled.</p>
-     */
-    public transient final StringProperty SqlMemberSourceValuePoolFactoryClass =
-        new StringProperty(
-            this, "mondrian.rolap.SqlMemberSource.ValuePoolFactory.class", null);
 
     /**
      * <p>Property that defines

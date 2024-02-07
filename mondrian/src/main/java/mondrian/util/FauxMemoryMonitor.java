@@ -17,7 +17,7 @@ package mondrian.util;
  * @since Feb 03 2007
  */
 public class FauxMemoryMonitor implements MemoryMonitor {
-    FauxMemoryMonitor() {
+    public FauxMemoryMonitor() {
     }
 
     @Override
