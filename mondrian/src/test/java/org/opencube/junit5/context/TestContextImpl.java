@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 
 import mondrian.rolap.RolapConnectionProps;
+import mondrian.server.MonitorImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.result.Scenario;
@@ -41,11 +42,12 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	private Optional<String> description = Optional.empty();
     private TestConfig testConfig;
     private Semaphore queryLimimitSemaphore;
-    
-    
+
+
 
 	public TestContextImpl() {
         testConfig = new TestConfig();
+        this.monitor = new MonitorImpl(getConfig().executionHistorySize());
 	    shepherd = new RolapResultShepherd(testConfig.rolapConnectionShepherdThreadPollingInterval(),testConfig.rolapConnectionShepherdThreadPollingIntervalUnit(),
             testConfig.rolapConnectionShepherdNbThreads());
 	    aggMgr = new AggregationManager(this);
@@ -188,7 +190,7 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	@Override
 	public void setQueryLimitSemaphore(Semaphore queryLimimitSemaphore) {
 		this.queryLimimitSemaphore = queryLimimitSemaphore;
-		
+
 	}
 
 	@Override
