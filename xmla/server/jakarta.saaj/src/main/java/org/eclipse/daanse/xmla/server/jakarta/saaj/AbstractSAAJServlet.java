@@ -43,7 +43,7 @@ public abstract class AbstractSAAJServlet extends HttpServlet {
 	}
 
 	protected static MimeHeaders getRequestHeaders(HttpServletRequest req) {
-		Enumeration enumeration = req.getHeaderNames();
+		Enumeration<String> enumeration = req.getHeaderNames();
 		MimeHeaders headers = new MimeHeaders();
 
 		while (enumeration.hasMoreElements()) {
