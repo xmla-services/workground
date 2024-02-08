@@ -16,6 +16,13 @@ package mondrian.olap;
 
 import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
 import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
+import static mondrian.resource.MondrianResource.LimitExceededDuringCrossjoin;
+import static mondrian.resource.MondrianResource.MdxCantFindMember;
+import static mondrian.resource.MondrianResource.MdxChildObjectNotFound;
+import static mondrian.resource.MondrianResource.MemberNotFound;
+import static mondrian.resource.MondrianResource.UdfClassMustBePublicAndStatic;
+import static mondrian.resource.MondrianResource.UdfClassWrongIface;
+import static mondrian.resource.MondrianResource.message;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -53,7 +60,6 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -66,7 +72,6 @@ import java.util.Random;
 import java.util.RandomAccess;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.Timer;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -139,7 +144,6 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.sort.Sorter;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
@@ -711,11 +715,10 @@ public class Util {
                 if (!failIfNotFound) {
                     return null;
                 } else if (category == DataType.MEMBER) {
-                    throw MondrianResource.instance().MemberNotFound.ex(
-                        quoteMdxIdentifier(names));
+                    throw new MondrianException(message(MemberNotFound,
+                        quoteMdxIdentifier(names)));
                 } else {
-                    throw MondrianResource.instance().MdxChildObjectNotFound
-                        .ex(name.toString(), parent.getQualifiedName());
+                    throw new MondrianException(message(MdxChildObjectNotFound, name.toString(), parent.getQualifiedName()));
                 }
             }
             parent = child;
@@ -765,8 +768,8 @@ public class Util {
             if (parent instanceof Member) {
                 return parent;
             } else if (failIfNotFound) {
-                throw MondrianResource.instance().MdxCantFindMember.ex(
-                    implode(names));
+                throw new MondrianException(message( MdxCantFindMember,
+                    implode(names)));
             } else {
                 return null;
             }
@@ -901,19 +904,19 @@ public class Util {
                 if (olapElement != null) {
                     olapElement = olapElement.getHierarchy().getNullMember();
                 } else {
-                    throw MondrianResource.instance().MdxChildObjectNotFound.ex(
-                            fullName, cube.getQualifiedName());
+                    throw new MondrianException(message(MdxChildObjectNotFound,
+                            fullName, cube.getQualifiedName()));
                 }
             } else {
-                throw MondrianResource.instance().MdxChildObjectNotFound.ex(
-                        fullName, cube.getQualifiedName());
+                throw new MondrianException(message(MdxChildObjectNotFound,
+                        fullName, cube.getQualifiedName()));
             }
         }
 
         Role role = schemaReader.getRole();
         if (!role.canAccess(olapElement)) {
-            throw MondrianResource.instance().MdxChildObjectNotFound.ex(
-                    fullName, cube.getQualifiedName());
+            throw new MondrianException(message(MdxChildObjectNotFound,
+                    fullName, cube.getQualifiedName()));
         }
         if (olapElement instanceof Member member) {
             olapElement =
@@ -945,7 +948,7 @@ public class Util {
             }
         }
         if (fail) {
-            throw MondrianResource.instance().MdxCubeNotFound.ex(cubeName);
+            throw new MondrianException(message("MDX cube ''{0}'' not found", cubeName));
         }
         return null;
     }
@@ -1819,8 +1822,8 @@ public class Util {
         String type;
         switch (category) {
         case MEMBER:
-            return MondrianResource.instance().MemberNotFound.ex(
-                identifierNode.toString());
+            return new MondrianException(message(MemberNotFound,
+                identifierNode.toString()));
         case UNKNOWN:
             type = "Element";
             break;
@@ -2079,14 +2082,14 @@ public class Util {
      * Creates an internal error with a given message.
      */
     public static RuntimeException newInternal(String message) {
-        return MondrianResource.instance().Internal.ex(message);
+        return new MondrianException(message("Internal error: {0}", message));
     }
 
     /**
      * Creates an internal error with a given message and cause.
      */
     public static RuntimeException newInternal(Throwable e, String message) {
-        return MondrianResource.instance().Internal.ex(message, e);
+        return new MondrianException(message("Internal error: {0}", message), e);
     }
 
     /**
@@ -3165,9 +3168,9 @@ public class Util {
                 || (udfClass.getEnclosingClass() != null
                     && !Modifier.isStatic(udfClass.getModifiers())))
         {
-            throw MondrianResource.instance().UdfClassMustBePublicAndStatic.ex(
+            throw new MondrianException(message(UdfClassMustBePublicAndStatic,
                 functionName,
-                className);
+                className));
         }
 
         // 1. Look for a constructor "public Udf(String name)".
@@ -3196,23 +3199,23 @@ public class Util {
         }
         // 3. Else, no constructor suitable.
         if (constructor == null) {
-            throw MondrianResource.instance().UdfClassWrongIface.ex(
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionNameOrEmpty,
                 className,
-                UserDefinedFunction.class.getName());
+                UserDefinedFunction.class.getName()));
         }
         // Instantiate class.
         try {
             udf = (UserDefinedFunction) constructor.newInstance(args);
         } catch (InstantiationException | ClassCastException e) {
-            throw MondrianResource.instance().UdfClassWrongIface.ex(
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionNameOrEmpty,
-                className, UserDefinedFunction.class.getName());
+                className, UserDefinedFunction.class.getName()));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw MondrianResource.instance().UdfClassWrongIface.ex(
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionName,
                 className,
-                UserDefinedFunction.class.getName());
+                UserDefinedFunction.class.getName()));
         }
 
         return udf;
@@ -3236,15 +3239,15 @@ public class Util {
         // Throw an exeption, if the size of the crossjoin exceeds the result
         // limit.
         if (resultLimit > 0 && resultLimit < resultSize) {
-            throw MondrianResource.instance().LimitExceededDuringCrossjoin.ex(
-                resultSize, resultLimit);
+            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+                resultSize, resultLimit));
         }
 
         // Throw an exception if the crossjoin exceeds a reasonable limit.
         // (Yes, 4 billion is a reasonable limit.)
         if (resultSize > Integer.MAX_VALUE) {
-            throw MondrianResource.instance().LimitExceededDuringCrossjoin.ex(
-                resultSize, Integer.MAX_VALUE);
+            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+                resultSize, Integer.MAX_VALUE));
         }
     }
 

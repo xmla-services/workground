@@ -84,7 +84,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
@@ -95,6 +94,22 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.ProfileHandler;
 import mondrian.util.ArrayStack;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.CalculatedMember;
+import static mondrian.resource.MondrianResource.CalculatedSet;
+import static mondrian.resource.MondrianResource.DuplicateAxis;
+import static mondrian.resource.MondrianResource.HierarchyInIndependentAxes;
+import static mondrian.resource.MondrianResource.MdxAxisShowSubtotalsNotSupported;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInFormula;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInQuery;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnAxis;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnSlicer;
+import static mondrian.resource.MondrianResource.MdxFormulaNotFound;
+import static mondrian.resource.MondrianResource.NonContiguousAxis;
+import static mondrian.resource.MondrianResource.ParameterDefinedMoreThanOnce;
+import static mondrian.resource.MondrianResource.ParameterIsNotModifiable;
+import static mondrian.resource.MondrianResource.UnknownParameter;
 
 /**
  * <code>Query</code> is an MDX query.
@@ -692,8 +707,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             for (QueryAxis axis : axes) {
                 validator.validate(axis);
                 if (!axisNames.add(axis.getAxisOrdinal().logicalOrdinal())) {
-                    throw MondrianResource.instance().DuplicateAxis.ex(
-                        axis.getAxisName());
+                    throw new MondrianException(message(DuplicateAxis,
+                        axis.getAxisName()));
                 }
             }
 
@@ -706,9 +721,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     AxisOrdinal axisName =
                         AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(
                             seekOrdinal);
-                    throw MondrianResource.instance().NonContiguousAxis.ex(
+                    throw new MondrianException(message(NonContiguousAxis,
                         seekOrdinal,
-                        axisName.name());
+                        axisName.name()));
                 }
                 ++seekOrdinal;
             }
@@ -726,8 +741,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
             }
             if (useCount > 1) {
-                throw MondrianResource.instance().HierarchyInIndependentAxes.ex(
-                    hierarchy.getUniqueName());
+                throw new MondrianException(message(HierarchyInIndependentAxes,
+                    hierarchy.getUniqueName()));
             }
         }
     }
@@ -931,12 +946,12 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         final Parameter param =
             getSchemaReader(false).getParameter(parameterName);
         if (param == null) {
-            throw MondrianResource.instance().UnknownParameter.ex(
-                parameterName);
+            throw new MondrianException(message(UnknownParameter,
+                parameterName));
         }
         if (!param.isModifiable()) {
-            throw MondrianResource.instance().ParameterIsNotModifiable.ex(
-                parameterName, param.getScope().name());
+            throw new MondrianException(message(ParameterIsNotModifiable,
+                parameterName, param.getScope().name()));
         }
         final Object value2 =
         Locus.execute(
@@ -1248,8 +1263,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // mdxElement is used in the query. lets find on on which axis
                 // or formula
                 String formulaType = formula.isMember()
-                    ? MondrianResource.instance().CalculatedMember.str()
-                    : MondrianResource.instance().CalculatedSet.str();
+                    ? CalculatedMember
+                    : CalculatedSet;
 
                 int i = 0;
                 Object parent = walker.getAncestor(i);
@@ -1257,37 +1272,35 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 while ((parent != null) && (grandParent != null)) {
                     if (grandParent instanceof Query) {
                         if (parent instanceof Axis) {
-                            throw MondrianResource.instance()
-                                .MdxCalculatedFormulaUsedOnAxis.ex(
+                            throw new MondrianException(message(
+                                MdxCalculatedFormulaUsedOnAxis,
                                     formulaType,
                                     uniqueName,
-                                    ((QueryAxisImpl) parent).getAxisName());
+                                    ((QueryAxisImpl) parent).getAxisName()));
 
                         } else if (parent instanceof Formula form) {
                             String parentFormulaType =
                                 form.isMember()
-                                    ? MondrianResource.instance()
-                                          .CalculatedMember.str()
-                                    : MondrianResource.instance()
-                                          .CalculatedSet.str();
-                            throw MondrianResource.instance()
-                                .MdxCalculatedFormulaUsedInFormula.ex(
+                                    ? CalculatedMember
+                                    : CalculatedSet;
+                            throw new MondrianException(message(
+                                MdxCalculatedFormulaUsedInFormula,
                                     formulaType, uniqueName, parentFormulaType,
-                                    form.getUniqueName());
+                                    form.getUniqueName()));
 
                         } else {
-                            throw MondrianResource.instance()
-                                .MdxCalculatedFormulaUsedOnSlicer.ex(
-                                    formulaType, uniqueName);
+                            throw new MondrianException(message(
+                                MdxCalculatedFormulaUsedOnSlicer,
+                                    formulaType, uniqueName));
                         }
                     }
                     ++i;
                     parent = walker.getAncestor(i);
                     grandParent = walker.getAncestor(i + 1);
                 }
-                throw MondrianResource.instance()
-                    .MdxCalculatedFormulaUsedInQuery.ex(
-                        formulaType, uniqueName, Util.unparse(this));
+                throw new MondrianException(message(
+                    MdxCalculatedFormulaUsedInQuery,
+                        formulaType, uniqueName, Util.unparse(this)));
             }
         }
 
@@ -1360,8 +1373,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     public void renameFormula(String uniqueName, String newName) {
         Formula formula = findFormula(uniqueName);
         if (formula == null) {
-            throw MondrianResource.instance().MdxFormulaNotFound.ex(
-                "formula", uniqueName, Util.unparse(this));
+            throw new MondrianException(message( MdxFormulaNotFound,
+                "formula", uniqueName, Util.unparse(this)));
         }
         formula.rename(newName);
     }
@@ -1384,8 +1397,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void setAxisShowEmptyCells(int axis, boolean showEmpty) {
         if (axis >= axes.length) {
-            throw MondrianResource.instance().MdxAxisShowSubtotalsNotSupported
-                .ex(axis);
+            throw new MondrianException(message(MdxAxisShowSubtotalsNotSupported,
+                axis));
         }
         axes[axis].setNonEmpty(!showEmpty);
     }
@@ -1396,8 +1409,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal axis) {
         if (axis.logicalOrdinal() >= axes.length) {
-            throw MondrianResource.instance().MdxAxisShowSubtotalsNotSupported
-                .ex(axis.logicalOrdinal());
+            throw new MondrianException(message(MdxAxisShowSubtotalsNotSupported,
+                axis.logicalOrdinal()));
         }
         QueryAxis queryAxis =
             axis.isFilter()
@@ -2271,8 +2284,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 String parameterName =
                     ParameterFunDef.getParameterName(call.getArgs());
                 if (parametersByName.get(parameterName) != null) {
-                    throw MondrianResource.instance()
-                        .ParameterDefinedMoreThanOnce.ex(parameterName);
+                    throw new MondrianException(message(
+                        ParameterDefinedMoreThanOnce, parameterName));
                 }
 
                 Type type =

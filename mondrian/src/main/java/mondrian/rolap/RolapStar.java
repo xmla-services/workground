@@ -12,6 +12,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.IllegalLeftDeepJoin;
 import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 import static mondrian.rolap.util.JoinUtil.getLeftAlias;
 import static mondrian.rolap.util.JoinUtil.getRightAlias;
@@ -67,7 +68,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.Aggregation;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.AggregationManager;
@@ -377,7 +377,7 @@ public class RolapStar {
             }
         } else if (relOrJoin instanceof MappingJoin join) {
             if (left(join) instanceof MappingJoin) {
-                throw MondrianResource.instance().IllegalLeftDeepJoin.ex();
+                throw new MondrianException(IllegalLeftDeepJoin);
             }
             final MappingRelationOrJoin left;
             final MappingRelationOrJoin right;

@@ -38,7 +38,9 @@ import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxAxisIsNotSet;
 
 /**
  * An axis in an MDX query. For example, the typical MDX query has two axes,
@@ -261,8 +263,8 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                         new Expression[] {exp});
                 exp = validator.validate(exp, false);
             } else {
-                throw MondrianResource.instance().MdxAxisIsNotSet.ex(
-                    axisOrdinal.name());
+                throw new MondrianException(message(MdxAxisIsNotSet,
+                    axisOrdinal.name()));
             }
         }
     }

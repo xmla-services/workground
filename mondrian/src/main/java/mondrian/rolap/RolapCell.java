@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -57,7 +58,6 @@ import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.SetFunDef;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AndPredicate;
 import mondrian.rolap.agg.DrillThroughCellRequest;
 import mondrian.rolap.agg.MemberColumnPredicate;
@@ -66,6 +66,9 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.server.monitor.SqlStatementEvent;
+
+import static mondrian.resource.MondrianResource.DrillthroughDisabled;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * <code>RolapCell</code> implements {@link org.eclipse.daanse.olap.api.result.Cell} within a
@@ -161,9 +164,9 @@ public class RolapCell implements Cell {
         if (!result.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig()
             .enableDrillThrough())
         {
-            throw MondrianResource.instance()
-                .DrillthroughDisabled.ex(
-                        "enableDrillThrough");
+            throw new MondrianException(message(
+                DrillthroughDisabled,
+                        "enableDrillThrough"));
         }
         final Member[] currentMembers = getMembersForDrillThrough();
         // Create a StarPredicate to represent the compound slicer

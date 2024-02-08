@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -79,7 +80,6 @@ import mondrian.olap.type.NumericType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeWrapperExp;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;
 import mondrian.server.Execution;
@@ -88,6 +88,10 @@ import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
+
+import static mondrian.resource.MondrianResource.CycleDuringParameterEvaluation;
+import static mondrian.resource.MondrianResource.TotalMembersLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * A <code>RolapResult</code> is the result of running a query.
@@ -1536,7 +1540,7 @@ public Cell getCell( int[] pos ) {
       if ( this.limit > 0 ) {
         this.totalCellCount *= this.axisCount;
         if ( this.totalCellCount > this.limit ) {
-          throw MondrianResource.instance().TotalMembersLimitExceeded.ex( this.totalCellCount, this.limit );
+          throw new MondrianException(message(TotalMembersLimitExceeded, String.valueOf(this.totalCellCount), String.valueOf(this.limit) ));
         }
         this.axisCount = 0;
       }
@@ -1728,7 +1732,7 @@ public Cell getCell( int[] pos ) {
       Object value;
       if ( liftedValue != null ) {
         if ( liftedValue == CycleSentinel ) {
-          throw MondrianResource.instance().CycleDuringParameterEvaluation.ex( slot.getParameter().getName() );
+          throw new MondrianException(message(CycleDuringParameterEvaluation, slot.getParameter().getName() ));
         }
         if ( liftedValue == NullSentinel ) {
           value = null;

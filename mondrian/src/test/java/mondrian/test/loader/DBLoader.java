@@ -12,6 +12,8 @@
 package mondrian.test.loader;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.resource.MondrianResource.CreateTableFailed;
+import static mondrian.resource.MondrianResource.message;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -37,13 +39,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 
 /**
@@ -1086,8 +1088,8 @@ public abstract class DBLoader {
             }
             return true;
         } catch (Exception e) {
-            throw MondrianResource.instance().CreateTableFailed.ex(
-                table.getName(), e);
+            throw new MondrianException(message(CreateTableFailed,
+                table.getName()), e);
         } finally {
             closeFileWriter();
         }

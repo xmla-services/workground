@@ -24,9 +24,11 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 import mondrian.olap.fun.FunUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
 import mondrian.util.Bug;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxMemberName;
 
 /**
  * <code>MemberBase</code> is a partial implementation of {@link Member}.
@@ -100,7 +102,7 @@ public abstract class MemberBase
 
   @Override
 public String getQualifiedName() {
-    return MondrianResource.instance().MdxMemberName.str( getUniqueName() );
+    return message(MdxMemberName, getUniqueName() );
   }
 
   @Override

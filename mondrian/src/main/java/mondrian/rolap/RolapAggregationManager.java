@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.DrillThroughCellRequest;
 import mondrian.rolap.agg.ListPredicate;
@@ -34,6 +33,9 @@ import mondrian.rolap.agg.MemberColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
 import mondrian.rolap.agg.RangeColumnPredicate;
 import mondrian.rolap.agg.ValueColumnPredicate;
+
+import static mondrian.resource.MondrianResource.DrillthroughCalculatedMember;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * <code>RolapAggregationManager</code> manages all
@@ -98,7 +100,7 @@ public abstract class RolapAggregationManager {
 
         List<OlapElement> applicableMembers = getApplicableReturnClauseMembers(
             cube, members, returnClauseMembers, extendedContext);
-        
+
         List<OlapElement> nonApplicableMembers =new ArrayList<OlapElement>();
         nonApplicableMembers.addAll(returnClauseMembers);
         nonApplicableMembers.removeAll(applicableMembers);
@@ -464,8 +466,8 @@ public abstract class RolapAggregationManager {
                         ((RolapBaseCubeMeasure)member).getStarMeasure());
             return;
         } else if (member instanceof RolapHierarchy.RolapCalculatedMeasure) {
-            throw MondrianResource.instance().DrillthroughCalculatedMember
-                .ex(member.getUniqueName());
+            throw new MondrianException(message(DrillthroughCalculatedMember,
+                member.getUniqueName()));
         } else {
             throw new MondrianException(
                 "Unknown member type in DRILLTHROUGH operation.");

@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
@@ -24,9 +25,8 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.ToggleDrillStateRecursiveNotSupported;
 
 /**
  * Definition of the <code>ToggleDrillState</code> MDX function.
@@ -52,8 +52,7 @@ class ToggleDrillStateFunDef extends AbstractFunctionDefinition {
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
         if (call.getArgCount() > 2) {
-            throw MondrianResource.instance()
-                .ToggleDrillStateRecursiveNotSupported.ex();
+            throw new MondrianException(ToggleDrillStateRecursiveNotSupported);
         }
         final TupleListCalc listCalc0 =
             compiler.compileList(call.getArg(0));

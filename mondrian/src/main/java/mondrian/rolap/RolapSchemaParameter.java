@@ -9,6 +9,7 @@
 
 package mondrian.rolap;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -16,9 +17,9 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-
 import mondrian.calc.impl.GenericCalc;
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.ParameterIsNotModifiable;
 
 /**
  * Parameter that is defined in a schema.
@@ -100,8 +101,8 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     @Override
 	public void setValue(Object value) {
         if (!modifiable) {
-            throw MondrianResource.instance().ParameterIsNotModifiable.ex(
-                getName(), getScope().name());
+            throw new MondrianException(message(ParameterIsNotModifiable,
+                getName(), getScope().name()));
         }
         this.assigned = true;
         this.value = value;
@@ -115,8 +116,8 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     @Override
 	public void unsetValue() {
         if (!modifiable) {
-            throw MondrianResource.instance().ParameterIsNotModifiable.ex(
-                getName(), getScope().name());
+            throw new MondrianException(message(ParameterIsNotModifiable,
+                getName(), getScope().name()));
         }
         assigned = false;
         value = null;

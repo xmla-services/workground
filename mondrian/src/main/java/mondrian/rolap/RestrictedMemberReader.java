@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -23,9 +24,11 @@ import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.RoleImpl;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
+
+import static mondrian.resource.MondrianResource.HierarchyHasNoAccessibleMembers;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * A <code>RestrictedMemberReader</code> reads only the members of a hierarchy
@@ -227,9 +230,9 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
             final List<RolapMember> memberList =
                 getMembersInLevel(topLevel);
             if (memberList.isEmpty()) {
-                throw MondrianResource.instance()
-                    .HierarchyHasNoAccessibleMembers.ex(
-                        getHierarchy().getUniqueName());
+                throw new MondrianException(message(
+                    HierarchyHasNoAccessibleMembers,
+                        getHierarchy().getUniqueName()));
             }
             return memberList;
         }

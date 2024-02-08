@@ -9,6 +9,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.QueryCanceled;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -21,13 +22,13 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.QueryCanceledException;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
@@ -61,7 +62,7 @@ class SqlStatementTest {
 
     execution = new Execution(statMock, 0);
     execution = spy(execution);
-    doThrow(MondrianResource.instance().QueryCanceled.ex())
+    doThrow(new MondrianException(QueryCanceled))
             .when(execution).checkCancelOrTimeout();
 
     locus = new Locus(execution, "component", "message");

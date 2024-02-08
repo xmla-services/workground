@@ -21,12 +21,15 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
+import mondrian.olap.MondrianException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
+
+import static mondrian.resource.MondrianResource.ExecutionStatementCleanupException;
+import static mondrian.resource.MondrianResource.message;
 
 // Only in Java6 and above
 
@@ -87,9 +90,9 @@ public class UtilCompatibleJdk16 implements UtilCompatible  {
             // side.
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("",
-                    MondrianResource.instance()
-                        .ExecutionStatementCleanupException
-                            .ex(t.getMessage(), t),
+                    new MondrianException(message(
+                        ExecutionStatementCleanupException,
+                            t.getMessage()), t),
                     t);
             }
         }

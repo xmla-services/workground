@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRule;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRules;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.FactCountMatch;
@@ -35,8 +36,12 @@ import jakarta.xml.bind.Unmarshaller;
 import mondrian.recorder.ListRecorder;
 import mondrian.recorder.MessageRecorder;
 import mondrian.recorder.RecorderException;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapStar;
+
+import static mondrian.resource.MondrianResource.AggRuleParse;
+import static mondrian.resource.MondrianResource.CouldNotLoadDefaultAggregateRules;
+import static mondrian.resource.MondrianResource.MissingDefaultAggRule;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Container for the default aggregate recognition rules.
@@ -54,7 +59,6 @@ public class DefaultRules {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRules.class);
 
-    private static final MondrianResource mres = MondrianResource.instance();
     /**
      * There is a single instance of the {@link DefaultRecognizer} and the
      * {@link DefaultRules} class is a container of that instance.
@@ -87,7 +91,7 @@ public class DefaultRules {
             // make sure the tag name exists
             AggRule aggrule = defs.getAggRule(aggregateRuleTag);
             if (aggrule == null) {
-                throw mres.MissingDefaultAggRule.ex(aggregateRuleTag);
+                throw new MondrianException(message(MissingDefaultAggRule, aggregateRuleTag));
             }
 
             DefaultRules rules = new DefaultRules(defs, aggregateRuleTag);
@@ -111,7 +115,7 @@ public class DefaultRules {
             }
         }
         if (inStream == null) {
-            LOGGER.warn(mres.CouldNotLoadDefaultAggregateRules.str(aggregateRules));
+            LOGGER.warn(message(CouldNotLoadDefaultAggregateRules, aggregateRules));
         }
         return inStream;
     }
@@ -180,7 +184,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            throw mres.AggRuleParse.ex(file.getName(), e);
+            throw new MondrianException(message(AggRuleParse, file.getName()), e);
         }
     }
 
@@ -191,7 +195,7 @@ public class DefaultRules {
             return (AggRules) jaxbUnmarshaller.unmarshal(url);
 
         } catch (JAXBException e) {
-            throw mres.AggRuleParse.ex(url.toString(), e);
+            throw new MondrianException(message(AggRuleParse, url.toString()), e);
         }
     }
 
@@ -203,7 +207,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(inStream);
         } catch (JAXBException e) {
-            throw mres.AggRuleParse.ex("InputStream", e);
+            throw new MondrianException(message(AggRuleParse, "InputStream"), e);
         }
     }
 
@@ -216,7 +220,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(new StringReader(text));
         } catch (JAXBException e) {
-            throw mres.AggRuleParse.ex(name, e);
+            throw new MondrianException(message(AggRuleParse, name), e);
         }
     }
 

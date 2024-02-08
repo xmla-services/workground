@@ -66,8 +66,8 @@ public class ResultLoader {
     public boolean loadResult() throws SQLException {
 /*
         if (limit > 0 && limit < ++fetchCount) {
-            throw MondrianResource.instance().MemberFetchLimitExceeded
-                    .ex((long) limit);
+            throw new InvalidArgumentException(message(MemberFetchLimitExceeded,
+                    limit));
         }
 */
         if (enumTargetCount == 0) {

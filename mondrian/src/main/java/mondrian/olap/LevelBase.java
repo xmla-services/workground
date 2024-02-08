@@ -24,8 +24,10 @@ import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxLevelName;
 
 /**
  * Skeleton implementation of {@link Level}.
@@ -78,7 +80,7 @@ public abstract class LevelBase
     // from Element
     @Override
 	public String getQualifiedName() {
-        return MondrianResource.instance().MdxLevelName.str(getUniqueName());
+        return message(MdxLevelName, getUniqueName());
     }
 
     @Override

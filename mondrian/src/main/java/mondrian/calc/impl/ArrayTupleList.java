@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
@@ -23,7 +24,9 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.LimitExceededDuringCrossjoin;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Implementation of {@link TupleList} that stores tuples end-to-end in an array.
@@ -274,8 +277,8 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
 
     private void ensureCapacity( int minCapacity ) {
         if ( minCapacity > maxMembers ) {
-            throw MondrianResource.instance().LimitExceededDuringCrossjoin.ex(
-                    minCapacity / arity, cjMaxSize );
+            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+                    minCapacity / arity, cjMaxSize ));
         }
         final int oldCapacity = objectData.length;
         if ( minCapacity > oldCapacity ) {

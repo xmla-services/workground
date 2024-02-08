@@ -32,17 +32,19 @@ import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
+
+import static mondrian.resource.MondrianResource.AttemptToChangeTableUsage;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Metadata gleaned from JDBC about the tables and columns in the star schema.
@@ -67,8 +69,6 @@ import mondrian.rolap.RolapStar;
 public class JdbcSchema {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(JdbcSchema.class);
-
-    private static final MondrianResource mres = MondrianResource.instance();
 
     /**
      * Returns the Logger.
@@ -115,7 +115,7 @@ public class JdbcSchema {
         if (factory != null) {
             return;
         }
-   
+
             factory = new StdFactory();
 
     }
@@ -973,10 +973,10 @@ public class JdbcSchema {
             if ((this.tableUsageType != TableUsageType.UNKNOWN)
                 && (this.tableUsageType != tableUsageType))
             {
-                throw mres.AttemptToChangeTableUsage.ex(
+                throw new MondrianException(message(AttemptToChangeTableUsage,
                     getName(),
                     this.tableUsageType.name(),
-                    tableUsageType.name());
+                    tableUsageType.name()));
             }
             this.tableUsageType = tableUsageType;
         }

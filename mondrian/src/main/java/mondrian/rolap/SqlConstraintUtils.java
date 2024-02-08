@@ -12,6 +12,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.AggTableNoConstraintGenerated;
+import static mondrian.resource.MondrianResource.NativeSqlInClauseTooLarge;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.util.ArrayList;
@@ -54,7 +57,6 @@ import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MemberExtractingVisitor;
 import mondrian.olap.fun.ParenthesesFunDef;
 import mondrian.olap.fun.ValidMeasureFunDef;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.rolap.RolapStar.Column;
@@ -82,7 +84,6 @@ public class SqlConstraintUtils {
   private static final String ADD_MEMBER_CONSTRAINT_CANNOT_RESTRICT_SQL_TO_CALCULATED_MEMBER = "addMemberConstraint: cannot restrict SQL to calculated member :";
 private static final String AND = " and ";
 private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.class );
-  private static final MondrianResource mres = MondrianResource.instance();
 
   /** Utility class */
   private SqlConstraintUtils() {
@@ -1373,7 +1374,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         AggStar.Table.Column aggColumn = aggStar.lookupColumn( bitPos );
 
         if ( aggColumn == null ) {
-          LOG.warn( mres.AggTableNoConstraintGenerated.str( aggStar.getFactTable().getName() ) );
+          LOG.warn(message(AggTableNoConstraintGenerated, aggStar.getFactTable().getName() ) );
           return new StringBuilder();
         }
 
@@ -1825,8 +1826,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         // Simply get them all, do not create where-clause.
         // Below are two alternative approaches (and code). They
         // both have problems.
-        LOG.debug( MondrianResource.instance().NativeSqlInClauseTooLarge.str( level.getUniqueName(), maxConstraints
-            + "" ) );
+        LOG.debug(message(NativeSqlInClauseTooLarge, level.getUniqueName(), maxConstraints ) );
         sqlQuery.setSupported( false );
       } else {
         String where = RolapStar.Column.createInExpr( q, cc, level.getDatatype(), sqlQuery );

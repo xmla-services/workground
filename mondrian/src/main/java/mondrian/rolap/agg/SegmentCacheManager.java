@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -33,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.CacheControlImpl;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
@@ -55,6 +55,9 @@ import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.BlockingHashMap;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.SegmentCacheLimitReached;
+import static mondrian.resource.MondrianResource.SqlQueryLimitReached;
 
 @SuppressWarnings( { "JavaDoc", "squid:S1192", "squid:S4274" } )
 // suppressing warnings for asserts, duplicated string constants
@@ -324,8 +327,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$cacheExecutor",
             ( r, executor ) -> {
-                throw MondrianResource.instance()
-                    .SegmentCacheLimitReached.ex();
+                throw new MondrianException(SegmentCacheLimitReached);
             } );
     }
 
@@ -341,8 +343,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$sqlExecutor",
             ( r, executor ) -> {
-                throw MondrianResource.instance()
-                    .SqlQueryLimitReached.ex();
+                throw new MondrianException(SqlQueryLimitReached);
             } );
     }
 

@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -69,7 +70,6 @@ import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.parser.MdxParserValidator;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
@@ -78,6 +78,8 @@ import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.NotificationMemoryMonitor;
 
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.FailedToParseQuery;
 
 public class RolapConnection extends ConnectionBase {
   private static final Logger LOGGER =
@@ -471,8 +473,8 @@ public Expression parseExpression( String expr ) {
       final FunctionTable funTable = getSchema().getFunTable();
       return parser.parseExpression( statement, expr, debug, funTable );
     } catch ( Throwable exception ) {
-      throw MondrianResource.instance().FailedToParseQuery.ex(
-        expr,
+      throw new MondrianException(message(FailedToParseQuery,
+        expr),
         exception );
     }
   }

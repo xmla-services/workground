@@ -11,6 +11,12 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.HierarchyHasNoLevels;
+import static mondrian.resource.MondrianResource.HierarchyLevelNamesNotUnique;
+import static mondrian.resource.MondrianResource.HierarchyMustNotHaveMoreThanOneSource;
+import static mondrian.resource.MondrianResource.InvalidHierarchyCondition;
+import static mondrian.resource.MondrianResource.LevelMustHaveNameExpression;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 import static mondrian.rolap.util.JoinUtil.changeLeftRight;
 import static mondrian.rolap.util.JoinUtil.left;
@@ -28,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -92,7 +99,6 @@ import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
@@ -341,16 +347,15 @@ public class RolapHierarchy extends HierarchyBase {
         this.allMember.setOrdinal(0);
 
         if (xmlHierarchy.levels().isEmpty()) {
-            throw MondrianResource.instance().HierarchyHasNoLevels.ex(
-                getUniqueName());
+            throw new MondrianException(message(HierarchyHasNoLevels,
+                getUniqueName()));
         }
 
         Set<String> levelNameSet = new HashSet<>();
         for (MappingLevel level : xmlHierarchy.levels()) {
             if (!levelNameSet.add(level.name())) {
-                throw MondrianResource.instance().HierarchyLevelNamesNotUnique
-                    .ex(
-                        getUniqueName(), level.name());
+                throw new MondrianException(message(HierarchyLevelNamesNotUnique,
+                        getUniqueName(), level.name()));
             }
         }
 
@@ -363,8 +368,8 @@ public class RolapHierarchy extends HierarchyBase {
                 if (getKeyExp(xmlLevel) == null
                     && xmlHierarchy.memberReaderClass() == null)
                 {
-                    throw MondrianResource.instance()
-                        .LevelMustHaveNameExpression.ex(xmlLevel.name());
+                    throw new MondrianException(message(
+                        LevelMustHaveNameExpression, xmlLevel.name()));
                 }
                 levels[i + 1] = new RolapLevel(this, i + 1, xmlLevel);
             }
@@ -388,8 +393,8 @@ public class RolapHierarchy extends HierarchyBase {
         if (xmlHierarchyRelation != null
             && xmlHierarchy.memberReaderClass() != null)
         {
-            throw MondrianResource.instance()
-                .HierarchyMustNotHaveMoreThanOneSource.ex(getUniqueName());
+            throw new MondrianException(message(
+                HierarchyMustNotHaveMoreThanOneSource, getUniqueName()));
         }
         if (!Util.isEmpty(xmlHierarchy.caption())) {
             setCaption(xmlHierarchy.caption());
@@ -631,8 +636,8 @@ public class RolapHierarchy extends HierarchyBase {
                 break;
             }
             if (defaultMember == null) {
-                throw MondrianResource.instance().InvalidHierarchyCondition.ex(
-                    this.getUniqueName());
+                throw new MondrianException(message(InvalidHierarchyCondition,
+                    this.getUniqueName()));
             }
         }
         return defaultMember;

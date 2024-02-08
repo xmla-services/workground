@@ -44,8 +44,12 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCalculatedMember;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxCalculatedHierarchyError;
+import static mondrian.resource.MondrianResource.MdxMemberExpIsSet;
+import static mondrian.resource.MondrianResource.MdxSetExpNotSet;
 
 /**
  * A <code>Formula</code> is a clause in an MDX query which defines a Set or a
@@ -137,12 +141,12 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         final Type type = exp.getType();
         if (isMember) {
             if (!TypeUtil.canEvaluate(type)) {
-                throw MondrianResource.instance().MdxMemberExpIsSet.ex(
-                    exp.toString());
+                throw new MondrianException(message(MdxMemberExpIsSet,
+                    exp.toString()));
             }
         } else {
             if (!TypeUtil.isSet(type)) {
-                throw MondrianResource.instance().MdxSetExpNotSet.ex(idInner);
+                throw new MondrianException(message(MdxSetExpNotSet, idInner));
             }
         }
         for (MemberProperty memberProperty : memberProperties) {
@@ -257,8 +261,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                             hierarchy = parent.getHierarchy();
                         }
                         if (hierarchy == null) {
-                            throw MondrianResource.instance()
-                                .MdxCalculatedHierarchyError.ex(id.toString());
+                            throw new MondrianException(
+                                message(MdxCalculatedHierarchyError, id.toString()));
                         }
                         level = hierarchy.getLevels()[0];
                     }

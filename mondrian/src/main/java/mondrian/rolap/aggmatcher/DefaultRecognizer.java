@@ -21,12 +21,14 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 
 import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.HierarchyUsage;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column;
 import mondrian.util.Pair;
+
+import static mondrian.resource.MondrianResource.AggMultipleMatchingMeasure;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * This is the default Recognizer. It uses the rules found in the file
@@ -35,8 +37,6 @@ import mondrian.util.Pair;
  * @author Richard M. Emberson
  */
 class DefaultRecognizer extends Recognizer {
-
-    private static final MondrianResource mres = MondrianResource.instance();
 
     private final DefaultRules aggDefault;
 
@@ -148,7 +148,7 @@ class DefaultRecognizer extends Recognizer {
                 }
 
                 if (matchCount > 1) {
-                    String msg = mres.AggMultipleMatchingMeasure.str(
+                    String msg = message(AggMultipleMatchingMeasure,
                         msgRecorder.getContext(),
                         aggTable.getName(),
                         dbFactTable.getName(),

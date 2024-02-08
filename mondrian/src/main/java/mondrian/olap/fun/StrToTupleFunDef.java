@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -42,7 +43,11 @@ import mondrian.olap.type.NullType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.NullValue;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxFuncArgumentsNum;
+import static mondrian.resource.MondrianResource.MdxFuncNotHier;
 
 /**
  * Definition of the <code>StrToTuple</code> MDX function.
@@ -51,7 +56,7 @@ import mondrian.resource.MondrianResource;
  * @since Mar 23, 2006
  */
 class StrToTupleFunDef extends AbstractFunctionDefinition {
-	
+
 	private static final String NAME = "StrToTuple";
 	private static final Syntax SYNTAX = Syntax.Function;
 	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
@@ -73,7 +78,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            MondrianResource.instance().NullValue.ex());
+                            new MondrianException(NullValue));
                     }
                     return FunUtil.parseMember(evaluator, string, hierarchy);
                 }
@@ -87,7 +92,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            MondrianResource.instance().NullValue.ex());
+                            new MondrianException(NullValue));
                     }
                     return FunUtil.parseTuple(evaluator, string, hierarchies);
                 }
@@ -99,7 +104,8 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getFunctionMetaData().functionAtom().name());
+            throw new MondrianException(
+                message( MdxFuncArgumentsNum, getFunctionMetaData().functionAtom().name() ));
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -109,8 +115,8 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
             } else if (arg instanceof HierarchyExpressionImpl) {
                 // nothing
             } else {
-                throw MondrianResource.instance().MdxFuncNotHier.ex(
-                    i + 1, getFunctionMetaData().functionAtom().name());
+                throw new MondrianException(message( MdxFuncNotHier,
+                    String.valueOf(i + 1), getFunctionMetaData().functionAtom().name()));
             }
         }
         return super.createCall(validator, args);
@@ -187,12 +193,12 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
             return new StrToTupleFunDef(functionMetaDataFor(argTypes));
         }
 
-        
+
         @Override
         public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
         	return List.of( functionMetaDataFor(new DataType[] {DataType.STRING}));
         }
-        
+
 		private FunctionMetaData functionMetaDataFor(DataType[] argTypes) {
 			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
 					"Constructs a tuple from a string.", "StrToTuple(<String Expression>)",
@@ -205,6 +211,6 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
 		public FunctionAtom getFunctionAtom() {
 			return functionAtom;
 		}
- 
+
     }
 }

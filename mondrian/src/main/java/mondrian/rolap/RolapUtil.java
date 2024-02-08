@@ -13,6 +13,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.NativeEvaluationUnsupported;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxCantFindMember;
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.io.Serializable;
@@ -57,7 +60,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
@@ -306,8 +308,8 @@ public class RolapUtil {
             }
         }
         if (member == null && failIfNotFound) {
-            throw MondrianResource.instance().MdxCantFindMember.ex(
-                Util.implode(segments));
+            throw new MondrianException(message(MdxCantFindMember,
+                Util.implode(segments)));
         }
         return member;
     }
@@ -414,8 +416,8 @@ public class RolapUtil {
                 "ERROR"))
         {
             LOGGER.error(alertMsg);
-            throw MondrianResource.instance().NativeEvaluationUnsupported.ex(
-                functionName);
+            throw new MondrianException(message(NativeEvaluationUnsupported,
+                functionName));
         }
     }
 

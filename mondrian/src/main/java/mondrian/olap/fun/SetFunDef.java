@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -60,7 +61,9 @@ import mondrian.olap.ResultStyleException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.ArgsMustHaveSameHierarchy;
 
 /**
  * <code>SetFunDef</code> implements the 'set' function (whose syntax is the
@@ -70,8 +73,8 @@ import mondrian.resource.MondrianResource;
  * @since 3 March, 2002
  */
 public class SetFunDef extends AbstractFunctionDefinition {
-	
-    
+
+
 	public static final String NAME = "{}";
 	public static final Syntax SYNTAX = Syntax.Braces;
 	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
@@ -106,8 +109,8 @@ public class SetFunDef extends AbstractFunctionDefinition {
                     type0 = type;
                 } else {
                     if (!TypeUtil.isUnionCompatible(type0, type)) {
-                        throw MondrianResource.instance()
-                            .ArgsMustHaveSameHierarchy.ex(getFunctionMetaData().functionAtom().name());
+                        throw new MondrianException(message(
+                            ArgsMustHaveSameHierarchy, getFunctionMetaData().functionAtom().name()));
                     }
                 }
             }
@@ -301,7 +304,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                         return tupleIteratorCalc.evaluateIterable(evaluator);
                     }
 
-     
+
                 };
             case LIST:
             case MUTABLE_LIST:
@@ -350,7 +353,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                         : new UnaryTupleList(Collections.singletonList(member));
                 }
 
- 
+
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
@@ -394,7 +397,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 type = argType;
             }
         }
-        
+
 
 
         FunctionMetaData functionMetaData=       new FunctionMetaDataR(functionAtom, DESCRIPTION, SIGNATURE,
@@ -488,7 +491,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
     }
 
     private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
-  
+
 
         @Override
 		public FunctionDefinition resolve(
@@ -518,7 +521,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 }
                 return null;
             }
-            
+
             FunctionMetaData functionMetaData=       new FunctionMetaDataR(functionAtom, DESCRIPTION, SIGNATURE,
     				 DataType.SET, parameterTypes);
             return new SetFunDef(functionMetaData);

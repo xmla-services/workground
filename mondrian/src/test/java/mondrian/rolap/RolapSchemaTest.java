@@ -8,6 +8,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.RoleUnionGrants;
+import static mondrian.resource.MondrianResource.UnknownRole;
+import static mondrian.resource.MondrianResource.message;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -61,7 +64,6 @@ import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
@@ -131,7 +133,7 @@ class RolapSchemaTest {
             createSchema().createUnionRole(role);
         } catch (MondrianException ex) {
             assertMondrianException(
-                MondrianResource.instance().RoleUnionGrants.ex(), ex);
+                new IllegalArgumentException(RoleUnionGrants), ex);
             return;
         }
         fail("Should fail if union and schema grants exist simultaneously");
@@ -152,7 +154,7 @@ class RolapSchemaTest {
             createSchema().createUnionRole(role);
         } catch (MondrianException ex) {
             assertMondrianException(
-                MondrianResource.instance().UnknownRole.ex(roleName), ex);
+                new MondrianException(message(UnknownRole, roleName)), ex);
             return;
         }
         fail("Should fail if union and schema grants exist simultaneously");
@@ -420,8 +422,8 @@ class RolapSchemaTest {
     }
 
     private void assertMondrianException(
-        MondrianException expected,
-        MondrianException actual)
+        Exception expected,
+        Exception actual)
     {
         assertEquals(expected.getMessage(), actual.getMessage());
     }

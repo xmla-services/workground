@@ -29,6 +29,15 @@
 
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.DuplicateSchemaParameter;
+import static mondrian.resource.MondrianResource.FinalizerErrorRolapSchema;
+import static mondrian.resource.MondrianResource.NamedSetHasBadFormula;
+import static mondrian.resource.MondrianResource.PublicDimensionMustNotHaveForeignKey;
+import static mondrian.resource.MondrianResource.RoleUnionGrants;
+import static mondrian.resource.MondrianResource.UdfClassNotFound;
+import static mondrian.resource.MondrianResource.UdfDuplicateName;
+import static mondrian.resource.MondrianResource.UnknownRole;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.NamedSetUtil.getFormula;
 
 import java.lang.reflect.Constructor;
@@ -47,6 +56,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
@@ -104,7 +114,6 @@ import mondrian.olap.fun.UdfResolver;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.StringType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.AggTableManager;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.spi.impl.Scripts;
@@ -325,10 +334,7 @@ public class RolapSchema implements Schema {
             // Only clear the JDBC cache to prevent leaks.
             flushJdbcSchema();
         } catch (Throwable t) {
-            LOGGER.info(
-                MondrianResource.instance()
-                    .FinalizerErrorRolapSchema.baseMessage,
-                t);
+            LOGGER.info(FinalizerErrorRolapSchema, t);
         }
     }
 
@@ -465,9 +471,9 @@ public class RolapSchema implements Schema {
         // Validate public dimensions.
         for (MappingPrivateDimension xmlDimension : mappingSchema.dimensions()) {
             if (xmlDimension.foreignKey() != null) {
-                throw MondrianResource.instance()
-                    .PublicDimensionMustNotHaveForeignKey.ex(
-                        xmlDimension.name());
+                throw new MondrianException(message(
+                    PublicDimensionMustNotHaveForeignKey,
+                        xmlDimension.name()));
             }
         }
 
@@ -476,8 +482,8 @@ public class RolapSchema implements Schema {
         for (MappingParameter xmlParameter : mappingSchema.parameters()) {
             String name = xmlParameter.name();
             if (!parameterNames.add(name)) {
-                throw MondrianResource.instance().DuplicateSchemaParameter.ex(
-                    name);
+                throw new MondrianException(message(DuplicateSchemaParameter,
+                    name));
             }
             Type type;
             if (ParameterTypeEnum.STRING.equals(xmlParameter.type())) {
@@ -562,8 +568,8 @@ public class RolapSchema implements Schema {
         try {
             exp = getInternalConnection().parseExpression(formulaString);
         } catch (Exception e) {
-            throw MondrianResource.instance().NamedSetHasBadFormula.ex(
-                mappingNamedSet.name(), e);
+            throw new MondrianException(message(NamedSetHasBadFormula,
+                mappingNamedSet.name(), e));
         }
         final Formula formula =
             new FormulaImpl(
@@ -591,7 +597,7 @@ public class RolapSchema implements Schema {
     // package-local visibility for testing purposes
     Role createUnionRole(MappingRole mappingRole) {
         if (mappingRole.schemaGrants() != null && !mappingRole.schemaGrants().isEmpty()) {
-            throw MondrianResource.instance().RoleUnionGrants.ex();
+            throw new MondrianException(RoleUnionGrants);
         }
 
         List<? extends MappingRoleUsage> usages = mappingRole.union().roleUsages();
@@ -599,8 +605,8 @@ public class RolapSchema implements Schema {
         for (MappingRoleUsage roleUsage : usages) {
             Role role = mapNameToRole.get(roleUsage.roleName());
             if (role == null) {
-                throw MondrianResource.instance().UnknownRole.ex(
-                    roleUsage.roleName());
+                throw new MondrianException(message(UnknownRole,
+                    roleUsage.roleName()));
             }
             roleList.add(role);
         }
@@ -771,7 +777,7 @@ public class RolapSchema implements Schema {
 	public Cube lookupCube(final String cube, final boolean failIfNotFound) {
         RolapCube mdxCube = lookupCube(cube);
         if (mdxCube == null && failIfNotFound) {
-            throw MondrianResource.instance().MdxCubeNotFound.ex(cube);
+            throw new MondrianException(message("MDX cube ''{0}'' not found", cube));
         }
         return mdxCube;
     }
@@ -939,9 +945,9 @@ public class RolapSchema implements Schema {
                 // Instantiate UDF by calling correct constructor.
                 udfFactory = new UdfResolver.ClassUdfFactory(klass, name);
             } catch (ClassNotFoundException e) {
-                throw MondrianResource.instance().UdfClassNotFound.ex(
+                throw new MondrianException(message(UdfClassNotFound,
                     name,
-                    className);
+                    className));
             }
         } else {
             udfFactory =
@@ -957,7 +963,7 @@ public class RolapSchema implements Schema {
         // Check for duplicate.
         UdfResolver.UdfFactory existingUdf = mapNameToUdf.get(name);
         if (existingUdf != null) {
-            throw MondrianResource.instance().UdfDuplicateName.ex(name);
+            throw new MondrianException(UdfDuplicateName);
         }
         mapNameToUdf.put(name, udfFactory);
     }

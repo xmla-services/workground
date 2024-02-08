@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEndEvent;
@@ -37,6 +37,9 @@ import mondrian.server.monitor.SqlStatementExecuteEvent;
 import mondrian.server.monitor.SqlStatementStartEvent;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
+
+import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * SqlStatement contains a SQL statement and associated resources throughout its lifetime.
@@ -435,8 +438,8 @@ public class SqlStatement {
             }
             final double val = resultSet.getBigDecimal( columnPlusOne ).doubleValue();
             if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-              throw MondrianResource.instance().JavaDoubleOverflow
-                .ex( resultSet.getMetaData().getColumnName( columnPlusOne ) );
+              throw new MondrianException(
+                  message(JavaDoubleOverflow, resultSet.getMetaData().getColumnName( columnPlusOne ) ));
             }
             return val;
           }

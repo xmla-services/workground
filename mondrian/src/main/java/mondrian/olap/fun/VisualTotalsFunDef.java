@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -36,11 +37,12 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Property;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapMemberBase;
 import mondrian.rolap.RolapUtil;
+
+import static mondrian.resource.MondrianResource.VisualTotalsAppliedToTuples;
 
 /**
  * Definition of the <code>VisualTotals</code> MDX function.
@@ -73,8 +75,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
             final SetType setType = (SetType) validatedArg.getType();
             final Type elementType = setType.getElementType();
             if (!(elementType instanceof MemberType)) {
-                throw MondrianResource.instance().VisualTotalsAppliedToTuples
-                    .ex();
+                throw new MondrianException(VisualTotalsAppliedToTuples);
             }
         }
         return validatedArg;

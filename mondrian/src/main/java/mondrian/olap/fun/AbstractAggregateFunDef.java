@@ -13,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -32,10 +33,12 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapStoredMeasure;
+
+import static mondrian.resource.MondrianResource.IterationLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Abstract base class for all aggregate functions (<code>Aggregate</code>,
@@ -130,8 +133,8 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
             evaluator.getQuery().getConnection().getContext().getConfig().iterationLimit();
         final int productLen = currLen * evaluator.getIterationLength();
         if (iterationLimit > 0 && productLen > iterationLimit) {
-                throw MondrianResource.instance()
-                    .IterationLimitExceeded.ex(iterationLimit);
+                throw new MondrianException(message(
+                    IterationLimitExceeded, iterationLimit));
         }
         evaluator.setIterationLength(currLen);
     }

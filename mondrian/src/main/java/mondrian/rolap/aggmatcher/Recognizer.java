@@ -11,6 +11,16 @@
 
 package mondrian.rolap.aggmatcher;
 
+import static mondrian.resource.MondrianResource.AggUnknownColumn;
+import static mondrian.resource.MondrianResource.DoubleMatchForLevel;
+import static mondrian.resource.MondrianResource.NoAggregatorFound;
+import static mondrian.resource.MondrianResource.NoColumnNameFromExpression;
+import static mondrian.resource.MondrianResource.NoFactCountColumns;
+import static mondrian.resource.MondrianResource.NoMeasureColumns;
+import static mondrian.resource.MondrianResource.NonNumericFactCountColumn;
+import static mondrian.resource.MondrianResource.TooManyFactCountColumns;
+import static mondrian.resource.MondrianResource.TooManyMatchingForeignKeyColumns;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
@@ -36,7 +46,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
 import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.HierarchyUsage;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapCube;
@@ -64,7 +73,6 @@ import mondrian.rolap.sql.SqlQuery;
  */
 public abstract class Recognizer {
 
-    private static final MondrianResource mres = MondrianResource.instance();
     private static final Logger LOGGER = LoggerFactory.getLogger(Recognizer.class);
 
     /**
@@ -197,7 +205,7 @@ public abstract class Recognizer {
                         makeFactCount(aggColumn);
                         nosOfFactCounts++;
                     } else {
-                        String msg = mres.NonNumericFactCountColumn.str(
+                        String msg = message(NonNumericFactCountColumn,
                             aggTable.getName(),
                             dbFactTable.getName(),
                             aggColumn.getName(),
@@ -209,7 +217,7 @@ public abstract class Recognizer {
                 }
             }
             if (nosOfFactCounts == 0) {
-                String msg = mres.NoFactCountColumns.str(
+                String msg = message(NoFactCountColumns,
                     aggTable.getName(),
                     dbFactTable.getName());
                 msgRecorder.reportError(msg);
@@ -217,7 +225,7 @@ public abstract class Recognizer {
                 returnValue = false;
 
             } else if (nosOfFactCounts > 1) {
-                String msg = mres.TooManyFactCountColumns.str(
+                String msg = message(TooManyFactCountColumns,
                     aggTable.getName(),
                     dbFactTable.getName(),
                     nosOfFactCounts);
@@ -284,7 +292,7 @@ public abstract class Recognizer {
 
         try {
             if (nosMeasures == 0) {
-                String msg = mres.NoMeasureColumns.str(
+                String msg = message(NoMeasureColumns,
                     aggTable.getName(),
                     dbFactTable.getName());
                 msgRecorder.reportError(msg);
@@ -435,7 +443,7 @@ public abstract class Recognizer {
                 int matchCount = matchForeignKey(factUsage);
 
                 if (matchCount > 1) {
-                    String msg = mres.TooManyMatchingForeignKeyColumns.str(
+                    String msg = message(TooManyMatchingForeignKeyColumns,
                         aggTable.getName(),
                         dbFactTable.getName(),
                         matchCount,
@@ -635,7 +643,7 @@ public abstract class Recognizer {
                     if (!aggUsageMatchesHierarchyUsage(aggUsage,
                         hierarchyUsage, levelColumnName)) {
                         // Levels should have only one usage.
-                        String msg = mres.DoubleMatchForLevel.str(
+                        String msg = message(DoubleMatchForLevel,
                             aggTable.getName(),
                             dbFactTable.getName(),
                             aggColumn.getName(),
@@ -826,7 +834,7 @@ public abstract class Recognizer {
             new TreeMap<>();
         for (JdbcSchema.Table.Column aggColumn : aggTable.getColumns()) {
             if (!aggColumn.hasUsage()) {
-                String msg = mres.AggUnknownColumn.str(
+                String msg = message(AggUnknownColumn,
                     aggTable.getName(),
                     dbFactTable.getName(),
                     aggColumn.getName());
@@ -913,7 +921,7 @@ public abstract class Recognizer {
         }
 
         if (rollupAgg == null && factAgg != null) {
-            String msg = mres.NoAggregatorFound.str(
+            String msg = message(NoAggregatorFound,
                 aggUsage.getSymbolicName(),
                 factAgg.getName(),
                 siblingAgg.getName());
@@ -1022,7 +1030,7 @@ public abstract class Recognizer {
                 return key.toString();
             }
 
-            String msg = mres.NoColumnNameFromExpression.str(
+            String msg = message(NoColumnNameFromExpression,
                 expr.toString());
             msgRecorder.reportError(msg);
 

@@ -13,6 +13,9 @@
 package mondrian.rolap;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
+import static mondrian.resource.MondrianResource.LevelTableParentNotFound;
+import static mondrian.resource.MondrianResource.MemberFetchLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.sql.ResultSet;
@@ -30,6 +33,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -49,7 +53,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.CrossJoinFunDef;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.aggmatcher.AggStar;
@@ -212,8 +215,7 @@ public class SqlTupleReader implements TupleReader {
                 parentMember = keyToMember.get( parentValue );
               }
               if ( parentMember == null ) {
-                String msg = MondrianResource.instance()
-                    .LevelTableParentNotFound.str(
+                String msg = message(LevelTableParentNotFound,
                         childLevel.getUniqueName(),
                         String.valueOf( parentValue ) );
                 LOGGER.warn(msg);
@@ -513,8 +515,8 @@ public Object getCacheKey() {
 
         if ( limit > 0 && limit < ++fetchCount ) {
           // result limit exceeded, throw an exception
-          throw MondrianResource.instance().MemberFetchLimitExceeded
-            .ex( (long) limit );
+          throw new MondrianException(message(MemberFetchLimitExceeded,
+            (long) limit ));
         }
 
         if ( enumTargetCount == 0 ) {
@@ -741,8 +743,8 @@ public TupleList readTuples(
         return i;
       }
     }
-    throw MondrianResource.instance().Internal.ex(
-      new StringBuilder("Couldn't find level ").append(level.getName()).append(" in tuple.").toString() );
+    throw new IllegalArgumentException(
+      new StringBuilder("Internal error: Couldn't find level ").append(level.getName()).append(" in tuple.").toString() );
   }
 
 

@@ -11,6 +11,11 @@
 package mondrian.test.loader;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.resource.MondrianResource.CreateIndexFailed;
+import static mondrian.resource.MondrianResource.CreateTableFailed;
+import static mondrian.resource.MondrianResource.InvalidInsertLine;
+import static mondrian.resource.MondrianResource.MissingArg;
+import static mondrian.resource.MondrianResource.message;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,6 +50,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +58,6 @@ import org.slf4j.LoggerFactory;
 //import mondrian.spi.DialectManager;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 
 /**
@@ -266,8 +271,8 @@ public class MondrianFoodMartLoaderX {
         }
         if (errorMessage.length() > 0) {
             usage();
-            throw MondrianResource.instance().MissingArg.ex(
-                errorMessage.toString());
+            throw new MondrianException(message(MissingArg,
+                errorMessage.toString()));
         }
 
         if (LOGGER.isInfoEnabled()) {
@@ -605,8 +610,8 @@ public class MondrianFoodMartLoaderX {
                 //   values = "1, 'bar'"
                 final Matcher matcher = regex.matcher(line);
                 if (!matcher.matches()) {
-                    throw MondrianResource.instance().InvalidInsertLine.ex(
-                        lineNumber, line);
+                    throw new MondrianException(message(InvalidInsertLine,
+                        lineNumber, line));
                 }
                 String tableName = matcher.group(1); // e.g. "foo"
                 String columnNames = matcher.group(2);
@@ -2228,8 +2233,8 @@ public class MondrianFoodMartLoaderX {
             final String createDDL = buf.toString();
             executeDDL(createDDL);
         } catch (Exception e) {
-            throw MondrianResource.instance().CreateIndexFailed.ex(
-                indexName, tableName, e);
+            throw new MondrianException(message(CreateIndexFailed,
+                indexName, tableName), e);
         }
     }
 
@@ -2759,8 +2764,8 @@ public class MondrianFoodMartLoaderX {
                     try {
                         executeDDL("DELETE FROM " + quoteId(schema, name));
                     } catch (SQLException e) {
-                        throw MondrianResource.instance().CreateTableFailed.ex(
-                            name, e);
+                        throw new MondrianException(message(CreateTableFailed,
+                            name), e);
                     }
                 }
                 return;
@@ -2828,7 +2833,7 @@ public class MondrianFoodMartLoaderX {
             final String ddl = buf.toString();
             executeDDL(ddl);
         } catch (Exception e) {
-            throw MondrianResource.instance().CreateTableFailed.ex(name, e);
+            throw new MondrianException(message(CreateTableFailed, name), e);
         }
     }
 

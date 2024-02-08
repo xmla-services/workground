@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -48,7 +49,9 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
-import mondrian.resource.MondrianResource;
+
+import static mondrian.resource.MondrianResource.CannotDeduceTypeOfSet;
+import static mondrian.resource.MondrianResource.DescendantsAppliedToSetOfTuples;
 
 /**
  * Definition of the <code>Descendants</code> MDX function.
@@ -88,14 +91,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     if ( type0 instanceof SetType setType ) {
       if ( setType.getElementType() instanceof TupleType ) {
-        throw MondrianResource.instance()
-          .DescendantsAppliedToSetOfTuples.ex();
+        throw new MondrianException(DescendantsAppliedToSetOfTuples);
       }
 
       MemberType memberType = (MemberType) setType.getElementType();
       final Hierarchy hierarchy = memberType.getHierarchy();
       if ( hierarchy == null ) {
-        throw MondrianResource.instance().CannotDeduceTypeOfSet.ex();
+        throw new MondrianException(CannotDeduceTypeOfSet);
       }
       // Convert
       //   Descendants(<set>, <args>)
@@ -433,7 +435,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     private static List<String> reservedWords=Stream.of(Flag.values()).map(Flag::name).toList();
-    
+
     public static List<String> asReservedWords() {
     	return reservedWords;
     }

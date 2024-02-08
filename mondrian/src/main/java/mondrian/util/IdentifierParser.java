@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -30,8 +31,10 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxChildObjectNotFound;
 
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,
@@ -90,9 +93,9 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
                             return olapElement.getHierarchy().getNullMember();
                         }
                     }
-                    throw MondrianResource.instance().MdxChildObjectNotFound.ex(
+                    throw new MondrianException(message(MdxChildObjectNotFound,
                         Util.implode(mondrianSegmentList),
-                        cube.getQualifiedName());
+                        cube.getQualifiedName()));
                 }
             }
             if (expectedHierarchy != null

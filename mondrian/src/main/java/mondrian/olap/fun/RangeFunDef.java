@@ -11,6 +11,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -31,8 +32,9 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.type.NullType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapMember;
+
+import static mondrian.resource.MondrianResource.TwoNullsNotSupported;
 
 /**
  * Definition of the MDX <code>&lt;Member&gt : &lt;Member&gt;</code> operator,
@@ -43,7 +45,7 @@ import mondrian.rolap.RolapMember;
  */
 class RangeFunDef extends AbstractFunctionDefinition {
 
-    
+
 	static FunctionAtom functionAtom = new FunctionAtomR(":", Syntax.Infix);
 	static final RangeFunDef instance = new RangeFunDef();
     private RangeFunDef() {
@@ -83,7 +85,7 @@ class RangeFunDef extends AbstractFunctionDefinition {
         // if both objects are null, throw exception
 
         if (members[0] == null && members[1] == null) {
-            throw MondrianResource.instance().TwoNullsNotSupported.ex();
+            throw new MondrianException(TwoNullsNotSupported);
         } else if (members[0] == null) {
             Member nullMember =
                 ((RolapMember) members[1].evaluate(null)).getHierarchy()

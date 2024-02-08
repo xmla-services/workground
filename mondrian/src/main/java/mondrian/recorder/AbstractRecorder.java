@@ -13,10 +13,10 @@ package mondrian.recorder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
-
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.ForceMessageRecorderError;
+import static mondrian.resource.MondrianResource.TooManyMessageRecorderErrors;
+import static mondrian.resource.MondrianResource.message;
 
 /**
  * Abstract implemention of the {@link MessageRecorder} interface.
@@ -166,9 +166,9 @@ public abstract class AbstractRecorder implements MessageRecorder {
 	public void throwRTException() throws RecorderException {
         if (hasErrors()) {
             final String errorMsg =
-                MondrianResource.instance().ForceMessageRecorderError.str(
+                message(ForceMessageRecorderError,
                     getContext(),
-                    errorMsgCount);
+                    String.valueOf(errorMsgCount));
             throw new RecorderException(errorMsg);
         }
     }
@@ -203,9 +203,9 @@ public abstract class AbstractRecorder implements MessageRecorder {
 
         if (errorMsgCount >= errorMsgLimit) {
             final String errorMsg =
-                MondrianResource.instance().TooManyMessageRecorderErrors.str(
+                message(TooManyMessageRecorderErrors,
                     getContext(),
-                    errorMsgCount);
+                    String.valueOf(errorMsgCount));
             throw new RecorderException(errorMsg);
         }
     }

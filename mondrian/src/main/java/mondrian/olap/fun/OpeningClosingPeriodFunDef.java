@@ -14,6 +14,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -35,9 +36,11 @@ import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
+
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.FunctionMbrAndLevelHierarchyMismatch;
 
 /**
  * Definition of the <code>OpeningPeriod</code> and <code>ClosingPeriod</code>
@@ -121,7 +124,7 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
             levelCalc = compiler.compileLevel(call.getArg(0));
             memberCalc =
                 new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
-                    
+
                         MemberType.forHierarchy(defaultTimeHierarchy),
                     defaultTimeHierarchy);
             break;
@@ -137,11 +140,11 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
                 memberCalc.getType().getDimension();
             final Dimension levelDimension = levelCalc.getType().getDimension();
             if (!memberDimension.equals(levelDimension)) {
-                throw MondrianResource.instance()
-                    .FunctionMbrAndLevelHierarchyMismatch.ex(
+                throw new MondrianException(message(
+                    FunctionMbrAndLevelHierarchyMismatch,
                         opening ? "OpeningPeriod" : "ClosingPeriod",
                         levelDimension.getUniqueName(),
-                        memberDimension.getUniqueName());
+                        memberDimension.getUniqueName()));
             }
         }
         return new AbstractProfilingNestedMemberCalc(

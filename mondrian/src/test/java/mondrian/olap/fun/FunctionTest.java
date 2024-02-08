@@ -13,6 +13,8 @@ package mondrian.olap.fun;
 
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static mondrian.olap.Util.assertTrue;
+import static mondrian.resource.MondrianResource.CousinHierarchyMismatch;
+import static mondrian.resource.MondrianResource.message;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -91,7 +93,6 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.test.BasicQueryTest;
@@ -1612,7 +1613,7 @@ class FunctionTest {//extends FoodMartTestCase {
   void testCousinWrongHierarchy(TestContext context) {
     assertAxisThrows(context.getConnection(),
       "Cousin([Time].[1997], [Gender].[M])",
-      MondrianResource.instance().CousinHierarchyMismatch.str(
+      message(CousinHierarchyMismatch,
         "[Time].[1997]",
         "[Gender].[M]" ) );
   }

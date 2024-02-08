@@ -21,7 +21,8 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.resource.MondrianResource;
+import static mondrian.resource.MondrianResource.message;
+import static mondrian.resource.MondrianResource.MdxDimensionName;
 
 /**
  * Abstract implementation for a {@link Dimension}.
@@ -97,8 +98,7 @@ public abstract class DimensionBase
 
     @Override
 	public String getQualifiedName() {
-        return MondrianResource.instance().MdxDimensionName.str(
-            getUniqueName());
+        return message(MdxDimensionName, getUniqueName());
     }
 
     @Override
