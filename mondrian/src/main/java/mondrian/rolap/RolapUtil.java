@@ -416,7 +416,7 @@ public class RolapUtil {
                 "ERROR"))
         {
             LOGGER.error(alertMsg);
-            throw new MondrianException(message(NativeEvaluationUnsupported,
+            throw new NativeEvaluationUnsupportedException(message(NativeEvaluationUnsupported,
                 functionName));
         }
     }

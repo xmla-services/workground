@@ -13,6 +13,7 @@ package mondrian.rolap.agg;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.AbstractList;
@@ -29,6 +30,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
+import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import mondrian.olap.MondrianException;
@@ -638,7 +640,7 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw new MondrianException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                throw new SQLDataException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
                     columnIndex + 1 ) ));
               }
               axisValueSets[axisIndex].add( val );
@@ -712,7 +714,7 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw new MondrianException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                throw new SQLDataException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
                     columnIndex + 1 ) ));
               }
               processedRows.setDouble( columnIndex, val );
@@ -734,7 +736,7 @@ public class SegmentLoader {
   private void checkResultLimit( int currentCount ) {
     final int limit = MondrianProperties.instance().ResultLimit.get();
     if ( limit > 0 && currentCount > limit ) {
-      throw new MondrianException(message(SegmentFetchLimitExceeded, limit ));
+      throw new ResourceLimitExceededException(message(SegmentFetchLimitExceeded, limit ));
     }
   }
 

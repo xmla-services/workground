@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import mondrian.olap.MondrianException;
+import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -1540,7 +1541,7 @@ public Cell getCell( int[] pos ) {
       if ( this.limit > 0 ) {
         this.totalCellCount *= this.axisCount;
         if ( this.totalCellCount > this.limit ) {
-          throw new MondrianException(message(TotalMembersLimitExceeded, String.valueOf(this.totalCellCount), String.valueOf(this.limit) ));
+          throw new ResourceLimitExceededException(message(TotalMembersLimitExceeded, String.valueOf(this.totalCellCount), String.valueOf(this.limit) ));
         }
         this.axisCount = 0;
       }

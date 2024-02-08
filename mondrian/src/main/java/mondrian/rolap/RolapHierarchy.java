@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.InvalidHierarchyException;
 import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -636,7 +637,7 @@ public class RolapHierarchy extends HierarchyBase {
                 break;
             }
             if (defaultMember == null) {
-                throw new MondrianException(message(InvalidHierarchyCondition,
+                throw new InvalidHierarchyException(message(InvalidHierarchyCondition,
                     this.getUniqueName()));
             }
         }
