@@ -4,7 +4,6 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.*;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.TreeSet;
