@@ -21,6 +21,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
+import mondrian.olap.MondrianException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +90,7 @@ public class UtilCompatibleJdk16 implements UtilCompatible  {
             // side.
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("",
-                    new IllegalArgumentException(message(
+                    new MondrianException(message(
                         ExecutionStatementCleanupException,
                             t.getMessage()), t),
                     t);

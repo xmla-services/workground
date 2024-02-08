@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -212,7 +213,7 @@ public class TupleType implements Type {
                 final Hierarchy hierarchy = memberType.getHierarchy();
                 final Hierarchy hierarchy1 = member1.getHierarchy();
                 if (hierarchy != null && hierarchy == hierarchy1) {
-                    throw new IllegalArgumentException(message(DupHierarchiesInTuple,
+                    throw new MondrianException(message(DupHierarchiesInTuple,
                         hierarchy.getUniqueName()));
                 }
             }

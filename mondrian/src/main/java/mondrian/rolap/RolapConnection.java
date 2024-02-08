@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -469,7 +470,7 @@ public Expression parseExpression( String expr ) {
       final FunctionTable funTable = getSchema().getFunTable();
       return parser.parseExpression( statement, expr, debug, funTable );
     } catch ( Throwable exception ) {
-      throw new IllegalArgumentException(message(FailedToParseQuery,
+      throw new MondrianException(message(FailedToParseQuery,
         expr),
         exception );
     }

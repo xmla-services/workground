@@ -707,7 +707,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             for (QueryAxis axis : axes) {
                 validator.validate(axis);
                 if (!axisNames.add(axis.getAxisOrdinal().logicalOrdinal())) {
-                    throw new IllegalArgumentException(message(DuplicateAxis,
+                    throw new MondrianException(message(DuplicateAxis,
                         axis.getAxisName()));
                 }
             }
@@ -721,7 +721,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     AxisOrdinal axisName =
                         AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(
                             seekOrdinal);
-                    throw new IllegalArgumentException(message(NonContiguousAxis,
+                    throw new MondrianException(message(NonContiguousAxis,
                         seekOrdinal,
                         axisName.name()));
                 }
@@ -741,7 +741,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
             }
             if (useCount > 1) {
-                throw new IllegalArgumentException(message(HierarchyInIndependentAxes,
+                throw new MondrianException(message(HierarchyInIndependentAxes,
                     hierarchy.getUniqueName()));
             }
         }
@@ -946,11 +946,11 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         final Parameter param =
             getSchemaReader(false).getParameter(parameterName);
         if (param == null) {
-            throw new IllegalArgumentException(message(UnknownParameter,
+            throw new MondrianException(message(UnknownParameter,
                 parameterName));
         }
         if (!param.isModifiable()) {
-            throw new IllegalArgumentException(message(ParameterIsNotModifiable,
+            throw new MondrianException(message(ParameterIsNotModifiable,
                 parameterName, param.getScope().name()));
         }
         final Object value2 =
@@ -1272,7 +1272,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 while ((parent != null) && (grandParent != null)) {
                     if (grandParent instanceof Query) {
                         if (parent instanceof Axis) {
-                            throw new IllegalArgumentException(message(
+                            throw new MondrianException(message(
                                 MdxCalculatedFormulaUsedOnAxis,
                                     formulaType,
                                     uniqueName,
@@ -1283,13 +1283,13 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                                 form.isMember()
                                     ? CalculatedMember
                                     : CalculatedSet;
-                            throw new IllegalArgumentException(message(
+                            throw new MondrianException(message(
                                 MdxCalculatedFormulaUsedInFormula,
                                     formulaType, uniqueName, parentFormulaType,
                                     form.getUniqueName()));
 
                         } else {
-                            throw new IllegalArgumentException(message(
+                            throw new MondrianException(message(
                                 MdxCalculatedFormulaUsedOnSlicer,
                                     formulaType, uniqueName));
                         }
@@ -1298,7 +1298,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     parent = walker.getAncestor(i);
                     grandParent = walker.getAncestor(i + 1);
                 }
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     MdxCalculatedFormulaUsedInQuery,
                         formulaType, uniqueName, Util.unparse(this)));
             }
@@ -1373,7 +1373,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     public void renameFormula(String uniqueName, String newName) {
         Formula formula = findFormula(uniqueName);
         if (formula == null) {
-            throw new IllegalArgumentException( message( MdxFormulaNotFound,
+            throw new MondrianException(message( MdxFormulaNotFound,
                 "formula", uniqueName, Util.unparse(this)));
         }
         formula.rename(newName);
@@ -1397,7 +1397,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void setAxisShowEmptyCells(int axis, boolean showEmpty) {
         if (axis >= axes.length) {
-            throw new IllegalArgumentException( message(MdxAxisShowSubtotalsNotSupported,
+            throw new MondrianException(message(MdxAxisShowSubtotalsNotSupported,
                 axis));
         }
         axes[axis].setNonEmpty(!showEmpty);
@@ -1409,7 +1409,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal axis) {
         if (axis.logicalOrdinal() >= axes.length) {
-            throw new IllegalArgumentException(message(MdxAxisShowSubtotalsNotSupported,
+            throw new MondrianException(message(MdxAxisShowSubtotalsNotSupported,
                 axis.logicalOrdinal()));
         }
         QueryAxis queryAxis =
@@ -2284,7 +2284,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 String parameterName =
                     ParameterFunDef.getParameterName(call.getArgs());
                 if (parametersByName.get(parameterName) != null) {
-                    throw new IllegalArgumentException(message(
+                    throw new MondrianException(message(
                         ParameterDefinedMoreThanOnce, parameterName));
                 }
 

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
@@ -437,7 +438,7 @@ public class SqlStatement {
             }
             final double val = resultSet.getBigDecimal( columnPlusOne ).doubleValue();
             if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-              throw new IllegalArgumentException(
+              throw new MondrianException(
                   message(JavaDoubleOverflow, resultSet.getMetaData().getColumnName( columnPlusOne ) ));
             }
             return val;

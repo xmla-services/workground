@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -163,7 +164,7 @@ public class RolapCell implements Cell {
         if (!result.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig()
             .enableDrillThrough())
         {
-            throw new IllegalArgumentException(message(
+            throw new MondrianException(message(
                 DrillthroughDisabled,
                         "enableDrillThrough"));
         }

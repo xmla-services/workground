@@ -117,7 +117,7 @@ public class CubeAccess {
             SchemaReader schemaReader = mdxCube.getSchemaReader(null);
             Member member = schemaReader.getMemberByUniqueName(sMembers, fail);
             if (member == null) {
-                throw new IllegalArgumentException(message(MdxCubeSlicerMemberError,
+                throw new MondrianException(message(MdxCubeSlicerMemberError,
                     sMember, sHierarchy, mdxCube.getUniqueName()));
             }
             // there should be only slicer per hierarchy; ignore the rest
@@ -131,7 +131,7 @@ public class CubeAccess {
                     new IdImpl.NameSegmentImpl(sHierarchy),
                     fail);
             if (hierarchy == null) {
-                throw new IllegalArgumentException(
+                throw new MondrianException(
                     message(MdxCubeSlicerHierarchyError, sHierarchy, mdxCube.getUniqueName()));
             }
             hierarchyList.add(hierarchy);

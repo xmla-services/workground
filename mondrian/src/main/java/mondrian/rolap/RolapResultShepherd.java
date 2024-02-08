@@ -82,7 +82,7 @@ public class RolapResultShepherd {
                         Runnable r,
                         ThreadPoolExecutor executor)
                     {
-                        throw new IllegalArgumentException(message(QueryLimitReached,
+                        throw new MondrianException(message(QueryLimitReached,
                             maximumPoolSize,
                             "rolapConnectionShepherdNbThreads"));
                     }

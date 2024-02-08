@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -164,7 +165,7 @@ public class CastFunDef extends AbstractFunctionDefinition {
             } else if (typeName.equalsIgnoreCase("Integer")) {
                 returnCategory = DataType.INTEGER;
             } else {
-                throw new IllegalArgumentException(message(CastInvalidType, typeName));
+                throw new MondrianException(message(CastInvalidType, typeName));
             }
 
 

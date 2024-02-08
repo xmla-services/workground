@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -117,7 +118,7 @@ public class ValidMeasureFunDef extends AbstractFunctionDefinition
                 .isAssignableFrom(vcMeasure.getClass()))
             {
                 // Cannot use calculated members in ValidMeasure.
-                throw new IllegalArgumentException(message(ValidMeasureUsingCalculatedMember,vcMeasure.getUniqueName()));
+                throw new MondrianException(message(ValidMeasureUsingCalculatedMember,vcMeasure.getUniqueName()));
             }
 
             baseCube = ((RolapVirtualCubeMeasure)vcMeasure).getCube();

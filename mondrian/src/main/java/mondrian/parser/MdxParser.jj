@@ -1452,7 +1452,7 @@ QueryAxis axisSpecification() :
             if (number.doubleValue() < 0
                 || number.doubleValue() != number.intValue())
             {
-                throw new IllegalArgumentException(message(InvalidAxis,
+                throw new MondrianException(message(InvalidAxis,
                     number.doubleValue()));
             }
 

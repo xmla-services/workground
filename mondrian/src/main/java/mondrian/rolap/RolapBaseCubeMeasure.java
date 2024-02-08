@@ -11,6 +11,7 @@ package mondrian.rolap;
 
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
@@ -130,7 +131,7 @@ public class RolapBaseCubeMeasure
                 buf.append(aggName);
                 buf.append('\'');
             }
-            throw new IllegalArgumentException(message(UnknownAggregator,
+            throw new MondrianException(message(UnknownAggregator,
                 aggregatorName,
                 buf.toString()));
         }
@@ -146,7 +147,7 @@ public class RolapBaseCubeMeasure
             }
         }
         if (RolapBaseCubeMeasure.DataType.valueOf(datatype.getValue()) == null) {
-            throw new IllegalArgumentException(message(CastInvalidType, datatype.getValue()));
+            throw new MondrianException(message(CastInvalidType, datatype.getValue()));
         }
         setProperty(Property.DATATYPE.name, datatype.getValue());
     }

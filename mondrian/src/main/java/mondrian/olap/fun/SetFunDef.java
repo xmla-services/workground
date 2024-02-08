@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -108,7 +109,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                     type0 = type;
                 } else {
                     if (!TypeUtil.isUnionCompatible(type0, type)) {
-                        throw new IllegalArgumentException(message(
+                        throw new MondrianException(message(
                             ArgsMustHaveSameHierarchy, getFunctionMetaData().functionAtom().name()));
                     }
                 }

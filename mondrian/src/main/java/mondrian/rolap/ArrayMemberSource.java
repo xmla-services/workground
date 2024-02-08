@@ -16,6 +16,7 @@ package mondrian.rolap;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Segment;
 
 import mondrian.olap.Util;
@@ -89,7 +90,7 @@ abstract class ArrayMemberSource implements MemberSource {
             }
         }
         if (failIfNotFound) {
-            throw new IllegalArgumentException(message( MdxCantFindMember, uniqueName));
+            throw new MondrianException(message( MdxCantFindMember, uniqueName));
         } else {
             return null;
         }

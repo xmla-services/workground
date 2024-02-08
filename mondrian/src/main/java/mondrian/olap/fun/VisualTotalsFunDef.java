@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -74,7 +75,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
             final SetType setType = (SetType) validatedArg.getType();
             final Type elementType = setType.getElementType();
             if (!(elementType instanceof MemberType)) {
-                throw new IllegalArgumentException(VisualTotalsAppliedToTuples);
+                throw new MondrianException(VisualTotalsAppliedToTuples);
             }
         }
         return validatedArg;

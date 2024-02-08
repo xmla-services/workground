@@ -24,6 +24,7 @@ import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -363,7 +364,7 @@ public class HierarchyUsage {
             RolapLevel joinLevel = (RolapLevel)
                     Util.lookupHierarchyLevel(hierarchy, cubeDim.level());
             if (joinLevel == null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     DimensionUsageHasUnknownLevel,
                         hierarchy.getUniqueName(),
                         cube.getName(),
@@ -403,13 +404,13 @@ public class HierarchyUsage {
         final boolean inFactTable = this.joinTable.equals(cube.getFact());
         if (!inFactTable) {
             if (this.joinExp == null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     MustSpecifyPrimaryKeyForHierarchy,
                         hierarchy.getUniqueName(),
                         cube.getName()));
             }
             if (foreignKey == null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     MustSpecifyForeignKeyForHierarchy,
                         hierarchy.getUniqueName(),
                         cube.getName()));
@@ -433,7 +434,7 @@ public class HierarchyUsage {
         if (tableName == null) {
             table = hierarchy.getUniqueTable();
             if (table == null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     MustSpecifyPrimaryKeyTableForHierarchy,
                         hierarchy.getUniqueName()));
             }

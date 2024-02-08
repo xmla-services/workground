@@ -91,7 +91,7 @@ public abstract class ConnectionBase implements Connection {
                 parser.parseInternal(
                     statement, query, debug, funTable, strictValidation);
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(FailedToParseQuery, query), e);
+            throw new MondrianException(message(FailedToParseQuery, query), e);
         }
     }
 
@@ -124,7 +124,7 @@ public abstract class ConnectionBase implements Connection {
                 parser.parseInternal(
                     statement, query, debug, funTable, strictValidation);
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(FailedToParseQuery, query), e);
+            throw new MondrianException(message(FailedToParseQuery, query), e);
         }
     }
 }

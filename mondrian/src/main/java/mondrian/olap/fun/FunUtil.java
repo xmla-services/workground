@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -1162,7 +1163,7 @@ public class FunUtil extends Util {
       return ancestorMember;
     }
     if ( member.getHierarchy() != ancestorMember.getHierarchy() ) {
-      throw new IllegalArgumentException(message(CousinHierarchyMismatch,
+      throw new MondrianException(message(CousinHierarchyMismatch,
         member.getUniqueName(), ancestorMember.getUniqueName() ));
     }
     if ( member.getLevel().getDepth()
@@ -1221,7 +1222,7 @@ public class FunUtil extends Util {
     Level targetLevel ) {
     if ( ( targetLevel != null )
       && ( member.getHierarchy() != targetLevel.getHierarchy() ) ) {
-      throw new IllegalArgumentException(message(MemberNotInLevelHierarchy,
+      throw new MondrianException(message(MemberNotInLevelHierarchy,
         member.getUniqueName(), targetLevel.getUniqueName() ));
     }
 
@@ -1700,7 +1701,7 @@ public class FunUtil extends Util {
     // todo: check for garbage at end of string
     final Member member = members[ 0 ];
     if ( member == null ) {
-      throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+      throw new MondrianException(message(MdxChildObjectNotFound,
         string, evaluator.getCube().getQualifiedName() ));
     }
     return member;

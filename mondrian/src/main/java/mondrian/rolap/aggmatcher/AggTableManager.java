@@ -99,7 +99,7 @@ public class AggTableManager {
             try {
                 loadRolapStarAggregates(connectionProps);
             } catch (SQLException ex) {
-                throw new IllegalArgumentException(AggLoadingError, ex);
+                throw new MondrianException(AggLoadingError, ex);
             }
         }
         printResults();
@@ -310,7 +310,7 @@ public class AggTableManager {
             msgRecorder.logWarningMessage(getLogger());
             msgRecorder.logErrorMessage(getLogger());
             if (msgRecorder.hasErrors()) {
-                throw new IllegalArgumentException(message(AggLoadingExceededErrorCount,
+                throw new MondrianException(message(AggLoadingExceededErrorCount,
                     msgRecorder.getErrorCount()));
             }
         }

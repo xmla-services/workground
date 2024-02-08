@@ -125,13 +125,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       Set<Member> members = map.get( hierarchy );
 
       if ( members != null && members.size() > 1 ) {
-          IllegalArgumentException exception =
-            new IllegalArgumentException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
+          MondrianException exception =
+            new MondrianException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
 
         if ( alertValue.equalsIgnoreCase( "WARN" ) ) {
           HierarchyCurrentMemberFunDef.LOGGER.warn( exception.getMessage() );
         } else if ( alertValue.equalsIgnoreCase("ERROR") ) {
-          throw new IllegalArgumentException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
+          throw new MondrianException(message(CurrentMemberWithCompoundSlicer,  hierarchy.getUniqueName() ));
         }
       }
     }

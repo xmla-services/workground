@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -233,7 +234,7 @@ public class RolapLevel extends LevelBase {
         Dimension dim = hierarchy.getDimension();
         if (dim.getDimensionType() == DimensionType.TIME_DIMENSION) {
             if (!levelType.isTime() && !isAll()) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     NonTimeLevelInTimeHierarchy, getUniqueName()));
             }
         } else if (dim.getDimensionType() == null) {
@@ -241,7 +242,7 @@ public class RolapLevel extends LevelBase {
             // - check later
         } else {
             if (levelType.isTime()) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     TimeLevelInNonTimeHierarchy, getUniqueName()));
             }
         }

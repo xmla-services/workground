@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -1539,7 +1540,7 @@ public Cell getCell( int[] pos ) {
       if ( this.limit > 0 ) {
         this.totalCellCount *= this.axisCount;
         if ( this.totalCellCount > this.limit ) {
-          throw new IllegalArgumentException(message(TotalMembersLimitExceeded, String.valueOf(this.totalCellCount), String.valueOf(this.limit) ));
+          throw new MondrianException(message(TotalMembersLimitExceeded, String.valueOf(this.totalCellCount), String.valueOf(this.limit) ));
         }
         this.axisCount = 0;
       }
@@ -1731,7 +1732,7 @@ public Cell getCell( int[] pos ) {
       Object value;
       if ( liftedValue != null ) {
         if ( liftedValue == CycleSentinel ) {
-          throw new IllegalArgumentException(message(CycleDuringParameterEvaluation, slot.getParameter().getName() ));
+          throw new MondrianException(message(CycleDuringParameterEvaluation, slot.getParameter().getName() ));
         }
         if ( liftedValue == NullSentinel ) {
           value = null;

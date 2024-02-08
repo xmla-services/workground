@@ -11,6 +11,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -84,7 +85,7 @@ class RangeFunDef extends AbstractFunctionDefinition {
         // if both objects are null, throw exception
 
         if (members[0] == null && members[1] == null) {
-            throw new IllegalArgumentException(TwoNullsNotSupported);
+            throw new MondrianException(TwoNullsNotSupported);
         } else if (members[0] == null) {
             Member nullMember =
                 ((RolapMember) members[1].evaluate(null)).getHierarchy()

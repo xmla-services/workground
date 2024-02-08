@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -223,7 +224,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
             return hierarchyToMember(hierarchyCalc);
         }
         if (type instanceof NullType) {
-            throw new IllegalArgumentException(NullNotSupported);
+            throw new MondrianException(NullNotSupported);
         } else if (type instanceof DimensionType) {
             final HierarchyCalc hierarchyCalc = compileHierarchy(exp);
             return hierarchyToMember(hierarchyCalc);

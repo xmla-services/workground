@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -514,7 +515,7 @@ public Object getCacheKey() {
 
         if ( limit > 0 && limit < ++fetchCount ) {
           // result limit exceeded, throw an exception
-          throw new IllegalArgumentException(message(MemberFetchLimitExceeded,
+          throw new MondrianException(message(MemberFetchLimitExceeded,
             (long) limit ));
         }
 

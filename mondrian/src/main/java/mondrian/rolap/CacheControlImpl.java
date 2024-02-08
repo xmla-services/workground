@@ -124,7 +124,7 @@ public class CacheControlImpl implements CacheControl {
             List<Dimension> dimensionality = region.getDimensionality();
             set.addAll(dimensionality);
             if (set.size() < prevSize + dimensionality.size()) {
-                throw new IllegalArgumentException(
+                throw new MondrianException(
                     message(CacheFlushCrossjoinDimensionsInCommon, getDimensionalityList(regions)));
             }
 
@@ -162,7 +162,7 @@ public class CacheControlImpl implements CacheControl {
             if (!region.getDimensionality().equals(
                     regions[0].getDimensionality()))
             {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     CacheFlushUnionDimensionalityMismatch,
                         regions[0].getDimensionality().toString(),
                         region.getDimensionality().toString()));
@@ -223,7 +223,7 @@ public class CacheControlImpl implements CacheControl {
             }
         }
         if (!found) {
-            throw new IllegalArgumentException(CacheFlushRegionMustContainMembers);
+            throw new MondrianException(CacheFlushRegionMustContainMembers);
         }
         final UnionCellRegion union = normalize((CellRegionImpl) region);
         for (CellRegionImpl cellRegion : union.regions) {

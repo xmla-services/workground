@@ -466,7 +466,7 @@ public abstract class RolapAggregationManager {
                         ((RolapBaseCubeMeasure)member).getStarMeasure());
             return;
         } else if (member instanceof RolapHierarchy.RolapCalculatedMeasure) {
-            throw new IllegalArgumentException(message(DrillthroughCalculatedMember,
+            throw new MondrianException(message(DrillthroughCalculatedMember,
                 member.getUniqueName()));
         } else {
             throw new MondrianException(

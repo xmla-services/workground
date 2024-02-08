@@ -9,6 +9,7 @@
 
 package mondrian.rolap;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -100,7 +101,7 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     @Override
 	public void setValue(Object value) {
         if (!modifiable) {
-            throw new IllegalArgumentException(message(ParameterIsNotModifiable,
+            throw new MondrianException(message(ParameterIsNotModifiable,
                 getName(), getScope().name()));
         }
         this.assigned = true;
@@ -115,7 +116,7 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     @Override
 	public void unsetValue() {
         if (!modifiable) {
-            throw new IllegalArgumentException(message(ParameterIsNotModifiable,
+            throw new MondrianException(message(ParameterIsNotModifiable,
                 getName(), getScope().name()));
         }
         assigned = false;

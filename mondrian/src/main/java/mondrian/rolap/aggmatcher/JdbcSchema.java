@@ -32,6 +32,7 @@ import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
@@ -972,7 +973,7 @@ public class JdbcSchema {
             if ((this.tableUsageType != TableUsageType.UNKNOWN)
                 && (this.tableUsageType != tableUsageType))
             {
-                throw new IllegalArgumentException(message(AttemptToChangeTableUsage,
+                throw new MondrianException(message(AttemptToChangeTableUsage,
                     getName(),
                     this.tableUsageType.name(),
                     tableUsageType.name()));

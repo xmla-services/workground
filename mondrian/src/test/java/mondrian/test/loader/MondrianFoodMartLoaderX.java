@@ -50,6 +50,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,6 @@ import org.slf4j.LoggerFactory;
 //import mondrian.spi.DialectManager;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 
 /**
@@ -271,7 +271,7 @@ public class MondrianFoodMartLoaderX {
         }
         if (errorMessage.length() > 0) {
             usage();
-            throw new IllegalArgumentException(message(MissingArg,
+            throw new MondrianException(message(MissingArg,
                 errorMessage.toString()));
         }
 
@@ -610,7 +610,7 @@ public class MondrianFoodMartLoaderX {
                 //   values = "1, 'bar'"
                 final Matcher matcher = regex.matcher(line);
                 if (!matcher.matches()) {
-                    throw new IllegalArgumentException(message(InvalidInsertLine,
+                    throw new MondrianException(message(InvalidInsertLine,
                         lineNumber, line));
                 }
                 String tableName = matcher.group(1); // e.g. "foo"
@@ -2233,7 +2233,7 @@ public class MondrianFoodMartLoaderX {
             final String createDDL = buf.toString();
             executeDDL(createDDL);
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(CreateIndexFailed,
+            throw new MondrianException(message(CreateIndexFailed,
                 indexName, tableName), e);
         }
     }
@@ -2764,7 +2764,7 @@ public class MondrianFoodMartLoaderX {
                     try {
                         executeDDL("DELETE FROM " + quoteId(schema, name));
                     } catch (SQLException e) {
-                        throw new IllegalArgumentException(message(CreateTableFailed,
+                        throw new MondrianException(message(CreateTableFailed,
                             name), e);
                     }
                 }
@@ -2833,7 +2833,7 @@ public class MondrianFoodMartLoaderX {
             final String ddl = buf.toString();
             executeDDL(ddl);
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(CreateTableFailed, name), e);
+            throw new MondrianException(message(CreateTableFailed, name), e);
         }
     }
 

@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -77,7 +78,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            new IllegalArgumentException(NullValue));
+                            new MondrianException(NullValue));
                     }
                     return FunUtil.parseMember(evaluator, string, hierarchy);
                 }
@@ -91,7 +92,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
-                            new IllegalArgumentException(NullValue));
+                            new MondrianException(NullValue));
                     }
                     return FunUtil.parseTuple(evaluator, string, hierarchies);
                 }
@@ -103,7 +104,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw new IllegalArgumentException(
+            throw new MondrianException(
                 message( MdxFuncArgumentsNum, getFunctionMetaData().functionAtom().name() ));
         }
         for (int i = 1; i < argCount; i++) {
@@ -114,7 +115,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
             } else if (arg instanceof HierarchyExpressionImpl) {
                 // nothing
             } else {
-                throw new IllegalArgumentException( message( MdxFuncNotHier,
+                throw new MondrianException(message( MdxFuncNotHier,
                     String.valueOf(i + 1), getFunctionMetaData().functionAtom().name()));
             }
         }

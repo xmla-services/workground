@@ -119,7 +119,7 @@ abstract class ValidatorImpl implements Validator {
             final Type type = resolved.getType();
             if (!TypeUtil.canEvaluate(type)) {
                 String exprString = Util.unparse(resolved);
-                throw new IllegalArgumentException(message(MdxMemberExpIsSet,
+                throw new MondrianException(message(MdxMemberExpIsSet,
                     exprString));
             }
         }
@@ -238,7 +238,7 @@ abstract class ValidatorImpl implements Validator {
         }
         switch (matchDefs.size()) {
         case 0:
-            throw new IllegalArgumentException(message(NoFunctionMatchesSignature,
+            throw new MondrianException(message(NoFunctionMatchesSignature,
                 signature));
         case 1:
             break;
@@ -250,7 +250,7 @@ abstract class ValidatorImpl implements Validator {
                 }
                 buf.append(matchDef.getSignature());
             }
-            throw new IllegalArgumentException(message(
+            throw new MondrianException(message(
                 MoreThanOneFunctionMatchesSignature,
                     signature,
                     buf.toString()));
@@ -407,7 +407,7 @@ abstract class ValidatorImpl implements Validator {
             if (param != null) {
                 return param;
             }
-            throw new IllegalArgumentException(message(UnknownParameter, name));
+            throw new MondrianException(message(UnknownParameter, name));
         }
     }
 

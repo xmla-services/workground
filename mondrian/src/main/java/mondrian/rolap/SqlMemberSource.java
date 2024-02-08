@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.Context;
@@ -385,7 +386,7 @@ class SqlMemberSource
                 if (limit > 0 && limit < stmt.rowCount) {
                     // result limit exceeded, throw an exception
                     throw stmt.handle(
-                        new IllegalArgumentException(message(MemberFetchLimitExceeded, limit)));
+                        new MondrianException(message(MemberFetchLimitExceeded, limit)));
                 }
 
                 int column = 0;
@@ -1044,7 +1045,7 @@ RME is this right
 
                 if (limit > 0 && limit < stmt.rowCount) {
                     // result limit exceeded, throw an exception
-                    throw new IllegalArgumentException(message(MemberFetchLimitExceeded,
+                    throw new MondrianException(message(MemberFetchLimitExceeded,
                         limit));
                 }
 

@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -90,13 +91,13 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     if ( type0 instanceof SetType setType ) {
       if ( setType.getElementType() instanceof TupleType ) {
-        throw new IllegalArgumentException(DescendantsAppliedToSetOfTuples);
+        throw new MondrianException(DescendantsAppliedToSetOfTuples);
       }
 
       MemberType memberType = (MemberType) setType.getElementType();
       final Hierarchy hierarchy = memberType.getHierarchy();
       if ( hierarchy == null ) {
-        throw new IllegalArgumentException(CannotDeduceTypeOfSet);
+        throw new MondrianException(CannotDeduceTypeOfSet);
       }
       // Convert
       //   Descendants(<set>, <args>)

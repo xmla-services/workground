@@ -12,6 +12,7 @@ package mondrian.rolap.format;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import mondrian.olap.MondrianException;
 import mondrian.spi.CellFormatter;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
@@ -74,7 +75,7 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(CellFormatterLoadFailed,
+            throw new MondrianException(message(CellFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
                 e));
@@ -103,7 +104,7 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(MemberFormatterLoadFailed,
+            throw new MondrianException(message(MemberFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
                 e));
@@ -133,7 +134,7 @@ public class FormatterFactory {
                     context.getScriptLanguage());
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(PropertyFormatterLoadFailed,
+            throw new MondrianException(message(PropertyFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
                 e));

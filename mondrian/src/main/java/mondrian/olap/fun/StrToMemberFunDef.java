@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -49,7 +50,7 @@ class StrToMemberFunDef extends AbstractFunctionDefinition {
                     memberNameCalc.evaluate(evaluator);
                 if (memberName == null) {
                     throw FunUtil.newEvalException(
-                        new IllegalArgumentException(NullValue));
+                        new MondrianException(NullValue));
                 }
                 return FunUtil.parseMember(evaluator, memberName, null);
             }

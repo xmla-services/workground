@@ -263,7 +263,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                         new Expression[] {exp});
                 exp = validator.validate(exp, false);
             } else {
-                throw new IllegalArgumentException(message(MdxAxisIsNotSet,
+                throw new MondrianException(message(MdxAxisIsNotSet,
                     axisOrdinal.name()));
             }
         }

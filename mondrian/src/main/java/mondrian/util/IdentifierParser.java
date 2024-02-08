@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -92,7 +93,7 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
                             return olapElement.getHierarchy().getNullMember();
                         }
                     }
-                    throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+                    throw new MondrianException(message(MdxChildObjectNotFound,
                         Util.implode(mondrianSegmentList),
                         cube.getQualifiedName()));
                 }

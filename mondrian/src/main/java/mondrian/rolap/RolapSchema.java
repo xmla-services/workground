@@ -56,6 +56,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
@@ -470,7 +471,7 @@ public class RolapSchema implements Schema {
         // Validate public dimensions.
         for (MappingPrivateDimension xmlDimension : mappingSchema.dimensions()) {
             if (xmlDimension.foreignKey() != null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     PublicDimensionMustNotHaveForeignKey,
                         xmlDimension.name()));
             }
@@ -481,7 +482,7 @@ public class RolapSchema implements Schema {
         for (MappingParameter xmlParameter : mappingSchema.parameters()) {
             String name = xmlParameter.name();
             if (!parameterNames.add(name)) {
-                throw new IllegalArgumentException(message(DuplicateSchemaParameter,
+                throw new MondrianException(message(DuplicateSchemaParameter,
                     name));
             }
             Type type;
@@ -567,7 +568,7 @@ public class RolapSchema implements Schema {
         try {
             exp = getInternalConnection().parseExpression(formulaString);
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(NamedSetHasBadFormula,
+            throw new MondrianException(message(NamedSetHasBadFormula,
                 mappingNamedSet.name(), e));
         }
         final Formula formula =
@@ -596,7 +597,7 @@ public class RolapSchema implements Schema {
     // package-local visibility for testing purposes
     Role createUnionRole(MappingRole mappingRole) {
         if (mappingRole.schemaGrants() != null && !mappingRole.schemaGrants().isEmpty()) {
-            throw new IllegalArgumentException(RoleUnionGrants);
+            throw new MondrianException(RoleUnionGrants);
         }
 
         List<? extends MappingRoleUsage> usages = mappingRole.union().roleUsages();
@@ -604,7 +605,7 @@ public class RolapSchema implements Schema {
         for (MappingRoleUsage roleUsage : usages) {
             Role role = mapNameToRole.get(roleUsage.roleName());
             if (role == null) {
-                throw new IllegalArgumentException(message(UnknownRole,
+                throw new MondrianException(message(UnknownRole,
                     roleUsage.roleName()));
             }
             roleList.add(role);
@@ -776,7 +777,7 @@ public class RolapSchema implements Schema {
 	public Cube lookupCube(final String cube, final boolean failIfNotFound) {
         RolapCube mdxCube = lookupCube(cube);
         if (mdxCube == null && failIfNotFound) {
-            throw new IllegalArgumentException(message("MDX cube ''{0}'' not found", cube));
+            throw new MondrianException(message("MDX cube ''{0}'' not found", cube));
         }
         return mdxCube;
     }
@@ -944,7 +945,7 @@ public class RolapSchema implements Schema {
                 // Instantiate UDF by calling correct constructor.
                 udfFactory = new UdfResolver.ClassUdfFactory(klass, name);
             } catch (ClassNotFoundException e) {
-                throw new IllegalArgumentException(message(UdfClassNotFound,
+                throw new MondrianException(message(UdfClassNotFound,
                     name,
                     className));
             }
@@ -962,7 +963,7 @@ public class RolapSchema implements Schema {
         // Check for duplicate.
         UdfResolver.UdfFactory existingUdf = mapNameToUdf.get(name);
         if (existingUdf != null) {
-            throw new IllegalArgumentException(UdfDuplicateName);
+            throw new MondrianException(UdfDuplicateName);
         }
         mapNameToUdf.put(name, udfFactory);
     }

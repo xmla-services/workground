@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -346,14 +347,14 @@ public class RolapHierarchy extends HierarchyBase {
         this.allMember.setOrdinal(0);
 
         if (xmlHierarchy.levels().isEmpty()) {
-            throw new IllegalArgumentException(message(HierarchyHasNoLevels,
+            throw new MondrianException(message(HierarchyHasNoLevels,
                 getUniqueName()));
         }
 
         Set<String> levelNameSet = new HashSet<>();
         for (MappingLevel level : xmlHierarchy.levels()) {
             if (!levelNameSet.add(level.name())) {
-                throw new IllegalArgumentException(message(HierarchyLevelNamesNotUnique,
+                throw new MondrianException(message(HierarchyLevelNamesNotUnique,
                         getUniqueName(), level.name()));
             }
         }
@@ -367,7 +368,7 @@ public class RolapHierarchy extends HierarchyBase {
                 if (getKeyExp(xmlLevel) == null
                     && xmlHierarchy.memberReaderClass() == null)
                 {
-                    throw new IllegalArgumentException(message(
+                    throw new MondrianException(message(
                         LevelMustHaveNameExpression, xmlLevel.name()));
                 }
                 levels[i + 1] = new RolapLevel(this, i + 1, xmlLevel);
@@ -392,7 +393,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (xmlHierarchyRelation != null
             && xmlHierarchy.memberReaderClass() != null)
         {
-            throw new IllegalArgumentException(message(
+            throw new MondrianException(message(
                 HierarchyMustNotHaveMoreThanOneSource, getUniqueName()));
         }
         if (!Util.isEmpty(xmlHierarchy.caption())) {
@@ -635,7 +636,7 @@ public class RolapHierarchy extends HierarchyBase {
                 break;
             }
             if (defaultMember == null) {
-                throw new IllegalArgumentException(message(InvalidHierarchyCondition,
+                throw new MondrianException(message(InvalidHierarchyCondition,
                     this.getUniqueName()));
             }
         }

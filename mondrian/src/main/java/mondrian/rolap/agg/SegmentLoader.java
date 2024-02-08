@@ -638,7 +638,7 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw new IllegalArgumentException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                throw new MondrianException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
                     columnIndex + 1 ) ));
               }
               axisValueSets[axisIndex].add( val );
@@ -712,7 +712,7 @@ public class SegmentLoader {
             } else {
               final double val = rawRows.getBigDecimal( columnIndex + 1 ).doubleValue();
               if ( val == Double.NEGATIVE_INFINITY || val == Double.POSITIVE_INFINITY ) {
-                throw new IllegalArgumentException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
+                throw new MondrianException(message(JavaDoubleOverflow, rawRows.getMetaData().getColumnName(
                     columnIndex + 1 ) ));
               }
               processedRows.setDouble( columnIndex, val );
@@ -734,7 +734,7 @@ public class SegmentLoader {
   private void checkResultLimit( int currentCount ) {
     final int limit = MondrianProperties.instance().ResultLimit.get();
     if ( limit > 0 && currentCount > limit ) {
-      throw new IllegalArgumentException(message(SegmentFetchLimitExceeded, limit ));
+      throw new MondrianException(message(SegmentFetchLimitExceeded, limit ));
     }
   }
 

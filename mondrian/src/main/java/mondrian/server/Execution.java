@@ -197,7 +197,7 @@ public class Execution {
             Thread.currentThread().interrupt();
           }
         }
-        throw new IllegalArgumentException(QueryCanceled);
+        throw new MondrianException(QueryCanceled);
       case RUNNING:
       case TIMEOUT:
         if ( timeoutTimeMillis > 0 ) {

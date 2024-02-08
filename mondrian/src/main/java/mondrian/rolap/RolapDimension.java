@@ -14,6 +14,7 @@ package mondrian.rolap;
 
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -156,14 +157,14 @@ class RolapDimension extends DimensionBase {
                             && !lev.getLevelType().isTime()
                             && !lev.isAll())
                         {
-                            throw new IllegalArgumentException(message(
+                            throw new MondrianException(message(
                                 NonTimeLevelInTimeHierarchy,
                                     getUniqueName()));
                         }
                         if (dimensionType != DimensionType.TIME_DIMENSION
                             && lev.getLevelType().isTime())
                         {
-                            throw new IllegalArgumentException(message(
+                            throw new MondrianException(message(
                                 TimeLevelInNonTimeHierarchy,
                                     getUniqueName()));
                         }

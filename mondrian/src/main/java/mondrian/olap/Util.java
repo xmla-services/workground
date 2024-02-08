@@ -715,10 +715,10 @@ public class Util {
                 if (!failIfNotFound) {
                     return null;
                 } else if (category == DataType.MEMBER) {
-                    throw new IllegalArgumentException(message(MemberNotFound,
+                    throw new MondrianException(message(MemberNotFound,
                         quoteMdxIdentifier(names)));
                 } else {
-                    throw new IllegalArgumentException(message(MdxChildObjectNotFound, name.toString(), parent.getQualifiedName()));
+                    throw new MondrianException(message(MdxChildObjectNotFound, name.toString(), parent.getQualifiedName()));
                 }
             }
             parent = child;
@@ -768,7 +768,7 @@ public class Util {
             if (parent instanceof Member) {
                 return parent;
             } else if (failIfNotFound) {
-                throw new IllegalArgumentException( message( MdxCantFindMember,
+                throw new MondrianException(message( MdxCantFindMember,
                     implode(names)));
             } else {
                 return null;
@@ -904,18 +904,18 @@ public class Util {
                 if (olapElement != null) {
                     olapElement = olapElement.getHierarchy().getNullMember();
                 } else {
-                    throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+                    throw new MondrianException(message(MdxChildObjectNotFound,
                             fullName, cube.getQualifiedName()));
                 }
             } else {
-                throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+                throw new MondrianException(message(MdxChildObjectNotFound,
                         fullName, cube.getQualifiedName()));
             }
         }
 
         Role role = schemaReader.getRole();
         if (!role.canAccess(olapElement)) {
-            throw new IllegalArgumentException(message(MdxChildObjectNotFound,
+            throw new MondrianException(message(MdxChildObjectNotFound,
                     fullName, cube.getQualifiedName()));
         }
         if (olapElement instanceof Member member) {
@@ -948,7 +948,7 @@ public class Util {
             }
         }
         if (fail) {
-            throw new IllegalArgumentException(message("MDX cube ''{0}'' not found", cubeName));
+            throw new MondrianException(message("MDX cube ''{0}'' not found", cubeName));
         }
         return null;
     }
@@ -1822,7 +1822,7 @@ public class Util {
         String type;
         switch (category) {
         case MEMBER:
-            return new IllegalArgumentException(message(MemberNotFound,
+            return new MondrianException(message(MemberNotFound,
                 identifierNode.toString()));
         case UNKNOWN:
             type = "Element";
@@ -2082,14 +2082,14 @@ public class Util {
      * Creates an internal error with a given message.
      */
     public static RuntimeException newInternal(String message) {
-        return new IllegalArgumentException(message("Internal error: {0}", message));
+        return new MondrianException(message("Internal error: {0}", message));
     }
 
     /**
      * Creates an internal error with a given message and cause.
      */
     public static RuntimeException newInternal(Throwable e, String message) {
-        return new IllegalArgumentException(message("Internal error: {0}", message), e);
+        return new MondrianException(message("Internal error: {0}", message), e);
     }
 
     /**
@@ -3168,7 +3168,7 @@ public class Util {
                 || (udfClass.getEnclosingClass() != null
                     && !Modifier.isStatic(udfClass.getModifiers())))
         {
-            throw new IllegalArgumentException(message(UdfClassMustBePublicAndStatic,
+            throw new MondrianException(message(UdfClassMustBePublicAndStatic,
                 functionName,
                 className));
         }
@@ -3199,7 +3199,7 @@ public class Util {
         }
         // 3. Else, no constructor suitable.
         if (constructor == null) {
-            throw new IllegalArgumentException(message(UdfClassWrongIface,
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionNameOrEmpty,
                 className,
                 UserDefinedFunction.class.getName()));
@@ -3208,11 +3208,11 @@ public class Util {
         try {
             udf = (UserDefinedFunction) constructor.newInstance(args);
         } catch (InstantiationException | ClassCastException e) {
-            throw new IllegalArgumentException(message(UdfClassWrongIface,
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionNameOrEmpty,
                 className, UserDefinedFunction.class.getName()));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException(message(UdfClassWrongIface,
+            throw new MondrianException(message(UdfClassWrongIface,
                 functionName,
                 className,
                 UserDefinedFunction.class.getName()));
@@ -3239,14 +3239,14 @@ public class Util {
         // Throw an exeption, if the size of the crossjoin exceeds the result
         // limit.
         if (resultLimit > 0 && resultLimit < resultSize) {
-            throw new IllegalArgumentException(message(LimitExceededDuringCrossjoin,
+            throw new MondrianException(message(LimitExceededDuringCrossjoin,
                 resultSize, resultLimit));
         }
 
         // Throw an exception if the crossjoin exceeds a reasonable limit.
         // (Yes, 4 billion is a reasonable limit.)
         if (resultSize > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException(message(LimitExceededDuringCrossjoin,
+            throw new MondrianException(message(LimitExceededDuringCrossjoin,
                 resultSize, Integer.MAX_VALUE));
         }
     }

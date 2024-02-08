@@ -308,7 +308,7 @@ public class RolapUtil {
             }
         }
         if (member == null && failIfNotFound) {
-            throw new IllegalArgumentException(message(MdxCantFindMember,
+            throw new MondrianException(message(MdxCantFindMember,
                 Util.implode(segments)));
         }
         return member;
@@ -416,7 +416,7 @@ public class RolapUtil {
                 "ERROR"))
         {
             LOGGER.error(alertMsg);
-            throw new IllegalArgumentException(message(NativeEvaluationUnsupported,
+            throw new MondrianException(message(NativeEvaluationUnsupported,
                 functionName));
         }
     }

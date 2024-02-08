@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -326,7 +327,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$cacheExecutor",
             ( r, executor ) -> {
-                throw new IllegalArgumentException(SegmentCacheLimitReached);
+                throw new MondrianException(SegmentCacheLimitReached);
             } );
     }
 
@@ -342,7 +343,7 @@ public class SegmentCacheManager {
             1,
             "mondrian.rolap.agg.SegmentCacheManager$sqlExecutor",
             ( r, executor ) -> {
-                throw new IllegalArgumentException(SqlQueryLimitReached);
+                throw new MondrianException(SqlQueryLimitReached);
             } );
     }
 

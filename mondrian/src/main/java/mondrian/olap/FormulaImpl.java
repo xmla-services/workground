@@ -141,12 +141,12 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         final Type type = exp.getType();
         if (isMember) {
             if (!TypeUtil.canEvaluate(type)) {
-                throw new IllegalArgumentException(message(MdxMemberExpIsSet,
+                throw new MondrianException(message(MdxMemberExpIsSet,
                     exp.toString()));
             }
         } else {
             if (!TypeUtil.isSet(type)) {
-                throw new IllegalArgumentException(message(MdxSetExpNotSet, idInner));
+                throw new MondrianException(message(MdxSetExpNotSet, idInner));
             }
         }
         for (MemberProperty memberProperty : memberProperties) {
@@ -261,7 +261,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                             hierarchy = parent.getHierarchy();
                         }
                         if (hierarchy == null) {
-                            throw new IllegalArgumentException(
+                            throw new MondrianException(
                                 message(MdxCalculatedHierarchyError, id.toString()));
                         }
                         level = hierarchy.getLevels()[0];

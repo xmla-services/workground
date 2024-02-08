@@ -14,6 +14,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -139,7 +140,7 @@ class OpeningClosingPeriodFunDef extends AbstractFunctionDefinition {
                 memberCalc.getType().getDimension();
             final Dimension levelDimension = levelCalc.getType().getDimension();
             if (!memberDimension.equals(levelDimension)) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     FunctionMbrAndLevelHierarchyMismatch,
                         opening ? "OpeningPeriod" : "ClosingPeriod",
                         levelDimension.getUniqueName(),

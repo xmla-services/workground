@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -44,7 +45,7 @@ public class NamedSetCurrentOrdinalFunDef extends AbstractFunctionDefinition {
         assert args.length == 1;
         final Expression arg0 = args[0];
         if (!(arg0 instanceof NamedSetExpression)) {
-            throw new IllegalArgumentException(NotANamedSet);
+            throw new MondrianException(NotANamedSet);
         }
         return super.createCall(validator, args);
     }

@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRule;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRules;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.FactCountMatch;
@@ -90,7 +91,7 @@ public class DefaultRules {
             // make sure the tag name exists
             AggRule aggrule = defs.getAggRule(aggregateRuleTag);
             if (aggrule == null) {
-                throw new IllegalArgumentException(message(MissingDefaultAggRule, aggregateRuleTag));
+                throw new MondrianException(message(MissingDefaultAggRule, aggregateRuleTag));
             }
 
             DefaultRules rules = new DefaultRules(defs, aggregateRuleTag);
@@ -183,7 +184,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            throw new IllegalArgumentException(message(AggRuleParse, file.getName()), e);
+            throw new MondrianException(message(AggRuleParse, file.getName()), e);
         }
     }
 
@@ -194,7 +195,7 @@ public class DefaultRules {
             return (AggRules) jaxbUnmarshaller.unmarshal(url);
 
         } catch (JAXBException e) {
-            throw new IllegalArgumentException(message(AggRuleParse, url.toString()), e);
+            throw new MondrianException(message(AggRuleParse, url.toString()), e);
         }
     }
 
@@ -206,7 +207,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(inStream);
         } catch (JAXBException e) {
-            throw new IllegalArgumentException(message(AggRuleParse, "InputStream"), e);
+            throw new MondrianException(message(AggRuleParse, "InputStream"), e);
         }
     }
 
@@ -219,7 +220,7 @@ public class DefaultRules {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (AggRules) jaxbUnmarshaller.unmarshal(new StringReader(text));
         } catch (JAXBException e) {
-            throw new IllegalArgumentException(message(AggRuleParse, name), e);
+            throw new MondrianException(message(AggRuleParse, name), e);
         }
     }
 

@@ -11,6 +11,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -86,7 +87,7 @@ public Type getResultType( Validator validator, Expression[] args ) {
     }
     final Type type = args[0].getType();
     if ( type.getDimension().getDimensionType() != DimensionType.TIME_DIMENSION) {
-      throw new IllegalArgumentException(message(TimeArgNeeded, getFunctionMetaData().functionAtom().name() ));
+      throw new MondrianException(message(TimeArgNeeded, getFunctionMetaData().functionAtom().name() ));
     }
     return super.getResultType( validator, args );
   }

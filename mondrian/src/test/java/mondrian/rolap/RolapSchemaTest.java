@@ -64,7 +64,6 @@ import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
@@ -155,7 +154,7 @@ class RolapSchemaTest {
             createSchema().createUnionRole(role);
         } catch (MondrianException ex) {
             assertMondrianException(
-                new IllegalArgumentException(message(UnknownRole, roleName)), ex);
+                new MondrianException(message(UnknownRole, roleName)), ex);
             return;
         }
         fail("Should fail if union and schema grants exist simultaneously");

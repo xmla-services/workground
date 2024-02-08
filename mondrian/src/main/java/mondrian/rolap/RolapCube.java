@@ -613,7 +613,7 @@ public class RolapCube extends CubeBase {
         MappingExpression measureExp;
         if (xmlMeasure.column() != null) {
             if (xmlMeasure.measureExpression() != null) {
-                throw new IllegalArgumentException(message(BadMeasureSource,
+                throw new MondrianException(message(BadMeasureSource,
                     xmlCube.name(), xmlMeasure.name()));
             }
             measureExp = new ColumnR(
@@ -624,7 +624,7 @@ public class RolapCube extends CubeBase {
             // it's ok if count has no expression; it means 'count(*)'
             measureExp = null;
         } else {
-            throw new IllegalArgumentException(message(BadMeasureSource,
+            throw new MondrianException(message(BadMeasureSource,
                 xmlCube.name(), xmlMeasure.name()));
         }
 
@@ -1159,7 +1159,7 @@ public class RolapCube extends CubeBase {
             if (!ordinals.containsKey(ordinal)) {
                 ordinals.put(ordinal, measure.getUniqueName());
             } else {
-                throw new IllegalArgumentException(message(MeasureOrdinalsNotUnique,
+                throw new MondrianException(message(MeasureOrdinalsNotUnique,
                     cubeName,
                     ordinal.toString(),
                     ordinals.get(ordinal),
@@ -1259,7 +1259,7 @@ public class RolapCube extends CubeBase {
                     }
                 });
         } catch (Exception e) {
-            throw new IllegalArgumentException(message(UnknownNamedSetHasBadFormula, getName()), e);
+            throw new MondrianException(message(UnknownNamedSetHasBadFormula, getName()), e);
         }
     }
 
@@ -1305,7 +1305,7 @@ public class RolapCube extends CubeBase {
         StringBuilder buf)
     {
         if (!nameSet.add(xmlNamedSet.name())) {
-            throw new IllegalArgumentException(message(NamedSetNotUnique,
+            throw new MondrianException(message(NamedSetNotUnique,
                 xmlNamedSet.name(), getName()));
         }
 
@@ -1380,7 +1380,7 @@ public class RolapCube extends CubeBase {
         if (xmlCalcMember.hierarchy() != null
             && xmlCalcMember.dimension() != null)
         {
-            throw  new IllegalArgumentException(message(
+            throw  new MondrianException(message(
                 CalcMemberHasBothDimensionAndHierarchy,
                     xmlCalcMember.name(), getName()));
         }
@@ -1408,7 +1408,7 @@ public class RolapCube extends CubeBase {
                     DataType.HIERARCHY);
         }
         if (hierarchy == null) {
-            throw new IllegalArgumentException(message(CalcMemberHasBadDimension,
+            throw new MondrianException(message(CalcMemberHasBadDimension,
                 dimName, xmlCalcMember.name(), getName()));
         }
 
@@ -1431,13 +1431,13 @@ public class RolapCube extends CubeBase {
                     DataType.UNKNOWN);
 
             if (parent == null) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     CalcMemberHasUnknownParent,
                         parentFqName, xmlCalcMember.name(), getName()));
             }
 
             if (parent.getHierarchy() != hierarchy) {
-                throw  new IllegalArgumentException(message(
+                throw  new MondrianException(message(
                 CalcMemberHasDifferentParentAndHierarchy,
                     xmlCalcMember.name(), getName(), hierarchy.getUniqueName()));
             }
@@ -1456,7 +1456,7 @@ public class RolapCube extends CubeBase {
                     hierarchy))
             {
                 if (errOnDup) {
-                    throw new IllegalArgumentException(message(CalcMemberNotUnique,
+                    throw new MondrianException(message(CalcMemberNotUnique,
                         fqName,
                         getName()));
                 } else {
@@ -1469,7 +1469,7 @@ public class RolapCube extends CubeBase {
         // Check this calc member doesn't clash with one earlier in this
         // batch.
         if (!fqNames.add(fqName)) {
-            throw new IllegalArgumentException(message(CalcMemberNotUnique,
+            throw new MondrianException(message(CalcMemberNotUnique,
                 fqName,
                 getName()));
         }
@@ -1591,12 +1591,12 @@ public class RolapCube extends CubeBase {
         }
         for (MappingCalculatedMemberProperty xmlProperty : xmlProperties) {
             if (xmlProperty.expression() == null && xmlProperty.value() == null) {
-                throw  new IllegalArgumentException(message(
+                throw  new MondrianException(message(
                     NeitherExprNorValueForCalcMemberProperty,
                         xmlProperty.name(), memberName, getName()));
             }
             if (xmlProperty.expression() != null && xmlProperty.value() != null) {
-                throw new IllegalArgumentException(
+                throw new MondrianException(
                     message(ExprAndValueForMemberProperty, xmlProperty.name(), memberName, getName()));
             }
             propNames.add(xmlProperty.name());
@@ -2102,7 +2102,7 @@ public class RolapCube extends CubeBase {
                 if (relation != null && !relation.equals(table.getRelation())) {
                     // HierarchyUsage should have checked this.
                     if (hierarchyUsage.getForeignKey() == null) {
-                        throw new IllegalArgumentException(message(
+                        throw new MondrianException(message(
                             HierarchyMustHaveForeignKey,
                                 hierarchy.getName(), getName()));
                     }
@@ -2111,7 +2111,7 @@ public class RolapCube extends CubeBase {
                         && !starInner.getFactTable().containsColumn(
                             hierarchyUsage.getForeignKey()))
                     {
-                        throw  new IllegalArgumentException(message(
+                        throw  new MondrianException(message(
                             HierarchyInvalidForeignKey,
                                 hierarchyUsage.getForeignKey(),
                                 hierarchy.getName(),
@@ -2717,7 +2717,7 @@ public class RolapCube extends CubeBase {
             }
         }
 
-        throw new IllegalArgumentException(message(NoTimeDimensionInCube, funName));
+        throw new MondrianException(message(NoTimeDimensionInCube, funName));
     }
 
     /**

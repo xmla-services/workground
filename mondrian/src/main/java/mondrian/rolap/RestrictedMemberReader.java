@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -229,7 +230,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
             final List<RolapMember> memberList =
                 getMembersInLevel(topLevel);
             if (memberList.isEmpty()) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     HierarchyHasNoAccessibleMembers,
                         getHierarchy().getUniqueName()));
             }

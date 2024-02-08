@@ -93,7 +93,6 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.test.BasicQueryTest;

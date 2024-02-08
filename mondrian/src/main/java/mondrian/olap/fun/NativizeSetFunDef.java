@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -1175,7 +1176,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
             // Throw an exeption if the size of the crossjoin exceeds the result
             // limit.
             if (resultLimit < resultSize) {
-                throw new IllegalArgumentException(message(
+                throw new MondrianException(message(
                     LimitExceededDuringCrossjoin, resultSize, resultLimit));
             }
         }

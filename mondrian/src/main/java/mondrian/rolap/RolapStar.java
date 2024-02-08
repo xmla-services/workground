@@ -377,7 +377,7 @@ public class RolapStar {
             }
         } else if (relOrJoin instanceof MappingJoin join) {
             if (left(join) instanceof MappingJoin) {
-                throw new IllegalArgumentException(IllegalLeftDeepJoin);
+                throw new MondrianException(IllegalLeftDeepJoin);
             }
             final MappingRelationOrJoin left;
             final MappingRelationOrJoin right;
