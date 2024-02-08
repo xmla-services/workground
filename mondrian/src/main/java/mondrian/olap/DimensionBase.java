@@ -121,7 +121,7 @@ public abstract class DimensionBase
         // looking for level - we can check that by checking of hierarchy and
         // dimension name is the same.
         //
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             if (oe == null || oe.getName().equalsIgnoreCase(getName())) {
                 OlapElement oeLevel =
                     getHierarchy().lookupChild(schemaReader, s, matchType);

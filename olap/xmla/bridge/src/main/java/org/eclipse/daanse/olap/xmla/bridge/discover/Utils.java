@@ -108,7 +108,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.DimensionType;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapStoredMeasure;
@@ -702,7 +702,7 @@ public class Utils {
 
     private static String getHierarchyName(String hierarchyName, String dimensionName) {
         //TODO use Properties from context
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()
+        if (SystemWideProperties.instance().SsasCompatibleNaming
             && !hierarchyName.equals(dimensionName)) {
             hierarchyName =
                 dimensionName + "." + hierarchyName;

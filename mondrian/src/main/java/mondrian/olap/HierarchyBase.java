@@ -50,7 +50,7 @@ public abstract class HierarchyBase
      * <tr> <td>[Customers]</td>   <td>Customers</td>   <td>null</td></tr>
      * </table>
      *
-     * <p>If {@link mondrian.olap.MondrianProperties#SsasCompatibleNaming} is
+     * <p>If {@link mondrian.olap.SystemWideProperties#SsasCompatibleNaming} is
      * true, name and subName have the same value.
      */
     protected final String subName;
@@ -85,7 +85,7 @@ public abstract class HierarchyBase
         this.visible = visible;
 
         String nameInner = dimension.getName();
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             if(dimension.getDimensionType() == DimensionType.MEASURES_DIMENSION) {
                 this.subName = subName;
                 this.name = nameInner;

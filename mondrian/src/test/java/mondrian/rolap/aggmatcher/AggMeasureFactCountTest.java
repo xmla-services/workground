@@ -13,7 +13,7 @@ package mondrian.rolap.aggmatcher;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianException;
-import mondrian.test.PropertySaver5;
+import mondrian.olap.SystemWideProperties;
 import mondrian.test.SqlPattern;
 import mondrian.test.loader.CsvDBTestCase;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -60,17 +60,13 @@ class AggMeasureFactCountTest extends CsvDBTestCase {
         return "agg_measure_fact_count_test.csv";
     }
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @Override

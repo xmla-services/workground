@@ -11,6 +11,7 @@ package mondrian.rolap;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +24,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 
 /**
@@ -31,23 +32,14 @@ import mondrian.test.SqlPattern;
  */
 class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
+
     @BeforeAll
     public static void beforeAll() {
     }
 
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.UseAggregates, true);
-        //propSaver.set(propSaver.properties.ReadAggregates, true);
-        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
@@ -149,7 +141,7 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
             "[%s]: Native and non-native executions of FILTER() differ. "
             + "The query:\n\t\t%s",
             query, testCase);
-        TestUtil.verifySameNativeAndNot(connection, query, message, propSaver);
+        TestUtil.verifySameNativeAndNot(connection, query, message);
     }
 
     @ParameterizedTest

@@ -9,7 +9,7 @@
 package mondrian.test;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
@@ -160,18 +160,14 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class SchemaTest {
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private static final String CUBES_AB =
@@ -2921,7 +2917,7 @@ class SchemaTest {
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
-            + (MondrianProperties.instance().SsasCompatibleNaming.get()
+            + (SystemWideProperties.instance().SsasCompatibleNaming
                 ? "{[Time2].[Time].[1997]}\n"
                 : "{[Time2].[1997]}\n")
             + "Axis #2:\n"
@@ -3291,8 +3287,8 @@ class SchemaTest {
             }
         }
 
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, true);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -3321,7 +3317,7 @@ class SchemaTest {
         //
         // Under the old behavior, the member is called [Store2].[All Store2s].
         final String store2AllMember =
-            MondrianProperties.instance().SsasCompatibleNaming.get()
+            SystemWideProperties.instance().SsasCompatibleNaming
                 ? "[Store2].[All Stores]"
                 : "[Store2].[All Store2s]";
         withSchema(context, TestAllMemberMultipleDimensionUsagesModifier::new);
@@ -3422,7 +3418,7 @@ class SchemaTest {
         final String query = "select\n"
                              + " {[Time].[1997]} on columns \n"
                              + "From [Sales Two Dimensions]";
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             assertQueryThrows(context,
                 query,
                 "In cube \"Sales Two Dimensions\" use of unaliased Dimension name \"[Time]\" rather than the alias name \"Time2\"");
@@ -5263,7 +5259,7 @@ class SchemaTest {
 
         // Now access the same member using a path that is not its unique name.
         // Only works with new name resolver (if ssas = true).
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             assertQueryReturns(context.getConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -5713,7 +5709,7 @@ class SchemaTest {
                 + "{[Time].[1997].[Q3]}\n"
                 + "Row #0: 16,266\n");
 
-            MondrianProperties props = MondrianProperties.instance();
+            SystemWideProperties props = SystemWideProperties.instance();
 
             // turn off caching
             ((TestConfig)context.getConfig()).setDisableCaching(true);
@@ -7731,7 +7727,7 @@ class SchemaTest {
         // The hierarchy in the shared dimension does not have a name, so the
         // hierarchy usage inherits the name of the dimension usage, Time1.
         final boolean ssasCompatibleNaming =
-            MondrianProperties.instance().SsasCompatibleNaming.get();
+            SystemWideProperties.instance().SsasCompatibleNaming;
         if (ssasCompatibleNaming) {
             assertEquals("Time", timeHierarchy.getName());
             assertEquals("Time1", timeHierarchy.getDimension().getName());
@@ -8377,8 +8373,7 @@ class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian463(TestContext context) {
-        if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
-            .get())
+        if (!SystemWideProperties.instance().FilterChildlessSnowflakeMembers)
         {
             // Similar to aggregates. If we turn off filtering,
             // we get wild stuff because of referential integrity.
@@ -9504,7 +9499,7 @@ class SchemaTest {
             final Hierarchy hier = dim.getHierarchy();
             assertNotNull(hier);
             assertEquals(
-                MondrianProperties.instance().SsasCompatibleNaming.get()
+                SystemWideProperties.instance().SsasCompatibleNaming
                     ? "Bacon"
                     : "Bar.Bacon",
                 hier.getName());
@@ -9594,7 +9589,7 @@ class SchemaTest {
             final Hierarchy hier = dim.getHierarchy();
             assertNotNull(hier);
             assertEquals(
-                MondrianProperties.instance().SsasCompatibleNaming.get()
+                SystemWideProperties.instance().SsasCompatibleNaming
                     ? "Bacon"
                     : "Bar.Bacon",
                 hier.getName());

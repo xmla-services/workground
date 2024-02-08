@@ -9,7 +9,7 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;
@@ -64,16 +64,13 @@ public class PerformanceTest {
   public static final Logger LOGGER =
     LoggerFactory.getLogger( PerformanceTest.class );
 
-  private PropertySaver5 propSaver;
-
   @BeforeEach
   public void beforeEach() {
-      propSaver = new PropertySaver5();
   }
 
   @AfterEach
   public void afterEach() {
-      propSaver.reset();
+      SystemWideProperties.instance().populateInitial();
   }
   /**
    * Test case for
@@ -608,7 +605,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testBugMondrian1242(TestContext context) {
-    propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
+    SystemWideProperties.instance().SsasCompatibleNaming = false;
     withSchema(context, SchemaModifiers.PerformanceTestModifier4::new);
     // original test case for MONDRIAN-1242; ensures correct result
     Connection connection = context.getConnection();

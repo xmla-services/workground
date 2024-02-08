@@ -10,9 +10,10 @@
 package mondrian.rolap.sql;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.SchemaModifiers;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -145,18 +146,15 @@ class SelectNotInGroupByTest extends BatchTestCase {
         + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
         + "    ISNULL(`c3`) ASC, `c3` ASC";
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest

@@ -39,14 +39,13 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestContext;
 import org.slf4j.LoggerFactory;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
@@ -950,7 +949,7 @@ public class BatchTestCase{
             if (!listener.isExecuteSql()) {
                 fail("cache is empty: expected SQL query to be executed");
             }
-            if (MondrianProperties.instance().EnableRolapCubeMemberCache.get())
+            if (SystemWideProperties.instance().EnableRolapCubeMemberCache)
             {
                 // run once more to make sure that the result comes from cache
                 // now
@@ -1089,11 +1088,11 @@ public class BatchTestCase{
 
         protected Result run() {
             con.getCacheControl(null).flushSchemaCache();
-            IntegerProperty monLimit =
-                MondrianProperties.instance().ResultLimit;
-            int oldLimit = monLimit.get();
+            Integer monLimit =
+                SystemWideProperties.instance().ResultLimit;
+            int oldLimit = monLimit;
             try {
-                monLimit.set(this.resultLimit);
+                SystemWideProperties.instance().ResultLimit = this.resultLimit;
                 Result result = executeQuery(query, con);
 
                 // Check the number of positions on the last axis, which is
@@ -1104,7 +1103,7 @@ public class BatchTestCase{
                 assertEquals(rowCount, positionCount);
                 return result;
             } finally {
-                monLimit.set(oldLimit);
+                SystemWideProperties.instance().ResultLimit = oldLimit;
             }
         }
     }

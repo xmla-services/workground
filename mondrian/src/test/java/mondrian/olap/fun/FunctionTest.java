@@ -90,13 +90,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.test.BasicQueryTest;
-import mondrian.test.PropertySaver5;
+
 import mondrian.util.Bug;
 
 //import mondrian.spi.DialectManager;
@@ -118,7 +118,7 @@ class FunctionTest {//extends FoodMartTestCase {
           "[Store Size in SQFT]",
           "[Store Type]",
           "[Time]",
-          MondrianProperties.instance().SsasCompatibleNaming.get() ? "[Time].[Weekly]" : "[Time.Weekly]",
+          SystemWideProperties.instance().SsasCompatibleNaming ? "[Time].[Weekly]" : "[Time.Weekly]",
           "[Product]",
           "[Promotion Media]",
           "[Promotions]",
@@ -178,20 +178,20 @@ class FunctionTest {//extends FoodMartTestCase {
       + "[Beer and Wine].[Beer].[Good].[Good Imported Beer])";
 
   private static final String TimeWeekly =
-    MondrianProperties.instance().SsasCompatibleNaming.get()
+    SystemWideProperties.instance().SsasCompatibleNaming
       ? "[Time].[Weekly]"
       : "[Time.Weekly]";
 
-  private PropertySaver5 propSaver;
+
 
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   /**
@@ -2313,7 +2313,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCurrentMemberMultiHierarchy(TestContext context) {
     final String hierarchyName =
-      MondrianProperties.instance().SsasCompatibleNaming.get()
+      SystemWideProperties.instance().SsasCompatibleNaming
         ? "Weekly"
         : "Time.Weekly";
     final String queryString =
@@ -2391,13 +2391,13 @@ class FunctionTest {//extends FoodMartTestCase {
         "select {[Time.Weekly].DefaultMember} on columns\n"
           + "from Sales" );
     assertEquals(
-      MondrianProperties.instance().SsasCompatibleNaming.get()
+      SystemWideProperties.instance().SsasCompatibleNaming
         ? "All Weeklys"
         : "All Time.Weeklys",
       result.getAxes()[ 0 ].getPositions().get( 0 ).get( 0 ).getName() );
 
     final String memberUname =
-      MondrianProperties.instance().SsasCompatibleNaming.get()
+      SystemWideProperties.instance().SsasCompatibleNaming
         ? "[Time2].[Weekly].[1997].[23]"
         : "[Time2.Weekly].[1997].[23]";
     /*
@@ -6419,7 +6419,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
       "{[Time].[Weekly].[All Weeklys], [Measures].[Store Sales], [Marital Status].[M], [Time].[1997]}" );
 
     // two usages of the [Time].[Weekly] hierarchy
-    if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+    if ( SystemWideProperties.instance().SsasCompatibleNaming ) {
       assertAxisThrows(context.getConnection(),
         "{([Time].[Weekly], [Measures].[Store Sales], [Marital Status].[M], [Time].[Weekly])}",
         "Tuple contains more than one member of hierarchy '[Time].[Weekly]'." );
@@ -8072,7 +8072,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testGenerateWillTimeout(TestContext context) {
     ((TestConfig)context.getConfig()).setQueryTimeout(5);
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false);
+    SystemWideProperties.instance().EnableNativeNonEmpty = false;
     try {
       executeAxis(context.getConnection(),
         "Generate([Product].[Product Name].members,"
@@ -8116,7 +8116,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(TestContext context) {
     ((TestConfig)context.getConfig()).setQueryTimeout(3);
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+    SystemWideProperties.instance().EnableNativeNonEmpty = false;
     try {
         class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
 
@@ -9217,9 +9217,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderMemberMemberValueExpNew(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey,
-      true );
+
+      SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     //final TestContext context = getTestContext().withFreshConnection();
@@ -9250,8 +9249,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderMemberMemberValueExpNew1(TestContext context) {
     // sort by default measure
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey, true );
+
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     Connection connection = context.getConnection();
@@ -9366,8 +9365,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderMemberMultiKeysMemberValueExp2(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey, true );
+
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     Connection connection = context.getConnection();
@@ -9420,8 +9419,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderTupleSingleKeysNew(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey, true );
+
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     final Connection connection = context.getConnection();
@@ -9456,8 +9455,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderTupleSingleKeysNew1(TestContext context) {
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey, true );
+
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     Connection connection = context.getConnection();
@@ -9575,8 +9574,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderTupleMultiKeyswithVCube(TestContext context) {
     // WA unit sales is greater than CA unit sales
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey, true );
+
+     SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
 
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
@@ -10890,7 +10889,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
       "[Product].[All Products]" );
 
     // Applied to a dimension (invalid because has no default hierarchy)
-    if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+    if ( SystemWideProperties.instance().SsasCompatibleNaming ) {
       assertExprThrows(context.getConnection(),
         "TupleToStr([Time])",
         "The 'Time' dimension contains more than one hierarchy, "
@@ -11278,7 +11277,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testRankHuge(TestContext context) {
     // If caching is disabled, don't even try -- it will take too long.
-    if ( !MondrianProperties.instance().EnableExpCache.get() ) {
+    if ( !SystemWideProperties.instance().EnableExpCache ) {
       return;
     }
 
@@ -11311,7 +11310,7 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void _testRank3Huge(TestContext context) {
     // If caching is disabled, don't even try -- it will take too long.
-    if ( !MondrianProperties.instance().EnableExpCache.get() ) {
+    if ( !SystemWideProperties.instance().EnableExpCache ) {
       return;
     }
 

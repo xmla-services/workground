@@ -45,7 +45,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Unit-test for named sets, in all their various forms: <code>WITH SET</code>,
@@ -56,18 +56,14 @@ import mondrian.olap.MondrianProperties;
  */
 class NamedSetTest {
 
-	private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     /**
@@ -216,7 +212,7 @@ class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testIntrinsic(TestContext context) {
-    	propSaver.set( MondrianProperties.instance().CaseSensitiveMdxInstr, true);
+    	SystemWideProperties.instance().CaseSensitiveMdxInstr = true;
         assertQueryReturns(context.getConnection(),
             "WITH SET [ChardonnayChablis] AS\n"
             + "   'Filter([Product].Members, (InStr(1, [Product].CurrentMember.Name, \"chardonnay\") <> 0) OR (InStr(1, [Product].CurrentMember.Name, \"chablis\") <> 0))'\n"
@@ -1203,7 +1199,7 @@ class NamedSetTest {
             + "Row #0: 257\n"
             + "Row #0: 258\n"
             + "Row #0: 227\n");
-        verifySameNativeAndNot(context.getConnection(), mdx, "", propSaver);
+        verifySameNativeAndNot(context.getConnection(), mdx, "");
     }
 
     /**
@@ -1288,8 +1284,8 @@ class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMondrian2424(TestContext context) {
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
         assertQueryReturns(context.getConnection(),
                 "WITH SET Gender as '[Gender].[Gender].members' \n" +
                         "select {Gender} ON 0 from [Sales]",

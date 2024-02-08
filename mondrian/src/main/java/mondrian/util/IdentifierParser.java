@@ -28,7 +28,7 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.ArrayTupleList;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.RolapCube;
@@ -61,7 +61,7 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
             this.schemaReader = schemaReader;
             this.cube = cube;
             this.hierarchyList = hierarchyList;
-            final MondrianProperties props = MondrianProperties.instance();
+            final SystemWideProperties props = SystemWideProperties.instance();
             final boolean load = ((RolapCube) cube).isLoadInProgress();
             this.ignoreInvalid =
                 (load

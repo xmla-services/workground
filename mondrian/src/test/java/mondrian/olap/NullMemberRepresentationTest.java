@@ -26,7 +26,7 @@ import mondrian.rolap.RolapUtil;
 /**
  * <code>NullMemberRepresentationTest</code> tests the null member
  * custom representation feature supported via
- * {@link MondrianProperties#NullMemberRepresentation} property.
+ * {@link SystemWideProperties#NullMemberRepresentation} property.
  * @author ajogleka
  */
 class NullMemberRepresentationTest {

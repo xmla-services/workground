@@ -95,7 +95,7 @@ import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.xmla.RowsetDefinitionType;
 import mondrian.xmla.XmlaException;
@@ -456,7 +456,7 @@ public class Convertor {
 
     private static List<String> getQueryCellPropertyNames(CellSet cellSet) {
         final boolean matchCase =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         List<String> queryCellPropertyNames = new ArrayList<>();
         final Statement statement = cellSet.getStatement();
         for (QueryComponent queryPart : statement.getQuery().getCellProperties()) {

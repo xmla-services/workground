@@ -14,11 +14,6 @@
 package mondrian.olap;
 
 import java.io.File;
-
-import org.eigenbase.util.property.BooleanProperty;
-import org.eigenbase.util.property.IntegerProperty;
-import org.eigenbase.util.property.StringProperty;
-
 /**
  * Configuration properties that determine the
  * behavior of a mondrian instance.
@@ -28,20 +23,49 @@ import org.eigenbase.util.property.StringProperty;
  * properties using the inherited {@link java.util.Properties#getProperty(String)}
  * method, we recommend that you use methods in this class.</p>
  */
-public class MondrianProperties extends MondrianPropertiesBase {
+public class SystemWideProperties extends MondrianPropertiesBase {
     /**
      * Properties, drawn from {@link System#getProperties},
      * plus the contents of "mondrian.properties" if it
      * exists. A singleton.
      */
-    private static final MondrianProperties instance =
-        new MondrianProperties();
+    private static final SystemWideProperties instance =
+        new SystemWideProperties();
 
-    private MondrianProperties() {
+    private SystemWideProperties() {
         super(
             new FilePropertySource(
                 new File(MONDRIAN_DOT_PROPERTIES)));
         populate();
+        populateInitial();
+    }
+
+    public void populateInitial() {
+        CaseSensitive =
+            this.getBoolean("mondrian.olap.case.sensitive", false);
+        CaseSensitiveMdxInstr =
+            this.getBoolean("mondrian.olap.case.sensitive.CaseSensitiveMdxInstr", false);
+        CompareSiblingsByOrderKey =
+            this.getBoolean("mondrian.rolap.compareSiblingsByOrderKey", false);
+        EnableExpCache =
+            this.getBoolean("mondrian.expCache.enable", true);
+        EnableNativeNonEmpty =
+            this.getBoolean("mondrian.native.nonempty.enable", true);
+        EnableRolapCubeMemberCache =
+            this.getBoolean("mondrian.rolap.EnableRolapCubeMemberCache", true);
+        EnableTriggers =
+            this.getBoolean("mondrian.olap.triggers.enable", true);
+        FilterChildlessSnowflakeMembers =
+            this.getBoolean("mondrian.rolap.FilterChildlessSnowflakeMembers", true);
+        MaxConstraints =
+            this.getInteger("mondrian.rolap.maxConstraints", 1000);
+        NullMemberRepresentation =
+            getProperty("mondrian.olap.NullMemberRepresentation", "#null");
+        ResultLimit =
+            this.getInteger("mondrian.result.limit", 0);
+        SsasCompatibleNaming =
+            this.getBoolean("mondrian.olap.SsasCompatibleNaming", false);
+
     }
 
     /**
@@ -49,7 +73,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
      *
      * @return Singleton instance
      */
-    public static MondrianProperties instance() {
+    public static SystemWideProperties instance() {
         // NOTE: We used to instantiate on demand, but
         // synchronization overhead was significant. See
         // MONDRIAN-978.
@@ -63,9 +87,9 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * case-sensitive matching when looking up identifiers. The default is
      * false.
      */
-    public transient final BooleanProperty CaseSensitive =
-        new BooleanProperty(
-            this, "mondrian.olap.case.sensitive", false);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean CaseSensitive;
+
 
     /**
      * <p>
@@ -73,17 +97,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
      *                 Default value is false.
      *             </p>
      */
-    public transient final BooleanProperty CaseSensitiveMdxInstr =
-        new BooleanProperty(
-            this, "mondrian.olap.case.sensitive.CaseSensitiveMdxInstr", false);
-
-    /**
-     * Integer property that, if set to a value greater than zero, sets a hard limit on the
-     * number of cells that are batched together when building segments.
-     */
-    //public transient final IntegerProperty CellBatchSize =
-    //    new IntegerProperty(
-    //        this, "mondrian.rolap.cellBatchSize", -1);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive.CaseSensitiveMdxInstr")
+    public transient Boolean CaseSensitiveMdxInstr;
 
 
     /**
@@ -91,9 +106,9 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * compared according to order key value fetched from their ordinal
      * expression.  The default is false (only database ORDER BY is used).
      */
-    public transient final BooleanProperty CompareSiblingsByOrderKey =
-        new BooleanProperty(
-            this, "mondrian.rolap.compareSiblingsByOrderKey", false);
+    @PropertyAnnotation(path = "mondrian.rolap.compareSiblingsByOrderKey")
+    public transient Boolean CompareSiblingsByOrderKey;
+
 
     /**
      * Boolean property that controls whether to use a cache for frequently
@@ -102,24 +117,21 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * Order([Product].MEMBERS, [Measures].[Unit Sales]))</code> would perform
      * many redundant sorts. The default is true.
      */
-    public transient final BooleanProperty EnableExpCache =
-        new BooleanProperty(
-            this, "mondrian.expCache.enable", true);
+    @PropertyAnnotation(path = "mondrian.expCache.enable")
+    public transient Boolean EnableExpCache;
 
     /**
      * <p>If enabled some NON EMPTY set operations like member.children,
      * level.members and member descendants will be computed in SQL.</p>
      */
-    public transient final BooleanProperty EnableNativeNonEmpty =
-        new BooleanProperty(
-            this, "mondrian.native.nonempty.enable", true);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean EnableNativeNonEmpty;
     /**
      * Boolean property that controls whether each query axis implicit has the
      * NON EMPTY option set. The default is false.
      */
-    public transient final BooleanProperty EnableNonEmptyOnAllAxis =
-        new BooleanProperty(
-            this, "mondrian.rolap.nonempty", false);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean EnableNonEmptyOnAllAxis;
 
     /**
      * <p>Property that determines whether to cache RolapCubeMember objects,
@@ -134,23 +146,21 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * construct, and we may obsolete this cache and this
      * property.</p>
      */
-    public transient final BooleanProperty EnableRolapCubeMemberCache =
-        new BooleanProperty(
-            this, "mondrian.rolap.EnableRolapCubeMemberCache", true);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean EnableRolapCubeMemberCache;
 
 
     /**
      * <p>Boolean property that controls whether to notify the Mondrian system
-     * when a {@link MondrianProperties property value} changes.</p>
+     * when a {@link SystemWideProperties property value} changes.</p>
      *
      * <p>This allows objects dependent on Mondrian properties to react (that
      * is, reload), when a given property changes via, say,
      * <code>MondrianProperties.instance().populate(null)</code> or
      * <code>MondrianProperties.instance().QueryLimit.set(50)</code>.</p>
      */
-    public transient final BooleanProperty EnableTriggers =
-        new BooleanProperty(
-            this, "mondrian.olap.triggers.enable", true);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean EnableTriggers;
 
 
 
@@ -170,9 +180,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * table, during your ETL process, and to set this property to
      * {@code false}.</p>
      */
-    public transient final BooleanProperty FilterChildlessSnowflakeMembers =
-        new BooleanProperty(
-            this, "mondrian.rolap.FilterChildlessSnowflakeMembers", true);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Boolean FilterChildlessSnowflakeMembers;
 
     /**
      * <p>Max number of constraints in a single 'IN' SQL clause.</p>
@@ -188,9 +197,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * <li>Other: 10,000</li>
      * </ul>
      */
-    public transient final IntegerProperty MaxConstraints =
-        new IntegerProperty(
-            this, "mondrian.rolap.maxConstraints", 1000);
+    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    public transient Integer MaxConstraints;
 
 
     /**
@@ -199,9 +207,7 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * <p>AS 2000 shows this as empty value</p>
      * <p>AS 2005 shows this as "(null)" value</p>
      */
-    public transient final StringProperty NullMemberRepresentation =
-        new StringProperty(
-            this, "mondrian.olap.NullMemberRepresentation", "#null");
+    public transient String NullMemberRepresentation;
 
 
 
@@ -209,9 +215,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * Integer property that, if set to a value greater than zero, limits the
      * maximum size of a result set.
      */
-    public transient final IntegerProperty ResultLimit =
-        new IntegerProperty(
-            this, "mondrian.result.limit", 0);
+    @PropertyAnnotation(path = "")
+    public transient Integer ResultLimit;
 
     /**
      * <p>Property that defines
@@ -220,9 +225,8 @@ public class MondrianProperties extends MondrianPropertiesBase {
      * <p>If true, hierarchies are named [Dimension].[Hierarchy]; if false,
      * [Dimension.Hierarchy].</p>
      */
-    public transient final BooleanProperty SsasCompatibleNaming =
-        new BooleanProperty(
-            this, "mondrian.olap.SsasCompatibleNaming", false);
+    @PropertyAnnotation(path = "")
+    public transient Boolean SsasCompatibleNaming;
 
 }
 

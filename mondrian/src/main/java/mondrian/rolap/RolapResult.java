@@ -67,7 +67,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.MemberBase;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
@@ -1517,7 +1517,7 @@ public Cell getCell( int[] pos ) {
       this.axisCount = 0;
       // Now that the axes are evaluated, make sure that the number of
       // cells does not exceed the result limit.
-      this.limit = MondrianProperties.instance().ResultLimit.get();
+      this.limit = SystemWideProperties.instance().ResultLimit;
     }
 
     @Override

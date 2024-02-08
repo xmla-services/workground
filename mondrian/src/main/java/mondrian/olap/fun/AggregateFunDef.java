@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
@@ -213,7 +213,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
 //            }
             boolean tupleSizeWithinInListSize =
                 tupleList.size()
-                    <= MondrianProperties.instance().MaxConstraints.get();
+                    <= SystemWideProperties.instance().MaxConstraints;
             if (unlimitedIn || tupleSizeWithinInListSize) {
                 // If the DBMS does not have an upper limit on IN list
                 // predicate size, then don't attempt any list
@@ -288,7 +288,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     evaluator.getSchemaReader(),
                     evaluator.getMeasureCube());
             if (checkSize) {
-                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList, MondrianProperties.instance().MaxConstraints.get());
+                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList, SystemWideProperties.instance().MaxConstraints);
             }
             return tupleList;
         }

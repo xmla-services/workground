@@ -78,7 +78,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
 /**
@@ -1613,7 +1613,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
 
     private static IdImpl hierarchyId(Level level) {
         IdImpl id = new IdImpl(NativizeSetFunDef.q(level.getDimension().getName()));
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             id = id.append(NativizeSetFunDef.q(level.getHierarchy().getName()));
         }
         return id;

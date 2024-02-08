@@ -53,7 +53,7 @@ import org.slf4j.Logger;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
@@ -580,7 +580,7 @@ public class RolapCell implements Cell {
     @Override
 	public Object getPropertyValue(String propertyName) {
         final boolean matchCase =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         Property property = Property.lookup(propertyName, matchCase);
         Object defaultValue = null;
         String formatString = null;

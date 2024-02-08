@@ -34,7 +34,7 @@ import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapStar;
@@ -69,7 +69,7 @@ import static mondrian.resource.MondrianResource.message;
  * </p>
  *
  * <p>
- * It will also look at the {@link MondrianProperties#SegmentCache} property and make usage of the SegmentCache provided
+ * It will also look at the {@link SystemWideProperties#SegmentCache} property and make usage of the SegmentCache provided
  * as an SPI.
  *
  * @author Thiyagu, LBoudreau
@@ -734,7 +734,7 @@ public class SegmentLoader {
   }
 
   private void checkResultLimit( int currentCount ) {
-    final int limit = MondrianProperties.instance().ResultLimit.get();
+    final int limit = SystemWideProperties.instance().ResultLimit;
     if ( limit > 0 && currentCount > limit ) {
       throw new ResourceLimitExceededException(message(SegmentFetchLimitExceeded, limit ));
     }

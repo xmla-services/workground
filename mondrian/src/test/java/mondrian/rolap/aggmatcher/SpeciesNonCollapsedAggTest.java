@@ -21,7 +21,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Test case for non-collapsed levels in agg tables, based on the "Species"
@@ -75,16 +75,12 @@ class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        final MondrianProperties props = MondrianProperties.instance();
-        //propSaver.set(props.UseAggregates, true);
-        //propSaver.set(props.ReadAggregates, true);
-        //super.getConnection().getCacheControl(null).flushSchemaCache();
     }
 
     @Override
 	@AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @Override

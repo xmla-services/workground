@@ -23,7 +23,6 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.monitor.CellCacheEvent;
@@ -474,7 +473,7 @@ public List<SqlStatementInfo> getSqlStatements() {
 					return false;
 				}
 			};
-			
+
 			retiredExecutionMap =
 			        new LinkedHashMap<>( executionHistorySize, 0.8f,
 			            false ) {
@@ -899,7 +898,7 @@ public List<SqlStatementInfo> getSqlStatements() {
       }
     }
   }
-  
+
   /**
    * Information about memory usage.
    *
@@ -913,7 +912,7 @@ public List<SqlStatementInfo> getSqlStatements() {
           long getMax();
       }
   }
-  
+
 	public static MemoryInfo getMemoryInfo() {
 		return new MemoryInfo() {
 			protected static final MemoryPoolMXBean TENURED_POOL = findTenuredGenPool();

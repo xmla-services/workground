@@ -16,12 +16,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 
-import org.eigenbase.util.property.TriggerableProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +59,7 @@ import org.slf4j.LoggerFactory;
  * @author jhyde
  * @since 22 December, 2002
  */
-public abstract class MondrianPropertiesBase extends TriggerableProperties {
+public abstract class MondrianPropertiesBase extends Properties {
 
     private final transient PropertySource propertySource;
     private int populateCount;
@@ -70,9 +73,27 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
         this.propertySource = propertySource;
     }
 
-    @Override
-	public boolean triggersAreEnabled() {
-        return ((MondrianProperties) this).EnableTriggers.get();
+    protected Boolean getBoolean(String key, boolean defaultValue) {
+        final String value = getProperty(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        return toBoolean(value);
+    }
+
+    private Boolean toBoolean(String value) {
+        String trimmedLowerValue = value.toLowerCase().trim();
+        return trimmedLowerValue.equals("1")
+            || trimmedLowerValue.equals("true")
+            || trimmedLowerValue.equals("yes");
+    }
+
+    protected Integer getInteger(String key, int defaultValue) {
+        final String value = getProperty(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        return Integer.parseInt(value);
     }
 
     /**
@@ -283,5 +304,39 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             LOGGER.error(
                 "Mondrian: error while loading properties from '{}' ({})", source.getDescription(), e);
         }
+    }
+
+    public List<SystemProperty> getPropertyList()
+    {
+        Field[] fields = getClass().getFields();
+        List<SystemProperty> list = new ArrayList /*<Property>*/();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            if (field.isAnnotationPresent(PropertyAnnotation.class))
+            {
+                try {
+                    PropertyAnnotation annotation = field.getAnnotation(PropertyAnnotation.class);
+                    list.add(new SystemProperty(String.valueOf(field.get(this)), annotation.path()));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(
+                        "Error while accessing property '" + field.getName()
+                            + "'",
+                        e);
+                }
+            }
+        }
+        return list;
+    }
+
+    public SystemProperty getPropertyDefinition(String path)
+    {
+        final List<SystemProperty> propertyList = getPropertyList();
+        for (int i = 0; i < propertyList.size(); i++) {
+            SystemProperty property = (SystemProperty) propertyList.get(i);
+            if (property.getPath().equals(path)) {
+                return property;
+            }
+        }
+        return null;
     }
 }

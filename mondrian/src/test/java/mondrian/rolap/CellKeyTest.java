@@ -11,7 +11,7 @@
 
 package mondrian.rolap;
 
-import mondrian.test.PropertySaver5;
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -47,15 +47,13 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class CellKeyTest  {
 
-    private PropertySaver5 propSaver;
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @Test

@@ -11,6 +11,7 @@ package mondrian.rolap.aggmatcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
@@ -23,8 +24,6 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
-import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 
 import java.util.function.Function;
@@ -51,15 +50,14 @@ import java.util.function.Function;
 public class Checkin_7634 extends CsvDBTestCase {
 
     private static final String CHECKIN_7634 = "Checkin_7634.csv";
-    protected PropertySaver5 propSaver;
+
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest

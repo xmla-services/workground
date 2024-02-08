@@ -19,7 +19,7 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 public class DimensionUtil {
 
@@ -35,7 +35,7 @@ public class DimensionUtil {
 		if (hierarchies.length == 1) {
 			return Optional.of(hierarchies[0]);
 		}
-		if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+		if (SystemWideProperties.instance().SsasCompatibleNaming) {
 			// In SSAS 2005, dimensions with more than one hierarchy do not have
 			// a default hierarchy.
 			return Optional.empty();

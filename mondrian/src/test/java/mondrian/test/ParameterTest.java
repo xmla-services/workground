@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import mondrian.olap.SystemProperty;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -48,7 +49,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ParameterRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.eigenbase.util.property.Property;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -57,7 +57,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
@@ -439,7 +439,7 @@ class ParameterTest {
             "40");
         // right dimension, wrong hierarchy
         final String levelName =
-            MondrianProperties.instance().SsasCompatibleNaming.get()
+            SystemWideProperties.instance().SsasCompatibleNaming
                 ? "[Time].[Weekly]"
                 : "[Time.Weekly]";
         assertExprThrows(connection,
@@ -1200,9 +1200,9 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSystemPropsGet(TestContext context) {
-        final List<Property> propertyList =
-            MondrianProperties.instance().getPropertyList();
-        for (Property property : propertyList) {
+        final List<SystemProperty> propertyList =
+            SystemWideProperties.instance().getPropertyList();
+        for (SystemProperty property : propertyList) {
             assertExprReturns(context.getConnection(),
                 "ParamRef("
                 + Util.singleQuoteString(property.getPath())
@@ -1229,9 +1229,9 @@ class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSystemPropsSet(TestContext context) {
-        final List<Property> propertyList =
-            MondrianProperties.instance().getPropertyList();
-        for (Property property : propertyList) {
+        final List<SystemProperty> propertyList =
+            SystemWideProperties.instance().getPropertyList();
+        for (SystemProperty property : propertyList) {
             final String propName = property.getPath();
             assertSetPropertyFails(context.getConnection(), propName, "System");
         }

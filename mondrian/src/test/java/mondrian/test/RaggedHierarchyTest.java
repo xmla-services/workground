@@ -11,7 +11,7 @@
 package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -38,18 +38,15 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class RaggedHierarchyTest {
 
-	private PropertySaver5 propSaver;
 
 	  @BeforeEach
 	  public void beforeEach() {
-	    propSaver = new PropertySaver5();
-	    propSaver.set(
-	            MondrianProperties.instance().NullMemberRepresentation, "null");
+	    SystemWideProperties.instance().NullMemberRepresentation = "null";
 	  }
 
 	  @AfterEach
 	  public void afterEach() {
-	    propSaver.reset();
+          SystemWideProperties.instance().populateInitial();
 	  }
 
     private void assertRaggedReturns(Connection connection, String expression, String expected) {
@@ -99,8 +96,7 @@ class RaggedHierarchyTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     public void dont_testChildrenOfVatican(TestContext context) {
-	    propSaver.set(
-	            MondrianProperties.instance().NullMemberRepresentation, "null");
+	    SystemWideProperties.instance().NullMemberRepresentation = "null";
         assertRaggedReturns(context.getConnection(),
             "[Store].[Vatican].children",
             "[Store].[Vatican].[Vatican].[null].[Store 17]");

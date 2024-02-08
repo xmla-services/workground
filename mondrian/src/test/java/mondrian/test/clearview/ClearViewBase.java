@@ -16,6 +16,7 @@ package mondrian.test.clearview;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -23,12 +24,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
-
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.test.DiffRepository;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
 /**
@@ -50,21 +49,18 @@ import mondrian.test.SqlPattern;
 
     public abstract DiffRepository getDiffRepos();
 
-    private PropertySaver5 propSaver;
-
     private String name;
 
     // implement TestCase
     @BeforeEach
     protected void beforeEach() throws Exception {
-        propSaver = new PropertySaver5();
     }
 
 
     // implement TestCase
     @AfterEach
     protected void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         DiffRepository diffRepos = getDiffRepos();
         diffRepos.setCurrentTestCaseName(null);
     }

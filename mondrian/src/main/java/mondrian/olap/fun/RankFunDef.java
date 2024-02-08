@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.CacheCalc;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapUtil;
@@ -97,7 +97,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final TupleListCalc listCalc0 = compiler.compileList( listExp );
     Calc listCalc1 = new RankedListCalc( listCalc0, tuple );
     final Calc listCalc;
-    if ( MondrianProperties.instance().EnableExpCache.get() ) {
+    if ( SystemWideProperties.instance().EnableExpCache ) {
       final ExpCacheDescriptor key = new ExpCacheDescriptor( listExp, listCalc1, compiler.getEvaluator() );
       listCalc = new CacheCalc( listExp.getType(), key );
     } else {

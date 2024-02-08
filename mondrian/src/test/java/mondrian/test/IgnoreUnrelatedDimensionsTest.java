@@ -10,7 +10,7 @@
 */
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.SchemaModifiers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,17 +34,15 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class IgnoreUnrelatedDimensionsTest {
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = true;
     }
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

@@ -136,7 +136,7 @@ import mondrian.olap.DimensionType;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.Property;
 import mondrian.olap.QueryAxisImpl;
@@ -1851,7 +1851,7 @@ public class RolapCube extends CubeBase {
     public synchronized HierarchyUsage[] getUsages(Hierarchy hierarchy) {
         String name = hierarchy.getName();
         if (!name.equals(hierarchy.getDimension().getName())
-            && MondrianProperties.instance().SsasCompatibleNaming.get())
+            && SystemWideProperties.instance().SsasCompatibleNaming)
         {
             name = new StringBuilder(hierarchy.getDimension().getName()).append(".").append(name).toString();
         }

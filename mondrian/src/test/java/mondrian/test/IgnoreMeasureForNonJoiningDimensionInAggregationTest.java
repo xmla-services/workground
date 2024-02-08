@@ -23,7 +23,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Test ignoring of measure when unrelated Dimension is in
@@ -35,18 +35,18 @@ import mondrian.olap.MondrianProperties;
  */
 class IgnoreMeasureForNonJoiningDimensionInAggregationTest
 {
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableNonEmptyOnAllAxis,
-                true);
+
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis =
+                true;
     }
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

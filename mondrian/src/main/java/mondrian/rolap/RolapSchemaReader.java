@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.SystemProperty;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -43,13 +44,12 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.impl.IdentifierSegment;
-import org.eigenbase.util.property.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.NullLiteralImpl;
@@ -474,7 +474,7 @@ public class RolapSchemaReader
         DataType category,
         MatchType matchType)
     {
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             return new NameResolver().resolve(
                 parent,
                 Util.toOlap4j(names),
@@ -792,9 +792,9 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         }
 
         // Scan through mondrian properties.
-        List<Property> propertyList =
-            MondrianProperties.instance().getPropertyList();
-        for (Property property : propertyList) {
+        List<SystemProperty> propertyList =
+            SystemWideProperties.instance().getPropertyList();
+        for (SystemProperty property : propertyList) {
             if (property.getPath().equals(name)) {
                 return new SystemPropertyParameter(name, false);
             }
@@ -840,7 +840,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
 
     /**
      * Implementation of {@link Parameter} which is sourced from mondrian
-     * properties (see {@link MondrianProperties}.
+     * properties (see {@link SystemWideProperties}.
      * <p/>
      * <p>The name of the property is the same as the key into the
      * {@link java.util.Properties} object; for example "mondrian.trace.level".
@@ -856,7 +856,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         /**
          * Definition of mondrian property, or null if system property.
          */
-        private final Property propertyDefinition;
+        private final SystemProperty propertyDefinition;
 
         public SystemPropertyParameter(String name, boolean system) {
             super(
@@ -868,7 +868,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
             this.propertyDefinition =
                 system
                 ? null
-                : MondrianProperties.instance().getPropertyDefinition(name);
+                : SystemWideProperties.instance().getPropertyDefinition(name);
         }
 
         @Override

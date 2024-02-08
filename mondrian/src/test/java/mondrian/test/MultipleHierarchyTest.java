@@ -10,7 +10,7 @@
 package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.SchemaModifiers;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +44,7 @@ class MultipleHierarchyTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testWeekly(TestContext context) {
         Connection connection = context.getConnection();
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             // [Time.Weekly] has an 'all' member, but [Time] does not.
             assertAxisReturns(connection,
                 "{[Time].[Time].CurrentMember}",
@@ -337,7 +337,7 @@ class MultipleHierarchyTest {
             + "select [Measures].[Time Child Count] on 0\n"
             + "from [Sales]";
         Connection connection = context.getConnection();
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             assertQueryThrows(connection,
                 query,
                 "The 'Time' dimension contains more than one hierarchy, "

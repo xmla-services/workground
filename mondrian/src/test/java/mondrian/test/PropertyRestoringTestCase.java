@@ -8,6 +8,7 @@
 */
 package mondrian.test;
 
+import mondrian.olap.SystemWideProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,15 +17,15 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class PropertyRestoringTestCase {
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 }

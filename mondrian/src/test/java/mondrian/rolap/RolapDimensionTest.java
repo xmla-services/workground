@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import mondrian.test.PropertySaver5;
+
 
 class RolapDimensionTest {
 
@@ -38,10 +39,10 @@ class RolapDimensionTest {
   private MappingCubeDimension xmlCubeDimension;
   private HierarchyImpl hierarchy;
 
-  private PropertySaver5 propSaver;
+
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
     schema = Mockito.mock(RolapSchema.class);
     cube = Mockito.mock(RolapCube.class);
     MappingRelation fact = Mockito.mock(MappingRelation.class);
@@ -73,7 +74,7 @@ class RolapDimensionTest {
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   @Disabled("disabled for CI build") //disabled for CI build

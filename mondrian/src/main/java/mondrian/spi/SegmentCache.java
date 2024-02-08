@@ -12,7 +12,7 @@ package mondrian.spi;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * SPI definition of the segments cache.
@@ -22,7 +22,7 @@ import mondrian.olap.MondrianProperties;
  *
  * <p>There are a few ways to declare a SegmentCache implementation in
  * Mondrian. The first one is to set the
- * {@link MondrianProperties#SegmentCache} property.
+ * {@link SystemWideProperties#SegmentCache} property.
  *
  * <p>The second one is to use the Java Services API. This is the preferred
  * mean. You will need to create a jar file, accessible through the same

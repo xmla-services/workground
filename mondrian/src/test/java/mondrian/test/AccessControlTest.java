@@ -13,7 +13,7 @@ package mondrian.test;
 import mondrian.olap.DelegatingRole;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProps;
@@ -99,16 +99,10 @@ class AccessControlTest {
         + " </SchemaGrant>\n"
         + "</Role>";
     */
-    private PropertySaver5 propSaver;
-
-	@BeforeEach
-	public void beforeEach() {
-		propSaver = new PropertySaver5();
-	}
 
 	@AfterEach
 	public void afterEach() {
-		propSaver.reset();
+		SystemWideProperties.instance().populateInitial();
 	}
 
     @ParameterizedTest
@@ -2259,14 +2253,14 @@ class AccessControlTest {
     void testBugMondrian436(TestContext foodMartContext) {
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
-        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        SystemWideProperties.instance().EnableNativeNonEmpty = true;
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
         ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 
         // Run with native enabled, then with whatever properties are set for
         // this test run.
         checkBugMondrian436(foodMartContext);
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         checkBugMondrian436(foodMartContext);
     }
 
@@ -3359,7 +3353,7 @@ class AccessControlTest {
         // connected with MONDRIAN-1568
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeFilter(true);
-        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        SystemWideProperties.instance().EnableNativeNonEmpty = true;
         ((TestConfig)foodMartContext.getConfig()).setEnableNativeTopCount(true);
         ((TestConfig)foodMartContext.getConfig()).setExpandNonNative(true);
 
@@ -3484,7 +3478,7 @@ class AccessControlTest {
             }
         }
 
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

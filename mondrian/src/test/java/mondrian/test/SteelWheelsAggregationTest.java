@@ -10,6 +10,7 @@
 */
 package mondrian.test;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
@@ -79,18 +80,15 @@ class SteelWheelsAggregationTest {
             + "{[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine].[Roulet]}\n"
             + "Row #0: 1,701.95\n";
 
-    private PropertySaver5 propertySaver;
-
     @BeforeEach
     public void beforeEach() {
-        propertySaver = new PropertySaver5();
         //propertySaver.set(propertySaver.properties.UseAggregates, true);
         //propertySaver.set(propertySaver.properties.ReadAggregates, true);
     }
 
     @AfterEach
     public void afterEach() {
-        propertySaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private MappingSchema getSchemaWith(List<MappingRole> roles) {

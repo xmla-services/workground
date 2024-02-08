@@ -21,7 +21,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 import java.util.function.Function;
 
@@ -46,8 +46,6 @@ public class BUG_1541077 extends AggTableTestCase {
         if (!isApplicable(context.getConnection())) {
             return;
         }
-
-        MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(false);
@@ -75,8 +73,6 @@ public class BUG_1541077 extends AggTableTestCase {
             return;
         }
 
-        MondrianProperties props = MondrianProperties.instance();
-
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(false);
 
@@ -103,8 +99,6 @@ public class BUG_1541077 extends AggTableTestCase {
             return;
         }
 
-        MondrianProperties props = MondrianProperties.instance();
-
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(false);
 
@@ -130,8 +124,6 @@ public class BUG_1541077 extends AggTableTestCase {
         if (!isApplicable(context.getConnection())) {
             return;
         }
-
-        MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(false);

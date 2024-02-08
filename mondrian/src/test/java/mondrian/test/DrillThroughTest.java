@@ -15,6 +15,7 @@ package mondrian.test;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapSchemaPool;
@@ -131,16 +132,10 @@ class DrillThroughTest {
             NAME_COLUMN_FULL_NAME,
             NAME_COLUMN_PRODUCT_NAME);
 
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-    }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
     // ~ Tests ================================================================
 

@@ -13,7 +13,7 @@
 package mondrian.olap;
 
 import mondrian.rolap.RolapConnectionPropsR;
-import mondrian.test.PropertySaver5;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -56,16 +56,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 class HierarchyBugTest {
-	private PropertySaver5 propSaver;
+
 
 	@BeforeEach
 	public void beforeEach() {
-		propSaver = new PropertySaver5();
+
 	}
 
 	@AfterEach
 	public void afterEach() {
-		propSaver.reset();
+		SystemWideProperties.instance().populateInitial();
 	}
 
     /**
@@ -128,8 +128,8 @@ class HierarchyBugTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
 	void testNamesIdentitySsasCompatibleTimeHierarchy(TestContext foodMartContext) {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         String mdxTime = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Time].[Year].Members ON ROWS\n"
@@ -148,8 +148,7 @@ TestUtil.flushSchemaCache(conn);
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNamesIdentitySsasCompatibleWeeklyHierarchy(TestContext foodMartContext) {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         String mdxWeekly = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Weekly].[Year].Members ON ROWS\n"
@@ -229,8 +228,7 @@ TestUtil.flushSchemaCache(conn);
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testNamesIdentitySsasCompatibleOlap4j(TestContext foodMartContext) throws SQLException {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time].[Time]");
     }
 	@ParameterizedTest
@@ -256,8 +254,7 @@ TestUtil.flushSchemaCache(conn);
     void testNamesIdentitySsasCompatibleOlap4jWeekly(TestContext foodMartContext)
         throws SQLException
     {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         String mdx = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Weekly].[Year].Members ON ROWS\n"
@@ -283,8 +280,8 @@ TestUtil.flushSchemaCache(conn);
     void testNamesIdentitySsasCompatibleOlap4jDateDim(TestContext foodMartContext)
         throws SQLException
     {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext, "[Date].[Date]");
     }
 	@ParameterizedTest
@@ -382,8 +379,8 @@ TestUtil.flushSchemaCache(conn);
     void testNamesIdentitySsasCompatibleOlap4jDateWeekly(TestContext context)
         throws SQLException
     {
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         String mdx = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Date].[Weekly].[Year].Members ON ROWS\n"

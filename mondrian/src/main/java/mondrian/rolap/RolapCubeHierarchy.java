@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.rolap.TupleReader.MemberBuilder;
@@ -50,7 +50,7 @@ import mondrian.util.UnsupportedList;
 public class RolapCubeHierarchy extends RolapHierarchy {
 
     private final boolean cachingEnabled =
-        MondrianProperties.instance().EnableRolapCubeMemberCache.get();
+        SystemWideProperties.instance().EnableRolapCubeMemberCache;
     private final RolapCubeDimension cubeDimension;
     private final RolapHierarchy rolapHierarchy;
     private final RolapCubeLevel currentNullLevel;
@@ -607,7 +607,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
          */
         protected MemberCacheHelper rolapCubeCacheHelper;
         private final boolean enableCache =
-            MondrianProperties.instance().EnableRolapCubeMemberCache.get();
+            SystemWideProperties.instance().EnableRolapCubeMemberCache;
 
         public CacheRolapCubeHierarchyMemberReader() {
             super(new SqlMemberSource(RolapCubeHierarchy.this));

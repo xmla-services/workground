@@ -11,7 +11,7 @@ package mondrian.olap;
 
 /**
  * Strategies for applying solve order, exposed via the property
- * {@link MondrianProperties#SolveOrderMode}.
+ * {@link SystemWideProperties#SolveOrderMode}.
  */
 public enum SolveOrderMode {
 

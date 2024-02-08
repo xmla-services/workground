@@ -8,7 +8,7 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -398,7 +398,7 @@ class NonCollapsedAggTest extends AggTableTestCase {
         ((TestConfig)context.getConfig()).setReadAggregates(true);
         prepareContext(context);
         // MONDRIAN-1085
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         /*

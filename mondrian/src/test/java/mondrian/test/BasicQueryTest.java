@@ -87,10 +87,9 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
-
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryImpl;
@@ -123,7 +122,7 @@ public class BasicQueryTest {
   private static final String timeWeekly = TestUtil.hierarchyName( "Time", "Weekly" );
   public static final int MAX_EVAL_DEPTH_VALUE = 5000;
 
-  private MondrianProperties props = MondrianProperties.instance();
+  private SystemWideProperties props = SystemWideProperties.instance();
 
   private static final QueryAndResult[] sampleQueries = {
     // 0
@@ -280,18 +279,14 @@ public class BasicQueryTest {
 
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Promotion Sales]}\n" + "Row #0: 151,211.21\n" ), };
 
-  private PropertySaver5 propSaver;
-
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
-    propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, false);
+    SystemWideProperties.instance().SsasCompatibleNaming = false;
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   @ParameterizedTest
@@ -333,7 +328,7 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testSample5Snowflake(TestContext context) {
-    propSaver.set( MondrianProperties.instance().FilterChildlessSnowflakeMembers, false );
+    SystemWideProperties.instance().FilterChildlessSnowflakeMembers = false;
     //final TestContext context = getTestContext().withFreshConnection();
     Connection connection = context.getConnection();
     try {
@@ -727,7 +722,7 @@ public class BasicQueryTest {
         executeQuery( context.getConnection(), "SELECT {[Measures].[Unit Sales]} on columns,\n" + " {[Product].members} on rows\n"
             + "from Sales" );
     final int rowCount = result.getAxes()[1].getPositions().size();
-    assertEquals( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ? 2256 : 2266, rowCount );
+    assertEquals( SystemWideProperties.instance().FilterChildlessSnowflakeMembers ? 2256 : 2266, rowCount );
     assertEquals( "152", result.getCell( new int[] { 0, rowCount - 1 } ).getFormattedValue() );
   }
 
@@ -737,7 +732,7 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testGetContext(TestContext context) {
-    if ( !MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+    if ( !SystemWideProperties.instance().SsasCompatibleNaming ) {
       return;
     }
     Result result =
@@ -4225,10 +4220,10 @@ public class BasicQueryTest {
   void testMONDRIAN2608(TestContext context) {
     // this issue takes place only for the case when ordinalColumn is defined
     // and CompareSiblingsByOrderKey=false and ExpandNonNative=true
-    propSaver.set( props.CompareSiblingsByOrderKey, false );
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = false;
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
-    if ( !props.EnableRolapCubeMemberCache.get() ) {
-      propSaver.set( props.EnableRolapCubeMemberCache, true );
+    if ( !props.EnableRolapCubeMemberCache ) {
+      SystemWideProperties.instance().EnableRolapCubeMemberCache = true;
     }
 
     String MDX1 =
@@ -4320,7 +4315,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberOrdinalCaching(TestContext context) {
-    propSaver.set( props.CompareSiblingsByOrderKey, true );
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     // Use a fresh connection to make sure bad member ordinals haven't
     // been assigned by previous tests.
     //final TestContext context = getTestContext().withFreshConnection();
@@ -4828,7 +4823,7 @@ public class BasicQueryTest {
     String queryWithDefaultMeasureFilter =
         "select store.members on 0 " + "from DefaultMeasureTesting where [measures].[Supply Time]";
       Connection connection = context.getConnection();
-    if ( props.CaseSensitive.get() ) {
+    if ( SystemWideProperties.instance().CaseSensitive ) {
       assertQueriesReturnSimilarResults(connection, queryWithoutFilter, queryWithFirstMeasure);
     } else {
       assertQueriesReturnSimilarResults(connection, queryWithoutFilter, queryWithDefaultMeasureFilter);
@@ -5188,7 +5183,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testHierarchiesOfSameDimensionOnDifferentAxes(TestContext context) {
-    if ( !MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+    if ( !SystemWideProperties.instance().SsasCompatibleNaming ) {
       return;
     }
     assertQueryReturns( context.getConnection(),"select [Time].[Year].Members on columns,\n" + "[Time].[Weekly].[1997].[6].Children on rows\n"
@@ -5542,7 +5537,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testResultLimit(TestContext context) throws Exception {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
+    SystemWideProperties.instance().ResultLimit = 1000;
     assertAxisThrows(context.getConnection(), "CrossJoin([Product].[Brand Name].Members, [Gender].[Gender].Members)",
         "result (1,001) exceeded limit (1,000)" );
   }
@@ -5550,7 +5545,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testResultLimitWithinLimit(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 5000 );
+    SystemWideProperties.instance().ResultLimit = 5000;
     executeQuery(context.getConnection(),
         "select CrossJoin([Product].[Brand Name].Members, [Gender].[Gender].Members) on columns from [Sales]" );
   }
@@ -5621,7 +5616,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCaseInsensitiveResolution(TestContext context) {
-    propSaver.set( MondrianProperties.instance().CaseSensitive, false );
+    SystemWideProperties.instance().CaseSensitive = false;
     String[] equivalentMemberNames =
         { "gender.gender.F", "gender.gender.f", "gender.[All gender].F", "gender.[All gender].f" };
     for ( String memberName : equivalentMemberNames ) {
@@ -5629,12 +5624,12 @@ public class BasicQueryTest {
           + "{[Gender].[F]}\n" + "Row #0: 131,558\n" );
     }
     // also verify case.sensitive=true is honored
-    propSaver.set( MondrianProperties.instance().CaseSensitive, true );
+    SystemWideProperties.instance().CaseSensitive = true;
     String[] wrongCase = { "gender.gender.f", "gender.[All gender].f" };
     for ( String memberName : wrongCase ) {
       assertExprThrows(context.getConnection(), "select " + memberName + " on 0 from sales", "Failed to parse query" );
     }
-    propSaver.set( MondrianProperties.instance().CaseSensitive, false );
+    SystemWideProperties.instance().CaseSensitive = false;
   }
 
   /**
@@ -6056,7 +6051,7 @@ public class BasicQueryTest {
     } catch ( MondrianException e ) {
       fail( "MondrianException is not expected" );
     } finally {
-      propSaver.reset();
+      SystemWideProperties.instance().populateInitial();
     }
   }
 
@@ -6102,7 +6097,7 @@ public class BasicQueryTest {
     } catch ( MondrianException e ) {
       fail( "MondrianException is not expected" );
     } finally {
-      propSaver.reset();
+      SystemWideProperties.instance().populateInitial();
     }
   }
 

@@ -130,7 +130,7 @@ import static mondrian.resource.MondrianResource.UnknownParameter;
  *     takes longer to execute than the value of this parameter, the system
  *     will kill it.</li>
  *
- * <li>The {@link MondrianProperties#QueryLimit} parameter limits the number
+ * <li>The {@link SystemWideProperties#QueryLimit} parameter limits the number
  *     of cells returned by a query.</li>
  *
  * <li>At any time while a query is executing, another thread can cancel the
@@ -545,7 +545,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public boolean ignoreInvalidMembers()
     {
-        MondrianProperties props = MondrianProperties.instance();
         final boolean load = ((RolapCube) getCube()).isLoadInProgress();
         return
             !strictValidation

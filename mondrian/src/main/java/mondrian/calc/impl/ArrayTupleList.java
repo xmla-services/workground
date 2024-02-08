@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
 import static mondrian.resource.MondrianResource.LimitExceededDuringCrossjoin;
@@ -38,7 +38,7 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
     private final int maxMembers;
     private transient Member[] objectData;
     private int size;
-    private final int cjMaxSize = MondrianProperties.instance().ResultLimit.get();
+    private final int cjMaxSize = SystemWideProperties.instance().ResultLimit;
 
     /**
      * Creates an empty ArrayTupleList with an initial capacity of 10 tuples.
@@ -70,7 +70,7 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
 
     /**
      * Get the upper limit of the size of the Member[] backing ArrayTupleLists
-     * This uses the {@link MondrianProperties#ResultLimit} as the value
+     * This uses the {@link SystemWideProperties#ResultLimit} as the value
      * setting the maximum number of tuples.  Member max = (tuple max * arity),
      * or max int if undefined.
      */

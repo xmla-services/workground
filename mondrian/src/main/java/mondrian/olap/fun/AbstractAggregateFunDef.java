@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapStoredMeasure;
@@ -59,7 +59,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
     {
         // If expression cache is enabled, wrap first expression (the set)
         // in a function which will use the expression cache.
-        if (i == 0 && MondrianProperties.instance().EnableExpCache.get()) {
+        if (i == 0 && SystemWideProperties.instance().EnableExpCache) {
             Expression arg = args[0];
             if (FunUtil.worthCaching(arg)) {
                 final Expression cacheCall =

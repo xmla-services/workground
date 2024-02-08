@@ -12,9 +12,9 @@ package mondrian.rolap;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
@@ -23,7 +23,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
 import java.util.List;
@@ -33,15 +32,10 @@ import java.util.concurrent.TimeUnit;
 
 class NativeEvalVirtualCubeTest extends BatchTestCase {
 
-  private PropertySaver5 propSaver;
-  @BeforeEach
-  public void beforeEach() {
-    propSaver = new PropertySaver5();
-  }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
     /**
@@ -54,7 +48,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
         + "from [warehouse and sales]",
-        "", propSaver);
+        "");
   }
 
   @ParameterizedTest
@@ -64,7 +58,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
       + " NON EMPTY Crossjoin ( Gender.gender.members, product.[product category].members) on 1 "
       + " from [warehouse and sales]";
 
-      verifySameNativeAndNot(context.getConnection(), query, "", propSaver);
+      verifySameNativeAndNot(context.getConnection(), query, "");
       assertQueryReturns(context.getConnection(),
           query,
           "Axis #0:\n"
@@ -84,7 +78,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
         + "from [warehouse and sales]",
-        "", propSaver);
+        "");
   }
 
   void testNoApplicableCube(TestContext context) {
@@ -92,7 +86,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, [Warehouse].[All Warehouses].children) on 1 "
         + "from [warehouse and sales]",
-        "", propSaver);
+        "");
   }
 
   /**
@@ -108,7 +102,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         + " nonemptycrossjoin( Gender.[All Gender], "
         + "product.[product category].members)"
         + " on 1 "
-        + " from [warehouse and sales]", "", propSaver);
+        + " from [warehouse and sales]", "");
   }
 
   @ParameterizedTest
@@ -122,7 +116,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
           + "ON COLUMNS,\n"
           + "{ [Measures].[allW]}\n"
           + "ON ROWS\n"
-          + "from [Warehouse and Sales]", "", propSaver);
+          + "from [Warehouse and Sales]", "");
   }
 
   @ParameterizedTest
@@ -137,7 +131,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "{ [Measures].[allW]}\n"
         + "ON ROWS\n"
         + "from [Warehouse and Sales]";
-    verifySameNativeAndNot(context.getConnection(), query, "", propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, "");
     assertQueryReturns(context.getConnection(),
         query,
         "Axis #0:\n"
@@ -257,7 +251,7 @@ class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "ON COLUMNS,\n"
         + "{ [Measures].[validUS]}\n"
         + "ON ROWS\n"
-        + "from [Warehouse and Sales]", "", propSaver);
+        + "from [Warehouse and Sales]", "");
   }
 
   @ParameterizedTest

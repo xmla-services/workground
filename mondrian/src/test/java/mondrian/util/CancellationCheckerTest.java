@@ -13,6 +13,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Statement;
 import org.eclipse.daanse.olap.api.Context;
@@ -21,15 +22,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.server.Execution;
-import mondrian.test.PropertySaver5;
 
 class CancellationCheckerTest {
 
-    protected PropertySaver5 propSaver = new PropertySaver5();
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private Execution excMock = mock(Execution.class);

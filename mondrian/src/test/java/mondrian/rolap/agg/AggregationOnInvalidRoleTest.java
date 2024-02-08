@@ -8,6 +8,7 @@
 */
 package mondrian.rolap.agg;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
@@ -20,8 +21,6 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
-import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 
 import java.util.List;
@@ -37,20 +36,13 @@ class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         return "mondrian_2225.csv";
     }
 
-
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.UseAggregates, true);
-        //propSaver.set(propSaver.properties.ReadAggregates, true);
-        //propSaver.set(propSaver.properties.IgnoreInvalidMembers, true);
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

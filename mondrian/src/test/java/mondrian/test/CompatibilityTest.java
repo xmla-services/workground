@@ -36,7 +36,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 
@@ -53,8 +53,8 @@ import mondrian.rolap.SchemaModifiers;
  * @since March 30, 2005
  */
 class CompatibilityTest {
-	private PropertySaver5 propSaver;
-    private final MondrianProperties props = MondrianProperties.instance();
+
+    private final SystemWideProperties props = SystemWideProperties.instance();
 
     @BeforeAll
     public static void beforeAll() {
@@ -62,12 +62,12 @@ class CompatibilityTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		propSaver = new PropertySaver5();
+
 	}
 
 	@AfterEach
 	public void afterEach() {
-		propSaver.reset();
+		props.populateInitial();
 	}
 
     /**
@@ -205,7 +205,7 @@ class CompatibilityTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCalculatedMemberCase(TestContext foodMartContext) {
     	Connection connection = foodMartContext.getConnection();
-        propSaver.set(MondrianProperties.instance().CaseSensitive, false);
+        SystemWideProperties.instance().CaseSensitive = false;
         TestUtil.assertQueryReturns(
     		connection,
             "with member [Measures].[CaLc] as '1'\n"
@@ -333,7 +333,7 @@ class CompatibilityTest {
     }
 
     protected boolean isDefaultNullMemberRepresentation() {
-        return MondrianProperties.instance().NullMemberRepresentation.get()
+        return SystemWideProperties.instance().NullMemberRepresentation
                 .equals("#null");
     }
 
@@ -400,7 +400,7 @@ class CompatibilityTest {
         connection = foodMartContext.getConnection();
 
         // This test should work irrespective of the case-sensitivity setting.
-        props.CaseSensitive.get();
+        //props.CaseSensitive;
 //        discard();
 
         TestUtil.assertQueryReturns(
@@ -565,7 +565,7 @@ class CompatibilityTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testPropertyCaseSensitivity(TestContext foodMartContext) {
     	Connection connection = foodMartContext.getConnection();
-        boolean caseSensitive = props.CaseSensitive.get();
+        boolean caseSensitive = props.CaseSensitive;
 
         // A user-defined property of a member.
         TestUtil.assertExprReturns(

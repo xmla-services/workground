@@ -741,11 +741,6 @@
 				<version>2.9.0</version>
 			</dependency>
 			<dependency>
-				<groupId>org.eclipse.daanse</groupId>
-				<artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
-				<version>${eigenbase-properties.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
 				<artifactId>org.apache.servicemix.bundles.xerces</artifactId>
 				<version>2.12.2_1</version>
@@ -938,7 +933,7 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>org.eclipse.daanse.repackage.eigenbase.properties</module>
+		<!--module>org.eclipse.daanse.repackage.eigenbase.properties</module-->
 		<module>org.eclipse.daanse.repackage.dockerjava</module>
 		<module>org.eclipse.daanse.repackage.rhino.engine</module>
 		<module>function</module>

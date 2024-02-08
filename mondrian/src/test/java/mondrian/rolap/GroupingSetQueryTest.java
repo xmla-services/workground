@@ -33,9 +33,9 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.agg.CellRequest;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 
 /**
@@ -47,7 +47,7 @@ import mondrian.test.SqlPattern;
  */
 class GroupingSetQueryTest extends BatchTestCase{
 
-    private MondrianProperties prop = MondrianProperties.instance();
+    private SystemWideProperties prop = SystemWideProperties.instance();
 
     private static final String cubeNameSales2 = "Sales 2";
     private static final String measureStoreSales = "[Measures].[Store Sales]";
@@ -60,16 +60,9 @@ class GroupingSetQueryTest extends BatchTestCase{
             DatabaseProduct.ORACLE,
             DatabaseProduct.TERADATA);
 
-    private PropertySaver5 propSaver;
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(prop.GenerateFormattedSql, false);
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private void pripareContext(TestContext context) {

@@ -9,6 +9,7 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import mondrian.olap.SystemWideProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,9 +18,7 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
 import java.util.List;
-
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
@@ -36,15 +35,12 @@ class AggregationOverAggTableTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @Override
 	@AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest

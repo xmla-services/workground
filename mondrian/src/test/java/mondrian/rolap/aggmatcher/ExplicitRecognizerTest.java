@@ -9,6 +9,7 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
@@ -52,16 +53,12 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        //TestContext.instance().flushSchemaCache();
     }
 
     @Override
 	@AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @Override

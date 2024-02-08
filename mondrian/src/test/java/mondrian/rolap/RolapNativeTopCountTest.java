@@ -9,7 +9,8 @@
 */
 package mondrian.rolap;
 
-import mondrian.test.PropertySaver5;
+
+import mondrian.olap.SystemWideProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,16 +58,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class RolapNativeTopCountTest extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.EnableNativeTopCount, true);
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest

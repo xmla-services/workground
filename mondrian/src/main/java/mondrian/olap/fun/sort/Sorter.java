@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.olap.type.ScalarType;
@@ -737,7 +737,7 @@ public class Sorter {
       }
     }
     if(
-        MondrianProperties.instance().CompareSiblingsByOrderKey.get()
+        SystemWideProperties.instance().CompareSiblingsByOrderKey
         &&
         ((mondrian.rolap.RolapLevel)m1.getLevel()).getOrdinalExp() != null
     ) {

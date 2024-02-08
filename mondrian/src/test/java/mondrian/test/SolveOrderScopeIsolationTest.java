@@ -9,7 +9,7 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
 import mondrian.rolap.SchemaModifiers;
@@ -50,7 +50,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class SolveOrderScopeIsolationTest {
     //SolveOrderMode defaultSolveOrderMode;
 
-    //private PropertySaver5 propSaver;
+    //
 
 
     //public void beforeEach(TestContext context) {
@@ -59,7 +59,7 @@ class SolveOrderScopeIsolationTest {
     //}
 
     //public void afterEach(TestContext context) {
-    //    //propSaver.reset();
+    //    //SystemWideProperties.instance().populateInitial();
     //    setSolveOrderMode(context, defaultSolveOrderMode);
     //}
 

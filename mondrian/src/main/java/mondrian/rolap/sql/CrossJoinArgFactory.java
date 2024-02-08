@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.ParenthesesFunDef;
 import mondrian.olap.fun.SetFunDef;
@@ -470,7 +470,7 @@ public class CrossJoinArgFactory {
             }
         } else {
             if (!"{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
-                || !isArgSizeSupported(args.length, MondrianProperties.instance().MaxConstraints.get()))
+                || !isArgSizeSupported(args.length, SystemWideProperties.instance().MaxConstraints))
             {
                 return null;
             }

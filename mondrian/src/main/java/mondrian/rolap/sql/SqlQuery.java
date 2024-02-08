@@ -36,7 +36,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapUtil;
@@ -339,8 +339,8 @@ public class SqlQuery {
 
         if (relation instanceof MappingRelation relation1) {
             if (relations.add(relation1)
-                && !MondrianProperties.instance()
-                .FilterChildlessSnowflakeMembers.get())
+                && !SystemWideProperties.instance()
+                .FilterChildlessSnowflakeMembers)
             {
                 // This relation is new to this query. Add a join to any other
                 // relation in the same dimension.

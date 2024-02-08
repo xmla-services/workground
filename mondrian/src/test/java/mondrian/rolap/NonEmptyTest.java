@@ -68,7 +68,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.rolap.RolapConnection.NonEmptyResult;
 import mondrian.rolap.RolapNative.Listener;
@@ -76,7 +76,6 @@ import mondrian.rolap.RolapNative.NativeEvent;
 import mondrian.rolap.RolapNative.TupleEvent;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
 
@@ -90,7 +89,7 @@ class NonEmptyTest extends BatchTestCase {
 
 
 	public static String hierarchyName(String dimension, String hierarchy) {
-		return MondrianProperties.instance().SsasCompatibleNaming.get() ? "[" + dimension + "].[" + hierarchy + "]"
+		return SystemWideProperties.instance().SsasCompatibleNaming ? "[" + dimension + "].[" + hierarchy + "]"
 				: (hierarchy.equals(dimension) ? "[" + dimension + "]" : "[" + dimension + "." + hierarchy + "]");
 	}
 
@@ -107,21 +106,14 @@ class NonEmptyTest extends BatchTestCase {
     levelName(
       "Education Level", "Education Level", "Education Level" );
 
-  private PropertySaver5 propSaver;
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
-    //propSaver.set(
-    //        MondrianProperties.instance().EnableNativeCrossJoin, true );
-    propSaver.set(
-            MondrianProperties.instance().EnableNativeNonEmpty, true );
-    //propSaver.set(
-    //        MondrianProperties.instance().LevelPreCacheThreshold, 0 );
+    SystemWideProperties.instance().EnableNativeNonEmpty = true;
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+      SystemWideProperties.instance().populateInitial();
   }
 
   @ParameterizedTest
@@ -171,14 +163,14 @@ class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAnalyzerPerformanceIssue(TestContext context) {
-    final MondrianProperties mondrianProperties =
-      MondrianProperties.instance();
+    final SystemWideProperties mondrianProperties =
+      SystemWideProperties.instance();
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
     ((TestConfig)context.getConfig()).setEnableNativeTopCount(false);
     ((TestConfig)context.getConfig()).setEnableNativeFilter(true);
-    propSaver.set( mondrianProperties.EnableNativeNonEmpty, false );
-    propSaver.set( mondrianProperties.ResultLimit, 5000000 );
+    mondrianProperties.EnableNativeNonEmpty = false;
+    mondrianProperties.ResultLimit = 5000000;
 
     assertQueryReturns(context.getConnection(),
       "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level], NonEmptyCrossJoin"
@@ -1118,7 +1110,7 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(true);
-    propSaver.set( MondrianProperties.instance().ResultLimit, 2 );
+    SystemWideProperties.instance().ResultLimit = 2;
 
     try {
       executeQuery(
@@ -1308,7 +1300,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testExpandLowMaxConstraints(TestContext context) {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
+    SystemWideProperties.instance().MaxConstraints = 2;
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     checkNotNative(context,
       12,
@@ -1481,7 +1473,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testEnumLowMaxConstraints(TestContext context) {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
+    SystemWideProperties.instance().MaxConstraints = 2;
     checkNotNative(context,
       12,
       "with "
@@ -2082,10 +2074,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
     checkNative(context,
       4,
@@ -2137,10 +2129,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
     checkNative(context,
       11,
@@ -2160,10 +2152,10 @@ class NonEmptyTest extends BatchTestCase {
     // Make sure maxConstraint settting is high enough
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
     checkNative(context,
       3,
@@ -2384,8 +2376,7 @@ class NonEmptyTest extends BatchTestCase {
         "sales_fact_1997", "agg_c_14_sales_fact_1997" );
     }
 
-    if ( !MondrianProperties.instance().FilterChildlessSnowflakeMembers
-      .get() ) {
+    if ( !SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       necjSqlMySql = necjSqlMySql.replaceAll(
         "`product` as `product`, `product_class` as `product_class`",
         "`product_class` as `product_class`, `product` as `product`" );
@@ -2427,8 +2418,7 @@ class NonEmptyTest extends BatchTestCase {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
-    if ( !MondrianProperties.instance().FilterChildlessSnowflakeMembers
-      .get() ) {
+    if ( !SystemWideProperties.instance().FilterChildlessSnowflakeMembers ){
       return;
     }
     String dimension =
@@ -2614,8 +2604,7 @@ class NonEmptyTest extends BatchTestCase {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
-    if ( !MondrianProperties.instance().FilterChildlessSnowflakeMembers
-      .get() ) {
+    if ( !SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       return;
     }
     String dimension =
@@ -2792,8 +2781,7 @@ class NonEmptyTest extends BatchTestCase {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
-    if ( !MondrianProperties.instance().FilterChildlessSnowflakeMembers
-      .get() ) {
+    if ( !SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       return;
     }
     String dimension =
@@ -3067,15 +3055,15 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     ((TestConfig)context.getConfig()).setEnableNativeCrossJoin(false);
     boolean oldEnableNativeNonEmpty =
-        MondrianProperties.instance().EnableNativeNonEmpty.get();
-    MondrianProperties.instance().EnableNativeNonEmpty.set( false );
+        SystemWideProperties.instance().EnableNativeNonEmpty;
+    SystemWideProperties.instance().EnableNativeNonEmpty = false;
 
     executeQuery(
       "select non empty CrossJoin([Customers].[Name].Members, "
         + "{[Promotions].[All Promotions].[Fantastic Discounts]}) "
         + "ON COLUMNS FROM [Sales]", context.getConnection());
-    MondrianProperties.instance().EnableNativeNonEmpty.set(
-      oldEnableNativeNonEmpty );
+    SystemWideProperties.instance().EnableNativeNonEmpty =
+      oldEnableNativeNonEmpty;
   }
 
   /**
@@ -3160,7 +3148,7 @@ class NonEmptyTest extends BatchTestCase {
     lmc = scf.getLevelMembersConstraint( evaluator );
     List<RolapMember> list =
       smrch.mapLevelToMembers.get( (RolapLevel) nameLevel, lmc );
-    if ( MondrianProperties.instance().EnableRolapCubeMemberCache.get() ) {
+    if ( SystemWideProperties.instance().EnableRolapCubeMemberCache ) {
       assertNotNull( list );
       assertEquals( 20, list.size() );
     }
@@ -3218,7 +3206,7 @@ class NonEmptyTest extends BatchTestCase {
     TupleConstraint lmc = scf.getLevelMembersConstraint( null );
     List<RolapMember> list =
       smrch.mapLevelToMembers.get( (RolapLevel) nameLevel, lmc );
-    if ( MondrianProperties.instance().EnableRolapCubeMemberCache.get() ) {
+    if ( SystemWideProperties.instance().EnableRolapCubeMemberCache ) {
       assertNotNull( list );
       assertEquals( 10281, list.size() );
     }
@@ -3845,10 +3833,9 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     // enumerated list of calculated members results in some empty cells
@@ -3971,10 +3958,9 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     checkNative(context,
@@ -4011,10 +3997,9 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 6;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     // members in set are a cross product of (1997, 1998) and (Q1, Q2, Q3)
@@ -4034,10 +4019,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     // members in set have the same parent
@@ -4057,10 +4042,10 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     // members in set have different parents but there is a unique level
@@ -4156,10 +4141,9 @@ class NonEmptyTest extends BatchTestCase {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
-    if ( MondrianProperties.instance().MaxConstraints.get()
+    if ( SystemWideProperties.instance().MaxConstraints
       < minConstraints ) {
-        propSaver.set(
-            MondrianProperties.instance().MaxConstraints, minConstraints );
+        SystemWideProperties.instance().MaxConstraints = minConstraints;
     }
 
     // calculated measure contains a calculated member
@@ -4577,12 +4561,12 @@ class NonEmptyTest extends BatchTestCase {
   void testNonEmptyLevelMembers(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     boolean currentNativeNonEmpty =
-        MondrianProperties.instance().EnableNativeNonEmpty.get();
+        SystemWideProperties.instance().EnableNativeNonEmpty;
     boolean currentNonEmptyOnAllAxis =
-      MondrianProperties.instance().EnableNonEmptyOnAllAxis.get();
+      SystemWideProperties.instance().EnableNonEmptyOnAllAxis;
     try {
-      MondrianProperties.instance().EnableNativeNonEmpty.set( false );
-      MondrianProperties.instance().EnableNonEmptyOnAllAxis.set( true );
+      SystemWideProperties.instance().EnableNativeNonEmpty = false;
+      SystemWideProperties.instance().EnableNonEmptyOnAllAxis = true;
       assertQueryReturns(context.getConnection(),
         "WITH MEMBER [Measures].[One] AS '1' "
           + "SELECT "
@@ -4627,7 +4611,7 @@ class NonEmptyTest extends BatchTestCase {
           + "Row #1: 263,793.22\n" );
 
       if ( Bug.BugMondrian446Fixed ) {
-        MondrianProperties.instance().EnableNativeNonEmpty.set( true );
+        SystemWideProperties.instance().EnableNativeNonEmpty = true;
         assertQueryReturns(context.getConnection(),
           "WITH MEMBER [Measures].[One] AS '1' "
             + "SELECT "
@@ -4672,10 +4656,10 @@ class NonEmptyTest extends BatchTestCase {
             + "Row #1: 263,793.22\n" );
       }
     } finally {
-      MondrianProperties.instance().EnableNativeNonEmpty.set(
-        currentNativeNonEmpty );
-      MondrianProperties.instance().EnableNonEmptyOnAllAxis.set(
-        currentNonEmptyOnAllAxis );
+      SystemWideProperties.instance().EnableNativeNonEmpty =
+        currentNativeNonEmpty;
+      SystemWideProperties.instance().EnableNonEmptyOnAllAxis =
+        currentNonEmptyOnAllAxis;
     }
   }
 
@@ -5114,12 +5098,12 @@ class NonEmptyTest extends BatchTestCase {
     // run an mdx query with the default NullMemberRepresentation
     executeQuery(preMdx, context.getConnection());
 
-    propSaver.set(
-      MondrianProperties.instance().NullMemberRepresentation,
-      "~Missing " );
-    propSaver.set(
-      MondrianProperties.instance().EnableNonEmptyOnAllAxis,
-      true );
+
+    SystemWideProperties.instance().NullMemberRepresentation =
+      "~Missing ";
+
+    SystemWideProperties.instance().EnableNonEmptyOnAllAxis =
+      true;
     RolapUtil.reloadNullLiteral();
     executeQuery(mdx, context.getConnection());
   }
@@ -5158,7 +5142,7 @@ class NonEmptyTest extends BatchTestCase {
         + " \n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} on columns, \n"
         + "NON EMPTY Hierarchize({[#DataSet#]}) on rows FROM [Sales]",
-      "testBugMondrian321 failed", propSaver
+      "testBugMondrian321 failed"
     );
   }
 
@@ -5605,7 +5589,7 @@ class NonEmptyTest extends BatchTestCase {
   void testMeasureConstraintsInACrossjoinHaveCorrectResults(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     //http://jira.pentaho.com/browse/MONDRIAN-715
-    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+    SystemWideProperties.instance().EnableNativeNonEmpty = true;
     String mdx =
       "with "
         + "  member [Measures].[aa] as '([Measures].[Store Cost],[Gender].[M])'"
@@ -5732,7 +5716,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException(TestContext context)  {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-      propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+      SystemWideProperties.instance().EnableNativeNonEmpty= true;
       class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends RDbMappingSchemaModifier {
 
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(MappingSchema mappingSchema) {
@@ -6068,7 +6052,7 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterChildlessSnowflakeMembers2(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
+    if ( SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       // If FilterChildlessSnowflakeMembers is true, then
       // [Product].[Drink].[Baking Goods].[Coffee] does not even exist!
       return;
@@ -6086,9 +6070,8 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterChildlessSnowflakeMembers(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-    propSaver.set(
-      MondrianProperties.instance().FilterChildlessSnowflakeMembers,
-      false );
+      SystemWideProperties.instance().FilterChildlessSnowflakeMembers =
+      false;
     SqlPattern[] patterns = {
       new SqlPattern(
         DatabaseProduct.MYSQL,
@@ -7717,7 +7700,7 @@ class NonEmptyTest extends BatchTestCase {
   void testCalcMeasureInVirtualCubeWithoutBaseComponents(TestContext context)  {
     ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
     // http://jira.pentaho.com/browse/ANALYZER-3630
-    propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
+    SystemWideProperties.instance().EnableNativeNonEmpty= true;
     /*
     withSchema(context,
         "<Schema name=\"FoodMart\">"
@@ -7762,6 +7745,6 @@ class NonEmptyTest extends BatchTestCase {
         + " [Measures].[dummyMeasure2] on COLUMNS, "
         + " NON EMPTY CrossJoin([Store].[Store State].Members, Time.[Year].members) ON ROWS "
         + " from [virtual] ",
-      "", propSaver);
+      "");
   }
 }

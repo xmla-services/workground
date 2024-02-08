@@ -42,7 +42,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryTiming;
 import mondrian.spi.ProfileHandler;
 
@@ -54,15 +54,15 @@ import mondrian.spi.ProfileHandler;
  */
 class ExplainPlanTest {
 
-  private PropertySaver5 propSaver;
+
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   @ParameterizedTest

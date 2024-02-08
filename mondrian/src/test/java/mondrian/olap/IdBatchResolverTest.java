@@ -59,7 +59,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
+
 
 class IdBatchResolverTest  {
 
@@ -75,16 +75,16 @@ class IdBatchResolverTest  {
     @Captor
      ArgumentCaptor<MatchType> matchType;
 
-	private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        propSaver=new PropertySaver5();
+
     }
     @AfterEach
     public void  afterEach(){
-    	propSaver.reset();
+    	SystemWideProperties.instance().populateInitial();
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
@@ -298,7 +298,7 @@ class IdBatchResolverTest  {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMultiHierarchyNonSSAS(TestContext context) {
-        propSaver.set(propSaver.properties.SsasCompatibleNaming, false);
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -337,7 +337,7 @@ class IdBatchResolverTest  {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testMultiHierarchySSAS(TestContext context) {
-        propSaver.set(propSaver.properties.SsasCompatibleNaming, true);
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,

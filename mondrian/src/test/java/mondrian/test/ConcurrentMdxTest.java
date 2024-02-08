@@ -35,7 +35,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Runs specified set of MDX queries concurrently.
@@ -49,8 +49,6 @@ import mondrian.olap.MondrianProperties;
 class ConcurrentMdxTest {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(FoodMartTestCase.class);
-
-    private MondrianProperties props;
 
     static final QueryAndResult[] mdxQueries = new QueryAndResult[]{
         new QueryAndResult(
@@ -1262,17 +1260,15 @@ class ConcurrentMdxTest {
             + "565,238.13"),
     };
     private int count = 0;
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        props = MondrianProperties.instance();
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

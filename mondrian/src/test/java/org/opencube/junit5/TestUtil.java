@@ -75,7 +75,7 @@ import org.opencube.junit5.context.TestContext;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
@@ -88,7 +88,7 @@ import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SmartMemberReader;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -1030,10 +1030,10 @@ public class TestUtil {
 	 *
 	 * @param actual Actual result
 	 * @return Expected result massaged for backwards compatibility
-	 * @see mondrian.olap.MondrianProperties#SsasCompatibleNaming
+	 * @see mondrian.olap.SystemWideProperties#SsasCompatibleNaming
 	 */
 	public static String upgradeActual(String actual) {
-		if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+		if (!SystemWideProperties.instance().SsasCompatibleNaming) {
 			actual = actual.replace("[Time.Weekly]", "[Time].[Weekly]");
 			actual = actual.replace("[All Time.Weeklys]", "[All Weeklys]");
 			actual = actual.replace("<HIERARCHY_NAME>Time.Weekly</HIERARCHY_NAME>",
@@ -1338,7 +1338,7 @@ public class TestUtil {
 	}
 
 	public static boolean isDefaultNullMemberRepresentation() {
-		return MondrianProperties.instance().NullMemberRepresentation.get()
+		return SystemWideProperties.instance().NullMemberRepresentation
 				.equals("#null");
 	}
 
@@ -1474,7 +1474,7 @@ public class TestUtil {
 	}
 
 	public static String hierarchyName( String dimension, String hierarchy ) {
-		return MondrianProperties.instance().SsasCompatibleNaming.get()
+		return SystemWideProperties.instance().SsasCompatibleNaming
 				? "[" + dimension + "].[" + hierarchy + "]"
 				: ( hierarchy.equals( dimension )
 				? "[" + dimension + "]"
@@ -1682,7 +1682,7 @@ public class TestUtil {
 	}
 
 	public static String upgradeQuery( String queryString ) {
-		if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+		if ( SystemWideProperties.instance().SsasCompatibleNaming ) {
 			String[] names = {
 					"[Gender]",
 					"[Education Level]",
@@ -1909,18 +1909,19 @@ public class TestUtil {
 	 * @param connection Connection
 	 */
 	public static void verifySameNativeAndNot(Connection connection,
-			String query, String message, PropertySaver5 propSaver)
+			String query, String message)
 	{
+	    SystemWideProperties properties = SystemWideProperties.instance();
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(true);
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(true);
-        propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
+        properties.EnableNativeNonEmpty= true;
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(true);
 
 		Result resultNative = executeQuery(connection, query);
 
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeCrossJoin(false);
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeFilter(false);
-        propSaver.set( propSaver.properties.EnableNativeNonEmpty, false );
+        properties.EnableNativeNonEmpty = false;
         ((TestConfig)connection.getContext().getConfig()).setEnableNativeTopCount(false);
 
 		Result resultNonNative = executeQuery(connection, query);
