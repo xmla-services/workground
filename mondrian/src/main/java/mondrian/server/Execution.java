@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
+import mondrian.olap.QueryCanceledException;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
@@ -197,7 +198,7 @@ public class Execution {
             Thread.currentThread().interrupt();
           }
         }
-        throw new MondrianException(QueryCanceled);
+        throw new QueryCanceledException(QueryCanceled);
       case RUNNING:
       case TIMEOUT:
         if ( timeoutTimeMillis > 0 ) {

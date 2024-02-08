@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import mondrian.olap.MondrianException;
+import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -133,7 +134,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
             evaluator.getQuery().getConnection().getContext().getConfig().iterationLimit();
         final int productLen = currLen * evaluator.getIterationLength();
         if (iterationLimit > 0 && productLen > iterationLimit) {
-                throw new MondrianException(message(
+                throw new ResourceLimitExceededException(message(
                     IterationLimitExceeded, iterationLimit));
         }
         evaluator.setIterationLength(currLen);

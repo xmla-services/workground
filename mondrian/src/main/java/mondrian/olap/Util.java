@@ -3239,14 +3239,14 @@ public class Util {
         // Throw an exeption, if the size of the crossjoin exceeds the result
         // limit.
         if (resultLimit > 0 && resultLimit < resultSize) {
-            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+            throw new ResourceLimitExceededException(message(LimitExceededDuringCrossjoin,
                 resultSize, resultLimit));
         }
 
         // Throw an exception if the crossjoin exceeds a reasonable limit.
         // (Yes, 4 billion is a reasonable limit.)
         if (resultSize > Integer.MAX_VALUE) {
-            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+            throw new ResourceLimitExceededException(message(LimitExceededDuringCrossjoin,
                 resultSize, Integer.MAX_VALUE));
         }
     }

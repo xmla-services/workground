@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import mondrian.olap.MondrianException;
+import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
@@ -277,7 +278,7 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
 
     private void ensureCapacity( int minCapacity ) {
         if ( minCapacity > maxMembers ) {
-            throw new MondrianException(message(LimitExceededDuringCrossjoin,
+            throw new ResourceLimitExceededException(message(LimitExceededDuringCrossjoin,
                     minCapacity / arity, cjMaxSize ));
         }
         final int oldCapacity = objectData.length;
