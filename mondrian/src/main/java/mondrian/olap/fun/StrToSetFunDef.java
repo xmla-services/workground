@@ -105,7 +105,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
-            throw new MondrianException(message( MdxFuncArgumentsNum, getFunctionMetaData().functionAtom().name() ));
+            throw new MondrianException(message( MdxFuncArgumentsNum, getFunctionMetaData().operationAtom().name() ));
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -116,7 +116,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
                 // nothing
             } else {
                 throw new MondrianException(message( MdxFuncNotHier,
-                    String.valueOf(i + 1), getFunctionMetaData().functionAtom().name()));
+                    String.valueOf(i + 1), getFunctionMetaData().operationAtom().name()));
             }
         }
         return super.createCall(validator, args);

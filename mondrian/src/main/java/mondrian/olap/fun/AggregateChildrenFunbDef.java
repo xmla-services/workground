@@ -38,7 +38,7 @@ public class AggregateChildrenFunbDef extends AbstractFunctionDefinition{
     
     @Override
 	public void unparse(Expression[] args, PrintWriter pw) {
-        pw.print(getFunctionMetaData().functionAtom().name());
+        pw.print(getFunctionMetaData().operationAtom().name());
         pw.print("(");
         args[0].unparse(pw);
         pw.print(")");

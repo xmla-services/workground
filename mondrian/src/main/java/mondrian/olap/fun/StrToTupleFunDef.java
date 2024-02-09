@@ -103,7 +103,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
         final int argCount = args.length;
         if (argCount <= 1) {
             throw new MondrianException(
-                message( MdxFuncArgumentsNum, getFunctionMetaData().functionAtom().name() ));
+                message( MdxFuncArgumentsNum, getFunctionMetaData().operationAtom().name() ));
         }
         for (int i = 1; i < argCount; i++) {
             final Expression arg = args[i];
@@ -114,7 +114,7 @@ class StrToTupleFunDef extends AbstractFunctionDefinition {
                 // nothing
             } else {
                 throw new MondrianException(message( MdxFuncNotHier,
-                    String.valueOf(i + 1), getFunctionMetaData().functionAtom().name()));
+                    String.valueOf(i + 1), getFunctionMetaData().operationAtom().name()));
             }
         }
         return super.createCall(validator, args);

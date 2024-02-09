@@ -57,7 +57,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
 
     public NthQuartileFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
-        this.range = functionMetaData.functionAtom().name().equals("FirstQ") ? 1 : 3;
+        this.range = functionMetaData.operationAtom().name().equals("FirstQ") ? 1 : 3;
     }
 
     @Override

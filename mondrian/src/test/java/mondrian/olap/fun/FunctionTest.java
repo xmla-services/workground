@@ -12815,7 +12815,7 @@ Intel platforms):
     for ( FunctionMetaData funInfo : functionMetaDatas ) {
       pw.println( "<tr>" );
       pw.print( "  <td valign=top><code>" );
-      printHtml( pw, funInfo.functionAtom().name() );
+      printHtml( pw, funInfo.operationAtom().name() );
       pw.println( "</code></td>" );
       pw.print( "  <td>" );
       if ( funInfo.description() != null ) {

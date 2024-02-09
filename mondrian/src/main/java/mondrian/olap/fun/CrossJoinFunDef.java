@@ -104,11 +104,11 @@ public Type getResultType( Validator validator, Expression[] args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getFunctionMetaData().functionAtom().name().equals( "*" ) ) {
+      } else if ( getFunctionMetaData().operationAtom().name().equals( "*" ) ) {
         // The "*" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );
-      } else if ( getFunctionMetaData().functionAtom().name().equals( "()" ) ) {
+      } else if ( getFunctionMetaData().operationAtom().name().equals( "()" ) ) {
         // The "()" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
         CrossJoinFunDef.addTypes( type, list );

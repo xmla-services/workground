@@ -121,7 +121,7 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
 
     @Override
 	public OperationAtom getOperationAtom() {
-        return funDef.getFunctionMetaData().functionAtom();
+        return funDef.getFunctionMetaData().operationAtom();
     }
 
 

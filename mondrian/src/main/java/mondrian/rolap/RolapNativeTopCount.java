@@ -177,7 +177,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
 
         // is this "TopCount(<set>, <count>, [<numeric expr>])"
         boolean ascending;
-        String funName = fun.getFunctionMetaData().functionAtom().name();
+        String funName = fun.getFunctionMetaData().operationAtom().name();
         if ("TopCount".equalsIgnoreCase(funName)) {
             ascending = false;
         } else if ("BottomCount".equalsIgnoreCase(funName)) {

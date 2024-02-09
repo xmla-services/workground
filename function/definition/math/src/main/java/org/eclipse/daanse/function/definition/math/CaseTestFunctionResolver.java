@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.query.base.Expressions;
 public class CaseTestFunctionResolver implements FunctionResolver {
 
 	private static final String NAME = "_CaseTest";
-	static OperationAtom functionAtom = new CaseOperationAtom(NAME);
+	private static final OperationAtom OPERATION_ATOM = new CaseOperationAtom(NAME);
 
 	private static final String SIGNATURE = "Case When <Logical Expression> Then <Expression> [...] [Else <Expression>] End";
 	private static final String DESCRIPTION = "Evaluates various conditions, and returns the corresponding expression for the first which evaluates to true.";
@@ -66,7 +66,7 @@ public class CaseTestFunctionResolver implements FunctionResolver {
 		if (mismatchingArgs != 0) {
 			return null;
 		}
-		FunctionMetaData functionInformation = new FunctionMetaDataR(functionAtom,
+		FunctionMetaData functionInformation = new FunctionMetaDataR(OPERATION_ATOM,
 				DESCRIPTION,
 				SIGNATURE, 
 				returnType, Expressions.categoriesOf(argumentExpressions));
@@ -80,7 +80,7 @@ public class CaseTestFunctionResolver implements FunctionResolver {
 
 	@Override
 	public OperationAtom getFunctionAtom() {
-		return functionAtom;
+		return OPERATION_ATOM;
 	}
 
 }

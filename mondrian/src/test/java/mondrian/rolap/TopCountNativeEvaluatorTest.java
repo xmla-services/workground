@@ -98,7 +98,7 @@ class TopCountNativeEvaluatorTest {
         OperationAtom functionAtom = Mockito.mock(OperationAtom.class);
 
         when(topCountFunMock.getFunctionMetaData()).thenReturn(functionInformation);
-        when(functionInformation.functionAtom()).thenReturn(functionAtom);
+        when(functionInformation.operationAtom()).thenReturn(functionAtom);
         when(functionAtom.name()).thenReturn("TOPCOUNT");
 
         return topCountFunMock;

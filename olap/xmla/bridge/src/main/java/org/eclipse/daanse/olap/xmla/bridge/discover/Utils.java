@@ -421,9 +421,9 @@ public class Utils {
         List<FunctionMetaData> fmList = c.getConnection().getSchema().getFunTable().getFunctionMetaDatas();
         StringBuilder buf = new StringBuilder(50);
         for (FunctionMetaData fm : fmList) {
-			if (fm.functionAtom() instanceof EmptyOperationAtom//
-					|| fm.functionAtom() instanceof InternalOperationAtom//
-					|| fm.functionAtom() instanceof ParenthesesOperationAtom//
+			if (fm.operationAtom() instanceof EmptyOperationAtom//
+					|| fm.operationAtom() instanceof InternalOperationAtom//
+					|| fm.operationAtom() instanceof ParenthesesOperationAtom//
 			) {
 				continue;
 			}
@@ -442,7 +442,7 @@ public class Utils {
                 || (paramCategories.length == 0)) {
                 result.add(
                     new MdSchemaFunctionsResponseRowR(
-                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(fm.operationAtom().name()),
                         Optional.ofNullable(description),
                         "(none)",
                         Optional.of(1),
@@ -453,7 +453,7 @@ public class Utils {
                         Optional.empty(),
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(fm.operationAtom().name()),
                         Optional.empty(),
                         Optional.empty()));
             } else {
@@ -470,7 +470,7 @@ public class Utils {
                 VarType varType = VarType.forCategory(returnCategory);
                 result.add(
                     new MdSchemaFunctionsResponseRowR(
-                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(fm.operationAtom().name()),
                         Optional.ofNullable(description),
                         buf.toString(),
                         Optional.of(varType.ordinal()),
@@ -481,7 +481,7 @@ public class Utils {
                         Optional.empty(),
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.ofNullable(fm.functionAtom().name()),
+                        Optional.ofNullable(fm.operationAtom().name()),
                         Optional.empty(),
                         Optional.empty()));
             }

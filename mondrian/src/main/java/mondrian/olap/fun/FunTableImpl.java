@@ -40,8 +40,7 @@ import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 public abstract class FunTableImpl implements FunctionTable {
 	private List<FunctionMetaData> functionMetaDatas;
     /**
-     * Maps the upper-case name of a function plus its
-     * {@link org.eclipse.daanse.olap.api.Syntax} to an array of
+     * Maps the {@link OperationAtom} with an upper-case {@link OperationAtom#name()}  to an {@link List} of
      * {@link FunctionResolver} objects for that name.
      */
     private Map<FunctionAtomCompareKey, List<FunctionResolver>> mapNameToResolvers;

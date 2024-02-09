@@ -168,7 +168,7 @@ NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fu
       return null;
     }
     // is this "Filter(<set>, <numeric expr>)"
-    String funName = fun.getFunctionMetaData().functionAtom().name();
+    String funName = fun.getFunctionMetaData().operationAtom().name();
     if ( !"Filter".equalsIgnoreCase( funName ) ) {
       return null;
     }

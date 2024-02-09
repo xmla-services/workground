@@ -67,8 +67,8 @@ public class ParameterFunDef extends AbstractFunctionDefinition {
         super(
             functionMetaData);
         Util.assertPrecondition(
-        		getFunctionMetaData().functionAtom().name().equals("Parameter")
-            || getFunctionMetaData().functionAtom().name().equals("ParamRef"));
+        		getFunctionMetaData().operationAtom().name().equals("Parameter")
+            || getFunctionMetaData().operationAtom().name().equals("ParamRef"));
         this.parameterName = parameterName;
         this.type = type;
         this.exp = exp;
@@ -78,7 +78,7 @@ public class ParameterFunDef extends AbstractFunctionDefinition {
     @Override
 	public Expression createCall(Validator validator, Expression[] args) {
         Parameter parameter = validator.createOrLookupParam(
-            this.getFunctionMetaData().functionAtom().name().equals("Parameter"),
+            this.getFunctionMetaData().operationAtom().name().equals("Parameter"),
             parameterName, type, exp, parameterDescription);
         return new ParameterExpressionImpl(parameter);
     }

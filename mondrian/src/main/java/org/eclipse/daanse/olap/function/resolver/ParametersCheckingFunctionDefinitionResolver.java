@@ -12,7 +12,6 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-
 package org.eclipse.daanse.olap.function.resolver;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 public class ParametersCheckingFunctionDefinitionResolver implements FunctionResolver {
 	private FunctionDefinition functionDefinition;
-	
+
 	private ParametersCheckingFunctionDefinitionResolver() {
 	}
 
@@ -62,9 +61,9 @@ public class ParametersCheckingFunctionDefinitionResolver implements FunctionRes
 		if (checkExpressions(expressions)) {
 			return functionDefinition;
 		}
-		return null;		 
+		return null;
 	}
-	
+
 	protected boolean checkExpressions(Expression[] expressions) {
 		return true;
 	}
@@ -77,6 +76,6 @@ public class ParametersCheckingFunctionDefinitionResolver implements FunctionRes
 
 	@Override
 	public OperationAtom getFunctionAtom() {
-		return functionDefinition.getFunctionMetaData().functionAtom();
+		return functionDefinition.getFunctionMetaData().operationAtom();
 	}
 }

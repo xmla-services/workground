@@ -55,7 +55,7 @@ class CovarianceFunDef extends AbstractFunctionDefinition {
 
     public CovarianceFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
-        this.biased = functionMetaData.functionAtom().name().equals("Covariance");
+        this.biased = functionMetaData.operationAtom().name().equals("Covariance");
     }
 
     @Override

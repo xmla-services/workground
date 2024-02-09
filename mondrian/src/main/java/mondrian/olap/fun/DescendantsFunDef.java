@@ -37,6 +37,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
@@ -113,11 +114,12 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       final ResolvedFunCallImpl generateCall =
         (ResolvedFunCallImpl) compiler.getValidator().validate(
           new UnresolvedFunCallImpl(
-            "Generate",
+           new FunctionOperationAtom( "Generate"),
             new Expression[] {
               call.getArg( 0 ),
               new UnresolvedFunCallImpl(
-                DESCENDANTS,
+            		  new FunctionOperationAtom( 
+                DESCENDANTS),
                 descendantsArgs )
             } ),
           false );

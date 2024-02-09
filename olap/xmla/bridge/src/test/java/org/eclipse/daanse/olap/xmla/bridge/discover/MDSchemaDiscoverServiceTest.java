@@ -389,8 +389,8 @@ class MDSchemaDiscoverServiceTest {
         when(functionMetaData2.returnCategory()).thenReturn(DataType.MEMBER);
         when(functionMetaData2.description()).thenReturn("functionMetaData2Description");
 
-        when(functionMetaData1.functionAtom()).thenReturn(functionAtom1);
-        when(functionMetaData2.functionAtom()).thenReturn(functionAtom2);
+        when(functionMetaData1.operationAtom()).thenReturn(functionAtom1);
+        when(functionMetaData2.operationAtom()).thenReturn(functionAtom2);
 
         when(functionTable.getFunctionMetaDatas()).thenAnswer(setupDummyListAnswer(functionMetaData1,
             functionMetaData2));

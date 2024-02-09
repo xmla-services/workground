@@ -203,7 +203,7 @@ public class FunctionPrinter {
 		DataType[] parameterDataTypes = functionMetaData.parameterDataTypes();
 		DataType returnCategory = functionMetaData.returnCategory();
 
-		return getSignature(functionMetaData.functionAtom(), returnCategory, parameterDataTypes);
+		return getSignature(functionMetaData.operationAtom(), returnCategory, parameterDataTypes);
 
 	}
 

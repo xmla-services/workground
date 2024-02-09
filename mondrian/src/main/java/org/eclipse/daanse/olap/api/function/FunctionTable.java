@@ -32,14 +32,13 @@ package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 /**
  * List of all MDX functions.
  *
  * <p>A function table can resolve a function call, using a particular
- * {@link Syntax} and set of arguments, to a
+ * {@link OperationAtom} and set of arguments, to a
  * function definition ({@link FunctionDefinition}).</p>
  *
  * @author jhyde, 3 March, 2002

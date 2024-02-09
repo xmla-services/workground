@@ -708,7 +708,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         return true;
       }
 
-      if ( fun.getFunDef().getFunctionMetaData().functionAtom().name().equals( "+" ) ) {
+      if ( fun.getFunDef().getFunctionMetaData().operationAtom().name().equals( "+" ) ) {
         for ( Expression argsExp : fun.getArgs() ) {
           if ( !isSupportedExpressionForCalculatedMember( argsExp ) ) {
             return false;

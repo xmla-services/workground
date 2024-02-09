@@ -471,7 +471,7 @@ void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 
 
 			@Override
-			public OperationAtom functionAtom() {
+			public OperationAtom operationAtom() {
 
 				return new FunctionOperationAtom("SomeName");
 			}
@@ -531,7 +531,7 @@ void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 		    }
 
 			@Override
-			public OperationAtom functionAtom() {
+			public OperationAtom operationAtom() {
 				return new FunctionOperationAtom("");
 			}
 

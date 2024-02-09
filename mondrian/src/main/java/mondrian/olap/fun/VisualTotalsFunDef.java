@@ -30,6 +30,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -200,7 +201,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
                 memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
-                "Aggregate",
+            		 new FunctionOperationAtom( "Aggregate"),
                 new Expression[] {
                     new UnresolvedFunCallImpl(
                         new BracesOperationAtom(),
@@ -312,7 +313,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
                 memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
-                "Aggregate",
+            		 new FunctionOperationAtom(  "Aggregate"),
                 new Expression[] {
                     new UnresolvedFunCallImpl(
                         new BracesOperationAtom(),

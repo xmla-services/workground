@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 public interface FunctionMetaData {
 
-	OperationAtom functionAtom();
+	OperationAtom operationAtom();
 
 	String description();
 

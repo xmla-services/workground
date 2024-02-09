@@ -57,7 +57,7 @@ public Type getResultType( Validator validator, Expression[] args ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
       RolapHierarchy defaultTimeHierarchy =
-          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().functionAtom().name() );
+          ( (RolapCube) validator.getQuery().getCube() ).getTimeHierarchy( getFunctionMetaData().operationAtom().name() );
       return new SetType( MemberType.forHierarchy( defaultTimeHierarchy ) );
     }
 
@@ -81,7 +81,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final LevelCalc levelCalc = call.getArgCount() > 0 ? compiler.compileLevel( call.getArg( 0 ) ) : null;
     final MemberCalc memberCalc = call.getArgCount() > 1 ? compiler.compileMember( call.getArg( 1 ) ) : null;
     final RolapHierarchy timeHierarchy =
-        levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getFunctionMetaData().functionAtom().name() ) : null;
+        levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getFunctionMetaData().operationAtom().name() ) : null;
 
     return new AbstractListCalc( call.getType(), new Calc[] { levelCalc, memberCalc } ) {
       @Override

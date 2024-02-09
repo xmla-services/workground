@@ -507,39 +507,7 @@ public class FunUtil extends Util {
       }
     }
   }
-
-
-  /**
-   * Decodes the syntactic type of an operator.
-   *
-   * @param flags A encoded string which represents an operator signature, as used by the {@code flags} parameter used
-   *              to construct a {@link AbstractFunctionDefinition}.
-   * @return A {@link Syntax}
-   */
-  public static Syntax decodeSyntacticType( String flags ) {
-	    char c = flags.charAt( 0 );
-	    switch ( c ) {
-	      case 'p':
-	        return Syntax.Property;
-	      case 'f':
-	        return Syntax.Function;
-	      case 'm':
-	        return Syntax.Method;
-	      case 'i':
-	        return Syntax.Infix;
-	      case 'P':
-	        return Syntax.Prefix;
-	      case 'Q':
-	        return Syntax.Postfix;
-	      case 'I':
-	        return Syntax.Internal;
-	      default:
-	        throw Util.newInternal(
-	          new StringBuilder("unknown syntax code '").append(c).append("' in string '")
-	              .append(flags).append("'").toString() );
-	    }
-	  }
-  
+ 
   public static OperationAtom decodeSyntacticTypeToOp( String flags,String name ) {
 	    char c = flags.charAt( 0 );
 	    switch ( c ) {

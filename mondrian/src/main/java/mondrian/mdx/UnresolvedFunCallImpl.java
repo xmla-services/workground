@@ -12,7 +12,6 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -22,12 +21,10 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.FunctionPrinter;
-import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
-import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 
 /**
@@ -42,24 +39,18 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
     private final OperationAtom operationAtom;
     private final Expression[] args;
 
-    /**
-     * Creates a function call with {@link Syntax#Function} syntax.
-     */
-    public UnresolvedFunCallImpl(String name, Expression[] args) {
-        this(new FunctionOperationAtom(name) , args);
-    }
 
-    /**
-     * Creates a function call.
-     */
-    public UnresolvedFunCallImpl( OperationAtom operationAtom , Expression[] args) {
-        if (operationAtom == null || args == null) {
-            throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
-        }
-        this.operationAtom = operationAtom;
-        this.args = args;
+	/**
+	 * Creates a function call.
+	 */
+	public UnresolvedFunCallImpl(OperationAtom operationAtom, Expression[] args) {
+		if (operationAtom == null || args == null) {
+			throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
+		}
+		this.operationAtom = operationAtom;
+		this.args = args;
 
-    }
+	}
 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})

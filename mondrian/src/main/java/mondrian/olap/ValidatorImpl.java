@@ -304,7 +304,7 @@ abstract class ValidatorImpl implements Validator {
         if (parent instanceof Formula formula) {
             return formula.isMember();
         } else if (parent instanceof ResolvedFunCallImpl funCall) {
-            if (funCall.getFunDef().getFunctionMetaData().functionAtom() instanceof ParenthesesOperationAtom) {
+            if (funCall.getFunDef().getFunctionMetaData().operationAtom() instanceof ParenthesesOperationAtom) {
                 return requiresExpression(n - 1);
             } else {
                 int k = whichArg(funCall, (Expression) stack.get(n));

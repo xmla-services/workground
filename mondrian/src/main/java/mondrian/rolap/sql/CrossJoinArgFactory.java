@@ -201,10 +201,10 @@ public class CrossJoinArgFactory {
         }
         // strip off redundant set braces, for example
         // { Gender.Gender.members }, or {{{ Gender.M }}}
-        if ("{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
+        if ("{}".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name()) && args.length == 1) {
             return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
-        if ("NativizeSet".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()) && args.length == 1) {
+        if ("NativizeSet".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name()) && args.length == 1) {
             return checkCrossJoinArg(evaluator, args[0], returnAny, enableNativeFilter);
         }
         return checkCrossJoin(evaluator, fun, args, returnAny);
@@ -225,7 +225,7 @@ public class CrossJoinArgFactory {
     }
 
     private boolean isSetOfConstrainedMeasures(FunctionDefinition fun, Expression[] args) {
-        return fun.getFunctionMetaData().functionAtom().name().equals("{}") && allArgsConstrainedMeasure(args);
+        return fun.getFunctionMetaData().operationAtom().name().equals("{}") && allArgsConstrainedMeasure(args);
     }
 
     private boolean allArgsConstrainedMeasure(Expression[] args) {
@@ -378,8 +378,8 @@ public class CrossJoinArgFactory {
         final boolean returnAny)
     {
         // is this "CrossJoin([A].children, [B].children)"
-        if (!"Crossjoin".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
-            && !"NonEmptyCrossJoin".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name()))
+        if (!"Crossjoin".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())
+            && !"NonEmptyCrossJoin".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name()))
         {
             return null;
         }
@@ -470,7 +470,7 @@ public class CrossJoinArgFactory {
                 return null;
             }
         } else {
-            if (!"{}".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
+            if (!"{}".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())
                 || !isArgSizeSupported(args.length, SystemWideProperties.instance().MaxConstraints))
             {
                 return null;
@@ -516,7 +516,7 @@ public class CrossJoinArgFactory {
         FunctionDefinition fun,
         Expression[] args)
     {
-        if (!"Children".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())) {
+        if (!"Children".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())) {
             return null;
         }
         if (args.length != 1) {
@@ -571,7 +571,7 @@ public class CrossJoinArgFactory {
         FunctionDefinition fun,
         Expression[] args)
     {
-        if (!"Members".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())) {
+        if (!"Members".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())) {
             return null;
         }
         if (args.length != 1) {
@@ -638,7 +638,7 @@ public class CrossJoinArgFactory {
         FunctionDefinition fun,
         Expression[] args)
     {
-        if (!"Descendants".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())) {
+        if (!"Descendants".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())) {
             return null;
         }
         if (args.length != 2) {
@@ -713,7 +713,7 @@ public class CrossJoinArgFactory {
         }
 
         // Return null if not the expected funciton name or input size.
-        if (!"Filter".equalsIgnoreCase(fun.getFunctionMetaData().functionAtom().name())
+        if (!"Filter".equalsIgnoreCase(fun.getFunctionMetaData().operationAtom().name())
             || filterArgs.length != 2)
         {
             return null;
@@ -880,7 +880,7 @@ public class CrossJoinArgFactory {
             return null;
         }
 
-        if (predFirstArgCall.getFunDef().getFunctionMetaData().functionAtom().name().equals("Ancestor")) {
+        if (predFirstArgCall.getFunDef().getFunctionMetaData().operationAtom().name().equals("Ancestor")) {
             Expression[] ancestorArgs = predFirstArgCall.getArgs();
 
             if (!(ancestorArgs[0] instanceof ResolvedFunCallImpl)) {
@@ -893,7 +893,7 @@ public class CrossJoinArgFactory {
         // Now check that predFirstArgCall is a CurrentMember function that
         // refers to the dimension being filtered
         FunctionDefinition predFirstArgFun = predFirstArgCall.getFunDef();
-        if (!predFirstArgFun.getFunctionMetaData().functionAtom().name().equals("CurrentMember")) {
+        if (!predFirstArgFun.getFunctionMetaData().operationAtom().name().equals("CurrentMember")) {
             return null;
         }
 

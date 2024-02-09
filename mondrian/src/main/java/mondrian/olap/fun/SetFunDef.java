@@ -109,7 +109,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 } else {
                     if (!TypeUtil.isUnionCompatible(type0, type)) {
                         throw new MondrianException(message(
-                            ArgsMustHaveSameHierarchy, getFunctionMetaData().functionAtom().name()));
+                            ArgsMustHaveSameHierarchy, getFunctionMetaData().operationAtom().name()));
                     }
                 }
             }

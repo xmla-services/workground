@@ -130,7 +130,7 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 			return type;
 		}
 		throw new IllegalArgumentException(new StringBuilder("Cannot deduce type of call to function '")
-				.append(this.functionMetaData.functionAtom().name()).append("'").toString());
+				.append(this.functionMetaData.operationAtom().name()).append("'").toString());
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	@Override
 	public void unparse(Expression[] args, PrintWriter pw) {
 
-		FunctionPrinter.unparse(getFunctionMetaData().functionAtom(), args, pw);
+		FunctionPrinter.unparse(getFunctionMetaData().operationAtom(), args, pw);
 
 	}
 
