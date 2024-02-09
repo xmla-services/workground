@@ -134,7 +134,7 @@ class RolapSchemaTest {
             createSchema().createUnionRole(role);
         } catch (MondrianException ex) {
             assertMondrianException(
-                new IllegalArgumentException(RoleUnionGrants), ex);
+                new MondrianException(RoleUnionGrants), ex);
             return;
         }
         fail("Should fail if union and schema grants exist simultaneously");
