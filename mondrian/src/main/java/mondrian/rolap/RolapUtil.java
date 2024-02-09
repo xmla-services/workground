@@ -56,7 +56,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
@@ -235,7 +235,7 @@ public class RolapUtil {
 
     public static void reloadNullLiteral() {
         mdxNullLiteral =
-            MondrianProperties.instance().NullMemberRepresentation.get();
+            SystemWideProperties.instance().NullMemberRepresentation;
     }
 
     /**

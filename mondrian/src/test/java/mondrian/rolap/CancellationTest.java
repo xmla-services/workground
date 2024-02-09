@@ -15,6 +15,7 @@ import static org.opencube.junit5.TestUtil.cubeByName;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -38,20 +39,17 @@ import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.olap.fun.CrossJoinTest;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
 
 class CancellationTest {
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     /**

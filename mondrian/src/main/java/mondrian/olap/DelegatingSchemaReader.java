@@ -162,7 +162,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         DataType category,
         MatchType matchType)
     {
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             return new NameResolver().resolve(
                 parent,
                 Util.toOlap4j(names),

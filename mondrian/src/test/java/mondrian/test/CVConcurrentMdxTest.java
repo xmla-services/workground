@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.test.clearview.CVBasicTest;
 import mondrian.test.clearview.ClearViewBase;
@@ -57,21 +57,17 @@ import mondrian.test.clearview.TopBottomTest;
  * @author Khanh Vu
  */
 class CVConcurrentMdxTest {
-    private MondrianProperties props;
 
-    private PropertySaver5 propSaver;
     private SummaryGeneratingListener listener;
 
     @BeforeEach
     protected void beforeEach() throws Exception {
         listener = new SummaryGeneratingListener();
-        props = MondrianProperties.instance();
-        propSaver = new PropertySaver5();
     }
 
     @AfterEach
     protected void afterEach() throws Exception {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

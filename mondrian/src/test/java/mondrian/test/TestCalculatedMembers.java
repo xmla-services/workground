@@ -40,7 +40,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.opentest4j.AssertionFailedError;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
@@ -54,16 +54,16 @@ import mondrian.rolap.SchemaModifiers;
  */
  class TestCalculatedMembers extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
@@ -307,7 +307,7 @@ import mondrian.rolap.SchemaModifiers;
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testQueryCalcMemberOverridesShallowerStoredMember(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             // functionality requires new name resolver
             return;
         }
@@ -344,7 +344,7 @@ import mondrian.rolap.SchemaModifiers;
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testEarlierCalcMember(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             // functionality requires new name resolver
             return;
         }
@@ -520,7 +520,7 @@ import mondrian.rolap.SchemaModifiers;
         // Dimension can be converted, if unambiguous.
         assertExprReturns(context.getConnection(), "[Customers]", "266,773");
 
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             // SSAS 2005 does not have default hierarchies.
             assertExprThrows(context,
                 "[Time]",
@@ -1431,7 +1431,7 @@ import mondrian.rolap.SchemaModifiers;
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberMSASCompatibility(TestContext context) {
-        propSaver.set(MondrianProperties.instance().CaseSensitive, false);
+        SystemWideProperties.instance().CaseSensitive = false;
         assertQueryReturns(context.getConnection(),
             "with "
             + "member gender.calculated as 'gender.m' "
@@ -1716,7 +1716,7 @@ import mondrian.rolap.SchemaModifiers;
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCycleFalsePositive(TestContext context) {
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             // This test uses old-style [dimension.hierarchy] names.
             return;
         }

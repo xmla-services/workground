@@ -11,9 +11,9 @@
 package mondrian.rolap;
 
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
-import mondrian.test.PropertySaver5;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -53,18 +53,15 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class RolapCubeTest {
 
-    private PropertySaver5 propSaver;
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest

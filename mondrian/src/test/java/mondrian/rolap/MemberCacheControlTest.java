@@ -10,7 +10,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
 import mondrian.rolap.agg.AggregationManager;
@@ -18,7 +18,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.test.DiffRepository;
-import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
 import org.eclipse.daanse.olap.api.Connection;
@@ -31,7 +30,6 @@ import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -84,19 +82,17 @@ class MemberCacheControlTest {
     // TODO: edit a different member not known to be in cache -- will it be
     //       fetched?
 
-    private PropertySaver5 propSaver;
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableRolapCubeMemberCache,
-                false);
+
+
+        SystemWideProperties.instance().EnableRolapCubeMemberCache = false;
         RolapSchemaPool.instance().clear();
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         RolapSchemaPool.instance().clear();
         Locus.pop(locus);
         locus = null;
@@ -323,9 +319,8 @@ class MemberCacheControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberOpsFailIfCacheEnabled(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().EnableRolapCubeMemberCache,
-            true);
+
+        SystemWideProperties.instance().EnableRolapCubeMemberCache = true;
         prepareTestContext(context);
         final Connection conn = context.getConnection();
         final CacheControl cc = conn.getCacheControl(null);

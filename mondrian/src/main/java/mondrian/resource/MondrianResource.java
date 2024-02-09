@@ -100,7 +100,7 @@ public class MondrianResource {
 
     public final static String DupHierarchiesInTuple = "Tuple contains more than one member of hierarchy ''{0}''.";
 
-    public final static String VisualTotalsAppliedToTuples = "Argument to ''VisualTotals'' function must be a set of members; got set of tuples.";
+    public final static String VisualTotalsAppliedToTuples = "Argument to 'VisualTotals' function must be a set of members; got set of tuples.";
 
     public final static String ParameterIsNotModifiable = "Parameter ''{0}'' (defined at ''{1}'' scope) is not modifiable";
 

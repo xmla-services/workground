@@ -58,7 +58,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -66,7 +66,7 @@ import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapCube;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
+
 
 /**
  * <code>CrossJoint</code> tests the collation order of positive and negative
@@ -112,17 +112,14 @@ public class CrossJoinTest {
 
   private CrossJoinFunDef crossJoinFunDef;
 
-private PropertySaver5 propSaver;
-
   @BeforeEach
   protected void beforeEach() throws Exception {
-    propSaver=new PropertySaver5();
     crossJoinFunDef = new CrossJoinFunDef( new NullFunDef().getFunctionMetaData() );
   }
 
   @AfterEach
   protected void afterEach() throws Exception {
-	  propSaver.reset();
+	  SystemWideProperties.instance().populateInitial();
   }
 
   ////////////////////////////////////////////////////////////////////////
@@ -390,7 +387,7 @@ void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testResultLimitWithinCrossjoin(TestContext foodMartContext) {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
+   SystemWideProperties.instance().ResultLimit = 1000;
    Connection connection= foodMartContext.getConnection();
     TestUtil.assertAxisThrows(connection, "Hierarchize(Crossjoin(Union({[Gender].CurrentMember}, [Gender].Children), "
         + "Union({[Product].CurrentMember}, [Product].[Brand Name].Members)))",

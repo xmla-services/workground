@@ -67,7 +67,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
@@ -765,8 +765,7 @@ public class ExplicitRules {
                     List<Segment> names = Util.parseIdentifier(nameInner);
                     // must be [hierarchy usage name].[level name]
                     if (!(names.size() == 2
-                        || MondrianProperties.instance().SsasCompatibleNaming
-                        .get()
+                        || SystemWideProperties.instance().SsasCompatibleNaming
                         && names.size() == 3))
                     {
                         msgRecorder.reportError(

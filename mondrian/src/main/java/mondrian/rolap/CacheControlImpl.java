@@ -35,11 +35,10 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eigenbase.util.property.BooleanProperty;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -813,12 +812,12 @@ public class CacheControlImpl implements CacheControl {
 
     @Override
 	public void execute(MemberEditCommand cmd) {
-        final BooleanProperty prop =
-            MondrianProperties.instance().EnableRolapCubeMemberCache;
-        if (prop.get()) {
+        final Boolean prop =
+            SystemWideProperties.instance().EnableRolapCubeMemberCache;
+        if (prop) {
             throw new IllegalArgumentException(
                 new StringBuilder("Member cache control operations are not allowed unless ")
-                .append("property ").append(prop.getPath()).append(" is false").toString());
+                .append("property ").append("mondrian.rolap.EnableRolapCubeMemberCache").append(" is false").toString());
         }
         synchronized (MEMBER_CACHE_LOCK) {
             // Make sure that a Locus is in the Execution stack,

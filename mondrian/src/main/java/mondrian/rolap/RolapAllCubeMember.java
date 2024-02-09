@@ -11,7 +11,7 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
 /**
@@ -58,7 +58,7 @@ class RolapAllCubeMember
         // called [Measures].[Foo] not [Measures].[Measures].[Foo]. We can
         // remove this code when we revisit the scheme to generate member unique
         // names.
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             this.uniqueName = Util.makeFqName(getHierarchy(), name);
         }
         else {

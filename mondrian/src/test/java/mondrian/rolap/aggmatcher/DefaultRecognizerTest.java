@@ -9,12 +9,12 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
-import mondrian.test.PropertySaver5;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
@@ -30,22 +30,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
 class DefaultRecognizerTest {
 
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        //propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-        //propSaver.set(propSaver.properties.UseAggregates, true);
-        //propSaver.set(propSaver.properties.ReadAggregates, true);
-        //TestContext.instance().flushSchemaCache();
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 

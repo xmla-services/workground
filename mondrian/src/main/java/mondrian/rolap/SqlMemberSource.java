@@ -41,7 +41,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
@@ -85,7 +85,7 @@ class SqlMemberSource
         this.context =
             hierarchy.getRolapSchema().getSchemaReader().getContext();
         assignOrderKeys =
-            MondrianProperties.instance().CompareSiblingsByOrderKey.get();
+            SystemWideProperties.instance().CompareSiblingsByOrderKey;
         oValuePool = context.getSqlMemberSourceValuePool();
     }
 
@@ -373,7 +373,7 @@ class SqlMemberSource
                 list.add(root);
             }
 
-            int limit = MondrianProperties.instance().ResultLimit.get();
+            int limit = SystemWideProperties.instance().ResultLimit;
             ResultSet resultSet = stmt.getResultSet();
             Execution execution = Locus.peek().execution;
             while (resultSet.next()) {
@@ -1030,7 +1030,7 @@ RME is this right
                     SqlStatementEvent.Purpose.TUPLES, 0),
                 -1, -1, null);
         try {
-            int limit = MondrianProperties.instance().ResultLimit.get();
+            int limit = SystemWideProperties.instance().ResultLimit;
             boolean checkCacheStatus = true;
 
             final List<SqlStatement.Accessor> accessors = stmt.getAccessors();
@@ -1177,7 +1177,7 @@ RME is this right
      * keeping overall memory requirements down.</p>
      *
      * <p>If
-     * {@link mondrian.olap.MondrianProperties#SqlMemberSourceValuePoolFactoryClass}
+     * {@link mondrian.olap.SystemWideProperties#SqlMemberSourceValuePoolFactoryClass}
      * is not set, then valuePool will be null and no attempt to cache the
      * value will be made.  The method will simply return the incoming
      * object reference.</p>
@@ -1509,5 +1509,5 @@ RME is this right
         }
     }
 
-  
+
 }

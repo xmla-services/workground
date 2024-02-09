@@ -30,7 +30,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 
 /**

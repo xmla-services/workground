@@ -11,10 +11,10 @@
 package mondrian.rolap.sql;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.SchemaModifiers;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
@@ -73,13 +73,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 class SqlQueryTest  extends BatchTestCase {
     //private String origWarnIfNoPatternForDialect;
 
-    private MondrianProperties prop = MondrianProperties.instance();
-
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
         //origWarnIfNoPatternForDialect = prop.WarnIfNoPatternForDialect.get();
     }
 
@@ -101,7 +97,7 @@ class SqlQueryTest  extends BatchTestCase {
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         //prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
     }
 

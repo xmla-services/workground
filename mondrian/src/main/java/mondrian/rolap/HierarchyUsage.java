@@ -37,7 +37,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
 /**
@@ -245,7 +245,7 @@ public class HierarchyUsage {
 
     private String deriveHierarchyName(RolapHierarchy hierarchy) {
         final String nameInner = hierarchy.getName();
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return nameInner;
         } else {
             final String dimensionName = hierarchy.getDimension().getName();

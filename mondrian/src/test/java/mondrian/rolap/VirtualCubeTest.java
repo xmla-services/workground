@@ -11,9 +11,8 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -67,16 +66,16 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class VirtualCubeTest extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-163">
@@ -389,7 +388,7 @@ class VirtualCubeTest extends BatchTestCase {
             + "where measures.[Profit]";
 
         Connection connection = context.getConnection();
-        if (MondrianProperties.instance().CaseSensitive.get()) {
+        if (SystemWideProperties.instance().CaseSensitive) {
             assertQueriesReturnSimilarResults(connection,
                 queryWithoutFilter, queryWithFirstMeasure);
         } else {
@@ -1592,7 +1591,7 @@ class VirtualCubeTest extends BatchTestCase {
         }
 
         if (!context.getConfig().enableNativeCrossJoin()
-            && !MondrianProperties.instance().EnableNativeNonEmpty.get())
+            && !SystemWideProperties.instance().EnableNativeNonEmpty)
         {
             // Only run the tests if either native CrossJoin or native NonEmpty
             // is enabled.
@@ -2251,7 +2250,7 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure(TestContext context) {
-        if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
+        if (!SystemWideProperties.instance().EnableNativeNonEmpty) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
         }

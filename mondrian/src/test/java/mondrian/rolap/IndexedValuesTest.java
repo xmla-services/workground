@@ -18,7 +18,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Test case for '&amp;[..]' capability in MDX identifiers.
@@ -55,7 +55,7 @@ class IndexedValuesTest {
             desiredResult);
 
         // Member keys only work with SsasCompatibleNaming=true
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
 

@@ -14,6 +14,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.executeAxis;
 import static org.opencube.junit5.TestUtil.getDialect;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -30,7 +31,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapAxis;
 import mondrian.test.SqlPattern;
 
@@ -53,13 +53,12 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
 	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
     @Override
 	@AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 
@@ -80,8 +79,6 @@ class MultipleColsInTupleAggTest extends AggTableTestCase {
         if (!isApplicable(context.getConnection())) {
             return;
         }
-
-        MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(false);

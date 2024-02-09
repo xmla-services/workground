@@ -57,7 +57,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.type.HierarchyType;
@@ -434,7 +434,7 @@ public class UdfTest {
     {
         prepareContext(context);
         assertAxisReturns(context.getConnection(),
-            MondrianProperties.instance().SsasCompatibleNaming.get()
+            SystemWideProperties.instance().SsasCompatibleNaming
             ? "CurrentDateMember([Time].[Time], "
             + "'\"[Time].[Time].[\"yyyy\"].[Q\"q\"].[\"m\"]\"', BEFORE)"
             : "CurrentDateMember([Time], "
@@ -496,7 +496,7 @@ public class UdfTest {
     void testCurrentDateMemberHierarchy(TestContext context) {
         prepareContext(context);
         final String query =
-            MondrianProperties.instance().SsasCompatibleNaming.get()
+            SystemWideProperties.instance().SsasCompatibleNaming
                 ? "SELECT { CurrentDateMember([Time.Weekly], "
                   + "\"[Ti\\me\\.Weekl\\y]\\.[All Weekl\\y\\s]\\.[yyyy]\\.[ww]\", BEFORE)} "
                   + "ON COLUMNS FROM [Sales]"

@@ -31,30 +31,24 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
-import mondrian.test.PropertySaver5;
 
 /**
- * Tests the {@link MondrianProperties#EnableNonEmptyOnAllAxis} property.
+ * Tests the {@link SystemWideProperties#EnableNonEmptyOnAllAxis} property.
  */
 class NonEmptyPropertyForAllAxisTest {
-    private PropertySaver5 propSaver;
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-    }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonEmptyForAllAxesWithPropertySet(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = true;
         final String MDX_QUERY =
             "select {[Country].[USA].[OR].Children} on 0,"
             + " {[Promotions].Members} on 1 "
@@ -230,8 +224,8 @@ class NonEmptyPropertyForAllAxisTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSlicerAxisDoesNotGetNonEmptyApplied(TestContext context) {
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = true;
         String mdxQuery = "select from [Sales]\n"
             + "where [Time].[1997]\n";
         Connection connection = context.getConnection();

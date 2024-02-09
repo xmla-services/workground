@@ -43,7 +43,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 
@@ -86,16 +86,14 @@ class Ssas2005CompatibilityTest {
      */
     private static final boolean IMPLEMENTED = false;
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private void runQ(TestContext context,  String s) {
@@ -139,7 +137,7 @@ class Ssas2005CompatibilityTest {
         // If there is a dimension, hierarchy, level with the same name X,
         // then [X].[X] might reasonably resolve to hierarchy or the level.
         // SSAS resolves to hierarchy, old mondrian resolves to level.
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             // SSAS gives error with the <Level>.Ordinal function:
             //   The ORDINAL function expects a level expression for
             //   the  argument. A hierarchy expression was used.
@@ -215,7 +213,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionDotHierarchyDotLevelDotMembers(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [dimension].[hierarchy].[level] is valid on dimension with multiple
@@ -229,7 +227,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionDotHierarchyDotLevel(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [dimension].[hierarchy].[level] is valid on dimension with single
@@ -267,7 +265,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNamingDimensionDotLevel(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [dimension].[level] is valid if level name is unique within all
@@ -296,7 +294,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNamingDimensionDotLevel2(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // Date2 is a level that occurs in only 1 hierarchy
@@ -381,7 +379,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleHierarchyRequiresQualification(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [dimension].members for a dimension with one hierarchy
@@ -421,7 +419,7 @@ class Ssas2005CompatibilityTest {
             + " {[Store].[Store Country].[USA].CHILDREN} ON ROWS\n"
             + " FROM [Sales]\n"
             + " WHERE ([Measures].[ProfitPercent])";
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             assertQueryThrows(context.getConnection(),
                 mdx,
                 "Hierarchy for calculated member '[Time].[First Half 97]' not found");
@@ -466,7 +464,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnqualifiedHierarchy(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [hierarchy].members for a dimension with one hierarchy
@@ -498,7 +496,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testYtd(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // We use 'Generate' to establish context for Ytd without passing it
@@ -523,7 +521,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAxesOutOfOrder(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // TODO: run this in SSAS
@@ -549,7 +547,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionMembersRequiresHierarchyQualification(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         RolapSchemaPool.instance().clear();
@@ -568,7 +566,7 @@ class Ssas2005CompatibilityTest {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionMemberRequiresHierarchyQualification(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [dimension].CurrentMember
@@ -635,7 +633,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testImplicitCurrentMemberRequiresHierarchyQualification(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // a function that causes an implicit call to CurrentMember
@@ -663,7 +661,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnqualifiedHierarchyCurrentMember(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [hierarchy].CurrentMember
@@ -945,7 +943,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionWithMultipleHierarchiesDotParent(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // [Dimension].Parent
@@ -1086,7 +1084,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDupHierarchyOnAxes(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // same hierarchy on both axes
@@ -1118,7 +1116,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionDotHierarchyOnAxis(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // Dimension is implicitly converted to member
@@ -1259,7 +1257,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberIdentifiedByDimensionAndKey(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // Member identified by dimension, key;
@@ -1275,7 +1273,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionHierarchyKey(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // member identified by dimension, hierarchy, key
@@ -1290,7 +1288,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKey(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // compound key
@@ -1323,7 +1321,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKeyStringBad(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // too few values in key
@@ -1357,7 +1355,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKeyString(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // succeeds on SSAS (gives 1 row)
@@ -1380,7 +1378,7 @@ class Ssas2005CompatibilityTest {
      * occur after a key segment {@code &amp;&amp;CA}.
      *
      * <p>Needs to work regardless of the value of
-     * {@link MondrianProperties#SsasCompatibleNaming}. Mondrian-3 had this
+     * {@link SystemWideProperties#SsasCompatibleNaming}. Mondrian-3 had this
      * functionality.</p>
      */
     @ParameterizedTest
@@ -1410,7 +1408,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNameAfterCompositeKey(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         prepareContext(context);
@@ -1430,7 +1428,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKeyAll(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         prepareContext(context);
@@ -1447,7 +1445,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKeyParent(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         prepareContext(context);
@@ -1459,7 +1457,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCompoundKeyNull(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // Note: [Store Size in SQFT].[#null] is the member whose name is null;
@@ -1496,7 +1494,7 @@ class Ssas2005CompatibilityTest {
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testKeyNonExistent(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // SSAS gives 1 row
@@ -1528,7 +1526,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAxesLabelsOutOfSequence(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // succeeds on SSAS
@@ -1549,7 +1547,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAxisLabelsNotContiguousFails(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // SSAS gives error:
@@ -1567,7 +1565,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLotsOfAxes(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // lots of axes, mixed ways of specifying axes
@@ -1749,7 +1747,7 @@ class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCrossjoinMember(TestContext context) {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             // Can't resolve [Products] under old mondrian
             return;
         }
@@ -1812,13 +1810,13 @@ class Ssas2005CompatibilityTest {
 
         assertQueryThrows(context.getConnection(),
             "select {"
-            + (MondrianProperties.instance().SsasCompatibleNaming.get()
+            + (SystemWideProperties.instance().SsasCompatibleNaming
                 ? "[SameName].[SameName].[SameName]"
                 : "[SameName].[SameName]")
             + "} on 0 from Sales",
             "Mondrian Error:No function matches signature '{<Level>}'");
 
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (SystemWideProperties.instance().SsasCompatibleNaming) {
             assertQueryReturns(context.getConnection(),
                 "select {[SameName].[SameName].[SameName].[SameName]} on 0 from Sales",
                 "Axis #0:\n"
@@ -1911,7 +1909,7 @@ class Ssas2005CompatibilityTest {
             "[Time].[1997].Level.UniqueName",
             timeByWeek + ".[Year2]");
 
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
         // now for a calc member defined in a query
@@ -1929,53 +1927,47 @@ class Ssas2005CompatibilityTest {
 
     /**
      * Subclass of {@link Ssas2005CompatibilityTest} that runs
-     * with {@link mondrian.olap.MondrianProperties#SsasCompatibleNaming}=false.
+     * with {@link mondrian.olap.SystemWideProperties#SsasCompatibleNaming}=false.
      */
     public static class OldBehaviorTest extends Ssas2005CompatibilityTest
     {
 
-        private PropertySaver5 propSaver;
+
 
         @Override
 		@BeforeEach
         public void beforeEach() {
-            propSaver = new PropertySaver5();
-            propSaver.set(
-                    MondrianProperties.instance().SsasCompatibleNaming,
-                    false);
+            SystemWideProperties.instance().SsasCompatibleNaming = false;
         }
 
         @Override
 		@AfterEach
         public void afterEach() {
-            propSaver.reset();
+            SystemWideProperties.instance().populateInitial();
         }
 
     }
 
     /**
      * Subclass of {@link Ssas2005CompatibilityTest} that runs
-     * with {@link mondrian.olap.MondrianProperties#SsasCompatibleNaming}=true.
+     * with {@link mondrian.olap.SystemWideProperties#SsasCompatibleNaming}=true.
      */
     public static class NewBehaviorTest extends Ssas2005CompatibilityTest
     {
 
-        private PropertySaver5 propSaver;
+
 
         @Override
 		@BeforeEach
         public void beforeEach() {
         	RolapSchemaPool.instance().clear();
-            propSaver = new PropertySaver5();
-            propSaver.set(
-                    MondrianProperties.instance().SsasCompatibleNaming,
-                    true);
+            SystemWideProperties.instance().SsasCompatibleNaming = true;
         }
 
         @Override
 		@AfterEach
         public void afterEach() {
-            propSaver.reset();
+            SystemWideProperties.instance().populateInitial();
         }
 
     }

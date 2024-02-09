@@ -1913,7 +1913,7 @@ public class Vba {
         }
         String lwStringCheck = stringCheck;
         String lwStringMatch = stringMatch;
-        if(!mondrian.olap.MondrianProperties.instance().CaseSensitiveMdxInstr.get()) {
+        if(!mondrian.olap.SystemWideProperties.instance().CaseSensitiveMdxInstr) {
             if(stringCheck != null) {
                 lwStringCheck = stringCheck.toLowerCase();
             }
@@ -1968,7 +1968,7 @@ public class Vba {
         }
         String lwStringCheck = stringCheck;
         String lwStringMatch = stringMatch;
-        if(!mondrian.olap.MondrianProperties.instance().CaseSensitiveMdxInstr.get()) {
+        if(!mondrian.olap.SystemWideProperties.instance().CaseSensitiveMdxInstr) {
             if(stringCheck != null) {
                 lwStringCheck = stringCheck.toLowerCase();
             }

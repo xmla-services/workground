@@ -50,7 +50,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapUtil;
@@ -59,7 +59,7 @@ import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.test.PerformanceTest;
-import mondrian.test.PropertySaver5;
+
 import mondrian.util.ByteString;
 import mondrian.util.Pair;
 
@@ -72,24 +72,9 @@ class SegmentBuilderTest {
 
     public static final double MOCK_CELL_VALUE = 123.123;
 
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-        //propSaver.set(
-        //        MondrianProperties.instance().EnableInMemoryRollup,
-        //        true);
-        //propSaver.set(MondrianProperties.instance().EnableNativeNonEmpty, true);
-        //propSaver.set(
-        //        MondrianProperties.instance().SparseSegmentDensityThreshold, .5);
-        //propSaver.set(
-        //        MondrianProperties.instance().SparseSegmentCountThreshold, 1000);
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         RolapUtil.setHook(null);
     }
 
@@ -938,7 +923,7 @@ class SegmentBuilderTest {
         assertEquals(
             rolledForward.getValue().getValueMap().size(),
             rolledReverse.getValue().getValueMap().size());
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         return rolledForward;
     }
 

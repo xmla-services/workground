@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * A <code>Hierarchy</code> is a set of members, organized into levels.
@@ -75,7 +75,7 @@ public interface Hierarchy extends OlapElement, MetaElement {
     /**
      * Returns the unique name of this hierarchy, always including the dimension
      * name, e.g. "[Time].[Time]", regardless of whether
-     * {@link MondrianProperties#SsasCompatibleNaming} is enabled.
+     * {@link SystemWideProperties#SsasCompatibleNaming} is enabled.
      *
      * @deprecated Will be removed in mondrian-4.0, when
      * {@link #getUniqueName()} will have this behavior.

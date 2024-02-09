@@ -10,8 +10,8 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
+import mondrian.olap.SystemWideProperties;
+
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
@@ -51,17 +51,17 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class FilterTest extends BatchTestCase {
 
-  private PropertySaver5 propSaver;
+
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
     //propSaver.set(
     //        MondrianProperties.instance().EnableNativeCrossJoin, true );
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
 
@@ -560,7 +560,7 @@ class FilterTest extends BatchTestCase {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
-    if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
+    if ( SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       return;
     }
 
@@ -738,7 +738,7 @@ class FilterTest extends BatchTestCase {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
-    if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
+    if ( SystemWideProperties.instance().FilterChildlessSnowflakeMembers ) {
       return;
     }
 
@@ -1187,10 +1187,9 @@ class FilterTest extends BatchTestCase {
       ((TestConfig)context.getConfig()).setUseAggregates(false);
       ((TestConfig) context.getConfig()).setReadAggregates(false);
     ((TestConfig) context.getConfig()).setDisableCaching(false);
-    propSaver.set( propSaver.properties.EnableNativeNonEmpty, true );
-    propSaver.set(
-      MondrianProperties.instance().CompareSiblingsByOrderKey,
-      true );
+    SystemWideProperties.instance().EnableNativeNonEmpty = true;
+
+    SystemWideProperties.instance().CompareSiblingsByOrderKey = true;
     ((TestConfig)context.getConfig()).setNullDenominatorProducesNull( true );
     ((TestConfig)context.getConfig()).setExpandNonNative(true);
     ((TestConfig)context.getConfig()).setEnableNativeFilter(true);

@@ -9,7 +9,7 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.Segment;
@@ -18,7 +18,7 @@ import mondrian.rolap.agg.SegmentWithData;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
 import mondrian.util.DelegatingInvocationHandler;
@@ -77,15 +77,14 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   private RolapCube salesCube;
   private Connection connection;
 
-  private PropertySaver5 propSaver;
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
     Locus.pop( locus );
     // cleanup
     connection.close();
@@ -1340,7 +1339,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   void testAggregateDistinctCount5(TestContext context) {
     prepareContext(context);
     // make sure tuple optimization will be used
-    propSaver.set( propSaver.properties.MaxConstraints, 2 );
+    SystemWideProperties.instance().MaxConstraints = 2;
 
     String query =
         "With " + "Set [Products] as " + " '{[Product].[Drink], " + "   [Product].[Food], "

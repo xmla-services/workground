@@ -56,7 +56,7 @@ public class RoleImpl implements Role {
         LoggerFactory.getLogger(RoleImpl.class);
     private final List<Object[]> hashCache = new ArrayList<>();
     private int hash = 0;
-    
+
     /**
      * Returns a role which has access to everything.
      * @param schema A schema to bind this role to.
@@ -1064,8 +1064,8 @@ public class RoleImpl implements Role {
                 }
             }
             // Not a parent. Cache it and return.
-            if (MondrianProperties.instance()
-                .EnableRolapCubeMemberCache.get())
+            if (SystemWideProperties.instance()
+                .EnableRolapCubeMemberCache)
             {
                 parentsCache.put(
                     parentMember.getUniqueName(), Boolean.FALSE);

@@ -9,7 +9,7 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
 import mondrian.rolap.SchemaModifiers;
@@ -60,7 +60,7 @@ class PropertiesTest {
                 Segment.toList("Customers", "All Customers", "USA", "CA"),
                 true);
         final boolean caseSensitive =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
 
         String stringPropValue;
         Integer intPropValue;
@@ -317,7 +317,7 @@ class PropertiesTest {
             0.1);
 
         // Case sensitivity.
-        if (MondrianProperties.instance().CaseSensitive.get()) {
+        if (SystemWideProperties.instance().CaseSensitive) {
             assertNull(cell.getPropertyValue("cell_ordinal"));
             assertNull(cell.getPropertyValue("font_flags"));
             assertNull(cell.getPropertyValue("format_string"));

@@ -83,7 +83,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
             throw new IllegalArgumentException("QueryAxis: dimensionProperties and axisOrdinal should not be null");
         }
         this.nonEmpty = nonEmpty
-            || (MondrianProperties.instance().EnableNonEmptyOnAllAxis.get()
+            || (SystemWideProperties.instance().EnableNonEmptyOnAllAxis
             && !axisOrdinal.isFilter());
         this.exp = set;
         this.axisOrdinal = axisOrdinal;

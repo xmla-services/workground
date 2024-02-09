@@ -58,10 +58,6 @@
 			<artifactId>commons-vfs2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.servicemix.bundles</groupId>
 			<artifactId>org.apache.servicemix.bundles.xerces</artifactId>
 		</dependency>

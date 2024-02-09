@@ -92,7 +92,7 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
@@ -187,7 +187,7 @@ public class RolapHierarchy extends HierarchyBase {
         this.allLevelName = "(All)";
         this.allMemberName =
             subName != null
-            && (MondrianProperties.instance().SsasCompatibleNaming.get()
+            && (SystemWideProperties.instance().SsasCompatibleNaming
                 || name.equals(new StringBuilder(subName).append(".").append(subName).toString()))
                 ? new StringBuilder("All ").append(subName).append("s").toString()
                 : new StringBuilder("All ").append(name).append("s").toString();
@@ -882,8 +882,8 @@ public class RolapHierarchy extends HierarchyBase {
             if (rightRelation == null) {
                 return relationSubset(left(join), alias);
             } else {
-                return MondrianProperties.instance()
-                    .FilterChildlessSnowflakeMembers.get()
+                return SystemWideProperties.instance()
+                    .FilterChildlessSnowflakeMembers
                     ? join
                     : rightRelation;
             }
@@ -1631,7 +1631,7 @@ public class RolapHierarchy extends HierarchyBase {
                 return dimension;
             }
             // Archaic form <dimension>.<hierarchy>, e.g. [Time.Weekly].[1997]
-            if (!MondrianProperties.instance().SsasCompatibleNaming.get()
+            if (!SystemWideProperties.instance().SsasCompatibleNaming
                 && Util.equalName(
                     nameSegment.getName(),
                 new StringBuilder(dimension.getName()).append(".").append(subName).toString()))

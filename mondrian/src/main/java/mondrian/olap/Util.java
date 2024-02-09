@@ -434,7 +434,7 @@ public class Util {
     /**
      * Returns whether two names are equal.
      * Takes into account the
-     * {@link MondrianProperties#CaseSensitive case sensitive option}.
+     * {@link SystemWideProperties#CaseSensitive case sensitive option}.
      * Names may be null.
      */
     public static boolean equalName(String s, String t) {
@@ -442,7 +442,7 @@ public class Util {
             return t == null;
         }
         boolean caseSensitive =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         return caseSensitive ? s.equals(t) : s.equalsIgnoreCase(t);
     }
 
@@ -464,13 +464,13 @@ public class Util {
     /**
      * Compares two names.  if case sensitive flag is false,
      * apply finer grain difference with case sensitive
-     * Takes into account the {@link MondrianProperties#CaseSensitive case
+     * Takes into account the {@link SystemWideProperties#CaseSensitive case
      * sensitive option}.
      * Names must not be null.
      */
     public static int caseSensitiveCompareName(String s, String t) {
         boolean caseSensitive =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         if (caseSensitive) {
             return s.compareTo(t);
         } else {
@@ -484,24 +484,24 @@ public class Util {
 
     /**
      * Compares two names.
-     * Takes into account the {@link MondrianProperties#CaseSensitive case
+     * Takes into account the {@link SystemWideProperties#CaseSensitive case
      * sensitive option}.
      * Names must not be null.
      */
     public static int compareName(String s, String t) {
         boolean caseSensitive =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         return caseSensitive ? s.compareTo(t) : s.compareToIgnoreCase(t);
     }
 
     /**
      * Generates a normalized form of a name, for use as a key into a map.
      * Returns the upper case name if
-     * {@link MondrianProperties#CaseSensitive} is true, the name unchanged
+     * {@link SystemWideProperties#CaseSensitive} is true, the name unchanged
      * otherwise.
      */
     public static String normalizeName(String s) {
-        return MondrianProperties.instance().CaseSensitive.get()
+        return SystemWideProperties.instance().CaseSensitive
             ? s
             : s.toUpperCase();
     }
@@ -1211,7 +1211,7 @@ public class Util {
         } while (level != null);
         // Now try a standard property.
         boolean caseSensitive =
-            MondrianProperties.instance().CaseSensitive.get();
+            SystemWideProperties.instance().CaseSensitive;
         final Property property = Property.lookup(propertyName, caseSensitive);
         if (property != null
             && property.isMemberProperty()
@@ -3234,7 +3234,7 @@ public class Util {
      * @throws ResourceLimitExceededException
      */
     public static void checkCJResultLimit(long resultSize) {
-        int resultLimit = MondrianProperties.instance().ResultLimit.get();
+        int resultLimit = SystemWideProperties.instance().ResultLimit;
 
         // Throw an exeption, if the size of the crossjoin exceeds the result
         // limit.

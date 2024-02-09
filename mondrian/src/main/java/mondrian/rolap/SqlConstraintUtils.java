@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MemberExtractingVisitor;
@@ -1428,7 +1428,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
           // the value to upper-case in the DBMS (e.g. UPPER('Foo'))
           // rather than in Java (e.g. 'FOO') in case the DBMS is
           // running a different locale.
-          if ( !MondrianProperties.instance().CaseSensitive.get() ) {
+          if ( !SystemWideProperties.instance().CaseSensitive ) {
             value = query.getDialect().toUpper( buf );
           }
         }
@@ -1436,7 +1436,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       }
     }
 
-    if ( caseSensitive && datatype == Datatype.STRING && !MondrianProperties.instance().CaseSensitive.get() ) {
+    if ( caseSensitive && datatype == Datatype.STRING && !SystemWideProperties.instance().CaseSensitive ) {
         columnStringBuilder = query.getDialect().toUpper( columnStringBuilder );
     }
 
@@ -1753,7 +1753,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
   private static String generateSingleValueInExpr( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar,
       List<RolapMember> members, RolapLevel fromLevel, boolean restrictMemberTypes, boolean exclude,
       boolean includeParentLevels ) {
-    int maxConstraints = MondrianProperties.instance().MaxConstraints.get();
+    int maxConstraints = SystemWideProperties.instance().MaxConstraints;
     Dialect dialect = sqlQuery.getDialect();
 
     StringBuilder condition = new StringBuilder();

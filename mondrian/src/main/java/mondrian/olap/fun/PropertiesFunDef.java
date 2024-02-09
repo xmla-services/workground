@@ -35,7 +35,7 @@ import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 
@@ -77,7 +77,7 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
     }
 
     static Object properties(Member member, String s) {
-        boolean matchCase = MondrianProperties.instance().CaseSensitive.get();
+        boolean matchCase = SystemWideProperties.instance().CaseSensitive;
         Object o = member.getPropertyValue(s, matchCase);
         if (o == null) {
             if (!Util.isValidProperty(s, member.getLevel())) {
@@ -97,7 +97,7 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
             DataType.MEMBER, DataType.STRING
         };
 
- 
+
         private boolean matches(
             Expression[] args,
             DataType[] parameterTypes,
@@ -127,8 +127,8 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
                 return null;
             }
             DataType returnType = deducePropertyCategory(args[0], args[1]);
-            
-            
+
+
             return new PropertiesFunDef(
                 returnType);
         }
@@ -191,6 +191,6 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
 			return functionAtom;
 		}
 
-		
+
     }
 }

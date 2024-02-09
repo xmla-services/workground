@@ -11,9 +11,7 @@ package mondrian.rolap.aggmatcher;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
+import mondrian.olap.SystemWideProperties;
 import mondrian.test.loader.CsvDBTestCase;
 
 /**
@@ -27,32 +25,19 @@ import mondrian.test.loader.CsvDBTestCase;
  */
 public abstract class AggTableTestCase extends CsvDBTestCase {
 
-    protected PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
         // Schema needs to be flushed before DBLoader is created is super.setUp,
         // otherwise AggTableManager can end up loading an old JdbcSchema
         //getConnection().getCacheControl(null).flushSchemaCache();
 
         // store current property values
-        MondrianProperties props = MondrianProperties.instance();
-
-        // turn off caching
-        //propSaver.set(
-        //        props.UseAggregates,
-        //        true);
-        //propSaver.set(
-        //        props.ReadAggregates,
-        //        false);
-        //propSaver.set(
-        //        props.ReadAggregates,
-        //        true);
+        SystemWideProperties props = SystemWideProperties.instance();
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 }

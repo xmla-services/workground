@@ -67,7 +67,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRB
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -79,7 +78,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.ResultBase;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
@@ -88,7 +87,6 @@ import mondrian.rolap.RolapCube;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
 /**
@@ -99,22 +97,15 @@ import mondrian.test.SqlPattern;
  * @since 19 December, 2007
  */
 class AggregationOnDistinctCountMeasuresTest {
-    private final MondrianProperties props = MondrianProperties.instance();
     private  final String cubeNameSales = "Sales";
 
     private SchemaReader salesCubeSchemaReader = null;
     private SchemaReader schemaReader = null;
     private RolapCube salesCube;
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-    }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private void prepareContext(TestContext context) {
@@ -199,8 +190,7 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithASingleMember(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 1 );
+      SystemWideProperties.instance().MaxConstraints = 1;
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -251,8 +241,7 @@ class AggregationOnDistinctCountMeasuresTest {
   void testCrossJoinMembersWithSetOfMembers(TestContext context) {
       prepareContext(context);
         // make sure tuple optimization will be used
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 2 );
+      SystemWideProperties.instance().MaxConstraints = 2;
 
         String query =
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
@@ -530,8 +519,8 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregationOverLargeListGeneratesError(TestContext context) {
       prepareContext(context);
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 7 );
+
+      SystemWideProperties.instance().MaxConstraints = 7;
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
@@ -624,11 +613,11 @@ class AggregationOnDistinctCountMeasuresTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testAggregateMaxConstraints(TestContext context) {
       prepareContext(context);
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+        if (!SystemWideProperties.instance().SsasCompatibleNaming) {
             return;
         }
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 5 );
+
+        SystemWideProperties.instance().MaxConstraints = 5;
         assertQueryReturns(context.getConnection(),
             "SELECT\n"
             + "  Measures.[Unit Sales] on columns,\n"

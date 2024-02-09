@@ -9,8 +9,7 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
+import mondrian.olap.SystemWideProperties;
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -57,15 +56,15 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class NativeFilterMatchingTest extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
+
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
@@ -150,7 +149,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             context.getConnection(),
             query,
             queryResults);
-        verifySameNativeAndNot(context.getConnection(), query, null, propSaver);
+        verifySameNativeAndNot(context.getConnection(), query, null);
     }
 
     @ParameterizedTest
@@ -212,7 +211,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
         final Result result = executeQuery(query, context.getConnection());
         final String resultString = TestUtil.toString(result);
         assertFalse(resultString.contains("Jeanne"));
-        verifySameNativeAndNot(context.getConnection(), query, null, propSaver);
+        verifySameNativeAndNot(context.getConnection(), query, null);
     }
 
     /**
@@ -259,27 +258,27 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(connection,
             "select Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
-            "Filter w/ regex.", propSaver);
+            "Filter w/ regex.");
 
         verifySameNativeAndNot(connection,
             "select Filter([Store].[Store Name].Members, Measures.[Unit Sales] > 100 and Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
-            "Filter w/ regex and measure constraint.", propSaver);
+            "Filter w/ regex and measure constraint.");
 
         verifySameNativeAndNot(connection,
             "select Filter([Store].[Store Name].Members, measures.[Unit Sales] > 100) "
             + " on 0 from sales",
-            "Filter w/ measure constraint.", propSaver);
+            "Filter w/ measure constraint.");
 
         verifySameNativeAndNot(connection,
             "select non empty Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
-            "Filter w/ regex in non-empty context.", propSaver);
+            "Filter w/ regex in non-empty context.");
 
         verifySameNativeAndNot(connection,
             "with set [filterSet] as 'Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\")'"
             + " select [filterSet] on 0 from sales",
-            "Filter w/ regex defined in named set.", propSaver);
+            "Filter w/ regex defined in named set.");
     }
 
     @ParameterizedTest
@@ -293,11 +292,11 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(connection,
             "select NON EMPTY Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
-            "Filter w/ regex.", propSaver);
+            "Filter w/ regex.");
         verifySameNativeAndNot(connection,
             "select Filter([Store].[Store Name].Members, Store.CurrentMember.Name matches \"Store.*\") "
             + " on 0 from sales",
-            "Filter w/ regex.", propSaver);
+            "Filter w/ regex.");
     }
 
     @ParameterizedTest
@@ -425,15 +424,15 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(connection,
             "select Filter([Product].[Product Category].Members, [Product].CurrentMember.Name matches \"(?i).*Food.*\")"
             + " on 0 from tinysales",
-            "Filter on dim with full access.", propSaver);
+            "Filter on dim with full access.");
         verifySameNativeAndNot(connection,
             "select Filter([Store2].[USA].Children, [Store2].CurrentMember.Name matches \"WA.*\")"
             + " on 0 from tinysales",
-            "Filter on restricted dimension.  Should be empty set.", propSaver);
+            "Filter on restricted dimension.  Should be empty set.");
         verifySameNativeAndNot(connection,
             "select Filter(CrossJoin({[Store2].[USA].Children}, [Product].[Product Category].Members), [Store2].CurrentMember.Name matches \".*A.*\")"
             + " on 0 from tinysales",
-            "Filter on partially accessible set of tuples.", propSaver);
+            "Filter on partially accessible set of tuples.");
     }
 
     @ParameterizedTest
@@ -445,7 +444,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
 
         if (context.getConfig().enableNativeFilter()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+            && SystemWideProperties.instance().EnableNativeNonEmpty)
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
@@ -544,7 +543,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
             + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)";
         if (context.getConfig().enableNativeFilter()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+            && SystemWideProperties.instance().EnableNativeNonEmpty)
         {
             final String sqlMysql =
                 "select\n"
@@ -611,7 +610,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
             + "select [measures].[avgQtrs] on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )";
         if (context.getConfig().enableNativeFilter()
-            && MondrianProperties.instance().EnableNativeNonEmpty.get())
+            && SystemWideProperties.instance().EnableNativeNonEmpty)
         {
             boolean requiresOrderByAlias =
                     getDialect(context.getConnection()).requiresOrderByAlias();
@@ -755,7 +754,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 40 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
-            "Failed.", propSaver);
+            "Failed.");
     }
 
     @ParameterizedTest
@@ -764,7 +763,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, [Measures].[Unit Sales] > 1000 ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
-            "Failed.", propSaver);
+            "Failed.");
     }
 
     @ParameterizedTest
@@ -773,7 +772,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(context.getConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 500 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
-            "Failed.", propSaver);
+            "Failed.");
     }
 
     @ParameterizedTest

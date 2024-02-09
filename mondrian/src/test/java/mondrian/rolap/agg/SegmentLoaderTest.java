@@ -31,6 +31,7 @@ import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -56,7 +57,7 @@ import mondrian.rolap.StarPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -87,16 +88,16 @@ class SegmentLoaderTest extends BatchTestCase {
         Locus.push(locus);
     }
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     protected void AfterEach() throws Exception {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         Locus.pop(locus);
         try {
             statement.cancel();
@@ -146,7 +147,7 @@ class SegmentLoaderTest extends BatchTestCase {
                 rollup,
                 false,
                 false);
-            propSaver.reset();
+            SystemWideProperties.instance().populateInitial();
         }
     }
 

@@ -51,7 +51,7 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.agg.AggregationManager;
@@ -487,7 +487,7 @@ public Object getCacheKey() {
         target.open();
       }
 
-      int limit = MondrianProperties.instance().ResultLimit.get();
+      int limit = SystemWideProperties.instance().ResultLimit;
       int fetchCount = 0;
 
       // determine how many enum targets we have

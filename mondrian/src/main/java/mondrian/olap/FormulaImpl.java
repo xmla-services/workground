@@ -249,8 +249,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                     } else {
                         final Hierarchy hierarchy;
                         if (parent instanceof Dimension dimension
-                            && MondrianProperties.instance()
-                                .SsasCompatibleNaming.get())
+                            && SystemWideProperties.instance()
+                                .SsasCompatibleNaming)
                         {
                             if (dimension.getHierarchies().length == 1) {
                                 hierarchy = dimension.getHierarchies()[0];

@@ -17,10 +17,9 @@ import static org.mockito.Mockito.mock;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.ResourceLimitExceededException;
-import mondrian.test.PropertySaver5;
+
 
 
 class ArrayTupleListTest {
@@ -28,11 +27,11 @@ class ArrayTupleListTest {
   /**
   * Access properties via this object and their values will be reset.
   */
-  protected final PropertySaver5 propSaver = new PropertySaver5();  
-  
+
+
   @AfterEach
   public void afterEach() {
-      propSaver.reset();
+      SystemWideProperties.instance().populateInitial();
   }
   private Member member1 = mock( Member.class );
   private Member member2 = mock( Member.class );
@@ -40,7 +39,7 @@ class ArrayTupleListTest {
 
   @Test
   void testGrowListBeyondInitialCapacity() {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 0 );
+    SystemWideProperties.instance().ResultLimit = 0;
     list = new ArrayTupleList( 2, 10 );
     addMockTuplesToList( list, 50 );
 
@@ -53,7 +52,7 @@ class ArrayTupleListTest {
 
   @Test
   void testAttemptToGrowBeyondResultLimit() {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 30 );
+    SystemWideProperties.instance().ResultLimit = 30;
     list = new ArrayTupleList( 2, 10 );
     try {
       addMockTuplesToList( list, 32 );

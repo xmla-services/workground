@@ -9,6 +9,7 @@
 */
 package mondrian.test;
 
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.util.Bug;
 import org.eclipse.daanse.olap.api.Connection;
@@ -36,16 +37,14 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class CompoundSlicerTest {
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
 
@@ -1501,7 +1500,7 @@ class CompoundSlicerTest {
 
         verifySameNativeAndNot(context.getConnection(),
                 query,
-                "Compound aggregated member should return same results with native filter on/off", propSaver);
+                "Compound aggregated member should return same results with native filter on/off");
     }
 
     @ParameterizedTest
@@ -1514,7 +1513,7 @@ class CompoundSlicerTest {
 
         verifySameNativeAndNot(context.getConnection(),
                 query,
-                "Compound aggregated member should return same results with native filter on/off", propSaver);
+                "Compound aggregated member should return same results with native filter on/off");
     }
 
     @ParameterizedTest
@@ -1535,6 +1534,6 @@ class CompoundSlicerTest {
                 + "SELECT\n"
                 + "[*BASE_MEMBERS__Measures_] ON COLUMNS\n"
                 + ",[*SORTED_ROW_AXIS] ON ROWS\n"
-                + "FROM [Sales]", "", propSaver);
+                + "FROM [Sales]", "");
     }
 }

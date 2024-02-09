@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.CrossJoinArgFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -56,7 +56,7 @@ public class SqlConstraintFactory {
     }
 
     public static void setNativeNonEmptyValue() {
-        enabled = MondrianProperties.instance().EnableNativeNonEmpty.get();
+        enabled = SystemWideProperties.instance().EnableNativeNonEmpty;
     }
 
     public MemberChildrenConstraint getMemberChildrenConstraint(

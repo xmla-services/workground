@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -68,7 +69,7 @@ import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.util.RelationUtil;
-import mondrian.test.PropertySaver5;
+
 
 /**
  * @author Andrey Khayrutdinov
@@ -77,16 +78,16 @@ class RolapSchemaTest {
   private RolapSchema schemaSpy;
   private static RolapStar rlStarMock = mock(RolapStar.class);
 
-    private PropertySaver5 propSaver;
+
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
+
         schemaSpy = spy(createSchema());
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     private RolapSchema createSchema() {
@@ -133,7 +134,7 @@ class RolapSchemaTest {
             createSchema().createUnionRole(role);
         } catch (MondrianException ex) {
             assertMondrianException(
-                new IllegalArgumentException(RoleUnionGrants), ex);
+                new MondrianException(RoleUnionGrants), ex);
             return;
         }
         fail("Should fail if union and schema grants exist simultaneously");

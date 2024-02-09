@@ -342,7 +342,7 @@ public final class IdBatchResolver {
     private Collection<String> getOlapElementNames(
         OlapElement[] olapElements, final boolean uniqueName)
     {
-    	
+
 		return Stream.of(olapElements)
 				.map(olapElement -> uniqueName ? olapElement.getUniqueName() : olapElement.getName()).toList();
 
@@ -364,7 +364,7 @@ public final class IdBatchResolver {
                 || segListMatchInUniqueNames(
                     id.getSegments(), hierarchyUniqueNames);
         }
-        if (MondrianProperties.instance().SsasCompatibleNaming.get()
+        if (SystemWideProperties.instance().SsasCompatibleNaming
             && size == 2)
         {
             return segListMatchInUniqueNames(

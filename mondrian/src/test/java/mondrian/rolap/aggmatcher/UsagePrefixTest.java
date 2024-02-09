@@ -20,7 +20,7 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 
 /**
  * Validates the dimension attribute usagePrefix is correctly
@@ -42,7 +42,7 @@ class UsagePrefixTest extends AggTableTestCase {
         if (!isApplicable(context.getConnection())) {
             return;
         }
-        MondrianProperties props = MondrianProperties.instance();
+        SystemWideProperties props = SystemWideProperties.instance();
 
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(true);
@@ -78,7 +78,6 @@ class UsagePrefixTest extends AggTableTestCase {
         if (!isApplicable(context.getConnection())) {
             return;
         }
-        MondrianProperties props = MondrianProperties.instance();
 
         // get value without aggregates
         ((TestConfig)context.getConfig()).setUseAggregates(true);

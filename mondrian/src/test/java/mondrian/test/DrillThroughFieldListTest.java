@@ -20,11 +20,11 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import java.util.Arrays;
 import java.util.List;
 
+import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
@@ -44,17 +44,10 @@ import mondrian.rolap.RolapCell;
  * @since Nov 18, 2015
  */
 class DrillThroughFieldListTest {
-  private PropertySaver5 propSaver;
-
-  @BeforeEach
-  public void beforeEach() {
-    propSaver = new PropertySaver5();
-    //propSaver.set(propSaver.properties.GenerateFormattedSql, true);
-  }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   @ParameterizedTest

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
@@ -228,7 +228,7 @@ public class RolapEvaluator implements Evaluator {
     ancestorCommandCount = 0;
     nonEmpty = false;
     nativeEnabled =
-        MondrianProperties.instance().EnableNativeNonEmpty.get() || root.connection.getContext().getConfig().enableNativeCrossJoin();
+        SystemWideProperties.instance().EnableNativeNonEmpty || root.connection.getContext().getConfig().enableNativeCrossJoin();
     evalAxes = false;
     cellReader = null;
     currentMembers = root.defaultMembers.clone();

@@ -11,6 +11,7 @@
 package mondrian.rolap;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
@@ -19,7 +20,7 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
+
 import mondrian.test.SqlPattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -88,16 +89,16 @@ class TestAggregationManager extends BatchTestCase {
     private Execution execution;
     private AggregationManager aggMgr;
 
-    private PropertySaver5 propSaver;
+
 
     @BeforeEach
     void beforeEach() {
-        propSaver = new PropertySaver5();
+
     }
 
     @AfterEach
     void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
         Locus.pop(locus);
 
         // allow gc

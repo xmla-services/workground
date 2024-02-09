@@ -10,7 +10,7 @@
 package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
@@ -42,7 +42,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRB
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextArgumentsProvider;
@@ -73,21 +72,17 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class NativeSetEvaluationTest extends BatchTestCase {
 
-  private PropertySaver5 propSaver;
+
 
   @BeforeAll
   public static void beforeAll() {
       ContextArgumentsProvider.dockerWasChanged = true;
   }
 
-  @BeforeEach
-  public void beforeEach() {
-    propSaver = new PropertySaver5();
-  }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
   /**
    * Checks that a given MDX query results in a particular SQL statement being generated.
@@ -304,7 +299,7 @@ protected void assertQuerySql(Connection connection,
       NativeTopCountWithAgg.getMysql(connection),
       NativeTopCountWithAgg.getMysql(connection));
     if ( context.getConfig().enableNativeTopCount()
-      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
+      && SystemWideProperties.instance().EnableNativeNonEmpty ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(), mdx, NativeTopCountWithAgg.result );
@@ -396,7 +391,7 @@ protected void assertQuerySql(Connection connection,
         mysqlQuery,
         mysqlQuery );
     if ( context.getConfig().enableNativeFilter()
-      && MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
+      && SystemWideProperties.instance().EnableNativeNonEmpty ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.getConnection(),
@@ -1275,7 +1270,7 @@ protected void assertQuerySql(Connection connection,
         mysql,
         mysql );
 
-    if ( MondrianProperties.instance().EnableNativeNonEmpty.get() ) {
+    if ( SystemWideProperties.instance().EnableNativeNonEmpty ) {
       assertQuerySql(context.getConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1679,8 +1674,8 @@ protected void assertQuerySql(Connection connection,
 	// test failed because in native mode system returns limit quantity 6 and then filter by role
 	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
 
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 4 );
+
+    SystemWideProperties.instance().MaxConstraints = 4;
     String roleDef =
       "  <Role name=\"Test\">\n"
         + "    <SchemaGrant access=\"none\">\n"
@@ -1775,15 +1770,15 @@ protected void assertQuerySql(Connection connection,
       Connection connection = context.getConnection(List.of("Test"));
     verifySameNativeAndNot(connection,
       "select non empty crossjoin([Store].[USA],[Product].[Product Name].members) on 0 from sales",
-      "Native crossjoin mismatch", propSaver);
+      "Native crossjoin mismatch");
     verifySameNativeAndNot(connection,
       "select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales",
-      "Native topcount mismatch", propSaver);
+      "Native topcount mismatch");
     verifySameNativeAndNot(connection,
       "select filter([Product].[Product Name].members, Measures.[Unit Sales] > 0) on 0 from sales",
-      "Native native filter mismatch", propSaver);
+      "Native native filter mismatch");
 
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   private static boolean isUseAgg(TestContext context) {
@@ -2113,7 +2108,7 @@ protected void assertQuerySql(Connection connection,
       + " where customers.agg";
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message);
   }
 
   @ParameterizedTest
@@ -2130,7 +2125,7 @@ protected void assertQuerySql(Connection connection,
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message);
   }
 
   @ParameterizedTest
@@ -2140,12 +2135,12 @@ protected void assertQuerySql(Connection connection,
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
       + "FROM sales where store.agg";
-      propSaver.set(
-          MondrianProperties.instance().MaxConstraints, 24 );
+
+      SystemWideProperties.instance().MaxConstraints = 24;
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.getConnection(), query, message, propSaver);
+    verifySameNativeAndNot(context.getConnection(), query, message);
   }
 
   @ParameterizedTest
@@ -2202,7 +2197,7 @@ protected void assertQuerySql(Connection connection,
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testResultLimitInNativeCJ(TestContext context) {
-    propSaver.set( MondrianProperties.instance().ResultLimit, 400 );
+    SystemWideProperties.instance().ResultLimit = 400;
     assertAxisThrows(context.getConnection(), "NonEmptyCrossjoin({[Product].[All Products].Children}, "
         + "{ [Customers].[Name].members})",
       "exceeded limit (400)" );

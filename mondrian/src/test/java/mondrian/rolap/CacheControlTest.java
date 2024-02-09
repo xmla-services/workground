@@ -34,15 +34,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.test.DiffRepository;
-import mondrian.test.PropertySaver5;
 
 /**
  * Unit-test for cache-flushing functionality.
@@ -52,18 +50,14 @@ import mondrian.test.PropertySaver5;
  */
 class CacheControlTest {
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     /**
@@ -415,12 +409,10 @@ class CacheControlTest {
         // Make sure MaxConstraint is high enough
         int minConstraints = 3;
 
-        if (MondrianProperties.instance().MaxConstraints.get()
+        if (SystemWideProperties.instance().MaxConstraints
             < minConstraints)
         {
-            propSaver.set(
-                MondrianProperties.instance().MaxConstraints,
-                minConstraints);
+            SystemWideProperties.instance().MaxConstraints = minConstraints;
         }
 
         // Execute a query, to bring data into the cache.
@@ -1251,12 +1243,10 @@ class CacheControlTest {
         // Make sure MaxConstraint is high enough
         int minConstraints = 3;
 
-        if (MondrianProperties.instance().MaxConstraints.get()
+        if (SystemWideProperties.instance().MaxConstraints
             < minConstraints)
         {
-            propSaver.set(
-                MondrianProperties.instance().MaxConstraints,
-                minConstraints);
+            SystemWideProperties.instance().MaxConstraints = minConstraints;
         }
 
         StringWriter sw = new StringWriter();

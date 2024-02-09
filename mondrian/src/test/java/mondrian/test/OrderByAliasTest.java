@@ -9,7 +9,7 @@
 package mondrian.test;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
@@ -42,17 +42,17 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 class OrderByAliasTest extends BatchTestCase {
 
-  private PropertySaver5 propSaver;
+
 
   @BeforeEach
   public void beforeEach() {
-    propSaver = new PropertySaver5();
+
     //propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
   }
 
   @AfterEach
   public void afterEach() {
-    propSaver.reset();
+    SystemWideProperties.instance().populateInitial();
   }
 
   @ParameterizedTest

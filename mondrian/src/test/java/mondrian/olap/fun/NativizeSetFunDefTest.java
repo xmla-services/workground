@@ -27,13 +27,12 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
 /**
@@ -44,33 +43,23 @@ import mondrian.test.SqlPattern;
  */
 class NativizeSetFunDefTest extends BatchTestCase {
 
-    private PropertySaver5 propSaver;
-
     @BeforeEach
     public void beforeEach() {
-        propSaver = new PropertySaver5();
-        propSaver.set(
-                MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
-        //propSaver.set(
-        //        MondrianProperties.instance().NativizeMinThreshold, 0);
-        //propSaver.set(
-        //        MondrianProperties.instance().UseAggregates, false);
-        //propSaver.set(
-        //        MondrianProperties.instance().ReadAggregates, false);
-        //propSaver.set(
-        //        MondrianProperties.instance().EnableNativeCrossJoin, true);
+
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = true;
         // SSAS-compatible naming causes <dimension>.<level>.members to be
         // interpreted as <dimension>.<hierarchy>.members, and that happens a
         // lot in this test. There is little to be gained by having this test
         // run for both values. When SSAS-compatible naming is the standard, we
         // should upgrade all the MDX.
-        propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
     }
 
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
@@ -1261,8 +1250,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDoesNoHarmToPlainEnumeratedMembers(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         assertQueryIsReWritten(context.getConnection(),
             "SELECT NativizeSet({Gender.M,Gender.F}) on 0 from sales",
@@ -1276,8 +1265,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDoesNoHarmToPlainDotMembers(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         assertQueryIsReWritten(context.getConnection(),
             "select NativizeSet({[Marital Status].[Marital Status].members}) "
@@ -1291,8 +1280,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTransformsCallToRemoveDotMembersInCrossJoin(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         assertQueryIsReWritten(context.getConnection(),
             "select NativizeSet(CrossJoin({Gender.M,Gender.F},{[Marital Status].[Marital Status].members})) "
@@ -1311,8 +1300,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void DISABLED_testTransformsWithSeveralDimensionsNestedOnRows(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         assertQueryIsReWritten(context.getConnection(),
             "WITH SET [COG_OQP_INT_s4] AS 'CROSSJOIN({[Education Level].[Graduate Degree]},"
@@ -1345,8 +1334,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTransformsComplexQueryWithGenerateAndAggregate(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         assertQueryIsReWritten(context.getConnection(),
             "WITH MEMBER [Product].[COG_OQP_INT_umg1] AS "
@@ -1403,10 +1392,10 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleHierarchySsasTrue(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, true);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = true;
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         // Ssas compatible: time.[weekly].[week]
         // Use fresh connection -- unique names are baked in when schema is
@@ -1433,10 +1422,10 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleHierarchySsasFalse(TestContext context) {
         ((TestConfig)context.getConfig()).setNativizeMinThreshold(0);
-        propSaver.set(
-            MondrianProperties.instance().SsasCompatibleNaming, false);
-        propSaver.set(
-            MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
+
+        SystemWideProperties.instance().SsasCompatibleNaming = false;
+
+        SystemWideProperties.instance().EnableNonEmptyOnAllAxis = false;
 
         // Ssas compatible: [time.weekly].week
         assertQueryIsReWritten(context.getConnection(),

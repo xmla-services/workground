@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
@@ -32,11 +31,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianProperties;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
-import mondrian.test.PropertySaver5;
 
 /**
  * Test if lookup columns are there after loading them in
@@ -45,17 +43,9 @@ import mondrian.test.PropertySaver5;
  * @author Sherman Wood
  */
 class AggGenTest {
-
-    private PropertySaver5 propSaver;
-
-    @BeforeEach
-    public void beforeEach() {
-        propSaver = new PropertySaver5();
-    }
-
     @AfterEach
     public void afterEach() {
-        propSaver.reset();
+        SystemWideProperties.instance().populateInitial();
     }
 
     @ParameterizedTest
@@ -71,7 +61,6 @@ class AggGenTest {
 
         //Util.addAppender(appender, logger, org.apache.logging.log4j.Level.DEBUG);
 
-        MondrianProperties props = MondrianProperties.instance();
         // If run in Ant and with mondrian.jar, please comment out this line:
         ((TestConfig)context.getConfig()).setAggregateRules("/DefaultRules.xml");
         ((TestConfig)context.getConfig()).setUseAggregates(true);
