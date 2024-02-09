@@ -11,12 +11,11 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianException;
+import static mondrian.resource.MondrianResource.TwoNullsNotSupported;
+
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -25,16 +24,16 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.MondrianException;
 import mondrian.olap.type.NullType;
 import mondrian.rolap.RolapMember;
-
-import static mondrian.resource.MondrianResource.TwoNullsNotSupported;
 
 /**
  * Definition of the MDX <code>&lt;Member&gt : &lt;Member&gt;</code> operator,
@@ -46,7 +45,7 @@ import static mondrian.resource.MondrianResource.TwoNullsNotSupported;
 class RangeFunDef extends AbstractFunctionDefinition {
 
 
-	static FunctionAtom functionAtom = new FunctionAtomR(":", Syntax.Infix);
+	static OperationAtom functionAtom = new InfixOperationAtom(":");
 	static final RangeFunDef instance = new RangeFunDef();
     private RangeFunDef() {
         super(new FunctionMetaDataR(functionAtom,

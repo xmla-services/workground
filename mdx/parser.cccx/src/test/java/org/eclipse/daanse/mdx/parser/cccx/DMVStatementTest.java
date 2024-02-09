@@ -23,6 +23,7 @@ import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.StringLiteral;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
 import org.junit.jupiter.api.Test;
 
 class DMVStatementTest {
@@ -58,8 +59,7 @@ class DMVStatementTest {
         assertThat(clause.table().quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
         assertThat(clause.where()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) clause.where();
-        assertThat(callExpression.name()).isEqualTo("=");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.TERM_INFIX);
+        assertThat(callExpression.operationAtom()).isEqualTo(new InfixOperationAtom("="));
         assertThat(callExpression.expressions()).isNotNull().hasSize(2);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         assertThat(callExpression.expressions().get(1)).isNotNull().isInstanceOf(StringLiteral.class);

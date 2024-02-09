@@ -1,5 +1,16 @@
 package org.eclipse.daanse.query;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
@@ -13,22 +24,13 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.query.base.QueryProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class QueryProviderImplTest {
 
@@ -179,8 +181,7 @@ class QueryProviderImplTest {
             nObjectIdentifier1_2, nObjectIdentifier2_2, nObjectIdentifier3_2));
 
 
-        when(callExpression1.name()).thenReturn("{}");
-        when(callExpression1.type()).thenReturn(CallExpression.Type.BRACES);
+        when(callExpression1.operationAtom()).thenReturn(new BracesOperationAtom());
         when(callExpression1.expressions()).thenAnswer(setupDummyListAnswer(compoundId1, compoundId2));
 
         when(selectQueryAxisClause.nonEmpty()).thenReturn(false);
@@ -211,8 +212,7 @@ class QueryProviderImplTest {
         when(compoundId.objectIdentifiers()).thenAnswer(
             setupDummyListAnswer(nObjectIdentifier1, nObjectIdentifier2, nObjectIdentifier3)
         );
-        when(callExpression.name()).thenReturn("Membmers");
-        when(callExpression.type()).thenReturn(CallExpression.Type.PROPERTY);
+        when(callExpression.operationAtom()).thenReturn(new PlainPropertyOperationAtom("Membmers"));
         when(callExpression.expressions()).thenAnswer(setupDummyListAnswer(compoundId));
 
         when(axis.ordinal()).thenReturn(0);

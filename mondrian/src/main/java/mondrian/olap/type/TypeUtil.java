@@ -41,6 +41,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Util;
@@ -697,7 +698,7 @@ public class TypeUtil {
                 final Expression newArg =
                     validator.validate(
                         new UnresolvedFunCallImpl(
-                            "{}", Syntax.Braces, new Expression[]{arg}), false);
+                            new BracesOperationAtom(), new Expression[]{arg}), false);
                 args.set(ordinal, newArg);
             }
         }

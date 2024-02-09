@@ -17,11 +17,9 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -32,9 +30,10 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.ParametersCheckingFunctionDefinitionResolver;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -56,7 +55,7 @@ import mondrian.olap.type.SetType;
  */
 class AddCalculatedMembersFunDef extends AbstractFunctionDefinition {
 
-	static FunctionAtom functionAtom = new FunctionAtomR("AddCalculatedMembers", Syntax.Function);
+	static OperationAtom functionAtom = new FunctionOperationAtom("AddCalculatedMembers");
 
 	static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Adds calculated members to a set.",
 			"", DataType.SET, new DataType[] { DataType.SET });

@@ -9,6 +9,12 @@
 */
 package mondrian.olap;
 
+import static mondrian.resource.MondrianResource.MdxMemberExpIsSet;
+import static mondrian.resource.MondrianResource.MoreThanOneFunctionMatchesSignature;
+import static mondrian.resource.MondrianResource.NoFunctionMatchesSignature;
+import static mondrian.resource.MondrianResource.UnknownParameter;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +24,6 @@ import java.util.Map;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -31,18 +36,15 @@ import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.function.FunctionPrinter;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.TypeUtil;
 import mondrian.util.ArrayStack;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.MdxMemberExpIsSet;
-import static mondrian.resource.MondrianResource.MoreThanOneFunctionMatchesSignature;
-import static mondrian.resource.MondrianResource.NoFunctionMatchesSignature;
-import static mondrian.resource.MondrianResource.UnknownParameter;
 
 /**
  * Default implementation of {@link org.eclipse.daanse.olap.api.Validator}.
@@ -197,19 +199,17 @@ abstract class ValidatorImpl implements Validator {
     @Override
 	public FunctionDefinition getDef(
         Expression[] args,
-        String funName,
-        Syntax syntax)
+        OperationAtom operationAtom)
     {
         // Compute signature first. It makes debugging easier.
-        final String signature =
-            syntax.getSignature(
-                funName, DataType.UNKNOWN, Expressions.categoriesOf(args));
+		final String signature = FunctionPrinter.getSignature(operationAtom, DataType.UNKNOWN,
+				Expressions.categoriesOf(args));
 
         // Resolve function by its upper-case name first.  If there is only one
         // function with that name, stop immediately.  If there is more than
         // function, use some custom method, which generally involves looking
         // at the type of one of its arguments.
-        List<FunctionResolver> resolvers = funTable.getResolvers(funName, syntax);
+        List<FunctionResolver> resolvers = funTable.getResolvers(operationAtom);
         assert resolvers != null;
 
         final List<FunctionResolver.Conversion> conversionList =
@@ -304,7 +304,7 @@ abstract class ValidatorImpl implements Validator {
         if (parent instanceof Formula formula) {
             return formula.isMember();
         } else if (parent instanceof ResolvedFunCallImpl funCall) {
-            if (funCall.getFunDef().getFunctionMetaData().functionAtom().syntax() == Syntax.Parentheses) {
+            if (funCall.getFunDef().getFunctionMetaData().functionAtom() instanceof ParenthesesOperationAtom) {
                 return requiresExpression(n - 1);
             } else {
                 int k = whichArg(funCall, (Expression) stack.get(n));
@@ -320,8 +320,8 @@ abstract class ValidatorImpl implements Validator {
                 return parameterTypes[k] != DataType.SET;
             }
         } else if (parent instanceof UnresolvedFunCallImpl funCall) {
-            if (funCall.getSyntax() == Syntax.Parentheses
-                || funCall.getFunName().equals("*"))
+            if (funCall.getOperationAtom() instanceof ParenthesesOperationAtom
+                || funCall.getOperationAtom().name().equals("*"))
             {
                 return requiresExpression(n - 1);
             } else {
@@ -358,8 +358,7 @@ abstract class ValidatorImpl implements Validator {
         // expected.
         List<FunctionResolver> resolvers =
             funTable.getResolvers(
-                funCall.getFunName(),
-                funCall.getSyntax());
+                funCall.getOperationAtom());
         for (FunctionResolver resolver2 : resolvers) {
             if (!resolver2.requiresExpression(k)) {
                 // This resolver accepts a set in this argument position,

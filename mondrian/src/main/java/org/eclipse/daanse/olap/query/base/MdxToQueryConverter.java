@@ -47,13 +47,27 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.CellPropertyImpl;
@@ -79,7 +93,7 @@ public class MdxToQueryConverter {
 				if (oi instanceof KeyObjectIdentifier keyObjectIdentifier) {
 					List<? extends NameObjectIdentifier> l = keyObjectIdentifier.nameObjectIdentifiers();
 					if (l != null) {
-                        columns.addAll(l.stream().map(MdxToQueryConverter::convertName).toList());
+						columns.addAll(l.stream().map(MdxToQueryConverter::convertName).toList());
 					}
 				}
 				if (oi instanceof NameObjectIdentifier nameObjectIdentifier) {
@@ -118,16 +132,14 @@ public class MdxToQueryConverter {
 	}
 
 	static List<QueryAxisImpl> convertQueryAxisList(SelectQueryClause selectQueryClause) {
-		if (selectQueryClause instanceof SelectQueryAsteriskClause) {
+		switch (selectQueryClause) {
+		case SelectQueryAsteriskClause _UNNAMED:
 			return selectQueryAsteriskClauseToQueryAxisList();
-		}
-		if (selectQueryClause instanceof SelectQueryAxesClause selectQueryAxesClause) {
+		case SelectQueryAxesClause selectQueryAxesClause:
 			return selectQueryAxesClauseToQueryAxisList(selectQueryAxesClause);
-		}
-		if (selectQueryClause instanceof SelectQueryEmptyClause) {
+		case SelectQueryEmptyClause _UNNAMES:
 			return selectQueryEmptyClauseToQueryAxisList();
 		}
-		return List.of();
 	}
 
 	static List<QueryAxisImpl> selectQueryEmptyClauseToQueryAxisList() {
@@ -154,8 +166,8 @@ public class MdxToQueryConverter {
 
 	static List<IdImpl> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
 		if (selectDimensionPropertyListClause != null && selectDimensionPropertyListClause.properties() != null) {
-			return selectDimensionPropertyListClause.properties().stream().map(MdxToQueryConverter::getExpressionByCompoundId)
-					.toList();
+			return selectDimensionPropertyListClause.properties().stream()
+					.map(MdxToQueryConverter::getExpressionByCompoundId).toList();
 		}
 		return List.of();
 	}
@@ -169,13 +181,13 @@ public class MdxToQueryConverter {
 	}
 
 	static Subcube convertSubcube(SelectSubcubeClause selectSubcubeClause) {
-		if (selectSubcubeClause instanceof SelectSubcubeClauseName selectSubcubeClauseName) {
+
+		switch (selectSubcubeClause) {
+		case SelectSubcubeClauseName selectSubcubeClauseName:
 			return getSubcubeBySelectSubcubeClauseName(selectSubcubeClauseName);
-		}
-		if (selectSubcubeClause instanceof SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
+		case SelectSubcubeClauseStatement selectSubcubeClauseStatement:
 			return getSubcubeBySelectSubcubeClauseStatement(selectSubcubeClauseStatement);
 		}
-		return null;
 	}
 
 	static Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
@@ -212,46 +224,43 @@ public class MdxToQueryConverter {
 	}
 
 	static Expression getExpression(MdxExpression expression) {
-		if (expression instanceof CallExpression callExpression) {
+
+		switch (expression) {
+		case CallExpression callExpression:
 			return getExpressionByCallExpression(callExpression);
-		}
-		if (expression instanceof Literal literal) {
+		case Literal literal:
 			return getExpressionByLiteral(literal);
-		}
-		if (expression instanceof CompoundId compoundId) {
+		case CompoundId compoundId:
 			return getExpressionByCompoundId(compoundId);
-		}
-		if (expression instanceof ObjectIdentifier objectIdentifier) {
+		case ObjectIdentifier objectIdentifier:
 			return getExpressionByObjectIdentifier(objectIdentifier);
 		}
-		return null;
+
 	}
 
 	static Expression getExpressionByObjectIdentifier(ObjectIdentifier objectIdentifier) {
-		if (objectIdentifier instanceof KeyObjectIdentifier keyObjectIdentifier) {
+		switch (objectIdentifier) {
+
+		case KeyObjectIdentifier keyObjectIdentifier:
 			return new IdImpl(getExpressionByKeyObjectIdentifier(keyObjectIdentifier));
-		}
-		if (objectIdentifier instanceof NameObjectIdentifier nameObjectIdentifier) {
+		case NameObjectIdentifier nameObjectIdentifier:
 			return new IdImpl(getExpressionByNameObjectIdentifier(nameObjectIdentifier));
 		}
-		return null;
+
 	}
 
 	static Segment getExpressionByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
-		switch (nameObjectIdentifier.quoting()) {
-		case QUOTED:
-			return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.QUOTED);
-		case UNQUOTED:
-			return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.UNQUOTED);
-		case KEY:
-			return new IdImpl.KeySegment(new IdImpl.NameSegmentImpl(nameObjectIdentifier.name()));
-		}
-		return null;
+		return switch (nameObjectIdentifier.quoting()) {
+		case QUOTED -> new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.QUOTED);
+		case UNQUOTED -> new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.UNQUOTED);
+		case KEY -> new IdImpl.KeySegment(new IdImpl.NameSegmentImpl(nameObjectIdentifier.name()));
+		};
+
 	}
 
 	static List<Segment> getExpressionByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
-		return keyObjectIdentifier.nameObjectIdentifiers().stream().map(MdxToQueryConverter::getExpressionByNameObjectIdentifier)
-				.toList();
+		return keyObjectIdentifier.nameObjectIdentifiers().stream()
+				.map(MdxToQueryConverter::getExpressionByNameObjectIdentifier).toList();
 	}
 
 	static IdImpl getExpressionByCompoundId(CompoundId compoundId) {
@@ -268,78 +277,69 @@ public class MdxToQueryConverter {
 	}
 
 	static Expression getExpressionByLiteral(Literal literal) {
-		if (literal instanceof NumericLiteral numericLiteral) {
+
+		switch (literal) {
+		case NumericLiteral numericLiteral:
 			return NumericLiteralImpl.create(numericLiteral.value());
-		}
-		if (literal instanceof StringLiteral stringLiteral) {
+		case StringLiteral stringLiteral:
 			return StringLiteralImpl.create(stringLiteral.value());
-		}
-		if (literal instanceof NullLiteral) {
+		case NullLiteral _UNNAMED: // TODO: use Unnamed Pattern _
 			return NullLiteralImpl.nullValue;
-		}
-		if (literal instanceof SymbolLiteral symbolLiteral) {
+		case SymbolLiteral symbolLiteral:
 			return SymbolLiteralImpl.create(symbolLiteral.value());
 		}
-		return null;
 	}
 
 	static Expression getExpressionByCallExpression(CallExpression callExpression) {
 		Expression x;
 		Expression y;
 		List<Expression> list;
-		switch (callExpression.type()) {
-		case TERM_INFIX:
+		OperationAtom oa = callExpression.operationAtom();
+
+		switch (oa) {
+		case InfixOperationAtom ioa:
 			x = getExpression(callExpression.expressions().get(0));
 			y = getExpression(callExpression.expressions().get(1));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Infix, new Expression[] { x, y });
-		case TERM_PREFIX:
+			return new UnresolvedFunCallImpl(ioa, new Expression[] { x, y });
+		case PrefixOperationAtom poa:
 			x = getExpression(callExpression.expressions().get(0));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Prefix, new Expression[] { x });
-		case FUNCTION:
+			return new UnresolvedFunCallImpl(poa, new Expression[] { x });
+		case FunctionOperationAtom foa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Function,
-					list.stream().toArray(Expression[]::new));
-		case PROPERTY:
+			return new UnresolvedFunCallImpl(foa, list.stream().toArray(Expression[]::new));
+		case PlainPropertyOperationAtom ppoa:
 			x = getExpression(callExpression.expressions().get(0));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Property, new Expression[] { x });
-		case PROPERTY_QUOTED:
+			return new UnresolvedFunCallImpl(ppoa, new Expression[] { x });
+		case QuotedPropertyOperationAtom qpoa:
 			x = getExpression(callExpression.expressions().get(0));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.QuotedProperty, new Expression[] { x });
-		case PROPERTY_AMPERS_AND_QUOTED:
+			return new UnresolvedFunCallImpl(qpoa, new Expression[] { x });
+		case AmpersandQuotedPropertyOperationAtom aqpoa:
 			x = getExpression(callExpression.expressions().get(0));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.AmpersandQuotedProperty,
-					new Expression[] { x });
-		case METHOD:
+			return new UnresolvedFunCallImpl(aqpoa, new Expression[] { x });
+		case MethodOperationAtom moa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Method,
-					list.stream().toArray(Expression[]::new));
-		case BRACES:
+			return new UnresolvedFunCallImpl(moa, list.stream().toArray(Expression[]::new));
+		case BracesOperationAtom broa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Braces,
-					list.stream().toArray(Expression[]::new));
-		case PARENTHESES:
+			return new UnresolvedFunCallImpl(broa, list.stream().toArray(Expression[]::new));
+		case ParenthesesOperationAtom parenoa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Parentheses,
-					list.stream().toArray(Expression[]::new));
-		case INTERNAL:
+			return new UnresolvedFunCallImpl(parenoa, list.stream().toArray(Expression[]::new));
+		case InternalOperationAtom intoa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Internal,
-					list.stream().toArray(Expression[]::new));
-		case EMPTY:
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Empty, new Expression[] {});
-		case TERM_POSTFIX:
+			return new UnresolvedFunCallImpl(intoa, list.stream().toArray(Expression[]::new));
+		case EmptyOperationAtom eoa:
+			return new UnresolvedFunCallImpl(eoa, new Expression[] {});
+		case PostfixOperationAtom posgos:
 			x = getExpression(callExpression.expressions().get(0));
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Postfix, new Expression[] { x });
-		case TERM_CASE:
+			return new UnresolvedFunCallImpl(posgos, new Expression[] { x });
+		case CaseOperationAtom coa:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Case,
-					list.stream().toArray(Expression[]::new));
-		case CAST:
+			return new UnresolvedFunCallImpl(coa, list.stream().toArray(Expression[]::new));
+		case CastOperationAtom cast:
 			list = getExpressionList(callExpression.expressions());
-			return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Cast,
-					list.stream().toArray(Expression[]::new));
+			return new UnresolvedFunCallImpl(new CastOperationAtom(), list.stream().toArray(Expression[]::new));
 		}
-		return null;
 	}
 
 	static List<Expression> getExpressionList(List<? extends MdxExpression> expressions) {
@@ -364,14 +364,14 @@ public class MdxToQueryConverter {
 		return segmentList;
 	}
 
-	static Segment getIdSegment(ObjectIdentifier oi) {
-		if (oi instanceof KeyObjectIdentifier keyObjectIdentifier) {
+	static Segment getIdSegment(ObjectIdentifier objectIdentifier) {
+
+		switch (objectIdentifier) {
+		case KeyObjectIdentifier keyObjectIdentifier:
 			return new IdImpl.KeySegment(getNameSegmentList(keyObjectIdentifier.nameObjectIdentifiers()));
-		}
-		if (oi instanceof NameObjectIdentifier nameObjectIdentifier) {
+		case NameObjectIdentifier nameObjectIdentifier:
 			return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.UNQUOTED);
 		}
-		return null;
 	}
 
 	static List<NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {

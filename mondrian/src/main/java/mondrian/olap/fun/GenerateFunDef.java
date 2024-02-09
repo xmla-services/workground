@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
@@ -98,8 +99,7 @@ class GenerateFunDef extends AbstractFunctionDefinition {
             } else {
                 //NumericType
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
-                        "str",
-                        org.eclipse.daanse.olap.api.Syntax.Function,
+                		new FunctionOperationAtom("str"),
                         new Expression[] {call.getArg(1)});
                 stringCalc = compiler.compileString(unresolvedFunCall.accept(compiler.getValidator()));
             }

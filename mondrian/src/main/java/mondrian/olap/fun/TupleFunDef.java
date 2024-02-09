@@ -17,10 +17,8 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -31,9 +29,10 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.type.MemberType;
@@ -50,9 +49,8 @@ import mondrian.olap.type.TypeUtil;
  */
 public class TupleFunDef extends AbstractFunctionDefinition {
 	
-	private static final String NAME = "()";
-	private static final Syntax SYNTAX = Syntax.Parentheses;
-	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+
+	static OperationAtom functionAtom = new ParenthesesOperationAtom();
     static final ResolverImpl Resolver = new ResolverImpl();
 
 	private TupleFunDef(FunctionMetaData functionMetaData) {
@@ -126,7 +124,7 @@ public class TupleFunDef extends AbstractFunctionDefinition {
     private static class ResolverImpl extends NoExpressionRequiredFunctionResolver {
 
     	@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
         @Override

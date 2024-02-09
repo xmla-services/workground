@@ -9,6 +9,9 @@
 */
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.ValidMeasureUsingCalculatedMember;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -31,12 +33,10 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
 import mondrian.calc.impl.GenericCalc;
+import mondrian.olap.MondrianException;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapVirtualCubeMeasure;
-
-import static mondrian.resource.MondrianResource.ValidMeasureUsingCalculatedMember;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>ValidMeasure</code> MDX function.

@@ -136,7 +136,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
 	public Object visitResolvedFunCall(ResolvedFunCall funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
-        } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {
+        } else if (MemberExtractingVisitor.blacklist.contains(funCall.getOperationAtom().name())) {
             for (Expression arg : funCall.getArgs()) {
                 arg.accept(new MemberExtractingVisitor(memberSet, call, true));
             }

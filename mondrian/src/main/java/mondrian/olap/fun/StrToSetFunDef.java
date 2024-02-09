@@ -9,17 +9,19 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.MdxFuncArgumentsNum;
+import static mondrian.resource.MondrianResource.MdxFuncNotHier;
+import static mondrian.resource.MondrianResource.NullValue;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -31,24 +33,21 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-
-import static mondrian.resource.MondrianResource.NullValue;
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.MdxFuncArgumentsNum;
-import static mondrian.resource.MondrianResource.MdxFuncNotHier;
 
 /**
  * Definition of the <code>StrToSet</code> MDX builtin function.
@@ -59,8 +58,7 @@ import static mondrian.resource.MondrianResource.MdxFuncNotHier;
 class StrToSetFunDef extends AbstractFunctionDefinition {
 
 	private static final String NAME = "StrToSet";
-	private static final Syntax SYNTAX = Syntax.Function;
-	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+	static OperationAtom functionAtom = new FunctionOperationAtom(NAME);
     static final ResolverImpl Resolver = new ResolverImpl();
 
     private StrToSetFunDef(FunctionMetaData functionMetaData) {
@@ -216,7 +214,7 @@ class StrToSetFunDef extends AbstractFunctionDefinition {
 
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
 

@@ -15,12 +15,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -31,12 +29,13 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
 /**
@@ -46,7 +45,7 @@ import mondrian.olap.Util;
  * @since Mar 23, 2006
  */
 class PropertiesFunDef extends AbstractFunctionDefinition {
-	static FunctionAtom functionAtom = new FunctionAtomR("Properties", Syntax.Method);
+	static OperationAtom functionAtom = new MethodOperationAtom("Properties");
 
     static final ResolverImpl Resolver = new ResolverImpl();
 
@@ -187,7 +186,7 @@ class PropertiesFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
 

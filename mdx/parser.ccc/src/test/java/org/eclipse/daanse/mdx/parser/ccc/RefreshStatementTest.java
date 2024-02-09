@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class RefreshStatementTest {
 

@@ -13,9 +13,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -26,9 +24,10 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.QueryImpl;
@@ -48,7 +47,7 @@ class AsFunDef extends AbstractFunctionDefinition {
     public static final FunctionResolver RESOLVER = new ResolverImpl();
     private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
-    static FunctionAtom functionAtom=new FunctionAtomR("AS", Syntax.Infix);
+    static OperationAtom functionAtom=new InfixOperationAtom("AS");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
     		"Assigns an alias to an expression", "<Expression> AS <Name>",  DataType.SET,
 			new DataType[] { DataType.SET,DataType.NUMERIC });
@@ -105,7 +104,7 @@ class AsFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     }

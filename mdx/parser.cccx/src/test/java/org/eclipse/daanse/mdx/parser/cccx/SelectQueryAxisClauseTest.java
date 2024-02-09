@@ -21,6 +21,8 @@ import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.junit.jupiter.api.Test;
 
 class SelectQueryAxisClauseTest {
@@ -45,8 +47,7 @@ class SelectQueryAxisClauseTest {
 		assertThat(selectQueryAxisClause.nonEmpty()).isFalse();
 		assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression1 = (CallExpression) selectQueryAxisClause.expression();
-		assertThat(callExpression1.name()).isEqualTo("Membmers");
-		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.PROPERTY);
+		assertThat(callExpression1.operationAtom()).isEqualTo(new PlainPropertyOperationAtom("Membmers"));
 		assertThat(callExpression1.expressions()).isNotNull().hasSize(1);
 		assertThat(callExpression1.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
 		CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
@@ -76,8 +77,8 @@ class SelectQueryAxisClauseTest {
 		assertThat(selectQueryAxisClause.nonEmpty()).isFalse();
 		assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression1 = (CallExpression) selectQueryAxisClause.expression();
-		assertThat(callExpression1.name()).isEqualTo("{}");
-		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.BRACES);
+        assertThat(callExpression1.operationAtom()).isEqualTo(new BracesOperationAtom());
+
 		assertThat(callExpression1.expressions()).isNotNull().hasSize(2);
 		assertThat(callExpression1.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
 		CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);

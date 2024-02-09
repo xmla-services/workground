@@ -90,56 +90,54 @@ KeyObjectIdentifier :
 INJECT CompoundId :
     import static PARSER_PACKAGE.PARSER_CLASS.stripQuotes;
     import java.util.List;
+    import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
     implements Expression,
                org.eclipse.daanse.mdx.model.api.expression.CompoundId,
                org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public java.util.List<org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier> objectIdentifiers() {
-       return childrenOfType(org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.class);
-    }
+	public java.util.List<org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier> objectIdentifiers() {
+		return childrenOfType(org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.class);
+	}
 
-    public Type type() {
-        String lastChild = getLastChild().getSource();
-        if (lastChild.startsWith("[&")) return Type.PROPERTY_AMPERS_AND_QUOTED;
-        char firstChar = lastChild.charAt(0);
-        return firstChar == '[' ? Type.PROPERTY_QUOTED : Type.PROPERTY;
-    }
+	@Override
+	public OperationAtom operationAtom() {
+		String lastChild = getLastChild().getSource();
+		if (lastChild.startsWith("[&")) {
+			return new AmpersandQuotedPropertyOperationAtom(stripQuotes(lastChild).substring(1));
+		}
+		char firstChar = lastChild.charAt(0);
+		return firstChar == '[' ? new QuotedPropertyOperationAtom(stripQuotes(lastChild))
+				: new PlainPropertyOperationAtom(lastChild);
+	}
 
-    public String name() {
-        String image = getLastChild().getSource();
-        return switch (type()) {
-           case PROPERTY_AMPERS_AND_QUOTED -> stripQuotes(image).substring(1);
-           case PROPERTY_QUOTED -> stripQuotes(image);
-           default -> image;
-        };
-    }
+	public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
+		if (operationAtom() instanceof PlainPropertyOperationAtom && isChildrenHaveQuoted()) {
+			CompoundId compoundId = new CompoundId();
+			List<ObjectIdentifier> list = childrenOfType(ObjectIdentifier.class);
+			if (!list.isEmpty()) {
+				for (int i = 0; i < list.size() - 1; i++) {
+					compoundId.addChild(list.get(i));
+				}
+			}
+			return List.of(compoundId);
+		} else {
+			return super.expressions();
+		}
+	}
 
-    public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
-        if (Type.PROPERTY.equals(type()) && isChildrenHaveQuoted()) {
-            CompoundId compoundId = new CompoundId();
-            List<ObjectIdentifier> list = childrenOfType(ObjectIdentifier.class);
-            if (!list.isEmpty()) {
-                for (int i = 0; i < list.size() - 1; i++) {
-                    compoundId.addChild(list.get(i));
-                }
-            }
-            return List.of(compoundId);
-        } else {
-            return super.expressions();
-        }
-    }
-
-    private boolean isChildrenHaveQuoted() {
-        for (int i = 0; i < getChildCount(); i++) {
-            Node child = getChild(i);
-            char firstChar = child.getSource().charAt(0);
-            if (firstChar == '[') {
-                return true;
-            }
-        }
-        return false;
-    }
-
+	private boolean isChildrenHaveQuoted() {
+		for (int i = 0; i < getChildCount(); i++) {
+			Node child = getChild(i);
+			char firstChar = child.getSource().charAt(0);
+			if (firstChar == '[') {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 CompoundId :
@@ -172,15 +170,14 @@ AndExpression#void :
 
 INJECT NegatedExpression :
     import java.util.List;
+    import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
     implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-  public String name() {
-    return "NOT";
-  }
-
-  public Type type() {
-     return Type.TERM_PREFIX;
-  }
+	@Override
+	public OperationAtom operationAtom() {
+		return new PrefixOperationAtom("NOT");
+	}
 }
 
 NegatedExpression#(>1) :
@@ -190,37 +187,45 @@ NegatedExpression#(>1) :
 ;
 
 INJECT RelationalExpression :
-   import java.util.List;
+	import java.util.List;
+	import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
    extends BinaryExpression
 {
-   public String name() {
-      Node op = getChild(1);
-      if (op.getType() == IS && op.nextSibling().getType() == EMPTY) {
-         return "IS EMPTY";
-      }
-      else if (op.getType() == NOT) {
-        NodeType nextType = op.nextSibling().getType();
-        if (nextType ==MATCHES) return "NOT MATCHES";
-        if (nextType == IN) return "NOT IN";
-      }
-      return super.name();
-   }
+	public String name() {
+		Node op = getChild(1);
+		if (op.getType() == IS && op.nextSibling().getType() == EMPTY) {
+			return "IS EMPTY";
+		} else if (op.getType() == NOT) {
+			NodeType nextType = op.nextSibling().getType();
+			if (nextType == MATCHES)
+				return "NOT MATCHES";
+			if (nextType == IN)
+				return "NOT IN";
+		}
+		return super.name();
+	}
 
-   public Type type() {
-      Node is = firstChildOfType(IS);
-      if (is != null) {
-         NodeType nextType = is.nextSibling().getType();
-         if (nextType == NULL || nextType == EMPTY) return Type.TERM_POSTFIX;
-      }
-      return Type.TERM_INFIX;
-   }
+	@Override
+	public OperationAtom operationAtom() {
 
-   public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
-      if (type() == Type.TERM_POSTFIX) {
-        return List.of((org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getFirstChild());
-      }
-      return super.expressions();
-   }
+		Node is = firstChildOfType(IS);
+		if (is != null) {
+			NodeType nextType = is.nextSibling().getType();
+			if (nextType == NULL || nextType == EMPTY)
+				return new PostfixOperationAtom(name());
+		}
+
+		return new InfixOperationAtom(name());
+	}
+
+	public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
+		if (operationAtom() instanceof PostfixOperationAtom) {
+			return List.of((org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getFirstChild());
+		}
+		return super.expressions();
+	}
 }
 
 RelationalExpression#(>1) :
@@ -256,15 +261,18 @@ AdditiveExpression#void :
 
 INJECT BinaryExpression :
     import java.util.List;
+    import org.eclipse.daanse.olap.operation.api.OperationAtom;
+    import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
     implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public String name() {
-       return getChild(1).getImage();
-    }
+	String name() {
+		return getChild(1).getImage();
+	}
 
-    public Type type() {
-       return Type.TERM_INFIX;
-    }
+	@Override
+	public OperationAtom operationAtom() {
+		return new InfixOperationAtom(name());
+	}
 
     public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
         return List.of((org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getFirstChild(), (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getLastChild());
@@ -283,15 +291,14 @@ MultiplicativeExpression#void :
 
 INJECT UnaryExpression :
     import java.util.List;
+    import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
     implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public String name() {
-       return getChild(0).getImage();
-    }
-
-    public Type type() {
-       return Type.TERM_PREFIX;
-    }
+	@Override
+	public OperationAtom operationAtom() {
+		return new PrefixOperationAtom(getChild(0).getImage());
+	}
 }
 
 UnaryExpression#(>1) :
@@ -354,61 +361,77 @@ PrimaryPrefix#void :
 ;
 
 INJECT DotName :
+	import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public String name() {
-        return getChild(2) instanceof NameObjectIdentifier noi ? noi.name() : null;
+    private String name() {
+        return getChild(2) instanceof 
+        NameObjectIdentifier noi
+        ? noi.name() : null;
     }
 
-    public Type type() {
-       ObjectIdentifier oi = (ObjectIdentifier) getChild(2);
-       return switch (oi.quoting()) {
-			    case UNQUOTED -> Type.PROPERTY;
-			    case QUOTED -> Type.PROPERTY_QUOTED;
-          default-> Type.PROPERTY_AMPERS_AND_QUOTED;
-			 };
-    }
+	@Override
+	public OperationAtom operationAtom() {
+        ObjectIdentifier oi = (ObjectIdentifier) getChild(2);
+        return switch(oi.quoting()) {
+            case UNQUOTED -> new PlainPropertyOperationAtom(name());
+            case QUOTED -> new QuotedPropertyOperationAtom(name());
+            default -> new AmpersandQuotedPropertyOperationAtom(name());
+        };
+	}
 }
 
 INJECT FunctionCall :
     import java.util.List;
     import java.util.ArrayList;
+    import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public String name() {
-        if (getChild(0) instanceof NameObjectIdentifier noi) return noi.name();
-        if (getChild(0) instanceof CompoundId ci) return ci.getLastChild().toString();
-        return null;
-    }
+ 
+	public String name() {
+		if (getChild(0) instanceof NameObjectIdentifier noi)
+			return noi.name();
+		if (getChild(0) instanceof CompoundId ci)
+			return ci.getLastChild().toString();
+		return null;
+	}
 
-    public Type type() {
-       return getChild(0) instanceof NameObjectIdentifier noi ? Type.FUNCTION : Type.METHOD;
-    }
+	@Override
+	public OperationAtom operationAtom() {
+		return getChild(0) instanceof NameObjectIdentifier noi ? new FunctionOperationAtom(name())
+				: new MethodOperationAtom(name());
+	}
 
-    public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
-        List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.MdxExpression.class);
-        if (Type.METHOD.equals(type())) {
-            List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> res = new ArrayList<>();
-            for (org.eclipse.daanse.mdx.model.api.expression.MdxExpression ex : result) {
-                if (ex instanceof CompoundId compoundId) {
-                    List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> exList = compoundId.expressions();
-                    if (exList.size() > 0 && exList.get(0) instanceof NameObjectIdentifier nameObjectIdentifier) {
-                    	res.add(nameObjectIdentifier);
-                    }
-                } else {
-                	res.add(ex);
-                }
-            }
-            return res;
-        } else {
-            // This is not supposed to include the LHS.
-            result.remove(0);
-            if (result.size() == 1 && result.get(0) instanceof EmptyExpression ) {
-                result.clear();
-            }
-        }
-        return result;
-    }
+	public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
+		List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(
+				org.eclipse.daanse.mdx.model.api.expression.MdxExpression.class);
+		if (operationAtom() instanceof MethodOperationAtom) {
+			List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> res = new ArrayList<>();
+			for (org.eclipse.daanse.mdx.model.api.expression.MdxExpression ex : result) {
+				if (ex instanceof CompoundId compoundId) {
+					List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> exList = compoundId.expressions();
+					if (exList.size() > 0 && exList.get(0) instanceof NameObjectIdentifier nameObjectIdentifier) {
+						res.add(nameObjectIdentifier);
+					}
+				} else {
+					res.add(ex);
+				}
+			}
+			return res;
+		} else {
+			// This is not supposed to include the LHS.
+			result.remove(0);
+			if (result.size() == 1 && result.get(0) instanceof EmptyExpression) {
+				result.clear();
+			}
+		}
+		return result;
+	}
 }
 
 INJECT interface Literal : extends PrimaryExpression
@@ -426,15 +449,14 @@ Literal#interface :
 ;
 
 INJECT CastExpression :
+	import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public String name() {
-      return "CAST";
-    }
-
-    public Type type() {
-      return Type.CAST;
-    }
+	@Override
+	public OperationAtom operationAtom() {
+		return new CastOperationAtom();
+	}
 }
 
 CastExpression :
@@ -447,15 +469,14 @@ CastExpression :
 ;
 
 INJECT ExpressionList :
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
+	import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
   implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-  public String name() {
-    return "()";
-  }
-
-  public Type type() {
-     return Type.PARENTHESES;
-  }
+	@Override
+	public OperationAtom operationAtom() {
+		return new ParenthesesOperationAtom();
+	}
 }
 
 ExpressionList :
@@ -466,15 +487,15 @@ ExpressionList :
 ;
 
 INJECT Tuple :
+	import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
   implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-  public String name() {
-     return "{}";
-  }
+	@Override
+	public OperationAtom operationAtom() {
+		return new BracesOperationAtom();
+	}
 
-  public Type type() {
-     return Type.BRACES;
-  }
 }
 
 Tuple :
@@ -500,15 +521,15 @@ QualifiedIdentifier :
    (<BANG> NameObjectIdentifier)+
 ;
 
-INJECT EmptyExpression : implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
+INJECT EmptyExpression :
+	import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
+ implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-   public String name() {
-      return "";
-   }
-
-   public Type type() {
-      return Type.EMPTY;
-   }
+	@Override
+	public OperationAtom operationAtom() {
+		return new EmptyOperationAtom();
+	}
 }
 
 
@@ -525,15 +546,14 @@ PossiblyEmptyExpression#void :
 ;
 
 INJECT CaseExpression :
+	import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+	import org.eclipse.daanse.olap.operation.api.OperationAtom;
    implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-   public String name() {
-      return (getChild(1) instanceof org.eclipse.daanse.mdx.model.api.expression.MdxExpression) ? "_CaseMatch" : "_CaseTest";
-   }
-
-   public Type type() {
-      return Type.TERM_CASE;
-   }
+    @Override
+    public OperationAtom operationAtom() {
+        return new CaseOperationAtom((getChild(1) instanceof org.eclipse.daanse.mdx.model.api.expression.MdxExpression) ? "_CaseMatch" : "_CaseTest");
+    }
 }
 
 CaseExpression :

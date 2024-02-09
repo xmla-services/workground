@@ -21,16 +21,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Statement;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -44,6 +41,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.core.BasicContextConfig;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,9 +62,11 @@ import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
+import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
+import mondrian.server.Statement;
 
 
 /**
@@ -470,20 +471,9 @@ void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 
 
 			@Override
-			public FunctionAtom functionAtom() {
+			public OperationAtom functionAtom() {
 
-				return new FunctionAtom() {
-
-					@Override
-					public Syntax syntax() {
-						throw new UnsupportedOperationException();
-					}
-
-					@Override
-					public String name() {
-						return "SomeName";
-					}
-				};
+				return new FunctionOperationAtom("SomeName");
 			}
 
 			    @Override
@@ -541,19 +531,8 @@ void testResultLimitWithinCrossjoin_1(TestContext foodMartContext) {
 		    }
 
 			@Override
-			public FunctionAtom functionAtom() {
-				return new FunctionAtom() {
-
-					@Override
-					public Syntax syntax() {
-						return Syntax.Function;
-					}
-
-					@Override
-					public String name() {
-						return "";
-					}
-				};
+			public OperationAtom functionAtom() {
+				return new FunctionOperationAtom("");
 			}
 
 			    @Override

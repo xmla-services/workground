@@ -45,8 +45,8 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Property;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
 

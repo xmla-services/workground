@@ -8,6 +8,9 @@
 */
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.CurrentMemberWithCompoundSlicer;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -27,9 +30,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.MondrianException;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
-
-import static mondrian.resource.MondrianResource.CurrentMemberWithCompoundSlicer;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>&lt;Hierarchy&gt;.CurrentMember</code> MDX builtin function.

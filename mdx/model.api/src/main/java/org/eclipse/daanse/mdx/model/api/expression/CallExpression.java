@@ -15,84 +15,89 @@ package org.eclipse.daanse.mdx.model.api.expression;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+
 public non-sealed interface CallExpression extends MdxExpression {
 
-    String name();
-
-    CallExpression.Type type();
+	
+	OperationAtom operationAtom();
+	
 
     List<? extends MdxExpression> expressions();
 
-    public enum Type {
-
-        /**
-         * FunctionName() FunctionName(arg) FunctionName(args[])
-         */
-        FUNCTION,
-        /**
-         * object.PROPERTY
-         */
-        PROPERTY,
-        /**
-         * object.&PROPERTY
-         */
-        PROPERTY_QUOTED,
-        /**
-         * object.[&PROPERTY]
-         */
-        PROPERTY_AMPERS_AND_QUOTED,
-        /**
-         * object.FunctionName() object.FunctionName(arg) object.FunctionName(args[])
-         */
-        METHOD,
-        /**
-         * { expression } { expression,expression } { [a][a] : [a][c] } { [a][a] ,
-         * [a][b] , [a][c] }
-         */
-        BRACES,
-        /**
-         * ( arg, arg )
-         */
-        PARENTHESES, INTERNAL,
-
-        /**
-         * the 2. argument in this expression FunctionOrMethod(1, ,3)
-         */
-        EMPTY,
-
-        TERM_PREFIX,
-
-        /**
-         *
-         * arg OPERATOR
-         *
-         * arg IS EMPTY //maybe it is an infix
-         */
-        TERM_POSTFIX,
-
-        /**
-         *
-         * arg OPERATOR arg
-         *
-         * 1 < 2 1 AND 2 1 + 2
-         */
-
-        TERM_INFIX,
-
-        /**
-         * CASE
-         *
-         * WHEN
-         *
-         * THEN
-         *
-         * END
-         *
-         */
-        TERM_CASE,
-
-        // may be replaced
-        CAST
-
-    }
+//    String name();
+//
+//    CallExpression.Type type();
+//    public enum Type {
+//
+//        /**
+//         * FunctionName() FunctionName(arg) FunctionName(args[])
+//         */
+//        FUNCTION,
+//        /**
+//         * object.PROPERTY
+//         */
+//        PROPERTY,
+//        /**
+//         * object.&PROPERTY
+//         */
+//        PROPERTY_QUOTED,
+//        /**
+//         * object.[&PROPERTY]
+//         */
+//        PROPERTY_AMPERS_AND_QUOTED,
+//        /**
+//         * object.FunctionName() object.FunctionName(arg) object.FunctionName(args[])
+//         */
+//        METHOD,
+//        /**
+//         * { expression } { expression,expression } { [a][a] : [a][c] } { [a][a] ,
+//         * [a][b] , [a][c] }
+//         */
+//        BRACES,
+//        /**
+//         * ( arg, arg )
+//         */
+//        PARENTHESES, INTERNAL,
+//
+//        /**
+//         * the 2. argument in this expression FunctionOrMethod(1, ,3)
+//         */
+//        EMPTY,
+//
+//        TERM_PREFIX,
+//
+//        /**
+//         *
+//         * arg OPERATOR
+//         *
+//         * arg IS EMPTY //maybe it is an infix
+//         */
+//        TERM_POSTFIX,
+//
+//        /**
+//         *
+//         * arg OPERATOR arg
+//         *
+//         * 1 < 2 1 AND 2 1 + 2
+//         */
+//
+//        TERM_INFIX,
+//
+//        /**
+//         * CASE
+//         *
+//         * WHEN
+//         *
+//         * THEN
+//         *
+//         * END
+//         *
+//         */
+//        TERM_CASE,
+//
+//        // may be replaced
+//        CAST
+//
+//    }
 }

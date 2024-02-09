@@ -14,7 +14,6 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -23,6 +22,7 @@ import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
@@ -120,14 +120,10 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
     }
 
     @Override
-	public String getFunName() {
-        return funDef.getFunctionMetaData().functionAtom().name();
+	public OperationAtom getOperationAtom() {
+        return funDef.getFunctionMetaData().functionAtom();
     }
 
-    @Override
-	public Syntax getSyntax() {
-        return funDef.getFunctionMetaData().functionAtom().syntax();
-    }
 
     @SuppressWarnings("java:S4144")
     @Override
@@ -162,7 +158,7 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
         // referenced
         Expression[] newArgs = new Expression[args.length];
         FunUtil.resolveFunArgs(
-            validator, funDef, args, newArgs, getFunName(), getSyntax());
+            validator, funDef, args, newArgs, getOperationAtom());
 
         return this;
     }

@@ -9,7 +9,8 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianException;
+import static mondrian.resource.MondrianResource.NotANamedSet;
+
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -22,7 +23,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
-import static mondrian.resource.MondrianResource.NotANamedSet;
+import mondrian.olap.MondrianException;
 /**
  * Definition of the <code>&lt;Named Set&gt;.Current</code> MDX
  * builtin function.

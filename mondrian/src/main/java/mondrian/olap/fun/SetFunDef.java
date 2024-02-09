@@ -12,6 +12,9 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.ArgsMustHaveSameHierarchy;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,13 +22,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -44,9 +44,11 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.AbstractIterCalc;
@@ -57,13 +59,11 @@ import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeUtil;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.ArgsMustHaveSameHierarchy;
 
 /**
  * <code>SetFunDef</code> implements the 'set' function (whose syntax is the
@@ -75,9 +75,8 @@ import static mondrian.resource.MondrianResource.ArgsMustHaveSameHierarchy;
 public class SetFunDef extends AbstractFunctionDefinition {
 
 
-	public static final String NAME = "{}";
-	public static final Syntax SYNTAX = Syntax.Braces;
-	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+
+	static OperationAtom functionAtom = new BracesOperationAtom();
 	public static final String SIGNATURE = "{<Member> [, <Member>...]}";
 	public static final String DESCRIPTION = "Brace operator constructs a set.";
 	static final ResolverImpl Resolver = new ResolverImpl();
@@ -214,8 +213,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
                 };
             } else if (type instanceof mondrian.olap.type.LevelType) {
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
-                        "Members",
-                        org.eclipse.daanse.olap.api.Syntax.Property,
+                		new PlainPropertyOperationAtom("Members"),
                         new Expression[] {arg});
                 final TupleListCalc tupleListCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
                 return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
@@ -528,7 +526,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     }

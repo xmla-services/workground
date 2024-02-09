@@ -14,11 +14,21 @@
 
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -26,10 +36,12 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.Schema;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.result.Property;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
@@ -95,18 +107,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MDSchemaDiscoverServiceTest {
@@ -373,13 +373,11 @@ class MDSchemaDiscoverServiceTest {
         MdSchemaFunctionsRequest request = mock(MdSchemaFunctionsRequest.class);
         MdSchemaFunctionsRestrictions restrictions = mock(MdSchemaFunctionsRestrictions.class);
         FunctionTable functionTable = mock(FunctionTable.class);
-        FunctionAtom functionAtom1 = mock(FunctionAtom.class);
-        FunctionAtom functionAtom2 = mock(FunctionAtom.class);
+        OperationAtom functionAtom1 = mock(FunctionOperationAtom.class);
+        OperationAtom functionAtom2 = mock(MethodOperationAtom.class);
         when(functionAtom1.name()).thenReturn("functionAtom1Name");
-        when(functionAtom1.syntax()).thenReturn(Syntax.Function);
 
         when(functionAtom2.name()).thenReturn("functionAtom2Name");
-        when(functionAtom2.syntax()).thenReturn(Syntax.Method);
 
         FunctionMetaData functionMetaData1 = mock(FunctionMetaData.class);
         FunctionMetaData functionMetaData2 = mock(FunctionMetaData.class);

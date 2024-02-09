@@ -64,6 +64,7 @@ import org.eclipse.daanse.olap.calc.base.type.level.UnknownToLevelCalc;
 import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.SymbolLiteralImpl;
@@ -599,9 +600,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
         if (type instanceof ScalarType) {
             if (!defaultExp.getType().equals(type)) {
                 defaultExp =
-                        new UnresolvedFunCallImpl(
-                                "Cast",
-                                Syntax.Cast,
+                        new UnresolvedFunCallImpl(new CastOperationAtom(),
                                 new Expression[] {
                                         defaultExp,
                                     SymbolLiteralImpl.create(

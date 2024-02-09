@@ -52,6 +52,7 @@
 	org.eclipse.daanse.db.statistics.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.operation.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\

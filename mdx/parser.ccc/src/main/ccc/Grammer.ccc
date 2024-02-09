@@ -108,6 +108,14 @@ import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
 import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
 import org.eclipse.daanse.mdx.model.record.UpdateStatementR;
 import org.eclipse.daanse.mdx.model.record.DMVStatementR;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
 {
 
 }
@@ -769,7 +777,7 @@ MdxExpression parseExpression :
     < AS > objectIdentifier = parseIdentifier
     {
       CompoundId compundId = new CompoundIdR(List.of(objectIdentifier));
-      expression = new CallExpressionR("AS", CallExpression.Type.TERM_INFIX, List.of(
+      expression = new CallExpressionR(new InfixOperationAtom("AS"), List.of(
       expression, compundId
       )
       );
@@ -791,7 +799,7 @@ MdxExpression parseExpressionOrEmpty :
   }
 | /* empty */
   {
-    return new CallExpressionR("", CallExpression.Type.EMPTY, List.of()
+    return new CallExpressionR(new EmptyOperationAtom(), List.of()
     );
   }
 ;
@@ -977,14 +985,14 @@ MdxExpression parseUnaliasedExpression :
   (
     < OR > y = parseTerm5
     {
-      x = new CallExpressionR("OR", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("OR"), List.of(
       x, y
       )
       );
     }
   | < XOR > y = parseTerm5
     {
-      x = new CallExpressionR("XOR", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("XOR"), List.of(
       x, y
       )
       );
@@ -993,7 +1001,7 @@ MdxExpression parseUnaliasedExpression :
     // range 'm1 : m2' yields set of members
     < COLON > y = parseTerm5
     {
-      x = new CallExpressionR(":", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom(":"), List.of(
       x, y
       )
       );
@@ -1014,7 +1022,7 @@ MdxExpression parseTerm5 :
   (
     < AND > y = parseTerm4
     {
-      x = new CallExpressionR("AND", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("AND"), List.of(
       x, y
       )
       );
@@ -1036,7 +1044,7 @@ MdxExpression parseTerm4 :
   }
 | < NOT > x = parseTerm4
   {
-    return new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX, List.of(
+    return new CallExpressionR(new PrefixOperationAtom("NOT"), List.of(
     x
     )
     );
@@ -1081,7 +1089,7 @@ MdxExpression parseTerm3 :
     )
     y = parseTerm2
     {
-      x = new CallExpressionR(op.getImage(), CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom(op.getImage()), List.of(
       x, y
       )
       );
@@ -1092,7 +1100,7 @@ MdxExpression parseTerm3 :
     SCAN 2 =>
     < IS > < NULL >
     {
-      x = new CallExpressionR("IS NULL", CallExpression.Type.TERM_POSTFIX, List.of(
+      x = new CallExpressionR(new PostfixOperationAtom("IS NULL"), List.of(
       x
       )
       );
@@ -1102,19 +1110,18 @@ MdxExpression parseTerm3 :
     SCAN 2 =>
     < IS > y = parseTerm2
     {
-      x = new CallExpressionR("IS", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("IS"), List.of(
       x, y
       )
       );
     }
   | < IS > < EMPTY >
     {
-      x = new CallExpressionR(
-      "IS EMPTY", CallExpression.Type.TERM_POSTFIX, List.of(x));
+      x = new CallExpressionR(new PostfixOperationAtom("IS NULL"), List.of(x));
     }
   | < MATCHES > y = parseTerm2
     {
-      x = new CallExpressionR("MATCHES", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("MATCHES"), List.of(
       x, y
       )
       );
@@ -1122,10 +1129,8 @@ MdxExpression parseTerm3 :
   | SCAN 2 =>
     < NOT > < MATCHES > y = parseTerm2
     {
-      x = new CallExpressionR(
-      "NOT", CallExpression.Type.TERM_PREFIX, List.of(
-      new CallExpressionR(
-      "MATCHES", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new PrefixOperationAtom("NOT"), List.of(
+      new CallExpressionR(new InfixOperationAtom("MATCHES"), List.of(
       x, y
       )
       )
@@ -1134,17 +1139,16 @@ MdxExpression parseTerm3 :
     }
   | < IN > y = parseTerm2
     {
-      x = new CallExpressionR("IN", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("IN"), List.of(
       x, y
       )
       );
     }
   | < NOT > < IN > y = parseTerm2
     {
-      x = new CallExpressionR(
-      "NOT", CallExpression.Type.TERM_PREFIX, List.of(
+      x = new CallExpressionR(new PrefixOperationAtom("NOT"), List.of(
       new CallExpressionR(
-      "IN", CallExpression.Type.TERM_INFIX, List.of(
+      new InfixOperationAtom("IN"), List.of(
       x, y
       )
       )
@@ -1167,21 +1171,21 @@ MdxExpression parseTerm2 :
   (
     < PLUS > y = parseTerm
     {
-      x = new CallExpressionR("+", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("+"), List.of(
       x, y
       )
       );
     }
   | < MINUS > y = parseTerm
     {
-      x = new CallExpressionR("-", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("-"), List.of(
       x, y
       )
       );
     }
   | < CONCAT > y = parseTerm
     {
-      x = new CallExpressionR("||", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("||"), List.of(
       x, y
       )
       );
@@ -1202,14 +1206,14 @@ MdxExpression parseTerm :
   (
     < ASTERISK > y = parseFactor
     {
-      x = new CallExpressionR("*", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("*"), List.of(
       x, y
       )
       );
     }
   | < SOLIDUS > y = parseFactor
     {
-      x = new CallExpressionR("/", CallExpression.Type.TERM_INFIX, List.of(
+      x = new CallExpressionR(new InfixOperationAtom("/"), List.of(
       x, y
       )
       );
@@ -1235,14 +1239,14 @@ MdxExpression parseFactor :
   }
 | < MINUS > p = parsePrimary
   {
-    return new CallExpressionR("-", CallExpression.Type.TERM_PREFIX, List.of(
+    return new CallExpressionR(new PrefixOperationAtom("-"), List.of(
     p
     )
     );
   }
 | < EXISTING > p = parsePrimary
   {
-    return new CallExpressionR("Existing", CallExpression.Type.TERM_PREFIX, List.of(
+    return new CallExpressionR(new PrefixOperationAtom("Existing"), List.of(
     p
     )
     );
@@ -1324,8 +1328,7 @@ MdxExpression parseAtom :
 | < CAST > < LPAREN > expression = parseUnaliasedExpression
   < AS > nameObjectIdentifier = parseNameObjectIdentifier < RPAREN >
   {
-    return new CallExpressionR(
-    "CAST", CallExpression.Type.CAST, List.of(
+    return new CallExpressionR(new CastOperationAtom(), List.of(
     expression,
     new SymbolLiteralR(nameObjectIdentifier.name())
     )
@@ -1335,8 +1338,7 @@ MdxExpression parseAtom :
   {
     // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
     // are just expressions.
-    return new CallExpressionR(
-    "()", CallExpression.Type.PARENTHESES, expressions);
+    return new CallExpressionR(new ParenthesesOperationAtom(), expressions);
   }
 |
   // set built from sets/tuples
@@ -1351,8 +1353,7 @@ MdxExpression parseAtom :
   )
   < RBRACE >
   {
-    return new CallExpressionR(
-    "{}", CallExpression.Type.BRACES, expressions);
+    return new CallExpressionR(new BracesOperationAtom(), expressions);
   }
 | expression = parseCaseExpression
   {
@@ -1425,12 +1426,12 @@ MdxExpression parseCaseExpression :
     if (match)
     {
       return new CallExpressionR(
-      "_CaseMatch", CallExpression.Type.TERM_CASE, expressions);
+      new CaseOperationAtom("_CaseMatch"), expressions);
     }
     else
     {
       return new CallExpressionR(
-      "_CaseTest", CallExpression.Type.TERM_CASE, expressions);
+      new CaseOperationAtom("_CaseTest"), expressions);
     }
   }
 ;

@@ -41,6 +41,7 @@ import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 /**
  * Provides context necessary to resolve identifiers to objects, function
@@ -139,8 +140,7 @@ public interface Validator {
      */
     FunctionDefinition getDef(
         Expression[] args,
-        String name,
-        Syntax syntax);
+        OperationAtom operationAtom );
 
     /**
      * Whether to resolve function name and arguments to a function definition

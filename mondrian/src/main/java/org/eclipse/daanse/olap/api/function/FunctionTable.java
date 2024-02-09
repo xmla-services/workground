@@ -33,6 +33,7 @@ package org.eclipse.daanse.olap.api.function;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 /**
  * List of all MDX functions.
@@ -70,17 +71,15 @@ public interface FunctionTable {
      */
     List<FunctionResolver> getResolvers();
 
+    
     /**
      * Returns a list of resolvers for an operator with a given name and syntax.
      * Never returns null; if there are no resolvers, returns the empty list.
      *
-     * @param name Operator name
-     * @param syntax Operator syntax
-     * @return List of resolvers for the operator
+     * @param operationAtom OperationAtom
+     * @return List of resolvers for the OperationAtom
      */
-    List<FunctionResolver> getResolvers(
-        String name,
-        Syntax syntax);
+	List<FunctionResolver> getResolvers(OperationAtom operationAtom);
 
 
     /**

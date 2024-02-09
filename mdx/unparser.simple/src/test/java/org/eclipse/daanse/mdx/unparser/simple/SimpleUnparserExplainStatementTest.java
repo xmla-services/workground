@@ -21,7 +21,6 @@ import java.util.Optional;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
 import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
@@ -34,6 +33,7 @@ import org.eclipse.daanse.mdx.model.record.select.AxisR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 import org.junit.jupiter.api.Test;
 
 class SimpleUnparserExplainStatementTest {
@@ -45,8 +45,7 @@ class SimpleUnparserExplainStatementTest {
 
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
-                new CallExpressionR("{}",
-                    CallExpression.Type.BRACES,
+                new CallExpressionR(new BracesOperationAtom(),
                     List.of(
                         new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -73,8 +72,7 @@ class SimpleUnparserExplainStatementTest {
 
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
-                new CallExpressionR("{}",
-                    CallExpression.Type.BRACES,
+                new CallExpressionR(new BracesOperationAtom(),
                     List.of(
                         new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),

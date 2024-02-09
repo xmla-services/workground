@@ -15,10 +15,11 @@
 package org.eclipse.daanse.olap.api.function;
 
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 public interface FunctionMetaData {
 
-	FunctionAtom functionAtom();
+	OperationAtom functionAtom();
 
 	String description();
 

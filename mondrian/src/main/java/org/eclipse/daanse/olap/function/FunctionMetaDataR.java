@@ -15,12 +15,10 @@
 package org.eclipse.daanse.olap.function;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
-public record FunctionMetaDataR(FunctionAtom functionAtom, String description, String signature, 
+public record FunctionMetaDataR(OperationAtom functionAtom, String description, String signature,
 		DataType returnCategory, DataType[] parameterDataTypes) implements FunctionMetaData {
-
-
 
 }

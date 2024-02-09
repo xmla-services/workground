@@ -24,6 +24,7 @@ import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -46,8 +47,7 @@ class SelectSlicerAxisClauseTest {
 		SelectSlicerAxisClause selectSlicerAxisClause = selectSlicerAxisClauseOption.get();
 		assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) selectSlicerAxisClause.expression();
-		assertThat(callExpression.name()).isEqualTo("=");
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.TERM_INFIX);
+		assertThat(callExpression.operationAtom()).isEqualTo(new InfixOperationAtom("="));
 		assertThat(callExpression.expressions()).isNotNull().hasSize(2);
 		assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
 		assertThat(callExpression.expressions().get(1)).isInstanceOf(CompoundId.class);

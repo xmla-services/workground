@@ -131,6 +131,8 @@ import org.eclipse.daanse.olap.impl.IdentifierParser;
 import org.eclipse.daanse.olap.impl.IdentifierSegment;
 import org.eclipse.daanse.olap.impl.KeySegment;
 import org.eclipse.daanse.olap.impl.NameSegment;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -863,8 +865,8 @@ public class Util {
                     && propertyName != null
                     && isValidProperty(propertyName, member.getLevel()))
             {
-                return new UnresolvedFunCallImpl(
-                        propertyName, Syntax.Property, new Expression[] {
+                return new UnresolvedFunCallImpl( new PlainPropertyOperationAtom(propertyName)
+                        , new Expression[] {
                         createExpr(member)});
             }
             final Level level =
@@ -875,7 +877,7 @@ public class Util {
                     && isValidProperty(propertyName, level))
             {
                 return new UnresolvedFunCallImpl(
-                        propertyName, Syntax.Property, new Expression[] {
+                		new PlainPropertyOperationAtom(propertyName), new Expression[] {
                         createExpr(level)});
             }
         }
@@ -2780,11 +2782,11 @@ public class Util {
             }
 
             @Override
-			public FunctionDefinition getDef(Expression[] args, String name, Syntax syntax) {
+			public FunctionDefinition getDef(Expression[] args, OperationAtom operationAtom) {
                 // Very simple resolution. Assumes that there is precisely
                 // one resolver (i.e. no overloading) and no argument
                 // conversions are necessary.
-                List<FunctionResolver> resolvers = funTable.getResolvers(name, syntax);
+                List<FunctionResolver> resolvers = funTable.getResolvers(operationAtom);
                 final FunctionResolver resolver = resolvers.get(0);
                 final List<FunctionResolver.Conversion> conversionList =
                     new ArrayList<>();

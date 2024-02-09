@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 
 import mondrian.olap.NumericLiteralImpl;
 
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -95,7 +95,7 @@ class TopCountNativeEvaluatorTest {
     private FunctionDefinition mockFunctionDef() {
         FunctionDefinition topCountFunMock = mock(FunctionDefinition.class);
         FunctionMetaData functionInformation = mock(FunctionMetaData.class);
-        FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
+        OperationAtom functionAtom = Mockito.mock(OperationAtom.class);
 
         when(topCountFunMock.getFunctionMetaData()).thenReturn(functionInformation);
         when(functionInformation.functionAtom()).thenReturn(functionAtom);

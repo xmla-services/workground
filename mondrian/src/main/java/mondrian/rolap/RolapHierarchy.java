@@ -65,6 +65,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -1125,8 +1126,7 @@ public class RolapHierarchy extends HierarchyBase {
     synchronized Expression getAggregateChildrenExpression() {
         if (aggregateChildrenExpression == null) {
             UnresolvedFunCallImpl fc = new UnresolvedFunCallImpl(
-                "$AggregateChildren",
-                Syntax.Internal,
+            		new InternalOperationAtom("$AggregateChildren"),
                 new Expression[] {new HierarchyExpressionImpl(this)});
             Validator validator =
                     Util.createSimpleValidator(BuiltinFunTable.instance());

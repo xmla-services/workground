@@ -42,6 +42,7 @@
 	org.eclipse.daanse.mdx.unparser.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.unparser.simple;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.unparser.simple-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.operation.api;version='[0.0.1,0.0.2)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\
 	org.objenesis;version='[3.3.0,3.3.1)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\

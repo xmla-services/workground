@@ -26,6 +26,9 @@ import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -51,15 +54,13 @@ class SelectWithClauseTest {
 
 			assertThat(createSetBodyClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 			CallExpression callExpression = (CallExpression) createSetBodyClause.expression();
-			assertThat(callExpression.name()).isEqualTo("Union");
-			assertThat(callExpression.type()).isEqualTo(CallExpression.Type.FUNCTION);
+			assertThat(callExpression.operationAtom()).isEqualTo(new FunctionOperationAtom("Union"));
 			assertThat(callExpression.expressions()).hasSize(2);
 			assertThat(callExpression.expressions().get(0)).isInstanceOf(CallExpression.class);
 			assertThat(callExpression.expressions().get(1)).isInstanceOf(CallExpression.class);
 			CallExpression callExpression1 = (CallExpression) callExpression.expressions().get(0);
 			CallExpression callExpression2 = (CallExpression) callExpression.expressions().get(1);
-			assertThat(callExpression1.name()).isEqualTo("Members");
-			assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.PROPERTY);
+			assertThat(callExpression1.operationAtom()).isEqualTo(new PlainPropertyOperationAtom("Members"));
 			assertThat(callExpression1.expressions()).hasSize(1);
 			assertThat(callExpression1.expressions().get(0)).isInstanceOf(CompoundId.class);
 			CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
@@ -68,8 +69,7 @@ class SelectWithClauseTest {
                 compoundId1.objectIdentifiers(), 0, "Customer", ObjectIdentifier.Quoting.QUOTED);
             checkNameObjectIdentifiers(
                 compoundId1.objectIdentifiers(), 1, "Gender", ObjectIdentifier.Quoting.QUOTED);
-			assertThat(callExpression2.name()).isEqualTo("{}");
-			assertThat(callExpression2.type()).isEqualTo(CallExpression.Type.BRACES);
+			assertThat(callExpression2.operationAtom()).isEqualTo(new BracesOperationAtom());
 			assertThat(callExpression2.expressions()).hasSize(1);
 			CompoundId compoundId2 = (CompoundId) callExpression2.expressions().get(0);
 			assertThat(compoundId2.objectIdentifiers()).hasSize(3);

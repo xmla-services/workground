@@ -13,15 +13,16 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.CannotDeduceTypeOfSet;
+import static mondrian.resource.MondrianResource.DescendantsAppliedToSetOfTuples;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -36,12 +37,14 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.EmptyType;
@@ -49,9 +52,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
-
-import static mondrian.resource.MondrianResource.CannotDeduceTypeOfSet;
-import static mondrian.resource.MondrianResource.DescendantsAppliedToSetOfTuples;
 
 /**
  * Definition of the <code>Descendants</code> MDX function.
@@ -105,9 +105,8 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       //   Generate(<set>, Descendants(<dimension>.CurrentMember, <args>))
       Expression[] descendantsArgs = call.getArgs().clone();
       descendantsArgs[ 0 ] =
-        new UnresolvedFunCallImpl(
-          "CurrentMember",
-          Syntax.Property,
+        new UnresolvedFunCallImpl(new PlainPropertyOperationAtom(
+          "CurrentMember"),
           new Expression[] {
             new HierarchyExpressionImpl( hierarchy )
           } );

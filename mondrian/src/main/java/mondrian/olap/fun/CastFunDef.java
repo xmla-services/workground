@@ -9,15 +9,15 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.CastInvalidType;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.Date;
 import java.util.List;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -27,17 +27,16 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
-
-import static mondrian.resource.MondrianResource.CastInvalidType;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * Definition of the <code>CAST</code> MDX operator.
@@ -60,7 +59,7 @@ import static mondrian.resource.MondrianResource.message;
  */
 public class CastFunDef extends AbstractFunctionDefinition {
 
-	static final FunctionAtom functionAtom = new FunctionAtomR("Cast", Syntax.Cast);
+	static final OperationAtom functionAtom = new CastOperationAtom();
 	static final NoExpressionRequiredFunctionResolver Resolver = new ResolverImpl();
 
     private CastFunDef(FunctionMetaData functionMetaData) {
@@ -175,7 +174,7 @@ public class CastFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     }

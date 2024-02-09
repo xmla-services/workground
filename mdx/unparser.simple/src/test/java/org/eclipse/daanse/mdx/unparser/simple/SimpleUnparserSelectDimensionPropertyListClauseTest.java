@@ -13,16 +13,16 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserSelectDimensionPropertyListClauseTest {
 

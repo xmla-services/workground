@@ -14,26 +14,23 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
 
 
 public abstract class MultiResolver implements FunctionResolver {
-    private final String name;
+    private final OperationAtom operationAtom;
     private final String signature;
     private final String description;
     private final String[] signatures;
-    private final Syntax syntax;
 
 
     protected MultiResolver(
@@ -42,14 +39,15 @@ public abstract class MultiResolver implements FunctionResolver {
         String description,
         String[] signatures)
     {
-        this.name = name;
+   
         this.signature = signature;
         this.description = description;
         this.signatures = signatures;
         Util.assertTrue(signatures.length > 0);
-        this.syntax = FunUtil.decodeSyntacticType(signatures[0]);
+        this.operationAtom = FunUtil.decodeSyntacticTypeToOp(signatures[0],name);
         for (int i = 1; i < signatures.length; i++) {
-            Util.assertTrue(FunUtil.decodeSyntacticType(signatures[i]) == syntax);
+        	OperationAtom iOoperationAtom 	=FunUtil.decodeSyntacticTypeToOp(signatures[i],name);
+            Util.assertTrue(operationAtom.getClass().equals(iOoperationAtom.getClass()));
         }
     }
 
@@ -74,8 +72,8 @@ outer:
                 }
             }
             DataType returnType = FunUtil.decodeReturnCategory(signature);
-            FunctionAtom functionAtom=new FunctionAtomR(name,syntax);
-			FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, description, signature,  returnType,
+
+			FunctionMetaData functionMetaData = new FunctionMetaDataR(operationAtom, description, signature,  returnType,
 					Expressions.categoriesOf(args));
             return createFunDef(args, functionMetaData);
         }
@@ -96,9 +94,9 @@ outer:
     }
 
 	@Override
-	public FunctionAtom getFunctionAtom() {
+	public OperationAtom getFunctionAtom() {
 
-		return new FunctionAtomR(name, syntax);
+		return operationAtom;
 	}
     protected abstract FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData);
 }

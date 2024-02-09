@@ -30,6 +30,9 @@ import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -58,13 +61,13 @@ class SimpleUnparserSelectWithClauseTest {
                 ObjectIdentifier.Quoting.QUOTED);
             KeyObjectIdentifier keyObjectIdentifier = new KeyObjectIdentifierR(List.of(nameObjectIdentifier3));
 
-            CallExpression callExpression1 = new CallExpressionR("Members", CallExpression.Type.PROPERTY,
+            CallExpression callExpression1 = new CallExpressionR(new PlainPropertyOperationAtom("Members"),
                 List.of(new CompoundIdR(List.of(nameObjectIdentifier11, nameObjectIdentifier12))));
 
-            CallExpression callExpression2 = new CallExpressionR("{}", CallExpression.Type.BRACES,
+            CallExpression callExpression2 = new CallExpressionR(new BracesOperationAtom(),
                 List.of(new CompoundIdR(List.of(nameObjectIdentifier21, nameObjectIdentifier22, keyObjectIdentifier))));
 
-            CallExpression callExpression = new CallExpressionR("Union", CallExpression.Type.FUNCTION,
+            CallExpression callExpression = new CallExpressionR(new FunctionOperationAtom("Union"),
                 List.of(callExpression1, callExpression2));
             CreateSetBodyClause createSetBodyClause =
                 new CreateSetBodyClauseR(new CompoundIdR(List.of(nameObjectIdentifier)), callExpression);

@@ -9,7 +9,9 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianException;
+import static mondrian.resource.MondrianResource.FunctionMbrAndLevelHierarchyMismatch;
+import static mondrian.resource.MondrianResource.message;
+
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -28,13 +30,11 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
+import mondrian.olap.MondrianException;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.MemberType;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.FunctionMbrAndLevelHierarchyMismatch;
 
 /**
  * Definition of the <code>ParallelPeriod</code> MDX function.

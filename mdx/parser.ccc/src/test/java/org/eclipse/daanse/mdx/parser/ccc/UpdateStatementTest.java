@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
@@ -20,11 +24,8 @@ import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.Allocation;
 import org.eclipse.daanse.mdx.model.api.select.UpdateClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.math.BigDecimal;
 
 class UpdateStatementTest {
 
@@ -47,8 +48,7 @@ class UpdateStatementTest {
         CallExpression callExpression = (CallExpression)updateClause1.tupleExp();
         NumericLiteral numericLiteral = (NumericLiteral)updateClause1.valueExp();
         assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(55));
-        assertThat(callExpression.name()).isEqualTo("()");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PARENTHESES);
+        assertThat(callExpression.operationAtom()).isEqualTo(new ParenthesesOperationAtom());
         assertThat(callExpression.expressions()).hasSize(2);
         assertThat(updateClause2.allocation()).isEqualTo(Allocation.USE_WEIGHTED_ALLOCATION);
         assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);
@@ -75,8 +75,7 @@ class UpdateStatementTest {
         CallExpression callExpression = (CallExpression)updateClause1.tupleExp();
         NumericLiteral numericLiteral = (NumericLiteral)updateClause1.valueExp();
         assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(55));
-        assertThat(callExpression.name()).isEqualTo("()");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PARENTHESES);
+        assertThat(callExpression.operationAtom()).isEqualTo(new ParenthesesOperationAtom());
         assertThat(callExpression.expressions()).hasSize(2);
         assertThat(updateClause2.allocation()).isEqualTo(Allocation.USE_WEIGHTED_ALLOCATION);
         assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);

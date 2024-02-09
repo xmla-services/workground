@@ -73,6 +73,10 @@ import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eclipse.daanse.olap.impl.IdentifierParser;
 import org.eclipse.daanse.olap.impl.IdentifierSegment;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
@@ -598,9 +602,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 org.eclipse.daanse.olap.api.element.Level[] levels = hierarchy.getLevels();
                 org.eclipse.daanse.olap.api.element.Level lastLevel = levels[levels.length - 1];
                 LevelExpressionImpl levelExpr = new LevelExpressionImpl(lastLevel);
-                Expression levelMembers = new UnresolvedFunCallImpl(
-                  "AllMembers",
-                  Syntax.Property,
+                Expression levelMembers = new UnresolvedFunCallImpl( new PlainPropertyOperationAtom("AllMembers"),
                   new Expression[] {levelExpr}
                 );
 
@@ -626,11 +628,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     }
                     Expression axisInBracesExp =
                             new UnresolvedFunCallImpl(
-                                    "{}", Syntax.Braces, new Expression[] {hierarchyExp});
+                                    new BracesOperationAtom(), new Expression[] {hierarchyExp});
                     if(hierarchyExps.size() > 1) {
                         resultExp = new UnresolvedFunCallImpl(
-                                "Exists",
-                                Syntax.Function,
+                        		new FunctionOperationAtom("Exists"),
                                 new Expression[] {prevExp, axisInBracesExp}
                         );
                     }
@@ -642,14 +643,12 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 if(resultExp != null) {
                     HierarchyExpressionImpl hierarchyExpr = new HierarchyExpressionImpl(hierarchy);
                     Expression hierarchyAllMembersExp = new UnresolvedFunCallImpl(
-                            "AllMembers",
-                            Syntax.Property,
+                    		new PlainPropertyOperationAtom("AllMembers"),
                             new Expression[] {hierarchyExpr}
                     );
 
                     resultExp = new UnresolvedFunCallImpl(
-                            "Exists",
-                            Syntax.Function,
+                    		new FunctionOperationAtom("Exists"),
                             new Expression[] {hierarchyAllMembersExp, resultExp}
                     );
 
@@ -2205,7 +2204,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             {
                 newExpr =
                     new UnresolvedFunCallImpl(
-                        "{}", Syntax.Braces, new Expression[] {newExpr})
+                        new BracesOperationAtom(), new Expression[] {newExpr})
                     .accept(validator);
             }
             this.expr = newExpr;
@@ -2278,7 +2277,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public Object visitUnresolvedFunCall(UnresolvedFunCall call) {
-            if (call.getFunName().equals("Parameter")) {
+            if (call.getOperationAtom().name().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
                     ParameterFunDef.getParameterName(call.getArgs());
@@ -2344,8 +2343,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param exp Expression that may be an "AS"
          */
         private void registerAlias(QueryComponent parent, Expression exp) {
-            if (exp instanceof FunctionCall call2 && call2.getSyntax() == Syntax.Infix
-                && call2.getFunName().equals("AS")) {
+            if (exp instanceof FunctionCall call2 && call2.getOperationAtom() instanceof InfixOperationAtom
+                && call2.getOperationAtom().name().equals("AS")) {
                 // Scope is the function enclosing the 'AS' expression.
                 // For example, in
                 //    Filter(Time.Children AS s, x > y)

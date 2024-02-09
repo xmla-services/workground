@@ -13,6 +13,14 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkAxis;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
@@ -22,15 +30,9 @@ import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkAxis;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SelectStatementTest {
 
@@ -74,8 +76,7 @@ class SelectStatementTest {
         assertThat(selectQueryAxisClause2.selectDimensionPropertyListClause()).isNull();
         assertThat(selectQueryAxisClause2.expression()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) selectQueryAxisClause2.expression();
-        assertThat(callExpression.name()).isEqualTo("{}");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
+        assertThat(callExpression.operationAtom()).isEqualTo(new BracesOperationAtom());
         assertThat(callExpression.expressions()).hasSize(2);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         assertThat(callExpression.expressions().get(1)).isNotNull().isInstanceOf(CompoundId.class);
@@ -101,8 +102,7 @@ class SelectStatementTest {
         assertThat(selectQueryAxisClause.selectDimensionPropertyListClause()).isNull();
         assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) selectQueryAxisClause.expression();
-        assertThat(callExpression.name()).isEqualTo("Membmers");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PROPERTY);
+        assertThat(callExpression.operationAtom()).isEqualTo(new PlainPropertyOperationAtom("Membmers"));
         assertThat(callExpression.expressions()).hasSize(1);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);
@@ -140,8 +140,7 @@ class SelectStatementTest {
 
         CallExpression callExpression =
             (CallExpression) selectQueryAxesClause.selectQueryAxisClauses().get(0).expression();
-        assertThat(callExpression.name()).isEqualTo("Members");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PROPERTY);
+        assertThat(callExpression.operationAtom()).isEqualTo(new PlainPropertyOperationAtom("Members"));
         assertThat(callExpression.expressions()).hasSize(1);
         assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
         CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);

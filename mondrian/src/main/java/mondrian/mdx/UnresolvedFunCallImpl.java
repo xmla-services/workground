@@ -21,6 +21,9 @@ import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.function.FunctionPrinter;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
@@ -36,53 +39,32 @@ import mondrian.olap.fun.FunUtil;
  * @since Sep 28, 2005
  */
 public class UnresolvedFunCallImpl extends AbstractExpression implements UnresolvedFunCall {
-    private final String name;
-    private final Syntax syntax;
+    private final OperationAtom operationAtom;
     private final Expression[] args;
 
     /**
      * Creates a function call with {@link Syntax#Function} syntax.
      */
     public UnresolvedFunCallImpl(String name, Expression[] args) {
-        this(name, Syntax.Function, args);
+        this(new FunctionOperationAtom(name) , args);
     }
 
     /**
      * Creates a function call.
      */
-    public UnresolvedFunCallImpl(String name, Syntax syntax, Expression[] args) {
-        if (name == null || syntax == null || args == null) {
+    public UnresolvedFunCallImpl( OperationAtom operationAtom , Expression[] args) {
+        if (operationAtom == null || args == null) {
             throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
         }
-        this.name = name;
-        this.syntax = syntax;
+        this.operationAtom = operationAtom;
         this.args = args;
-        switch (syntax) {
-        case Braces:
-            Util.assertTrue(name.equals("{}"));
-            break;
-        case Parentheses:
-            Util.assertTrue(name.equals("()"));
-            break;
-        case Internal:
-            Util.assertTrue(name.startsWith("$"));
-            break;
-        case Empty:
-            Util.assertTrue(name.equals(""));
-            break;
-        default:
-            Util.assertTrue(
-                !name.startsWith("$")
-                && !name.equals("{}")
-                && !name.equals("()"));
-            break;
-        }
+
     }
 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
     public UnresolvedFunCallImpl cloneExp() {
-        return new UnresolvedFunCallImpl(name, syntax, Expressions.cloneExpressions(args));
+        return new UnresolvedFunCallImpl(operationAtom, Expressions.cloneExpressions(args));
     }
 
     @Override
@@ -97,7 +79,7 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
 
     @Override
 	public void unparse(PrintWriter pw) {
-        syntax.unparse(name, args, pw);
+    	FunctionPrinter.unparse(operationAtom, args, pw);
     }
 
     @Override
@@ -117,7 +99,7 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
         Expression[] newArgs = new Expression[args.length];
         FunctionDefinition funDef =
             FunUtil.resolveFunArgs(
-                validator, null, args, newArgs, name, syntax);
+                validator, null, args, newArgs, operationAtom);
         return funDef.createCall(validator, newArgs);
     }
 
@@ -127,24 +109,15 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
     }
 
     /**
-     * Returns the function name.
+     * Returns the OperationAtom.
      *
-     * @return function name
+     * @return OperationAtom
      */
     @Override
-	public String getFunName() {
-        return name;
+	public OperationAtom getOperationAtom() {
+        return operationAtom;
     }
 
-    /**
-     * Returns the syntax of this function call.
-     *
-     * @return the syntax of the call
-     */
-    @Override
-	public Syntax getSyntax() {
-        return syntax;
-    }
 
     /**
      * Returns the Exp argument at the specified index.

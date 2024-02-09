@@ -14,9 +14,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -26,9 +24,10 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
@@ -47,7 +46,6 @@ public class CacheFunDef extends AbstractFunctionDefinition {
     private static final String SIGNATURE_VALUE = "Cache(<<Exp>>)";
     private static final String DESCRIPTION =
         "Evaluates and returns its sole argument, applying statement-level caching";
-    private static final Syntax SYNTAX = Syntax.Function;
     static final CacheFunResolver Resolver = new CacheFunResolver();
 
 	public CacheFunDef(FunctionMetaData functionMetaData) {
@@ -104,7 +102,7 @@ public class CacheFunDef extends AbstractFunctionDefinition {
 
     public static class CacheFunResolver extends NoExpressionRequiredFunctionResolver {
 
-    	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+    	static OperationAtom functionAtom = new FunctionOperationAtom(NAME);
 
         @Override
 		public FunctionDefinition resolve(
@@ -124,7 +122,7 @@ public class CacheFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
 

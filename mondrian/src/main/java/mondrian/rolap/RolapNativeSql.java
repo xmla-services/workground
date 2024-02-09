@@ -265,18 +265,17 @@ public class RolapNativeSql {
             final Expression arg1 = ((ResolvedFunCallImpl)exp).getArg(1);
 
             // Must finish by ".Caption" or ".Name"
-            if (!(arg0 instanceof ResolvedFunCallImpl)
-                || ((ResolvedFunCallImpl)arg0).getArgCount() != 1
+            if (!(arg0 instanceof ResolvedFunCallImpl rfci)
+                || rfci.getArgCount() != 1
                 || !(arg0.getType() instanceof StringType)
-                || (!((ResolvedFunCallImpl)arg0).getFunName().equals("Name")
-                    && !((ResolvedFunCallImpl)arg0)
-                            .getFunName().equals("Caption")))
+                || (!rfci.getOperationAtom().name().equals("Name")
+                    && !rfci.getOperationAtom().name().equals("Caption")))
             {
                 return null;
             }
 
             final boolean useCaption;
-            if (((ResolvedFunCallImpl)arg0).getFunName().equals("Name")) {
+            if (((ResolvedFunCallImpl)arg0).getOperationAtom().name().equals("Name")) {
                 useCaption = false;
             } else {
                 useCaption = true;
@@ -284,11 +283,10 @@ public class RolapNativeSql {
 
             // Must be ".CurrentMember"
             final Expression currMemberExpr = ((ResolvedFunCallImpl)arg0).getArg(0);
-            if (!(currMemberExpr instanceof ResolvedFunCallImpl)
-                || ((ResolvedFunCallImpl)currMemberExpr).getArgCount() != 1
+            if (!(currMemberExpr instanceof ResolvedFunCallImpl rfci2)
+                || rfci2.getArgCount() != 1
                 || !(currMemberExpr.getType() instanceof MemberType)
-                || !((ResolvedFunCallImpl)currMemberExpr)
-                        .getFunName().equals("CurrentMember"))
+                || !rfci2.getOperationAtom().name().equals("CurrentMember"))
             {
                 return null;
             }
@@ -442,7 +440,7 @@ public class RolapNativeSql {
             if (!(exp instanceof FunctionCall fc)) {
                 return false;
             }
-            if (!mdx.equalsIgnoreCase(fc.getFunName())) {
+            if (!mdx.equalsIgnoreCase(fc.getOperationAtom().name())) {
                 return false;
             }
             Expression[] args = fc.getArgs();

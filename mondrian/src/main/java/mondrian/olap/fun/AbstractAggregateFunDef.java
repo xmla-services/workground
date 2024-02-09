@@ -8,16 +8,16 @@
 */
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.IterationLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -29,17 +29,16 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapStoredMeasure;
-
-import static mondrian.resource.MondrianResource.IterationLimitExceeded;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * Abstract base class for all aggregate functions (<code>Aggregate</code>,
@@ -64,9 +63,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
             if (FunUtil.worthCaching(arg)) {
                 final Expression cacheCall =
                     new UnresolvedFunCallImpl(
-                        CacheFunDef.NAME,
-                        Syntax.Function,
-                        new Expression[] {arg});
+								new FunctionOperationAtom(CacheFunDef.NAME), new Expression[] { arg });
                 return validator.validate(cacheCall, false);
             }
         }

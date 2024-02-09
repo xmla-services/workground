@@ -11,10 +11,12 @@
 
 package mondrian.olap;
 
+import static mondrian.resource.MondrianResource.MdxAxisIsNotSet;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
@@ -29,6 +31,10 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
@@ -38,9 +44,6 @@ import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.MdxAxisIsNotSet;
 
 /**
  * An axis in an MDX query. For example, the typical MDX query has two axes,
@@ -155,23 +158,22 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
             || slicer instanceof HierarchyExpressionImpl
             || slicer instanceof DimensionExpression)
         {
-            slicer = new UnresolvedFunCallImpl(
-                "DefaultMember", Syntax.Property, new Expression[] {
-                    slicer});
+			slicer = new UnresolvedFunCallImpl(new PlainPropertyOperationAtom("DefaultMember"),
+					new Expression[] { slicer });
         }
 
         if (slicer instanceof FunctionCall funCall
-            && funCall.getSyntax() == Syntax.Parentheses)
+            && funCall.getOperationAtom() instanceof ParenthesesOperationAtom)
         {
             slicer =
                 new UnresolvedFunCallImpl(
-                    "{}", Syntax.Braces, new Expression[] {slicer});
+                    new BracesOperationAtom(), new Expression[] {slicer});
         } else {
             slicer =
                 new UnresolvedFunCallImpl(
-                    "{}", Syntax.Braces, new Expression[] {
+                		new BracesOperationAtom(), new Expression[] {
                         new UnresolvedFunCallImpl(
-                            "()", Syntax.Parentheses, new Expression[] {
+                        		new ParenthesesOperationAtom(), new Expression[] {
                                 slicer})});
         }
 
@@ -258,8 +260,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
             {
                 exp =
                     new UnresolvedFunCallImpl(
-                        "{}",
-                        Syntax.Braces,
+                    		new BracesOperationAtom(),
                         new Expression[] {exp});
                 exp = validator.validate(exp, false);
             } else {
@@ -300,11 +301,11 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     @Override
     public void addLevel(Level level) {
         Util.assertTrue(level != null, "addLevel needs level");
-        exp = new UnresolvedFunCallImpl(
-            "Crossjoin", Syntax.Function, new Expression[] {
+        exp = new UnresolvedFunCallImpl(new FunctionOperationAtom("Crossjoin")
+            ,  new Expression[] {
                 exp,
-                new UnresolvedFunCallImpl(
-                    "Members", Syntax.Property, new Expression[] {
+                new UnresolvedFunCallImpl( new  PlainPropertyOperationAtom("Members"),
+                    new Expression[] {
                         new LevelExpressionImpl(level)})});
     }
 

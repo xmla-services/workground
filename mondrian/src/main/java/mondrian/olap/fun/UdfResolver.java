@@ -20,7 +20,6 @@ import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -35,8 +34,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
 import mondrian.calc.impl.AbstractListCalc;
@@ -161,7 +160,7 @@ public class UdfResolver implements FunctionResolver {
         public UdfFunDef(DataType[] parameterCategories, Type returnType) {
         	
 
-            super(new FunctionMetaDataR(new FunctionAtomR(UdfResolver.this.getName(), UdfResolver.this.getSyntax()), UdfResolver.this.getDescription(), UdfResolver.this.getSignature(),  TypeUtil.typeToCategory(returnType), parameterCategories));
+            super(new FunctionMetaDataR( UdfResolver.this.getSyntax().getOperationAtom(UdfResolver.this.getName()), UdfResolver.this.getDescription(), UdfResolver.this.getSignature(),  TypeUtil.typeToCategory(returnType), parameterCategories));
                 
             this.returnType = returnType;
         }
@@ -466,7 +465,7 @@ public class UdfResolver implements FunctionResolver {
     }
 
 	@Override
-	public FunctionAtom getFunctionAtom() {
-		return new FunctionAtomR(getName(), getSyntax());
+	public OperationAtom getFunctionAtom() {
+		return getSyntax().getOperationAtom(getName());
 	}
 }

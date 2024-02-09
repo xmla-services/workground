@@ -17,34 +17,8 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
-public record CallExpressionR(String name,
-                              CallExpression.Type type,
-                              List<MdxExpression> expressions)
-        implements CallExpression {
+public record CallExpressionR(OperationAtom operationAtom, List<MdxExpression> expressions) implements CallExpression {
 
-    public CallExpressionR {
-
-        assert name != null;
-        assert type != null;
-        assert expressions != null;
-
-        switch (type) {
-        case BRACES:
-            assert name.equals("{}");
-            break;
-        case PARENTHESES:
-            assert name.equals("()");
-            break;
-        case INTERNAL:
-            assert name.startsWith("$");
-            break;
-        case EMPTY:
-            assert name.equals("");
-            break;
-        default:
-            assert !name.startsWith("$") && !name.equals("{}") && !name.equals("()");
-            break;
-        }
-    }
 }

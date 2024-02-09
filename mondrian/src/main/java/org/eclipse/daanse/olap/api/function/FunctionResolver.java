@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 /**
  * A {@link FunctionResolver} converts a function name, invocation type, and set
@@ -85,7 +86,7 @@ public interface FunctionResolver {
 	}
 	
 
-	public FunctionAtom getFunctionAtom();
+	public OperationAtom getFunctionAtom();
 
     default List<FunctionMetaData> getRepresentativeFunctionMetaDatas(){
     	return List.of();

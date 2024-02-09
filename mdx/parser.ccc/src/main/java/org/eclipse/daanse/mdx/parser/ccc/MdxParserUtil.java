@@ -16,13 +16,18 @@ package org.eclipse.daanse.mdx.parser.ccc;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
 
 public class MdxParserUtil {
 	private MdxParserUtil() {
@@ -46,26 +51,27 @@ public class MdxParserUtil {
 			if (left != null) {
 				// Method syntax: "x.foo(arg1, arg2)" or "x.foo()"
 				expressions.add(0, left);
-				return new CallExpressionR(name, CallExpression.Type.METHOD, expressions);
+				return new CallExpressionR(new MethodOperationAtom(name) , expressions);
 			} else {
 				// Function syntax: "foo(arg1, arg2)" or "foo()"
-				return new CallExpressionR(name, CallExpression.Type.FUNCTION, expressions);
+				return new CallExpressionR(new FunctionOperationAtom(name), expressions);
 			}
 		} else {
 			// Member syntax: "foo.bar"
 			// or property syntax: "foo.RESERVED_WORD"
-			CallExpression.Type type;
+			
+			OperationAtom operationAtom;
 			boolean call = false;
 			switch (objectIdentifier.quoting()) {
 			case UNQUOTED:
-				type = CallExpression.Type.PROPERTY;
+				operationAtom = new PlainPropertyOperationAtom(name);
 				call = true;
 				break;
 			case QUOTED:
-				type = CallExpression.Type.PROPERTY_QUOTED;
+				operationAtom = new QuotedPropertyOperationAtom(name);
 				break;
 			default:
-				type = CallExpression.Type.PROPERTY_AMPERS_AND_QUOTED;
+				operationAtom = new AmpersandQuotedPropertyOperationAtom(name);
 				break;
 			}
 			if (left instanceof CompoundId compoundIdLeft && !call) {
@@ -76,7 +82,7 @@ public class MdxParserUtil {
 			} else if (left == null) {
 				return new CompoundIdR(List.of(objectIdentifier));
 			} else {
-				return new CallExpressionR(name, type, List.of(left));
+				return new CallExpressionR(operationAtom, List.of(left));
 			}
 		}
 	}

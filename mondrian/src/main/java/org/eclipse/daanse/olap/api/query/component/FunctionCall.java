@@ -11,8 +11,8 @@
 
 package org.eclipse.daanse.olap.api.query.component;
 
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 /**
  * A <code>FunCall</code> is a function applied to a list of operands.
@@ -51,12 +51,9 @@ public interface FunctionCall extends Expression {
     int getArgCount();
 
     /**
-     * Returns the name of the function.
+     * Returns the OperationAtom.
      */
-    String getFunName();
+    OperationAtom getOperationAtom(); 
 
-    /**
-     * Returns the syntax of the call.
-     */
-    Syntax getSyntax();
+
 }

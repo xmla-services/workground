@@ -14,9 +14,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -25,9 +23,10 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.GenericCalc;
@@ -51,8 +50,7 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
 	
 	
 	static final String NAME = "_CaseMatch";
-	static final Syntax SYNTAX = Syntax.Case;
-	static final FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+	static final OperationAtom functionAtom = new CaseOperationAtom(NAME);
 
 	static final String DESCRIPTION = "Evaluates various expressions, and returns the corresponding expression for the first which matches a particular value.";
 	static final String SIGNATURE = "Case <Expression> When <Expression> Then <Expression> [...] [Else <Expression>] End";
@@ -162,7 +160,7 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     }

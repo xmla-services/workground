@@ -102,12 +102,12 @@ public class ParameterFunDef extends AbstractFunctionDefinition {
             return true;
         }
         if (typeArg instanceof FunctionCall hierarchyCall) {
-            if (hierarchyCall.getFunName().equals("Hierarchy")
+            if (hierarchyCall.getOperationAtom().name().equals("Hierarchy")
                 && hierarchyCall.getArgCount() > 0
                 && hierarchyCall.getArg(0) instanceof FunctionCall)
             {
                 FunctionCall currentMemberCall = (FunctionCall) hierarchyCall.getArg(0);
-                if (currentMemberCall.getFunName().equals("CurrentMember")
+                if (currentMemberCall.getOperationAtom().name().equals("CurrentMember")
                     && currentMemberCall.getArgCount() > 0
                     && currentMemberCall.getArg(0) instanceof DimensionExpression)
                 {

@@ -6,10 +6,8 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -18,8 +16,9 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -27,7 +26,7 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Property;
 
 public class AggregateChildrenFunbDef extends AbstractFunctionDefinition{
-	static FunctionAtom functionAtom$AggregateChildren = new FunctionAtomR("$AggregateChildren", Syntax.Internal);
+	static OperationAtom functionAtom$AggregateChildren = new InternalOperationAtom("$AggregateChildren");
 	static FunctionMetaData functionMetaData$AggregateChildren = new FunctionMetaDataR(functionAtom$AggregateChildren,
 			"Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
 			"$AggregateChildren(<Hierarchy>)", DataType.NUMERIC, new DataType[] { DataType.HIERARCHY });

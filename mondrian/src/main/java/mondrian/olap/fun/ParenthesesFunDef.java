@@ -14,17 +14,16 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
@@ -38,7 +37,7 @@ import mondrian.olap.Util;
  */
 public class ParenthesesFunDef extends AbstractFunctionDefinition {
     
-	static FunctionAtom functionAtom = new FunctionAtomR("()", Syntax.Parentheses);
+	static OperationAtom functionAtom = new ParenthesesOperationAtom();
 
 	public ParenthesesFunDef(DataType argType) {
 		super(new FunctionMetaDataR(functionAtom, "Parenthesis enclose an expression and indicate precedence.",

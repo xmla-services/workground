@@ -26,6 +26,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.MemberCalcToTupleCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.UnknownToTupleCalc;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
@@ -52,8 +53,8 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 		final Calc<?> calc = compile(exp);
 		final Type type = exp.getType();
 		if (type instanceof mondrian.olap.type.DimensionType || type instanceof mondrian.olap.type.HierarchyType) {
-			final mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl("DefaultMember",
-					org.eclipse.daanse.olap.api.Syntax.Property, new Expression[] { exp });
+			final mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
+					new PlainPropertyOperationAtom("DefaultMember"), new Expression[] { exp });
 			final Expression defaultMember = unresolvedFunCall.accept(getValidator());
 			return compileTuple(defaultMember);
 		}

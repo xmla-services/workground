@@ -15,9 +15,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -26,8 +24,9 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
 
@@ -40,7 +39,7 @@ import mondrian.calc.impl.GenericCalc;
  * @author gjohnson
  */
 public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
-	static final FunctionAtom functionAtom = new FunctionAtomR("CoalesceEmpty", Syntax.Function);
+	static final OperationAtom functionAtom = new FunctionOperationAtom("CoalesceEmpty");
     static final FunctionResolver Resolver = new ResolverImpl();
 
 
@@ -112,7 +111,7 @@ public class CoalesceEmptyFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     }

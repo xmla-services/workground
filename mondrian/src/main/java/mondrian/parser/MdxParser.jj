@@ -24,15 +24,26 @@ import java.math.BigDecimal;
 
 import mondrian.olap.*;
 import org.eclipse.daanse.olap.api.*;
-import org.eclipse.daanse.olap.api.query.*;
 import org.eclipse.daanse.olap.api.query.component.*;
 import org.eclipse.daanse.olap.api.function.*;
 import mondrian.mdx.*;
-import mondrian.parser.*;
 import mondrian.server.Statement;
 import static mondrian.resource.MondrianResource.InvalidAxis;
 import static mondrian.resource.MondrianResource.message;
-
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
 /**
  * MDX parser, generated from MdxParser.jj.
  *
@@ -170,27 +181,27 @@ public class MdxParserImpl
                 // Method syntax: "x.foo(arg1, arg2)" or "x.foo()"
                 argList.add(0, left);
                 return  new UnresolvedFunCallImpl(
-                    name, Syntax.Method, toExpArray(argList));
+                    new MethodOperationAtom(name), toExpArray(argList));
             } else {
                 // Function syntax: "foo(arg1, arg2)" or "foo()"
                 return  new UnresolvedFunCallImpl(
-                    name, Syntax.Function, toExpArray(argList));
+                    new FunctionOperationAtom(name), toExpArray(argList));
             }
         } else {
             // Member syntax: "foo.bar"
             // or property syntax: "foo.RESERVED_WORD"
-            Syntax syntax;
+            OperationAtom operationAtom;
             boolean call = false;
             switch (segment.getQuoting()) {
             case UNQUOTED:
-                syntax = Syntax.Property;
-                call = funTable.isProperty(name);
+            	call = funTable.isProperty(name);
+            	operationAtom = new PlainPropertyOperationAtom(name);
                 break;
             case QUOTED:
-                syntax = Syntax.QuotedProperty;
+            	operationAtom = new QuotedPropertyOperationAtom(name);
                 break;
             default:
-                syntax = Syntax.AmpersandQuotedProperty;
+            	operationAtom = new AmpersandQuotedPropertyOperationAtom(name);
                 break;
             }
             if (left instanceof IdImpl && !call) {
@@ -198,8 +209,7 @@ public class MdxParserImpl
             } else if (left == null) {
                 return  new IdImpl(segment);
             } else {
-                return  new UnresolvedFunCallImpl(
-                    name, syntax, new Expression[] {left});
+                return  new UnresolvedFunCallImpl(operationAtom, new Expression[] {left});
             }
         }
     }
@@ -573,15 +583,15 @@ Expression unaliasedExpression() :
     x = term5()
     (
         <OR> y = term5() {
-            x =  new UnresolvedFunCallImpl("OR", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("OR"), new Expression[] {x, y});
         }
     |   <XOR> y = term5() {
-            x =  new UnresolvedFunCallImpl("XOR", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("XOR"), new Expression[] {x, y});
         }
     |
         // range 'm1 : m2' yields set of members
         <COLON> y = term5() {
-            x =  new UnresolvedFunCallImpl(":", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom(":"), new Expression[] {x, y});
         }
     )*
     {
@@ -597,7 +607,7 @@ Expression term5() :
     x = term4()
     (
         <AND> y = term4() {
-            x =  new UnresolvedFunCallImpl("AND", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("AND"), new Expression[] {x, y});
         }
     )*
     {
@@ -614,7 +624,7 @@ Expression term4() :
         return x;
     }
 |   <NOT> x = term4() {
-        return  new UnresolvedFunCallImpl("NOT", Syntax.Prefix, new Expression[] {x});
+        return  new UnresolvedFunCallImpl(new PrefixOperationAtom("NOT"), new Expression[] {x});
     }
 }
 
@@ -636,43 +646,41 @@ Expression term3() :
         |   <GE>  { op = token; }
         )
         y = term2() {
-            x =  new UnresolvedFunCallImpl(op.image, Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom(op.image), new Expression[] {x, y});
         }
     |
         // We expect a shift-reduce conflict here, because NULL is a literal and
         // so is a valid argument to the IS operator. We want to shift.
         LOOKAHEAD(2)
         <IS> <NULL> {
-            x =  new UnresolvedFunCallImpl("IS NULL", Syntax.Postfix, new Expression[] {x});
+            x =  new UnresolvedFunCallImpl(new PostfixOperationAtom("IS NULL"), new Expression[] {x});
         }
     |
         // e.g. "x IS y"; but "x IS NULL" is handled elsewhere
         LOOKAHEAD(2)
         <IS> y = term2() {
-            x =  new UnresolvedFunCallImpl("IS", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("IS"), new Expression[] {x, y});
         }
     |   <IS> <EMPTY> {
-            x =  new UnresolvedFunCallImpl(
-                "IS EMPTY", Syntax.Postfix, new Expression[] {x});
+            x =  new UnresolvedFunCallImpl(new PostfixOperationAtom("IS EMPTY"), new Expression[] {x});
         }
     |   <MATCHES> y = term2() {
-            x =  new UnresolvedFunCallImpl("MATCHES", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("MATCHES"), new Expression[] {x, y});
         }
     |   LOOKAHEAD(2)
         <NOT> <MATCHES> y = term2() {
             x =  new UnresolvedFunCallImpl(
-                "NOT", Syntax.Prefix, new Expression[] {
-                     new UnresolvedFunCallImpl(
-                        "MATCHES", Syntax.Infix, new Expression[] {x, y})});
+                new PrefixOperationAtom("NOT"), new Expression[] {
+                     new UnresolvedFunCallImpl(new InfixOperationAtom("MATCHES"), new Expression[] {x, y})});
         }
     |   <IN> y = term2() {
-            x =  new UnresolvedFunCallImpl("IN", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("IN"), new Expression[] {x, y});
         }
     |   <NOT> <IN> y = term2() {
             x =  new UnresolvedFunCallImpl(
-                "NOT", Syntax.Prefix, new Expression[] {
+                new PrefixOperationAtom("NOT"), new Expression[] {
                      new UnresolvedFunCallImpl(
-                        "IN", Syntax.Infix, new Expression[] {x, y})});
+                        new InfixOperationAtom("IN"), new Expression[] {x, y})});
         }
     )*
     {
@@ -688,13 +696,13 @@ Expression term2() :
     x = term()
     (
         <PLUS> y = term() {
-            x =  new UnresolvedFunCallImpl("+", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("+"), new Expression[] {x, y});
         }
     |   <MINUS> y = term() {
-            x =  new UnresolvedFunCallImpl("-", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("-"), new Expression[] {x, y});
         }
     |   <CONCAT> y = term() {
-            x =  new UnresolvedFunCallImpl("||", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("||"), new Expression[] {x, y});
         }
     )*
     {
@@ -710,10 +718,10 @@ Expression term() :
     x = factor()
     (
         <ASTERISK> y = factor() {
-            x =  new UnresolvedFunCallImpl("*", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("*"), new Expression[] {x, y});
         }
     |   <SOLIDUS> y = factor() {
-            x =  new UnresolvedFunCallImpl("/", Syntax.Infix, new Expression[] {x, y});
+            x =  new UnresolvedFunCallImpl(new InfixOperationAtom("/"), new Expression[] {x, y});
         }
     )*
     {
@@ -733,10 +741,10 @@ Expression factor() :
         return p;
     }
 |   <MINUS> p = primary() {
-        return  new UnresolvedFunCallImpl("-", Syntax.Prefix, new Expression[] {p});
+        return  new UnresolvedFunCallImpl(new PrefixOperationAtom("-"), new Expression[] {p});
     }
 |   <EXISTING> p = primary() {
-        return  new UnresolvedFunCallImpl("Existing", Syntax.Prefix, new Expression[] {p});
+        return  new UnresolvedFunCallImpl(new PrefixOperationAtom("Existing"), new Expression[] {p});
     }
 }
 
@@ -815,15 +823,14 @@ Expression atom() :
     <AS> segment = nameSegment() <RPAREN>
     {
         return  new UnresolvedFunCallImpl(
-            "CAST", Syntax.Cast, new Expression[] {
+            new CastOperationAtom(), new Expression[] {
                 e,
                 SymbolLiteralImpl.create(segment.getName())});
     }
 |   <LPAREN> lis = expList() <RPAREN> {
         // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
         // are just expressions.
-        return  new UnresolvedFunCallImpl(
-            "()", Syntax.Parentheses, toExpArray(lis));
+        return  new UnresolvedFunCallImpl(new ParenthesesOperationAtom(), toExpArray(lis));
     }
 |
     // set built from sets/tuples
@@ -837,7 +844,7 @@ Expression atom() :
     )
     <RBRACE> {
         return  new UnresolvedFunCallImpl(
-            "{}", Syntax.Braces, toExpArray(lis));
+           new BracesOperationAtom(), toExpArray(lis));
     }
 |   e = caseExpression() {
         return e;
@@ -901,10 +908,10 @@ Expression caseExpression() :
     {
         if (match) {
             return  new UnresolvedFunCallImpl(
-                "_CaseMatch", Syntax.Case, toExpArray(list));
+                new CaseOperationAtom("_CaseMatch"), toExpArray(list));
         } else {
             return  new UnresolvedFunCallImpl(
-                "_CaseTest", Syntax.Case, toExpArray(list));
+                new CaseOperationAtom("_CaseTest"), toExpArray(list));
         }
     }
 }
@@ -922,7 +929,7 @@ Expression expression() :
     (
         <AS> i = identifier() {
             IdImpl id =  new IdImpl(i);
-            e =  new UnresolvedFunCallImpl("AS", Syntax.Infix, new Expression[] {e, id});
+            e =  new UnresolvedFunCallImpl(new InfixOperationAtom("AS"), new Expression[] {e, id});
         }
     )*
     {
@@ -939,7 +946,7 @@ Expression expressionOrEmpty() :
         return e;
     }
 |   /* empty */ {
-        return  new UnresolvedFunCallImpl("", Syntax.Empty, new Expression[] {});
+        return  new UnresolvedFunCallImpl(new EmptyOperationAtom(), new Expression[] {});
     }
 }
 

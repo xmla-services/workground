@@ -20,7 +20,6 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -28,7 +27,6 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -53,8 +51,11 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
@@ -97,7 +98,7 @@ public class BuiltinFunTable extends FunTableImpl {
 	public void defineFunctions(FunctionTableCollector builder) {
         builder.defineReserved("NULL");
 
-        FunctionAtom functionAtom = new FunctionAtomR("",Syntax.Empty);
+        OperationAtom functionAtom = new EmptyOperationAtom();
         FunctionMetaData functionMetaDataEmpty = new FunctionMetaDataR(functionAtom,
         		"Dummy function representing the empty expression", "", DataType.EMPTY,
     			new DataType[] { });
@@ -311,7 +312,7 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(AncestorsFunDef.Resolver);
 
 
-        FunctionAtom functionAtomCousin = new FunctionAtomR("Cousin",Syntax.Function);
+        OperationAtom functionAtomCousin = new FunctionOperationAtom("Cousin");
         FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtomCousin,
         		"Returns the member with the same relative position under <ancestor member> as the member specified.", "<Member> Cousin(<Member>, <Ancestor Member>)",  DataType.MEMBER,
     			new DataType[] { DataType.MEMBER,DataType.MEMBER});
@@ -374,7 +375,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // "<Dimension>.DefaultMember". The function is implemented using an
         // implicit cast to hierarchy, and we create a FunInfo for
         // documentation & backwards compatibility.
-        FunctionAtom functionAtomDefaultMember = new FunctionAtomR("DefaultMember",Syntax.Property);
+        OperationAtom functionAtomDefaultMember = new PlainPropertyOperationAtom("DefaultMember");
 
 		builder.define(new FunctionMetaDataR(functionAtomDefaultMember, "Returns the default member of a dimension.", "",
 				 DataType.MEMBER, new DataType[] { DataType.DIMENSION }));
@@ -956,7 +957,7 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(LastPeriodsFunDef.Resolver);
 
         // <Dimension>.Members is really just shorthand for <Hierarchy>.Members
-    	 FunctionAtom functionAtomMembers =new FunctionAtomR(MEMBERS, Syntax.Property);
+    	 OperationAtom functionAtomMembers =new PlainPropertyOperationAtom(MEMBERS);
 		builder.define(	new FunctionMetaDataR(functionAtomMembers, "Returns the set of members in a dimension.", "",
 						DataType.SET, new DataType[] { DataType.DIMENSION }));
 

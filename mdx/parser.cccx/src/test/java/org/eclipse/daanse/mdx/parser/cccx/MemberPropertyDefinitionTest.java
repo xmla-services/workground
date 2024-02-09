@@ -13,6 +13,8 @@ import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 import org.junit.jupiter.api.Test;
 
 class MemberPropertyDefinitionTest {
@@ -61,8 +63,8 @@ class MemberPropertyDefinitionTest {
 
 		assertThat(memberPropertyDefinition.expression()).isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) memberPropertyDefinition.expression();
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
-		assertThat(callExpression.name()).isEqualTo("{}");
+        assertThat(callExpression.operationAtom()).isEqualTo(new BracesOperationAtom());
+
 		assertThat(callExpression.expressions()).hasSize(2);
 		checkArgument(callExpression, 0, "expression1");
 		checkArgument(callExpression, 1, "expression2");
@@ -80,8 +82,7 @@ class MemberPropertyDefinitionTest {
 
 		assertThat(memberPropertyDefinition.expression()).isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) memberPropertyDefinition.expression();
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.FUNCTION);
-		assertThat(callExpression.name()).isEqualTo("FunctionName");
+		assertThat(callExpression.operationAtom()).isEqualTo(new FunctionOperationAtom("FunctionName"));
 		assertThat(callExpression.expressions()).hasSize(1);
 		checkArgument(callExpression, 0, "arg1, arg2");
 	}

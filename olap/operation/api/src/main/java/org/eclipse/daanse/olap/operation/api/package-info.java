@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
 *
 * This program and the accompanying materials are made
 * available under the terms of the Eclipse Public License 2.0
@@ -9,16 +9,8 @@
 *
 * Contributors:
 *   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.api.function;
 
-import org.eclipse.daanse.olap.api.Syntax;
-
-public interface FunctionAtom {
-
-	String name();
-
-	Syntax syntax();
-
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.olap.operation.api;

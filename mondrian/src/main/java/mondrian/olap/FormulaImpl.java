@@ -39,6 +39,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.olap.type.DecimalType;
@@ -489,8 +490,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             }
         }
 
-        if (exp instanceof FunctionCall call && call.getFunName().equals("-")
-                && call.getSyntax() == Syntax.Prefix) {
+        if (exp instanceof FunctionCall call && call.getOperationAtom().name().equals("-")
+                && call.getOperationAtom() instanceof PrefixOperationAtom) {
                 final Number number = quickEval(call.getArg(0));
                 if (number == null) {
                     return null;

@@ -31,6 +31,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -100,8 +101,7 @@ class SelectSubCubeClauseTest {
             checkAxis(selectQueryAxisClause.axis(), 0, true);
             assertThat(selectQueryAxisClause.expression()).isInstanceOf(CallExpression.class);
             CallExpression callExpression = (CallExpression) selectQueryAxisClause.expression();
-            assertThat(callExpression.name()).isEqualTo("{}");
-            assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
+            assertThat(callExpression.operationAtom()).isEqualTo(new BracesOperationAtom());
             assertThat(callExpression.expressions()).isNotNull().hasSize(1);
             assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
             CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);
@@ -148,8 +148,7 @@ class SelectSubCubeClauseTest {
         assertThat(selectQueryAxisClauseInner.selectDimensionPropertyListClause()).isNull();
 
         CallExpression callExpressionInner = (CallExpression) selectQueryAxisClauseInner.expression();
-        assertThat(callExpressionInner.name()).isEqualTo("{}");
-        assertThat(callExpressionInner.type()).isEqualTo(CallExpression.Type.BRACES);
+        assertThat(callExpressionInner.operationAtom()).isEqualTo(new BracesOperationAtom());
         assertThat(callExpressionInner.expressions()).isNotNull().hasSize(1);
         assertThat(callExpressionInner.expressions().get(0)).isInstanceOf(CompoundId.class);
         CompoundId compoundIdInner = (CompoundId) callExpressionInner.expressions().get(0);

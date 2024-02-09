@@ -14,10 +14,8 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -33,9 +31,10 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Util;
@@ -59,8 +58,7 @@ import mondrian.olap.type.TupleType;
 class SetItemFunDef extends AbstractFunctionDefinition {
     
 	private static final String NAME = "Item";
-	private static final Syntax SYNTAX = Syntax.Method;
-	static FunctionAtom functionAtom = new FunctionAtomR(NAME, SYNTAX);
+	static OperationAtom functionAtom = new MethodOperationAtom(NAME);
 
 	static final FunctionResolver intResolver =
         new ReflectiveMultiResolver(
@@ -109,7 +107,7 @@ class SetItemFunDef extends AbstractFunctionDefinition {
         }
 
 		@Override
-		public FunctionAtom getFunctionAtom() {
+		public OperationAtom getFunctionAtom() {
 			return functionAtom;
 		}
     };

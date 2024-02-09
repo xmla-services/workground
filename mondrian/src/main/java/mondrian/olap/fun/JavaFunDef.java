@@ -26,7 +26,6 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -39,8 +38,8 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Util;
@@ -133,7 +132,8 @@ public class JavaFunDef extends AbstractFunctionDefinition {
 
         DataType[] paramCategories = JavaFunDef.getParameterCategories(method);
 
-    	FunctionAtom functionAtom = new FunctionAtomR(name, syntax);
+        
+    	OperationAtom functionAtom = syntax.getOperationAtom(name);
 
         FunctionMetaData functionMetaDataEmpty = new FunctionMetaDataR(functionAtom,
         		desc, "", returnCategory, paramCategories

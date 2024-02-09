@@ -12,9 +12,11 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.FunctionMbrAndLevelHierarchyMismatch;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.List;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -34,13 +36,11 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 
+import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.FunctionMbrAndLevelHierarchyMismatch;
 
 /**
  * Definition of the <code>OpeningPeriod</code> and <code>ClosingPeriod</code>

@@ -68,7 +68,7 @@ public class CellSetAxisMetaDataImpl implements CellSetAxisMetaData {
                 Level level = ((LevelExpression) call.getArg(0)).getLevel();
                 olap4jProperty =
                     new PropertyImpl(
-                        Util.lookupProperty(level, call.getFunName()), level);
+                        Util.lookupProperty(level, call.getOperationAtom().name()), level);
             }
             propertyList.add(olap4jProperty);
         }

@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -36,6 +35,9 @@ import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.impl.XmlaConstants;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -419,11 +421,12 @@ public class Utils {
         List<FunctionMetaData> fmList = c.getConnection().getSchema().getFunTable().getFunctionMetaDatas();
         StringBuilder buf = new StringBuilder(50);
         for (FunctionMetaData fm : fmList) {
-            if (Syntax.Empty.equals(fm.functionAtom().syntax())
-                || Syntax.Internal.equals(fm.functionAtom().syntax())
-                || Syntax.Parentheses.equals(fm.functionAtom().syntax())) {
-                continue;
-            }
+			if (fm.functionAtom() instanceof EmptyOperationAtom//
+					|| fm.functionAtom() instanceof InternalOperationAtom//
+					|| fm.functionAtom() instanceof ParenthesesOperationAtom//
+			) {
+				continue;
+			}
 
             DataType[] paramCategories = fm.parameterDataTypes();
             DataType returnCategory = fm.returnCategory();

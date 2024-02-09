@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.VisualTotalsAppliedToTuples;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
@@ -29,11 +29,13 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -41,8 +43,6 @@ import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapMemberBase;
 import mondrian.rolap.RolapUtil;
-
-import static mondrian.resource.MondrianResource.VisualTotalsAppliedToTuples;
 
 /**
  * Definition of the <code>VisualTotals</code> MDX function.
@@ -203,8 +203,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
                 "Aggregate",
                 new Expression[] {
                     new UnresolvedFunCallImpl(
-                        "{}",
-                        Syntax.Braces,
+                        new BracesOperationAtom(),
                         memberExprs)
                 });
         }
@@ -316,8 +315,7 @@ public class VisualTotalsFunDef extends AbstractFunctionDefinition {
                 "Aggregate",
                 new Expression[] {
                     new UnresolvedFunCallImpl(
-                        "{}",
-                        Syntax.Braces,
+                        new BracesOperationAtom(),
                         memberExprs)
                 });
         }

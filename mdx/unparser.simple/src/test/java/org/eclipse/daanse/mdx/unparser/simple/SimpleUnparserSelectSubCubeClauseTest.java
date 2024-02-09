@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
@@ -31,6 +30,7 @@ import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -67,8 +67,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
             SelectSubcubeClauseStatement selectSubcubeClauseStatement =
                 new SelectSubcubeClauseStatementR(
                     new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
-                        new CallExpressionR("{}",
-                            CallExpression.Type.BRACES,
+                        new CallExpressionR(new BracesOperationAtom(),
                             List.of(
                                 new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                                 new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -90,8 +89,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
             SelectSubcubeClauseStatement selectSubcubeClauseStatement =
                 new SelectSubcubeClauseStatementR(
                     new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
-                        new CallExpressionR("{}",
-                            CallExpression.Type.BRACES,
+                        new CallExpressionR(new BracesOperationAtom(),
                             List.of(
                                 new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                                 new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -103,8 +101,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
 
                     new SelectSubcubeClauseStatementR(
                         new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
-                            new CallExpressionR("{}",
-                                CallExpression.Type.BRACES,
+                            new CallExpressionR(new BracesOperationAtom(),
                                 List.of(
                                     new NameObjectIdentifierR("test", ObjectIdentifier.Quoting.UNQUOTED)
                                 )),

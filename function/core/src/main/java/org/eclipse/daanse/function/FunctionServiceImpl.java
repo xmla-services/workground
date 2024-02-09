@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.daanse.olap.api.Syntax;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -88,9 +88,9 @@ public class FunctionServiceImpl implements FunctionService {
 
 			newRepresentativeFunctionMetaDatas.addAll(resolver.getRepresentativeFunctionMetaDatas());
 
-			FunctionAtom functionAtom = resolver.getFunctionAtom();
+			OperationAtom functionAtom = resolver.getFunctionAtom();
 
-			if (functionAtom.syntax() == Syntax.Property) {
+			if (functionAtom instanceof PlainPropertyOperationAtom) {
 				newPropertyWords.add(functionAtom.name().toUpperCase());
 			}
 
@@ -140,9 +140,9 @@ public class FunctionServiceImpl implements FunctionService {
 	}
 
 	@Override
-	public List<FunctionResolver> getResolvers(String name, Syntax syntax) {
+	public List<FunctionResolver> getResolvers(OperationAtom operationAtom) {
 
-		FunctionAtomCompareKey key = new FunctionAtomCompareKey(name, syntax);
+		FunctionAtomCompareKey key = new FunctionAtomCompareKey(operationAtom);
 		List<FunctionResolver> resolvers = mapNameToResolvers.get(key);
 		if (resolvers == null) {
 			resolvers = Collections.emptyList();

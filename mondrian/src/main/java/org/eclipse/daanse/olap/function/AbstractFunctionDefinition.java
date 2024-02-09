@@ -29,13 +29,16 @@
 
 package org.eclipse.daanse.olap.function;
 
+import java.io.PrintWriter;
+
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
@@ -55,19 +58,10 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	}
 
 	@Deprecated
-	public AbstractFunctionDefinition(String name, String signature, String description, Syntax syntax,
-			DataType returnCategory, DataType[] parameterCategories) {
-
-		this(new FunctionMetaDataR(new FunctionAtomR(name,syntax), description, signature,  returnCategory, parameterCategories));
-	}
-
-	@Deprecated
 	public AbstractFunctionDefinition(String name, String description, String flags) {
-		this(name, null, description, FunUtil.decodeSyntacticType(flags), FunUtil.decodeReturnCategory(flags),
-				FunUtil.decodeParameterCategories(flags));
+		this(new FunctionMetaDataR(FunUtil.decodeSyntacticTypeToOp(flags, name), description, null,
+				FunUtil.decodeReturnCategory(flags), FunUtil.decodeParameterCategories(flags)));
 	}
-
-
 
 	@Override
 	public Expression createCall(Validator validator, Expression[] args) {
@@ -137,6 +131,19 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 		}
 		throw new IllegalArgumentException(new StringBuilder("Cannot deduce type of call to function '")
 				.append(this.functionMetaData.functionAtom().name()).append("'").toString());
+	}
+
+	@Override
+	public String getSignature() {
+		FunctionMetaData fi = getFunctionMetaData();
+		return FunctionPrinter.getSignature(fi);
+	}
+
+	@Override
+	public void unparse(Expression[] args, PrintWriter pw) {
+
+		FunctionPrinter.unparse(getFunctionMetaData().functionAtom(), args, pw);
+
 	}
 
 }

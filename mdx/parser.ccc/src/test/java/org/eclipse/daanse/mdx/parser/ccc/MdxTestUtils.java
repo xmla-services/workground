@@ -13,16 +13,15 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
-import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.select.Axis;
-
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.Axis;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 
 public class MdxTestUtils {
 

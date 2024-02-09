@@ -11,6 +11,11 @@
 */
 package mondrian.olap.fun;
 
+import static mondrian.resource.MondrianResource.CousinHierarchyMismatch;
+import static mondrian.resource.MondrianResource.MdxChildObjectNotFound;
+import static mondrian.resource.MondrianResource.MemberNotInLevelHierarchy;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -20,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -52,9 +56,18 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.impl.IdentifierParser.Builder;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Util;
@@ -69,11 +82,6 @@ import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
-
-import static mondrian.resource.MondrianResource.CousinHierarchyMismatch;
-import static mondrian.resource.MondrianResource.MdxChildObjectNotFound;
-import static mondrian.resource.MondrianResource.MemberNotInLevelHierarchy;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.
@@ -509,28 +517,52 @@ public class FunUtil extends Util {
    * @return A {@link Syntax}
    */
   public static Syntax decodeSyntacticType( String flags ) {
-    char c = flags.charAt( 0 );
-    switch ( c ) {
-      case 'p':
-        return Syntax.Property;
-      case 'f':
-        return Syntax.Function;
-      case 'm':
-        return Syntax.Method;
-      case 'i':
-        return Syntax.Infix;
-      case 'P':
-        return Syntax.Prefix;
-      case 'Q':
-        return Syntax.Postfix;
-      case 'I':
-        return Syntax.Internal;
-      default:
-        throw Util.newInternal(
-          new StringBuilder("unknown syntax code '").append(c).append("' in string '")
-              .append(flags).append("'").toString() );
-    }
-  }
+	    char c = flags.charAt( 0 );
+	    switch ( c ) {
+	      case 'p':
+	        return Syntax.Property;
+	      case 'f':
+	        return Syntax.Function;
+	      case 'm':
+	        return Syntax.Method;
+	      case 'i':
+	        return Syntax.Infix;
+	      case 'P':
+	        return Syntax.Prefix;
+	      case 'Q':
+	        return Syntax.Postfix;
+	      case 'I':
+	        return Syntax.Internal;
+	      default:
+	        throw Util.newInternal(
+	          new StringBuilder("unknown syntax code '").append(c).append("' in string '")
+	              .append(flags).append("'").toString() );
+	    }
+	  }
+  
+  public static OperationAtom decodeSyntacticTypeToOp( String flags,String name ) {
+	    char c = flags.charAt( 0 );
+	    switch ( c ) {
+	      case 'p':
+	        return new PlainPropertyOperationAtom(name);
+	      case 'f':
+	        return new FunctionOperationAtom(name);
+	      case 'm':
+	        return new MethodOperationAtom(name);
+	      case 'i':
+	        return new InfixOperationAtom(name);
+	      case 'P':
+	        return new PrefixOperationAtom(name);
+	      case 'Q':
+	        return new PostfixOperationAtom(name);
+	      case 'I':
+	        return new InternalOperationAtom(name);
+	      default:
+	        throw Util.newInternal(
+	          new StringBuilder("unknown syntax code '").append(c).append("' in string '")
+	              .append(flags).append("'").toString() );
+	    }
+	  }
 
   /**
    * Decodes the signature of a function into a category code which describes the return type of the operator.
@@ -1382,13 +1414,12 @@ public class FunUtil extends Util {
     FunctionDefinition funDef,
     Expression[] args,
     Expression[] newArgs,
-    String name,
-    Syntax syntax ) {
+    OperationAtom operationAtom ) {
     for ( int i = 0; i < args.length; i++ ) {
       newArgs[ i ] = validator.validate( args[ i ], false );
     }
     if ( funDef == null || validator.alwaysResolveFunDef() ) {
-      funDef = validator.getDef( newArgs, name, syntax );
+      funDef = validator.getDef( newArgs, operationAtom );
     }
     FunUtil.checkNativeCompatible( validator, funDef, newArgs );
     return funDef;

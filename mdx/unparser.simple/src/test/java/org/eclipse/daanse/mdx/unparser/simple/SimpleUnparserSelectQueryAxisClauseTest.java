@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
@@ -25,6 +24,8 @@ import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.junit.jupiter.api.Test;
 
 class SimpleUnparserSelectQueryAxisClauseTest {
@@ -35,8 +36,7 @@ class SimpleUnparserSelectQueryAxisClauseTest {
         SelectQueryAxisClause selectQueryAxisClause =
             new SelectQueryAxisClauseR(
                 false,
-                new CallExpressionR("Membmers",
-                    CallExpression.Type.PROPERTY,
+                new CallExpressionR(new PlainPropertyOperationAtom("Membmers"),
                     List.of(new CompoundIdR(List.of(
                         new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED),
@@ -55,8 +55,7 @@ class SimpleUnparserSelectQueryAxisClauseTest {
         SelectQueryAxisClause selectQueryAxisClause =
             new SelectQueryAxisClauseR(
                 false,
-                new CallExpressionR("{}",
-                    CallExpression.Type.BRACES,
+                new CallExpressionR(new BracesOperationAtom(),
                     List.of(
                         new CompoundIdR(List.of(
                             new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED),

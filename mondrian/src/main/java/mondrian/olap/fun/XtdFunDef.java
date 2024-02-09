@@ -11,7 +11,9 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianException;
+import static mondrian.resource.MondrianResource.TimeArgNeeded;
+import static mondrian.resource.MondrianResource.message;
+
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -31,14 +33,12 @@ import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.DimensionType;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.TimeArgNeeded;
 
 /**
  * Definition of <code>Ytd</code>, <code>Qtd</code>, <code>Mtd</code>, and <code>Wtd</code> MDX builtin functions.

@@ -14,7 +14,6 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -22,40 +21,37 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.function.FunctionMetaDataR;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 /**
- * A <code>ValueFunDef</code> is a pseudo-function to evaluate a member or
- * a tuple. Similar to {@link TupleFunDef}.
+ * A <code>ValueFunDef</code> is a pseudo-function to evaluate a member or a
+ * tuple. Similar to {@link TupleFunDef}.
  *
  * @author jhyde
  * @since Jun 14, 2002
  */
 class ValueFunDef extends AbstractFunctionDefinition {
-    private final DataType[] argTypes;
+	private final DataType[] argTypes;
 
-    ValueFunDef(DataType[] argTypes) {
-        super(
-            "_Value()",
-            "_Value([<Member>, ...])",
-            "Pseudo-function which evaluates a tuple.",
-            Syntax.Parentheses,
-            DataType.NUMERIC,
-            argTypes);
-        this.argTypes = argTypes;
-    }
+	ValueFunDef(DataType[] argTypes) {
+		super(
+//				new ParenthesesOperationAtom("Value")
+				new FunctionMetaDataR(new ParenthesesOperationAtom(), "Pseudo-function which evaluates a tuple.",
+						"_Value([<Member>, ...])", DataType.NUMERIC, argTypes));
+		this.argTypes = argTypes;
+	}
 
-
-
-    @Override
+	@Override
 	public void unparse(Expression[] args, PrintWriter pw) {
-    	Expressions.unparseExpressions(pw, args, "(", ", ", ")");
-    }
+		Expressions.unparseExpressions(pw, args, "(", ", ", ")");
+	}
 
-    @Override
+	@Override
 	public Type getResultType(Validator validator, Expression[] args) {
-        return null;
-    }
+		return null;
+	}
 
 	@Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {

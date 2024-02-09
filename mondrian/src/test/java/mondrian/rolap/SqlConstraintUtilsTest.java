@@ -31,14 +31,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Evaluator.SetEvaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -47,6 +45,8 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
@@ -222,11 +222,10 @@ class SqlConstraintUtilsTest {
         Expression aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
 
         FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
-        FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
+        OperationAtom functionAtom = Mockito.mock(FunctionOperationAtom.class);
 
 
         Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
-        Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
         Mockito.doReturn("dummy").when(functionAtom).name();
 
 
@@ -343,10 +342,9 @@ class SqlConstraintUtilsTest {
                 parenthesesExpr), "ResolvedFunCall-Parentheses(N,Y)");
 
         FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
-        FunctionAtom functionAtom = Mockito.mock(FunctionAtom.class);
+        OperationAtom functionAtom = Mockito.mock(FunctionOperationAtom.class);
 
         Mockito.doReturn(functionAtom).when(functionInformation).functionAtom();
-        Mockito.doReturn(Syntax.Function).when(functionAtom).syntax();
         Mockito.doReturn("dummy").when(functionAtom).name();
         FunctionDefinition aggregateFunDef = new AggregateFunDef(functionInformation);
         Type aggregateReturnType = new DecimalType(1, 1);

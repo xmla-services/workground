@@ -40,6 +40,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -793,7 +794,7 @@ public class CrossJoinArgFactory {
         boolean exclude)
     {
         CrossJoinArg[] predicateCJArgs = null;
-        if (predicateCall.getFunName().equals("()")) {
+        if (predicateCall.getOperationAtom().name().equals("()")) {
             Expression actualPredicateCall = predicateCall.getArg(0);
             if (actualPredicateCall instanceof ResolvedFunCallImpl resolvedFunCall) {
                 return checkFilterPredicate(
@@ -803,7 +804,7 @@ public class CrossJoinArgFactory {
             }
         }
 
-        if (predicateCall.getFunName().equals("NOT")
+        if (predicateCall.getOperationAtom().name().equals("NOT")
             && predicateCall.getArg(0) instanceof ResolvedFunCallImpl resolvedFunCall)
         {
             predicateCall = resolvedFunCall;
@@ -812,7 +813,7 @@ public class CrossJoinArgFactory {
             return checkFilterPredicate(evaluator, predicateCall, exclude);
         }
 
-        if (predicateCall.getFunName().equals("AND")) {
+        if (predicateCall.getOperationAtom().name().equals("AND")) {
             Expression andArg0 = predicateCall.getArg(0);
             Expression andArg1 = predicateCall.getArg(1);
 
@@ -856,9 +857,9 @@ public class CrossJoinArgFactory {
         boolean exclude)
     {
         final boolean useIs;
-        if (predicateCall.getFunName().equals("IS")) {
+        if (predicateCall.getOperationAtom().name().equals("IS")) {
             useIs = true;
-        } else if (predicateCall.getFunName().equals("IN")) {
+        } else if (predicateCall.getOperationAtom().name().equals("IN")) {
             useIs = false;
         } else {
             // Neither IN nor IS
@@ -999,7 +1000,7 @@ public class CrossJoinArgFactory {
         }
         for (Expression arg : ((ResolvedFunCallImpl) exp).getArgs()) {
             if (arg instanceof ResolvedFunCallImpl resolvedFunCall) {
-                if (!cheapFuns.contains(resolvedFunCall.getFunName())) {
+                if (!cheapFuns.contains(resolvedFunCall.getOperationAtom().name())) {
                     return false;
                 }
             } else if (!(arg instanceof MemberExpression)) {
@@ -1011,7 +1012,7 @@ public class CrossJoinArgFactory {
 
     private boolean isSet(Expression exp) {
         return ((exp instanceof ResolvedFunCallImpl resolvedFunCall)
-            && resolvedFunCall.getFunName().equals("{}"))
+            && resolvedFunCall.getOperationAtom() instanceof BracesOperationAtom)
             || (exp instanceof NamedSetExpression);
     }
 }

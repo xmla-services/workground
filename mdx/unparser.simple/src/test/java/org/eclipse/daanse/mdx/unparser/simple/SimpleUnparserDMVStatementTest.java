@@ -13,19 +13,19 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.record.DMVStatementR;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserDMVStatementTest {
 
@@ -53,7 +53,7 @@ class SimpleUnparserDMVStatementTest {
                 new CompoundIdR(List.of(new NameObjectIdentifierR("columnName2", ObjectIdentifier.Quoting.UNQUOTED)))
             ),
             new NameObjectIdentifierR("tableName", ObjectIdentifier.Quoting.UNQUOTED),
-            new CallExpressionR("=", CallExpression.Type.TERM_INFIX,
+            new CallExpressionR(new InfixOperationAtom("="),
                 List.of(
                     new CompoundIdR(List.of(new NameObjectIdentifierR("nameColumn", ObjectIdentifier.Quoting.UNQUOTED))),
                     new StringLiteralR("\"test\"")

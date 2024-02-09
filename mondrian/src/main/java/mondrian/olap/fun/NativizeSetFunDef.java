@@ -32,12 +32,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -55,7 +52,6 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.api.result.Olap4jUtil;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -66,6 +62,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +75,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
+import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 
@@ -607,9 +605,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
         private FormulaImpl createDefaultMemberFormula(Level level) {
             Id memberId = NativizeSetFunDef.createMemberId(level);
             Expression memberExpr =
-                new UnresolvedFunCallImpl(
-                    "DEFAULTMEMBER",
-                    Syntax.Property,
+                new UnresolvedFunCallImpl( new PlainPropertyOperationAtom("DEFAULTMEMBER"),
                     new Expression[] {NativizeSetFunDef.hierarchyId(level)});
 
             NativizeSetFunDef.LOGGER.debug(

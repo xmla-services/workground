@@ -18,4 +18,14 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.mdx.model.api</artifactId>
+  
+  <dependencies>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.operation.api</artifactId>
+			<scope>compile</scope>
+			<version>${revision}</version>
+		</dependency>
+  </dependencies>
 </project>

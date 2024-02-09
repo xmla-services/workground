@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Syntax;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.function.resolver.ParametersCheckingFunctionDefinitionResolver;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 
 /**
  * Abstract implementation of {@link FunctionTable}.
@@ -114,23 +114,23 @@ public abstract class FunTableImpl implements FunctionTable {
     }
 
     @Override
-	public List<FunctionResolver> getResolvers(String name, Syntax syntax) {
-    	FunctionAtomCompareKey key = new FunctionAtomCompareKey(name,syntax);
+	public List<FunctionResolver> getResolvers(OperationAtom operationAtom) {
+    	FunctionAtomCompareKey key = new FunctionAtomCompareKey(operationAtom);
         List<FunctionResolver> resolvers = mapNameToResolvers.get(key);
         if (resolvers == null) {
             resolvers = Collections.emptyList();
         }
         return resolvers;
     }
-    public record FunctionAtomCompareKey(String name, Syntax syntax) {
+    public record FunctionAtomCompareKey(String name, Class<?> clazz) {
     
-		public FunctionAtomCompareKey(String name, Syntax syntax) {
+		public FunctionAtomCompareKey(String name, Class<?> clazz) {
 			this.name = name.toUpperCase();
-			this.syntax = syntax;
+			this.clazz = clazz;
 		}
 
-		public FunctionAtomCompareKey(FunctionAtom functionAtom) {
-			this(functionAtom.name(), functionAtom.syntax());
+		public FunctionAtomCompareKey(OperationAtom functionAtom) {
+			this(functionAtom.name(), functionAtom.getClass());
 		}
     	
     };
@@ -159,9 +159,9 @@ public abstract class FunTableImpl implements FunctionTable {
 
 			functionMetaDatas.addAll(resolver.getRepresentativeFunctionMetaDatas());
 			
-			FunctionAtom functionAtom= resolver.getFunctionAtom();
+			OperationAtom functionAtom= resolver.getFunctionAtom();
 			
-			if (functionAtom.syntax() == Syntax.Property) {
+			if (functionAtom instanceof PlainPropertyOperationAtom) {
 				propertyWords.add(functionAtom.name().toUpperCase());
 			}
 			
@@ -216,7 +216,7 @@ public abstract class FunTableImpl implements FunctionTable {
                 new Comparator<>() {
                     @Override
 					public int compare(FunctionResolver o1, FunctionResolver o2) {
-                        return o1.getFunctionAtom().syntax().compareTo(o2.getFunctionAtom().syntax());
+                        return o1.getFunctionAtom().getClass().getName().compareTo(o2.getFunctionAtom().getClass().getName());
                     }
                 };
             for (List<FunctionResolver> resolverListInner : nonSingletonResolverLists) {

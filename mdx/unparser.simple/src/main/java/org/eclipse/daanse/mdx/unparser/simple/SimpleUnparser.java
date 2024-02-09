@@ -28,9 +28,9 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.Literal;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NullLiteral;
 import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
@@ -56,6 +56,20 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.unparser.api.UnParser;
+import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
+import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
+import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.InternalOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -350,54 +364,53 @@ public class SimpleUnparser implements UnParser {
 
     private StringBuilder unparseCallExpression(CallExpression callExpression) {
         StringBuilder sb = new StringBuilder();
-        String name = callExpression.name();
+        String name = callExpression.operationAtom().name();
         List<? extends MdxExpression> expressions = callExpression.expressions();
         String expressionText;
         String object = "";
-        if (CallExpression.Type.METHOD.equals(callExpression.type()) && !expressions.isEmpty()) {
+        if (callExpression.operationAtom() instanceof MethodOperationAtom && !expressions.isEmpty()) {
             expressionText = unparseExpressions(expressions.subList(1, expressions.size()));
             object = unparseExpression(expressions.get(0)).toString();
         } else {
             expressionText = unparseExpressions(expressions);
         }
-        switch (callExpression.type()) {
-            case BRACES -> sb.append("{").append(expressionText).append("}");
-            case CAST -> sb.append("CAST(").append(expressionText.replace(",", " AS ")).append(")");
-            case EMPTY -> sb.append("");
-            case FUNCTION -> sb.append(name).append("(").append(expressionText).append(")");
-            case INTERNAL -> sb.append("$").append(expressionText);
-            case METHOD -> sb.append(object).append(".").append(name).append("(").append(expressionText).append(")");
-            case PARENTHESES -> sb.append("(").append(expressionText).append(")");
-            case PROPERTY -> sb.append(expressionText).append(".").append(name);
-            case PROPERTY_AMPERS_AND_QUOTED -> sb.append(expressionText).append(".[&").append(name).append("]");
-            case PROPERTY_QUOTED -> sb.append(expressionText).append(".&").append(name).append("");
-            case TERM_CASE -> {
-                int size = expressions.size();
-                sb.append("CASE ");
-                sb.append(unparseExpression(expressions.get(0)));
-
-                for (int i = 1; i < size - 1; i++) {
-                    sb.append(" WHEN ");
-                    sb.append(unparseExpression(expressions.get(i)));
-
-                }
-
-                sb.append(" THEN ");
-                sb.append(unparseExpression(expressions.get(size - 1)));
-                sb.append(" END ");
-
+        switch (callExpression.operationAtom()) {
+        	case AmpersandQuotedPropertyOperationAtom _UNNAMED-> sb.append(expressionText).append(".[&").append(name).append("]");
+            case BracesOperationAtom _UNNAMED -> sb.append("{").append(expressionText).append("}");
+            case CastOperationAtom _UNNAMED-> sb.append("CAST(").append(expressionText.replace(",", " AS ")).append(")");
+            case CaseOperationAtom _UNNAMED-> {
+            	int size = expressions.size();
+            	sb.append("CASE ");
+            	sb.append(unparseExpression(expressions.get(0)));
+            	
+            	for (int i = 1; i < size - 1; i++) {
+            		sb.append(" WHEN ");
+            		sb.append(unparseExpression(expressions.get(i)));
+            		
+            	}
+            	
+            	sb.append(" THEN ");
+            	sb.append(unparseExpression(expressions.get(size - 1)));
+            	sb.append(" END ");
+            	
             }
-            case TERM_INFIX -> {
-                sb.append(unparseExpression(expressions.get(0)));
-                sb.append(" ");
-                sb.append(name);
-                sb.append(" ");
-                sb.append(unparseExpression(expressions.get(1)));
+            case EmptyOperationAtom _UNNAMED-> sb.append("");
+            case FunctionOperationAtom _UNNAMED-> sb.append(name).append("(").append(expressionText).append(")");
+            case InfixOperationAtom _UNNAMED-> {
+            	sb.append(unparseExpression(expressions.get(0)));
+            	sb.append(" ");
+            	sb.append(name);
+            	sb.append(" ");
+            	sb.append(unparseExpression(expressions.get(1)));
             }
-            case TERM_POSTFIX -> sb.append(expressionText).append(" ").append(name);
-            case TERM_PREFIX -> sb.append(name).append(" ").append(expressionText);
+            case InternalOperationAtom _UNNAMED-> sb.append("$").append(expressionText);
+            case MethodOperationAtom _UNNAMED-> sb.append(object).append(".").append(name).append("(").append(expressionText).append(")");
+            case ParenthesesOperationAtom _UNNAMED-> sb.append("(").append(expressionText).append(")");
+            case PlainPropertyOperationAtom _UNNAMED-> sb.append(expressionText).append(".").append(name);
+            case PostfixOperationAtom _UNNAMED-> sb.append(expressionText).append(" ").append(name);
+            case PrefixOperationAtom _UNNAMED-> sb.append(name).append(" ").append(expressionText);
+            case QuotedPropertyOperationAtom _UNNAMED-> sb.append(expressionText).append(".&").append(name).append("");
 
-            default -> sb.append(":xxx");
         }
 
         return sb;

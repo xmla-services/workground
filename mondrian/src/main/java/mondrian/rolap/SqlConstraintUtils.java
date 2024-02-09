@@ -664,7 +664,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       if ( fun.getFunDef() instanceof ParenthesesFunDef ) {
         assert ( fun.getArgCount() == 1 );
         expandExpressions( member, fun.getArg( 0 ), evaluator, expandedSet );
-      } else if ( fun.getFunName().equals( "+" ) ) {
+      } else if ( fun.getOperationAtom().name().equals( "+" ) ) {
         Expression[] expressions = fun.getArgs();
         for ( Expression innerExp : expressions ) {
           expandExpressions( member, innerExp, evaluator, expandedSet );

@@ -22,11 +22,9 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.api.function.FunctionAtom;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -45,9 +43,10 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.function.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.FunctionAtomR;
 import org.eclipse.daanse.olap.function.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.resolver.NoExpressionRequiredFunctionResolver;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +80,7 @@ import mondrian.util.CartesianProductList;
  */
 public class CrossJoinFunDef extends AbstractFunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( CrossJoinFunDef.class );
-	static FunctionAtom functionAtom = new FunctionAtomR("Crossjoin", Syntax.Function);
+	static OperationAtom functionAtom = new FunctionOperationAtom("Crossjoin");
 
 
   static final ResolverImpl Resolver = new ResolverImpl();
@@ -1053,7 +1052,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     }
 
 	@Override
-	public FunctionAtom getFunctionAtom() {
+	public OperationAtom getFunctionAtom() {
 		return functionAtom;
 	}
   }
