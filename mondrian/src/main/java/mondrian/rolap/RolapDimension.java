@@ -104,17 +104,17 @@ class RolapDimension extends DimensionBase {
     RolapDimension(
         RolapSchema schema,
         RolapCube cube,
-        MappingPrivateDimension xmlDimension,
-        MappingCubeDimension xmlCubeDimension)
+        MappingPrivateDimension mappingDimension,
+        MappingCubeDimension mappingCubeDimension)
     {
         this(
             schema,
-            xmlDimension.name(),
-            xmlDimension.caption(),
-            xmlDimension.visible(),
-            xmlDimension.description(),
-            DimensionTypeUtil.getDimensionType(xmlDimension),
-            RolapHierarchy.createMetadataMap(xmlDimension.annotations()));
+            mappingDimension.name(),
+            mappingDimension.caption(),
+            mappingDimension.visible(),
+            mappingDimension.description(),
+            DimensionTypeUtil.getDimensionType(mappingDimension),
+            RolapHierarchy.createMetadataMap(mappingDimension.annotations()));
 
         Util.assertPrecondition(schema != null);
 
@@ -122,13 +122,13 @@ class RolapDimension extends DimensionBase {
             Util.assertTrue(cube.getSchema() == schema);
         }
 
-        if (!Util.isEmpty(xmlDimension.caption())) {
-            setCaption(xmlDimension.caption());
+        if (!Util.isEmpty(mappingDimension.caption())) {
+            setCaption(mappingDimension.caption());
         }
-        this.hierarchies = new RolapHierarchy[xmlDimension.hierarchies().size()];
-        for (int i = 0; i < xmlDimension.hierarchies().size(); i++) {
+        this.hierarchies = new RolapHierarchy[mappingDimension.hierarchies().size()];
+        for (int i = 0; i < mappingDimension.hierarchies().size(); i++) {
             RolapHierarchy hierarchy = new RolapHierarchy(
-                cube, this, xmlDimension.hierarchies().get(i), xmlCubeDimension);
+                cube, this, mappingDimension.hierarchies().get(i), mappingCubeDimension);
             hierarchies[i] = hierarchy;
         }
 
@@ -182,10 +182,10 @@ class RolapDimension extends DimensionBase {
     /**
      * Initializes a dimension within the context of a cube.
      */
-    void init(MappingCubeDimension xmlDimension) {
+    void init(MappingCubeDimension mappingDimension) {
         for (int i = 0; i < hierarchies.length; i++) {
             if (hierarchies[i] != null) {
-                ((RolapHierarchy) hierarchies[i]).init(xmlDimension);
+                ((RolapHierarchy) hierarchies[i]).init(mappingDimension);
             }
         }
     }

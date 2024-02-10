@@ -155,7 +155,7 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
         }
 
         @Override
-		public boolean requiresExpression(int k) {
+		public boolean requiresScalarExpressionOnArgument(int k) {
             return true;
         }
 

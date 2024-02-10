@@ -81,7 +81,7 @@ outer:
     }
 
     @Override
-	public boolean requiresExpression(int k) {
+	public boolean requiresScalarExpressionOnArgument(int k) {
         for (String signature : signatures) {
         	DataType[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)

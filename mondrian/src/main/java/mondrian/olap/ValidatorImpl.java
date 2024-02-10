@@ -356,11 +356,9 @@ abstract class ValidatorImpl implements Validator {
         // operator (which returns a scalar) or the crossjoin operator
         // (which returns a set) we have to know what kind of expression is
         // expected.
-        List<FunctionResolver> resolvers =
-            funTable.getResolvers(
-                funCall.getOperationAtom());
-        for (FunctionResolver resolver2 : resolvers) {
-            if (!resolver2.requiresExpression(k)) {
+        List<FunctionResolver> resolvers = funTable.getResolvers(funCall.getOperationAtom());
+        for (FunctionResolver resolver : resolvers) {
+            if (!resolver.requiresScalarExpressionOnArgument(k)) {
                 // This resolver accepts a set in this argument position,
                 // therefore we don't REQUIRE a scalar expression.
                 return false;

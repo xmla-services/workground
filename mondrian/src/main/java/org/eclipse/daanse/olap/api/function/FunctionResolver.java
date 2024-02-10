@@ -42,54 +42,57 @@ import org.eclipse.daanse.olap.operation.api.OperationAtom;
  * of arguments into a {@link FunctionDefinition}.
  */
 public interface FunctionResolver {
-  
+
+    public OperationAtom getFunctionAtom();
+
     /**
-     * Given a particular set of arguments the function is applied to, returns
-     * the correct overloaded form of the function.
+     * Given a particular set of arguments the function is applied to, returns the
+     * correct overloaded form of the function.
      *
-     * <p>The method adds an item to <code>conversions</code> every
-     * time it performs an implicit type-conversion. If there are several
-     * candidate functions with the same signature, the validator will choose
-     * the one which used the fewest implicit conversions.</p>
+     * <p>
+     * The method adds an item to <code>conversions</code> every time it performs an
+     * implicit type-conversion. If there are several candidate functions with the
+     * same signature, the validator will choose the one which used the fewest
+     * implicit conversions.
+     * </p>
      *
-     * @param args Expressions which this function call is applied to.
-     * @param validator Validator
+     * @param args        Expressions which this function call is applied to.
+     * @param validator   Validator
      * @param conversions List of implicit conversions performed (out)
      *
-     * @return The function definition which matches these arguments, or null
-     *   if no function definition that this resolver knows about matches.
+     * @return The function definition which matches these arguments, or null if no
+     *         function definition that this resolver knows about matches.
      */
-    FunctionDefinition resolve(
-        Expression[] args,
-        Validator validator,
-        List<Conversion> conversions);
+    FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions);
 
     /**
-     * Returns whether a particular argument must be a scalar expression.
-     * Returns <code>false</code> if any of the variants of this resolver
-     * allows a set as its <code>k</code>th argument; true otherwise.
+     * iIndicated whether a argument with a given <code>positionOfArgument</code>
+     * must be a scalar expression. Returns <code>false</code> if any of the
+     * variants of this resolver allows a set as its
+     * <code>positionOfArgument</code>th argument; true otherwise.
+     * 
+     * if the ( positionOfArgument < 1 ) implementations must return false;
+     * 
      */
-    boolean requiresExpression(int k);
+    boolean requiresScalarExpressionOnArgument(int positionOfArgument);
 
     /**
-     * Returns a {@link List} of symbolic constants which can appear as arguments
-     * to this function.
+     * Returns a {@link List} of symbolic constants which can appear as arguments to
+     * this function.
      *
-     * <p>For example, the <code>DrilldownMember</code> may take the symbol
-     * <code>RECURSIVE</code> as an argument. Most functions do not define
-     * any symbolic constants.
+     * <p>
+     * For example, the <code>DrilldownMember</code> may take the symbol
+     * <code>RECURSIVE</code> as an argument. Most functions do not define any
+     * symbolic constants.
      *
      * @return An {@link List} of the names of the symbolic constants
      */
-	default List<String> getReservedWords() {
-		return List.of();
-	}
-	
+    default List<String> getReservedWords() {
+        return List.of();
+    }
 
-	public OperationAtom getFunctionAtom();
-
-    default List<FunctionMetaData> getRepresentativeFunctionMetaDatas(){
-    	return List.of();
+    default List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return List.of();
     }
 
     /**
@@ -98,25 +101,25 @@ public interface FunctionResolver {
      */
     public interface Conversion {
         /**
-         * Returns the cost of the conversion. If there are several matching
-         * overloads, the one with the lowest overall cost will be preferred.
+         * Returns the cost of the conversion. If there are several matching overloads,
+         * the one with the lowest overall cost will be preferred.
          *
          * @return Cost of conversion
          */
         int getCost();
 
         /**
-         * Checks the viability of implicit conversions. Converting from a
-         * dimension to a hierarchy is valid if is only one hierarchy.
+         * Checks the viability of implicit conversions. Converting from a dimension to
+         * a hierarchy is valid if is only one hierarchy.
          */
         void checkValid();
 
         /**
-         * Applies this conversion to its argument, modifying the argument list
-         * in place.
+         * Applies this conversion to its argument, modifying the argument list in
+         * place.
          *
          * @param validator Validator
-         * @param args Argument list
+         * @param args      Argument list
          */
         void apply(Validator validator, List<Expression> args);
     }

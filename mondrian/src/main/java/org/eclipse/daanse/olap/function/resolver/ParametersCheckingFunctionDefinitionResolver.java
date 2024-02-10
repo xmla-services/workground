@@ -69,7 +69,7 @@ public class ParametersCheckingFunctionDefinitionResolver implements FunctionRes
 	}
 
 	@Override
-	public boolean requiresExpression(int k) {
+	public boolean requiresScalarExpressionOnArgument(int k) {
 		DataType[] parameterDataTypes = functionDefinition.getFunctionMetaData().parameterDataTypes();
 		return (k >= parameterDataTypes.length) || (parameterDataTypes[k] != DataType.SET);
 	}

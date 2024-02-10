@@ -141,7 +141,7 @@ public class UdfResolver implements FunctionResolver {
     }
 
     @Override
-	public boolean requiresExpression(int k) {
+	public boolean requiresScalarExpressionOnArgument(int k) {
         return false;
     }
 

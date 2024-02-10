@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.function.FunctionResolver;
 public abstract class NoExpressionRequiredFunctionResolver implements FunctionResolver {
 
 	@Override
-	public boolean requiresExpression(int k) {
+	public boolean requiresScalarExpressionOnArgument(int positionOfArgument) {
 		return false;
 	}
 
