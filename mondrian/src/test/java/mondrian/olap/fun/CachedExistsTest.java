@@ -13,6 +13,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
@@ -42,7 +43,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testEducationLevelSubtotals(TestContext context) {
+    void testEducationLevelSubtotals(Context context) {
     String query =
         "WITH "
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_])' "
@@ -71,7 +72,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProductFamilySubtotals(TestContext context) {
+    void testProductFamilySubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER(FILTER([Product].[Product Department].MEMBERS,ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IN {[Product].[All Products].[Drink],[Product].[All Products].[Non-Consumable]}), NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -100,7 +101,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProductFamilyProductDepartmentSubtotals(TestContext context) {
+    void testProductFamilyProductDepartmentSubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n"
@@ -135,7 +136,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testRowColumSubtotals(TestContext context) {
+    void testRowColumSubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_]))'\r\n"
@@ -173,7 +174,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testProductFamilyDisplayMember(TestContext context) {
+    void testProductFamilyDisplayMember(Context context) {
     String query =
         "WITH\r\n" +
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n" +
@@ -215,7 +216,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTop10Customers(TestContext context) {
+    void testTop10Customers(Context context) {
     String query =
         "WITH\r\n" +
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store_]))'\r\n" +
@@ -287,7 +288,7 @@ class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
-    void testTop1CustomersWithColumnLevel(TestContext context) {
+    void testTop1CustomersWithColumnLevel(Context context) {
     String query =
         "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Customers_])))'\n"
@@ -353,7 +354,7 @@ class CachedExistsTest{
 		}
 
 	};
-		((BaseTestContext) context).update(p);
+		((BaseContext) context).update(p);
     */
         class TestMondrian2704Modifier extends RDbMappingSchemaModifier {
 

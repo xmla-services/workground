@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -75,8 +76,8 @@ import org.opencube.junit5.context.TestContext;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.MemberCacheHelper;
@@ -88,7 +89,6 @@ import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SmartMemberReader;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -223,7 +223,7 @@ public class TestUtil {
 	 * @param queryString Query string
 	 * @param pattern     Pattern which exception must match
 	 */
-	public static void assertQueryThrows(TestContext context, String queryString, String pattern) {
+	public static void assertQueryThrows(Context context, String queryString, String pattern) {
 		Throwable throwable;
 		try {
 			Result result = executeQuery(context.getConnection(), queryString);

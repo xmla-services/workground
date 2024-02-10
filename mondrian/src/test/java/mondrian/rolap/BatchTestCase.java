@@ -31,6 +31,7 @@ import java.util.function.Function;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -45,8 +46,8 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryImpl;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
 import mondrian.rolap.RolapNative.NativeEvent;
@@ -823,7 +824,7 @@ public class BatchTestCase{
      * @param mdx            Query
      * @param expectedResult Expected result string
      */
-    protected void checkNotNative(TestContext context,
+    protected void checkNotNative(Context context,
         int rowCount,
         String mdx,
         String expectedResult)
@@ -912,7 +913,7 @@ public class BatchTestCase{
      * @param freshConnection Whether fresh connection is required
      */
     protected void checkNative(
-        TestContext context,
+        Context context,
         int resultLimit,
         int rowCount,
         String mdx,
@@ -1026,7 +1027,7 @@ public class BatchTestCase{
         new BatchTestCase().checkNotNative(context, mdx, null);
     }
 
-    public static void checkNotNative(TestContext context, String mdx, Result expectedResult) {
+    public static void checkNotNative(Context context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNotNative(context,
                 getRowCount(expectedResult),
@@ -1034,7 +1035,7 @@ public class BatchTestCase{
                 TestUtil.toString(expectedResult));
     }
 
-    public static void checkNative(TestContext context, String mdx, Result expectedResult) {
+    public static void checkNative(Context context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNative(context,
                 0,
