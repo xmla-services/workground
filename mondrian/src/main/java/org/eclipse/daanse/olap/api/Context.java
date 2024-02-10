@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
+import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
@@ -125,6 +126,8 @@ public interface Context {
     Semaphore getQueryLimitSemaphore();
 
 	Optional<Map<Object, Object>> getSqlMemberSourceValuePool();
+
+    FunctionService getFunctionService();
     
     
 }

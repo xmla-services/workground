@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.function;
+package org.eclipse.daanse.olap.function.core;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;

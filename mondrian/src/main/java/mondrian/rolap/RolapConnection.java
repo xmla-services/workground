@@ -446,7 +446,7 @@ public QueryComponent parseStatement(String query ) {
     Locus.push( locus );
     try {
       QueryComponent queryPart =
-        parseStatement( statement, query, null, false );
+        parseStatement( statement, query, context.getFunctionService(), false );
       if ( queryPart instanceof QueryImpl q) {
           q.setOwnStatement( true );
         statement = null;
@@ -470,8 +470,7 @@ public Expression parseExpression( String expr ) {
     final Statement statement = getInternalStatement();
     try {
       MdxParserValidator parser = createParser();
-      final FunctionTable funTable = getSchema().getFunTable();
-      return parser.parseExpression( statement, expr, debug, funTable );
+      return parser.parseExpression( statement, expr, debug, context.getFunctionService() );
     } catch ( Throwable exception ) {
       throw new MondrianException(message(FailedToParseQuery,
         expr),

@@ -67,12 +67,7 @@ public interface Schema extends MetaElement {
      */
     Role lookupRole(String role);
 
-    /**
-     * Returns this schema's function table.
-     */
-    FunctionTable getFunTable();
-
-    /**
+   /**
      * Returns this schema's parameters.
      */
     Parameter[] getParameters();

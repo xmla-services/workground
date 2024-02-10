@@ -199,7 +199,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
                             (Query) ((ConnectionBase)connection).parseStatementN(
                                 StatementImpl.this,
                                 mdx,
-                                null,
+                                context.getFunctionService(),
                                 false);
                         final CellSetMetaDataImpl cellSetMetaData =
                             new CellSetMetaDataImpl(

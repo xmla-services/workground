@@ -21,8 +21,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>api</module>
-  	<module>core</module>
     <module>definition</module>
   	<module>user</module>
   </modules>

@@ -14,11 +14,13 @@ import mondrian.rolap.RolapConnectionProps;
 import mondrian.server.MonitorImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
+import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.core.AbstractBasicContext;
 import org.eclipse.daanse.olap.core.BasicContextConfig;
+import org.eclipse.daanse.olap.function.core.FunctionServiceImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
@@ -42,6 +44,7 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	private Optional<String> description = Optional.empty();
     private TestConfig testConfig;
     private Semaphore queryLimimitSemaphore;
+    private FunctionService functionService =new FunctionServiceImpl();
 
 
 
@@ -197,5 +200,14 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	public Optional<Map<Object, Object>> getSqlMemberSourceValuePool() {
 		return Optional.empty();
 	}
+
+    @Override
+    public FunctionService getFunctionService() {
+        return functionService;
+    }
+
+    public void setFunctionService(FunctionService functionService) {
+        this.functionService = functionService;
+    }
 
 }

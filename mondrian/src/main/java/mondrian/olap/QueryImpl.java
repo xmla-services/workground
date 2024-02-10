@@ -423,10 +423,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @return Validator
      */
     public Validator createValidator() {
-        return createValidator(
-            statement.getSchema().getFunTable(),
-            false,
-            new HashMap<>());
+        return createValidator(new HashMap<>());
     }
 
 
@@ -434,7 +431,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         return createValidator(
-            statement.getSchema().getFunTable(),
+                statement.getMondrianConnection().getContext().getFunctionService(),
             false,
             resolvedIdentifiers);
     }

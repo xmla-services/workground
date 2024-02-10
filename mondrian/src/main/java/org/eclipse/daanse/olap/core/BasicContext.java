@@ -21,11 +21,11 @@ import java.util.concurrent.Semaphore;
 
 import javax.sql.DataSource;
 
-import mondrian.server.MonitorImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
@@ -47,6 +47,7 @@ import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.MonitorImpl;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
@@ -80,6 +81,9 @@ public class BasicContext extends AbstractBasicContext {
 
 	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private ExpressionCompilerFactory expressionCompilerFactory = null;
+	
+	@Reference 
+	private FunctionService functionService;
 
 	private BasicContextConfig config;
 
@@ -188,4 +192,9 @@ public class BasicContext extends AbstractBasicContext {
 	public Optional<Map<Object, Object>> getSqlMemberSourceValuePool() {
 		return Optional.empty(); //Caffein Cache is an option
 	}
+	
+	@Override
+    public FunctionService getFunctionService() {
+        return functionService;
+    }
 }

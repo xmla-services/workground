@@ -209,12 +209,6 @@ public class RolapSchema implements Schema {
     private final Map<String, NamedSet> mapNameToSet =
         new HashMap<>();
 
-    /**
-     * Table containing all standard MDX functions, plus user-defined functions
-     * for this schema.
-     */
-    private FunctionTable funTable;
-
     private MappingSchema mappingSchema;
 
     final List<RolapSchemaParameter > parameterList =
@@ -452,50 +446,37 @@ public class RolapSchema implements Schema {
 
         this.metadata =
             RolapHierarchy.createMetadataMap(mappingSchema.annotations());
-        // Validate user-defined functions. Must be done before we validate
-        // calculated members, because calculated members will need to use the
-        // function table.
-        final Map<String, UdfResolver.UdfFactory> mapNameToUdf =
-            new HashMap<>();
-        for (MappingUserDefinedFunction udf
-            : mappingSchema.userDefinedFunctions())
-        {
-            final Scripts.ScriptDefinition scriptDef = toScriptDef(udf.script());
-            defineFunction(mapNameToUdf, udf.name(), udf.className(), scriptDef);
-        }
-        final RolapSchemaFunctionTable funTable =
-            new RolapSchemaFunctionTable(mapNameToUdf.values());
-        funTable.init();
-        this.funTable = funTable;
+
+
 
         // Validate public dimensions.
-        for (MappingPrivateDimension xmlDimension : mappingSchema.dimensions()) {
-            if (xmlDimension.foreignKey() != null) {
+        for (MappingPrivateDimension mappingDimension : mappingSchema.dimensions()) {
+            if (mappingDimension.foreignKey() != null) {
                 throw new MondrianException(message(
                     PublicDimensionMustNotHaveForeignKey,
-                        xmlDimension.name()));
+                        mappingDimension.name()));
             }
         }
 
         // Create parameters.
         Set<String> parameterNames = new HashSet<>();
-        for (MappingParameter xmlParameter : mappingSchema.parameters()) {
-            String name = xmlParameter.name();
+        for (MappingParameter mappingParameter : mappingSchema.parameters()) {
+            String name = mappingParameter.name();
             if (!parameterNames.add(name)) {
                 throw new MondrianException(message(DuplicateSchemaParameter,
                     name));
             }
             Type type;
-            if (ParameterTypeEnum.STRING.equals(xmlParameter.type())) {
+            if (ParameterTypeEnum.STRING.equals(mappingParameter.type())) {
                 type = StringType.INSTANCE;
-            } else if (ParameterTypeEnum.NUMERIC.equals(xmlParameter.type())) {
+            } else if (ParameterTypeEnum.NUMERIC.equals(mappingParameter.type())) {
                 type = NumericType.INSTANCE;
             } else {
                 type = new MemberType(null, null, null, null);
             }
-            final String description = xmlParameter.description();
-            final boolean modifiable = xmlParameter.modifiable();
-            String defaultValue = xmlParameter.defaultValue();
+            final String description = mappingParameter.description();
+            final boolean modifiable = mappingParameter.modifiable();
+            String defaultValue = mappingParameter.defaultValue();
             RolapSchemaParameter param =
                 new RolapSchemaParameter(
                     this, name, defaultValue, description, type, modifiable);
@@ -901,11 +882,6 @@ public class RolapSchema implements Schema {
     }
 
     @Override
-	public FunctionTable getFunTable() {
-        return funTable;
-    }
-
-    @Override
 	public Parameter[] getParameters() {
         return parameterList.toArray(
             new Parameter[parameterList.size()]);
@@ -1198,31 +1174,6 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         return rolapStarRegistry;
     }
 
-    /**
-     * Function table which contains all of the user-defined functions in this
-     * schema, plus all of the standard functions.
-     */
-    static class RolapSchemaFunctionTable extends FunTableImpl {
-        private final List<UdfResolver.UdfFactory> udfFactoryList;
-
-        RolapSchemaFunctionTable(Collection<UdfResolver.UdfFactory> udfs) {
-            udfFactoryList = new ArrayList<>(udfs);
-        }
-
-        @Override
-		public void defineFunctions(FunctionTableCollector builder) {
-            final FunctionTable globalFunTable = GlobalFunTable.instance();
-            for (String reservedWord : globalFunTable.getReservedWords()) {
-                builder.defineReserved(reservedWord);
-            }
-            for (FunctionResolver resolver : globalFunTable.getResolvers()) {
-                builder.define(resolver);
-            }
-            for (UdfResolver.UdfFactory udfFactory : udfFactoryList) {
-                builder.define(new UdfResolver(udfFactory));
-            }
-        }
-    }
 
     public RolapStar getStar(final String factTableName) {
         return getStar(RolapUtil.makeRolapStarKey(factTableName));

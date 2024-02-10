@@ -77,10 +77,6 @@ public abstract class ConnectionBase implements Connection {
         MdxParserValidator parser = createParser();
         boolean debug = false;
 
-        if (funTable == null) {
-            funTable = getSchema().getFunTable();
-        }
-
         if (getLogger().isDebugEnabled()) {
             String s = new StringBuilder().append(Util.NL).append(query.replaceAll("[\n\r]", "_")).toString();
             getLogger().debug(s);
@@ -109,10 +105,6 @@ public abstract class ConnectionBase implements Connection {
                                            boolean strictValidation) {
         MdxParserValidator parser = createParser();
         boolean debug = false;
-
-        if (funTable == null) {
-            funTable = getSchema().getFunTable();
-        }
 
         if (getLogger().isDebugEnabled()) {
             String s = new StringBuilder().append(Util.NL).append(query.replaceAll("[\n\r]", "_")).toString();
