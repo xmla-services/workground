@@ -24,6 +24,7 @@ import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
@@ -565,9 +566,9 @@ System.out.println(buf.toString());
 
     //TODO: Free SegmentCacheManager if connection closed
 
-	private Map<RolapConnection, SegmentCacheManager> segCachStore = new HashMap<>();
+	private Map<Connection, SegmentCacheManager> segCachStore = new HashMap<>();
 
-	public SegmentCacheManager getCacheMgr(RolapConnection connection) {
+	public SegmentCacheManager getCacheMgr(Connection connection) {
 		if (connection == null || !connection.getContext().getConfig().enableSessionCaching()) {
 			return cacheMgr;
 		} else {

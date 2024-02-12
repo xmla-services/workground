@@ -34,8 +34,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.InvalidHierarchyException;
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -43,7 +41,6 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -93,8 +90,10 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.IdImpl;
-import mondrian.olap.SystemWideProperties;
+import mondrian.olap.InvalidHierarchyException;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
@@ -301,7 +300,7 @@ public class RolapHierarchy extends HierarchyBase {
             this.relation =
                 RolapUtil.convertInlineTableToRelation(
                     inlineTable,
-                    getRolapSchema().getDialect());
+                    getRolapSchema().getInternalConnection().getContext().getDialect());
         }
         this.memberReaderClass = xmlHierarchy.memberReaderClass();
         this.uniqueKeyLevelName = xmlHierarchy.uniqueKeyLevelName();

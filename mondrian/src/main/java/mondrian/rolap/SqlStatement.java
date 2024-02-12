@@ -9,6 +9,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
+import static mondrian.resource.MondrianResource.message;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
@@ -26,6 +29,7 @@ import java.util.function.Consumer;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.element.Schema;
 
 import mondrian.olap.Util;
 import mondrian.server.Execution;
@@ -37,9 +41,6 @@ import mondrian.server.monitor.SqlStatementExecuteEvent;
 import mondrian.server.monitor.SqlStatementStartEvent;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
-
-import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * SqlStatement contains a SQL statement and associated resources throughout its lifetime.
@@ -460,11 +461,8 @@ public class SqlStatement {
         this.types == null ? null : this.types.get( i );
       // There might not be a schema constructed yet,
       // so watch out here for NPEs.
-      RolapSchema schema = locus.execution.getMondrianStatement()
-        .getMondrianConnection()
-        .getSchema();
 
-      Dialect dialect = getDialect( schema );
+      Dialect dialect = context.getDialect();
 
       if ( suggestedType != null ) {
         typeList.add( suggestedType );
@@ -476,23 +474,6 @@ public class SqlStatement {
     }
     return typeList;
   }
-
-  /**
-   * Retrieves dialect from schema or attempts to create it in case it is null
-   *
-   * @param schema rolap schema
-   * @return database dialect
-   */
-  protected Dialect getDialect( RolapSchema schema ) {
-    Dialect dialect = null;
-    if ( schema != null && schema.getDialect() != null ) {
-      dialect = schema.getDialect();
-    } else {
-      dialect = getContext().getDialect();
-    }
-    return dialect;
-  }
-
 
   public List<Accessor> getAccessors() {
     return accessors;

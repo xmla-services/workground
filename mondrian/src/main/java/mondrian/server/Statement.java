@@ -11,11 +11,11 @@ package mondrian.server;
 
 import java.sql.SQLException;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
 
 /**
@@ -47,14 +47,14 @@ public interface Statement {
      *
      * @return Schema, not null
      */
-    RolapSchema getSchema();
+    Schema getSchema();
 
     /**
      * Returns this statement's connection.
      *
      * @return connection
      */
-    RolapConnection getMondrianConnection();
+    Connection getMondrianConnection();
 
 
 

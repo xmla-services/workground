@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.MonitorImpl;
@@ -190,7 +189,7 @@ public abstract class AbstractBasicContext implements Context {
 					connections.size());
 		}
 		statements.add( statement);
-		final RolapConnection connection = statement.getMondrianConnection();
+		final Connection connection = statement.getMondrianConnection();
 		monitor.sendEvent(new StatementStartEvent(System.currentTimeMillis(), connection.getContext().getName(),
 				connection.getId(), statement.getId()));
 	}
@@ -204,8 +203,8 @@ public abstract class AbstractBasicContext implements Context {
 		if (shutdown) {
 			throw new MondrianException("Server already shutdown.");
 		}
-		statements.remove(statement.getId());
-		final RolapConnection connection = statement.getMondrianConnection();
+		statements.remove(statement);
+		final Connection connection = statement.getMondrianConnection();
 		monitor.sendEvent(new StatementEndEvent(System.currentTimeMillis(), connection.getContext().getName(),
 				connection.getId(), statement.getId()));
 	}

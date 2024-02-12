@@ -11,6 +11,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.DrillthroughDisabled;
+import static mondrian.resource.MondrianResource.message;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractList;
@@ -20,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -53,8 +55,9 @@ import org.slf4j.Logger;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.SystemWideProperties;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.SetFunDef;
@@ -66,9 +69,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.server.monitor.SqlStatementEvent;
-
-import static mondrian.resource.MondrianResource.DrillthroughDisabled;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * <code>RolapCell</code> implements {@link org.eclipse.daanse.olap.api.result.Cell} within a
@@ -186,7 +186,7 @@ public class RolapCell implements Cell {
             return null;
         }
         cellRequest.setMaxRowCount(maxRowCount);
-        final RolapConnection connection =
+        final Connection connection =
             result.getExecution().getMondrianStatement()
                 .getMondrianConnection();
         final RolapAggregationManager aggMgr =
@@ -217,7 +217,7 @@ public class RolapCell implements Cell {
         if (cellRequest == null) {
             return -1;
         }
-        final RolapConnection connection =
+        final Connection connection =
             result.getExecution().getMondrianStatement()
                 .getMondrianConnection();
         final RolapAggregationManager aggMgr =
@@ -550,7 +550,8 @@ public class RolapCell implements Cell {
         int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
         int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
         final Schema schema = statement.getSchema();
-        Dialect dialect = ((RolapSchema) schema).getDialect();
+        
+        Dialect dialect = execution.getMondrianStatement().getMondrianConnection().getContext().getDialect();
         if (!dialect.supportsResultSetConcurrency(
                 resultSetType, resultSetConcurrency)
             || firstRowOrdinal <= 1)

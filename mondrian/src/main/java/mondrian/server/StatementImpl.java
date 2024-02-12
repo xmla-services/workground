@@ -13,9 +13,9 @@ import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
-import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
 
 /**
@@ -128,7 +128,7 @@ public abstract class StatementImpl implements Statement {
     }
 
     @Override
-	public RolapSchema getSchema() {
+	public Schema getSchema() {
         return getMondrianConnection().getSchema();
     }
 

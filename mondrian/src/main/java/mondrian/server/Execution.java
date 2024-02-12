@@ -10,27 +10,27 @@
 */
 package mondrian.server;
 
+import static mondrian.resource.MondrianResource.QueryCanceled;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
-import mondrian.olap.QueryCanceledException;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
+import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
-import mondrian.rolap.RolapConnection;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.server.monitor.ExecutionEndEvent;
 import mondrian.server.monitor.ExecutionPhaseEvent;
 import mondrian.server.monitor.ExecutionStartEvent;
-
-import static mondrian.resource.MondrianResource.QueryCanceled;
 
 /**
  * Execution context.
@@ -126,7 +126,7 @@ public class Execution {
   }
 
   public void tracePhase( int hitCount, int missCount, int pendingCount ) {
-    final RolapConnection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getMondrianConnection();
     final Context context = connection.getContext();
     final int hitCountInc = hitCount - this.cellCacheHitCount;
     final int missCountInc = missCount - this.cellCacheMissCount;
@@ -389,7 +389,7 @@ public class Execution {
   }
 
   private void fireExecutionEndEvent() {
-    final RolapConnection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getMondrianConnection();
     final Context context = connection.getContext();
     context.getMonitor().sendEvent( new ExecutionEndEvent( this.startTimeMillis, context.getName(), connection.getId(),
         this.statement.getId(), this.id, this.phase, this.state, this.cellCacheHitCount, this.cellCacheMissCount,
@@ -397,7 +397,7 @@ public class Execution {
   }
 
   private void fireExecutionStartEvent() {
-    final RolapConnection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getMondrianConnection();
     final Context context = connection.getContext();
     context.getMonitor().sendEvent( new ExecutionStartEvent( startTimeMillis, context.getName(), connection.getId(),
         statement.getId(), id, getMdx() ) );

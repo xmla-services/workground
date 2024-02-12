@@ -42,10 +42,6 @@ public abstract class ConnectionBase implements Connection {
     protected abstract Logger getLogger();
 
 
-
-
-    public abstract Statement getInternalStatement();
-
     @Override
 	public QueryImpl parseQuery(String query) {
         return (QueryImpl) parseStatement(query);

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.NamedSet;
@@ -44,7 +45,7 @@ class RolapEvaluatorRoot {
   final Map<Object, Object> expResultCache = new HashMap<>();
   final Map<Object, Object> tmpExpResultCache = new HashMap<>();
   final RolapCube cube;
-  final RolapConnection connection;
+  final Connection connection;
   final SchemaReader schemaReader;
   final Map<CompiledExpKey, Calc> compiledExps = new HashMap<>();
   final Statement statement;

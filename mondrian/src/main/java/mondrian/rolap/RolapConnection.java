@@ -29,6 +29,9 @@
 
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.FailedToParseQuery;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,13 +43,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
@@ -62,6 +63,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.ConnectionBase;
+import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryTimeoutException;
@@ -78,9 +80,6 @@ import mondrian.server.StatementImpl;
 import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.NotificationMemoryMonitor;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.FailedToParseQuery;
 
 public class RolapConnection extends ConnectionBase {
   private static final Logger LOGGER =
@@ -299,6 +298,7 @@ public Result execute( Query query ) {
    * @throws QueryTimeoutException          if query exceeded timeout specified in
    *                                        the property file
    */
+  @Override
   public Result execute( final Execution execution ) {
     return
       context.getResultShepherd()

@@ -56,7 +56,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
@@ -78,8 +77,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Schema;
-import org.eclipse.daanse.olap.api.function.FunctionResolver;
-import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -99,7 +96,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.slf4j.Logger;
@@ -107,10 +103,9 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianException;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
-import mondrian.olap.fun.FunTableImpl;
-import mondrian.olap.fun.GlobalFunTable;
 import mondrian.olap.fun.UdfResolver;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
@@ -427,17 +422,6 @@ public class RolapSchema implements Schema {
         return metadata;
     }
 
-    /**
-     * Returns this schema's SQL dialect.
-     *
-     * <p>NOTE: This method is not cheap. The implementation gets a connection
-     * from the connection pool.
-     *
-     * @return dialect
-     */
-    public Dialect getDialect() {
-        return context.getDialect();
-    }
 
     private void load(MappingSchema mappingSchema) {
         this.name = mappingSchema.name();

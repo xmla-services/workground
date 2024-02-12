@@ -562,11 +562,12 @@ public class FastBatchingCellReader implements CellReader {
      * @return Dialect
      */
     Dialect getDialect() {
+    	
         final RolapStar star = cube.getStar();
         if (star != null) {
             return star.getSqlQueryDialect();
         } else {
-            return cube.getSchema().getDialect();
+            return execution.getMondrianStatement().getMondrianConnection().getContext().getDialect();
         }
     }
 
