@@ -13,13 +13,13 @@
  */
 package mondrian.test;
 
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.ExpressiveNamesDataLoader;
 import org.opencube.junit5.propupdator.AppandExpressiveNamesCatalog;
-
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 class DemoTest {
 

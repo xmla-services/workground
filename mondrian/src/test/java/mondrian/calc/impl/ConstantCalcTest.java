@@ -11,12 +11,7 @@
 
 package mondrian.calc.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
-
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.NullType;
 
 /**
  * Test for <code>ConstantCalc</code>

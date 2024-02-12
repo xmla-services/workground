@@ -12,7 +12,11 @@ package mondrian.rolap;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 
-import mondrian.olap.SystemWideProperties;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.AfterEach;
@@ -23,12 +27,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.test.SqlPattern;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 class NativeEvalVirtualCubeTest extends BatchTestCase {
 

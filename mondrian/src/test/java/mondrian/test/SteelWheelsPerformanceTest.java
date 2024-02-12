@@ -9,6 +9,8 @@
 
 package mondrian.test;
 
+import static org.opencube.junit5.TestUtil.executeQuery;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,8 +19,6 @@ import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.opencube.junit5.TestUtil.executeQuery;
 
 /**
  * Those performance tests use the steel wheels schema

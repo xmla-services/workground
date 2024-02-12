@@ -28,11 +28,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import org.opencube.junit5.context.TestConfig;
 
 class SegmentCacheManagerTest {
 

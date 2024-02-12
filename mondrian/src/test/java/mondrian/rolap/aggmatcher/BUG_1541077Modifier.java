@@ -13,6 +13,9 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -26,9 +29,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BUG_1541077Modifier extends RDbMappingSchemaModifier {
 

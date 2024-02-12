@@ -9,9 +9,11 @@
 */
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.util.Bug;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.AfterEach;
@@ -23,10 +25,9 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.SystemWideProperties;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.util.Bug;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync

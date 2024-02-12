@@ -18,8 +18,6 @@ import static java.util.Arrays.asList;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,6 +29,7 @@ import java.util.Comparator;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -49,7 +48,6 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Execution;
-import mondrian.server.Statement;
 
 class SorterTest{
 

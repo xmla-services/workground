@@ -11,9 +11,13 @@
 
 package mondrian.olap;
 
+import static mondrian.resource.MondrianResource.FailedToParseQuery;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
@@ -22,10 +26,6 @@ import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
-import mondrian.server.Statement;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.FailedToParseQuery;
 
 /**
  * <code>ConnectionBase</code> implements some of the methods in

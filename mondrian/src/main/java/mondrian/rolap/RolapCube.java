@@ -57,6 +57,7 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -137,7 +138,6 @@ import mondrian.rolap.format.FormatterFactory;
 import mondrian.rolap.util.DimensionUtil;
 import mondrian.rolap.util.NamedSetUtil;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 import mondrian.spi.CellFormatter;
 
 /**

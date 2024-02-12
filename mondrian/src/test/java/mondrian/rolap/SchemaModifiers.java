@@ -13,9 +13,10 @@
  */
 package mondrian.rolap;
 
-import mondrian.test.BasicQueryTest;
-import mondrian.test.PerformanceTest;
-import mondrian.test.UdfTest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
@@ -88,9 +89,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMe
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import mondrian.test.BasicQueryTest;
+import mondrian.test.PerformanceTest;
+import mondrian.test.UdfTest;
 
 public class SchemaModifiers {
 

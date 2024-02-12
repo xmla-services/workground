@@ -15,7 +15,6 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.AfterEach;
@@ -26,8 +25,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
-
 import mondrian.test.SqlPattern;
 
 class EffectiveMemberCacheTest {

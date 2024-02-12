@@ -27,6 +27,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -67,7 +68,6 @@ import mondrian.rolap.agg.MemberColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 import mondrian.server.monitor.SqlStatementEvent;
 
 /**

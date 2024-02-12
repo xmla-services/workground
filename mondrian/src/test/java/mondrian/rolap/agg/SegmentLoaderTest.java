@@ -31,10 +31,10 @@ import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -46,18 +46,16 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.CellKey;
-import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
-
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -77,9 +75,9 @@ class SegmentLoaderTest extends BatchTestCase {
     private void prepareContext(Context context) {
         Connection connection = context.getConnection();
         cacheMgr =
-            ((RolapConnection) connection)
+            ((Connection) connection)
                 .getContext().getAggregationManager().cacheMgr;
-        statement = ((RolapConnection) connection).getInternalStatement();
+        statement = ((Connection) connection).getInternalStatement();
         execution = new Execution(statement, 1000);
         locus = new Locus(execution, null, null);
         cacheMgr = execution.getMondrianStatement().getMondrianConnection()

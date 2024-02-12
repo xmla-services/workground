@@ -11,6 +11,7 @@ package mondrian.olap;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Command;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
@@ -31,7 +32,6 @@ import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
 import mondrian.parser.MdxParserValidator;
-import mondrian.server.Statement;
 
 
 public class FactoryImpl

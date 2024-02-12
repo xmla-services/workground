@@ -10,16 +10,18 @@
 */
 package mondrian.test;
 
-import mondrian.olap.DelegatingRole;
-import mondrian.olap.IdImpl;
-import mondrian.olap.MondrianException;
-import mondrian.olap.SystemWideProperties;
-import mondrian.olap.RoleImpl;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionPropsR;
-import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.rolap.SchemaModifiers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
@@ -61,17 +63,16 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import mondrian.olap.DelegatingRole;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MondrianException;
+import mondrian.olap.RoleImpl;
+import mondrian.olap.SystemWideProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionPropsR;
+import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
+import mondrian.rolap.RolapSchemaPool;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * <code>AccessControlTest</code> is a set of unit-tests for access-control.

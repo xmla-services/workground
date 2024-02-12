@@ -10,8 +10,12 @@
 */
 package mondrian.test.loader;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.rolap.BatchTestCase;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.opencube.junit5.TestUtil.getDialect;
+
+import java.io.File;
+import java.util.function.Function;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -20,11 +24,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappin
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.TestUtil;
 
-import java.io.File;
-import java.util.function.Function;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.enums.DatabaseProduct;
+import mondrian.rolap.BatchTestCase;
 
 /**
  * Base class for tests that use

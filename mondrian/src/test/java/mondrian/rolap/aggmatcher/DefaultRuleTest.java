@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRule;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.AggRules;
 import org.eclipse.daanse.olap.rolap.aggmatch.jaxb.FactCountMatch;
@@ -28,6 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import mondrian.recorder.ListRecorder;
 
 /**

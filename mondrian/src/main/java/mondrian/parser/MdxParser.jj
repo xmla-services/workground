@@ -22,28 +22,55 @@ import java.util.*;
 import java.io.StringReader;
 import java.math.BigDecimal;
 
-import mondrian.olap.*;
-import org.eclipse.daanse.olap.api.*;
-import org.eclipse.daanse.olap.api.query.component.*;
-import org.eclipse.daanse.olap.api.function.*;
-import mondrian.mdx.*;
-import mondrian.server.Statement;
-import static mondrian.resource.MondrianResource.InvalidAxis;
-import static mondrian.resource.MondrianResource.message;
+import org.eclipse.daanse.olap.api.Command;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.SubtotalVisibility;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.UpdateClause;
+import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
 import org.eclipse.daanse.olap.operation.api.BracesOperationAtom;
 import org.eclipse.daanse.olap.operation.api.CaseOperationAtom;
 import org.eclipse.daanse.olap.operation.api.CastOperationAtom;
 import org.eclipse.daanse.olap.operation.api.EmptyOperationAtom;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 import org.eclipse.daanse.olap.operation.api.InfixOperationAtom;
+import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
+import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.eclipse.daanse.olap.operation.api.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.operation.api.PostfixOperationAtom;
 import org.eclipse.daanse.olap.operation.api.PrefixOperationAtom;
-import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
-import org.eclipse.daanse.olap.operation.api.MethodOperationAtom;
-import org.eclipse.daanse.olap.operation.api.AmpersandQuotedPropertyOperationAtom;
-import org.eclipse.daanse.olap.operation.api.OperationAtom;
-import org.eclipse.daanse.olap.operation.api.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.operation.api.QuotedPropertyOperationAtom;
+
+import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.CellPropertyImpl;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.IdImpl;
+import mondrian.olap.MemberPropertyImpl;
+import mondrian.olap.MondrianException;
+import mondrian.olap.NullLiteralImpl;
+import mondrian.olap.NumericLiteralImpl;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.StringLiteralImpl;
+import mondrian.olap.SubcubeImpl;
+import mondrian.olap.SymbolLiteralImpl;
+import mondrian.olap.UpdateImpl;
+import mondrian.resource.MondrianResource;
+
 /**
  * MDX parser, generated from MdxParser.jj.
  *
@@ -1459,7 +1486,7 @@ QueryAxis axisSpecification() :
             if (number.doubleValue() < 0
                 || number.doubleValue() != number.intValue())
             {
-                throw new MondrianException(message(InvalidAxis,
+                throw new MondrianException(MondrianResource.message(MondrianResource.InvalidAxis,
                     number.doubleValue()));
             }
 

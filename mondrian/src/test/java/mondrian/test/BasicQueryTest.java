@@ -94,7 +94,6 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.NumericType;
@@ -4498,7 +4497,7 @@ public class BasicQueryTest {
     flushSchemaCache(connection);
 
     RolapConnection conn = (RolapConnection) connection;
-    final mondrian.server.Statement stmt = conn.getInternalStatement();
+    final Statement stmt = conn.getInternalStatement();
     // use the logger to block and trigger cancelation at the right time
     Logger sqlLog = RolapUtil.SQL_LOGGER;
     //propSaver.set( sqlLog, org.apache.logging.log4j.Level.DEBUG );

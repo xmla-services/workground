@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 
 import mondrian.olap.Property;
-import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.aggmatcher.JdbcSchema;
 import mondrian.rolap.sql.SqlQuery;

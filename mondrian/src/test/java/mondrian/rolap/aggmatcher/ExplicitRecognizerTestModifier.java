@@ -13,6 +13,8 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
@@ -31,8 +33,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PropertyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-
-import java.util.List;
 
 public class ExplicitRecognizerTestModifier extends RDbMappingSchemaModifier {
 

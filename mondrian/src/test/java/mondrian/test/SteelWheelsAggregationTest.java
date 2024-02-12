@@ -10,7 +10,10 @@
 */
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -47,11 +50,8 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
-
-import java.util.List;
-
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * @author Andrey Khayrutdinov

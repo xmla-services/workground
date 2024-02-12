@@ -20,8 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Util;
-
 /**
  * Testcase for {@link BlockingHashMap}.
  *

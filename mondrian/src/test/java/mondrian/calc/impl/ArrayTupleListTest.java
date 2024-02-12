@@ -17,8 +17,9 @@ import static org.mockito.Mockito.mock;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import mondrian.olap.SystemWideProperties;
+
 import mondrian.olap.ResourceLimitExceededException;
+import mondrian.olap.SystemWideProperties;
 
 
 

@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
@@ -321,7 +320,7 @@ public class BatchTestCase{
             Bomb bomb;
             final Execution execution =
                 new Execution(
-                    ((RolapConnection) connection).getInternalStatement(),
+                    ((Connection) connection).getInternalStatement(),
                     1000);
             final AggregationManager aggMgr =
                 execution.getMondrianStatement()

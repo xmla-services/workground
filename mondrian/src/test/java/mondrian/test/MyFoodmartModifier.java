@@ -13,6 +13,8 @@
  */
 package mondrian.test;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
@@ -46,8 +48,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDi
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-
-import java.util.List;
 
 public class MyFoodmartModifier extends RDbMappingSchemaModifier {
 

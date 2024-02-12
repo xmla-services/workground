@@ -10,8 +10,9 @@
 */
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
-import mondrian.rolap.SchemaModifiers;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,8 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.SystemWideProperties;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * Test case to

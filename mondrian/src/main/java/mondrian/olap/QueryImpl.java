@@ -11,6 +11,22 @@
 */
 package mondrian.olap;
 
+import static mondrian.resource.MondrianResource.CalculatedMember;
+import static mondrian.resource.MondrianResource.CalculatedSet;
+import static mondrian.resource.MondrianResource.DuplicateAxis;
+import static mondrian.resource.MondrianResource.HierarchyInIndependentAxes;
+import static mondrian.resource.MondrianResource.MdxAxisShowSubtotalsNotSupported;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInFormula;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInQuery;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnAxis;
+import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnSlicer;
+import static mondrian.resource.MondrianResource.MdxFormulaNotFound;
+import static mondrian.resource.MondrianResource.NonContiguousAxis;
+import static mondrian.resource.MondrianResource.ParameterDefinedMoreThanOnce;
+import static mondrian.resource.MondrianResource.ParameterIsNotModifiable;
+import static mondrian.resource.MondrianResource.UnknownParameter;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +47,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
-import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -95,25 +111,8 @@ import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 import mondrian.spi.ProfileHandler;
 import mondrian.util.ArrayStack;
-
-import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.CalculatedMember;
-import static mondrian.resource.MondrianResource.CalculatedSet;
-import static mondrian.resource.MondrianResource.DuplicateAxis;
-import static mondrian.resource.MondrianResource.HierarchyInIndependentAxes;
-import static mondrian.resource.MondrianResource.MdxAxisShowSubtotalsNotSupported;
-import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInFormula;
-import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedInQuery;
-import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnAxis;
-import static mondrian.resource.MondrianResource.MdxCalculatedFormulaUsedOnSlicer;
-import static mondrian.resource.MondrianResource.MdxFormulaNotFound;
-import static mondrian.resource.MondrianResource.NonContiguousAxis;
-import static mondrian.resource.MondrianResource.ParameterDefinedMoreThanOnce;
-import static mondrian.resource.MondrianResource.ParameterIsNotModifiable;
-import static mondrian.resource.MondrianResource.UnknownParameter;
 
 /**
  * <code>Query</code> is an MDX query.

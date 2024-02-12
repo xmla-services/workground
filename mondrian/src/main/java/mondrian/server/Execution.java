@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.olap.MemoryLimitExceededException;
@@ -352,7 +353,7 @@ public class Execution {
     return startTimeMillis;
   }
 
-  public mondrian.server.Statement getMondrianStatement() {
+  public Statement getMondrianStatement() {
     return statement;
   }
 

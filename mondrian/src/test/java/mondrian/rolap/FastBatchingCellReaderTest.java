@@ -8,24 +8,31 @@
 */
 package mondrian.rolap;
 
-import mondrian.enums.DatabaseProduct;
-import mondrian.olap.SystemWideProperties;
-import mondrian.rolap.agg.AggregationKey;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.rolap.agg.Segment;
-import mondrian.rolap.agg.SegmentCacheManager;
-import mondrian.rolap.agg.SegmentWithData;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.Statement;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
-import mondrian.test.SqlPattern;
-import mondrian.util.Bug;
-import mondrian.util.DelegatingInvocationHandler;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
+
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -43,25 +50,18 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Future;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
+import mondrian.rolap.agg.AggregationKey;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.Segment;
+import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.SqlPattern;
+import mondrian.util.Bug;
+import mondrian.util.DelegatingInvocationHandler;
 
 /**
  * Test for <code>FastBatchingCellReader</code>.
@@ -98,7 +98,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   private void prepareContext(Context context) {
     connection = context.getConnection();
     connection.getCacheControl( null ).flushSchemaCache();
-    final Statement statement = ((RolapConnection) connection).getInternalStatement();
+    final Statement statement = ((Connection) connection).getInternalStatement();
     e = new Execution( statement, 0 );
     aggMgr = e.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
     locus = new Locus( e, "FastBatchingCellReaderTest", null );

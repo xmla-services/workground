@@ -9,6 +9,9 @@
 
 package mondrian.test.clearview;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
@@ -18,9 +21,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.test.DiffRepository;
-
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * <code>MiscTest</code> is a test suite which tests miscellaneous

@@ -8,7 +8,9 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.SystemWideProperties;
+import java.util.List;
+import java.util.function.Function;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -22,10 +24,9 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-import mondrian.test.loader.CsvDBTestCase;
 
-import java.util.List;
-import java.util.function.Function;
+import mondrian.olap.SystemWideProperties;
+import mondrian.test.loader.CsvDBTestCase;
 
 /**
  * @author Andrey Khayrutdinov

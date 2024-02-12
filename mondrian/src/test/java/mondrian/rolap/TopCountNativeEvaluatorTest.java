@@ -18,15 +18,15 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
-import mondrian.olap.NumericLiteralImpl;
-
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.operation.api.FunctionOperationAtom;
 import org.eclipse.daanse.olap.operation.api.OperationAtom;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import mondrian.olap.NumericLiteralImpl;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
 
@@ -95,11 +95,10 @@ class TopCountNativeEvaluatorTest {
     private FunctionDefinition mockFunctionDef() {
         FunctionDefinition topCountFunMock = mock(FunctionDefinition.class);
         FunctionMetaData functionInformation = mock(FunctionMetaData.class);
-        OperationAtom functionAtom = Mockito.mock(OperationAtom.class);
+        OperationAtom functionAtom = new FunctionOperationAtom("TOPCOUNT");
 
         when(topCountFunMock.getFunctionMetaData()).thenReturn(functionInformation);
         when(functionInformation.operationAtom()).thenReturn(functionAtom);
-        when(functionAtom.name()).thenReturn("TOPCOUNT");
 
         return topCountFunMock;
     }

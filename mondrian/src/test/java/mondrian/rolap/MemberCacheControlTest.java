@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -55,12 +56,10 @@ import org.slf4j.Logger;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 import mondrian.test.DiffRepository;
 
 /**

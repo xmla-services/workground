@@ -58,7 +58,6 @@ import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.test.PerformanceTest;
-
 import mondrian.util.ByteString;
 import mondrian.util.Pair;
 

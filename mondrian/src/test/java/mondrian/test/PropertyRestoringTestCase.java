@@ -8,9 +8,10 @@
 */
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+
+import mondrian.olap.SystemWideProperties;
 
 /**
  * @author Andrey Khayrutdinov

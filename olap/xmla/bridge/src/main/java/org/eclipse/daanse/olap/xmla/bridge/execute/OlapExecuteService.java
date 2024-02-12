@@ -154,7 +154,6 @@ import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 
-
 import mondrian.xmla.XmlaException;
 
 public class OlapExecuteService implements ExecuteService {
@@ -199,7 +198,7 @@ public class OlapExecuteService implements ExecuteService {
             */
                 ;
 
-                for (mondrian.server.Statement statement : connection.getContext().getStatements(connection)) {
+                for (Statement statement : connection.getContext().getStatements(connection)) {
                         statement.cancel();
                 }
             /*

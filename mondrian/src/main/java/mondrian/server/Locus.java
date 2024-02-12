@@ -10,6 +10,7 @@
 package mondrian.server;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
 
 import mondrian.rolap.RolapConnection;
 import mondrian.util.ArrayStack;

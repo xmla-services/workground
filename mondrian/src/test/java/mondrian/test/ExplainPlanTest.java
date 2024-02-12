@@ -42,8 +42,8 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.QueryTiming;
+import mondrian.olap.SystemWideProperties;
 import mondrian.spi.ProfileHandler;
 
 /**
@@ -162,7 +162,7 @@ mondrian.olap.fun.FilterFunDef$ImmutableIterCalc(type=SetType<MemberType<hierarc
 
 		// Plan after execution, including profiling.
 		final ArrayList<String> strings = new ArrayList<>();
-		((mondrian.server.Statement) statement).enableProfiling(new ProfileHandler() {
+		((Statement) statement).enableProfiling(new ProfileHandler() {
 			@Override
 			public void explain(String plan, QueryTiming timing) {
 				strings.add(plan);
@@ -422,7 +422,7 @@ mondrian.olap.fun.CrossJoinFunDef$CrossJoinIterCalc(type=SetType<TupleType<Membe
     final Statement statement = connection.createStatement();
 
     final ArrayList<String> strings = new ArrayList<>();
-    ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
+    ( statement ).enableProfiling( new ProfileHandler() {
       @Override
 	public void explain( String plan, QueryTiming timing ) {
         strings.add( plan );

@@ -45,6 +45,9 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
 
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.olap.ResourceLimitExceededException;
 import mondrian.server.Execution;
 
 /**
@@ -177,7 +180,7 @@ public interface Connection {
      */
 	int getId();
 
-	mondrian.server.Statement getInternalStatement();
+	Statement getInternalStatement();
 
 	/**
 	   * Executes a statement.

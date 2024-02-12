@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -47,7 +46,6 @@ import mondrian.util.ByteString;
 import mondrian.util.CartesianProductList;
 import mondrian.util.CombiningGenerator;
 import mondrian.util.Composite;
-import mondrian.util.Pair;
 import mondrian.util.ServiceDiscovery;
 import mondrian.util.UnionIterator;
 

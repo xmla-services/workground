@@ -342,10 +342,9 @@ class SqlConstraintUtilsTest {
                 parenthesesExpr), "ResolvedFunCall-Parentheses(N,Y)");
 
         FunctionMetaData functionInformation = Mockito.mock(FunctionMetaData.class);
-        OperationAtom functionAtom = Mockito.mock(FunctionOperationAtom.class);
+        OperationAtom functionAtom = new FunctionOperationAtom("dummy");
 
         Mockito.doReturn(functionAtom).when(functionInformation).operationAtom();
-        Mockito.doReturn("dummy").when(functionAtom).name();
         FunctionDefinition aggregateFunDef = new AggregateFunDef(functionInformation);
         Type aggregateReturnType = new DecimalType(1, 1);
 

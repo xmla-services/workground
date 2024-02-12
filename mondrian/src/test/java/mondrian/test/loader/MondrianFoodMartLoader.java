@@ -46,12 +46,12 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapUtil;
 

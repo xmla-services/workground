@@ -23,14 +23,13 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapDrillThroughAction;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
-public class StatementImpl extends mondrian.server.StatementImpl implements Statement, mondrian.server.Statement {
+public class StatementImpl extends mondrian.server.StatementImpl implements Statement {
 
     private Connection connection;
     private boolean closed;

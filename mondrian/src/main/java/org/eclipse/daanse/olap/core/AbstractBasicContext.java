@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,6 @@ import mondrian.olap.MondrianException;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.MonitorImpl;
-import mondrian.server.Statement;
 import mondrian.server.monitor.ConnectionEndEvent;
 import mondrian.server.monitor.ConnectionStartEvent;
 import mondrian.server.monitor.Monitor;

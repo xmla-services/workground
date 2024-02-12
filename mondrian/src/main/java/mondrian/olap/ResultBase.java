@@ -14,6 +14,7 @@ package mondrian.olap;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.slf4j.Logger;
 
 import mondrian.server.Execution;
-import mondrian.server.Statement;
 
 /**
  * Skeleton implementation of {@link Result}.

@@ -9,10 +9,13 @@
 
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
-import mondrian.olap.SolveOrderMode;
-import mondrian.olap.Util;
-import mondrian.rolap.SchemaModifiers;
+import static mondrian.olap.SolveOrderMode.ABSOLUTE;
+import static mondrian.olap.SolveOrderMode.SCOPED;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,12 +24,9 @@ import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import static mondrian.olap.SolveOrderMode.ABSOLUTE;
-import static mondrian.olap.SolveOrderMode.SCOPED;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.SolveOrderMode;
+import mondrian.olap.Util;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * <code>SolveOrderScopeIsolationTest</code> Test conformance to SSAS2005 solve

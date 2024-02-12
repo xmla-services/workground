@@ -9,7 +9,10 @@
  */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.SystemWideProperties;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +21,8 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-import java.util.List;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import mondrian.olap.SystemWideProperties;
 
 /**
  * @author Andrey Khayrutdinov

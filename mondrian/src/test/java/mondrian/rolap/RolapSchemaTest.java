@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -65,6 +64,7 @@ import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;

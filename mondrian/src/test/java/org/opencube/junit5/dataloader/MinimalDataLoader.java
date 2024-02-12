@@ -13,15 +13,16 @@
  */
 package org.opencube.junit5.dataloader;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.opencube.junit5.Constants;
-
-import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.opencube.junit5.Constants;
 
 public class MinimalDataLoader implements DataLoader {
     public static List<DataLoaderUtil.Table> minimalTables = List.of(

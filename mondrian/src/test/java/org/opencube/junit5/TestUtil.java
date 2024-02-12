@@ -49,6 +49,7 @@ import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -88,7 +89,6 @@ import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SmartMemberReader;
 import mondrian.server.Execution;
-import mondrian.server.Statement;
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 

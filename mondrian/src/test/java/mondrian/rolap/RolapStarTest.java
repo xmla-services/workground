@@ -9,8 +9,12 @@
 
 package mondrian.rolap;
 
-import mondrian.rolap.RolapStar.Column;
-import mondrian.rolap.util.RelationUtil;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
@@ -24,11 +28,8 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import mondrian.rolap.RolapStar.Column;
+import mondrian.rolap.util.RelationUtil;
 
 /**
  * Unit test for {@link RolapStar}.

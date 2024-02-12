@@ -13,9 +13,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.MdxCantFindMember;
 import static mondrian.resource.MondrianResource.NativeEvaluationUnsupported;
 import static mondrian.resource.MondrianResource.message;
-import static mondrian.resource.MondrianResource.MdxCantFindMember;
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.io.Serializable;
@@ -43,6 +43,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
@@ -56,14 +57,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 import mondrian.util.ClassResolver;
 
 /**

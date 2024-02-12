@@ -9,6 +9,7 @@
 
 package mondrian.parser;
 
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
@@ -16,7 +17,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import mondrian.olap.FactoryImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
-import mondrian.server.Statement;
 
 /**
  * Default implementation of {@link MdxParserValidator}, using the

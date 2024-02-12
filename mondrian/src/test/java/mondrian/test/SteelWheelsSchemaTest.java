@@ -36,8 +36,8 @@ import org.opencube.junit5.context.TestContext;
 import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalog;
 
-import mondrian.olap.SystemWideProperties;
 import mondrian.olap.RoleImpl;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.util.Bug;

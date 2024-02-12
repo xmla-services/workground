@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.Fo
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Util;
-import mondrian.rolap.RolapSchema;
 import mondrian.rolap.SchemaKey;
 
 class Rolap {

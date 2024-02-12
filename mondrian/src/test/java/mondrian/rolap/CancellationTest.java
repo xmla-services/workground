@@ -15,7 +15,6 @@ import static org.opencube.junit5.TestUtil.cubeByName;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 
-import mondrian.olap.SystemWideProperties;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -35,6 +34,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.MondrianException;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.olap.fun.CrossJoinTest;
 import mondrian.server.Execution;

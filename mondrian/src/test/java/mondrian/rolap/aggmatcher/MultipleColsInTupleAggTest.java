@@ -14,7 +14,8 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.executeAxis;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import mondrian.olap.SystemWideProperties;
+import java.util.function.Function;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -31,10 +32,9 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapAxis;
 import mondrian.test.SqlPattern;
-
-import java.util.function.Function;
 
 /**
  * Testcase for levels that contain multiple columns and are

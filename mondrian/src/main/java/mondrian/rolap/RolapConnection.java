@@ -44,9 +44,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -75,8 +77,6 @@ import mondrian.olap.Util;
 import mondrian.parser.MdxParserValidator;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.Statement;
-import mondrian.server.StatementImpl;
 import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.NotificationMemoryMonitor;
@@ -141,7 +141,7 @@ public class RolapConnection extends ConnectionBase {
     if ( schema == null ) {
       // If RolapSchema.Pool.get were to call this with schema == null,
       // we would loop.
-      Statement bootstrapStatement = createInternalStatement( false, context.getConfig().queryTimeout() );
+      Statement bootstrapStatement = createInternalStatement( false, this);
       final Locus locus =
         new Locus(
           new Execution( bootstrapStatement, 0 ),
@@ -191,7 +191,7 @@ public class RolapConnection extends ConnectionBase {
         }
       }
     } else {
-      this.internalStatement = createInternalStatement( true, context.getConfig().queryTimeout() );
+      this.internalStatement = createInternalStatement( true,this);
     }
 
     if ( roleInner == null ) {
@@ -439,7 +439,7 @@ public Role getRole() {
 
   @Override
 public QueryComponent parseStatement(String query ) {
-    Statement statement = createInternalStatement( false, context.getConfig().queryTimeout() );
+    Statement statement = createInternalStatement( false ,this);
     final Locus locus =
       new Locus(
         new Execution( statement, 0 ),
@@ -489,11 +489,11 @@ public Statement getInternalStatement() {
     }
   }
 
-  private Statement createInternalStatement( boolean reentrant, int queryTimeout ) {
+  private Statement createInternalStatement( boolean reentrant, Connection connection ) {
     final Statement statement =
       reentrant
-        ? new ReentrantInternalStatement(queryTimeout)
-        : new InternalStatement(queryTimeout);
+        ? new ReentrantInternalStatement(connection)
+        : new InternalStatement(connection);
     context.addStatement( statement );
     return statement;
   }
@@ -644,7 +644,7 @@ public Context getContext() {
    * <p>Implementation of {@link Statement} for use when you don't have an
    * olap4j connection.</p>
    */
-  private class InternalStatement extends StatementImpl {
+  private class InternalStatement extends org.eclipse.daanse.olap.impl.StatementImpl {
     private boolean closed = false;
 
       /**
@@ -652,8 +652,8 @@ public Context getContext() {
        *
        * @param queryTimeout
        */
-      protected InternalStatement(int queryTimeout) {
-          super(queryTimeout);
+      protected InternalStatement(Connection connection) {
+          super(connection);
       }
 
       @Override
@@ -694,8 +694,8 @@ public Context getContext() {
        *
        * @param queryTimeout
        */
-      protected ReentrantInternalStatement(int queryTimeout) {
-          super(queryTimeout);
+      protected ReentrantInternalStatement(Connection connection) {
+          super(connection);
       }
 
       @Override

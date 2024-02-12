@@ -11,6 +11,8 @@ package mondrian.rolap.aggmatcher;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.function.Function;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -20,10 +22,6 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
-import mondrian.olap.SystemWideProperties;
-
-import java.util.function.Function;
 
 /**
  * Testcase for

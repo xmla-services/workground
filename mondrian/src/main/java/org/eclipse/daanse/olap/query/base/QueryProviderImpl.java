@@ -31,6 +31,7 @@ import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
@@ -51,7 +52,6 @@ import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.RefreshImpl;
 import mondrian.olap.UpdateImpl;
-import mondrian.server.Statement;
 
 public class QueryProviderImpl implements QueryProvider {
 

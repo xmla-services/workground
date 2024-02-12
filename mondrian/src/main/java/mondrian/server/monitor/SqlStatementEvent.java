@@ -9,8 +9,9 @@
 
 package mondrian.server.monitor;
 
+import org.eclipse.daanse.olap.api.Statement;
+
 import mondrian.server.Locus;
-import mondrian.server.Statement;
 
 /**
  * Event concerning an SQL statement.

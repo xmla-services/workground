@@ -14,6 +14,7 @@ package mondrian.parser;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Command;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
@@ -32,7 +33,6 @@ import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
 import mondrian.olap.ExplainImpl;
-import mondrian.server.Statement;
 
 /**
  * Parses and validates an MDX statement.
