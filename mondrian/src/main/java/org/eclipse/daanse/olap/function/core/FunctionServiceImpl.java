@@ -52,14 +52,16 @@ public class FunctionServiceImpl implements FunctionService {
     private GlobalFunTable oldfunctiontable;
 
     public FunctionServiceImpl() {
-        oldfunctiontable = GlobalFunTable.instance();
-        oldfunctiontable.init();
+
+        this(Map.of());
     }
 
     @Activate
     public FunctionServiceImpl(Map<String, Object> configuration) {
 //		this.config = CONVERTER.convert(coniguration).to(Config.class);
 
+        oldfunctiontable = GlobalFunTable.instance();
+        oldfunctiontable.init();
         oldfunctiontable.getResolvers().forEach(this::addResolver);
 
     }
