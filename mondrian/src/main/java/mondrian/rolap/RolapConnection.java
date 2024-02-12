@@ -43,6 +43,7 @@ import javax.sql.DataSource;
 import mondrian.olap.MondrianException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
@@ -211,6 +212,7 @@ public class RolapConnection extends ConnectionBase {
    *
    * @return Identifier of this connection
    */
+	@Override
   public int getId() {
     return id;
   }

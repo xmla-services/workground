@@ -29,8 +29,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Statement;
@@ -105,9 +103,9 @@ public interface Context {
 
     Scenario createScenario();
 
-	void addConnection(RolapConnection rolapConnection);
+	void addConnection(Connection rolapConnection);
 
-	void removeConnection(RolapConnection rolapConnection);
+	void removeConnection(Connection rolapConnection);
 
 	RolapResultShepherd getResultShepherd();
 

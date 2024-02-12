@@ -1,4 +1,4 @@
-package mondrian.rolap;
+package org.eclipse.daanse.olap.api;
 
 import java.lang.ref.SoftReference;
 import java.util.List;

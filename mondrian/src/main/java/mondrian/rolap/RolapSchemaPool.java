@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

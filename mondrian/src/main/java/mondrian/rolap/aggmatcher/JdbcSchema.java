@@ -34,12 +34,12 @@ import javax.sql.DataSource;
 
 import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.rolap.RolapAggregator;
-import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 

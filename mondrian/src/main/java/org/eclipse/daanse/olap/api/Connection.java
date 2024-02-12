@@ -45,8 +45,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
 
-import mondrian.olap.QueryImpl;
-
 /**
  * Connection to a multi-dimensional database.
  *
@@ -119,7 +117,7 @@ public interface Connection {
      * Parses a statement.
      *
      * @param mdx MDX string
-     * @return A {@link QueryImpl} if it is a SELECT statement, a
+     * @return A {@link Query} if it is a SELECT statement, a
      *   {@link DrillThrough} if it is a DRILLTHROUGH statement
      */
     QueryComponent parseStatement(String mdx);
@@ -169,4 +167,11 @@ public interface Connection {
     Scenario createScenario();
 
     void setScenario(Scenario scenario);
+    /**
+     * Returns the identifier of this connection. Unique within the lifetime of
+     * this JVM.
+     *
+     * @return Identifier of this connection
+     */
+	int getId();
 }

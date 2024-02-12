@@ -25,6 +25,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.RolapConnectionProps;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
@@ -43,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import aQute.bnd.metatype.annotations.Designate;
 import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProps;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;

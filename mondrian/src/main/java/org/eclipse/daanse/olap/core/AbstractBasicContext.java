@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public abstract class AbstractBasicContext implements Context {
 	protected RolapResultShepherd shepherd;
 
 	@SuppressWarnings("unchecked")
-	private final List<RolapConnection> connections = Collections.synchronizedList(new ArrayList<>());
+	private final List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
 
 	@SuppressWarnings("unchecked")
 	private final List<Statement> statements =Collections.synchronizedList(new ArrayList<>());
@@ -153,7 +154,7 @@ public abstract class AbstractBasicContext implements Context {
 	}
 
 	@Override
-	synchronized public void addConnection(RolapConnection connection) {
+	synchronized public void addConnection(Connection connection) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("addConnection , id={}, statements={}, connections=", id, statements.size(),
 					connections.size());
@@ -167,7 +168,7 @@ public abstract class AbstractBasicContext implements Context {
 	}
 
 	@Override
-	synchronized public void removeConnection(RolapConnection connection) {
+	synchronized public void removeConnection(Connection connection) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("removeConnection , id={}, statements={}, connections={}", id, statements.size(),
 					connections.size());
