@@ -43,6 +43,7 @@ import org.eclipse.daanse.olap.operation.api.OperationAtom;
  *
  * @author jhyde, 3 March, 2002
  */
+@Deprecated
 public interface FunctionTable {
 	
 	List<FunctionMetaData> getFunctionMetaDatas();
