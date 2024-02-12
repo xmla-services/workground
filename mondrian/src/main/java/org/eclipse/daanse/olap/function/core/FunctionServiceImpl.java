@@ -116,7 +116,7 @@ public class FunctionServiceImpl implements FunctionService {
 
 			FunctionAtomCompareKey key = new FunctionAtomCompareKey(resolver.getFunctionAtom());
 
-			List<FunctionResolver> resolversToAdd = newMapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
+			List<FunctionResolver> resolversToAdd = newMapNameToResolvers.computeIfAbsent(key, k -> Collections.synchronizedList(new ArrayList<>()));
 			resolversToAdd.add(resolver);
 
 		});
