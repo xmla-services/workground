@@ -12,6 +12,7 @@ package mondrian.server;
 
 import static mondrian.resource.MondrianResource.QueryCanceled;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,18 +21,24 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.QueryTiming;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.EventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.ExecutionEndEvent;
+import org.eclipse.daanse.olap.api.monitor.event.ExecutionEventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.ExecutionPhaseEvent;
+import org.eclipse.daanse.olap.api.monitor.event.ExecutionStartEvent;
+import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.ServertEventCommon;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryTiming;
+import mondrian.olap.QueryTimingImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.SegmentCacheManager;
-import mondrian.server.monitor.ExecutionEndEvent;
-import mondrian.server.monitor.ExecutionPhaseEvent;
-import mondrian.server.monitor.ExecutionStartEvent;
 
 /**
  * Execution context.
@@ -77,7 +84,7 @@ public class Execution {
   private long startTimeMillis;
   private long timeoutTimeMillis;
   private long timeoutIntervalMillis;
-  private final QueryTiming queryTiming = new QueryTiming();
+  private final QueryTimingImpl queryTiming = new QueryTimingImpl();
   private int phase;
   private int cellCacheHitCount;
   private int cellCacheMissCount;
@@ -132,8 +139,16 @@ public class Execution {
     final int hitCountInc = hitCount - this.cellCacheHitCount;
     final int missCountInc = missCount - this.cellCacheMissCount;
     final int pendingCountInc = pendingCount - this.cellCachePendingCount;
-    context.getMonitor().sendEvent( new ExecutionPhaseEvent( System.currentTimeMillis(), context.getName(), connection
-        .getId(), statement.getId(), id, phase, hitCountInc, missCountInc, pendingCountInc ) );
+    ExecutionPhaseEvent executionPhaseEvent=new ExecutionPhaseEvent(new ExecutionEventCommon(
+    		new MdxStatementEventCommon(
+					new ConnectionEventCommon(
+							new ServertEventCommon(
+    		new EventCommon(Instant.now()), context.getName()),connection
+            .getId()), statement.getId()), id), phase, hitCountInc, missCountInc, pendingCountInc);
+    		
+	context.getMonitor().accept(executionPhaseEvent);
+//    		new ExecutionPhaseEvent( System.currentTimeMillis(), context.getName(), connection
+//        .getId(), statement.getId(), id, phase, hitCountInc, missCountInc, pendingCountInc ) 
     ++phase;
     this.cellCacheHitCount = hitCount;
     this.cellCacheMissCount = missCount;
@@ -392,16 +407,37 @@ public class Execution {
   private void fireExecutionEndEvent() {
     final Connection connection = statement.getMondrianConnection();
     final Context context = connection.getContext();
-    context.getMonitor().sendEvent( new ExecutionEndEvent( this.startTimeMillis, context.getName(), connection.getId(),
-        this.statement.getId(), this.id, this.phase, this.state, this.cellCacheHitCount, this.cellCacheMissCount,
-        this.cellCachePendingCount, expCacheHitCount, expCacheMissCount ) );
+    
+	ExecutionEndEvent endEvent = new ExecutionEndEvent(
+			new ExecutionEventCommon(
+					
+					new MdxStatementEventCommon(
+							new ConnectionEventCommon(
+									new ServertEventCommon(
+					new EventCommon(Instant.ofEpochMilli( this.startTimeMillis)), context.getName()), connection.getId()),
+					this.statement.getId()), this.id),
+			phase, state, cellCacheHitCount, cellCacheMissCount, cellCachePendingCount, expCacheHitCount,
+			expCacheMissCount);
+	context.getMonitor().accept(endEvent);
+//    		new ExecutionEndEvent( , context.getName(), connection.getId(),
+//        , this.id, this.phase, this.state, this.cellCacheHitCount, this.cellCacheMissCount,
+//        this.cellCachePendingCount, expCacheHitCount, expCacheMissCount ) 
   }
 
   private void fireExecutionStartEvent() {
     final Connection connection = statement.getMondrianConnection();
     final Context context = connection.getContext();
-    context.getMonitor().sendEvent( new ExecutionStartEvent( startTimeMillis, context.getName(), connection.getId(),
-        statement.getId(), id, getMdx() ) );
+    
+    
+	ExecutionStartEvent executionStartEvent = new ExecutionStartEvent(new ExecutionEventCommon(
+
+			new MdxStatementEventCommon(new ConnectionEventCommon(
+					new ServertEventCommon(new EventCommon(Instant.ofEpochMilli( this.startTimeMillis)), context.getName()), connection.getId()),
+					statement.getId()),
+			id), getMdx());
+	context.getMonitor().accept(executionStartEvent);
+//    		new ExecutionStartEvent( startTimeMillis, context.getName(), connection.getId(),
+//        statement.getId(), id, getMdx() ) 
   }
 
   public void setCellCacheHitCount( int cellCacheHitCount ) {

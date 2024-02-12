@@ -21,6 +21,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -29,16 +31,17 @@ import java.util.function.Consumer;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.monitor.event.EventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEndEvent;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementExecuteEvent;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementStartEvent;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent.Purpose;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEventCommon;
 
 import mondrian.olap.Util;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEndEvent;
-import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.server.monitor.SqlStatementEvent.Purpose;
-import mondrian.server.monitor.SqlStatementExecuteEvent;
-import mondrian.server.monitor.SqlStatementStartEvent;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -87,7 +90,7 @@ public class SqlStatement {
   private final int resultSetConcurrency;
   private boolean haveSemaphore;
   public int rowCount;
-  private long startTimeMillis;
+  private Instant startTime=null;
   private final List<Accessor> accessors = new ArrayList<>();
   private State state = State.FRESH;
   private final long id;
@@ -173,7 +176,7 @@ public class SqlStatement {
       locus.execution.checkCancelOrTimeout();
 
       startTimeNanos = System.nanoTime();
-      startTimeMillis = System.currentTimeMillis();
+      startTime = Instant.now();
 
       if ( resultSetType < 0 || resultSetConcurrency < 0 ) {
         statement = jdbcConnection.createStatement();
@@ -195,14 +198,20 @@ public class SqlStatement {
         }
       }
 
-      locus.getContext().getMonitor().sendEvent(
-        new SqlStatementStartEvent(
-          startTimeMillis,
-          id,
-          locus,
-          sql,
-          getPurpose(),
-          getCellRequestCount() ) );
+		long mdxStatementId = SqlStatementEventCommon.mdxStatementIdOf(locus);
+		SqlStatementStartEvent event = new SqlStatementStartEvent(//
+				new SqlStatementEventCommon(new EventCommon(startTime), id, mdxStatementId, sql, getPurpose()),
+				getCellRequestCount());
+		locus.getContext().getMonitor().accept(event);
+    		  
+//        new SqlStatementStartEvent(
+//          startTimeMillis,
+//          id,
+//          locus,
+//          sql,
+//          getPurpose(),
+//          getCellRequestCount() ) 
+        
 
       this.resultSet = statement.executeQuery( sql );
 
@@ -223,20 +232,26 @@ public class SqlStatement {
         }
       }
 
-      long timeMillis = System.currentTimeMillis();
+      Instant timeMillis = Instant.now();
       long timeNanos = System.nanoTime();
       final long executeNanos = timeNanos - startTimeNanos;
       final long executeMillis = executeNanos / 1000000;
       status = new StringBuilder(", exec ").append(executeMillis).append(" ms").toString();
 
-      locus.getContext().getMonitor().sendEvent(
-        new SqlStatementExecuteEvent(
-          timeMillis,
-          id,
-          locus,
-          sql,
-          getPurpose(),
-          executeNanos ) );
+      
+		SqlStatementExecuteEvent execEvent = new SqlStatementExecuteEvent(//
+				new SqlStatementEventCommon(new EventCommon(timeMillis), id, mdxStatementId, sql, getPurpose()),
+				executeNanos);
+
+		locus.getContext().getMonitor().accept(execEvent);
+		
+//      new SqlStatementExecuteEvent(
+//    		  timeMillis,
+//    		  id,
+//    		  locus,
+//    		  sql,
+//    		  getPurpose(),
+//    		  executeNanos ) 
 
       // Compute accessors. They ensure that we use the most efficient
       // method (e.g. getInt, getDouble, getObject) for the type of the
@@ -304,18 +319,18 @@ public class SqlStatement {
           new StringBuilder(locus.message).append("; sql=[").append(sql).append("]").toString() );
     }
 
-    long endTime = System.currentTimeMillis();
-    long totalMs;
-    if ( startTimeMillis == 0 ) {
-      // execution didn't start at all
-      totalMs = 0;
-    } else {
-      totalMs = endTime - startTimeMillis;
-    }
-    String status = formatTimingStatus( totalMs, rowCount );
+	Instant endTime = Instant.now();
+	Duration duration;
+	if (startTime == null) {
+		// execution didn't start at all
+		duration = Duration.ZERO;
+	} else {
+		duration = Duration.between(startTime, endTime);
+	}
+    String status = formatTimingStatus( duration, rowCount );
 
     locus.execution.getQueryTiming().markFull(
-      TIMING_NAME + locus.component, totalMs );
+      TIMING_NAME + locus.component, duration );
     String msg  = new StringBuilder().append(id).append(": ").append(status).toString();
     RolapUtil.SQL_LOGGER.debug( msg );
 
@@ -336,20 +351,26 @@ public class SqlStatement {
         "SqlStatement closed that was never executed: " + id );
     }
 
-    locus.getContext().getMonitor().sendEvent(
-      new SqlStatementEndEvent(
-        endTime,
-        id,
-        locus,
-        sql,
-        getPurpose(),
-        rowCount,
-        false,
-        null ) );
+	long mdxStatementId = SqlStatementEventCommon.mdxStatementIdOf(locus);
+	SqlStatementEndEvent endEvent = new SqlStatementEndEvent(//
+			new SqlStatementEventCommon(new EventCommon(endTime), id, mdxStatementId, sql, getPurpose()), rowCount,
+			false, null);
+
+	locus.getContext().getMonitor().accept(endEvent);
+	
+//      new SqlStatementEndEvent(
+//        endTime,
+//        id,
+//        locus,
+//        sql,
+//        getPurpose(),
+//        rowCount,
+//        false,
+//        null ) 
   }
 
-  public String formatTimingStatus( long totalMs, int rowCount ) {
-    return new StringBuilder(", exec+fetch ").append(totalMs).append(" ms, ")
+  public String formatTimingStatus( Duration duration, int rowCount ) {
+    return new StringBuilder(", exec+fetch ").append(duration.toMillis()).append(" ms, ")
         .append(rowCount).append(" rows").toString();
   }
 

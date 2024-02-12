@@ -498,10 +498,6 @@ public interface BasicContextConfig {
     @AttributeDefinition(name = "%checkCancelOrTimeoutInterval.name", description = "%checkCancelOrTimeoutInterval.description", type = AttributeType.INTEGER)
     default Integer checkCancelOrTimeoutInterval() { return 1000; }
 
-    //Property that defines how many previous execution instances the Monitor keeps in its history so that it can send the events which happen after the fact. Setting this property too high will make the JVM run out of memory. Setting it too low might prevent some events from reaching the listeners of the monitor. This property is for internal use only and should not be changed unless required. Defaults to 1,000.
-    @AttributeDefinition(name = "%executionHistorySize.name", description = "%executionHistorySize.description", type = AttributeType.INTEGER)
-    default Integer executionHistorySize() { return 1000; }
-
     //Property that defines whether the <code>MemoryMonitor</code> should be enabled. By default it is disabled; memory monitor is not available before Java version 1.5.
     @AttributeDefinition(name = "%memoryMonitor.name", description = "%memoryMonitor.description", type = AttributeType.BOOLEAN)
     default Boolean memoryMonitor() { return false; }

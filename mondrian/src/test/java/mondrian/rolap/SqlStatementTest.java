@@ -19,7 +19,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
+
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,14 +30,13 @@ import mondrian.olap.QueryCanceledException;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
-import mondrian.server.monitor.Monitor;
 
 /**
  * @author Andrey Khayrutdinov
  */
 class SqlStatementTest {
 
-  private Monitor monitor;
+  private EventBus monitor;
   private Context context;
   private RolapConnection rolapConnection;
   private StatementImpl statMock;
@@ -44,7 +46,7 @@ class SqlStatementTest {
 
   @BeforeEach
   public void beforeEach() {
-    monitor = mock(Monitor.class);
+    monitor = mock(EventBus.class);
 
     context = mock(Context.class);
     when(context.getMonitor()).thenReturn(monitor);
@@ -79,7 +81,7 @@ class SqlStatementTest {
       }
     }
 
-    verify(statement).formatTimingStatus(eq(0L), anyInt());
+    verify(statement).formatTimingStatus(eq(Duration.ZERO), anyInt());
   }
 
 }

@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.olap.core;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,18 +23,22 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.monitor.EventBus;
+import org.eclipse.daanse.olap.api.monitor.event.ConnectionEndEvent;
+import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.ConnectionStartEvent;
+import org.eclipse.daanse.olap.api.monitor.event.EventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEndEvent;
+import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEventCommon;
+import org.eclipse.daanse.olap.api.monitor.event.MdxStatementStartEvent;
+import org.eclipse.daanse.olap.api.monitor.event.ServertEventCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.MonitorImpl;
-import mondrian.server.monitor.ConnectionEndEvent;
-import mondrian.server.monitor.ConnectionStartEvent;
-import mondrian.server.monitor.Monitor;
-import mondrian.server.monitor.StatementEndEvent;
-import mondrian.server.monitor.StatementStartEvent;
+import mondrian.server.NopEventBus;
 
 public abstract class AbstractBasicContext implements Context {
 
@@ -52,7 +57,7 @@ public abstract class AbstractBasicContext implements Context {
 	@SuppressWarnings("unchecked")
 	private final List<Statement> statements =Collections.synchronizedList(new ArrayList<>());
 
-    protected MonitorImpl monitor;
+    protected NopEventBus monitor;
 
 	protected AggregationManager aggMgr;
 
@@ -147,7 +152,6 @@ public abstract class AbstractBasicContext implements Context {
 		}
 		this.shutdown = true;
 		aggMgr.shutdown();
-		monitor.shutdown();
 
 		shepherd.shutdown();
 	}
@@ -162,8 +166,13 @@ public abstract class AbstractBasicContext implements Context {
 			throw new MondrianException("Server already shutdown.");
 		}
 		connections.add(connection);
-		monitor.sendEvent(new ConnectionStartEvent(System.currentTimeMillis(), connection.getContext().getName(),
-				connection.getId()));
+		
+		ConnectionStartEvent connectionStartEvent = new ConnectionStartEvent(new ConnectionEventCommon(
+								new ServertEventCommon(
+				new EventCommon(Instant.now()), getName()), connection.getId()));
+		monitor.accept(connectionStartEvent);
+//				new ConnectionStartEvent(System.currentTimeMillis(), connection.getContext().getName(),
+//				connection.getId())
 	}
 
 	@Override
@@ -176,7 +185,13 @@ public abstract class AbstractBasicContext implements Context {
 			throw new MondrianException("Server already shutdown.");
 		}
 		connections.remove(connection);
-		monitor.sendEvent(new ConnectionEndEvent(System.currentTimeMillis(), getName(), connection.getId()));
+		
+		ConnectionEndEvent connectionEndEvent = new ConnectionEndEvent(
+				new ConnectionEventCommon(
+										new ServertEventCommon(
+						new EventCommon(Instant.now()), getName()), connection.getId()));
+		monitor.accept(connectionEndEvent);
+//		new ConnectionEndEvent(System.currentTimeMillis(), getName(), connection.getId())
 	}
 
 	@Override
@@ -190,8 +205,15 @@ public abstract class AbstractBasicContext implements Context {
 		}
 		statements.add( statement);
 		final Connection connection = statement.getMondrianConnection();
-		monitor.sendEvent(new StatementStartEvent(System.currentTimeMillis(), connection.getContext().getName(),
-				connection.getId(), statement.getId()));
+		
+		MdxStatementStartEvent mdxStatementStartEvent = new MdxStatementStartEvent(new MdxStatementEventCommon(
+				new ConnectionEventCommon(
+						new ServertEventCommon(new EventCommon(Instant.now()), getName()),
+						connection.getId()),
+				statement.getId()));
+		monitor.accept(mdxStatementStartEvent);
+//		new StatementStartEvent(System.currentTimeMillis(), connection.getContext().getName(),
+//				connection.getId(), statement.getId())
 	}
 
 	@Override
@@ -205,12 +227,20 @@ public abstract class AbstractBasicContext implements Context {
 		}
 		statements.remove(statement);
 		final Connection connection = statement.getMondrianConnection();
-		monitor.sendEvent(new StatementEndEvent(System.currentTimeMillis(), connection.getContext().getName(),
-				connection.getId(), statement.getId()));
+		
+		
+		MdxStatementEndEvent mdxStatementEndEvent = new MdxStatementEndEvent(
+				new MdxStatementEventCommon(new ConnectionEventCommon(
+						new ServertEventCommon(new EventCommon(Instant.now()), getName()),
+						connection.getId()), statement.getId()));
+		
+		monitor.accept(mdxStatementEndEvent);
+//				new StatementEndEvent(System.currentTimeMillis(), connection.getContext().getName(),
+//				connection.getId(), statement.getId())
 	}
 
 	@Override
-	public Monitor getMonitor() {
+	public EventBus getMonitor() {
 		if (shutdown) {
 			throw new MondrianException("Server already shutdown.");
 		}

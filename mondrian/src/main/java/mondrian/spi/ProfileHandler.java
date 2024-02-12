@@ -9,7 +9,7 @@
 
 package mondrian.spi;
 
-import mondrian.olap.QueryTiming;
+import org.eclipse.daanse.olap.api.QueryTiming;
 
 /**
  * Called when a statement has profile information.

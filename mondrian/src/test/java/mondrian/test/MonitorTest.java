@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.impl.RectangularCellSetFormatter;
 import org.eclipse.daanse.olap.impl.StatementImpl;
@@ -25,11 +26,10 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.server.monitor.ConnectionInfo;
-import mondrian.server.monitor.Monitor;
 import mondrian.server.monitor.ServerInfo;
 
 /**
- * Unit test for monitoring, including {@link Monitor}.
+ * Unit test for monitoring, including {@link EventBus}.
  *
  * @author jhyde
  */
@@ -69,75 +69,76 @@ class MonitorTest {
         println(stringWriter);
 
 
-        final Monitor monitor = context.getMonitor();
-        final ServerInfo server = monitor.getServer();
-
-        println(
-            "# stmts open: "
-            + server.getStatementCurrentlyOpenCount());
-
-        println(
-            "# connections open: "
-            + server.getConnectionCurrentlyOpenCount());
-
-        println("# rows fetched: " + server.sqlStatementRowFetchCount);
-
-        println(
-            "# sql stmts open: "
-            + server.getSqlStatementCurrentlyOpenCount());
-
-        // # sql stmts by category (cell query, member query, other)
-        //  -- if you want to do this, capture sql statement events
-
-        // cell cache requests
-        // cell cache misses
-        // cell cache hits
-        final List<ConnectionInfo> connections = monitor.getConnections();
-        ConnectionInfo lastConnection = connections.get(connections.size() - 1);
-
-        // Cannot reliably retrieve the last statement, since statements are
-        // removed from the map on completion.
-        //final List<StatementInfo> statements = monitor.getStatements();
-        //StatementInfo lastStatement = statements.get(statements.size() - 1);
-
-        println(
-            "# cell cache requests, misses, hits; "
-            + "by server, connection, mdx statement: "
-            + server.cellCacheRequestCount
-            + ", " + server.getCellCacheMissCount()
-            + ", " + server.cellCacheHitCount
-            + "; " + lastConnection.cellCacheRequestCount
-            + ", " + (lastConnection.cellCacheRequestCount
-                      - lastConnection.cellCacheHitCount)
-            + ", " + lastConnection.cellCacheHitCount);
-
-        // cache misses in the last minute
-        // cache hits in the last minute
-        // -- build a layer on top of monitor that polls say every 15 seconds,
-        //    and keeps results for a few minutes
-
-        println(
-            "number of mdx statements currently open: "
-            + server.getStatementCurrentlyOpenCount());
-        println(
-            "number of mdx statements currently executing: "
-            + server.getStatementCurrentlyExecutingCount());
-
-        println(
-            "jvm memory: " + server.jvmHeapBytesUsed
-            + ", max: " + server.jvmHeapBytesMax
-            + ", committed: " + server.jvmHeapBytesCommitted);
-
-        println(
-            "number of segments: " + server.segmentCount
-            + ", ever created: " + server.segmentCreateCount
-            + ", number of cells: " + server.cellCount
-            + ", number of cell coordinates: " + server.cellCoordinateCount
-            + ", average cell dimensionality: "
-            + ((float) server.cellCoordinateCount / (float) server.cellCount));
-
-        println("Connection: " + lastConnection);
-        println("Server: " + server);
+        final EventBus monitor = context.getMonitor();
+//        final ServerInfo server = monitor.getServer();
+//
+//        println(
+//            "# stmts open: "
+//            + server.getStatementCurrentlyOpenCount());
+//
+//        println(
+//            "# connections open: "
+//            + server.getConnectionCurrentlyOpenCount());
+//
+//        println("# rows fetched: " + server.sqlStatementRowFetchCount);
+//
+//        println(
+//            "# sql stmts open: "
+//            + server.getSqlStatementCurrentlyOpenCount());
+//
+//        // # sql stmts by category (cell query, member query, other)
+//        //  -- if you want to do this, capture sql statement events
+//
+//        // cell cache requests
+//        // cell cache misses
+//        // cell cache hits
+////        final List<ConnectionInfo> connections = monitor.getConnections();
+////        ConnectionInfo lastConnection = connections.get(connections.size() - 1);
+//
+//        // Cannot reliably retrieve the last statement, since statements are
+//        // removed from the map on completion.
+//        //final List<StatementInfo> statements = monitor.getStatements();
+//        //StatementInfo lastStatement = statements.get(statements.size() - 1);
+//
+//        println(
+//            "# cell cache requests, misses, hits; "
+//            + "by server, connection, mdx statement: "
+//            + server.cellCacheRequestCount
+//            + ", " + server.getCellCacheMissCount()
+//            + ", " + server.cellCacheHitCount
+////            + "; " + lastConnection.cellCacheRequestCount
+////            + ", " + (lastConnection.cellCacheRequestCount
+////                      - lastConnection.cellCacheHitCount)
+////            + ", " + lastConnection.cellCacheHitCount
+//        		);
+//
+//        // cache misses in the last minute
+//        // cache hits in the last minute
+//        // -- build a layer on top of monitor that polls say every 15 seconds,
+//        //    and keeps results for a few minutes
+//
+//        println(
+//            "number of mdx statements currently open: "
+//            + server.getStatementCurrentlyOpenCount());
+//        println(
+//            "number of mdx statements currently executing: "
+//            + server.getStatementCurrentlyExecutingCount());
+//
+//        println(
+//            "jvm memory: " + server.jvmHeapBytesUsed
+//            + ", max: " + server.jvmHeapBytesMax
+//            + ", committed: " + server.jvmHeapBytesCommitted);
+//
+//        println(
+//            "number of segments: " + server.segmentCount
+//            + ", ever created: " + server.segmentCreateCount
+//            + ", number of cells: " + server.cellCount
+//            + ", number of cell coordinates: " + server.cellCoordinateCount
+//            + ", average cell dimensionality: "
+//            + ((float) server.cellCoordinateCount / (float) server.cellCount));
+//
+////        println("Connection: " + lastConnection);
+//        println("Server: " + server);
 
         // number of mdx function calls cumulative
         // how many operations have been evaluated in sql?

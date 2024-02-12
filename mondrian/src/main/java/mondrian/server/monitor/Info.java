@@ -13,7 +13,7 @@ import mondrian.util.BeanMap;
 
 /**
  * Abstract base class for objects returned from polling the
- * {@link mondrian.server.monitor.Monitor} for server state.
+ * {@link org.eclipse.daanse.olap.api.monitor.EventBus} for server state.
  */
 abstract class Info {
 

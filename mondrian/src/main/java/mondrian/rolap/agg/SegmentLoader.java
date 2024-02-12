@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 
 import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.SystemWideProperties;
@@ -45,7 +46,6 @@ import mondrian.rolap.agg.SegmentCacheManager.AbortException;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;

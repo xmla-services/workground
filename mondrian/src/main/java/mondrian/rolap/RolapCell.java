@@ -35,6 +35,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEventCommon;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -68,7 +70,6 @@ import mondrian.rolap.agg.MemberColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEvent;
 
 /**
  * <code>RolapCell</code> implements {@link org.eclipse.daanse.olap.api.result.Cell} within a

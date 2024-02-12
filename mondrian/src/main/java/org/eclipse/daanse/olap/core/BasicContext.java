@@ -47,7 +47,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.MonitorImpl;
+import mondrian.server.NopEventBus;
 
 @Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
@@ -99,7 +99,7 @@ public class BasicContext extends AbstractBasicContext {
 	public void activate1(BasicContextConfig configuration) throws Exception {
 
 		this.config = configuration;
-		this.monitor = new MonitorImpl(getConfig().executionHistorySize());
+		this.monitor = new NopEventBus();
 
 		queryLimitSemaphore = new Semaphore(config.queryLimit());
 

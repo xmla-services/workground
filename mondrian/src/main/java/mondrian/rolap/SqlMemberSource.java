@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
@@ -54,7 +55,6 @@ import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
 

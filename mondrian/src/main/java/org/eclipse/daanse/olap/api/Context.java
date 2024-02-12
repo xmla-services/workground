@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.function.FunctionService;
+import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
@@ -31,7 +32,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.monitor.Monitor;
 
 /**
  * The {@link Context} gives access to all resources and configurations that are needed
@@ -114,7 +114,7 @@ public interface Context {
 
 	void removeStatement(Statement internalStatement);
 
-	Monitor getMonitor();
+	EventBus getMonitor();
 
 	List<Statement> getStatements(Connection connection);
 

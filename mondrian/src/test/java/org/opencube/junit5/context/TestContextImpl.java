@@ -30,7 +30,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.MonitorImpl;
+import mondrian.server.NopEventBus;
 
 public class TestContextImpl extends AbstractBasicContext implements TestContext {
 
@@ -50,7 +50,7 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 
 	public TestContextImpl() {
         testConfig = new TestConfig();
-        this.monitor = new MonitorImpl(getConfig().executionHistorySize());
+        this.monitor = new NopEventBus();
 	    shepherd = new RolapResultShepherd(testConfig.rolapConnectionShepherdThreadPollingInterval(),testConfig.rolapConnectionShepherdThreadPollingIntervalUnit(),
             testConfig.rolapConnectionShepherdNbThreads());
 	    aggMgr = new AggregationManager(this);
