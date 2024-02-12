@@ -9,15 +9,26 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.SystemWideProperties;
-import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.Statement;
-import mondrian.test.DiffRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushCache;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
 import org.eclipse.daanse.olap.api.Connection;
@@ -28,6 +39,7 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -41,25 +53,15 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushCache;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Property;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.SystemWideProperties;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.test.DiffRepository;
 
 /**
  * Unit tests for flushing member cache and editing cached member properties.
@@ -356,7 +358,7 @@ class MemberCacheControlTest {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Store].[USA].[CA].[San Francisco].[Store 14]}"
             + " ON ROWS FROM [Sales]";
-        QueryImpl q = conn.parseQuery(mdx);
+        Query q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",
@@ -409,7 +411,7 @@ class MemberCacheControlTest {
         String mdx = "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Retail].Members} ON ROWS "
             + "FROM [Sales]";
-        QueryImpl q = conn.parseQuery(mdx);
+        Query q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",

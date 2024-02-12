@@ -16,13 +16,13 @@ import java.util.Random;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 
 /**
@@ -74,7 +74,7 @@ class ParallelTest {
                 }
 
                 private void cycle(Connection connection) {
-                    QueryImpl query = connection.parseQuery(
+                	Query query = connection.parseQuery(
                         "select {[Measures].[Unit Sales]} on columns,"
                         + " {[Product].Members} on rows "
                         + "from [Sales]");

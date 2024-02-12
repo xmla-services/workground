@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MemoryLimitExceededException;
-import mondrian.olap.QueryImpl;
 
 /**
  * Test case for {@link ObjectPool}.
@@ -314,7 +314,7 @@ Does not work without the notify on add feature.
 //System.out.println("BEFORE");
             for (int i = 0; i < MAX; i++) {
 //System.out.println("i=" +i);
-                QueryImpl query = conn.parseQuery(queryString);
+            	Query query = conn.parseQuery(queryString);
                 query.setResultStyle(ResultStyle.MUTABLE_LIST);
                 Result result = conn.execute(query);
 

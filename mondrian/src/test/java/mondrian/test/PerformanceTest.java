@@ -9,18 +9,27 @@
 
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.fun.sort.Sorter;
-import mondrian.olap.type.NumericType;
-import mondrian.rolap.SchemaModifiers;
-import mondrian.spi.UserDefinedFunction;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -37,20 +46,12 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.hierarchyName;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.SystemWideProperties;
+import mondrian.olap.fun.sort.Sorter;
+import mondrian.olap.type.NumericType;
+import mondrian.rolap.SchemaModifiers;
+import mondrian.spi.UserDefinedFunction;
+import mondrian.util.Bug;
 
 /**
  * Various unit tests concerned with performance.
@@ -319,7 +320,7 @@ public class PerformanceTest {
 
     // Much more efficient technique. Use a parameter, and bind to array.
     // Cuts out a lot of parsing, so takes 2.4s as opposed to 65s.
-    QueryImpl query =
+    Query query =
             connection.parseQuery(
         "WITH SET [Selected Customers]\n"
           + "  AS Parameter('Foo', [Customers], {}, 'Description')\n"

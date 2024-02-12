@@ -930,6 +930,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      *
      * @throws RuntimeException if there is not parameter with the given name
      */
+    @Override
     public void setParameter(final String parameterName, final Object value) {
         // Need to resolve query before we set parameters, in order to create
         // slots to store them in. (This code will go away when parameters
@@ -1402,6 +1403,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * Returns <code>Hierarchy[]</code> used on <code>axis</code>. It calls
      * {@link #collectHierarchies}.
      */
+    @Override
     public Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal axis) {
         if (axis.logicalOrdinal() >= axes.length) {
             throw new MondrianException(message(MdxAxisShowSubtotalsNotSupported,
@@ -1545,6 +1547,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return baseCubes;
     }
 
+    @Override
     public Object accept(QueryComponentVisitor visitor) {
         Object o = visitor.visitQuery(this);
 

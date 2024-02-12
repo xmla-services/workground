@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.LocaleUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,7 +30,6 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import mondrian.olap.QueryImpl;
 import mondrian.rolap.RolapConnectionPropsR;
 import mondrian.util.Format;
 
@@ -112,7 +112,7 @@ class I18nTest {
 		List.of(), true, LocaleUtils.toLocale(localeName),
             -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty()));
 
-        QueryImpl query = connection.parseQuery(
+        Query query = connection.parseQuery(
             "WITH MEMBER [Measures].[Foo] AS ' 12345.67 ',\n"
             + " FORMAT_STRING='#,###.00'\n"
             + "SELECT {[Measures].[Foo]} ON COLUMNS\n"

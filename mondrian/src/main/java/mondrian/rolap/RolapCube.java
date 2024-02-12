@@ -71,6 +71,7 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -843,7 +844,7 @@ public class RolapCube extends CubeBase {
             RolapCube baseCube = entry.getKey();
             List<MappingCalculatedMember> mappingCalculatedMemberList =
                 calculatedMembersMap.get(baseCube);
-            QueryImpl queryExp =
+            Query queryExp =
                 resolveCalcMembers(
                     mappingCalculatedMemberList,
                     Collections.<MappingNamedSet>emptyList(),
@@ -1172,7 +1173,7 @@ public class RolapCube extends CubeBase {
         RolapCube cube,
         boolean errOnDups)
     {
-        final QueryImpl queryExp =
+        final Query queryExp =
             resolveCalcMembers(
                 mappingCalcMembers,
                 mappingNamedSets,
@@ -1195,7 +1196,7 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    private QueryImpl resolveCalcMembers(
+    private Query resolveCalcMembers(
         List<? extends MappingCalculatedMember> mappingCalcMembers,
         List<? extends MappingNamedSet> mappingNamedSets,
         RolapCube cube,
@@ -1234,7 +1235,7 @@ public class RolapCube extends CubeBase {
             return Locus.execute(
                 conn,
                 "RolapCube.resolveCalcMembers",
-                new Locus.Action<QueryImpl>() {
+                new Locus.Action<Query>() {
                     @Override
 					public QueryImpl execute() {
                         final QueryImpl queryExp =
@@ -1252,7 +1253,7 @@ public class RolapCube extends CubeBase {
         List<? extends MappingNamedSet> mappingNamedSets,
         final int offset,
         int i,
-        final QueryImpl queryExp,
+        final Query queryExp,
         List<Formula> formulaList)
     {
         MappingNamedSet mappingNamedSet = mappingNamedSets.get(i);
@@ -1305,7 +1306,7 @@ public class RolapCube extends CubeBase {
     private void postCalcMember(
         List<? extends MappingCalculatedMember> mappingCalcMembers,
         int i,
-        final QueryImpl queryExp,
+        final Query queryExp,
         List<RolapMember> memberList)
     {
         MappingCalculatedMember mappingCalcMember = mappingCalcMembers.get(i);

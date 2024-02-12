@@ -55,6 +55,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
@@ -76,7 +77,6 @@ import org.opencube.junit5.context.TestContext;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
@@ -547,7 +547,7 @@ public class TestUtil {
 			String expected,
 			Object... paramValues ) {
 		String queryString = generateExpression( expr );
-		QueryImpl query = connection.parseQuery( queryString );
+		Query query = connection.parseQuery( queryString );
 		assert paramValues.length % 2 == 0;
 		for ( int i = 0; i < paramValues.length; ) {
 			final String paramName = (String) paramValues[ i++ ];
@@ -630,7 +630,7 @@ public class TestUtil {
 			if ( cubeName.indexOf( ' ' ) >= 0 ) {
 				cubeName = Util.quoteMdxIdentifier( cubeName );
 			}
-			QueryImpl query = connection.parseQuery( "select from " + cubeName );
+			Query query = connection.parseQuery( "select from " + cubeName );
 			Result result = connection.execute( query );
 //			discard( result );
 			connection.close();
@@ -916,7 +916,7 @@ public class TestUtil {
 
 	public static Result executeQueryTimeoutTest(Connection connection, String queryString ) {
 	    queryString = upgradeQuery( queryString );
-	    QueryImpl query = connection.parseQuery( queryString );
+	    Query query = connection.parseQuery( queryString );
 	    Statement statement = query.getStatement();
 	    assertThat(statement).isNotNull();
 	    final Result result = statement.getMondrianConnection().execute(new Execution(statement, statement.getQueryTimeoutMillis()));
@@ -924,7 +924,7 @@ public class TestUtil {
 	  }
 
 	public static Result executeQuery(Connection connection, String queryString, long timeoutIntervalMillis) {
-		QueryImpl query = parseQuery(connection, queryString);
+		Query query = parseQuery(connection, queryString);
 		assertThat(query).isNotNull();
 		Statement statement = query.getStatement();
 		assertThat(statement).isNotNull();
@@ -933,10 +933,10 @@ public class TestUtil {
 		return result;
 	}
 
-	public static QueryImpl parseQuery(Connection connection, String queryString) {
+	public static Query parseQuery(Connection connection, String queryString) {
 
 		assertThat(connection).isNotNull();
-		QueryImpl query = connection.parseQuery(queryString);
+		Query query = connection.parseQuery(queryString);
 		return query;
 	}
 
@@ -1288,7 +1288,7 @@ public class TestUtil {
 				"WITH MEMBER [Measures].[Foo] AS "
 						+ Util.singleQuoteString( expr )
 						+ " SELECT FROM [Sales]";
-		final QueryImpl query = connection.parseQuery( queryString );
+		final Query query = connection.parseQuery( queryString );
 		query.resolve();
 		final Formula formula = query.getFormulas()[ 0 ];
 		final Expression expression = formula.getExpression();
@@ -1307,7 +1307,7 @@ public class TestUtil {
 		// Use a fresh connection, because some tests define their own dims.
 		final String queryString =
 				"SELECT {" + expr + "} ON COLUMNS FROM [Sales]";
-		final QueryImpl query = connection.parseQuery( queryString );
+		final Query query = connection.parseQuery( queryString );
 		query.resolve();
 		final Expression expression = query.getAxes()[ 0 ].getSet();
 
@@ -1357,7 +1357,7 @@ public class TestUtil {
 			queryString =
 					"SELECT {" + expression + "} ON COLUMNS FROM " + cubeName;
 		}
-		QueryImpl query = connection.parseQuery( queryString );
+		Query query = connection.parseQuery( queryString );
 		final Expression exp;
 		if ( scalar ) {
 			exp = query.getFormulas()[ 0 ].getExpression();
@@ -1404,7 +1404,7 @@ public class TestUtil {
 	}
 
 	private static void checkDependsOn(
-			final QueryImpl query,
+			final Query query,
 			final Expression expression,
 			String expectedHierList,
 			final boolean scalar ) {
@@ -1629,7 +1629,7 @@ public class TestUtil {
 				//	connection =
 				//			testContext.withSchemaPool(false).getConnection();
 				}
-				final QueryImpl query = connection.parseQuery(mdxQuery);
+				final Query query = connection.parseQuery(mdxQuery);
 				if (clearCache) {
 					clearCache(connection, (RolapCube)query.getCube());
 				}

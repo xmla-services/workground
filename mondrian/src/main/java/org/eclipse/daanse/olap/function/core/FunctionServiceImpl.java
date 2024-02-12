@@ -43,130 +43,136 @@ public class FunctionServiceImpl implements FunctionService {
 //    private static final Converter CONVERTER = Converters.standardConverter();
 //	private Config config;
 
-    private final List<FunctionResolver> resolvers = new ArrayList<>();
-    private Map<FunctionAtomCompareKey, List<FunctionResolver>> mapNameToResolvers = new HashMap<>();
+	private final List<FunctionResolver> resolvers = synchronizedList(new ArrayList<>());
+	private Map<FunctionAtomCompareKey, List<FunctionResolver>> mapNameToResolvers = new HashMap<>();
 
-    private List<FunctionMetaData> representativeFunctionMetaDatas = new ArrayList<>();
-    private List<String> reservedWords = new ArrayList<>();
-    private List<String> propertyWords = new ArrayList<>();
-    private GlobalFunTable oldfunctiontable;
+	private List<FunctionMetaData> representativeFunctionMetaDatas = synchronizedList(new ArrayList<>());
+	private List<String> reservedWords = synchronizedList(new ArrayList<>());
+	private List<String> propertyWords = synchronizedList(new ArrayList<>());
 
-    public FunctionServiceImpl() {
+	public FunctionServiceImpl() {
 
-        this(Map.of());
-    }
+		this(Map.of());
+	}
 
-    @Activate
-    public FunctionServiceImpl(Map<String, Object> configuration) {
+	@Activate
+	public FunctionServiceImpl(Map<String, Object> configuration) {
 //		this.config = CONVERTER.convert(coniguration).to(Config.class);
 
-        oldfunctiontable = GlobalFunTable.instance();
-        oldfunctiontable.init();
-        oldfunctiontable.getResolvers().forEach(this::addResolver);
+		GlobalFunTable	oldfunctiontable = GlobalFunTable.instance();
+		oldfunctiontable.init();
+		addResolvers(oldfunctiontable.getResolvers());
 
-    }
+	}
 
-    @Deactivate
-    public void deactivate() {
+	@Deactivate
+	public void deactivate() {
 //		config = null;
-    }
+	}
 
-    @Override
-    @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE)
-    public void addResolver(FunctionResolver resolver) {
+	@Override
+	@Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE)
+	public void addResolver(FunctionResolver resolver) {
 
-        resolvers.add(resolver);
-        reInitialize();
-    }
+		addResolvers(List.of(resolver));
+	}
+	
+	public void addResolvers(List<FunctionResolver> resolvers) {
 
-    @Override
-    @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE)
-    public void removeResolver(FunctionResolver resolver) {
+		this.resolvers.addAll(resolvers);
+		reInitialize();
+	}
 
-        resolvers.add(resolver);
-        reInitialize();
-    }
+	@Override
+	@Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE)
+	public void removeResolver(FunctionResolver resolver) {
 
-    private void reInitialize() {
+		this.resolvers.add(resolver);
+		reInitialize();
+	}
 
-        final List<FunctionMetaData> newRepresentativeFunctionMetaDatas = synchronizedList(new ArrayList<>());
-        final List<String> newPropertyWords = synchronizedList(new ArrayList<>(100));
-        final List<String> newReservedWords = synchronizedList(new ArrayList<>(100));
-        final Map<FunctionAtomCompareKey, List<FunctionResolver>> newMapNameToResolvers = new ConcurrentHashMap<>(100);
+	private void reInitialize() {
 
-        resolvers.stream().parallel().forEach(resolver -> {
+		final List<FunctionMetaData> newRepresentativeFunctionMetaDatas = synchronizedList(new ArrayList<>());
+		final List<String> newPropertyWords = synchronizedList(new ArrayList<>());
+		final List<String> newReservedWords = synchronizedList(new ArrayList<>());
+		final Map<FunctionAtomCompareKey, List<FunctionResolver>> newMapNameToResolvers = new ConcurrentHashMap<>();
 
-            newRepresentativeFunctionMetaDatas.addAll(resolver.getRepresentativeFunctionMetaDatas());
+		List<FunctionResolver> copy = List.copyOf(resolvers);
+		copy.stream().parallel().forEach(resolver -> {
 
-            OperationAtom functionAtom = resolver.getFunctionAtom();
+			newRepresentativeFunctionMetaDatas.addAll(resolver.getRepresentativeFunctionMetaDatas());
 
-            if (functionAtom instanceof PlainPropertyOperationAtom) {
-                newPropertyWords.add(functionAtom.name().toUpperCase());
-            }
+			OperationAtom functionAtom = resolver.getFunctionAtom();
 
-            final List<String> reservedWordsInner = resolver.getReservedWords();
-            for (String reservedWord : reservedWordsInner) {
-                newReservedWords.add(reservedWord.toUpperCase());
-            }
+			if (functionAtom instanceof PlainPropertyOperationAtom) {
+				newPropertyWords.add(functionAtom.name().toUpperCase());
+			}
 
-            FunctionAtomCompareKey key = new FunctionAtomCompareKey(resolver.getFunctionAtom());
+			final List<String> reservedWordsInner = resolver.getReservedWords();
+			for (String reservedWord : reservedWordsInner) {
+				newReservedWords.add(reservedWord.toUpperCase());
+			}
 
-            List<FunctionResolver> resolversToAdd = newMapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
-            resolversToAdd.add(resolver);
+			FunctionAtomCompareKey key = new FunctionAtomCompareKey(resolver.getFunctionAtom());
 
-        });
+			List<FunctionResolver> resolversToAdd = newMapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
+			resolversToAdd.add(resolver);
 
-        representativeFunctionMetaDatas = newRepresentativeFunctionMetaDatas;
-        propertyWords = newPropertyWords;
-        reservedWords = newReservedWords;
-        mapNameToResolvers = newMapNameToResolvers;
-    }
+		});
 
-    @Override
-    public boolean isReservedWord(String word) {
-        if (word == null) {
-            return false;
-        }
-        return reservedWords.contains(word.toUpperCase());
-    }
+		representativeFunctionMetaDatas = newRepresentativeFunctionMetaDatas;
+		propertyWords = newPropertyWords;
+		reservedWords = newReservedWords;
+		mapNameToResolvers = newMapNameToResolvers;
+	}
 
-    @Override
-    public boolean isProperty(String name) {
-        if (name == null) {
-            return false;
-        }
-        return propertyWords.contains(name.toUpperCase());
-    }
 
-    @Override
-    public List<String> getReservedWords() {
-        return reservedWords;
-    }
+	@Override
+	public boolean isReservedWord(String word) {
+		if (word == null) {
+			return false;
+		}
+		return reservedWords.contains(word.toUpperCase());
+	}
 
-    @Override
-    public List<FunctionResolver> getResolvers() {
+	@Override
+	public boolean isProperty(String name) {
+		if (name == null) {
+			return false;
+		}
+		return propertyWords.contains(name.toUpperCase());
+	}
 
-        return List.copyOf(resolvers);
-    }
+	@Override
+	public List<String> getReservedWords() {
+		return reservedWords;
+	}
 
-    @Override
-    public List<FunctionResolver> getResolvers(OperationAtom operationAtom) {
+	@Override
+	public List<FunctionResolver> getResolvers() {
 
-        FunctionAtomCompareKey key = new FunctionAtomCompareKey(operationAtom);
-        List<FunctionResolver> matchingResolvers = mapNameToResolvers.get(key);
-        if (matchingResolvers == null) {
-            matchingResolvers = Collections.emptyList();
-        }
-        return matchingResolvers;
-    }
+		return List.copyOf(resolvers);
+	}
 
-    @Override
-    public List<FunctionMetaData> getFunctionMetaDatas() {
-        return representativeFunctionMetaDatas;
-    }
+	@Override
+	public List<FunctionResolver> getResolvers(OperationAtom operationAtom) {
 
-    @Override
-    public void defineFunctions(FunctionTableCollector collector) {
+		FunctionAtomCompareKey key = new FunctionAtomCompareKey(operationAtom);
+		List<FunctionResolver> matchingResolvers = mapNameToResolvers.get(key);
+		if (matchingResolvers == null) {
+			matchingResolvers = Collections.emptyList();
+		}
+		return matchingResolvers;
+	}
 
-    }
+	@Override
+	public List<FunctionMetaData> getFunctionMetaDatas() {
+		return representativeFunctionMetaDatas;
+	}
+
+	@Override
+	public void defineFunctions(FunctionTableCollector collector) {
+
+	}
 }

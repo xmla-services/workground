@@ -13,10 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +26,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.type.StringType;
 
 class PropertiesFunctionTest {
@@ -34,7 +34,7 @@ class PropertiesFunctionTest {
   private static final String TIME_WEEKLY_MEMBER_CAPTION = "All Time.Weeklys";
   private static final String STORE_MEMBER_CAPTION = "All Stores";
   private static final int[] ZERO_POS = new int[] { 0 };
-  private QueryImpl query;
+  private Query query;
   private Result result;
   private Connection connection;
   private Expression resolvedFun;

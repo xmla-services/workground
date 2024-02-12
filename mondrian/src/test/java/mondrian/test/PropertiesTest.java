@@ -9,10 +9,14 @@
 
 package mondrian.test;
 
-import mondrian.olap.SystemWideProperties;
-import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
-import mondrian.rolap.SchemaModifiers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -21,6 +25,7 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -29,13 +34,9 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.Property;
+import mondrian.olap.SystemWideProperties;
+import mondrian.rolap.SchemaModifiers;
 
 /**
  * Tests intrinsic member and cell properties as specified in OLE DB for OLAP
@@ -288,7 +289,7 @@ class PropertiesTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMandatoryCellProperties(Context context) {
         Connection connection = context.getConnection();
-        QueryImpl salesCube = connection.parseQuery(
+        Query salesCube = connection.parseQuery(
             "select \n"
             + " {[Measures].[Store Sales], [Measures].[Unit Sales]} on columns, \n"
             + " {[Gender].members} on rows \n"

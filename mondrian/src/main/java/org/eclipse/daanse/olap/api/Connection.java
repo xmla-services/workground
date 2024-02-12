@@ -40,6 +40,7 @@ import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
@@ -92,7 +93,7 @@ public interface Connection {
      * to use olap4j and explicitly create a statement.
      */
     @Deprecated
-	Result execute(QueryImpl query);
+	Result execute(Query query);
 
     Statement createStatement();
 
@@ -112,7 +113,7 @@ public interface Connection {
     /**
      * Parses a query.
      */
-    QueryImpl parseQuery(String s);
+    Query parseQuery(String s);
 
     /**
      * Parses a statement.

@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
@@ -503,7 +504,7 @@ public class BatchTestCase{
                     //connection =
                     //    testContext.withSchemaPool(false).getConnection();
                 }
-                final QueryImpl query = connection.parseQuery(mdxQuery);
+                final Query query = connection.parseQuery(mdxQuery);
                 if (clearCache) {
                     clearCache(connection, (RolapCube)query.getCube());
                 }
@@ -1014,7 +1015,7 @@ public class BatchTestCase{
     }
 
     public Result executeQuery(String mdx, Connection connection) {
-        QueryImpl query = connection.parseQuery(mdx);
+    	Query query = connection.parseQuery(mdx);
         query.setResultStyle(ResultStyle.LIST);
         return connection.execute(query);
     }

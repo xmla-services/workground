@@ -59,7 +59,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
 
     @Override
     public Result executeSelect(String mdx) {
-        QueryImpl query = connection.parseQuery(mdx);
+    	Query query = connection.parseQuery(mdx);
         return connection.execute(query);
     }
 

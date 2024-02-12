@@ -12,7 +12,16 @@
 */
 package mondrian.olap;
 
-import mondrian.rolap.RolapConnectionPropsR;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
@@ -21,6 +30,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -43,16 +53,7 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.rolap.RolapConnectionPropsR;
 
 class HierarchyBugTest {
 
@@ -93,7 +94,7 @@ class HierarchyBugTest {
             + "from [Sales]";
 
         Connection conn = foodMartContext.getConnection();
-        QueryImpl query = conn.parseQuery(queryString);
+        Query query = conn.parseQuery(queryString);
 
         String failStr = null;
         int len = query.getAxes().length;

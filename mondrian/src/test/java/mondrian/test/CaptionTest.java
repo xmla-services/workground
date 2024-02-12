@@ -9,10 +9,17 @@
 
 package mondrian.test;
 
-import mondrian.olap.QueryImpl;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -20,13 +27,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
-
-import java.util.List;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit test special "caption" settings.
@@ -47,7 +47,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Time].[1997].[Q1]} ON ROWS FROM [Sales]";
-        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
+        Query monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[0].getPositions();
@@ -68,7 +68,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Promotion Media].[All Media]} ON ROWS FROM [Sales]";
-        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
+        Query monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
@@ -91,7 +91,7 @@ class CaptionTest{
         withSchema(context, MyFoodmartModifier::new);
         final Connection monConnection =
                 context.getConnection();
-        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
+        Query monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
@@ -131,7 +131,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Time].[Year].Members} ON ROWS FROM [Sales]";
-        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
+        Query monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();

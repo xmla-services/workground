@@ -42,6 +42,7 @@ import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
@@ -59,7 +60,6 @@ import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinTest.NullFunDef;
 import mondrian.olap.fun.ParenthesesFunDef;
@@ -409,7 +409,7 @@ class SqlConstraintUtilsTest {
             + "FROM [Sales] "
             + "WHERE [Time].[1997]";
 
-        final QueryImpl query = connection.parseQuery(queryText);
+        final Query query = connection.parseQuery(queryText);
         final QueryAxis querySlicerAxis = query.getSlicerAxis();
         final Member slicerMember =
             ((MemberExpression)querySlicerAxis.getSet()).getMember();
@@ -631,7 +631,7 @@ class SqlConstraintUtilsTest {
           + "FROM [Sales] "
           + "WHERE [Time].[1997]";
 
-      final QueryImpl query = connection.parseQuery(queryText);
+      final Query query = connection.parseQuery(queryText);
       final QueryAxis querySlicerAxis = query.getSlicerAxis();
       final Member slicerMember =
           ((MemberExpression)querySlicerAxis.getSet()).getMember();

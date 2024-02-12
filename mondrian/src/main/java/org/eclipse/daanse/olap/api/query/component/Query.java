@@ -28,6 +28,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -106,4 +107,10 @@ public non-sealed interface Query extends QueryComponent {
     boolean isCellPropertyEmpty();
 
     void setVirtualCubeNonNativeCrossJoin();
+
+	Object accept(QueryComponentVisitor visitor);
+
+	Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal forLogicalOrdinal);
+
+	void setParameter(String string, Object	 object);
 }

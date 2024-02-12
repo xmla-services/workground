@@ -37,13 +37,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import mondrian.olap.SystemProperty;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -57,8 +57,8 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
+import mondrian.olap.SystemProperty;
 import mondrian.olap.SystemWideProperties;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
 
@@ -74,7 +74,7 @@ class ParameterTest {
     // -- Helper methods ----------
 
     private void assertSetPropertyFails(Connection connection, String propName, String scope) {
-        QueryImpl q = connection.parseQuery("select from [Sales]");
+    	Query q = connection.parseQuery("select from [Sales]");
         try {
             q.setParameter(propName, "foo");
             fail(
@@ -96,7 +96,7 @@ class ParameterTest {
         String mdx =
             "select {Parameter(\"Foo\",[Time],[Time].[1997],\"Foo\")} "
             + "ON COLUMNS from [Sales]";
-        QueryImpl query = context.getConnection().parseQuery(mdx);
+        Query query = context.getConnection().parseQuery(mdx);
         SchemaReader sr = query.getSchemaReader(false).withLocus();
         Member m =
             sr.getMemberByUniqueName(
@@ -141,7 +141,7 @@ class ParameterTest {
 
         // this used to crash
         Connection connection = context.getConnection();
-        QueryImpl query = connection.parseQuery(queryString);
+        Query query = connection.parseQuery(queryString);
         query.toString();
     }
 
@@ -269,7 +269,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNullStrToMember(Context context) {
         Connection connection = context.getConnection();
-        QueryImpl query = connection.parseQuery(
+        Query query = connection.parseQuery(
             "select NON EMPTY {[Time].[1997]} ON COLUMNS, "
             + "NON EMPTY {StrToMember(Parameter(\"sProduct\", STRING, \"[Gender].[Gender].[F]\"))} ON ROWS "
             + "from [Sales]");
@@ -327,7 +327,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSetUnsetParameter(Context context) {
         Connection connection = context.getConnection();
-        QueryImpl query = connection.parseQuery(
+        Query query = connection.parseQuery(
             "with member [Measures].[Foo] as\n"
             + " len(Parameter(\"sProduct\", STRING, \"foobar\"))\n"
             + "select {[Measures].[Foo]} ON COLUMNS\n"
@@ -672,7 +672,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMetadata(Context context) {
         Connection connection = context.getConnection();
-        QueryImpl query = connection.parseQuery(
+        Query query = connection.parseQuery(
             "with member [Measures].[A string] as \n"
             + "   Parameter(\"S\",STRING,\"x\" || \"y\",\"A string parameter\")\n"
             + " member [Measures].[A number] as \n"
@@ -704,7 +704,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoParametersBug1425153(Context context) {
         Connection connection = context.getConnection();
-        QueryImpl query = connection.parseQuery(
+        Query query = connection.parseQuery(
             "select \n"
             + "{[Measures].[Unit Sales]} on columns, \n"
             + "{Parameter(\"ProductMember\", [Product], [Product].[All Products].[Food], \"wat willste?\").children} ON rows \n"
@@ -1107,7 +1107,7 @@ class ParameterTest {
                   + "select {[Measures].[s]} on columns,\n"
                   + "{Time.Time.Children} on rows\n"
                   + "from [Sales]";
-            QueryImpl query = connection.parseQuery(mdx);
+            Query query = connection.parseQuery(mdx);
             if (expectedMsg == null) {
                 query.setParameter("x", value);
                 final Result result = connection.execute(query);
@@ -1138,7 +1138,7 @@ class ParameterTest {
                 "select [Measures].[Unit Sales] on 0,\n"
                 + " Parameter(\"Foo\", [Time], {}, \"Foo\") on 1\n"
                 + "from [Sales]";
-            QueryImpl query = connection.parseQuery(mdx);
+            Query query = connection.parseQuery(mdx);
             SchemaReader sr = query.getSchemaReader(false);
             Member m1 =
                 sr.getMemberByUniqueName(

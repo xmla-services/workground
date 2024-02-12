@@ -280,7 +280,7 @@ public CacheControl getCacheControl( PrintWriter pw ) {
    */
   @Deprecated(since = "this method will be removed in mondrian-4.0")
 @Override
-public Result execute( QueryImpl query ) {
+public Result execute( Query query ) {
     final Statement statement = query.getStatement();
     Execution execution =
       new Execution( statement, statement.getQueryTimeoutMillis() );
