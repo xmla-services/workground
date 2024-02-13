@@ -18,6 +18,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.util.ArrayStack;
 
 //TODO: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ScopedValue.html
+//TODO: https://openjdk.org/jeps/462
 /**
  * Point of execution from which a service is invoked.
  */
