@@ -11,6 +11,10 @@
 */
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.CycleDuringParameterEvaluation;
+import static mondrian.resource.MondrianResource.TotalMembersLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,9 +28,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -67,10 +70,12 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.MemberBase;
-import mondrian.olap.SystemWideProperties;
+import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
+import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
+import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.AggregateFunDef;
@@ -83,16 +88,11 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;
-import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
-
-import static mondrian.resource.MondrianResource.CycleDuringParameterEvaluation;
-import static mondrian.resource.MondrianResource.TotalMembersLimitExceeded;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * A <code>RolapResult</code> is the result of running a query.

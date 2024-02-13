@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import org.eclipse.daanse.olap.api.Execution;
+
 import mondrian.rolap.BitKey;
 import mondrian.rolap.agg.SegmentBuilder;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
@@ -183,14 +185,14 @@ public interface SegmentCacheIndex {
      * <p>When this method is invoked, the execution instance of the
      * thread is automatically added to the list of clients for the
      * given segment. The calling code is responsible for calling
-     * {@link #cancel(Execution)} when it is done with the segments,
+     * {@link #cancel(ExecutionImpl)} when it is done with the segments,
      * or else this registration will prevent others from canceling
      * the running SQL statements associated to this segment.
      *
      * @param header Segment header
      * @return Slot, or null
      */
-    Future<SegmentBody> getFuture(Execution exec, SegmentHeader header);
+    Future<SegmentBody> getFuture(Execution execution, SegmentHeader header);
 
     /**
      * This method must remove all registrations as a client
@@ -198,9 +200,9 @@ public interface SegmentCacheIndex {
      *
      * This must terminate all SQL activity for any orphaned
      * segments.
-     * @param exec The execution to unregister.
+     * @param execution The execution to unregister.
      */
-    void cancel(Execution exec);
+    void cancel(Execution execution);
 
     /**
      * Tells whether or not a given segment is known to this index.
@@ -209,7 +211,7 @@ public interface SegmentCacheIndex {
 
     /**
      * Allows to link a {@link Statement} to a segment. This allows
-     * the index to cleanup when {@link #cancel(Execution)} is
+     * the index to cleanup when {@link #cancel(ExecutionImpl)} is
      * invoked and orphaned segments are left.
      * @param header The segment.
      * @param stmt The SQL statement.

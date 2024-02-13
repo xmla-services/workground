@@ -40,11 +40,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
-import mondrian.olap.exceptions.FailedToParseQueryException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ConnectionProps;
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -71,8 +71,9 @@ import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
+import mondrian.olap.exceptions.FailedToParseQueryException;
 import mondrian.parser.MdxParserValidator;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
@@ -141,7 +142,7 @@ public class RolapConnection extends ConnectionBase {
       Statement bootstrapStatement = createInternalStatement( false, this);
       final Locus locus =
         new Locus(
-          new Execution( bootstrapStatement, 0 ),
+          new ExecutionImpl( bootstrapStatement, 0 ),
           null,
           "Initializing connection" );
       Locus.push( locus );
@@ -273,15 +274,15 @@ public CacheControl getCacheControl( PrintWriter pw ) {
    * @throws QueryCanceledException         if query was canceled during execution
    * @throws QueryTimeoutException          if query exceeded timeout specified in
    *                                        the property file
-   * @deprecated Use {@link #execute(mondrian.server.Execution)}; this method
+   * @deprecated Use {@link #execute(mondrian.server.ExecutionImpl)}; this method
    * will be removed in mondrian-4.0
    */
   @Deprecated(since = "this method will be removed in mondrian-4.0")
 @Override
 public Result execute( Query query ) {
     final Statement statement = query.getStatement();
-    Execution execution =
-      new Execution( statement, statement.getQueryTimeoutMillis() );
+    ExecutionImpl execution =
+      new ExecutionImpl( statement, statement.getQueryTimeoutMillis() );
     return execute( execution );
   }
 
@@ -439,7 +440,7 @@ public QueryComponent parseStatement(String query ) {
     Statement statement = createInternalStatement( false ,this);
     final Locus locus =
       new Locus(
-        new Execution( statement, 0 ),
+        new ExecutionImpl( statement, 0 ),
         "Parse/validate MDX statement",
         null );
     Locus.push( locus );
@@ -668,7 +669,7 @@ public Context getContext() {
   /**
    * <p>A statement that can be used for all of the various internal
    * operations, such as resolving MDX identifiers, that require a
-   * {@link Statement} and an {@link Execution}.
+   * {@link Statement} and an {@link ExecutionImpl}.
    *
    * <p>The statement needs to be reentrant because there are many such
    * operations; several of these operations might be active at one time. We

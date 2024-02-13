@@ -57,7 +57,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 
 
@@ -456,7 +456,7 @@ class IdBatchResolverTest  {
         when(conn.createParser()).thenReturn(parser);
 
         query = conn.parseQuery(mdx);
-        Locus.push(new Locus(new Execution(
+        Locus.push(new Locus(new ExecutionImpl(
             query.getStatement(), Integer.MAX_VALUE),
             "batchResolveTest", "batchResolveTest"));
 

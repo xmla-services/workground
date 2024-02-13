@@ -12,7 +12,7 @@ package mondrian.spi;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
 /**
  * Provides estimates of the number of rows in a database.
@@ -48,7 +48,7 @@ public interface StatisticsProvider {
         String catalog,
         String schema,
         String table,
-        Execution execution);
+        ExecutionImpl execution);
 
     /**
      * Returns an estimate of the number of rows returned by a query.
@@ -64,7 +64,7 @@ public interface StatisticsProvider {
     long getQueryCardinality(
         Context context,
         String sql,
-        Execution execution);
+        ExecutionImpl execution);
 
     /**
      * Returns an estimate of the number of rows in a table.
@@ -86,5 +86,5 @@ public interface StatisticsProvider {
         String schema,
         String table,
         String column,
-        Execution execution);
+        ExecutionImpl execution);
 }

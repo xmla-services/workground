@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.QueryTiming;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
@@ -50,7 +51,7 @@ import mondrian.rolap.agg.SegmentCacheManager;
  *
  * @author jhyde
  */
-public class Execution {
+public class ExecutionImpl implements Execution{
   /**
    * Used for MDX logging, allows for a MDX Statement UID.
    */
@@ -67,7 +68,7 @@ public class Execution {
   private State state = State.FRESH;
 
   /**
-   * Lock monitor for SQL statements. All operations on {@link Execution#statements} need to be synchronized on this.
+   * Lock monitor for SQL statements. All operations on {@link ExecutionImpl#statements} need to be synchronized on this.
    */
   private final Object sqlStateLock = new Object();
 
@@ -97,12 +98,12 @@ public class Execution {
    */
   private final long id;
 
-  public static final Execution NONE = new Execution( null, 0 );
+  public static final ExecutionImpl NONE = new ExecutionImpl( null, 0 );
 
 
   private final Execution parent;
 
-  public Execution( Statement statement, long timeoutIntervalMillis ) {
+  public ExecutionImpl( Statement statement, long timeoutIntervalMillis ) {
     Execution parentExec = null;
     if ( !Locus.isEmpty() ) {
       parentExec = Locus.peek().execution;
@@ -116,7 +117,7 @@ public class Execution {
 
 
   /**
-   * Marks the start of an Execution instance. It is called by {@link Statement#start(Execution)} automatically. Users
+   * Marks the start of an Execution instance. It is called by {@link Statement#start(ExecutionImpl)} automatically. Users
    * don't need to call this method.
    */
   public void start() {
@@ -247,7 +248,7 @@ public class Execution {
 
   /**
    * Returns whether this execution is currently in a failed state and will throw an exception as soon as the next check
-   * is performed using {@link Execution#checkCancelOrTimeout()}.
+   * is performed using {@link ExecutionImpl#checkCancelOrTimeout()}.
    *
    * @return True or false, depending on the timeout state.
    */
@@ -284,14 +285,14 @@ public class Execution {
   /**
    * Called by the RolapResultShepherd when the execution needs to clean all of its resources for whatever reasons,
    * typically when an exception has occurred or the execution has ended. Any currently running SQL statements will be
-   * canceled. It should only be called if {@link Execution#isCancelOrTimeout()} returns true.
+   * canceled. It should only be called if {@link ExecutionImpl#isCancelOrTimeout()} returns true.
    *
    * <p>
    * This method doesn't need to be called by a user. It will be called internally by Mondrian when the system is ready
    * to clean the remaining resources.
    *
    * <p>
-   * To check if this execution is failed, use {@link Execution#isCancelOrTimeout()} instead.
+   * To check if this execution is failed, use {@link ExecutionImpl#isCancelOrTimeout()} instead.
    */
   public void cancelSqlStatements() {
     if ( parent != null ) {
@@ -353,7 +354,7 @@ public class Execution {
     mgr.execute( new SegmentCacheManager.Command<Void>() {
       @Override
 	public Void call() throws Exception {
-        mgr.getIndexRegistry().cancelExecutionSegments( Execution.this );
+        mgr.getIndexRegistry().cancelExecutionSegments( ExecutionImpl.this );
         return null;
       }
 

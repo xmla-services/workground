@@ -58,7 +58,7 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.DiffRepository;
 
@@ -107,7 +107,7 @@ class MemberCacheControlTest {
     private void prepareTestContext(Context context) {
         final RolapConnection conn = (RolapConnection) context.getConnection();
         final Statement statement = conn.getInternalStatement();
-        final Execution execution = new Execution(statement, 0);
+        final ExecutionImpl execution = new ExecutionImpl(statement, 0);
         //locus = new Locus(execution, getName(), null);
         locus = new Locus(execution, "MemberCacheControlTest", null);
         Locus.push(locus);

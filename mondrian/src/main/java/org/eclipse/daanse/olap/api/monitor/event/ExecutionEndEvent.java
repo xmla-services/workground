@@ -13,9 +13,9 @@
 
 package org.eclipse.daanse.olap.api.monitor.event;
 
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
-public record ExecutionEndEvent(ExecutionEventCommon executionEventCommon, int phaseCount, Execution.State state,
+public record ExecutionEndEvent(ExecutionEventCommon executionEventCommon, int phaseCount, ExecutionImpl.State state,
 		int cellCacheHitCount, int cellCacheMissCount, int cellCachePendingCount, int expCacheHitCount,
 		int expCacheMissCount) implements ExecutionEvent {
 

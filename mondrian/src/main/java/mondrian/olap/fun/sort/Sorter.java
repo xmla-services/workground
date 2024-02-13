@@ -28,6 +28,7 @@ import java.util.PriorityQueue;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
@@ -44,7 +45,6 @@ import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.olap.type.ScalarType;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
-import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 
 @SuppressWarnings( "squid:S4274" )

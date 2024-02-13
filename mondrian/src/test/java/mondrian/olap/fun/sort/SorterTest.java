@@ -47,14 +47,14 @@ import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
 class SorterTest{
 
   @Mock Evaluator evaluator;
   @Mock QueryImpl query;
   @Mock Statement statement;
-  @Mock Execution execution;
+  @Mock ExecutionImpl execution;
   @Mock SortKeySpec sortKeySpec1;
   @Mock SortKeySpec sortKeySpec2;
   @Mock TupleIterable tupleIterable;

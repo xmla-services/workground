@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.Context;
 
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SqlStatement;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.spi.StatisticsProvider;
 
@@ -34,7 +34,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         String catalog,
         String schema,
         String table,
-        Execution execution)
+        ExecutionImpl execution)
     {
         StringBuilder buf = new StringBuilder("select count(*) from ");
         context.getDialect().quoteIdentifier(buf, catalog, schema, table);
@@ -66,7 +66,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
 	public long getQueryCardinality(
         Context context,
         String sql,
-        Execution execution)
+        ExecutionImpl execution)
     {
         Dialect dialect=context.getDialect();
         final StringBuilder buf = new StringBuilder();
@@ -110,7 +110,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         String schema,
         String table,
         String column,
-        Execution execution)
+        ExecutionImpl execution)
     {
         final String sql =
             generateColumnCardinalitySql(

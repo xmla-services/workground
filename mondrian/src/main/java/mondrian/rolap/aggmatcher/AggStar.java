@@ -54,7 +54,7 @@ import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column.Usage;
 import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.util.ExpressionUtil;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 
 /**
@@ -1551,7 +1551,7 @@ public class AggStar {
                         context,
                     query.toString(),
                     new Locus(
-                        new Execution(
+                        new ExecutionImpl(
                             star.getSchema().getInternalConnection()
                                 .getInternalStatement(),
                             0),

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.spi.StatisticsProvider;
 
 /**
@@ -35,7 +35,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         String catalog,
         String schema,
         String table,
-        Execution execution)
+        ExecutionImpl execution)
     {
         Connection connection = null;
         ResultSet resultSet = null;
@@ -82,7 +82,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
 	public long getQueryCardinality(
         Context context,
         String sql,
-        Execution execution)
+        ExecutionImpl execution)
     {
         // JDBC cannot help with this. Defer to another statistics provider.
         return -1;
@@ -95,7 +95,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         String schema,
         String table,
         String column,
-        Execution execution)
+        ExecutionImpl execution)
     {
         Connection connection = null;
         ResultSet resultSet = null;

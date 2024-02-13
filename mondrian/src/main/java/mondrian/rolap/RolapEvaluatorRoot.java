@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.NamedSet;
@@ -30,7 +31,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
-import mondrian.server.Execution;
 
 /**
  * Context at the root of a tree of evaluators.

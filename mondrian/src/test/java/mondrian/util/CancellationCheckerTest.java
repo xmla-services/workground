@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
 class CancellationCheckerTest {
 
@@ -31,7 +31,7 @@ class CancellationCheckerTest {
         SystemWideProperties.instance().populateInitial();
     }
 
-    private Execution excMock = mock(Execution.class);
+    private ExecutionImpl excMock = mock(ExecutionImpl.class);
 
     @Test
     void testCheckCancelOrTimeoutWithIntExecution() {

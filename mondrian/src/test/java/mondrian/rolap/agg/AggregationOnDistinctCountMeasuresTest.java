@@ -34,6 +34,7 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -86,7 +87,7 @@ import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.SchemaModifiers;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.SqlPattern;
 
@@ -1945,7 +1946,7 @@ class AggregationOnDistinctCountMeasuresTest {
 
     private TupleList optimizeChildren(final TupleList memberList) {
         return Locus.execute(
-            Execution.NONE,
+            ExecutionImpl.NONE,
             "AggregationOnDistinctCountMeasuresTest",
             new Locus.Action<TupleList>() {
                 @Override
@@ -1961,7 +1962,7 @@ class AggregationOnDistinctCountMeasuresTest {
         final TupleList list1, final TupleList list2)
     {
         return Locus.execute(
-            Execution.NONE,
+            ExecutionImpl.NONE,
             "AggregationOnDistinctCountMeasuresTest",
             new Locus.Action<TupleList>() {
                 @Override

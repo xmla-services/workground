@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.spi.impl.SqlStatisticsProviderNew;
 
 /**
@@ -78,8 +78,8 @@ public class RolapStatisticsCache {
             //final List<StatisticsProvider> statisticsProviders =
             //    dialect.getStatisticsProviders();
             final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
-            final Execution execution =
-                new Execution(
+            final ExecutionImpl execution =
+                new ExecutionImpl(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);
@@ -111,8 +111,8 @@ public class RolapStatisticsCache {
             //final List<StatisticsProvider> statisticsProviders =
             //    dialect.getStatisticsProviders();
             final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
-            final Execution execution =
-                new Execution(
+            final ExecutionImpl execution =
+                new ExecutionImpl(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);
@@ -170,8 +170,8 @@ public class RolapStatisticsCache {
             final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
             //final List<StatisticsProvider> statisticsProviders =
             //    dialect.getStatisticsProviders();
-            final Execution execution =
-                new Execution(
+            final ExecutionImpl execution =
+                new ExecutionImpl(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);

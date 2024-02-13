@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -42,7 +43,7 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.sql.MemberChildrenConstraint;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.spi.SegmentColumn;
 import mondrian.util.ArraySortedSet;
@@ -830,7 +831,7 @@ public class CacheControlImpl implements CacheControl {
                 if (connection == null) {
                     throw new IllegalArgumentException("Connection required");
                 }
-                execution = new Execution(connection.getInternalStatement(), 0);
+                execution = new ExecutionImpl(connection.getInternalStatement(), 0);
             }
             final Locus locus = new Locus(
                 execution,

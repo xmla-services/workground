@@ -54,7 +54,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
@@ -67,7 +67,7 @@ import mondrian.util.DelegatingInvocationHandler;
  */
 class SegmentLoaderTest extends BatchTestCase {
 
-    private Execution execution;
+    private ExecutionImpl execution;
     private Locus locus;
     private SegmentCacheManager cacheMgr;
     private Statement statement;
@@ -78,7 +78,7 @@ class SegmentLoaderTest extends BatchTestCase {
             ((Connection) connection)
                 .getContext().getAggregationManager().cacheMgr;
         statement = ((Connection) connection).getInternalStatement();
-        execution = new Execution(statement, 1000);
+        execution = new ExecutionImpl(statement, 1000);
         locus = new Locus(execution, null, null);
         cacheMgr = execution.getMondrianStatement().getMondrianConnection()
             .getContext().getAggregationManager().cacheMgr;

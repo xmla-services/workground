@@ -45,6 +45,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 
+import org.eclipse.daanse.olap.api.Execution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,6 @@ import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.SegmentBuilder;
-import mondrian.server.Execution;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;

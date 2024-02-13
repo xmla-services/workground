@@ -57,7 +57,7 @@ import mondrian.rolap.SchemaKey;
 import mondrian.rolap.cache.MemorySegmentCache;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.rolap.cache.SegmentCacheIndexImpl;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentCache;
@@ -177,7 +177,7 @@ import mondrian.util.Pair;
  * sharedAggregations.</p>
  *
  * <p>8. Longer term. Move {@link mondrian.rolap.RolapStar.Bar}.segmentRefs to
- * {@link mondrian.server.Execution}. Would it still be thread-local?</p>
+ * {@link mondrian.server.ExecutionImpl}. Would it still be thread-local?</p>
  *
  * <p>10. Call
  * {@link mondrian.spi.DataSourceChangeListener#isAggregationChanged}.
@@ -1396,7 +1396,7 @@ public class SegmentCacheManager {
         return;
       }
       Locus.execute(
-        Execution.NONE,
+        ExecutionImpl.NONE,
         "AsyncCacheListener.handle",
         () -> {
           final Command<Void> command;
@@ -1695,7 +1695,7 @@ public class SegmentCacheManager {
       }
     }
 
-    public void cancelExecutionSegments( Execution exec ) {
+    public void cancelExecutionSegments( ExecutionImpl exec ) {
       for ( SegmentCacheIndex index : indexes.values() ) {
         index.cancel( exec );
       }

@@ -10,6 +10,7 @@
 package mondrian.server;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.Statement;
 
 import mondrian.rolap.RolapConnection;
@@ -36,7 +37,7 @@ public class Locus {
      *   printed if there is an error
      */
     public Locus(
-        Execution execution,
+    	Execution execution,
         String component,
         String message)
     {
@@ -74,7 +75,7 @@ public class Locus {
         Action<T> action)
     {
         final Statement statement = connection.getInternalStatement();
-        final Execution execution = new Execution(statement, 0);
+        final ExecutionImpl execution = new ExecutionImpl(statement, 0);
         return execute(execution, component, action);
     }
 
@@ -83,7 +84,7 @@ public class Locus {
     }
 
     public static <T> T execute(
-        Execution execution,
+        ExecutionImpl execution,
         String component,
         Action<T> action)
     {

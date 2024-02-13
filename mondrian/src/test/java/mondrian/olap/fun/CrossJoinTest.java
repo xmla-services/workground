@@ -63,7 +63,7 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 
 
@@ -82,7 +82,7 @@ public class CrossJoinTest {
 
   private static final String SALES_CUBE = "Sales";
 
-  private Execution excMock = mock( Execution.class );
+  private ExecutionImpl excMock = mock( ExecutionImpl.class );
 
   static List<List<Member>> m3 = Arrays.asList(
     Arrays.<Member>asList( new TestMember( "k" ), new TestMember( "l" ) ),
@@ -145,7 +145,7 @@ public class CrossJoinTest {
   }
 
     private void doTupleTupleIterTest(
-    CrossJoinFunDef.CrossJoinIterCalc calc, Execution execution ) {
+    CrossJoinFunDef.CrossJoinIterCalc calc, ExecutionImpl execution ) {
     TupleList l4 = makeListTuple( m4 );
     String s4 = toString( l4 );
     String e4 = "{[U, V], [W, X], [Y, Z]}";
@@ -190,8 +190,8 @@ public class CrossJoinTest {
     TupleList genderMembers = getGenderMembers( genders );
 
     // Test execution to track cancellation/timeout calls
-    Execution execution =
-      spy( new Execution( genders.getQuery().getStatement(), 0 ) );
+    ExecutionImpl execution =
+      spy( new ExecutionImpl( genders.getQuery().getStatement(), 0 ) );
     // check no execution of checkCancelOrTimeout has been yet
     verify( execution, times( 0 ) ).checkCancelOrTimeout();
     Integer crossJoinIterCalc =
@@ -216,7 +216,7 @@ public class CrossJoinTest {
 
   private Integer crossJoinIterCalcIterate(
     final TupleList list1, final TupleList list2,
-    final Execution execution ) {
+    final ExecutionImpl execution ) {
     return Locus.execute(
       execution, "CrossJoinTest", new Locus.Action<Integer>() {
         @Override

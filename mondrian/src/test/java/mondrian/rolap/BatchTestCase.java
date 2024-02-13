@@ -60,7 +60,7 @@ import mondrian.rolap.agg.Segment;
 import mondrian.rolap.agg.SegmentWithData;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.cache.HardSmartCache;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.SqlPattern;
 import mondrian.util.Pair;
@@ -318,8 +318,8 @@ public class BatchTestCase{
             // behave exactly the same as the current DataSource.
             RolapUtil.setHook(new TriggerHook(trigger));
             Bomb bomb;
-            final Execution execution =
-                new Execution(
+            final ExecutionImpl execution =
+                new ExecutionImpl(
                     ((Connection) connection).getInternalStatement(),
                     1000);
             final AggregationManager aggMgr =

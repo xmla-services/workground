@@ -88,7 +88,7 @@ import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SmartMemberReader;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -919,7 +919,7 @@ public class TestUtil {
 	    Query query = connection.parseQuery( queryString );
 	    Statement statement = query.getStatement();
 	    assertThat(statement).isNotNull();
-	    final Result result = statement.getMondrianConnection().execute(new Execution(statement, statement.getQueryTimeoutMillis()));
+	    final Result result = statement.getMondrianConnection().execute(new ExecutionImpl(statement, statement.getQueryTimeoutMillis()));
 	    return result;
 	  }
 
@@ -929,7 +929,7 @@ public class TestUtil {
 		Statement statement = query.getStatement();
 		assertThat(statement).isNotNull();
 
-		Result result = statement.getMondrianConnection().execute(new Execution(statement, timeoutIntervalMillis));
+		Result result = statement.getMondrianConnection().execute(new ExecutionImpl(statement, timeoutIntervalMillis));
 		return result;
 	}
 

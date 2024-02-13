@@ -22,7 +22,6 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 
-import mondrian.server.Execution;
 import mondrian.spi.ProfileHandler;
 
 public interface Statement  {

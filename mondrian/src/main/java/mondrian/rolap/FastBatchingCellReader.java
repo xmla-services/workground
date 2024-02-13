@@ -27,6 +27,7 @@ import java.util.SortedSet;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.slf4j.Logger;
@@ -49,7 +50,6 @@ import mondrian.rolap.aggmatcher.AggGen;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.rolap.cache.SegmentCacheIndexImpl;
-import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;

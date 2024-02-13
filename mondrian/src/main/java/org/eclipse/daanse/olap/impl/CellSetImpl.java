@@ -19,9 +19,9 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.rolap.RolapCell;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
-public class CellSetImpl extends Execution implements CellSet {
+public class CellSetImpl extends ExecutionImpl implements CellSet {
 
     private StatementImpl statement;
     private CellSetMetaData metaData;

@@ -68,7 +68,7 @@ import mondrian.rolap.agg.AndPredicate;
 import mondrian.rolap.agg.DrillThroughCellRequest;
 import mondrian.rolap.agg.MemberColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 
 /**
@@ -235,7 +235,7 @@ public class RolapCell implements Cell {
                 connection.getContext(),
                 sql,
                 new Locus(
-                    new Execution(connection.getInternalStatement(), 0),
+                    new ExecutionImpl(connection.getInternalStatement(), 0),
                     "RolapCell.getDrillThroughCount",
                     "Error while counting drill-through"));
         try {
@@ -545,7 +545,7 @@ public class RolapCell implements Cell {
         // essential.
         final Statement statement =
             result.getExecution().getMondrianStatement();
-        final Execution execution = new Execution(statement, 0);
+        final ExecutionImpl execution = new ExecutionImpl(statement, 0);
 
         final Connection connection = statement.getMondrianConnection();
         int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;

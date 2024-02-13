@@ -45,11 +45,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
 
-import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryTimeoutException;
-import mondrian.olap.ResourceLimitExceededException;
-import mondrian.server.Execution;
-
 /**
  * Connection to a multi-dimensional database.
  *
@@ -186,11 +181,6 @@ public interface Connection {
 	   * Executes a statement.
 	   *
 	   * @param execution Execution context (includes statement, query)
-	   * @throws ResourceLimitExceededException if some resource limit specified
-	   *                                        in the property file was exceeded
-	   * @throws QueryCanceledException         if query was canceled during execution
-	   * @throws QueryTimeoutException          if query exceeded timeout specified in
-	   *                                        the property file
 	   */
 	Result execute(Execution execution);
 }

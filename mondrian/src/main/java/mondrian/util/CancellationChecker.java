@@ -9,7 +9,7 @@
 */
 package mondrian.util;
 
-import mondrian.server.Execution;
+import org.eclipse.daanse.olap.api.Execution;
 
 /**
  * Encapsulates cancel and timeouts checks

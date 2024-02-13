@@ -57,7 +57,7 @@ import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.Segment;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.agg.SegmentWithData;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
@@ -72,7 +72,7 @@ import mondrian.util.DelegatingInvocationHandler;
 class FastBatchingCellReaderTest extends BatchTestCase{
 
   private Locus locus;
-  private Execution e;
+  private ExecutionImpl e;
   private AggregationManager aggMgr;
   private RolapCube salesCube;
   private Connection connection;
@@ -99,7 +99,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     connection = context.getConnection();
     connection.getCacheControl( null ).flushSchemaCache();
     final Statement statement = ((Connection) connection).getInternalStatement();
-    e = new Execution( statement, 0 );
+    e = new ExecutionImpl( statement, 0 );
     aggMgr = e.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
     locus = new Locus( e, "FastBatchingCellReaderTest", null );
     Locus.push( locus );

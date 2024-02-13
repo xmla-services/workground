@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -67,7 +68,6 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.SqlConstraintUtils;
-import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.util.CancellationChecker;
 import mondrian.util.CartesianProductList;

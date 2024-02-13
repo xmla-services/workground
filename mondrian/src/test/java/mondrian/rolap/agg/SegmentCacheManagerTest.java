@@ -31,13 +31,13 @@ import org.mockito.MockitoAnnotations;
 import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 
 class SegmentCacheManagerTest {
 
   @Mock private Context context;
-  private Locus locus = new Locus( new Execution( null, 0 ), "component", "message" );
+  private Locus locus = new Locus( new ExecutionImpl( null, 0 ), "component", "message" );
   private ExecutorService executor = Executors.newFixedThreadPool( 15 );
 
   @BeforeEach

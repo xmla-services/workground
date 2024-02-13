@@ -9,6 +9,9 @@
 
 package mondrian.rolap;
 
+import static mondrian.resource.MondrianResource.QueryLimitReached;
+import static mondrian.resource.MondrianResource.message;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +24,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.MondrianException;
@@ -28,11 +32,7 @@ import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.Util;
-import mondrian.server.Execution;
 import mondrian.util.Pair;
-
-import static mondrian.resource.MondrianResource.QueryLimitReached;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * A utility class for {@link RolapConnection}. It specializes in

@@ -10,6 +10,10 @@
 */
 package mondrian.rolap.agg;
 
+import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
+import static mondrian.resource.MondrianResource.SegmentFetchLimitExceeded;
+import static mondrian.resource.MondrianResource.message;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -30,11 +34,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-import mondrian.olap.ResourceLimitExceededException;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 
 import mondrian.olap.MondrianException;
+import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
@@ -44,17 +49,12 @@ import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.agg.SegmentCacheManager.AbortException;
 import mondrian.rolap.cache.SegmentCacheIndex;
-import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
-
-import static mondrian.resource.MondrianResource.JavaDoubleOverflow;
-import static mondrian.resource.MondrianResource.SegmentFetchLimitExceeded;
-import static mondrian.resource.MondrianResource.message;
 
 /**
  * <p>

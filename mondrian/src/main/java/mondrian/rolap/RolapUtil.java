@@ -62,7 +62,7 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.util.ClassResolver;
 
@@ -121,7 +121,7 @@ public class RolapUtil {
         final SchemaReader schemaReader)
     {
         final Statement statement = connection.getInternalStatement();
-        final Execution execution = new Execution(statement, 0);
+        final ExecutionImpl execution = new ExecutionImpl(statement, 0);
         final Locus locus =
             new Locus(
                 execution,
@@ -581,7 +581,7 @@ public class RolapUtil {
     public static Evaluator createEvaluator(
         Statement statement)
     {
-        Execution dummyExecution = new Execution(statement, 0);
+        ExecutionImpl dummyExecution = new ExecutionImpl(statement, 0);
         final RolapResult result = new RolapResult(dummyExecution, false);
         return result.getRootEvaluator();
     }

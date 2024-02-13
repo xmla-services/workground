@@ -69,7 +69,7 @@ import mondrian.olap.type.NullType;
 import mondrian.olap.type.TupleType;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 
 /**
  * <code>SqlConstraintUtilsTest</code> tests the functions defined in
@@ -414,7 +414,7 @@ class SqlConstraintUtilsTest {
         final RolapHierarchy slicerHierarchy =
             ((RolapCube)query.getCube()).getTimeHierarchy(null);
 
-        final Execution execution = new Execution(query.getStatement(), 0L);
+        final ExecutionImpl execution = new ExecutionImpl(query.getStatement(), 0L);
         final RolapEvaluatorRoot rolapEvaluatorRoot =
             new RolapEvaluatorRoot(execution);
         final RolapEvaluator rolapEvaluator =
@@ -636,7 +636,7 @@ class SqlConstraintUtilsTest {
       final RolapHierarchy slicerHierarchy =
           ((RolapCube)query.getCube()).getTimeHierarchy(null);
 
-      final Execution execution = new Execution(query.getStatement(), 0L);
+      final ExecutionImpl execution = new ExecutionImpl(query.getStatement(), 0L);
       final RolapEvaluatorRoot rolapEvaluatorRoot =
           new RolapEvaluatorRoot(execution);
       final RolapEvaluator rolapEvaluator =

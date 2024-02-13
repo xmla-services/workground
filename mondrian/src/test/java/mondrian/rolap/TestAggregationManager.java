@@ -69,7 +69,7 @@ import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.server.Execution;
+import mondrian.server.ExecutionImpl;
 import mondrian.server.Locus;
 import mondrian.test.SqlPattern;
 
@@ -86,7 +86,7 @@ class TestAggregationManager extends BatchTestCase {
             DatabaseProduct.MYSQL);
 
     private Locus locus;
-    private Execution execution;
+    private ExecutionImpl execution;
     private AggregationManager aggMgr;
 
 
@@ -111,7 +111,7 @@ class TestAggregationManager extends BatchTestCase {
         final Statement statement =
             ((Connection) context.getConnection())
                 .getInternalStatement();
-        execution = new Execution(statement, 0);
+        execution = new ExecutionImpl(statement, 0);
         aggMgr =
             execution.getMondrianStatement()
                 .getMondrianConnection()
