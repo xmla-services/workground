@@ -54,7 +54,7 @@ import mondrian.util.ArrayStack;
  * <p>
  * To read timing information, add a handler to the statement using
  * {@link mondrian.server.Statement#enableProfiling} and implement the
- * {@link mondrian.spi.ProfileHandler#explain(String, QueryTimingImpl)} method.
+ * {@link org.eclipse.daanse.olap.api.ProfileHandler#explain(String, QueryTimingImpl)} method.
  *
  * @author jbarnett
  */

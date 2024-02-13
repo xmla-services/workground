@@ -44,9 +44,9 @@ import java.util.regex.Pattern;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Statement;
@@ -126,42 +126,42 @@ public class TestUtil {
 		    {
 		        return new UnaryTupleList(Arrays.asList(
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "High Quality"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                Segment.toList(
+		                IdImpl.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Sunset"),
 		                salesCubeSchemaReader)));

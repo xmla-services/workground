@@ -32,9 +32,9 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
  */
 class QueryTest {
     private CellProperty[] cellProps = {
-        new CellPropertyImpl(Segment.toList("Value")),
-        new CellPropertyImpl(Segment.toList("Formatted_Value")),
-        new CellPropertyImpl(Segment.toList("Format_String")),
+        new CellPropertyImpl(IdImpl.toList("Value")),
+        new CellPropertyImpl(IdImpl.toList("Formatted_Value")),
+        new CellPropertyImpl(IdImpl.toList("Format_String")),
     };
     private QueryAxisImpl[] axes = new QueryAxisImpl[0];
     private Formula[] formulas = new Formula[0];

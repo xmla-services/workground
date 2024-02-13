@@ -13,12 +13,11 @@ import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.ProfileHandler;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.Query;
-
-import mondrian.spi.ProfileHandler;
 
 /**
  * Implementation of {@link Statement}.

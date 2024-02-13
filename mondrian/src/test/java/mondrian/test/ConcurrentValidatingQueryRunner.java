@@ -313,7 +313,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
         try {
             String[] tsegments =
                 new String[] {"Time", "1997"};
-            Id tid = new IdImpl(Segment.toList(tsegments));
+            Id tid = new IdImpl(IdImpl.toList(tsegments));
 
             Member memberTime97 =
                 schemaReader.getMemberByUniqueName(tid.getSegments(), false);
@@ -326,7 +326,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
 
             String[] ssegments =
                 new String[] {"Customers", "All Customers", "USA", states[idx]};
-            Id sid = new IdImpl(Segment.toList(ssegments));
+            Id sid = new IdImpl(IdImpl.toList(ssegments));
 
             Member memberCustomerState =
                 schemaReader.getMemberByUniqueName(sid.getSegments(), false);

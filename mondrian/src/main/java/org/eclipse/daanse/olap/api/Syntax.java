@@ -40,6 +40,7 @@ import mondrian.olap.Util;
  * @author jhyde
  * @since 21 July, 2003
  */
+@Deprecated
 public enum Syntax {
     /**
      * Defines syntax for expression invoked <code>FUNCTION()</code> or

@@ -34,7 +34,6 @@ import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -54,6 +53,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.SystemWideProperties;
@@ -172,7 +172,7 @@ class MemberCacheControlTest {
         Cube cube = connection.getSchema().lookupCube(cubeName, true);
         SchemaReader scr = cube.getSchemaReader(null).withLocus();
         return (RolapMember)
-            scr.getMemberByUniqueName(Segment.toList(names), true);
+            scr.getMemberByUniqueName(IdImpl.toList(names), true);
     }
 
     /**

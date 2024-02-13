@@ -7,9 +7,7 @@
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
 */
 
-package mondrian.spi;
-
-import org.eclipse.daanse.olap.api.QueryTiming;
+package org.eclipse.daanse.olap.api;
 
 /**
  * Called when a statement has profile information.

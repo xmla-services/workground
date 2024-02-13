@@ -20,7 +20,6 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -34,6 +33,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
+import mondrian.olap.IdImpl;
 import mondrian.olap.Property;
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.SchemaModifiers;
@@ -58,7 +58,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null).withLocus();
         Member member =
             scr.getMemberByUniqueName(
-                Segment.toList("Customers", "All Customers", "USA", "CA"),
+                IdImpl.toList("Customers", "All Customers", "USA", "CA"),
                 true);
         final boolean caseSensitive =
             SystemWideProperties.instance().CaseSensitive;
@@ -199,7 +199,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null);
         Member memberForCardinalityTest =
             scr.getMemberByUniqueName(
-                Segment.toList("Marital Status", "All Marital Status"),
+                IdImpl.toList("Marital Status", "All Marital Status"),
                 true);
         Integer intPropValue =
             (Integer) memberForCardinalityTest.getPropertyValue(

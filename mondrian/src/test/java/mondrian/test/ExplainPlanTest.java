@@ -29,6 +29,7 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ProfileHandler;
 import org.eclipse.daanse.olap.api.QueryTiming;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -44,7 +45,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
 import mondrian.olap.SystemWideProperties;
-import mondrian.spi.ProfileHandler;
 
 /**
  * Tests related to explain plan and QueryTiming

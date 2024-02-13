@@ -365,5 +365,20 @@ public class IdImpl
 	public Calc<?> accept(ExpressionCompiler compiler) {
         throw new UnsupportedOperationException(this.toString());
 	}
+	
+    /**
+     * Converts an array of names to a list of segments.
+     *
+     * @param nameParts Array of names
+     * @return List of segments
+     */
+    public static List<Segment> toList(String... nameParts) {
+        final List<Segment> segments =
+            new ArrayList<>(nameParts.length);
+        for (String namePart : nameParts) {
+            segments.add(new IdImpl.NameSegmentImpl(namePart));
+        }
+        return segments;
+    }
 
 }

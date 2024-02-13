@@ -13,10 +13,7 @@
  */
 package org.eclipse.daanse.olap.api;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import mondrian.olap.IdImpl;
 
 public interface Segment {
 
@@ -28,18 +25,5 @@ public interface Segment {
 
     void toString(StringBuilder buf);
 
-    /**
-     * Converts an array of names to a list of segments.
-     *
-     * @param nameParts Array of names
-     * @return List of segments
-     */
-    static List<Segment> toList(String... nameParts) {
-        final List<Segment> segments =
-            new ArrayList<>(nameParts.length);
-        for (String namePart : nameParts) {
-            segments.add(new IdImpl.NameSegmentImpl(namePart));
-        }
-        return segments;
-    }
+
 }

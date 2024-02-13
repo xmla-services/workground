@@ -63,7 +63,6 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -91,6 +90,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import org.slf4j.Logger;
 
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
 import mondrian.olap.QueryCanceledException;
@@ -3849,15 +3849,15 @@ public class BasicQueryTest {
      */
     TestUtil.withSchema(context, SchemaModifiers.BasicQueryTestModifier20::new);
     SchemaReader scr = context.getConnection().getSchema().lookupCube( cubeName, true ).getSchemaReader( null );
-    Member member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Unit Sales" ), true );
+    Member member = scr.getMemberByUniqueName( IdImpl.toList( "Measures", "Unit Sales" ), true );
     Object visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
 
-    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Store Cost" ), true );
+    member = scr.getMemberByUniqueName( IdImpl.toList( "Measures", "Store Cost" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.TRUE, visible );
 
-    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Profit" ), true );
+    member = scr.getMemberByUniqueName( IdImpl.toList( "Measures", "Profit" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
   }

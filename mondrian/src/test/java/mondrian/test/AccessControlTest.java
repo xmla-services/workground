@@ -23,12 +23,11 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
-import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -132,7 +131,7 @@ class AccessControlTest {
         final SchemaReader schemaReader = salesCube.getSchemaReader(role);
         Dimension genderDimension =
             (Dimension) schemaReader.lookupCompound(
-                salesCube, Segment.toList("Gender"), true,
+                salesCube, IdImpl.toList("Gender"), true,
                 DataType.DIMENSION);
         role.grant(genderDimension, Access.NONE);
         role.makeImmutable();

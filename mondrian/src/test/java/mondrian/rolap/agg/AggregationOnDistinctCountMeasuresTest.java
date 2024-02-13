@@ -80,6 +80,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
+import mondrian.olap.IdImpl;
 import mondrian.olap.ResultBase;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
@@ -1534,7 +1535,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1543,7 +1544,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers"),
                     salesCubeSchemaReader)));
@@ -1551,7 +1552,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1560,7 +1561,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                     salesCubeSchemaReader)));
@@ -1584,14 +1585,14 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Store", "All Stores", "USA", "OR", "Portland"),
                     salesCubeSchemaReader)));
         assertTrue(
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "USA", "OR"),
+                    IdImpl.toList("Store", "All Stores", "USA", "OR"),
                     salesCubeSchemaReader)));
         assertEquals(16, tuples.size());
     }
@@ -1612,7 +1613,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1621,7 +1622,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                 salesCubeSchemaReader)));
@@ -1629,7 +1630,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1655,10 +1656,10 @@ class AggregationOnDistinctCountMeasuresTest {
   void testShouldNotRemoveDuplicateTuples(Context context) {
       prepareContext(context);
         Member maleChildMember = member(
-            org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
+            IdImpl.toList("Gender", "All Gender", "M"),
             salesCubeSchemaReader);
         Member femaleChildMember = member(
-            org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
+            IdImpl.toList("Gender", "All Gender", "F"),
             salesCubeSchemaReader);
 
         List<Member> memberList = new ArrayList<>();
@@ -1697,15 +1698,15 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member maleChild =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
+                IdImpl.toList("Gender", "All Gender", "M"),
                 salesCubeSchemaReader);
         Member femaleChild =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                IdImpl.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member mexicoMember =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "Mexico"),
+                IdImpl.toList("Store", "All Stores", "Mexico"),
                 salesCubeSchemaReader);
 
         TupleList memberList =
@@ -1887,22 +1888,22 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member caMember =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList(
+                IdImpl.toList(
                     "Store", "All Stores", "USA", "CA"),
                 salesCubeSchemaReader);
         Member orMember =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList(
+                IdImpl.toList(
                     "Store", "All Stores", "USA", "OR"),
                 salesCubeSchemaReader);
         Member waMember =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList(
+                IdImpl.toList(
                     "Store", "All Stores", "USA", "WA"),
                 salesCubeSchemaReader);
         Member femaleMember =
             member(
-                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                IdImpl.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member [] tupleMembersArity1 =
             new Member[] {
@@ -2402,11 +2403,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member maleMember =
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
+                    IdImpl.toList("Gender", "All Gender", "M"),
                         salesCubeSchemaReader);
         Member femaleMember =
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                		IdImpl.toList("Gender", "All Gender", "F"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
@@ -2425,40 +2426,40 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         return new UnaryTupleList(Arrays.asList(
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills",
                                 "Store 6"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "CA", "Los Angeles"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem"),
                         salesCubeSchemaReader),
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList(
+                    IdImpl.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                         salesCubeSchemaReader)));
     }
@@ -2470,11 +2471,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member usaMember =
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "USA"),
+                    IdImpl.toList("Store", "All Stores", "USA"),
                         salesCubeSchemaReader);
         Member canadaMember =
                 member(
-                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "CANADA"),
+                    IdImpl.toList("Store", "All Stores", "CANADA"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
