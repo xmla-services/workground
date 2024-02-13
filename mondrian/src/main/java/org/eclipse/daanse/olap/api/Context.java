@@ -30,7 +30,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.core.BasicContextConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
-import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 
 /**
@@ -106,7 +105,7 @@ public interface Context {
 
 	void removeConnection(Connection rolapConnection);
 
-	RolapResultShepherd getResultShepherd();
+	ResultShepherd getResultShepherd();
 
 	AggregationManager getAggregationManager();
 

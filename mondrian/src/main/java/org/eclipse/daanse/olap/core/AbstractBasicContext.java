@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ResultShepherd;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEndEvent;
@@ -36,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianException;
-import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.NopEventBus;
 
@@ -49,7 +49,7 @@ public abstract class AbstractBasicContext implements Context {
 	 */
 	private final long id = ID_GENERATOR.incrementAndGet();
 
-	protected RolapResultShepherd shepherd;
+	protected ResultShepherd shepherd;
 
 	@SuppressWarnings("unchecked")
 	private final List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
@@ -118,7 +118,7 @@ public abstract class AbstractBasicContext implements Context {
 	}
 
 	@Override
-	public RolapResultShepherd getResultShepherd() {
+	public ResultShepherd getResultShepherd() {
 		if (shutdown) {
 			throw new MondrianException(SERVER_ALREADY_SHUTDOWN);
 		}

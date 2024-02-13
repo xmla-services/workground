@@ -25,6 +25,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.ResultShepherd;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.MondrianException;
@@ -47,7 +48,7 @@ import mondrian.util.Pair;
  *
  * @author LBoudreau
  */
-public class RolapResultShepherd {
+public class RolapResultShepherd implements ResultShepherd {
 
     /**
      * An executor service used for both the shepherd thread and the
@@ -138,7 +139,8 @@ public class RolapResultShepherd {
      * @return A Result object, as supplied by the Callable passed as a
      * parameter.
      */
-    public Result shepherdExecution(
+    @Override
+	public Result shepherdExecution(
         Execution execution,
         Callable<Result> callable)
     {
@@ -211,7 +213,8 @@ public class RolapResultShepherd {
         }
     }
 
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         this.timer.cancel();
         this.executor.shutdown();
         this.tasks.clear();
