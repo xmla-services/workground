@@ -11,6 +11,7 @@ package mondrian.server;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.Statement;
 
 import mondrian.rolap.RolapConnection;
@@ -19,8 +20,8 @@ import mondrian.util.ArrayStack;
 /**
  * Point of execution from which a service is invoked.
  */
-public class Locus {
-    public final Execution execution;
+public class LocusImpl implements Locus {
+    private final Execution execution;
     public final String message;
     public final String component;
 
@@ -36,7 +37,7 @@ public class Locus {
      * @param message Description of the purpose of this statement, to be
      *   printed if there is an error
      */
-    public Locus(
+    public LocusImpl(
     	Execution execution,
         String component,
         String message)
@@ -84,28 +85,33 @@ public class Locus {
     }
 
     public static <T> T execute(
-        ExecutionImpl execution,
+        Execution execution,
         String component,
         Action<T> action)
     {
         final Locus locus =
-            new Locus(
+            new LocusImpl(
                 execution,
                 component,
                 null);
-        Locus.push(locus);
+        LocusImpl.push(locus);
         try {
             return action.execute();
         } finally {
-            Locus.pop(locus);
+            LocusImpl.pop(locus);
         }
     }
 
     public final Context getContext() {
-        return execution.getMondrianStatement().getMondrianConnection().getContext();
+        return getExecution().getMondrianStatement().getMondrianConnection().getContext();
     }
 
-    public interface Action<T> {
+    @Override
+    public Execution getExecution() {
+		return execution;
+	}
+
+	public interface Action<T> {
         T execute();
     }
 }

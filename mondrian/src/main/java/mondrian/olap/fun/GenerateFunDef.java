@@ -44,7 +44,7 @@ import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TypeUtil;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
 
 /**
@@ -152,7 +152,7 @@ class GenerateFunDef extends AbstractFunctionDefinition {
                         iterCalc1.evaluateIterable(evaluator);
                 evaluator.restore(savepoint);
                 TupleList result = TupleCollections.createList(arityOut);
-                Execution execution = Locus.peek().execution;
+                Execution execution = LocusImpl.peek().getExecution();
                 if (all) {
                     final TupleCursor cursor = iterable1.tupleCursor();
                     int rowCount = 0;

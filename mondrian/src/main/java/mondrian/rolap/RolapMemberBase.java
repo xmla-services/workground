@@ -36,7 +36,7 @@ import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.VisualTotalsFunDef;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
 
@@ -421,11 +421,11 @@ public class RolapMemberBase
                 return getOrdinal();
 
             case Property.CHILDREN_CARDINALITY_ORDINAL:
-                return Locus.execute(
+                return LocusImpl.execute(
                     ((RolapSchema) level.getDimension().getSchema())
                         .getInternalConnection(),
                     "Member.CHILDREN_CARDINALITY",
-                    new Locus.Action<Integer>() {
+                    new LocusImpl.Action<Integer>() {
                         @Override
 						public Integer execute() {
                             if (isAll() && childLevelHasApproxRowCount()) {

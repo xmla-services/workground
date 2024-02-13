@@ -68,7 +68,7 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.SqlConstraintUtils;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
 import mondrian.util.CartesianProductList;
 
@@ -285,7 +285,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
             final Member[] members = new Member[arity];
 
             long currentIteration = 0;
-            Execution execution = Locus.peek().execution;
+            Execution execution = LocusImpl.peek().getExecution();
 
             @Override
 			public boolean forward() {
@@ -622,7 +622,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     final int iNext = i + 1;
     final TupleCursor cursor = tupleList.tupleCursor();
     int currentIteration = 0;
-    Execution execution = Locus.peek().execution;
+    Execution execution = LocusImpl.peek().getExecution();
     while ( cursor.forward() ) {
       CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
       cursor.currentToArray( partialArray, partialSize );

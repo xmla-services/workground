@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,12 +33,12 @@ import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 class SegmentCacheManagerTest {
 
   @Mock private Context context;
-  private Locus locus = new Locus( new ExecutionImpl( null, 0 ), "component", "message" );
+  private Locus locus = new LocusImpl( new ExecutionImpl( null, 0 ), "component", "message" );
   private ExecutorService executor = Executors.newFixedThreadPool( 15 );
 
   @BeforeEach

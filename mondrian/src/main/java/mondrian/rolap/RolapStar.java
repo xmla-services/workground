@@ -76,7 +76,7 @@ import mondrian.rolap.agg.SegmentWithData;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.util.RelationUtil;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.Bug;
 
 /**
@@ -219,7 +219,7 @@ public class RolapStar {
 
     private Object getCellFromExternalCache(CellRequest request, RolapConnection rolapConnection) {
         final SegmentWithData segment =
-            Locus.peek().getContext().getAggregationManager()
+            LocusImpl.peek().getContext().getAggregationManager()
                 .getCacheMgr(rolapConnection).peek(request);
         if (segment == null) {
             return null;

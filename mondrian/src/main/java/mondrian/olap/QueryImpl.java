@@ -110,7 +110,7 @@ import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.ArrayStack;
 
 /**
@@ -949,10 +949,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 parameterName, param.getScope().name());
         }
         final Object value2 =
-        Locus.execute(
+        LocusImpl.execute(
             new ExecutionImpl(statement, 0),
             "Query.quickParse",
-            new Locus.Action<Object>() {
+            new LocusImpl.Action<Object>() {
                 @Override
 				public Object execute() {
                     return quickParse(

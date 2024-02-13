@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -88,7 +89,7 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
@@ -641,12 +642,12 @@ public class RolapResult extends ResultBase {
               && ((NameSegment)
               mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).getName().equalsIgnoreCase(
               mondrian.olap.Property.CELL_ORDINAL.getName()    ))) {
-        final Locus locus = new Locus( execution, null, "Loading cells" );
-        Locus.push( locus );
+        final Locus locus = new LocusImpl( execution, null, "Loading cells" );
+        LocusImpl.push( locus );
         try {
           executeBody( internalSlicerEvaluator, query, new int[axes.length] );
         } finally {
-          Util.explain( evaluator.root.statement.getProfileHandler(), "QueryBody:", null, evaluator.getTiming() );Locus.pop( locus );
+          Util.explain( evaluator.root.statement.getProfileHandler(), "QueryBody:", null, evaluator.getTiming() );LocusImpl.pop( locus );
         }
       }
 
@@ -1021,12 +1022,12 @@ public Cell getCell( int[] pos ) {
 
     for ( int i = 0; i < pos.length; i++ ) {
       if ( positionsHighCardinality.containsKey(i) && Boolean.TRUE.equals( positionsHighCardinality.get( i ) ) ) {
-        final Locus locus = new Locus( execution, null, "Loading cells" );
-        Locus.push( locus );
+        final Locus locus = new LocusImpl( execution, null, "Loading cells" );
+        LocusImpl.push( locus );
         try {
           executeBody( evaluator, statement.getQuery(), pos );
         } finally {
-          Locus.pop( locus );
+          LocusImpl.pop( locus );
         }
         break;
       }
@@ -1568,7 +1569,7 @@ public Cell getCell( int[] pos ) {
 
     private void mergeTupleIter( TupleCursor cursor ) {
       int currentIteration = 0;
-      Execution execution = Locus.peek().execution;
+      Execution execution = LocusImpl.peek().getExecution();
       while ( cursor.forward() ) {
         CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
         mergeTuple( cursor );

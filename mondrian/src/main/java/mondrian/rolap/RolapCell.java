@@ -69,7 +69,7 @@ import mondrian.rolap.agg.DrillThroughCellRequest;
 import mondrian.rolap.agg.MemberColumnPredicate;
 import mondrian.rolap.agg.OrPredicate;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 /**
  * <code>RolapCell</code> implements {@link org.eclipse.daanse.olap.api.result.Cell} within a
@@ -234,7 +234,7 @@ public class RolapCell implements Cell {
             RolapUtil.executeQuery(
                 connection.getContext(),
                 sql,
-                new Locus(
+                new LocusImpl(
                     new ExecutionImpl(connection.getInternalStatement(), 0),
                     "RolapCell.getDrillThroughCount",
                     "Error while counting drill-through"));

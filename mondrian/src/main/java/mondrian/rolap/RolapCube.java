@@ -139,7 +139,7 @@ import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
 import mondrian.rolap.util.DimensionUtil;
 import mondrian.rolap.util.NamedSetUtil;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.CellFormatter;
 
 /**
@@ -1234,10 +1234,10 @@ public class RolapCube extends CubeBase {
         final String queryString = buf.toString();
         try {
             final RolapConnection conn = schema.getInternalConnection();
-            return Locus.execute(
+            return LocusImpl.execute(
                 conn,
                 "RolapCube.resolveCalcMembers",
-                new Locus.Action<Query>() {
+                new LocusImpl.Action<Query>() {
                     @Override
 					public QueryImpl execute() {
                         final QueryImpl queryExp =

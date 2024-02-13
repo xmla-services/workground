@@ -58,7 +58,7 @@ import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 
 class IdBatchResolverTest  {
@@ -456,7 +456,7 @@ class IdBatchResolverTest  {
         when(conn.createParser()).thenReturn(parser);
 
         query = conn.parseQuery(mdx);
-        Locus.push(new Locus(new ExecutionImpl(
+        LocusImpl.push(new LocusImpl(new ExecutionImpl(
             query.getStatement(), Integer.MAX_VALUE),
             "batchResolveTest", "batchResolveTest"));
 

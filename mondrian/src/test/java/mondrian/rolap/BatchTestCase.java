@@ -32,6 +32,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -61,7 +62,7 @@ import mondrian.rolap.agg.SegmentWithData;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.cache.HardSmartCache;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 import mondrian.util.Pair;
 
@@ -204,16 +205,16 @@ public class BatchTestCase{
         final String cubeName,
         final String measure)
     {
-        return Locus.execute(
+        return LocusImpl.execute(
             ((RolapConnection)connection),
             "BatchTestCase.getGroupingSet",
-            new Locus.Action<GroupingSet>() {
+            new LocusImpl.Action<GroupingSet>() {
                 @Override
 				public GroupingSet execute() {
                     final RolapCube cube = getCube(connection, cubeName);
                     final BatchLoader fbcr =
                         new BatchLoader(
-                            Locus.peek(),
+                            LocusImpl.peek(),
                             connection.getContext()
                                 .getAggregationManager().cacheMgr,
                             cube.getStar().getSqlQueryDialect(),
@@ -327,7 +328,7 @@ public class BatchTestCase{
                     .getMondrianConnection()
                     .getContext().getAggregationManager();
             final Locus locus =
-                new Locus(
+                new LocusImpl(
                     execution,
                     "BatchTestCase",
                     "BatchTestCase");
@@ -340,7 +341,7 @@ public class BatchTestCase{
                 }
                 // The FBCR will presume there is a current Locus in the stack,
                 // so let's create a mock one.
-                Locus.push(locus);
+                LocusImpl.push(locus);
                 fbcr.loadAggregations();
                 bomb = null;
             } catch (Bomb e) {
@@ -354,7 +355,7 @@ public class BatchTestCase{
                 }
             } finally {
                 RolapUtil.setHook(null);
-                Locus.pop(locus);
+                LocusImpl.pop(locus);
             }
             if (!negative && bomb == null) {
                 fail("expected query [" + sql + "] did not occur");

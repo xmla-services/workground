@@ -28,6 +28,7 @@ import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ import mondrian.rolap.aggmatcher.AggGen;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.rolap.cache.SegmentCacheIndexImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.Pair;
@@ -275,7 +276,7 @@ public class FastBatchingCellReader implements CellReader {
             final BatchLoader.LoadBatchResponse response =
                 cacheMgr.execute(
                     new BatchLoader.LoadBatchCommand(
-                        Locus.peek(),
+                        LocusImpl.peek(),
                         cacheMgr,
                         getDialect(),
                         cube,
@@ -368,7 +369,7 @@ public class FastBatchingCellReader implements CellReader {
                 // This has to be done on the SegmentCacheManager's
                 // Actor thread to ensure thread safety.
                 if (!cacheMgr.getContext().getConfig().disableCaching()) {
-                    final Locus locus = Locus.peek();
+                    final Locus locus = LocusImpl.peek();
                     cacheMgr.execute(
                         new SegmentCacheManager.Command<Void>() {
                             @Override
@@ -703,7 +704,7 @@ class BatchLoader {
         if (!headersInCache.isEmpty()) {
             for (SegmentHeader headerInCache : headersInCache) {
                 final Future<SegmentBody> future =
-                    index.getFuture(locus.execution, headerInCache);
+                    index.getFuture(locus.getExecution(), headerInCache);
 
                 if (future != null) {
                     // Segment header is in cache, body is being loaded.
@@ -906,8 +907,8 @@ class BatchLoader {
     LoadBatchResponse load(List<CellRequest> cellRequests) {
         // Check for cancel/timeout. The request might have been on the queue
         // for a while.
-        if (locus.execution != null) {
-            locus.execution.checkCancelOrTimeout();
+        if (locus.getExecution() != null) {
+            locus.getExecution().checkCancelOrTimeout();
         }
 
         final long t1 = System.currentTimeMillis();

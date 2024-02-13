@@ -41,7 +41,7 @@ import org.eclipse.daanse.olap.api.monitor.event.SqlStatementExecuteEvent;
 import org.eclipse.daanse.olap.api.monitor.event.SqlStatementStartEvent;
 
 import mondrian.olap.Util;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -85,7 +85,7 @@ public class SqlStatement {
   private final List<BestFitColumnType> types;
   private final int maxRows;
   private final int firstRowOrdinal;
-  private final Locus locus;
+  private final LocusImpl locus;
   private final int resultSetType;
   private final int resultSetConcurrency;
   private boolean haveSemaphore;
@@ -115,7 +115,7 @@ public class SqlStatement {
     List<BestFitColumnType> types,
     int maxRows,
     int firstRowOrdinal,
-    Locus locus,
+    LocusImpl locus,
     int resultSetType,
     int resultSetConcurrency,
     Consumer<Statement>  callback ) {
@@ -144,7 +144,7 @@ public class SqlStatement {
     Statement statement = null;
     try {
       // Check execution state
-      locus.execution.checkCancelOrTimeout();
+      locus.getExecution().checkCancelOrTimeout();
 
       this.jdbcConnection = context.getDataSource().getConnection();
       context.getQueryLimitSemaphore().acquire();
@@ -173,7 +173,7 @@ public class SqlStatement {
       }
 
       // Check execution state
-      locus.execution.checkCancelOrTimeout();
+      locus.getExecution().checkCancelOrTimeout();
 
       startTimeNanos = System.nanoTime();
       startTime = Instant.now();
@@ -191,7 +191,7 @@ public class SqlStatement {
 
       // First make sure to register with the execution instance.
       if ( getPurpose() != Purpose.CELL_SEGMENT ) {
-        locus.execution.registerStatement( locus, statement );
+        locus.getExecution().registerStatement( locus, statement );
       } else {
         if ( callback != null ) {
           callback.accept(statement);
@@ -329,7 +329,7 @@ public class SqlStatement {
 	}
     String status = formatTimingStatus( duration, rowCount );
 
-    locus.execution.getQueryTiming().markFull(
+    locus.getExecution().getQueryTiming().markFull(
       TIMING_NAME + locus.component, duration );
     String msg  = new StringBuilder().append(id).append(": ").append(status).toString();
     RolapUtil.SQL_LOGGER.debug( msg );
@@ -623,7 +623,7 @@ public class SqlStatement {
     CLOSED
   }
 
-  public static class StatementLocus extends Locus {
+  public static class StatementLocus extends LocusImpl {
     private final SqlStatementEvent.Purpose purpose;
     private final int cellRequestCount;
 

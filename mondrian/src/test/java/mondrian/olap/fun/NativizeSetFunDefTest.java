@@ -32,7 +32,7 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 
 /**
@@ -1786,10 +1786,10 @@ class NativizeSetFunDefTest extends BatchTestCase {
         final RolapConnection connection =
             (RolapConnection) con;
         String actualOutput =
-            Locus.execute(
+            LocusImpl.execute(
                 connection,
                 NativizeSetFunDefTest.class.getName(),
-                new Locus.Action<String>() {
+                new LocusImpl.Action<String>() {
                     @Override
 					public String execute() {
                         return connection.parseQuery(query).toString();

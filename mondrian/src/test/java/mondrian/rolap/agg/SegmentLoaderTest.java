@@ -55,7 +55,7 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
 
@@ -68,7 +68,7 @@ import mondrian.util.DelegatingInvocationHandler;
 class SegmentLoaderTest extends BatchTestCase {
 
     private ExecutionImpl execution;
-    private Locus locus;
+    private LocusImpl locus;
     private SegmentCacheManager cacheMgr;
     private Statement statement;
 
@@ -79,11 +79,11 @@ class SegmentLoaderTest extends BatchTestCase {
                 .getContext().getAggregationManager().cacheMgr;
         statement = ((Connection) connection).getInternalStatement();
         execution = new ExecutionImpl(statement, 1000);
-        locus = new Locus(execution, null, null);
+        locus = new LocusImpl(execution, null, null);
         cacheMgr = execution.getMondrianStatement().getMondrianConnection()
             .getContext().getAggregationManager().cacheMgr;
 
-        Locus.push(locus);
+        LocusImpl.push(locus);
     }
 
 
@@ -96,7 +96,7 @@ class SegmentLoaderTest extends BatchTestCase {
     @AfterEach
     protected void AfterEach() throws Exception {
         SystemWideProperties.instance().populateInitial();
-        Locus.pop(locus);
+        LocusImpl.pop(locus);
         try {
             statement.cancel();
         } catch (Exception e) {

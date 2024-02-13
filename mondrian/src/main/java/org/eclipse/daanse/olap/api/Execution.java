@@ -28,8 +28,6 @@
  */
 package org.eclipse.daanse.olap.api;
 
-import mondrian.server.Locus;
-
 public interface Execution {
 
 	void cancelSqlStatements();

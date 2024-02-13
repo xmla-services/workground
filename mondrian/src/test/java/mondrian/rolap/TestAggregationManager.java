@@ -30,6 +30,7 @@ import java.util.Set;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -70,7 +71,7 @@ import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 
 /**
@@ -99,7 +100,7 @@ class TestAggregationManager extends BatchTestCase {
     @AfterEach
     void afterEach() {
         SystemWideProperties.instance().populateInitial();
-        Locus.pop(locus);
+        LocusImpl.pop(locus);
 
         // allow gc
         locus = null;
@@ -116,8 +117,8 @@ class TestAggregationManager extends BatchTestCase {
             execution.getMondrianStatement()
                 .getMondrianConnection()
                 .getContext().getAggregationManager();
-        locus = new Locus(execution, "TestAggregationManager", null);
-        Locus.push(locus);
+        locus = new LocusImpl(execution, "TestAggregationManager", null);
+        LocusImpl.push(locus);
     }
 
     @ParameterizedTest

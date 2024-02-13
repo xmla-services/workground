@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.QueryTiming;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
@@ -105,8 +106,8 @@ public class ExecutionImpl implements Execution{
 
   public ExecutionImpl( Statement statement, long timeoutIntervalMillis ) {
     Execution parentExec = null;
-    if ( !Locus.isEmpty() ) {
-      parentExec = Locus.peek().execution;
+    if ( !LocusImpl.isEmpty() ) {
+      parentExec = LocusImpl.peek().getExecution();
     }
     this.parent = parentExec;
     this.id = SEQ.getAndIncrement();
@@ -349,7 +350,7 @@ public class ExecutionImpl implements Execution{
    */
   public void unregisterSegmentRequests() {
     // We also have to cancel all requests for the current segments.
-    final Locus locus = new Locus( this, "Execution.unregisterSegmentRequests", "cleaning up segment registrations" );
+    final LocusImpl locus = new LocusImpl( this, "Execution.unregisterSegmentRequests", "cleaning up segment registrations" );
     final SegmentCacheManager mgr = locus.getContext().getAggregationManager().getCacheMgr(null);
     mgr.execute( new SegmentCacheManager.Command<Void>() {
       @Override

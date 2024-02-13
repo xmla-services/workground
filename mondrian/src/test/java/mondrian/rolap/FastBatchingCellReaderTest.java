@@ -32,6 +32,7 @@ import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
@@ -58,7 +59,7 @@ import mondrian.rolap.agg.Segment;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.agg.SegmentWithData;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
 import mondrian.util.DelegatingInvocationHandler;
@@ -85,7 +86,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
   @AfterEach
   public void afterEach() {
     SystemWideProperties.instance().populateInitial();
-    Locus.pop( locus );
+    LocusImpl.pop( locus );
     // cleanup
     connection.close();
     connection = null;
@@ -101,8 +102,8 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     final Statement statement = ((Connection) connection).getInternalStatement();
     e = new ExecutionImpl( statement, 0 );
     aggMgr = e.getMondrianStatement().getMondrianConnection().getContext().getAggregationManager();
-    locus = new Locus( e, "FastBatchingCellReaderTest", null );
-    Locus.push( locus );
+    locus = new LocusImpl( e, "FastBatchingCellReaderTest", null );
+    LocusImpl.push( locus );
     salesCube = (RolapCube) connection.getSchemaReader().withLocus().getCubes()[0];
   }
 
@@ -111,7 +112,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     if ( useGroupingSets != null ) {
       dialect = dialectWithGroupingSets( dialect, useGroupingSets );
     }
-    return new BatchLoader( Locus.peek(), aggMgr.cacheMgr, dialect, cube );
+    return new BatchLoader( LocusImpl.peek(), aggMgr.cacheMgr, dialect, cube );
   }
 
   private Dialect dialectWithGroupingSets( final Dialect dialect, final boolean supportsGroupingSets ) {
@@ -887,7 +888,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
         new ArrayList<>();
     context.getAggregationManager().cacheMgr.execute(
         new SegmentCacheManager.Command<Void>() {
-          private final Locus locus = Locus.peek();
+          private final Locus locus = LocusImpl.peek();
 
           @Override
 		public Void call() throws Exception {

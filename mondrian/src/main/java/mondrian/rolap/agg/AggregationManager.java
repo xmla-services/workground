@@ -40,7 +40,7 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.Pair;
 
 /**
@@ -133,7 +133,7 @@ public class AggregationManager extends RolapAggregationManager {
                 final SegmentCacheManager.FlushResult result =
                     segmentCacheManager.execute(
                         new SegmentCacheManager.FlushCommand(
-                            Locus.peek(),
+                            LocusImpl.peek(),
                             segmentCacheManager,
                             region,
                             this));

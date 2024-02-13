@@ -37,7 +37,7 @@ import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
 
 /**
@@ -271,7 +271,7 @@ class FilterFunDef extends AbstractFunctionDefinition {
                         @Override
 						public boolean forward() {
                             int currentIteration = 0;
-                            Execution execution = Locus.peek().execution;
+                            Execution execution = LocusImpl.peek().getExecution();
                             while (cursor.forward()) {
                                 CancellationChecker.checkCancelOrTimeout(
                                     currentIteration++, execution);

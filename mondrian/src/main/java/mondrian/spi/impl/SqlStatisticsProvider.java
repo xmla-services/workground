@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.Context;
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SqlStatement;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.StatisticsProvider;
 
 /**
@@ -43,7 +43,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
             RolapUtil.executeQuery(
                 context,
                 sql,
-                new Locus(
+                new LocusImpl(
                     execution,
                     "SqlStatisticsProvider.getTableCardinality",
                     "Reading row count from table "
@@ -85,7 +85,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
             RolapUtil.executeQuery(
                 context,
                 countSql,
-                new Locus(
+                new LocusImpl(
                     execution,
                     "SqlStatisticsProvider.getQueryCardinality",
                     new StringBuilder("Reading row count from query [").append(sql).append("]").toString()));
@@ -122,7 +122,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
             RolapUtil.executeQuery(
                 context,
                 sql,
-                new Locus(
+                new LocusImpl(
                     execution,
                     "SqlStatisticsProvider.getColumnCardinality",
                     "Reading cardinality for column "

@@ -45,6 +45,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -74,7 +75,7 @@ import mondrian.olap.Util;
 import mondrian.olap.exceptions.FailedToParseQueryException;
 import mondrian.parser.MdxParserValidator;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.FauxMemoryMonitor;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.NotificationMemoryMonitor;
@@ -141,11 +142,11 @@ public class RolapConnection extends ConnectionBase {
       // we would loop.
       Statement bootstrapStatement = createInternalStatement( false, this);
       final Locus locus =
-        new Locus(
+        new LocusImpl(
           new ExecutionImpl( bootstrapStatement, 0 ),
           null,
           "Initializing connection" );
-      Locus.push( locus );
+      LocusImpl.push( locus );
       try {
 
           schema = RolapSchemaPool.instance().get(
@@ -154,7 +155,7 @@ public class RolapConnection extends ConnectionBase {
             rolapConnectionProps );
 
       } finally {
-        Locus.pop( locus );
+        LocusImpl.pop( locus );
         bootstrapStatement.close();
       }
       internalStatement =
@@ -356,8 +357,8 @@ public Result execute( Query query ) {
             .append(": ").append(Util.unparse( query )).toString() );
       }
 
-      final Locus locus = new Locus( execution, null, "Loading cells" );
-      Locus.push( locus );
+      final Locus locus = new LocusImpl( execution, null, "Loading cells" );
+      LocusImpl.push( locus );
       Result result;
       try {
         statement.start( execution );
@@ -371,7 +372,7 @@ public Result execute( Query query ) {
           ++i;
         }
       } finally {
-        Locus.pop( locus );
+        LocusImpl.pop( locus );
         ( (RolapCube) query.getCube() ).clearCachedAggregations( true );
       }
       statement.end( execution );
@@ -439,11 +440,11 @@ public Role getRole() {
 public QueryComponent parseStatement(String query ) {
     Statement statement = createInternalStatement( false ,this);
     final Locus locus =
-      new Locus(
+      new LocusImpl(
         new ExecutionImpl( statement, 0 ),
         "Parse/validate MDX statement",
         null );
-    Locus.push( locus );
+    LocusImpl.push( locus );
     try {
       QueryComponent queryPart =
         parseStatement( statement, query, context.getFunctionService(), false );
@@ -453,7 +454,7 @@ public QueryComponent parseStatement(String query ) {
       }
       return queryPart;
     } finally {
-      Locus.pop( locus );
+      LocusImpl.pop( locus );
       if ( statement != null ) {
         statement.close();
       }

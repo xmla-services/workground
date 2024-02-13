@@ -38,6 +38,7 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -63,7 +64,7 @@ import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.ClassResolver;
 
 /**
@@ -104,8 +105,8 @@ public class RolapUtil {
     public static final Comparable<?> sqlNullValue =
         RolapUtilComparable.INSTANCE;
 
-    public static Consumer<java.sql.Statement> getDefaultCallback(final Locus locus) {
-        return stmt -> locus.execution.registerStatement(locus, stmt);
+    public static Consumer<java.sql.Statement> getDefaultCallback(final LocusImpl locus) {
+        return stmt -> locus.getExecution().registerStatement(locus, stmt);
     }
 
     /**
@@ -123,7 +124,7 @@ public class RolapUtil {
         final Statement statement = connection.getInternalStatement();
         final ExecutionImpl execution = new ExecutionImpl(statement, 0);
         final Locus locus =
-            new Locus(
+            new LocusImpl(
                 execution,
                 "Schema reader",
                 null);
@@ -138,13 +139,13 @@ public class RolapUtil {
                     Object[] args)
                     throws Throwable
                 {
-                    Locus.push(locus);
+                    LocusImpl.push(locus);
                     try {
                         return method.invoke(schemaReader, args);
                     } catch (InvocationTargetException e) {
                         throw e.getCause();
                     } finally {
-                        Locus.pop(locus);
+                        LocusImpl.pop(locus);
                     }
                 }
             }
@@ -322,7 +323,7 @@ public class RolapUtil {
     public static SqlStatement executeQuery(
         Context context,
         String sql,
-        Locus locus)
+        LocusImpl locus)
     {
         return executeQuery(
                 context, sql, null, 0, 0, locus, -1, -1,
@@ -359,7 +360,7 @@ public class RolapUtil {
         List<BestFitColumnType> types,
         int maxRowCount,
         int firstRowOrdinal,
-        Locus locus,
+        LocusImpl locus,
         int resultSetType,
         int resultSetConcurrency,
         Consumer<java.sql.Statement> callback)

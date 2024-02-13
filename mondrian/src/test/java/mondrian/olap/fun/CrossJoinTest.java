@@ -64,7 +64,7 @@ import mondrian.olap.type.TupleType;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 
 /**
@@ -156,8 +156,8 @@ public class CrossJoinTest {
     String e3 = "{[k, l], [m, n]}";
     assertEquals( e3, s3 );
 
-    String s = Locus.execute(
-      execution, "CrossJoinTest", new Locus.Action<String>() {
+    String s = LocusImpl.execute(
+      execution, "CrossJoinTest", new LocusImpl.Action<String>() {
         @Override
 		public String execute() {
           TupleIterable iterable = calc.makeIterable( l4, l3 );
@@ -217,8 +217,8 @@ public class CrossJoinTest {
   private Integer crossJoinIterCalcIterate(
     final TupleList list1, final TupleList list2,
     final ExecutionImpl execution ) {
-    return Locus.execute(
-      execution, "CrossJoinTest", new Locus.Action<Integer>() {
+    return LocusImpl.execute(
+      execution, "CrossJoinTest", new LocusImpl.Action<Integer>() {
         @Override
 		public Integer execute() {
           TupleIterable iterable =

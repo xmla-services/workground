@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import mondrian.olap.QueryCanceledException;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.server.StatementImpl;
 
 /**
@@ -41,7 +41,7 @@ class SqlStatementTest {
   private RolapConnection rolapConnection;
   private StatementImpl statMock;
   private ExecutionImpl execution;
-  private Locus locus;
+  private LocusImpl locus;
   private SqlStatement statement;
 
   @BeforeEach
@@ -62,7 +62,7 @@ class SqlStatementTest {
     doThrow(new QueryCanceledException(QueryCanceled))
             .when(execution).checkCancelOrTimeout();
 
-    locus = new Locus(execution, "component", "message");
+    locus = new LocusImpl(execution, "component", "message");
 
     statement = new SqlStatement(null, "sql", null, 0, 0, locus, 0, 0, null);
     statement = spy(statement);

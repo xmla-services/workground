@@ -38,7 +38,7 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.olap.fun.CrossJoinTest;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 class CancellationTest {
 
@@ -124,9 +124,9 @@ class CancellationTest {
     private TupleList mutableCrossJoin(
         final TupleList list1, final TupleList list2, final ExecutionImpl execution)
         {
-            return Locus.execute(
+            return LocusImpl.execute(
                 execution, "CancellationTest",
-                new Locus.Action<TupleList>() {
+                new LocusImpl.Action<TupleList>() {
                     @Override
 					public TupleList execute() {
                         return CrossJoinFunDef.mutableCrossJoin(list1, list2);

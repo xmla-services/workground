@@ -42,7 +42,7 @@ import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 /**
  * Unit test for {@link TupleList} and common implementations.
@@ -224,10 +224,10 @@ class TupleListTest {
             + "Row #0: \n"
             + "Row #1: \n"
             + "Row #2: 565,238.13\n");
-        Locus.execute(
+        LocusImpl.execute(
             (RolapConnection)connection,
             "testDelegatingTupleListSlice",
-            new Locus.Action<Void>() {
+            new LocusImpl.Action<Void>() {
                 @Override
 				public Void execute() {
                     // Unit test

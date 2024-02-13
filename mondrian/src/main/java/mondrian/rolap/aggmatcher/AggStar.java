@@ -55,7 +55,7 @@ import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.util.ExpressionUtil;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 
 /**
  * Aggregate table version of a RolapStar for a fact table.
@@ -1550,7 +1550,7 @@ public class AggStar {
                 RolapUtil.executeQuery(
                         context,
                     query.toString(),
-                    new Locus(
+                    new LocusImpl(
                         new ExecutionImpl(
                             star.getSchema().getInternalConnection()
                                 .getInternalStatement(),

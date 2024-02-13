@@ -32,6 +32,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -44,7 +45,7 @@ import mondrian.olap.Util;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.SegmentColumn;
 import mondrian.util.ArraySortedSet;
 
@@ -198,10 +199,10 @@ public class CacheControlImpl implements CacheControl {
 
     @Override
 	public void flush(final CellRegion region) {
-        Locus.execute(
+        LocusImpl.execute(
             connection,
             "Flush",
-            new Locus.Action<Void>() {
+            new LocusImpl.Action<Void>() {
                 @Override
 				public Void execute() {
                     flushInternal(region);
@@ -558,13 +559,13 @@ public class CacheControlImpl implements CacheControl {
         final SegmentCacheManager manager =
             connection.getContext()
                 .getAggregationManager().getCacheMgr(this.connection);
-        Locus.execute(
+        LocusImpl.execute(
             connection,
             "CacheControlImpl.printCacheState",
-            new Locus.Action<Void>() {
+            new LocusImpl.Action<Void>() {
                 @Override
 				public Void execute() {
-                    manager.printCacheState(region, pw, Locus.peek());
+                    manager.printCacheState(region, pw, LocusImpl.peek());
                     return null;
                 }
             });
@@ -826,18 +827,18 @@ public class CacheControlImpl implements CacheControl {
             Execution execution;
             try {
                 execution =
-                    Locus.peek().execution;
+                    LocusImpl.peek().getExecution();
             } catch (EmptyStackException e) {
                 if (connection == null) {
                     throw new IllegalArgumentException("Connection required");
                 }
                 execution = new ExecutionImpl(connection.getInternalStatement(), 0);
             }
-            final Locus locus = new Locus(
+            final Locus locus = new LocusImpl(
                 execution,
                 "CacheControlImpl.execute",
                 "when modifying the member cache.");
-            Locus.push(locus);
+            LocusImpl.push(locus);
             try {
                 // Execute the command
                 final List<CellRegion> cellRegionList =
@@ -898,7 +899,7 @@ public class CacheControlImpl implements CacheControl {
                 // Apply it all.
                 ((MemberEditCommandPlus) cmd).commit();
             } finally {
-                Locus.pop(locus);
+                LocusImpl.pop(locus);
             }
         }
     }

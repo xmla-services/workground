@@ -33,6 +33,7 @@ import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -59,7 +60,7 @@ import mondrian.olap.Property;
 import mondrian.olap.SystemWideProperties;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.DiffRepository;
 
 /**
@@ -95,7 +96,7 @@ class MemberCacheControlTest {
     public void afterEach() {
         SystemWideProperties.instance().populateInitial();
         RolapSchemaPool.instance().clear();
-        Locus.pop(locus);
+        LocusImpl.pop(locus);
         locus = null;
     }
 
@@ -109,8 +110,8 @@ class MemberCacheControlTest {
         final Statement statement = conn.getInternalStatement();
         final ExecutionImpl execution = new ExecutionImpl(statement, 0);
         //locus = new Locus(execution, getName(), null);
-        locus = new Locus(execution, "MemberCacheControlTest", null);
-        Locus.push(locus);
+        locus = new LocusImpl(execution, "MemberCacheControlTest", null);
+        LocusImpl.push(locus);
         /*
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",

@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.olap.api.monitor.event.CellCacheEvent;
@@ -49,6 +51,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.rolap.CacheControlImpl;
+import mondrian.rolap.FastBatchingCellReader;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapStoredMeasure;
@@ -58,7 +61,7 @@ import mondrian.rolap.cache.MemorySegmentCache;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.rolap.cache.SegmentCacheIndexImpl;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentColumn;
@@ -416,17 +419,17 @@ public class SegmentCacheManager {
     RolapStar star,
     SegmentHeader header,
     SegmentBody body ) {
-    final Locus locus = Locus.peek();
+    final Locus locus = LocusImpl.peek();
     actor.event(
       handler,
       new SegmentLoadSucceededEvent(
     	Instant.now(),
         locus.getContext().getMonitor(),
         locus.getContext().getName(),
-        locus.execution.getMondrianStatement()
+        locus.getExecution().getMondrianStatement()
           .getMondrianConnection().getId(),
-        locus.execution.getMondrianStatement().getId(),
-        locus.execution.getId(),
+        locus.getExecution().getMondrianStatement().getId(),
+        locus.getExecution().getId(),
         star,
         header,
         body ) );
@@ -445,17 +448,17 @@ public class SegmentCacheManager {
     RolapStar star,
     SegmentHeader header,
     Throwable throwable ) {
-    final Locus locus = Locus.peek();
+    final Locus locus = LocusImpl.peek();
     actor.event(
       handler,
       new SegmentLoadFailedEvent(
         System.currentTimeMillis(),
         locus.getContext().getMonitor(),
         locus.getContext().getName(),
-        locus.execution.getMondrianStatement()
+        locus.getExecution().getMondrianStatement()
           .getMondrianConnection().getId(),
-        locus.execution.getMondrianStatement().getId(),
-        locus.execution.getId(),
+        locus.getExecution().getMondrianStatement().getId(),
+        locus.getExecution().getId(),
         star,
         header,
         throwable ) );
@@ -473,17 +476,17 @@ public class SegmentCacheManager {
   public void remove(
     RolapStar star,
     SegmentHeader header ) {
-    final Locus locus = Locus.peek();
+    final Locus locus = LocusImpl.peek();
     actor.event(
       handler,
       new SegmentRemoveEvent(
 	    Instant.now(),
         locus.getContext().getMonitor(),
         locus.getContext().getName(),
-        locus.execution.getMondrianStatement()
+        locus.getExecution().getMondrianStatement()
           .getMondrianConnection().getId(),
-        locus.execution.getMondrianStatement().getId(),
-        locus.execution.getId(),
+        locus.getExecution().getMondrianStatement().getId(),
+        locus.getExecution().getId(),
         this,
         star,
         header ) );
@@ -586,7 +589,7 @@ public class SegmentCacheManager {
   public SegmentWithData peek( final CellRequest request ) {
     final SegmentCacheManager.PeekResponse response =
       execute(
-        new PeekCommand( request, Locus.peek() ) );
+        new PeekCommand( request, LocusImpl.peek() ) );
     for ( SegmentHeader header : response.headerMap.keySet() ) {
       final SegmentBody body = compositeCache.get( header );
       if ( body != null ) {
@@ -1082,7 +1085,7 @@ public class SegmentCacheManager {
             // the caller.
             if ( message instanceof Command<?> command ) {
               try {
-                Locus.push( command.getLocus() );
+                LocusImpl.push( command.getLocus() );
                 Object result = command.call();
                 responseMap.put(
                   command,
@@ -1095,7 +1098,7 @@ public class SegmentCacheManager {
                   command,
                   Pair.of( null, e ) );
               } finally {
-                Locus.pop( command.getLocus() );
+                LocusImpl.pop( command.getLocus() );
               }
             } else {
               Event event = (Event) message;
@@ -1395,12 +1398,12 @@ public class SegmentCacheManager {
       if ( e.isLocal() ) {
         return;
       }
-      Locus.execute(
+      LocusImpl.execute(
         ExecutionImpl.NONE,
         "AsyncCacheListener.handle",
         () -> {
           final Command<Void> command;
-          final Locus locus = Locus.peek();
+          final Locus locus = LocusImpl.peek();
           switch ( e.getEventType() ) {
             case ENTRY_CREATED:
               command =
@@ -1614,7 +1617,7 @@ public class SegmentCacheManager {
       for ( final SegmentHeader header : headers ) {
         final Future<SegmentBody> bodyFuture =
           indexRegistry.getIndex( star )
-            .getFuture( locus.execution, header );
+            .getFuture( locus.getExecution(), header );
         if ( bodyFuture != null ) {
           converterMap.put(
             SegmentCacheIndexImpl.makeConverterKey( header ),

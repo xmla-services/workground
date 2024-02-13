@@ -54,7 +54,7 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.MemberKeyConstraint;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
 
@@ -183,8 +183,8 @@ class SqlMemberSource
             RolapUtil.executeQuery(
                     context,
                 sql,
-                new Locus(
-                    Locus.peek().execution,
+                new LocusImpl(
+                    LocusImpl.peek().getExecution(),
                     "SqlMemberSource.getLevelMemberCount",
                     "while counting members of level '" + level));
         try {
@@ -375,7 +375,7 @@ class SqlMemberSource
 
             int limit = SystemWideProperties.instance().ResultLimit;
             ResultSet resultSet = stmt.getResultSet();
-            Execution execution = Locus.peek().execution;
+            Execution execution = LocusImpl.peek().getExecution();
             while (resultSet.next()) {
                 // Check if the MDX query was canceled.
                 CancellationChecker.checkCancelOrTimeout(
@@ -990,7 +990,7 @@ RME is this right
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
     {
-        Execution execution = Locus.peek().execution;
+        Execution execution = LocusImpl.peek().getExecution();
         execution.checkCancelOrTimeout();
 
         Pair<String, List<BestFitColumnType>> pair;
@@ -1024,7 +1024,7 @@ RME is this right
             RolapUtil.executeQuery(
                     context, sql, types, 0, 0,
                 new SqlStatement.StatementLocus(
-                    Locus.peek().execution,
+                    LocusImpl.peek().getExecution(),
                     "SqlMemberSource.getMemberChildren",
                     "while building member cache",
                     SqlStatementEvent.Purpose.TUPLES, 0),

@@ -65,7 +65,7 @@ import mondrian.rolap.sql.MemberListCrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.rolap.util.ExpressionUtil;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
 
@@ -472,7 +472,7 @@ public Object getCacheKey() {
         stmt = RolapUtil.executeQuery(
           context, sql, types, maxRows, 0,
           new SqlStatement.StatementLocus(
-            Locus.peek().execution,
+            LocusImpl.peek().getExecution(),
             "SqlTupleReader.readTuples " + partialTargets,
             message,
             SqlStatementEvent.Purpose.TUPLES, 0 ),
@@ -507,7 +507,7 @@ public Object getCacheKey() {
         moreRows = currPartialResultIdx < partialResult.size();
       }
 
-      Execution execution = Locus.peek().execution;
+      Execution execution = LocusImpl.peek().getExecution();
       while ( moreRows ) {
         // Check if the MDX query was canceled.
         CancellationChecker.checkCancelOrTimeout(

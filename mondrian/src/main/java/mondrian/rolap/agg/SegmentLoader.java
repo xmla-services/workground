@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 
 import mondrian.olap.MondrianException;
@@ -49,7 +50,7 @@ import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.agg.SegmentCacheManager.AbortException;
 import mondrian.rolap.cache.SegmentCacheIndex;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
@@ -132,12 +133,12 @@ public class SegmentLoader {
               compoundPredicateList ), true );
           // Make sure that we are registered as a client of
           // the segment by invoking getFuture.
-          index.getFuture( Locus.peek().execution, segment.getHeader() ) ;
+          index.getFuture( LocusImpl.peek().getExecution(), segment.getHeader() ) ;
         }
       }
     }
     try {
-      segmentFutures.add( cacheMgr.sqlExecutor.submit( new SegmentLoadCommand( Locus.peek(), this, cellRequestCount,
+      segmentFutures.add( cacheMgr.sqlExecutor.submit( new SegmentLoadCommand( LocusImpl.peek(), this, cellRequestCount,
           groupingSets, compoundPredicateList ) ) );
     } catch ( Exception e ) {
       throw new MondrianException( e );
@@ -162,14 +163,14 @@ public class SegmentLoader {
 
     @Override
 	public Map<Segment, SegmentWithData> call() throws Exception {
-      Locus.push( locus );
+      LocusImpl.push( locus );
       try {
-          boolean useAggregates = locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().useAggregates();
+          boolean useAggregates = locus.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig().useAggregates();
         return segmentLoader.loadImpl( cellRequestCount, groupingSets, compoundPredicateList, useAggregates,
-            locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentCountThreshold(),
-            locus.execution.getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentDensityThreshold());
+            locus.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentCountThreshold(),
+            locus.getExecution().getMondrianStatement().getMondrianConnection().getContext().getConfig().sparseSegmentDensityThreshold());
       } finally {
-        Locus.pop( locus );
+        LocusImpl.pop( locus );
       }
     }
   }
@@ -466,8 +467,8 @@ public class SegmentLoader {
     RolapStar star = groupingSetsList.getStar();
     Pair<String, List<BestFitColumnType>> pair =
         AggregationManager.generateSql( groupingSetsList, compoundPredicateList, useAggregates );
-    final Locus locus =
-        new SqlStatement.StatementLocus( Locus.peek().execution, "Segment.load", "Error while loading segment",
+    final LocusImpl locus =
+        new SqlStatement.StatementLocus( LocusImpl.peek().getExecution(), "Segment.load", "Error while loading segment",
             SqlStatementEvent.Purpose.CELL_SEGMENT, cellRequestCount );
 
     // When caching is enabled, we must register the SQL statement
@@ -513,7 +514,7 @@ public class SegmentLoader {
     final Consumer<Statement> callbackNoCaching = new Consumer<>() {
         @Override
 		public void accept(final Statement stmt) {
-            locus.execution.registerStatement(locus, stmt);
+            locus.getExecution().registerStatement(locus, stmt);
         }
     };
 
@@ -553,7 +554,7 @@ public class SegmentLoader {
     }
     final RowList processedRows = new RowList( processedTypes, 100 );
 
-    Execution execution = Locus.peek().execution;
+    Execution execution = LocusImpl.peek().getExecution();
     while ( rawRows.next() ) {
       // Check if the MDX query was canceled.
       CancellationChecker.checkCancelOrTimeout( ++stmt.rowCount, execution );

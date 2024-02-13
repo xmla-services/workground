@@ -26,7 +26,7 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.util.Pair;
 
 public class StatementImpl extends mondrian.server.StatementImpl implements Statement {
@@ -187,10 +187,10 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
 
     private Pair<Query, CellSetMetaDataImpl> parseQuery(String mdx) {
         try {
-            return Locus.execute(
+            return LocusImpl.execute(
                 (RolapConnection) connection,
                 "Parsing query",
-                new Locus.Action<Pair<Query, CellSetMetaDataImpl>>() {
+                new LocusImpl.Action<Pair<Query, CellSetMetaDataImpl>>() {
                     @Override
                     public Pair<Query, CellSetMetaDataImpl> execute()
                     {

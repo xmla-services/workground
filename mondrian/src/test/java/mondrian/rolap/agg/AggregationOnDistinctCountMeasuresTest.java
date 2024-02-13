@@ -89,7 +89,7 @@ import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.server.ExecutionImpl;
-import mondrian.server.Locus;
+import mondrian.server.LocusImpl;
 import mondrian.test.SqlPattern;
 
 /**
@@ -1946,10 +1946,10 @@ class AggregationOnDistinctCountMeasuresTest {
     }
 
     private TupleList optimizeChildren(final TupleList memberList) {
-        return Locus.execute(
+        return LocusImpl.execute(
             ExecutionImpl.NONE,
             "AggregationOnDistinctCountMeasuresTest",
-            new Locus.Action<TupleList>() {
+            new LocusImpl.Action<TupleList>() {
                 @Override
 				public TupleList execute() {
                     return AggregateFunDef.AggregateCalc.optimizeChildren(
@@ -1962,10 +1962,10 @@ class AggregationOnDistinctCountMeasuresTest {
     private TupleList mutableCrossJoin(
         final TupleList list1, final TupleList list2)
     {
-        return Locus.execute(
+        return LocusImpl.execute(
             ExecutionImpl.NONE,
             "AggregationOnDistinctCountMeasuresTest",
-            new Locus.Action<TupleList>() {
+            new LocusImpl.Action<TupleList>() {
                 @Override
 				public TupleList execute()
                 {
