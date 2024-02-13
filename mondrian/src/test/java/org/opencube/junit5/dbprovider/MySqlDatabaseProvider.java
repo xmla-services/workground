@@ -37,7 +37,7 @@ import com.mysql.jdbc.Driver;
 import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = DatabaseProvider.class)
-public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
+public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
 
 	public static String MYSQL_ROOT_PASSWORD = "the.root.pw";
 	public static String MYSQL_DATABASE = "the.db";

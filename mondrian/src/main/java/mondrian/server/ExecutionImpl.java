@@ -56,7 +56,7 @@ public class ExecutionImpl implements Execution{
   /**
    * Used for MDX logging, allows for a MDX Statement UID.
    */
-  private static AtomicLong SEQ = new AtomicLong();
+  private static final AtomicLong SEQ = new AtomicLong();
 
   private final StatementImpl statement;
 

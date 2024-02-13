@@ -149,12 +149,12 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	}
 
 	private List<TestContext> prepareContexts(ExtensionContext extensionContext) {
-		Stream<DatabaseProvider> providers;
+		List<? extends DatabaseProvider> providers;
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
 		if (dbHandlerClasses == null || dbHandlerClasses.length == 0) {
 			providers = ServiceLoader.load(DatabaseProvider.class, this.getClass().getClassLoader()).stream()
-					.map(Provider::get);
+					.map(Provider::get).toList();
 		} else {
 			providers = Stream.of(dbHandlerClasses).map(c -> {
 				try {
@@ -163,9 +163,9 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 					LOGGER.error("prepareContexts error", e);
 					return null;
 				}
-			});
+			}).toList();
 		}
-		List<TestContext> args = providers.parallel().map(dbp -> {
+		List<TestContext> args = providers.stream().parallel().map(dbp -> {
 
 			Entry<DataSource, Dialect> dataBaseInfo = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
