@@ -34,7 +34,7 @@ import javax.sql.DataSource;
 
 import mondrian.olap.MondrianException;
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1125,7 +1125,7 @@ public class JdbcSchema {
      * @param connectInfo Mondrian connection properties
      * @throws SQLException
      */
-    public void load(RolapConnectionProps connectionProps) throws SQLException {
+    public void load(ConnectionProps connectionProps) throws SQLException {
         loadTables(connectionProps);
     }
 
@@ -1260,7 +1260,7 @@ public class JdbcSchema {
      * @param connectInfo The Mondrian connection properties
      * @throws SQLException
      */
-    protected void loadTables(RolapConnectionProps connectionProps) throws SQLException {
+    protected void loadTables(ConnectionProps connectionProps) throws SQLException {
         if (allTablesLoaded) {
             return;
         }

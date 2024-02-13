@@ -5,11 +5,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 
 public record RolapConnectionPropsR(List<String> roles, boolean useSchemaPool, Locale locale, long pinSchemaTimeout,
 		TimeUnit pinSchemaTimeoutUnit, Optional<String> aggregateScanSchema, Optional<String> aggregateScanCatalog)
-		implements RolapConnectionProps {
+		implements ConnectionProps {
 
 	public RolapConnectionPropsR() {
 		this(List.of(), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());

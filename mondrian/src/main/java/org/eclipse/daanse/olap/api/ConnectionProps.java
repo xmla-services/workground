@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-public interface RolapConnectionProps {
+public interface ConnectionProps {
 
 
 

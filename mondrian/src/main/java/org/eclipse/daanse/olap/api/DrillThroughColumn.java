@@ -8,11 +8,11 @@
 // All Rights Reserved.
 */
 
-package mondrian.rolap;
+package org.eclipse.daanse.olap.api;
 
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-public abstract class RolapDrillThroughColumn {
-    public abstract OlapElement getOlapElement();
+public interface DrillThroughColumn {
+      OlapElement getOlapElement();
 }
 

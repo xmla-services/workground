@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
@@ -94,7 +94,7 @@ public class AggTableManager {
      * This method should only be called once.
      * @param connectInfo The Mondrian connection properties
      */
-    public void initialize(RolapConnectionProps connectionProps, boolean useAggregates) {
+    public void initialize(ConnectionProps connectionProps, boolean useAggregates) {
         if (useAggregates) {
             try {
                 loadRolapStarAggregates(connectionProps);
@@ -178,7 +178,7 @@ public class AggTableManager {
      */
     @SuppressWarnings({"java:S1143", "java:S1163"}) // throw exception in final
     private void loadRolapStarAggregates(
-        RolapConnectionProps connectionProps)
+        ConnectionProps connectionProps)
         throws SQLException
     {
         ListRecorder msgRecorder = new ListRecorder();

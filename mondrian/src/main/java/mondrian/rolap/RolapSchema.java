@@ -62,7 +62,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -243,7 +243,7 @@ public class RolapSchema implements Schema {
      */
     public RolapSchema(
         final SchemaKey key,
-         RolapConnectionProps rolapConnectionProps,
+         ConnectionProps rolapConnectionProps,
         final Context context)
     {
         this.id = UUID.randomUUID().toString();
@@ -353,7 +353,7 @@ public class RolapSchema implements Schema {
      * @param catalogStr Text of catalog, or null
      * @param connectInfo Mondrian connection properties
      */
-	protected void load(Context context, RolapConnectionProps connectionProps) {
+	protected void load(Context context, ConnectionProps connectionProps) {
 
 		this.context = context;
 		// TODO: get from schema var

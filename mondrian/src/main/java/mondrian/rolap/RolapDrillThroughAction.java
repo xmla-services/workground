@@ -13,43 +13,40 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.DrillThroughAction;
+import org.eclipse.daanse.olap.api.DrillThroughColumn;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-public class RolapDrillThroughAction extends RolapAction {
-    private final boolean isDefault;
-    private List<RolapDrillThroughColumn> columnList;
+public class RolapDrillThroughAction extends AbstractRolapAction implements DrillThroughAction {
+	private final boolean isDefault;
+	private List<DrillThroughColumn> columnList;
 
-    public RolapDrillThroughAction (
-            String name,
-            String caption,
-            String description,
-            boolean isDefault,
-            List<RolapDrillThroughColumn> columnList
-    ) {
-        super(
-                name,
-                caption,
-                description);
-        this.isDefault = isDefault;
-        this.columnList = columnList;
-        if(this.columnList == null) {
-            this.columnList = new ArrayList<>();
-        }
-    }
+	public RolapDrillThroughAction(String name, String caption, String description, boolean isDefault,
+			List<DrillThroughColumn> columnList) {
+		super(name, caption, description);
+		this.isDefault = isDefault;
+		this.columnList = columnList;
+		if (this.columnList == null) {
+			this.columnList = new ArrayList<>();
+		}
+	}
 
-    public boolean getIsDefault() { return this.isDefault; }
+	@Override
+	public boolean getIsDefault() {
+		return this.isDefault;
+	}
 
-    public List<RolapDrillThroughColumn> getColumns() {
-        return this.columnList;
-    }
+	public List<DrillThroughColumn> getColumns() {
+		return this.columnList;
+	}
 
-    public List<OlapElement> getOlapElements() {
-        List<OlapElement> olapElementList = new ArrayList<>();
-        for(RolapDrillThroughColumn rolapDrillThroughColumn: this.columnList) {
-            olapElementList.add(rolapDrillThroughColumn.getOlapElement());
-        }
-        return olapElementList;
-    }
+	@Override
+	public List<OlapElement> getOlapElements() {
+		List<OlapElement> olapElementList = new ArrayList<>();
+		for (DrillThroughColumn rolapDrillThroughColumn : this.columnList) {
+			olapElementList.add(rolapDrillThroughColumn.getOlapElement());
+		}
+		return olapElementList;
+	}
 
 }
-

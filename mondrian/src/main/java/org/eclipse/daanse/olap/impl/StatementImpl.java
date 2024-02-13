@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DrillThroughAction;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
@@ -25,7 +26,6 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapDrillThroughAction;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
@@ -104,7 +104,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
                 org.eclipse.daanse.olap.api.element.Cube rolapCube = cellSet.getMetaData().getCube();
 
 
-                RolapDrillThroughAction rolapDrillThroughAction =
+                DrillThroughAction rolapDrillThroughAction =
                     rolapCube.getDefaultDrillThroughAction();
                 if(rolapDrillThroughAction != null) {
                     fields = rolapDrillThroughAction.getOlapElements();

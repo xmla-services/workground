@@ -98,7 +98,7 @@ public interface Context {
 	 */
 	Connection getConnection();
 
-    Connection getConnection(RolapConnectionProps props);
+    Connection getConnection(ConnectionProps props);
 
     Scenario createScenario();
 

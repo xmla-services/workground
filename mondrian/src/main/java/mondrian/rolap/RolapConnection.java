@@ -44,7 +44,7 @@ import mondrian.olap.exceptions.FailedToParseQueryException;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -84,7 +84,7 @@ public class RolapConnection extends ConnectionBase {
   private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
 
 
-  private final RolapConnectionProps rolapConnectionProps;
+  private final ConnectionProps rolapConnectionProps;
 
   private Context context = null;
   private final String catalogName;
@@ -99,7 +99,7 @@ public class RolapConnection extends ConnectionBase {
   private final Statement internalStatement;
 
 
-	public RolapConnection(Context context, RolapConnectionProps rolapConnectionProps) {
+	public RolapConnection(Context context, ConnectionProps rolapConnectionProps) {
 		this(context, null, rolapConnectionProps);
 	}
 
@@ -119,7 +119,7 @@ public class RolapConnection extends ConnectionBase {
    * @param context  If not null an external DataSource to be used
    *                    by Mondrian
    */
-	RolapConnection(Context context, RolapSchema schema, RolapConnectionProps rolapConnectionProps) {
+	RolapConnection(Context context, RolapSchema schema, ConnectionProps rolapConnectionProps) {
     super();
 
     this.context = context;

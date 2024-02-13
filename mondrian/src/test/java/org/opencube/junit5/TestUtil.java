@@ -46,7 +46,7 @@ import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Statement;
@@ -254,7 +254,7 @@ public class TestUtil {
      * @param queryString Query string
      * @param pattern     Pattern which exception must match
      */
-    public static void assertQueryThrows(Context context, RolapConnectionProps props, String queryString, String pattern) {
+    public static void assertQueryThrows(Context context, ConnectionProps props, String queryString, String pattern) {
         Throwable throwable;
         try {
             Result result = executeQuery(context.getConnection(props), queryString);

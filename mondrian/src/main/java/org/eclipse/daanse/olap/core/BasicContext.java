@@ -25,7 +25,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
@@ -168,7 +168,7 @@ public class BasicContext extends AbstractBasicContext {
 	}
 
 	@Override
-	public org.eclipse.daanse.olap.api.Connection getConnection(RolapConnectionProps props) {
+	public org.eclipse.daanse.olap.api.Connection getConnection(ConnectionProps props) {
 		return new RolapConnection(this, props);
 	}
 

@@ -18,12 +18,11 @@ package org.eclipse.daanse.olap.api.element;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.DrillThroughAction;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-
-import mondrian.rolap.RolapDrillThroughAction;
 
 /**
  * Cube.
@@ -121,5 +120,5 @@ public interface Cube extends OlapElement, MetaElement {
 
     void createNamedSet(Formula formula);
 
-    RolapDrillThroughAction getDefaultDrillThroughAction();
+    DrillThroughAction getDefaultDrillThroughAction();
 }

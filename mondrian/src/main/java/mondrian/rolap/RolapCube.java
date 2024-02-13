@@ -50,9 +50,11 @@ import java.util.TreeSet;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.DrillThroughColumn;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.OlapAction;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -209,7 +211,7 @@ public class RolapCube extends CubeBase {
 
     final BitKey closureColumnBitKey;
 
-    final List<RolapAction> actionList =
+    final List<AbstractRolapAction> actionList =
             new ArrayList<>();
 
     final List<RolapWritebackTable> writebackTableList =
@@ -432,17 +434,17 @@ public class RolapCube extends CubeBase {
         checkOrdinals(mappingCube.name(), measureList);
         loadAggGroup(mappingCube);
 
-        for(MappingAction action: mappingCube.actions()) {
-            if(action instanceof MappingDrillThroughAction drillThroughAction) {
-                List<RolapDrillThroughColumn> columns = new ArrayList<>();
+        for(MappingAction mappingAction: mappingCube.actions()) {
+            if(mappingAction instanceof MappingDrillThroughAction mappingDrillThroughAction) {
+                List<DrillThroughColumn> columns = new ArrayList<>();
 
-                for(MappingDrillThroughElement drillThroughColumn: drillThroughAction.drillThroughElements()) {
-                    if(drillThroughColumn instanceof MappingDrillThroughAttribute drillThroughAttribute) {
+                for(MappingDrillThroughElement mappinmgDrillThroughColumn: mappingDrillThroughAction.drillThroughElements()) {
+                    if(mappinmgDrillThroughColumn instanceof MappingDrillThroughAttribute mappingDrillThroughAttribute) {
                         Dimension dimension = null;
                         Hierarchy hierarchy = null;
                         Level level = null;
                         for(Dimension currntDimension: this.getDimensions()) {
-                            if(currntDimension.getName().equals(drillThroughAttribute.dimension())) {
+                            if(currntDimension.getName().equals(mappingDrillThroughAttribute.dimension())) {
                                 dimension = currntDimension;
                                 break;
                             }
@@ -450,12 +452,12 @@ public class RolapCube extends CubeBase {
                         if(dimension == null) {
                             throw Util.newError(
                                     new StringBuilder("Error while creating DrillThrough  action. Dimension '")
-                                        .append(drillThroughAttribute.dimension()).append("' not found").toString());
+                                        .append(mappingDrillThroughAttribute.dimension()).append("' not found").toString());
                         }
                         else {
-                            if(drillThroughAttribute.hierarchy() != null && !drillThroughAttribute.hierarchy().equals("")) {
+                            if(mappingDrillThroughAttribute.hierarchy() != null && !mappingDrillThroughAttribute.hierarchy().equals("")) {
                                 for(Hierarchy currentHierarchy: dimension.getHierarchies()) {
-                                    if(currentHierarchy.getName().equals(drillThroughAttribute.hierarchy())) {
+                                    if(currentHierarchy.getName().equals(mappingDrillThroughAttribute.hierarchy())) {
                                         hierarchy = currentHierarchy;
                                         break;
                                     }
@@ -463,13 +465,13 @@ public class RolapCube extends CubeBase {
                                 if(hierarchy == null) {
                                     throw Util.newError(
                                             new StringBuilder("Error while creating DrillThrough  action. Hierarchy '")
-                                                .append(drillThroughAttribute.hierarchy())
+                                                .append(mappingDrillThroughAttribute.hierarchy())
                                                 .append("' not found").toString());
                                 }
                                 else {
-                                    if(drillThroughAttribute.level() != null && !drillThroughAttribute.level().equals("")) {
+                                    if(mappingDrillThroughAttribute.level() != null && !mappingDrillThroughAttribute.level().equals("")) {
                                         for(Level currentLevel: hierarchy.getLevels()) {
-                                            if(currentLevel.getName().equals(drillThroughAttribute.level())) {
+                                            if(currentLevel.getName().equals(mappingDrillThroughAttribute.level())) {
                                                 level = currentLevel;
                                                 break;
                                             }
@@ -477,7 +479,7 @@ public class RolapCube extends CubeBase {
                                         if(level == null) {
                                             throw Util.newError(
                                                     new StringBuilder("Error while creating DrillThrough  action. Level '")
-                                                        .append(drillThroughAttribute.level())
+                                                        .append(mappingDrillThroughAttribute.level())
                                                         .append("' not found").toString());
                                         }
                                     }
@@ -495,7 +497,7 @@ public class RolapCube extends CubeBase {
                         );
 
                     }
-                    else if(drillThroughColumn instanceof MappingDrillThroughMeasure drillThroughMeasure) {
+                    else if(mappinmgDrillThroughColumn instanceof MappingDrillThroughMeasure drillThroughMeasure) {
                         Member measure = null;
                         for(Member currntMeasure: this.getMeasures()) {
                             if(currntMeasure.getName().equals(drillThroughMeasure.name())) {
@@ -515,10 +517,10 @@ public class RolapCube extends CubeBase {
                 }
 
                 RolapDrillThroughAction rolapDrillThroughAction = new RolapDrillThroughAction(
-                        drillThroughAction.name(),
-                        drillThroughAction.caption(),
-                        drillThroughAction.description(),
-                        drillThroughAction.defaultt() != null && drillThroughAction.defaultt(),
+                        mappingDrillThroughAction.name(),
+                        mappingDrillThroughAction.caption(),
+                        mappingDrillThroughAction.description(),
+                        mappingDrillThroughAction.defaultt() != null && mappingDrillThroughAction.defaultt(),
                         columns
                 );
                 this.actionList.add(rolapDrillThroughAction);
@@ -3526,7 +3528,7 @@ public class RolapCube extends CubeBase {
 
     @Override
     public RolapDrillThroughAction getDefaultDrillThroughAction() {
-        for(RolapAction action: this.actionList) {
+        for(OlapAction action: this.actionList) {
             if(action instanceof RolapDrillThroughAction rolapDrillThroughAction
                 && rolapDrillThroughAction.getIsDefault()) {
                 return rolapDrillThroughAction;

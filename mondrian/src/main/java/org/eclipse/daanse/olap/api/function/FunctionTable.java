@@ -105,6 +105,7 @@ public interface FunctionTable {
      * {@link org.eclipse.daanse.olap.api.function.FunctionTable#defineFunctions(org.eclipse.daanse.olap.api.function.FunctionTable.FunctionTableCollector)}
      * method.
      */
+    @Deprecated
     public interface FunctionTableCollector {
 
     	void define(FunctionMetaData functionMetaData);

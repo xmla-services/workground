@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.RolapConnectionProps;
+import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +58,7 @@ public class RolapSchemaPool {
     public RolapSchema get(
         final String connectionKey,
         final Context context,
-        final RolapConnectionProps connectionProps)
+        final ConnectionProps connectionProps)
     {
 
         final boolean useSchemaPool =connectionProps.useSchemaPool();
@@ -131,7 +131,7 @@ public class RolapSchemaPool {
 
     private RolapSchema getByKey(
         Context context,
-        RolapConnectionProps connectionProps,
+        ConnectionProps connectionProps,
         SchemaKey key)
     {
     	long time=connectionProps.pinSchemaTimeout();
@@ -175,7 +175,7 @@ public class RolapSchemaPool {
     // is extracted and made package-local for testing purposes
     RolapSchema createRolapSchema(
         Context context,
-        RolapConnectionProps connectionProps,
+        ConnectionProps connectionProps,
         SchemaKey key)
     {
         return new RolapSchema(
