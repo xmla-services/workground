@@ -13,6 +13,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -25,7 +26,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.olap.NativeEvaluator;
 import mondrian.rolap.RolapEvaluator;
 
 

@@ -10,9 +10,9 @@
 package mondrian.rolap.format;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
 
 import mondrian.rolap.RolapMemberBase;
-import mondrian.spi.MemberFormatter;
 
 /**
  * Default implementation of SPI {@link MemberFormatter}.

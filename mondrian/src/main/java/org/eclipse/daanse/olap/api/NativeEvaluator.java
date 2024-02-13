@@ -7,7 +7,7 @@
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 

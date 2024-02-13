@@ -21,11 +21,11 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 import mondrian.olap.fun.FunUtil;
-import mondrian.spi.MemberFormatter;
 import mondrian.util.Bug;
 /**
  * <code>MemberBase</code> is a partial implementation of {@link Member}.

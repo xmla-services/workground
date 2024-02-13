@@ -12,6 +12,7 @@
 package mondrian.rolap;
 
 import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
@@ -30,7 +31,6 @@ import mondrian.rolap.agg.RangeColumnPredicate;
 import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.util.ExpressionUtil;
 import mondrian.rolap.util.RelationUtil;
-import mondrian.spi.MemberFormatter;
 
 /**
  * RolapCubeLevel wraps a RolapLevel for a specific Cube.

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -32,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.DelegatingSchemaReader;
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;

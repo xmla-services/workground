@@ -9,9 +9,10 @@
 */
 package mondrian.spi.impl;
 
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
+
 import mondrian.olap.Util;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.UserDefinedFunction;
 

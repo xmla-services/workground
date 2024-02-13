@@ -41,6 +41,7 @@ import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
@@ -69,7 +70,6 @@ import mondrian.olap.type.StringType;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.UserDefinedFunction;
 

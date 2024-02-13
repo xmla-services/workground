@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -26,7 +27,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.aggmatcher.AggStar;

@@ -16,12 +16,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Util;
 import mondrian.olap.fun.NonEmptyCrossJoinFunDef;
 import mondrian.rolap.sql.CrossJoinArg;
@@ -29,7 +29,7 @@ import mondrian.rolap.sql.MemberListCrossJoinArg;
 import mondrian.rolap.sql.TupleConstraint;
 
 /**
- * Creates a {@link mondrian.olap.NativeEvaluator} that evaluates NON EMPTY
+ * Creates a {@link org.eclipse.daanse.olap.api.NativeEvaluator} that evaluates NON EMPTY
  * CrossJoin in SQL. The generated SQL will join the dimension tables with
  * the fact table and return all combinations that have a
  * corresponding row in the fact table. The current context (slicer) is

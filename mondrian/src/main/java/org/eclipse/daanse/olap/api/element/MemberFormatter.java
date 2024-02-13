@@ -9,9 +9,7 @@
 // All Rights Reserved.
 */
 
-package mondrian.spi;
-
-import org.eclipse.daanse.olap.api.element.Member;
+package org.eclipse.daanse.olap.api.element;
 
 /**
  * An SPI to redefine the caption displayed for members.

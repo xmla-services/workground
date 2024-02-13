@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -60,7 +61,6 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;

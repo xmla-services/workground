@@ -15,6 +15,7 @@ import java.util.AbstractList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -35,7 +36,6 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.fun.sort.Sorter;
 
 /**

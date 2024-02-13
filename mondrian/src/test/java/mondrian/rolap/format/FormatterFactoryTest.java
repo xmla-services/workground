@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 
 class FormatterFactoryTest {

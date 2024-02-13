@@ -12,9 +12,10 @@ package mondrian.rolap.format;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.daanse.olap.api.element.MemberFormatter;
+
 import mondrian.olap.MondrianException;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.impl.Scripts;
 

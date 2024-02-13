@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.NativeEvaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -35,7 +36,6 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
 import mondrian.server.LocusImpl;
 import mondrian.util.CancellationChecker;
