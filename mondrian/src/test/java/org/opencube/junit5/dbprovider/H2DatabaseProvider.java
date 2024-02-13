@@ -18,12 +18,14 @@
  */
 package org.opencube.junit5.dbprovider;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -31,26 +33,26 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.h2.H2Dialect;
-import org.h2.jdbcx.JdbcConnectionPool;
+import org.h2.jdbcx.JdbcDataSource;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.rolap.RolapSchemaPool;
 
 @ServiceProvider(value = DatabaseProvider.class)
 public class H2DatabaseProvider implements DatabaseProvider {
 
 	private Path testDirPath;
 	private Path testFilePath;
-	
-	public H2DatabaseProvider() {
-		testDirPath = getTempFile();
+	private Connection connection;
 
-		testFilePath =testDirPath.resolve(UUID.randomUUID().toString());
+	public H2DatabaseProvider() {
+		System.out.println("1");
 	}
 
 	private static Path getTempFile() {
 		try {
 
-			Path temp = Files.createTempDirectory("daanse_test").toAbsolutePath();
+			Path temp = Files.createTempDirectory("daanse_test_"+UUID.randomUUID().toString()).toAbsolutePath();
 
 			return temp;
 		} catch (Exception e) {
@@ -63,9 +65,7 @@ public class H2DatabaseProvider implements DatabaseProvider {
 	@Override
 	public void close() throws IOException {
 
-		if (testFilePath != null) {
-			Files.deleteIfExists(testFilePath);
-		}
+		Files.walk(testDirPath).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 
 		if (testDirPath != null) {
 			Files.deleteIfExists(testDirPath);
@@ -74,12 +74,19 @@ public class H2DatabaseProvider implements DatabaseProvider {
 
 	@Override
 	public Entry<DataSource, Dialect> activate() {
+		testDirPath = getTempFile();
+		RolapSchemaPool.instance().clear();
+
+		testFilePath = testDirPath.resolve(UUID.randomUUID().toString());
 
 		String JDBC_SQLITE_MEMORY = "jdbc:h2:" + testFilePath.toFile().getAbsolutePath().toString();
-		JdbcConnectionPool cpDataSource = JdbcConnectionPool.create(JDBC_SQLITE_MEMORY, "sa", "sa");
+		JdbcDataSource cpDataSource = new JdbcDataSource();
+		cpDataSource.setUrl(JDBC_SQLITE_MEMORY);
+		cpDataSource.setUser("sa");
+		cpDataSource.setPassword("sa");
 
 		try {
-			Connection connection = cpDataSource.getConnection();
+			connection = cpDataSource.getConnection();
 			Dialect dialect = new H2Dialect(connection);
 
 			connection.close();

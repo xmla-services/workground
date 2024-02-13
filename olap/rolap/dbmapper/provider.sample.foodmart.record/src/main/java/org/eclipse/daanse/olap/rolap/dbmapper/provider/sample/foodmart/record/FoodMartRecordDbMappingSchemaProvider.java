@@ -91,6 +91,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
 	private static final String MARIADB = "mariadb";
 	private static final String MYSQL = "mysql";
 	private static final String POSTGRES = "postgres";
+	private static final String H2 = "h2";
 	private static final String HIVE = "hive";
 	private static final String ORACLE = "oracle";
 	private static final String HSQLDB = "hsqldb";
@@ -256,6 +257,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .sqls(List.of(
             SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(H2).content(FNAME_LNAME2).build(),
             SQLRBuilder.builder().dialect(HIVE).content("`customer`.`fullname`").build(),
             SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
             SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
@@ -276,6 +278,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .sqls(List.of(
             SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(H2).content(FNAME_LNAME2).build(),
             SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
             SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
             SQLRBuilder.builder().dialect(POSTGRES).content(FNAME_LNAME2).build(),
@@ -298,6 +301,9 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
                 .content("Iif(\"sales_fact_1997\".\"promotion_id\" = 0, 0, \"sales_fact_1997\".\"store_sales\")")
                 .build(),
             SQLRBuilder.builder().dialect(ORACLE)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
+                .build(),
+            SQLRBuilder.builder().dialect(H2)
                 .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
             SQLRBuilder.builder().dialect(HSQLDB)
@@ -343,6 +349,9 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
     private static final ExpressionViewR MEASUREEXPRESSION_2_7 = ExpressionViewRBuilder
         .builder()
         .sqls(List.of(
+            SQLRBuilder.builder().dialect(H2)
+                .content(WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST)
+                .build(),
             SQLRBuilder.builder().dialect(MYSQL)
                 .content(WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST)
                 .build(),
@@ -654,6 +663,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .keyExpression(ExpressionViewRBuilder.builder()
             .sqls(List.of(
                 SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+                SQLRBuilder.builder().dialect(H2).content(FNAME_LNAME2).build(),
                 SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
                 SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
                 SQLRBuilder.builder().dialect(POSTGRES).content(FNAME_LNAME2).build(),
