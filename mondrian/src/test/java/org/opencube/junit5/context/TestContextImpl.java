@@ -1,6 +1,7 @@
 package org.opencube.junit5.context;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -210,4 +211,14 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
         this.functionService = functionService;
     }
 
+    @Override
+    public String toString() {
+    	try {
+			return dataSource.getConnection().getMetaData().getURL();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			return dataSource.getClass().getPackageName();
+		}
+    }
 }

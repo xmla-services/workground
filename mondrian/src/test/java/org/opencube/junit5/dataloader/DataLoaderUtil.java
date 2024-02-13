@@ -440,7 +440,7 @@ public class DataLoaderUtil {
                             ps.getConnection().setAutoCommit(false);
 
                         } else {
-                            ps.clearParameters();
+                         //   ps.clearParameters();
                         }
                         int i = 1;
                         for (Column col : table.columns) {

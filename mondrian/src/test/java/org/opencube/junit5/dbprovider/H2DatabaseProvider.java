@@ -38,15 +38,21 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DatabaseProvider.class)
 public class H2DatabaseProvider implements DatabaseProvider {
 
-	private String getTempFile() {
+	private Path testDirPath;
+	private Path testFilePath;
+	
+	public H2DatabaseProvider() {
+		testDirPath = getTempFile();
+
+		testFilePath =testDirPath.resolve(UUID.randomUUID().toString());
+	}
+
+	private static Path getTempFile() {
 		try {
 
 			Path temp = Files.createTempDirectory("daanse_test").toAbsolutePath();
 
-			if (Files.exists(temp)) {
-				Files.delete(temp);
-			}
-			return temp.toFile().getAbsolutePath().toString();
+			return temp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -57,12 +63,19 @@ public class H2DatabaseProvider implements DatabaseProvider {
 	@Override
 	public void close() throws IOException {
 
+		if (testFilePath != null) {
+			Files.deleteIfExists(testFilePath);
+		}
+
+		if (testDirPath != null) {
+			Files.deleteIfExists(testDirPath);
+		}
 	}
 
 	@Override
 	public Entry<DataSource, Dialect> activate() {
-		String JDBC_SQLITE_MEMORY = "jdbc:h2:" + getTempFile() + "/" + UUID.randomUUID() + ".db";
 
+		String JDBC_SQLITE_MEMORY = "jdbc:h2:" + testFilePath.toFile().getAbsolutePath().toString();
 		JdbcConnectionPool cpDataSource = JdbcConnectionPool.create(JDBC_SQLITE_MEMORY, "sa", "sa");
 
 		try {
