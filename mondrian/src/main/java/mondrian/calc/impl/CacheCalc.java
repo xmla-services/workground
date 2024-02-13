@@ -13,7 +13,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.ExpCacheDescriptorImpl;
 
 /**
  * Calculation which retrieves the value of an underlying calculation
@@ -23,9 +23,9 @@ import mondrian.olap.ExpCacheDescriptor;
  * @since Oct 10, 2005
  */
 public class CacheCalc extends GenericCalc {
-    private final ExpCacheDescriptor key;
+    private final ExpCacheDescriptorImpl key;
 
-    public CacheCalc( Type type, ExpCacheDescriptor key) {
+    public CacheCalc( Type type, ExpCacheDescriptorImpl key) {
         super(   type);
         this.key = key;
     }

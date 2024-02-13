@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
@@ -39,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.CacheCalc;
-import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.ExpCacheDescriptorImpl;
 import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
@@ -81,7 +82,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final TupleListCalc tupleListCalc = compiler.compileList( call.getArg( 1 ) );
     final Calc keyCalc = compiler.compileScalar( call.getArg( 2 ), true );
     Calc sortedListCalc = new SortedListCalc( call.getType(), tupleListCalc, keyCalc );
-    final ExpCacheDescriptor cacheDescriptor = new ExpCacheDescriptor( call, sortedListCalc, compiler.getEvaluator() );
+    final ExpCacheDescriptorImpl cacheDescriptor = new ExpCacheDescriptorImpl( call, sortedListCalc, compiler.getEvaluator() );
     if ( type0 instanceof TupleType ) {
       final TupleCalc tupleCalc = compiler.compileTuple( call.getArg( 0 ) );
       return new Rank3TupleCalc( call, tupleCalc, keyCalc, cacheDescriptor );
@@ -98,7 +99,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     Calc listCalc1 = new RankedListCalc( listCalc0, tuple );
     final Calc listCalc;
     if ( SystemWideProperties.instance().EnableExpCache ) {
-      final ExpCacheDescriptor key = new ExpCacheDescriptor( listExp, listCalc1, compiler.getEvaluator() );
+      final ExpCacheDescriptorImpl key = new ExpCacheDescriptorImpl( listExp, listCalc1, compiler.getEvaluator() );
       listCalc = new CacheCalc( listExp.getType(), key );
     } else {
       listCalc = listCalc1;

@@ -68,7 +68,7 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
-import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.ExpCacheDescriptorImpl;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Property;
@@ -498,8 +498,8 @@ public class RolapResult extends ResultBase {
             }
           };
 
-          final ExpCacheDescriptor cacheDescriptor =
-              new ExpCacheDescriptor( query.getSlicerAxis().getSet(), calcCached, evaluator );
+          final ExpCacheDescriptorImpl cacheDescriptor =
+              new ExpCacheDescriptorImpl( query.getSlicerAxis().getSet(), calcCached, evaluator );
           // Generate a cached calculation for slicer aggregation
           // This is so critical for performance that we should consider creating an
           // optimized query level slicer cache.

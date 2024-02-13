@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
@@ -31,7 +32,7 @@ import org.eclipse.daanse.olap.operation.api.OperationAtom;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.ExpCacheDescriptorImpl;
 import mondrian.olap.type.SetType;
 
 /**
@@ -61,7 +62,7 @@ public class CacheFunDef extends AbstractFunctionDefinition {
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
         final Expression exp = call.getArg(0);
         final ExpCacheDescriptor cacheDescriptor =
-                new ExpCacheDescriptor(exp, compiler);
+                new ExpCacheDescriptorImpl(exp, compiler);
         if (call.getType() instanceof SetType) {
             return new GenericIterCalc(call.getType()) {
                 @Override

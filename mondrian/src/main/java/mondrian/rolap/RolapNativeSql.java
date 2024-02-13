@@ -30,7 +30,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.ExpCacheDescriptorImpl;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
@@ -297,16 +297,16 @@ public class RolapNativeSql {
             if (dimExpr instanceof DimensionExpression) {
                 dimension =
                     (RolapCubeDimension) evaluator.getCachedResult(
-                        new ExpCacheDescriptor(dimExpr, evaluator));
+                        new ExpCacheDescriptorImpl(dimExpr, evaluator));
             } else if (dimExpr instanceof HierarchyExpressionImpl) {
                 final RolapCubeHierarchy hierarchy =
                     (RolapCubeHierarchy) evaluator.getCachedResult(
-                        new ExpCacheDescriptor(dimExpr, evaluator));
+                        new ExpCacheDescriptorImpl(dimExpr, evaluator));
                 dimension = (RolapCubeDimension) hierarchy.getDimension();
             } else if (dimExpr instanceof LevelExpression) {
                 final RolapCubeLevel level =
                     (RolapCubeLevel) evaluator.getCachedResult(
-                        new ExpCacheDescriptor(dimExpr, evaluator));
+                        new ExpCacheDescriptorImpl(dimExpr, evaluator));
                 dimension = level.getDimension();
             } else {
                 return null;
@@ -372,7 +372,7 @@ public class RolapNativeSql {
                         sourceExp,
                         String.valueOf(
                             evaluator.getCachedResult(
-                                new ExpCacheDescriptor(arg1, evaluator))));
+                                new ExpCacheDescriptorImpl(arg1, evaluator))));
             } else {
                 return null;
             }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -26,12 +27,12 @@ import mondrian.calc.impl.BetterExpCompiler;
 
 /**
  * Holds information necessary to add an expression to the expression result
- * cache (see {@link Evaluator#getCachedResult(ExpCacheDescriptor)}).
+ * cache (see {@link Evaluator#getCachedResult(ExpCacheDescriptorImpl)}).
  *
  * @author jhyde
  * @since Aug 16, 2005
  */
-public class ExpCacheDescriptor {
+public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
     private final Expression exp;
     private int[] dependentHierarchyOrdinals;
     private final Calc calc;
@@ -43,7 +44,7 @@ public class ExpCacheDescriptor {
      * @param calc Compiled expression
      * @param evaluator Evaluator
      */
-    public ExpCacheDescriptor(Expression exp, Calc calc, Evaluator evaluator) {
+    public ExpCacheDescriptorImpl(Expression exp, Calc calc, Evaluator evaluator) {
         this.calc = calc;
         this.exp = exp;
         computeDepends(calc, evaluator);
@@ -55,7 +56,7 @@ public class ExpCacheDescriptor {
      * @param exp Expression
      * @param evaluator Evaluator
      */
-    public ExpCacheDescriptor(Expression exp, Evaluator evaluator) {
+    public ExpCacheDescriptorImpl(Expression exp, Evaluator evaluator) {
         this(exp, new BetterExpCompiler(evaluator, null));
     }
 
@@ -65,7 +66,7 @@ public class ExpCacheDescriptor {
      * @param exp Expression
      * @param compiler Compiler
      */
-    public ExpCacheDescriptor(Expression exp, ExpressionCompiler compiler) {
+    public ExpCacheDescriptorImpl(Expression exp, ExpressionCompiler compiler) {
         this.exp = exp;
 
         // Compile expression.
@@ -94,15 +95,17 @@ public class ExpCacheDescriptor {
             dependentHierarchyOrdinals[i] = ordinalList.get(i);
         }
     }
-
+    @Override
     public Expression getExp() {
         return exp;
     }
 
-    public Calc getCalc() {
+	@Override
+	public Calc getCalc() {
         return calc;
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         return calc.evaluate(evaluator);
     }
@@ -112,6 +115,7 @@ public class ExpCacheDescriptor {
      * dependent upon. When the cache descriptor is used to generate a cache
      * key, the key will consist of a member from each of these hierarchies.
      */
+    @Override
     public int[] getDependentHierarchyOrdinals() {
         return dependentHierarchyOrdinals;
     }

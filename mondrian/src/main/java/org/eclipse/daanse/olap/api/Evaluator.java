@@ -42,8 +42,6 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
-import mondrian.olap.ExpCacheDescriptor;
-
 /**
  * An <code>Evaluator</code> holds the context necessary to evaluate an
  * expression.
