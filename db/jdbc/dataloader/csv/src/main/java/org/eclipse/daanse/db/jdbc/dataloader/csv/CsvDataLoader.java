@@ -320,10 +320,11 @@ public class CsvDataLoader implements FileSystemWatcherListener {
 	@Override
 	public void handleInitialPaths(List<Path> initialPaths) {
 		this.initialPaths.addAll(initialPaths);
-		for (Path path : initialPaths) {
-
-			loadData(path);
-		}
+//		for (Path path : initialPaths) {
+//
+//			loadData(path);
+//		}
+		initialPaths.parallelStream().forEach(this::loadData);
 
 	}
 
