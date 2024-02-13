@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.SystemWideProperties;
-import mondrian.olap.NameResolver;
+import mondrian.olap.NameResolverImpl;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.NullLiteralImpl;
 import mondrian.olap.ParameterImpl;
@@ -69,7 +69,7 @@ import mondrian.rolap.sql.TupleConstraint;
 public class RolapSchemaReader
     implements SchemaReader,
         RolapNativeSet.SchemaReaderWithMemberReaderAvailable,
-        NameResolver.Namespace
+        NameResolverImpl.Namespace
 {
     protected final Role role;
     private final Map<Hierarchy, MemberReader> hierarchyReaders =
@@ -475,7 +475,7 @@ public class RolapSchemaReader
         MatchType matchType)
     {
         if (SystemWideProperties.instance().SsasCompatibleNaming) {
-            return new NameResolver().resolve(
+            return new NameResolverImpl().resolve(
                 parent,
                 Util.toOlap4j(names),
                 failIfNotFound,
@@ -503,8 +503,8 @@ public class RolapSchemaReader
     }
 
     @Override
-	public List<NameResolver.Namespace> getNamespaces() {
-        return Collections.<NameResolver.Namespace>singletonList(this);
+	public List<NameResolverImpl.Namespace> getNamespaces() {
+        return Collections.<NameResolverImpl.Namespace>singletonList(this);
     }
 
     @Override

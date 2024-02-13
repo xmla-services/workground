@@ -48,9 +48,7 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
-import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;
-import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchema;
 
 /**
@@ -576,7 +574,7 @@ public interface SchemaReader {
      * but returns a map of the grand-children and their access details
      * and costs more to invoke because of the access controls.
      *
-     * Called by {@link RolapHierarchy} when determining the lowest access
+     * Called by {@link Hierarchy} when determining the lowest access
      * level of a Role within a hierarchy.
      */
     Map<? extends Member, Access>

@@ -1619,7 +1619,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private static class QuerySchemaReader
         extends DelegatingSchemaReader
-        implements NameResolver.Namespace
+        implements NameResolverImpl.Namespace
     {
         private final QueryImpl query;
 
@@ -1932,7 +1932,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             // Only look for calculated members and named sets defined in the
             // query.
             for (Formula formula : query.getFormulas()) {
-                if (NameResolver.matches(formula, parent, segment)) {
+                if (NameResolverImpl.matches(formula, parent, segment)) {
                     return formula.getElement();
                 }
             }
@@ -1943,7 +1943,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 parentOlapElement = query.getRolapMember(rolapMember);
             }
             OlapElement child = null;
-            for (NameResolver.Namespace namespace : this.getNamespaces()) {
+            for (NameResolverImpl.Namespace namespace : this.getNamespaces()) {
                 if(namespace != this) {
                     child = namespace.lookupChild(parentOlapElement, segment);
                     if (child != null) {
@@ -1966,8 +1966,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public List<NameResolver.Namespace> getNamespaces() {
-            final List<NameResolver.Namespace> list =
+		public List<NameResolverImpl.Namespace> getNamespaces() {
+            final List<NameResolverImpl.Namespace> list =
                 new ArrayList<>();
             list.add(this);
             list.addAll(super.getNamespaces());
@@ -2044,7 +2044,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private static class ScopedSchemaReader
         extends DelegatingSchemaReader
-        implements NameResolver.Namespace
+        implements NameResolverImpl.Namespace
     {
         private final QueryValidator queryValidator;
         private final boolean accessControlled;
@@ -2074,8 +2074,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public List<NameResolver.Namespace> getNamespaces() {
-            final List<NameResolver.Namespace> list =
+		public List<NameResolverImpl.Namespace> getNamespaces() {
+            final List<NameResolverImpl.Namespace> list =
                 new ArrayList<>();
             list.add(this);
             list.addAll(super.getNamespaces());

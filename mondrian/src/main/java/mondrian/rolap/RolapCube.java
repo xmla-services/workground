@@ -125,7 +125,7 @@ import mondrian.olap.DimensionType;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.NameResolver;
+import mondrian.olap.NameResolverImpl;
 import mondrian.olap.Property;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
@@ -3113,7 +3113,7 @@ public class RolapCube extends CubeBase {
      */
     private class RolapCubeSchemaReader
         extends RolapSchemaReader
-        implements NameResolver.Namespace
+        implements NameResolverImpl.Namespace
     {
         public RolapCubeSchemaReader(Context context,Role role) {
             super(context,role, RolapCube.this.schema);
@@ -3276,8 +3276,8 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public List<NameResolver.Namespace> getNamespaces() {
-            final List<NameResolver.Namespace> list =
+		public List<NameResolverImpl.Namespace> getNamespaces() {
+            final List<NameResolverImpl.Namespace> list =
                 new ArrayList<>();
             list.add(this);
             list.addAll(schema.getSchemaReader().getNamespaces());
@@ -3305,7 +3305,7 @@ public class RolapCube extends CubeBase {
 
             // Look up calc member.
             for (Formula formula : calculatedMemberList) {
-                if (NameResolver.matches(formula, parent, segment)) {
+                if (NameResolverImpl.matches(formula, parent, segment)) {
                     return formula.getMdxMember();
                 }
             }

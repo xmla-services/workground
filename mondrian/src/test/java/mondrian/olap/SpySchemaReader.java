@@ -28,6 +28,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
+import org.eclipse.daanse.olap.api.NameResolver;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -45,7 +46,6 @@ import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.NameResolver.Namespace;
 import mondrian.rolap.RolapSchema;
 
 public class SpySchemaReader implements SchemaReader {
@@ -288,7 +288,7 @@ public class SpySchemaReader implements SchemaReader {
 	}
 
 	@Override
-	public List<Namespace> getNamespaces() {
+	public List<NameResolver.Namespace> getNamespaces() {
 		return delegate.getNamespaces();
 	}
 

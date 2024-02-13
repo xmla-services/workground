@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
+import org.eclipse.daanse.olap.api.NameResolver;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -27,12 +28,12 @@ import org.eclipse.daanse.olap.impl.IdentifierSegment;
 /**
  * Resolves a list of segments (a parsed identifier) to an OLAP element.
  */
-public final class NameResolver {
+public final class NameResolverImpl implements NameResolver {
 
     /**
      * Creates a NameResolver.
      */
-    public NameResolver() {
+    public NameResolverImpl() {
     }
 
     /**
@@ -49,7 +50,8 @@ public final class NameResolver {
      * @param namespaces Namespaces wherein to find child element at each step
      * @return OLAP element with given name, or null if not found
      */
-    public OlapElement resolve(
+    @Override
+	public OlapElement resolve(
         OlapElement parent,
         List<IdentifierSegment> segments,
         boolean failIfNotFound,
@@ -224,44 +226,5 @@ public final class NameResolver {
         }
     }
 
-    /**
-     * Naming context within which elements are defined.
-     *
-     * <p>Elements' names are hierarchical, so elements are resolved one
-     * name segment at a time. It is possible for an element to be defined
-     * in a different namespace than its parent: for example, stored member
-     * [Dim].[Hier].[X].[Y] might have a child [Dim].[Hier].[X].[Y].[Z] which
-     * is a calculated member defined using a WITH MEMBER clause.</p>
-     */
-    public interface Namespace {
-        /**
-         * Looks up a child element, using a match type for inexact matching.
-         *
-         * <p>If {@code matchType} is {@link MatchType#EXACT}, effect is
-         * identical to calling
-         * {@link #lookupChild(OlapElement, org.olap4j.mdx.IdentifierSegment)}.</p>
-         *
-         * <p>Match type is ignored except when searching for members.</p>
-         *
-         * @param parent Parent element
-         * @param segment Name segment
-         * @param matchType Match type
-         * @return Olap element, or null
-         */
-        OlapElement lookupChild(
-            OlapElement parent,
-            IdentifierSegment segment,
-            MatchType matchType);
-
-        /**
-         * Looks up a child element.
-         *
-         * @param parent Parent element
-         * @param segment Name segment
-         * @return Olap element, or null
-         */
-        OlapElement lookupChild(
-            OlapElement parent,
-            IdentifierSegment segment);
-    }
+  
 }

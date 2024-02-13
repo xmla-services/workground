@@ -163,7 +163,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         MatchType matchType)
     {
         if (SystemWideProperties.instance().SsasCompatibleNaming) {
-            return new NameResolver().resolve(
+            return new NameResolverImpl().resolve(
                 parent,
                 Util.toOlap4j(names),
                 failIfNotFound,
@@ -180,7 +180,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     @Override
-	public List<NameResolver.Namespace> getNamespaces() {
+	public List<NameResolverImpl.Namespace> getNamespaces() {
         return schemaReader.getNamespaces();
     }
 
