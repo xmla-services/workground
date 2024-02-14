@@ -46,7 +46,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 
 	private Map<Path, Configuration> catalogFolderConfigsCSV = new ConcurrentHashMap<>();
 	
-	Path tempPath=null;
+//	Path tempPath=null;
 
 	@ObjectClassDefinition
 	@interface ConfigA {
@@ -58,7 +58,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 
 	@Activate
 	void act() throws IOException {
-		tempPath = Files.createTempDirectory("daanse").toAbsolutePath();
+//		tempPath = Files.createTempDirectory("daanse").toAbsolutePath();
 		
 	}
 
@@ -117,7 +117,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 			Configuration cH2 = configurationAdmin.getFactoryConfiguration(PID_H2, UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> props = new Hashtable<>();
 			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, pathString);
-			props.put("url", "jdbc:h2:" + tempPath.toAbsolutePath().toString()+"/"+path.getFileName());
+			props.put("url", "jdbc:h2:memFS:" + UUID.randomUUID().toString());
 			props.put("file.context.matcher", pathString);
 			cH2.update(props);
 			catalogFolderConfigsDS.put(path, cH2);
