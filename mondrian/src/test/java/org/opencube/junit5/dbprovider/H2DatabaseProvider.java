@@ -18,14 +18,10 @@
  */
 package org.opencube.junit5.dbprovider;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -41,45 +37,47 @@ import mondrian.rolap.RolapSchemaPool;
 @ServiceProvider(value = DatabaseProvider.class)
 public class H2DatabaseProvider implements DatabaseProvider {
 
-	private Path testDirPath;
-	private Path testFilePath;
+//	private Path testDirPath;
+//	private Path testFilePath;
 	private Connection connection;
 
 	public H2DatabaseProvider() {
-		System.out.println("1");
-	}
-
-	private static Path getTempFile() {
-		try {
-
-			Path temp = Files.createTempDirectory("daanse_test_"+UUID.randomUUID().toString()).toAbsolutePath();
-
-			return temp;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
 
 	}
+
+//	private static Path getTempFile() {
+//		try {
+//			
+//			Path temp = Files.createTempDirectory("daanse_test_"+UUID.randomUUID().toString()).toAbsolutePath();
+//			
+//	
+//			
+//
+//			return temp;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+//
+//	}
 
 	@Override
 	public void close() throws IOException {
 
-		Files.walk(testDirPath).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-
-		if (testDirPath != null) {
-			Files.deleteIfExists(testDirPath);
-		}
+//		Files.walk(testDirPath).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+//
+//		if (testDirPath != null) {
+//			Files.deleteIfExists(testDirPath);
+//		}
 	}
 
 	@Override
 	public Entry<DataSource, Dialect> activate() {
-		testDirPath = getTempFile();
+		
 		RolapSchemaPool.instance().clear();
 
-		testFilePath = testDirPath.resolve(UUID.randomUUID().toString());
 
-		String JDBC_SQLITE_MEMORY = "jdbc:h2:" + testFilePath.toFile().getAbsolutePath().toString();
+		String JDBC_SQLITE_MEMORY = "jdbc:h2:memFS:" + UUID.randomUUID().toString();
 		JdbcDataSource cpDataSource = new JdbcDataSource();
 		cpDataSource.setUrl(JDBC_SQLITE_MEMORY);
 		cpDataSource.setUser("sa");
