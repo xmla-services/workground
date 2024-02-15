@@ -67,7 +67,6 @@ public class DemoSetup {
 
 	private void initContext() throws IOException {
 
-		cDs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_DS, "1", "?");
 
 //		String PATH_TO_OBSERVE = "./catalogs";
 
@@ -81,20 +80,20 @@ public class DemoSetup {
 
 		Dictionary<String, Object> propsDS = new Hashtable<>();
 		propsDS.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path);
-
+		cDs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_DS, "1", "?");
 		cDs.update(propsDS);
 
-		cCtxs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_CONTEXT, "1", "?");
 
+		
 		Dictionary<String, Object> propsCtxs = new Hashtable<>();
 		propsCtxs.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path);
-
+		cCtxs = configurationAdmin.getFactoryConfiguration(PID_FILE_CAT_CONTEXT, "1", "?");
 		cCtxs.update(propsDS);
 
-		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
 
 		Dictionary<String, Object> propsCG = new Hashtable<>();
 		propsCG.put(BasicContextGroup.REF_NAME_CONTEXTS + TARGET_EXT, "(service.pid=*)");
+		cCG = configurationAdmin.getFactoryConfiguration(PID_CONTEXT_GROUP, "1", "?");
 		cCG.update(propsCG);
 
 	}

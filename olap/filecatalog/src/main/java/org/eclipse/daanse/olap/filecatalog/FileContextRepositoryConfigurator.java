@@ -18,6 +18,7 @@ import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatch
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
@@ -46,6 +47,13 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 		String io_fs_watcher_path();
 
 	}
+	
+	@Activate
+	void activate(Config cgf) {
+		System.out.println("context FileContextRepositoryConfigurator");
+
+		System.out.println(cgf);
+}
 
 	@Override
 	public void handleBasePath(Path basePath) {

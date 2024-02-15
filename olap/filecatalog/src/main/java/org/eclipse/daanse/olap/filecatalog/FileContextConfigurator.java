@@ -74,7 +74,7 @@ public class FileContextConfigurator implements FileSystemWatcherListener {
 	@Activate
 	public void activate(Config config) throws IOException {
 		this.config = config;
-		matcher_value = config.io_fs_watcher_path();
+		matcher_value = config.io_fs_watcher_path().replace("\\","-.-");
 		contextSpecificFilter = "(" + MATCHER_KEY + "=" + matcher_value + ")";
 		initContext();
 	}
