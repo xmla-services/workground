@@ -37,7 +37,7 @@ public class XmlaServlet extends AbstractSAAJServlet {
 	public SOAPMessage onMessage(SOAPMessage message) {
 		System.out.println("On message call");
 		try {
-
+			System.out.println("> Message IN:");
 			message.writeTo(System.out);
 
 			SOAPHeader header = message.getSOAPHeader();
@@ -53,7 +53,10 @@ public class XmlaServlet extends AbstractSAAJServlet {
 
 			RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
 
-			return wsAdapter.handleRequest(message, metaData);
+			SOAPMessage returnMessage = wsAdapter.handleRequest(message, metaData);
+			System.out.println("< Message OUT:");
+			returnMessage.writeTo(System.out);
+			return returnMessage;
 
 		} catch (Exception e) {
 			e.printStackTrace();
