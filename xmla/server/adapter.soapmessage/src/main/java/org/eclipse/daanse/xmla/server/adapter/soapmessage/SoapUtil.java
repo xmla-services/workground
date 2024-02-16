@@ -1309,7 +1309,7 @@ public class SoapUtil {
             SOAPElement el = addChildElement(e, tagName, prefix);
             SOAPElement el1 = addChildElement(el, "Member", prefix);
             addCellInfoItemList(el1, it.any());
-            setAttribute(el, "Hierarchy", it.hierarchy());
+            setAttribute(el1, "Hierarchy", it.hierarchy());
         }
     }
 
