@@ -1,7 +1,14 @@
 
 package org.eclipse.daanse.xmla.server.jakarta.saaj;
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Optional;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -16,6 +23,7 @@ import org.osgi.service.servlet.whiteboard.propertytypes.HttpWhiteboardServletPa
 import jakarta.servlet.Servlet;
 import jakarta.xml.soap.MimeHeaders;
 import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPMessage;
 
@@ -23,46 +31,57 @@ import jakarta.xml.soap.SOAPMessage;
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 public class XmlaServlet extends AbstractSAAJServlet {
 
-    private XmlaApiAdapter wsAdapter;
+	private XmlaApiAdapter wsAdapter;
 
-    @Reference
-    private XmlaService xmlaService;
+	@Reference
+	private XmlaService xmlaService;
 
-    @Activate
-    public void activate() {
-        wsAdapter = new XmlaApiAdapter(xmlaService);
-    }
+	@Activate
+	public void activate() {
+		wsAdapter = new XmlaApiAdapter(xmlaService);
+	}
 
-    @Override
-    public SOAPMessage onMessage(SOAPMessage soapMessage) {
-        System.out.println("On message call");
-        try {
+	@Override
+	public SOAPMessage onMessage(SOAPMessage soapMessage) {
+		System.out.println("On message call");
+		try {
 
-            System.out.println("> Message IN:");
-            soapMessage.writeTo(System.out);
+			System.out.println("> Message IN:");
+			prettyPrint(soapMessage, System.out);
 
-            SOAPHeader header = soapMessage.getSOAPHeader();
-            SOAPBody body = soapMessage.getSOAPBody();
+			SOAPHeader header = soapMessage.getSOAPHeader();
+			SOAPBody body = soapMessage.getSOAPBody();
 
-            MimeHeaders m = soapMessage.getMimeHeaders();
-            String[] s = m.getHeader("User-agent");
+			MimeHeaders m = soapMessage.getMimeHeaders();
+			String[] s = m.getHeader("User-agent");
 
-            Optional<String> oUserAgent = Optional.empty();
-            if (s != null && s.length > 0) {
-                oUserAgent = Optional.of(s[0]);
-            }
+			Optional<String> oUserAgent = Optional.empty();
+			if (s != null && s.length > 0) {
+				oUserAgent = Optional.of(s[0]);
+			}
 
-            RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
+			RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
 
 			SOAPMessage returnMessage = wsAdapter.handleRequest(soapMessage, metaData);
 			System.out.println("< Message OUT:");
-			returnMessage.writeTo(System.out);
+
+			prettyPrint(returnMessage, System.out);
 			return returnMessage;
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	private static void prettyPrint(SOAPMessage msg, PrintStream printStream) throws IOException, SOAPException {
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(msg.getSOAPPart().getContent(), new StreamResult(printStream));
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg.writeTo(System.out);
+		}
+	}
 }
