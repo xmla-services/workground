@@ -23,44 +23,46 @@ import jakarta.xml.soap.SOAPMessage;
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 public class XmlaServlet extends AbstractSAAJServlet {
 
-	private XmlaApiAdapter wsAdapter;
+    private XmlaApiAdapter wsAdapter;
 
-	@Reference
-	private XmlaService xmlaService;
+    @Reference
+    private XmlaService xmlaService;
 
-	@Activate
-	public void activate() {
-		wsAdapter = new XmlaApiAdapter(xmlaService);
-	}
+    @Activate
+    public void activate() {
+        wsAdapter = new XmlaApiAdapter(xmlaService);
+    }
 
-	@Override
-	public SOAPMessage onMessage(SOAPMessage message) {
-		System.out.println("On message call");
-		try {
-			System.out.println("> Message IN:");
-			message.writeTo(System.out);
+    @Override
+    public SOAPMessage onMessage(SOAPMessage soapMessage) {
+        System.out.println("On message call");
+        try {
 
-			SOAPHeader header = message.getSOAPHeader();
-			SOAPBody body = message.getSOAPBody();
+            System.out.println("> Message IN:");
+            soapMessage.writeTo(System.out);
 
-			MimeHeaders m = message.getMimeHeaders();
-			String[] s = m.getHeader("User-agent");
+            SOAPHeader header = soapMessage.getSOAPHeader();
+            SOAPBody body = soapMessage.getSOAPBody();
 
-			Optional<String> oUserAgent = Optional.empty();
-			if (s != null && s.length > 0) {
-				oUserAgent = Optional.of(s[0]);
-			}
+            MimeHeaders m = soapMessage.getMimeHeaders();
+            String[] s = m.getHeader("User-agent");
 
-			RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
+            Optional<String> oUserAgent = Optional.empty();
+            if (s != null && s.length > 0) {
+                oUserAgent = Optional.of(s[0]);
+            }
 
-			SOAPMessage returnMessage = wsAdapter.handleRequest(message, metaData);
+            RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
+
+			SOAPMessage returnMessage = wsAdapter.handleRequest(soapMessage, metaData);
 			System.out.println("< Message OUT:");
 			returnMessage.writeTo(System.out);
 			return returnMessage;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
