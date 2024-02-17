@@ -8,25 +8,57 @@ public class Constants {
         // constructor
     }
 
-    private static final String URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS = "urn:schemas-microsoft-com:xml-analysis";
+    // XMLA
 
-    public static final QName QNAME_MSXMLA_DISCOVER = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "Discover");
-    public static final QName QNAME_MSXMLA_REQUESTTYPE = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "RequestType");
-    public static final QName QNAME_MSXMLA_RESTRICTIONS = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "Restrictions");
-    public static final QName QNAME_MSXMLA_RESTRICTIONLIST = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "RestrictionList");
-    public static final QName QNAME_MSXMLA_PROPERTIES = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "Properties");
-    public static final QName QNAME_MSXMLA_PROPERTYLIST = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "PropertyList");
-    public static final QName QNAME_MSXMLA_EXECUTE = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "Execute");
+    static class MSXMLA {
 
-    public static final QName QNAME_MSXMLA_COMMAND = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
-        "Command");
+        public static final String PREFIX = "msxmla";
+        public static final String NS_URN = "urn:schemas-microsoft-com:xml-analysis";
+
+        public static final QName QN_COMMAND = new QName(NS_URN, "Command", PREFIX);
+        public static final QName QN_DISCOVER = new QName(NS_URN, "Discover", PREFIX);
+        public static final QName QN_DISCOVER_RESPONSE = new QName(NS_URN, "DiscoverResponse", PREFIX);
+        public static final QName QN_EXECUTE = new QName(NS_URN, "Execute", PREFIX);
+        public static final QName QN_EXECUTE_RESPONSE = new QName(NS_URN, "ExecuteResponse", PREFIX);
+        public static final QName QN_PROPERTIES = new QName(NS_URN, "Properties", PREFIX);
+        public static final QName QN_PROPERTY_LIST = new QName(NS_URN, "PropertyList", PREFIX);
+        public static final QName QN_RESTRICTIONS = new QName(NS_URN, "Restrictions", PREFIX);
+        public static final QName QN_RESTRICTION_LIST = new QName(NS_URN, "RestrictionList", PREFIX);
+        public static final QName QN_RETURN = new QName(NS_URN, "return", PREFIX);
+        public static final QName QN_REQUEST_TYPE = new QName(NS_URN, "RequestType", PREFIX);
+
+    }
+
+    /////
+    static class EMPTY {
+
+        public static final String PREFIX = "empty";
+
+        public static final String EMPTY_NS_URN = "";
+
+        public static final QName QN_ROOT = new QName(EMPTY_NS_URN, "root", EMPTY.PREFIX);
+    }
+
+    /////
+    static class ROWSET {
+
+        public static final String PREFIX = "rowset";
+        public static final String NS_URN = "";
+        public static final QName QN_ROOT = new QName(ROWSET.NS_URN, "root", ROWSET.PREFIX);
+
+        public static final QName QN_ROW = new QName(ROWSET.NS_URN, "row", ROWSET.PREFIX);
+    }
+    /////
+
+    static class MDDATASET {
+        public static final String PREFIX = "mddataset";
+        public static final String NS_URN = "";
+        public static final QName QN_CELL_INFO = new QName(MDDATASET.NS_URN, "CellInfo", MDDATASET.PREFIX);
+
+        public static final QName QN_OLAP_INFO = new QName(MDDATASET.NS_URN, "OlapInfo", MDDATASET.PREFIX);
+public static final QName QN_ROOT = new QName(MDDATASET.NS_URN, "root", MDDATASET.PREFIX);
+    }
+    ///////////////////////////
 
     public static final String DISPLAY_FOLDER = "DisplayFolder";
     public static final String DIMENSIONS = "Dimensions";
@@ -63,7 +95,7 @@ public class Constants {
     public static final String HIERARCHY = "Hierarchy";
     public static final String ATTRIBUTE = "Attribute";
     public static final String ACTION = "Action";
-    public static final String ROW = "row";
+//    public static final String ROW = "row";
     public static final String ROLE_ID = "RoleID";
     public static final String RESTRICTION_LIST = "RestrictionList";
     public static final String REFRESH_INTERVAL = "RefreshInterval";

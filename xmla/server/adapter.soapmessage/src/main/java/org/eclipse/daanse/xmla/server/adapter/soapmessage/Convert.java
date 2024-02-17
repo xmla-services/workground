@@ -348,7 +348,7 @@ public class Convert {
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             if (node instanceof SOAPElement propertyList
-                && Constants.QNAME_MSXMLA_PROPERTYLIST.equals(propertyList.getElementQName())) {
+                && Constants.MSXMLA.QN_PROPERTY_LIST.equals(propertyList.getElementQName())) {
                 return propertyListToProperties(propertyList);
             }
 

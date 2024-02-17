@@ -226,7 +226,7 @@ public class XmlaApiAdapter {
         return null;
     }
 
-    private void handleBody(SOAPBody body, SOAPBody responseBody,RequestMetaData metaData) {
+    private void handleBody(SOAPBody body, SOAPBody responseBody,RequestMetaData metaData) throws SOAPException {
         SOAPElement node = null;
 
         Iterator<Node> nodeIterator = body.getChildElements();
@@ -241,18 +241,18 @@ public class XmlaApiAdapter {
             printNode(node);
         }
 
-        if (node != null && Constants.QNAME_MSXMLA_DISCOVER.equals(node.getElementQName())) {
+        if (node != null && Constants.MSXMLA.QN_DISCOVER.equals(node.getElementQName())) {
 
             discover(node, responseBody,metaData);
 
         }
-        if (node != null && Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
+        if (node != null && Constants.MSXMLA.QN_EXECUTE.equals(node.getElementQName())) {
             execute(node, responseBody);
         }
 
     }
 
-    private void discover(SOAPElement discover, SOAPBody responseBody,RequestMetaData metaData) {
+    private void discover(SOAPElement discover, SOAPBody responseBody,RequestMetaData metaData) throws SOAPException {
 
         String requestType = null;
         PropertiesR properties = null;
@@ -262,15 +262,15 @@ public class XmlaApiAdapter {
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             if (node instanceof SOAPElement element) {
-                if (requestType == null && Constants.QNAME_MSXMLA_REQUESTTYPE.equals(element.getElementQName())) {
+                if (requestType == null && Constants.MSXMLA.QN_REQUEST_TYPE.equals(element.getElementQName())) {
                     requestType = element.getTextContent();
                     continue;
                 }
-                if (restictions == null && Constants.QNAME_MSXMLA_RESTRICTIONS.equals(element.getElementQName())) {
+                if (restictions == null && Constants.MSXMLA.QN_RESTRICTIONS.equals(element.getElementQName())) {
                     restictions = element;
                     continue;
                 }
-                if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
+                if (properties == null && Constants.MSXMLA.QN_PROPERTIES.equals(element.getElementQName())) {
                     properties = Convert.propertiestoProperties(element);
                 }
             }
@@ -279,7 +279,7 @@ public class XmlaApiAdapter {
         discover(requestType, metaData,properties, restictions, responseBody);
     }
 
-    private void execute(SOAPElement discover, SOAPBody responseBody) {
+    private void execute(SOAPElement discover, SOAPBody responseBody) throws SOAPException {
 
         Command command = null;
         PropertiesR properties = null;
@@ -289,10 +289,10 @@ public class XmlaApiAdapter {
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             if (node instanceof SOAPElement element) {
-                if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
+                if (properties == null && Constants.MSXMLA.QN_PROPERTIES.equals(element.getElementQName())) {
                     properties = Convert.propertiestoProperties(element);
                 }
-                if (command == null && Constants.QNAME_MSXMLA_COMMAND.equals(element.getElementQName())) {
+                if (command == null && Constants.MSXMLA.QN_COMMAND.equals(element.getElementQName())) {
                     command = Convert.commandtoCommand(element);
                 }
             }
@@ -317,7 +317,7 @@ public class XmlaApiAdapter {
     private void execute(Command command,
                              PropertiesR properties,
                              List<ExecuteParameter> parameters,
-                             SOAPBody responseBody) {
+                             SOAPBody responseBody) throws SOAPException {
 
         if (command instanceof StatementR statement) {
             handleStatement(statement, properties, parameters, responseBody);
@@ -337,7 +337,7 @@ public class XmlaApiAdapter {
     						  RequestMetaData metaData,
                               PropertiesR properties,
                               SOAPElement restrictionElement,
-                              SOAPBody responseBody) {
+                              SOAPBody responseBody) throws SOAPException {
 
         switch (requestType) {
             case MDSCHEMA_FUNCTIONS -> handleMdSchemaFunctions(properties, restrictionElement, responseBody);
@@ -372,7 +372,7 @@ public class XmlaApiAdapter {
         }
     }
 
-    private void handleMdSchemaMeasureGroups(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaMeasureGroups(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaMeasureGroupsRestrictionsR restrictionsR = Convert.discoverMdSchemaMeasureGroups(restrictionElement);
         MdSchemaMeasureGroupsRequest request = new MdSchemaMeasureGroupsRequestR(propertiesR, restrictionsR);
         List<MdSchemaMeasureGroupsResponseRow> rows = xmlaService.discover()
@@ -381,7 +381,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaMeasureGroups(rows, body);
     }
 
-    private void handleMdSchemaKpis(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaKpis(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaKpisRestrictionsR restrictionsR = Convert.discoverMdSchemaKpisRestrictions(restrictionElement);
         MdSchemaKpisRequest request = new MdSchemaKpisRequestR(propertiesR, restrictionsR);
         List<MdSchemaKpisResponseRow> rows = xmlaService.discover()
@@ -390,7 +390,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaKpis(rows, body);
     }
 
-    private void handleMdSchemaSets(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaSets(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaSetsRestrictionsR restrictionsR = Convert.discoverMdSchemaSetsRestrictions(restrictionElement);
         MdSchemaSetsRequest request = new MdSchemaSetsRequestR(propertiesR, restrictionsR);
         List<MdSchemaSetsResponseRow> rows = xmlaService.discover()
@@ -399,7 +399,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaSets(rows, body);
     }
 
-    private void handleMdSchemaProperties(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaProperties(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaPropertiesRestrictionsR restrictionsR = Convert.discoverMdSchemaPropertiesRestrictions(restrictionElement);
         MdSchemaPropertiesRequest request = new MdSchemaPropertiesRequestR(propertiesR, restrictionsR);
         List<MdSchemaPropertiesResponseRow> rows = xmlaService.discover()
@@ -409,7 +409,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleMdSchemaMembers(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaMembers(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaMembersRestrictionsR restrictionsR = Convert.discoverMdSchemaMembersRestrictions(restrictionElement);
         MdSchemaMembersRequest request = new MdSchemaMembersRequestR(propertiesR, restrictionsR);
         List<MdSchemaMembersResponseRow> rows = xmlaService.discover()
@@ -419,7 +419,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleMdSchemaMeasures(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaMeasures(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaMeasuresRestrictionsR restrictionsR = Convert.discoverMdSchemaMeasuresRestrictions(restrictionElement);
         MdSchemaMeasuresRequest request = new MdSchemaMeasuresRequestR(propertiesR, restrictionsR);
         List<MdSchemaMeasuresResponseRow> rows = xmlaService.discover()
@@ -429,7 +429,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleMdSchemaMeasureGroupDimensions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaMeasureGroupDimensions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaMeasureGroupDimensionsRestrictionsR restrictionsR = Convert.discoverMdSchemaMeasureGroupDimensionsRestrictions(restrictionElement);
         MdSchemaMeasureGroupDimensionsRequest request = new MdSchemaMeasureGroupDimensionsRequestR(propertiesR, restrictionsR);
         List<MdSchemaMeasureGroupDimensionsResponseRow> rows = xmlaService.discover()
@@ -439,7 +439,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleMdSchemaLevels(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaLevels(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaLevelsRestrictionsR restrictionsR = Convert.discoverMdSchemaLevelsRestrictions(restrictionElement);
         MdSchemaLevelsRequest request = new MdSchemaLevelsRequestR(propertiesR, restrictionsR);
         List<MdSchemaLevelsResponseRow> rows = xmlaService.discover()
@@ -448,7 +448,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaLevels(rows, body);
     }
 
-    private void handleMdSchemaHierarchies(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaHierarchies(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaHierarchiesRestrictionsR restrictionsR = Convert.discoverMdSchemaHierarchiesRestrictions(restrictionElement);
         MdSchemaHierarchiesRequest request = new MdSchemaHierarchiesRequestR(propertiesR, restrictionsR);
         List<MdSchemaHierarchiesResponseRow> rows = xmlaService.discover()
@@ -457,7 +457,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaHierarchies(rows, body);
     }
 
-    private void handleDbSchemaTablesInfo(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaTablesInfo(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaTablesInfoRestrictionsR restrictionsR = Convert.discoverDbSchemaTablesInfo(restrictionElement);
         DbSchemaTablesInfoRequest request = new DbSchemaTablesInfoRequestR(propertiesR, restrictionsR);
         List<DbSchemaTablesInfoResponseRow> rows = xmlaService.discover()
@@ -467,7 +467,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaSourceTables(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaSourceTables(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaSourceTablesRestrictionsR restrictionsR = Convert.discoverDbSchemaSourceTablesRestrictions(restrictionElement);
         DbSchemaSourceTablesRequest request = new DbSchemaSourceTablesRequestR(propertiesR, restrictionsR);
         List<DbSchemaSourceTablesResponseRow> rows = xmlaService.discover()
@@ -477,7 +477,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaSchemata(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaSchemata(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaSchemataRestrictionsR restrictionsR = Convert.discoverDbSchemaSchemataRestrictions(restrictionElement);
         DbSchemaSchemataRequest request = new DbSchemaSchemataRequestR(propertiesR, restrictionsR);
         List<DbSchemaSchemataResponseRow> rows = xmlaService.discover()
@@ -487,7 +487,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaProviderTypes(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaProviderTypes(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaProviderTypesRestrictionsR restrictionsR = Convert.discoverDbSchemaProviderTypesRestrictions(restrictionElement);
         DbSchemaProviderTypesRequest request = new DbSchemaProviderTypesRequestR(propertiesR, restrictionsR);
         List<DbSchemaProviderTypesResponseRow> rows = xmlaService.discover()
@@ -497,7 +497,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaColumns(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaColumns(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaColumnsRestrictionsR restrictionsR = Convert.discoverDbSchemaColumnsRestrictions(restrictionElement);
         DbSchemaColumnsRequest request = new DbSchemaColumnsRequestR(propertiesR, restrictionsR);
         List<DbSchemaColumnsResponseRow> rows = xmlaService.discover()
@@ -507,7 +507,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverXmlMetaData(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverXmlMetaData(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverXmlMetaDataRestrictionsR restrictionsR = Convert.discoverDiscoverXmlMetaDataRestrictions(restrictionElement);
         DiscoverXmlMetaDataRequest request = new DiscoverXmlMetaDataRequestR(propertiesR, restrictionsR);
         List<DiscoverXmlMetaDataResponseRow> rows = xmlaService.discover()
@@ -517,7 +517,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverDataSources(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverDataSources(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverDataSourcesRestrictionsR restrictionsR = Convert.discoverDiscoverDataSourcesRestrictions(restrictionElement);
         DiscoverDataSourcesRequest request = new DiscoverDataSourcesRequestR(propertiesR, restrictionsR);
         List<DiscoverDataSourcesResponseRow> rows = xmlaService.discover()
@@ -527,7 +527,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaCatalogs(PropertiesR propertiesR,RequestMetaData metaData, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaCatalogs(PropertiesR propertiesR,RequestMetaData metaData, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaCatalogsRestrictionsR restrictionsR = Convert.discoverDbSchemaCatalogsRestrictions(restrictionElement);
         DbSchemaCatalogsRequest request = new DbSchemaCatalogsRequestR(propertiesR, restrictionsR);
         List<DbSchemaCatalogsResponseRow> rows = xmlaService.discover()
@@ -537,7 +537,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverSchemaRowsets(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverSchemaRowsets(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverSchemaRowsetsRestrictionsR restrictionsR = Convert.discoverSchemaRowsetsRestrictions(restrictionElement);
         DiscoverSchemaRowsetsRequest request = new DiscoverSchemaRowsetsRequestR(propertiesR, restrictionsR);
         List<DiscoverSchemaRowsetsResponseRow> rows = xmlaService.discover()
@@ -547,7 +547,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverEnumerators(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverEnumerators(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverEnumeratorsRestrictionsR restrictionsR = Convert.discoverDiscoverEnumerators(restrictionElement);
         DiscoverEnumeratorsRequest request = new DiscoverEnumeratorsRequestR(propertiesR, restrictionsR);
         List<DiscoverEnumeratorsResponseRow> rows = xmlaService.discover()
@@ -557,7 +557,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverKeywords(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverKeywords(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverKeywordsRestrictionsR restrictionsR = Convert.discoverKeywordsRestrictions(restrictionElement);
         DiscoverKeywordsRequest request = new DiscoverKeywordsRequestR(propertiesR, restrictionsR);
         List<DiscoverKeywordsResponseRow> rows = xmlaService.discover()
@@ -567,7 +567,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDiscoverLiterals(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverLiterals(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DiscoverLiteralsRestrictionsR restrictionsR = Convert.discoverLiteralsRestrictions(restrictionElement);
         DiscoverLiteralsRequest request = new DiscoverLiteralsRequestR(propertiesR, restrictionsR);
         List<DiscoverLiteralsResponseRow> rows = xmlaService.discover()
@@ -577,7 +577,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleDbSchemaTables(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDbSchemaTables(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         DbSchemaTablesRestrictionsR restrictionsR = Convert.discoverDbSchemaTablesRestrictions(restrictionElement);
         DbSchemaTablesRequest request = new DbSchemaTablesRequestR(propertiesR, restrictionsR);
         List<DbSchemaTablesResponseRow> rows = xmlaService.discover()
@@ -587,7 +587,7 @@ public class XmlaApiAdapter {
 
     }
 
-    private void handleMdSchemaActions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaActions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaActionsRestrictionsR restrictionsR = Convert.discoverMdSchemaActionsRestrictions(restrictionElement);
         MdSchemaActionsRequest request = new MdSchemaActionsRequestR(propertiesR, restrictionsR);
         List<MdSchemaActionsResponseRow> rows = xmlaService.discover()
@@ -596,7 +596,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaActions(rows, body);
     }
 
-    private void handleMdSchemaCubes(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaCubes(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaCubesRestrictionsR restrictionsR = Convert.discoverMdSchemaCubesRestrictions(restrictionElement);
         MdSchemaCubesRequest request = new MdSchemaCubesRequestR(propertiesR, restrictionsR);
         List<MdSchemaCubesResponseRow> rows = xmlaService.discover()
@@ -605,7 +605,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaCubes(rows, body);
     }
 
-    private  void handleMdSchemaDimensions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private  void handleMdSchemaDimensions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
         MdSchemaDimensionsRestrictionsR restrictionsR = Convert.discoverMdSchemaDimensionsRestrictions(restrictionElement);
         MdSchemaDimensionsRequest request = new MdSchemaDimensionsRequestR(propertiesR, restrictionsR);
         List<MdSchemaDimensionsResponseRow> rows = xmlaService.discover()
@@ -614,7 +614,7 @@ public class XmlaApiAdapter {
         SoapUtil.toMdSchemaDimensions(rows, body);
     }
 
-    private void handleDiscoverProperties(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleDiscoverProperties(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
 
         DiscoverPropertiesRestrictionsR restrictionsR = Convert.discoverPropertiesRestrictions(restrictionElement);
         DiscoverPropertiesRequest request = new DiscoverPropertiesRequestR(propertiesR, restrictionsR);
@@ -624,7 +624,7 @@ public class XmlaApiAdapter {
         SoapUtil.toDiscoverProperties(rows, body);
     }
 
-    private void handleMdSchemaFunctions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body) {
+    private void handleMdSchemaFunctions(PropertiesR propertiesR, SOAPElement restrictionElement, SOAPBody body)  throws SOAPException {
 
         MdSchemaFunctionsRestrictionsR restrictionsR = Convert.discoverMdSchemaFunctionsRestrictions(restrictionElement);
         MdSchemaFunctionsRequest request = new MdSchemaFunctionsRequestR(propertiesR, restrictionsR);
@@ -637,7 +637,7 @@ public class XmlaApiAdapter {
     private void handleStatement(StatementR statement,
                                      PropertiesR properties,
                                      List<ExecuteParameter> parameters,
-                                     SOAPBody responseBody) {
+                                     SOAPBody responseBody)  throws SOAPException {
         StatementRequest statementRequest = new StatementRequestR(properties,
             parameters,
             statement, null);
@@ -648,7 +648,7 @@ public class XmlaApiAdapter {
     private void handleAlter(AlterR alter,
                                  PropertiesR properties,
                                  List<ExecuteParameter> parameters,
-                                 SOAPBody responseBody) {
+                                 SOAPBody responseBody)  throws SOAPException {
         AlterRequest alterRequest = new AlterRequestR(properties,
             parameters,
             alter);
@@ -656,7 +656,7 @@ public class XmlaApiAdapter {
         SoapUtil.toAlterResponse(alterResponse, responseBody);
     }
 
-    private void handleClearCache(ClearCacheR clearCache, PropertiesR properties, List<ExecuteParameter> parameters, SOAPBody responseBody) {
+    private void handleClearCache(ClearCacheR clearCache, PropertiesR properties, List<ExecuteParameter> parameters, SOAPBody responseBody)  throws SOAPException {
         ClearCacheRequest clearCacheRequest = new ClearCacheRequestR(properties,
             parameters,
             clearCache);
@@ -664,7 +664,7 @@ public class XmlaApiAdapter {
         SoapUtil.toClearCacheResponse(clearCacheResponse, responseBody);
     }
 
-    private void handleCancel(CancelR cancel, PropertiesR properties, List<ExecuteParameter> parameters, SOAPBody responseBody) {
+    private void handleCancel(CancelR cancel, PropertiesR properties, List<ExecuteParameter> parameters, SOAPBody responseBody) throws SOAPException {
         CancelRequest cancelRequest = new CancelRequestR(properties,
             parameters,
             cancel);

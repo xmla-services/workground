@@ -13,9 +13,34 @@
  */
 package org.eclipse.daanse.xmla.server.adapter.soapmessage;
 
-import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPElement;
-import jakarta.xml.soap.SOAPException;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CATALOG_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CUBE_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DATA_TYPE;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION_UC;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DIMENSION_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DIMENSION_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.EXPRESSION_UC;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.LEVEL_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.MEASUREGROUP_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_PRECISION;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_SCALE;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCHEMA_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCOPE;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_CATALOG;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_NAME;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_SCHEMA;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_TYPE;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
@@ -94,239 +119,277 @@ import org.eclipse.daanse.xmla.api.xmla.Restriction;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CATALOG_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CUBE_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DATA_TYPE;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION_UC;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DIMENSION_IS_VISIBLE;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DIMENSION_UNIQUE_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.EXPRESSION_UC;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.LEVEL_UNIQUE_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.MEASUREGROUP_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_PRECISION;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_SCALE;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.ROW;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCHEMA_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCOPE;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_CATALOG;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_SCHEMA;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_TYPE;
+import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPException;
 
 public class SoapUtil {
 
-	private static final String MSXMLA = "msxmla";
-	private static final String EMPTY = "empty";
-    private static final String ROWSET = "rowset";
-    private static final String MDDATASET = "mddataset";
-	private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
 
     private SoapUtil() {
-        //constructor
+        // constructor
     }
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
             .withZone(ZoneId.systemDefault());
 
-    public static void toMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addMdSchemaFunctionsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaFunctionsResponseRow(root, r)
-        );
+
+        for (MdSchemaFunctionsResponseRow mdSchemaFunctionsResponseRow : rows) {
+            addMdSchemaFunctionsResponseRow(root, mdSchemaFunctionsResponseRow);
+
+        }
+
     }
 
-    public static void toMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addMdSchemaDimensionsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaDimensionsResponseRow(root, r)
-        );
+
+        for (MdSchemaDimensionsResponseRow mdSchemaDimensionsResponseRow : rows) {
+            addMdSchemaDimensionsResponseRow(root, mdSchemaDimensionsResponseRow);
+
+        }
+
     }
 
-    public static void toDiscoverProperties(List<DiscoverPropertiesResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverProperties(List<DiscoverPropertiesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDiscoverPropertiesRoot(body);
-        rows.forEach(r ->
-            addDiscoverPropertiesResponseRow(root, r)
-        );
+
+        for (DiscoverPropertiesResponseRow discoverPropertiesResponseRow : rows) {
+
+            addDiscoverPropertiesResponseRow(root, discoverPropertiesResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaCubes(List<MdSchemaCubesResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaCubes(List<MdSchemaCubesResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaCubesRoot(body);
-        rows.forEach(r ->
-            addMdSchemaCubesResponseRow(root, r)
-        );
+        for (MdSchemaCubesResponseRow mdSchemaCubesResponseRow : rows) {
+            addMdSchemaCubesResponseRow(root, mdSchemaCubesResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addMdSchemaMeasureGroupsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasureGroupsResponseRow(root, r)
-        );
+        for (MdSchemaMeasureGroupsResponseRow mdSchemaMeasureGroupsResponseRow : rows) {
+            addMdSchemaMeasureGroupsResponseRow(root, mdSchemaMeasureGroupsResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaKpis(List<MdSchemaKpisResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaKpis(List<MdSchemaKpisResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDiscoverPropertiesRoot(body);
-        rows.forEach(r ->
-            addMdSchemaKpisResponseRow(root, r)
-        );
+
+        for (MdSchemaKpisResponseRow mdSchemaKpisResponseRow : rows) {
+            addMdSchemaKpisResponseRow(root, mdSchemaKpisResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaSets(List<MdSchemaSetsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaSets(List<MdSchemaSetsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDiscoverPropertiesRoot(body);
-        rows.forEach(r ->
-            addMdSchemaSetsResponseRow(root, r)
-        );
+
+        for (MdSchemaSetsResponseRow mdSchemaSetsResponseRow : rows) {
+            addMdSchemaSetsResponseRow(root, mdSchemaSetsResponseRow);
+        }
+
     }
-    public static void toMdSchemaProperties(List<MdSchemaPropertiesResponseRow> rows, SOAPBody body) {
+
+    public static void toMdSchemaProperties(List<MdSchemaPropertiesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addMdSchemaPropertiesRoot(body);
-        rows.forEach(r ->
-            addMdSchemaPropertiesResponseRow(root, r)
-        );
+        for (MdSchemaPropertiesResponseRow mdSchemaPropertiesResponseRow : rows) {
+            addMdSchemaPropertiesResponseRow(root, mdSchemaPropertiesResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaMembers(List<MdSchemaMembersResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaMembers(List<MdSchemaMembersResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaMembersRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMembersResponseRow(root, r)
-        );
+
+        for (MdSchemaMembersResponseRow mdSchemaMembersResponseRow : rows) {
+            addMdSchemaMembersResponseRow(root, mdSchemaMembersResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaMeasuresRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasuresResponseRow(root, r)
-        );
+
+        for (MdSchemaMeasuresResponseRow mdSchemaMeasuresResponseRow : rows) {
+            addMdSchemaMeasuresResponseRow(root, mdSchemaMeasuresResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaMeasureGroupDimensions(List<MdSchemaMeasureGroupDimensionsResponseRow> rows
-        , SOAPBody body) {
+    public static void toMdSchemaMeasureGroupDimensions(List<MdSchemaMeasureGroupDimensionsResponseRow> rows,
+            SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaMeasureGroupDimensionsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasureGroupDimensionsResponseRow(root, r)
-        );
+
+        for (MdSchemaMeasureGroupDimensionsResponseRow mdSchemaMeasureGroupDimensionsResponseRow : rows) {
+            addMdSchemaMeasureGroupDimensionsResponseRow(root, mdSchemaMeasureGroupDimensionsResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaLevels(List<MdSchemaLevelsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaLevels(List<MdSchemaLevelsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaLevelsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaLevelsResponseRow(root, r)
-        );
+
+        for (MdSchemaLevelsResponseRow mdSchemaLevelsResponseRow : rows) {
+            addMdSchemaLevelsResponseRow(root, mdSchemaLevelsResponseRow);
+        }
+
     }
 
-    public static void toMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addMdSchemaHierarchiesRoot(body);
-        rows.forEach(r ->
-            addMdSchemaHierarchiesResponseRow(root, r)
-        );
+
+        for (MdSchemaHierarchiesResponseRow mdSchemaHierarchiesResponseRow : rows) {
+            addMdSchemaHierarchiesResponseRow(root, mdSchemaHierarchiesResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDbSchemaTablesInfoRoot(body);
-        rows.forEach(r ->
-            addDbSchemaTablesInfoResponseRow(root, r)
-        );
+
+        for (DbSchemaTablesInfoResponseRow dbSchemaTablesInfoResponseRow : rows) {
+            addDbSchemaTablesInfoResponseRow(root, dbSchemaTablesInfoResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDbSchemaSourceTablesRoot(body);
-        rows.forEach(r ->
-            addDbSchemaSourceTablesResponseRow(root, r)
-        );
+
+        for (DbSchemaSourceTablesResponseRow dbSchemaSourceTablesResponseRow : rows) {
+            addDbSchemaSourceTablesResponseRow(root, dbSchemaSourceTablesResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaSchemata(List<DbSchemaSchemataResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaSchemata(List<DbSchemaSchemataResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDbSchemaSchemataRoot(body);
-        rows.forEach(r ->
-            addDbSchemaSchemataResponseRow(root, r)
-        );
+        for (DbSchemaSchemataResponseRow dbSchemaSchemataResponseRow : rows) {
+            addDbSchemaSchemataResponseRow(root, dbSchemaSchemataResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDbSchemaProviderTypesRoot(body);
-        rows.forEach(r ->
-            addDbSchemaProviderTypesResponseRow(root, r)
-        );
+
+        for (DbSchemaProviderTypesResponseRow dbSchemaProviderTypesResponseRow : rows) {
+            addDbSchemaProviderTypesResponseRow(root, dbSchemaProviderTypesResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaColumns(List<DbSchemaColumnsResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaColumns(List<DbSchemaColumnsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDbSchemaColumnsRoot(body);
-        rows.forEach(r ->
-            addDbSchemaColumnsResponseRow(root, r)
-        );
+
+        for (DbSchemaColumnsResponseRow dbSchemaColumnsResponseRow : rows) {
+            addDbSchemaColumnsResponseRow(root, dbSchemaColumnsResponseRow);
+        }
+
     }
 
-    public static void toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDiscoverXmlMetaDataRoot(body);
-        rows.forEach(r ->
-            addDiscoverXmlMetaDataResponseRow(root, r)
-        );
+
+        for (DiscoverXmlMetaDataResponseRow discoverXmlMetaDataResponseRow : rows) {
+            addDiscoverXmlMetaDataResponseRow(root, discoverXmlMetaDataResponseRow);
+        }
+
     }
 
-    public static void toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDiscoverDataSourcesRoot(body);
-        rows.forEach(r ->
-            addDiscoverDataSourcesResponseRow(root, r)
-        );
+
+        for (DiscoverDataSourcesResponseRow discoverDataSourcesResponseRow : rows) {
+            addDiscoverDataSourcesResponseRow(root, discoverDataSourcesResponseRow);
+        }
+
     }
 
-    public static void toDbSchemaCatalogs(List<DbSchemaCatalogsResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaCatalogs(List<DbSchemaCatalogsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDbSchemaCatalogsRoot(body);
-        rows.forEach(r ->
-            addDbSchemaCatalogsResponseRow(root, r)
-        );
+
+        for (DbSchemaCatalogsResponseRow dbSchemaCatalogsResponseRow : rows) {
+            addDbSchemaCatalogsResponseRow(root, dbSchemaCatalogsResponseRow);
+        }
+
     }
 
-    public static void toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDiscoverRowSetsRoot(body);
-        rows.forEach(r ->
-            addDiscoverSchemaRowsetsResponseRow(root, r)
-        );
+
+        for (DiscoverSchemaRowsetsResponseRow discoverSchemaRowsetsResponseRow : rows) {
+            addDiscoverSchemaRowsetsResponseRow(root, discoverSchemaRowsetsResponseRow);
+        }
+
     }
 
-    public static void toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> rows, SOAPBody body)
+            throws SOAPException {
         SOAPElement root = addDiscoverEnumeratorsRoot(body);
-        rows.forEach(r ->
-            addDiscoverEnumeratorsResponseRow(root, r)
-        );
+
+        for (DiscoverEnumeratorsResponseRow discoverEnumeratorsResponseRow : rows) {
+            addDiscoverEnumeratorsResponseRow(root, discoverEnumeratorsResponseRow);
+        }
+
     }
 
-    public static void toDiscoverKeywords(List<DiscoverKeywordsResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverKeywords(List<DiscoverKeywordsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDiscoverKeywordsRoot(body);
-        rows.forEach(r ->
-            addDiscoverKeywordsResponseRow(root, r)
-        );
+
+        for (DiscoverKeywordsResponseRow discoverKeywordsResponseRow : rows) {
+            addDiscoverKeywordsResponseRow(root, discoverKeywordsResponseRow);
+        }
     }
 
-    public static void toDiscoverLiterals(List<DiscoverLiteralsResponseRow> rows, SOAPBody body) {
+    public static void toDiscoverLiterals(List<DiscoverLiteralsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDiscoverLiteralsRoot(body);
-        rows.forEach(r ->
-            addDiscoverLiteralsResponseRow(root, r)
-        );
+
+        for (DiscoverLiteralsResponseRow discoverLiteralsResponseRow : rows) {
+            addDiscoverLiteralsResponseRow(root, discoverLiteralsResponseRow);
+        }
     }
 
-    public static void toDbSchemaTables(List<DbSchemaTablesResponseRow> rows, SOAPBody body) {
+    public static void toDbSchemaTables(List<DbSchemaTablesResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addDbSchemaTablesRoot(body);
-        rows.forEach(r ->
-            addDbSchemaTablesResponseRow(root, r)
-        );
+
+        for (DbSchemaTablesResponseRow dbSchemaTablesResponseRow : rows) {
+            addDbSchemaTablesResponseRow(root, dbSchemaTablesResponseRow);
+
+        }
 
     }
 
-    public static void toMdSchemaActions(List<MdSchemaActionsResponseRow> rows, SOAPBody body) {
+    public static void toMdSchemaActions(List<MdSchemaActionsResponseRow> rows, SOAPBody body) throws SOAPException {
         SOAPElement root = addMdSchemaActionsRoot(body);
-        rows.forEach(r ->
-            addMdSchemaActionsResponseRow(root, r)
-        );
+
+        for (MdSchemaActionsResponseRow mdSchemaActionsResponseRow : rows) {
+            addMdSchemaActionsResponseRow(root, mdSchemaActionsResponseRow);
+        }
     }
 
-    public static void toStatementResponse(StatementResponse statementResponse, SOAPBody body) {
+    public static void toStatementResponse(StatementResponse statementResponse, SOAPBody body) throws SOAPException {
         if (statementResponse.mdDataSet() != null) {
             SOAPElement root = addMddatasetRoot(body);
             if (statementResponse != null) {
@@ -335,8 +398,12 @@ public class SoapUtil {
         }
         if (statementResponse.rowSet() != null) {
             SOAPElement root = addRowSetRoot(body, statementResponse.rowSet());
-            if (statementResponse.rowSet().rowSetRows() != null) {
-                statementResponse.rowSet().rowSetRows().forEach(it -> addRowSetRow(root, it));
+            List<RowSetRow> rowSetRows = statementResponse.rowSet().rowSetRows();
+            if (rowSetRows != null) {
+
+                for (RowSetRow rowSetRow : rowSetRows) {
+                    addRowSetRow(root, rowSetRow);
+                }
             }
         }
         if (statementResponse.mdDataSet() == null && statementResponse.rowSet() == null) {
@@ -344,38 +411,36 @@ public class SoapUtil {
         }
     }
 
-
-    private static void addRowSetRow(SOAPElement e, RowSetRow it) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(e, ROW, prefix);
+    private static void addRowSetRow(SOAPElement e, RowSetRow it) throws SOAPException {
+        SOAPElement seRow = e.addChildElement(Constants.ROWSET.QN_ROW);
         if (it.rowSetRowItem() != null) {
-            it.rowSetRowItem().forEach(i -> addRowSetRowItem(row, i));
+            it.rowSetRowItem().forEach(i -> addRowSetRowItem(seRow, i));
         }
     }
 
     private static void addRowSetRowItem(SOAPElement e, RowSetRowItem it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, it.tagName(), ROWSET);
+            SOAPElement el = addChildElement(e, it.tagName(), Constants.ROWSET.PREFIX);
             el.setTextContent(it.value());
             it.type().ifPresent(v -> setAttribute(el, "type", v.getValue()));
         }
     }
 
-    public static void toAlterResponse(AlterResponse alterResponse, SOAPBody body) {
+    public static void toAlterResponse(AlterResponse alterResponse, SOAPBody body) throws SOAPException {
         SOAPElement root = addEmptyRoot(body);
         if (alterResponse != null) {
             addEmptyresult(root, alterResponse.emptyresult());
         }
     }
 
-    public static void toClearCacheResponse(ClearCacheResponse clearCacheResponse, SOAPBody body) {
+    public static void toClearCacheResponse(ClearCacheResponse clearCacheResponse, SOAPBody body) throws SOAPException {
         SOAPElement root = addEmptyRoot(body);
         if (clearCacheResponse != null) {
             addEmptyresult(root, clearCacheResponse.emptyresult());
         }
     }
 
-    public static void toCancelResponse(CancelResponse cancelResponse, SOAPBody body) {
+    public static void toCancelResponse(CancelResponse cancelResponse, SOAPBody body) throws SOAPException {
         SOAPElement root = addEmptyRoot(body);
         if (cancelResponse != null) {
             addEmptyresult(root, cancelResponse.emptyresult());
@@ -387,9 +452,12 @@ public class SoapUtil {
         addMessages(root, emptyresult.messages());
     }
 
-    private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r)
+            throws SOAPException {
+
+        String prefix = Constants.ROWSET.PREFIX;
+
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         addChildElement(row, CUBE_NAME, prefix, r.cubeName());
@@ -404,9 +472,10 @@ public class SoapUtil {
         r.invocation().ifPresent(v -> addChildElement(row, "INVOCATION", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addDbSchemaTablesResponseRow(SOAPElement root, DbSchemaTablesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaTablesResponseRow(SOAPElement root, DbSchemaTablesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.tableCatalog().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
         r.tableSchema().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
         r.tableName().ifPresent(v -> addChildElement(row, TABLE_NAME, prefix, v));
@@ -418,9 +487,10 @@ public class SoapUtil {
         r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", prefix, String.valueOf(v)));
     }
 
-    private static void addDiscoverLiteralsResponseRow(SOAPElement root, DiscoverLiteralsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverLiteralsResponseRow(SOAPElement root, DiscoverLiteralsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "LiteralName", prefix, r.literalName());
         addChildElement(row, "LiteralValue", prefix, r.literalValue());
         addChildElement(row, "LiteralInvalidChars", prefix, r.literalInvalidChars());
@@ -429,15 +499,17 @@ public class SoapUtil {
         addChildElement(row, "LiteralNameEnumValue", prefix, String.valueOf(r.literalNameEnumValue().getValue()));
     }
 
-    private static void addDiscoverKeywordsResponseRow(SOAPElement root, DiscoverKeywordsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverKeywordsResponseRow(SOAPElement root, DiscoverKeywordsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "Keyword", prefix, r.keyword());
     }
 
-    private static void addDiscoverEnumeratorsResponseRow(SOAPElement root, DiscoverEnumeratorsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverEnumeratorsResponseRow(SOAPElement root, DiscoverEnumeratorsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "EnumName", prefix, r.enumName());
         r.enumDescription().ifPresent(v -> addChildElement(row, "EnumDescription", prefix, v));
         addChildElement(row, "EnumType", prefix, r.enumType());
@@ -446,9 +518,10 @@ public class SoapUtil {
         r.elementValue().ifPresent(v -> addChildElement(row, "ElementValue", prefix, v));
     }
 
-    private static void addDiscoverSchemaRowsetsResponseRow(SOAPElement root, DiscoverSchemaRowsetsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverSchemaRowsetsResponseRow(SOAPElement root, DiscoverSchemaRowsetsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "SchemaName", prefix, r.schemaName());
         r.schemaGuid().ifPresent(v -> addChildElement(row, "SchemaGuid", prefix, v));
         r.restrictions().ifPresent(v -> addRestrictionList(row, v));
@@ -464,17 +537,18 @@ public class SoapUtil {
 
     private static void addRestriction(SOAPElement e, Restriction it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Restrictions", ROWSET);
-            SOAPElement name = addChildElement(el, "Name", ROWSET);
+            SOAPElement el = addChildElement(e, "Restrictions", Constants.ROWSET.PREFIX);
+            SOAPElement name = addChildElement(el, "Name", Constants.ROWSET.PREFIX);
             name.setTextContent(it.name());
-            SOAPElement type = addChildElement(el, "Type", ROWSET);
+            SOAPElement type = addChildElement(el, "Type", Constants.ROWSET.PREFIX);
             type.setTextContent(it.type());
         }
     }
 
-    private static void addDbSchemaCatalogsResponseRow(SOAPElement root, DbSchemaCatalogsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaCatalogsResponseRow(SOAPElement root, DbSchemaCatalogsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.roles().ifPresent(v -> addChildElement(row, "ROLES", prefix, v));
@@ -487,14 +561,14 @@ public class SoapUtil {
         r.currentlyUsed().ifPresent(v -> addChildElement(row, "CURRENTLY_USED", prefix, String.valueOf(v)));
         r.popularity().ifPresent(v -> addChildElement(row, "POPULARITY", prefix, String.valueOf(v)));
         r.weightedPopularity().ifPresent(v -> addChildElement(row, "WEIGHTEDPOPULARITY", prefix, String.valueOf(v)));
-        r.clientCacheRefreshPolicy().ifPresent(v -> addChildElement(row, "CLIENTCACHEREFRESHPOLICY",
-            prefix,
-            String.valueOf(v.getValue())));
+        r.clientCacheRefreshPolicy()
+                .ifPresent(v -> addChildElement(row, "CLIENTCACHEREFRESHPOLICY", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addDiscoverDataSourcesResponseRow(SOAPElement root, DiscoverDataSourcesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverDataSourcesResponseRow(SOAPElement root, DiscoverDataSourcesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "DataSourceName", prefix, r.dataSourceName());
         r.dataSourceDescription().ifPresent(v -> addChildElement(row, "DataSourceDescription", prefix, v));
         r.url().ifPresent(v -> addChildElement(row, "URL", prefix, v));
@@ -504,15 +578,17 @@ public class SoapUtil {
         r.authenticationMode().ifPresent(v -> addChildElement(row, "AuthenticationMode", prefix, v.getValue()));
     }
 
-    private static void addDiscoverXmlMetaDataResponseRow(SOAPElement root, DiscoverXmlMetaDataResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverXmlMetaDataResponseRow(SOAPElement root, DiscoverXmlMetaDataResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "MetaData", prefix, r.metaData());
     }
 
-    private static void addDbSchemaColumnsResponseRow(SOAPElement root, DbSchemaColumnsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaColumnsResponseRow(SOAPElement root, DbSchemaColumnsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.tableCatalog().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
         r.tableSchema().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
         r.tableName().ifPresent(v -> addChildElement(row, TABLE_NAME, prefix, v));
@@ -526,8 +602,10 @@ public class SoapUtil {
         r.isNullable().ifPresent(v -> addChildElement(row, "IS_NULLABLE", prefix, String.valueOf(v)));
         r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v)));
         r.typeGuid().ifPresent(v -> addChildElement(row, "TYPE_GUID", prefix, String.valueOf(v)));
-        r.characterMaximum().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH", prefix, String.valueOf(v)));
-        r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH", prefix, String.valueOf(v)));
+        r.characterMaximum()
+                .ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH", prefix, String.valueOf(v)));
+        r.characterOctetLength()
+                .ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH", prefix, String.valueOf(v)));
         r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION, prefix, String.valueOf(v)));
         r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
         r.dateTimePrecision().ifPresent(v -> addChildElement(row, "DATETIME_PRECISION", prefix, String.valueOf(v)));
@@ -544,9 +622,10 @@ public class SoapUtil {
         r.columnOlapType().ifPresent(v -> addChildElement(row, "COLUMN_OLAP_TYPE", prefix, v.name()));
     }
 
-    private static void addDbSchemaProviderTypesResponseRow(SOAPElement root, DbSchemaProviderTypesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaProviderTypesResponseRow(SOAPElement root, DbSchemaProviderTypesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.typeName().ifPresent(v -> addChildElement(row, "TYPE_NAME", prefix, v));
         r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v.getValue())));
         r.columnSize().ifPresent(v -> addChildElement(row, "COLUMN_SIZE", prefix, String.valueOf(v)));
@@ -570,26 +649,29 @@ public class SoapUtil {
         r.isFixedLength().ifPresent(v -> addChildElement(row, "IS_FIXEDLENGTH", prefix, String.valueOf(v)));
     }
 
-    private static void addDbSchemaSchemataResponseRow(SOAPElement root, DbSchemaSchemataResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaSchemataResponseRow(SOAPElement root, DbSchemaSchemataResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
         addChildElement(row, SCHEMA_NAME, prefix, r.schemaName());
         addChildElement(row, "SCHEMA_OWNER", prefix, r.schemaOwner());
     }
 
-    private static void addDbSchemaSourceTablesResponseRow(SOAPElement root, DbSchemaSourceTablesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaSourceTablesResponseRow(SOAPElement root, DbSchemaSourceTablesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
         addChildElement(row, TABLE_NAME, prefix, r.tableName());
         addChildElement(row, TABLE_TYPE, prefix, r.tableType().getValue());
     }
 
-    private static void addDbSchemaTablesInfoResponseRow(SOAPElement root, DbSchemaTablesInfoResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDbSchemaTablesInfoResponseRow(SOAPElement root, DbSchemaTablesInfoResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
         addChildElement(row, TABLE_NAME, prefix, r.tableName());
@@ -598,7 +680,8 @@ public class SoapUtil {
         r.bookmarks().ifPresent(v -> addChildElement(row, "BOOKMARKS", prefix, String.valueOf(v)));
         r.bookmarkType().ifPresent(v -> addChildElement(row, "BOOKMARK_TYPE", prefix, String.valueOf(v)));
         r.bookmarkDataType().ifPresent(v -> addChildElement(row, "BOOKMARK_DATA_TYPE", prefix, String.valueOf(v)));
-        r.bookmarkMaximumLength().ifPresent(v -> addChildElement(row, "BOOKMARK_MAXIMUM_LENGTH", prefix, String.valueOf(v)));
+        r.bookmarkMaximumLength()
+                .ifPresent(v -> addChildElement(row, "BOOKMARK_MAXIMUM_LENGTH", prefix, String.valueOf(v)));
         r.bookmarkInformation().ifPresent(v -> addChildElement(row, "BOOKMARK_INFORMATION", prefix, String.valueOf(v)));
         r.tableVersion().ifPresent(v -> addChildElement(row, "TABLE_VERSION", prefix, String.valueOf(v)));
         r.cardinality().ifPresent(v -> addChildElement(row, "CARDINALITY", prefix, String.valueOf(v)));
@@ -606,9 +689,10 @@ public class SoapUtil {
         r.tablePropId().ifPresent(v -> addChildElement(row, "TABLE_PROP_ID", prefix, String.valueOf(v)));
     }
 
-    private static void addMdSchemaHierarchiesResponseRow(SOAPElement root, MdSchemaHierarchiesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaHierarchiesResponseRow(SOAPElement root, MdSchemaHierarchiesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -618,31 +702,37 @@ public class SoapUtil {
         r.hierarchyGuid().ifPresent(v -> addChildElement(row, "HIERARCHY_GUID", prefix, String.valueOf(v)));
         r.hierarchyCaption().ifPresent(v -> addChildElement(row, "HIERARCHY_CAPTION", prefix, v));
         r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", prefix, String.valueOf(v.getValue())));
-        r.hierarchyCardinality().ifPresent(v -> addChildElement(row, "HIERARCHY_CARDINALITY", prefix, String.valueOf(v)));
+        r.hierarchyCardinality()
+                .ifPresent(v -> addChildElement(row, "HIERARCHY_CARDINALITY", prefix, String.valueOf(v)));
         r.defaultMember().ifPresent(v -> addChildElement(row, "DEFAULT_MEMBER", prefix, v));
         r.allMember().ifPresent(v -> addChildElement(row, "ALL_MEMBER", prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.structure().ifPresent(v -> addChildElement(row, "STRUCTURE", prefix, String.valueOf(v.getValue())));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", prefix, String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", prefix, String.valueOf(v)));
-        r.dimensionUniqueSettings().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
-            prefix,
-            String.valueOf(v.getValue())));
+        r.dimensionUniqueSettings().ifPresent(
+                v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS", prefix, String.valueOf(v.getValue())));
         r.dimensionMasterUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_UNIQUE_NAME", prefix, v));
         r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix, String.valueOf(v)));
         r.hierarchyOrdinal().ifPresent(v -> addChildElement(row, "HIERARCHY_ORDINAL", prefix, String.valueOf(v)));
         r.dimensionIsShared().ifPresent(v -> addChildElement(row, "DIMENSION_IS_SHARED", prefix, String.valueOf(v)));
         r.hierarchyIsVisible().ifPresent(v -> addChildElement(row, "HIERARCHY_IS_VISIBLE", prefix, String.valueOf(v)));
-        r.hierarchyOrigin().ifPresent(v -> addChildElement(row, "HIERARCHY_ORIGIN", prefix, String.valueOf(v.getValue())));
+        r.hierarchyOrigin()
+                .ifPresent(v -> addChildElement(row, "HIERARCHY_ORIGIN", prefix, String.valueOf(v.getValue())));
         r.hierarchyDisplayFolder().ifPresent(v -> addChildElement(row, "HIERARCHY_DISPLAY_FOLDER", prefix, v));
-        r.instanceSelection().ifPresent(v -> addChildElement(row, "INSTANCE_SELECTION", prefix, String.valueOf(v.getValue())));
-        r.groupingBehavior().ifPresent(v -> addChildElement(row, "GROUPING_BEHAVIOR", prefix, String.valueOf(v.getValue())));
+        r.instanceSelection()
+                .ifPresent(v -> addChildElement(row, "INSTANCE_SELECTION", prefix, String.valueOf(v.getValue())));
+        r.groupingBehavior()
+                .ifPresent(v -> addChildElement(row, "GROUPING_BEHAVIOR", prefix, String.valueOf(v.getValue())));
         r.structureType().ifPresent(v -> addChildElement(row, "STRUCTURE_TYPE", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaLevelsResponseRow(SOAPElement root, MdSchemaLevelsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaLevelsResponseRow(SOAPElement root, MdSchemaLevelsResponseRow r)
+            throws SOAPException {
+
+        String prefix = Constants.ROWSET.PREFIX;
+
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
 
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
@@ -656,30 +746,37 @@ public class SoapUtil {
         r.levelNumber().ifPresent(v -> addChildElement(row, "LEVEL_NUMBER", prefix, String.valueOf(v)));
         r.levelCardinality().ifPresent(v -> addChildElement(row, "LEVEL_CARDINALITY", prefix, String.valueOf(v)));
         r.levelType().ifPresent(v -> addChildElement(row, "LEVEL_TYPE", prefix, String.valueOf(v.getValue())));
-        r.customRollupSetting().ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS",
-            prefix, String.valueOf(v.getValue())));
-        r.levelUniqueSettings().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS",
-            prefix, String.valueOf(v.getValue())));
+        r.customRollupSetting()
+                .ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS", prefix, String.valueOf(v.getValue())));
+        r.levelUniqueSettings()
+                .ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS", prefix, String.valueOf(v.getValue())));
         r.levelIsVisible().ifPresent(v -> addChildElement(row, "LEVEL_IS_VISIBLE", prefix, String.valueOf(v)));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
-        //absent in old mondrian
-        //r.levelOrderingProperty().ifPresent(v -> addChildElement(row, "LEVEL_ORDERING_PROPERTY", prefix, v));
-        //r.levelDbType().ifPresent(v -> addChildElement(row, "LEVEL_DBTYPE", prefix, String.valueOf(v.getValue())));
-        //r.levelMasterUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_MASTER_UNIQUE_NAME", prefix, v));
-        //r.levelNameSqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_NAME_SQL_COLUMN_NAME", prefix, v));
-        //r.levelKeySqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_KEY_SQL_COLUMN_NAME", prefix, v));
-        //r.levelUniqueNameSqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME", prefix, v));
-        //r.levelAttributeHierarchyName().ifPresent(v -> addChildElement(row, "LEVEL_ATTRIBUTE_HIERARCHY_NAME", prefix, v));
-        //r.levelKeyCardinality().ifPresent(v -> addChildElement(row, "LEVEL_KEY_CARDINALITY", prefix, String.valueOf(v)));
+        // absent in old mondrian
+        // r.levelOrderingProperty().ifPresent(v -> addChildElement(row,
+        // "LEVEL_ORDERING_PROPERTY", prefix, v));
+        // r.levelDbType().ifPresent(v -> addChildElement(row, "LEVEL_DBTYPE", prefix,
+        // String.valueOf(v.getValue())));
+        // r.levelMasterUniqueName().ifPresent(v -> addChildElement(row,
+        // "LEVEL_MASTER_UNIQUE_NAME", prefix, v));
+        // r.levelNameSqlColumnName().ifPresent(v -> addChildElement(row,
+        // "LEVEL_NAME_SQL_COLUMN_NAME", prefix, v));
+        // r.levelKeySqlColumnName().ifPresent(v -> addChildElement(row,
+        // "LEVEL_KEY_SQL_COLUMN_NAME", prefix, v));
+        // r.levelUniqueNameSqlColumnName().ifPresent(v -> addChildElement(row,
+        // "LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME", prefix, v));
+        // r.levelAttributeHierarchyName().ifPresent(v -> addChildElement(row,
+        // "LEVEL_ATTRIBUTE_HIERARCHY_NAME", prefix, v));
+        // r.levelKeyCardinality().ifPresent(v -> addChildElement(row,
+        // "LEVEL_KEY_CARDINALITY", prefix, String.valueOf(v)));
+
         r.levelOrigin().ifPresent(v -> addChildElement(row, "LEVEL_ORIGIN", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaMeasureGroupDimensionsResponseRow(
-        SOAPElement root,
-        MdSchemaMeasureGroupDimensionsResponseRow r
-    ) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaMeasureGroupDimensionsResponseRow(SOAPElement root,
+            MdSchemaMeasureGroupDimensionsResponseRow r) throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -689,26 +786,28 @@ public class SoapUtil {
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", prefix, v.name()));
         r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix, String.valueOf(v)));
-        r.dimensionIsFactDimension().ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION", prefix,
-            String.valueOf(v)));
+        r.dimensionIsFactDimension()
+                .ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION", prefix, String.valueOf(v)));
         r.dimensionPath().ifPresent(v -> addMeasureGroupDimensionXmlList(row, v));
-        r.dimensionGranularity().ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", ROWSET, v));
+        r.dimensionGranularity()
+                .ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", Constants.ROWSET.PREFIX, v));
     }
 
     private static void addMeasureGroupDimensionXmlList(SOAPElement el, List<MeasureGroupDimension> list) {
         if (list != null) {
-            SOAPElement e = addChildElement(el, "DIMENSION_PATH", ROWSET);
+            SOAPElement e = addChildElement(el, "DIMENSION_PATH", Constants.ROWSET.PREFIX);
             list.forEach(it -> addMeasureGroupDimensionXml(e, it));
         }
     }
 
     private static void addMeasureGroupDimensionXml(SOAPElement el, MeasureGroupDimension it) {
-        addChildElement(el, "MeasureGroupDimension", ROWSET, it.measureGroupDimension());
+        addChildElement(el, "MeasureGroupDimension", Constants.ROWSET.PREFIX, it.measureGroupDimension());
     }
 
-    private static void addMdSchemaMeasuresResponseRow(SOAPElement root, MdSchemaMeasuresResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaMeasuresResponseRow(SOAPElement root, MdSchemaMeasuresResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -716,7 +815,8 @@ public class SoapUtil {
         r.measureUniqueName().ifPresent(v -> addChildElement(row, "MEASURE_UNIQUE_NAME", prefix, v));
         r.measureCaption().ifPresent(v -> addChildElement(row, "MEASURE_CAPTION", prefix, v));
         r.measureGuid().ifPresent(v -> addChildElement(row, "MEASURE_GUID", prefix, String.valueOf(v)));
-        r.measureAggregator().ifPresent(v -> addChildElement(row, "MEASURE_AGGREGATOR", prefix, String.valueOf(v.getValue())));
+        r.measureAggregator()
+                .ifPresent(v -> addChildElement(row, "MEASURE_AGGREGATOR", prefix, String.valueOf(v.getValue())));
         r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v.getValue())));
         r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION, prefix, String.valueOf(v)));
         r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
@@ -731,13 +831,14 @@ public class SoapUtil {
         r.measureDisplayFolder().ifPresent(v -> addChildElement(row, "MEASURE_DISPLAY_FOLDER", prefix, v));
         r.defaultFormatString().ifPresent(v -> addChildElement(row, "DEFAULT_FORMAT_STRING", prefix, v));
         r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", prefix, String.valueOf(v.getValue())));
-        r.measureVisibility().ifPresent(v -> addChildElement(row, "MEASURE_VISIBILITY", prefix, String.valueOf(v.getValue())));
+        r.measureVisibility()
+                .ifPresent(v -> addChildElement(row, "MEASURE_VISIBILITY", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaMembersResponseRow(SOAPElement root, MdSchemaMembersResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
-
+    private static void addMdSchemaMembersResponseRow(SOAPElement root, MdSchemaMembersResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -763,9 +864,10 @@ public class SoapUtil {
         r.scope().ifPresent(v -> addChildElement(row, SCOPE, prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaPropertiesResponseRow(SOAPElement root, MdSchemaPropertiesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaPropertiesResponseRow(SOAPElement root, MdSchemaPropertiesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -774,40 +876,44 @@ public class SoapUtil {
         r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
         r.levelUniqueName().ifPresent(v -> addChildElement(row, LEVEL_UNIQUE_NAME, prefix, v));
         r.memberUniqueName().ifPresent(v -> addChildElement(row, "MEMBER_UNIQUE_NAME", prefix, v));
-        r.propertyType().ifPresent(v -> addChildElement(row, "PROPERTY_TYPE",
-            prefix, String.valueOf(v.getValue())));
+        r.propertyType().ifPresent(v -> addChildElement(row, "PROPERTY_TYPE", prefix, String.valueOf(v.getValue())));
         r.propertyName().ifPresent(v -> addChildElement(row, "PROPERTY_NAME", prefix, v));
         r.propertyCaption().ifPresent(v -> addChildElement(row, "PROPERTY_CAPTION", prefix, v));
-        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE,
-            prefix, String.valueOf(v.getValue())));
-        //r.characterMaximumLength().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH"
-        //    , prefix, String.valueOf(v)));
-        //r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH",
-        //    prefix, String.valueOf(v)));
-        //r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION
-        //    , prefix, String.valueOf(v)));
-        //r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
-        r.propertyContentType().ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE", prefix,
-            String.valueOf(v.getValue())));
+        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v.getValue())));
+        // r.characterMaximumLength().ifPresent(v -> addChildElement(row,
+        // "CHARACTER_MAXIMUM_LENGTH"
+        // , prefix, String.valueOf(v)));
+        // r.characterOctetLength().ifPresent(v -> addChildElement(row,
+        // "CHARACTER_OCTET_LENGTH",
+        // prefix, String.valueOf(v)));
+        // r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION
+        // , prefix, String.valueOf(v)));
+        // r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix,
+        // String.valueOf(v)));
+        r.propertyContentType()
+                .ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE", prefix, String.valueOf(v.getValue())));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.sqlColumnName().ifPresent(v -> addChildElement(row, "SQL_COLUMN_NAME", prefix, v));
-        //r.language().ifPresent(v -> addChildElement(row, "LANGUAGE", prefix, String.valueOf(v)));
-        r.propertyOrigin().ifPresent(v -> addChildElement(row, "PROPERTY_ORIGIN"
-            , prefix, String.valueOf(v.getValue())));
-        //r.propertyAttributeHierarchyName().ifPresent(v -> addChildElement(row
-        //    , "PROPERTY_ATTRIBUTE_HIERARCHY_NAME", prefix, v));
-        //r.propertyCardinality().ifPresent(v -> addChildElement(row, "PROPERTY_CARDINALITY"
-        //    , prefix, v.name()));
-        //r.mimeType().ifPresent(v -> addChildElement(row, "MIME_TYPE"
-        //    , prefix, v));
+        // r.language().ifPresent(v -> addChildElement(row, "LANGUAGE", prefix,
+        // String.valueOf(v)));
+        r.propertyOrigin()
+                .ifPresent(v -> addChildElement(row, "PROPERTY_ORIGIN", prefix, String.valueOf(v.getValue())));
+        // r.propertyAttributeHierarchyName().ifPresent(v -> addChildElement(row
+        // , "PROPERTY_ATTRIBUTE_HIERARCHY_NAME", prefix, v));
+        // r.propertyCardinality().ifPresent(v -> addChildElement(row,
+        // "PROPERTY_CARDINALITY"
+        // , prefix, v.name()));
+        // r.mimeType().ifPresent(v -> addChildElement(row, "MIME_TYPE"
+        // , prefix, v));
         r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", prefix, String.valueOf(v.getValue())));
-        r.propertyIsVisible().ifPresent(v -> addChildElement(row, "PROPERTY_VISIBILITY",
-            prefix, String.valueOf(v.getValue())));
+        r.propertyIsVisible()
+                .ifPresent(v -> addChildElement(row, "PROPERTY_VISIBILITY", prefix, String.valueOf(v.getValue())));
+
     }
 
-    private static void addMdSchemaSetsResponseRow(SOAPElement root, MdSchemaSetsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaSetsResponseRow(SOAPElement root, MdSchemaSetsResponseRow r) throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -819,13 +925,13 @@ public class SoapUtil {
         r.dimension().ifPresent(v -> addChildElement(row, "DIMENSIONS", prefix, v));
         r.setCaption().ifPresent(v -> addChildElement(row, "SET_CAPTION", prefix, v));
         r.setDisplayFolder().ifPresent(v -> addChildElement(row, "SET_DISPLAY_FOLDER", prefix, v));
-        r.setEvaluationContext().ifPresent(v -> addChildElement(row, "SET_EVALUATION_CONTEXT", prefix,
-            String.valueOf(v.getValue())));
+        r.setEvaluationContext()
+                .ifPresent(v -> addChildElement(row, "SET_EVALUATION_CONTEXT", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaKpisResponseRow(SOAPElement root, MdSchemaKpisResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaKpisResponseRow(SOAPElement root, MdSchemaKpisResponseRow r) throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -845,13 +951,13 @@ public class SoapUtil {
         r.kpiCurrentTimeMember().ifPresent(v -> addChildElement(row, "KPI_CURRENT_TIME_MEMBER", prefix, v));
         r.kpiParentKpiName().ifPresent(v -> addChildElement(row, "KPI_PARENT_KPI_NAME", prefix, v));
         r.annotation().ifPresent(v -> addChildElement(row, "ANNOTATIONS", prefix, v));
-        r.scope().ifPresent(v -> addChildElement(row, SCOPE,
-            prefix, String.valueOf(v.getValue())));
+        r.scope().ifPresent(v -> addChildElement(row, SCOPE, prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaMeasureGroupsResponseRow(SOAPElement root, MdSchemaMeasureGroupsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaMeasureGroupsResponseRow(SOAPElement root, MdSchemaMeasureGroupsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -862,9 +968,9 @@ public class SoapUtil {
         r.measureGroupCaption().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CAPTION", prefix, v));
     }
 
-    private static void addMdSchemaCubesResponseRow(SOAPElement root, MdSchemaCubesResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaCubesResponseRow(SOAPElement root, MdSchemaCubesResponseRow r) throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
@@ -877,49 +983,48 @@ public class SoapUtil {
         r.lastDataUpdate().ifPresent(v -> addChildElement(row, "LAST_DATA_UPDATE", prefix, String.valueOf(v)));
         r.dataUpdateDBy().ifPresent(v -> addChildElement(row, "DATA_UPDATED_BY", prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
-        r.isDrillThroughEnabled().ifPresent(v -> addChildElement(row, "IS_DRILLTHROUGH_ENABLED", prefix, String.valueOf(v)));
+        r.isDrillThroughEnabled()
+                .ifPresent(v -> addChildElement(row, "IS_DRILLTHROUGH_ENABLED", prefix, String.valueOf(v)));
         r.isLinkable().ifPresent(v -> addChildElement(row, "IS_LINKABLE", prefix, String.valueOf(v)));
         r.isWriteEnabled().ifPresent(v -> addChildElement(row, "IS_WRITE_ENABLED", prefix, String.valueOf(v)));
         r.isSqlEnabled().ifPresent(v -> addChildElement(row, "IS_SQL_ENABLED", prefix, String.valueOf(v)));
         r.cubeCaption().ifPresent(v -> addChildElement(row, "CUBE_CAPTION", prefix, v));
         r.baseCubeName().ifPresent(v -> addChildElement(row, "BASE_CUBE_NAME", prefix, v));
         r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", prefix, String.valueOf(v.getValue())));
-        r.preferredQueryPatterns().ifPresent(v -> addChildElement(row, "PREFERRED_QUERY_PATTERNS", prefix,
-            String.valueOf(v.getValue())));
+        r.preferredQueryPatterns()
+                .ifPresent(v -> addChildElement(row, "PREFERRED_QUERY_PATTERNS", prefix, String.valueOf(v.getValue())));
     }
 
-    private static void addMdSchemaDimensionsResponseRow(SOAPElement root, MdSchemaDimensionsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaDimensionsResponseRow(SOAPElement root, MdSchemaDimensionsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
         r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
         r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
         r.dimensionName().ifPresent(v -> addChildElement(row, "DIMENSION_NAME", prefix, v));
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
-        r.dimensionGuid().ifPresent(v -> addChildElement(row, "DIMENSION_GUID", prefix,
-            String.valueOf(v)));
+        r.dimensionGuid().ifPresent(v -> addChildElement(row, "DIMENSION_GUID", prefix, String.valueOf(v)));
         r.dimensionCaption().ifPresent(v -> addChildElement(row, "DIMENSION_CAPTION", prefix, v));
-        r.dimensionOptional().ifPresent(v -> addChildElement(row, "DIMENSION_ORDINAL", prefix,
-            String.valueOf(v)));
-        r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", prefix,
-            String.valueOf(v.getValue())));
-        r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", prefix,
-            String.valueOf(v)));
+        r.dimensionOptional().ifPresent(v -> addChildElement(row, "DIMENSION_ORDINAL", prefix, String.valueOf(v)));
+        r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", prefix, String.valueOf(v.getValue())));
+        r.dimensionCardinality()
+                .ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", prefix, String.valueOf(v)));
         r.defaultHierarchy().ifPresent(v -> addChildElement(row, "DEFAULT_HIERARCHY", prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", prefix, String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", prefix, String.valueOf(v)));
-        r.dimensionUniqueSetting().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
-            prefix, String.valueOf(v.getValue())));
+        r.dimensionUniqueSetting().ifPresent(
+                v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS", prefix, String.valueOf(v.getValue())));
         r.dimensionMasterName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_NAME", prefix, v));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix,
-            String.valueOf(v)));
+        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix, String.valueOf(v)));
     }
 
-    private static void addMdSchemaFunctionsResponseRow(SOAPElement root, MdSchemaFunctionsResponseRow r) {
-        String prefix = ROWSET;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addMdSchemaFunctionsResponseRow(SOAPElement root, MdSchemaFunctionsResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         r.functionalName().ifPresent(v -> addChildElement(row, "FUNCTION_NAME", prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         addChildElement(row, "PARAMETER_LIST", prefix, r.parameterList());
@@ -933,8 +1038,8 @@ public class SoapUtil {
         r.object().ifPresent(v -> addChildElement(row, "OBJECT", prefix, v));
         r.caption().ifPresent(v -> addChildElement(row, "CAPTION", prefix, v));
         r.parameterInfo().ifPresent(v -> addParameterInfoXmlList(row, v));
-        r.directQueryPushable().ifPresent(v -> addChildElement(row, "DIRECTQUERY_PUSHABLE",
-        		prefix, String.valueOf(v.getValue())));
+        r.directQueryPushable()
+                .ifPresent(v -> addChildElement(row, "DIRECTQUERY_PUSHABLE", prefix, String.valueOf(v.getValue())));
     }
 
     private static void addParameterInfoXmlList(SOAPElement root, List<ParameterInfo> list) {
@@ -944,7 +1049,7 @@ public class SoapUtil {
     }
 
     private static void addParameterInfoXml(SOAPElement root, ParameterInfo it) {
-        String prefix = ROWSET;
+        String prefix = Constants.ROWSET.PREFIX;
         SOAPElement el = addChildElement(root, "PARAMETERINFO", prefix);
         addChildElement(el, "NAME", prefix, it.name());
         addChildElement(el, DESCRIPTION_UC, prefix, it.description());
@@ -953,10 +1058,11 @@ public class SoapUtil {
         addChildElement(el, "REPEATGROUP", prefix, String.valueOf(it.repeatGroup()));
     }
 
-    private static void addDiscoverPropertiesResponseRow(SOAPElement root, DiscoverPropertiesResponseRow r) {
-        String prefix = ROWSET;
-        //String prefix = null;
-        SOAPElement row = addChildElement(root, ROW, prefix);
+    private static void addDiscoverPropertiesResponseRow(SOAPElement root, DiscoverPropertiesResponseRow r)
+            throws SOAPException {
+        String prefix = Constants.ROWSET.PREFIX;
+        // String prefix = null;
+        SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
         addChildElement(row, "PropertyName", prefix, r.propertyName());
         r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyDescription", prefix, v));
         r.propertyType().ifPresent(v -> addChildElement(row, "PropertyType", prefix, v));
@@ -965,7 +1071,7 @@ public class SoapUtil {
         r.value().ifPresent(v -> addChildElement(row, "Value", prefix, v));
     }
 
-    private static void addMdDataSet(SOAPElement el, Mddataset it) {
+    private static void addMdDataSet(SOAPElement el, Mddataset it) throws SOAPException {
         if (it != null) {
             addOlapInfo(el, it.olapInfo());
             addAxes(el, it.axes());
@@ -977,16 +1083,14 @@ public class SoapUtil {
 
     private static void addMessages(SOAPElement e, Messages it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Messages", prefix);
             addExceptionTypeList(el, it.warningOrError());
 
         }
     }
 
-    private static void addExceptionTypeList(
-        SOAPElement e,
-        List<org.eclipse.daanse.xmla.api.exception.Type> list) {
+    private static void addExceptionTypeList(SOAPElement e, List<org.eclipse.daanse.xmla.api.exception.Type> list) {
         if (list != null) {
             list.forEach(it -> addExceptionType(e, it));
         }
@@ -1018,7 +1122,7 @@ public class SoapUtil {
 
     private static void setAttribute(SOAPElement el, String name, String value) {
         if (value != null) {
-        	el.setAttribute(name, value);
+            el.setAttribute(name, value);
         }
     }
 
@@ -1028,8 +1132,8 @@ public class SoapUtil {
             addChildElement(el, "WarningCode", null, String.valueOf(it.warningCode()));
             addMessageLocation(el, it.location());
             addChildElement(el, DESCRIPTION, null, it.description());
-            addChildElement(el, "Source", null,  it.source());
-            addChildElement(el, "HelpFile", null,  it.helpFile());
+            addChildElement(el, "Source", null, it.source());
+            addChildElement(el, "HelpFile", null, it.helpFile());
         }
     }
 
@@ -1080,7 +1184,6 @@ public class SoapUtil {
         }
     }
 
-
     private static void addException(SOAPElement e, Exception it) {
         if (it != null) {
             addChildElement(e, "Exception", null);
@@ -1089,16 +1192,16 @@ public class SoapUtil {
 
     private static void addCellData(SOAPElement e, CellData it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "CellData", prefix);
             addCellTypeList(el, it.cell());
-            //addCellSetType(el, it.cellSet());
+            // addCellSetType(el, it.cellSet());
         }
     }
 
     private static void addCellSetType(SOAPElement e, CellSetType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CellSet", ROWSET);
+            SOAPElement el = addChildElement(e, "CellSet", Constants.ROWSET.PREFIX);
             addDataList(el, it.data());
         }
     }
@@ -1123,7 +1226,7 @@ public class SoapUtil {
 
     private static void addCellType(SOAPElement e, CellType it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Cell", prefix);
             addCellTypeValue(el, it.value());
             addCellInfoItemListName(el, it.any());
@@ -1133,7 +1236,7 @@ public class SoapUtil {
 
     private static void addCellTypeValue(SOAPElement e, Value it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Value", prefix);
             el.setAttribute("xsi:type", it.type().getValue());
             el.setTextContent(it.value());
@@ -1149,7 +1252,7 @@ public class SoapUtil {
 
     private static void addCellTypeError(SOAPElement e, CellTypeError it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Error", prefix);
             setAttribute(el, "ErrorCode", String.valueOf(it.errorCode()));
             setAttribute(el, DESCRIPTION, it.description());
@@ -1158,7 +1261,7 @@ public class SoapUtil {
 
     private static void addAxes(SOAPElement e, Axes it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Axes", prefix);
             addAxisList(el, it.axis());
         }
@@ -1172,7 +1275,7 @@ public class SoapUtil {
 
     private static void addAxis(SOAPElement e, Axis it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Axis", prefix);
             addTypeList(el, it.setType());
             setAttribute(el, "name", it.name());
@@ -1207,7 +1310,7 @@ public class SoapUtil {
 
     private static void addUnion(SOAPElement e, Union it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Union", prefix);
             addTypeList(el, it.setType());
         }
@@ -1215,7 +1318,7 @@ public class SoapUtil {
 
     private static void addNormTupleSet(SOAPElement e, NormTupleSet it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "NormTupleSet", prefix);
             addNormTuplesType(el, it.normTuples());
             addTupleTypeList(el, it.membersLookup());
@@ -1224,7 +1327,7 @@ public class SoapUtil {
 
     private static void addTupleTypeList(SOAPElement e, MembersLookup list) {
         if (list != null) {
-            SOAPElement el = addChildElement(e, "MembersLookup", ROWSET);
+            SOAPElement el = addChildElement(e, "MembersLookup", Constants.ROWSET.PREFIX);
             if (list.members() != null) {
                 list.members().forEach(it -> addTupleType(el, "Members", it));
             }
@@ -1233,33 +1336,33 @@ public class SoapUtil {
 
     private static void addNormTuplesType(SOAPElement e, NormTuplesType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "NormTuples", ROWSET);
+            SOAPElement el = addChildElement(e, "NormTuples", Constants.ROWSET.PREFIX);
             addNormTupleList(el, it.normTuple());
         }
     }
 
     private static void addNormTupleList(SOAPElement el, List<NormTuple> list) {
-        if (list  != null) {
+        if (list != null) {
             list.forEach(it -> addNormTuple(el, it));
         }
     }
 
     private static void addNormTuple(SOAPElement e, NormTuple it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "NormTuple", ROWSET);
+            SOAPElement el = addChildElement(e, "NormTuple", Constants.ROWSET.PREFIX);
             addMemberRefList(el, it.memberRef());
         }
     }
 
     private static void addMemberRefList(SOAPElement e, List<MemberRef> list) {
-        if (list  != null) {
+        if (list != null) {
             list.forEach(it -> addMemberRef(e, it));
         }
     }
 
     private static void addMemberRef(SOAPElement e, MemberRef it) {
         if (it != null) {
-            String prefix = ROWSET;
+            String prefix = Constants.ROWSET.PREFIX;
             SOAPElement el = addChildElement(e, "MemberRef", prefix);
             addChildElement(el, "MemberOrdinal", prefix, String.valueOf(it.memberOrdinal()));
             addChildElement(el, "MemberDispInfo", prefix, String.valueOf(it.memberDispInfo()));
@@ -1268,7 +1371,7 @@ public class SoapUtil {
 
     private static void addSetListType(SOAPElement e, SetListType it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "CrossProduct", prefix);
             addTypeList(el, it.setType());
             addChildElement(el, "Size", prefix, String.valueOf(it.size()));
@@ -1277,7 +1380,7 @@ public class SoapUtil {
 
     private static void addTuplesType(SOAPElement e, TuplesType it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Tuples", prefix);
             addTuplesTypeList(el, it.tuple());
         }
@@ -1305,11 +1408,11 @@ public class SoapUtil {
 
     private static void addMemberType(SOAPElement e, String tagName, MemberType it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, tagName, prefix);
-            SOAPElement el1 = addChildElement(el, "Member", prefix);
-            addCellInfoItemList(el1, it.any());
-            setAttribute(el1, "Hierarchy", it.hierarchy());
+            SOAPElement seMember = addChildElement(el, "Member", prefix);
+            addCellInfoItemList(seMember, it.any());
+            setAttribute(seMember, "Hierarchy", it.hierarchy());
         }
     }
 
@@ -1320,21 +1423,19 @@ public class SoapUtil {
         }
     }
 
-    private static void addOlapInfo(SOAPElement e, OlapInfo it) {
-        String prefix = MDDATASET;
+    private static void addOlapInfo(SOAPElement e, OlapInfo it) throws SOAPException {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "OlapInfo", prefix);
-            addCubeInfo(el, it.cubeInfo());
-            addAxesInfo(el, it.axesInfo());
-            addCellInfo(el, it.cellInfo());
+            SOAPElement seOlapInfo = e.addChildElement(Constants.MDDATASET.QN_OLAP_INFO);
+            addCubeInfo(seOlapInfo, it.cubeInfo());
+            addAxesInfo(seOlapInfo, it.axesInfo());
+            addCellInfo(seOlapInfo, it.cellInfo());
         }
     }
 
-    private static void addCellInfo(SOAPElement e, CellInfo it) {
+    private static void addCellInfo(SOAPElement e, CellInfo it) throws SOAPException {
         if (it != null) {
-            String prefix = MDDATASET;
-            SOAPElement el = addChildElement(e, "CellInfo", prefix);
-            addCellInfoItemListName(el, it.any());
+            SOAPElement seCellInfo = e.addChildElement(Constants.MDDATASET.QN_CELL_INFO);
+            addCellInfoItemListName(seCellInfo, it.any());
         }
     }
 
@@ -1352,16 +1453,16 @@ public class SoapUtil {
 
     private static void addCellInfoItemName(SOAPElement e, CellInfoItem it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, it.tagName(), prefix);
-            setAttribute(el,"name", it.name());
+            setAttribute(el, "name", it.name());
             it.type().ifPresent(v -> setAttribute(el, "type", v));
         }
     }
 
     private static void addCellInfoItem(SOAPElement e, CellInfoItem it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, it.tagName(), prefix);
             el.setTextContent(it.name());
             it.type().ifPresent(v -> setAttribute(el, "type", v));
@@ -1370,7 +1471,7 @@ public class SoapUtil {
 
     private static void addAxesInfo(SOAPElement e, AxesInfo it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "AxesInfo", prefix);
             addAxisInfoList(el, it.axisInfo());
         }
@@ -1384,7 +1485,7 @@ public class SoapUtil {
 
     private static void addAxisInfo(SOAPElement e, AxisInfo it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "AxisInfo", prefix);
             setAttribute(el, "name", it.name());
             addHierarchyInfoList(el, it.hierarchyInfo());
@@ -1399,7 +1500,7 @@ public class SoapUtil {
 
     private static void addHierarchyInfo(SOAPElement e, HierarchyInfo it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "HierarchyInfo", prefix);
             addCellInfoItemListName(el, it.any());
             setAttribute(el, "name", it.name());
@@ -1408,7 +1509,7 @@ public class SoapUtil {
 
     private static void addCubeInfo(SOAPElement e, CubeInfo it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "CubeInfo", prefix);
             addOlapInfoCubeList(el, it.cube());
         }
@@ -1422,7 +1523,7 @@ public class SoapUtil {
 
     private static void addOlapInfoCube(SOAPElement e, OlapInfoCube it) {
         if (it != null) {
-            String prefix = MDDATASET;
+            String prefix = Constants.MDDATASET.PREFIX;
             SOAPElement el = addChildElement(e, "Cube", prefix);
             addChildElement(el, "CubeName", prefix, it.cubeName());
             addChildElement(el, "LastDataUpdate", "engine", instantToString(it.lastDataUpdate()));
@@ -1433,21 +1534,23 @@ public class SoapUtil {
     private static String instantToString(Instant instant) {
         return instant != null ? formatter.format(instant) : null;
     }
-    private static SOAPElement addDiscoverRowSetsRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+
+    private static SOAPElement addDiscoverRowSetsRoot(SOAPElement body) throws SOAPException {
+
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = addChildElement(seReturn, "root", Constants.ROWSET.PREFIX);
+        seRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        seRoot.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        seRoot.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        SOAPElement schema = addChildElement(seRoot, "schema", "xsd");
         schema.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         schema.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         schema.setAttribute("xmlns:sql", "urn:schemas-microsoft-com:xml-sql");
         schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("elementFormDefault", "qualified");
-        SOAPElement el  = addChildElement(schema, "element", "xsd");
+        SOAPElement el = addChildElement(schema, "element", "xsd");
         el.setAttribute("name", "root");
         SOAPElement ct = addChildElement(el, "complexType", "xsd");
         SOAPElement s = addChildElement(ct, "sequence", "xsd");
@@ -1457,67 +1560,67 @@ public class SoapUtil {
         se.setAttribute("minOccurs", "0");
         se.setAttribute("maxOccurs", "unbounded");
 
-        SOAPElement st  = addChildElement(schema, "simpleType", "xsd");
+        SOAPElement st = addChildElement(schema, "simpleType", "xsd");
         st.setAttribute("name", "uuid");
-        SOAPElement r  = addChildElement(st, "restriction", "xsd");
+        SOAPElement r = addChildElement(st, "restriction", "xsd");
         r.setAttribute("base", "xsd:string");
-        SOAPElement p  = addChildElement(r, "pattern", "xsd");
+        SOAPElement p = addChildElement(r, "pattern", "xsd");
         p.setAttribute("value", "[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}");
 
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
-        SOAPElement s1  = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement s1e1  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1 = addChildElement(ct1, "sequence", "xsd");
+        SOAPElement s1e1 = addChildElement(s1, "element", "xsd");
         s1e1.setAttribute("sql:field", "SchemaName");
         s1e1.setAttribute("name", "SchemaName");
         s1e1.setAttribute("type", "xsd:string");
-        SOAPElement s1e2  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e2 = addChildElement(s1, "element", "xsd");
         s1e2.setAttribute("sql:field", "SchemaGuid");
         s1e2.setAttribute("name", "SchemaGuid");
         s1e2.setAttribute("type", "uuid");
         s1e2.setAttribute("minOccurs", "0");
-        SOAPElement s1e3  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e3 = addChildElement(s1, "element", "xsd");
         s1e3.setAttribute("sql:field", "Restrictions");
         s1e3.setAttribute("name", "Restrictions");
         s1e3.setAttribute("minOccurs", "0");
         s1e3.setAttribute("maxOccurs", "unbounded");
-        SOAPElement s1e3ct  = addChildElement(s1e3, "complexType", "xsd");
-        SOAPElement s1e3cts  = addChildElement(s1e3ct, "sequence", "xsd");
-        SOAPElement s1e3ctse1  = addChildElement(s1e3cts, "element", "xsd");
+        SOAPElement s1e3ct = addChildElement(s1e3, "complexType", "xsd");
+        SOAPElement s1e3cts = addChildElement(s1e3ct, "sequence", "xsd");
+        SOAPElement s1e3ctse1 = addChildElement(s1e3cts, "element", "xsd");
         s1e3ctse1.setAttribute("name", "Name");
         s1e3ctse1.setAttribute("type", "xsd:string");
         s1e3ctse1.setAttribute("sql:field", "Name");
-        SOAPElement s1e3ctse2  = addChildElement(s1e3cts, "element", "xsd");
+        SOAPElement s1e3ctse2 = addChildElement(s1e3cts, "element", "xsd");
         s1e3ctse2.setAttribute("name", "Type");
         s1e3ctse2.setAttribute("type", "xsd:string");
         s1e3ctse2.setAttribute("sql:field", "Type");
 
-        SOAPElement s1e4  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e4 = addChildElement(s1, "element", "xsd");
         s1e4.setAttribute("sql:field", "Description");
         s1e4.setAttribute("name", "Description");
         s1e4.setAttribute("type", "xsd:string");
 
-        SOAPElement s1e5  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e5 = addChildElement(s1, "element", "xsd");
         s1e5.setAttribute("sql:field", "RestrictionsMask");
         s1e5.setAttribute("name", "RestrictionsMask");
         s1e5.setAttribute("type", "xsd:unsignedLong");
         s1e5.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverPropertiesRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        root.setAttribute("xmlns:msxmla", "http://schemas.microsoft.com/analysisservices/2003/xmla");
-        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+    private static SOAPElement addDiscoverPropertiesRoot(SOAPElement body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        seRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        seRoot.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        seRoot.setAttribute("xmlns:msxmla", "http://schemas.microsoft.com/analysisservices/2003/xmla");
+        SOAPElement schema = addChildElement(seRoot, "schema", "xsd");
         schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("xmlns:sql", "urn:schemas-microsoft-com:xml-sql");
         schema.setAttribute("elementFormDefault", "qualified");
-        SOAPElement el  = addChildElement(schema, "element", "xsd");
+        SOAPElement el = addChildElement(schema, "element", "xsd");
         el.setAttribute("name", "root");
         SOAPElement ct = addChildElement(el, "complexType", "xsd");
         SOAPElement s = addChildElement(ct, "sequence", "xsd");
@@ -1527,406 +1630,407 @@ public class SoapUtil {
         se.setAttribute("minOccurs", "0");
         se.setAttribute("maxOccurs", "unbounded");
 
-        SOAPElement st  = addChildElement(schema, "simpleType", "xsd");
+        SOAPElement st = addChildElement(schema, "simpleType", "xsd");
         st.setAttribute("name", "uuid");
-        SOAPElement r  = addChildElement(st, "restriction", "xsd");
+        SOAPElement r = addChildElement(st, "restriction", "xsd");
         r.setAttribute("base", "xsd:string");
-        SOAPElement p  = addChildElement(r, "pattern", "xsd");
+        SOAPElement p = addChildElement(r, "pattern", "xsd");
         p.setAttribute("value", "[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}");
 
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "xmlDocument");
-        SOAPElement s1  = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement a  = addChildElement(s1, "any", "xsd");
+        SOAPElement s1 = addChildElement(ct1, "sequence", "xsd");
+        SOAPElement a = addChildElement(s1, "any", "xsd");
 
-        SOAPElement ct2  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct2 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
-        SOAPElement s2  = addChildElement(ct2, "sequence", "xsd");
-        SOAPElement s2e1  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2 = addChildElement(ct2, "sequence", "xsd");
+        SOAPElement s2e1 = addChildElement(s2, "element", "xsd");
         s2e1.setAttribute("sql:field", "PropertyName");
         s2e1.setAttribute("name", "PropertyName");
         s2e1.setAttribute("type", "xsd:string");
 
-        SOAPElement s2e2  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2e2 = addChildElement(s2, "element", "xsd");
         s2e2.setAttribute("sql:field", "PropertyDescription");
         s2e2.setAttribute("name", "PropertyDescription");
         s2e2.setAttribute("type", "xsd:string");
         s2e2.setAttribute("minOccurs", "0");
 
-        SOAPElement s2e3  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2e3 = addChildElement(s2, "element", "xsd");
         s2e3.setAttribute("sql:field", "PropertyType");
         s2e3.setAttribute("name", "PropertyType");
         s2e3.setAttribute("type", "xsd:string");
         s2e3.setAttribute("minOccurs", "0");
 
-        SOAPElement s2e4  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2e4 = addChildElement(s2, "element", "xsd");
         s2e4.setAttribute("sql:field", "PropertyAccessType");
         s2e4.setAttribute("name", "PropertyAccessType");
         s2e4.setAttribute("type", "xsd:string");
 
-        SOAPElement s2e5  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2e5 = addChildElement(s2, "element", "xsd");
         s2e5.setAttribute("sql:field", "IsRequired");
         s2e5.setAttribute("name", "IsRequired");
         s2e5.setAttribute("type", "xsd:boolean");
         s2e5.setAttribute("minOccurs", "0");
 
-        SOAPElement s2e6  = addChildElement(s2, "element", "xsd");
+        SOAPElement s2e6 = addChildElement(s2, "element", "xsd");
         s2e6.setAttribute("sql:field", "Value");
         s2e6.setAttribute("name", "Value");
         s2e6.setAttribute("type", "xsd:string");
         s2e6.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaCatalogsRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addDbSchemaCatalogsRoot(SOAPElement body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
 
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
-        SOAPElement s1  = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement s1e1  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1 = addChildElement(ct1, "sequence", "xsd");
+        SOAPElement s1e1 = addChildElement(s1, "element", "xsd");
         s1e1.setAttribute("sql:field", "CATALOG_NAME");
         s1e1.setAttribute("name", "CATALOG_NAME");
         s1e1.setAttribute("type", "xsd:string");
 
-        SOAPElement s1e2  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e2 = addChildElement(s1, "element", "xsd");
         s1e2.setAttribute("sql:field", "DESCRIPTION");
         s1e2.setAttribute("name", "DESCRIPTION");
         s1e2.setAttribute("type", "xsd:string");
         s1e2.setAttribute("minOccurs", "0");
 
-        SOAPElement s1e3  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e3 = addChildElement(s1, "element", "xsd");
         s1e3.setAttribute("sql:field", "ROLES");
         s1e3.setAttribute("name", "ROLES");
         s1e3.setAttribute("type", "xsd:string");
 
-        SOAPElement s1e4  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e4 = addChildElement(s1, "element", "xsd");
         s1e4.setAttribute("sql:field", "DATE_MODIFIED");
         s1e4.setAttribute("name", "DATE_MODIFIED");
         s1e4.setAttribute("type", "xsd:dateTime");
         s1e4.setAttribute("minOccurs", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverEnumeratorsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addDiscoverEnumeratorsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
 
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
-        SOAPElement s1  = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement s1e1  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1 = addChildElement(ct1, "sequence", "xsd");
+        SOAPElement s1e1 = addChildElement(s1, "element", "xsd");
         s1e1.setAttribute("sql:field", "EnumName");
         s1e1.setAttribute("name", "EnumName");
         s1e1.setAttribute("type", "xsd:string");
 
-        SOAPElement s1e2  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e2 = addChildElement(s1, "element", "xsd");
         s1e2.setAttribute("sql:field", "EnumDescription");
         s1e2.setAttribute("name", "EnumDescription");
         s1e2.setAttribute("type", "xsd:string");
         s1e2.setAttribute("minOccurs", "0");
 
-        SOAPElement s1e3  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e3 = addChildElement(s1, "element", "xsd");
         s1e3.setAttribute("sql:field", "EnumType");
         s1e3.setAttribute("name", "EnumType");
         s1e3.setAttribute("type", "xsd:string");
 
-
-        SOAPElement s1e4  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e4 = addChildElement(s1, "element", "xsd");
         s1e4.setAttribute("sql:field", "ElementName");
         s1e4.setAttribute("name", "ElementName");
         s1e4.setAttribute("type", "xsd:string");
 
-        SOAPElement s1e5  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e5 = addChildElement(s1, "element", "xsd");
         s1e5.setAttribute("sql:field", "ElementDescription");
         s1e5.setAttribute("name", "ElementDescription");
         s1e5.setAttribute("type", "xsd:string");
         s1e5.setAttribute("minOccurs", "0");
 
-        SOAPElement s1e6  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1e6 = addChildElement(s1, "element", "xsd");
         s1e6.setAttribute("sql:field", "ElementValue");
         s1e6.setAttribute("name", "ElementValue");
         s1e6.setAttribute("type", "xsd:string");
         s1e6.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverKeywordsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addDiscoverKeywordsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
 
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "row");
-        SOAPElement s1  = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement s1e1  = addChildElement(s1, "element", "xsd");
+        SOAPElement s1 = addChildElement(ct1, "sequence", "xsd");
+        SOAPElement s1e1 = addChildElement(s1, "element", "xsd");
         s1e1.setAttribute("sql:field", "Keyword");
         s1e1.setAttribute("name", "Keyword");
         s1e1.setAttribute("type", "xsd:string");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverLiteralsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addDiscoverLiteralsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
 
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        SOAPElement se1  = addChildElement(s, "element", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        SOAPElement se1 = addChildElement(s, "element", "xsd");
         se1.setAttribute("sql:field", "LiteralName");
         se1.setAttribute("name", "LiteralName");
         se1.setAttribute("type", "xsd:string");
 
-        SOAPElement se2  = addChildElement(s, "element", "xsd");
+        SOAPElement se2 = addChildElement(s, "element", "xsd");
         se2.setAttribute("sql:field", "LiteralValue");
         se2.setAttribute("name", "LiteralValue");
         se2.setAttribute("type", "xsd:string");
         se2.setAttribute("minOccurs", "0");
 
-        SOAPElement se3  = addChildElement(s, "element", "xsd");
+        SOAPElement se3 = addChildElement(s, "element", "xsd");
         se3.setAttribute("sql:field", "LiteralInvalidChars");
         se3.setAttribute("name", "LiteralInvalidChars");
         se3.setAttribute("type", "xsd:string");
         se3.setAttribute("minOccurs", "0");
 
-        SOAPElement se4  = addChildElement(s, "element", "xsd");
+        SOAPElement se4 = addChildElement(s, "element", "xsd");
         se4.setAttribute("sql:field", "LiteralInvalidStartingChars");
         se4.setAttribute("name", "LiteralInvalidStartingChars");
         se4.setAttribute("type", "xsd:string");
         se4.setAttribute("minOccurs", "0");
 
-        SOAPElement se5  = addChildElement(s, "element", "xsd");
+        SOAPElement se5 = addChildElement(s, "element", "xsd");
         se5.setAttribute("sql:field", "LiteralMaxLength");
         se5.setAttribute("name", "LiteralMaxLength");
         se5.setAttribute("type", "xsd:int");
         se5.setAttribute("minOccurs", "0");
 
-        SOAPElement se6  = addChildElement(s, "element", "xsd");
+        SOAPElement se6 = addChildElement(s, "element", "xsd");
         se6.setAttribute("sql:field", "LiteralNameEnumValue");
         se6.setAttribute("name", "LiteralNameEnumValue");
         se6.setAttribute("type", "xsd:int");
         se6.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaTablesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addDbSchemaTablesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
 
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        SOAPElement se1  = addChildElement(s, "element", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        SOAPElement se1 = addChildElement(s, "element", "xsd");
         se1.setAttribute("sql:field", "TABLE_CATALOG");
         se1.setAttribute("name", "TABLE_CATALOG");
         se1.setAttribute("type", "xsd:string");
 
-        SOAPElement se2  = addChildElement(s, "element", "xsd");
+        SOAPElement se2 = addChildElement(s, "element", "xsd");
         se2.setAttribute("sql:field", "TABLE_SCHEMA");
         se2.setAttribute("name", "TABLE_SCHEMA");
         se2.setAttribute("type", "xsd:string");
         se2.setAttribute("minOccurs", "0");
 
-        SOAPElement se3  = addChildElement(s, "element", "xsd");
+        SOAPElement se3 = addChildElement(s, "element", "xsd");
         se3.setAttribute("sql:field", "TABLE_NAME");
         se3.setAttribute("name", "TABLE_NAME");
         se3.setAttribute("type", "xsd:string");
 
-        SOAPElement se4  = addChildElement(s, "element", "xsd");
+        SOAPElement se4 = addChildElement(s, "element", "xsd");
         se4.setAttribute("sql:field", "TABLE_TYPE");
         se4.setAttribute("name", "TABLE_TYPE");
         se4.setAttribute("type", "xsd:string");
 
-        SOAPElement se5  = addChildElement(s, "element", "xsd");
+        SOAPElement se5 = addChildElement(s, "element", "xsd");
         se5.setAttribute("sql:field", "TABLE_GUID");
         se5.setAttribute("name", "TABLE_GUID");
         se5.setAttribute("type", "uuid");
         se5.setAttribute("minOccurs", "0");
 
-        SOAPElement se6  = addChildElement(s, "element", "xsd");
+        SOAPElement se6 = addChildElement(s, "element", "xsd");
         se6.setAttribute("sql:field", "DESCRIPTION");
         se6.setAttribute("name", "DESCRIPTION");
         se6.setAttribute("type", "xsd:string");
         se6.setAttribute("minOccurs", "0");
 
-        SOAPElement se7  = addChildElement(s, "element", "xsd");
+        SOAPElement se7 = addChildElement(s, "element", "xsd");
         se7.setAttribute("sql:field", "TABLE_PROPID");
         se7.setAttribute("name", "TABLE_PROPID");
         se7.setAttribute("type", "xsd:unsignedInt");
         se7.setAttribute("minOccurs", "0");
 
-        SOAPElement se8  = addChildElement(s, "element", "xsd");
+        SOAPElement se8 = addChildElement(s, "element", "xsd");
         se8.setAttribute("sql:field", "DATE_CREATED");
         se8.setAttribute("name", "DATE_CREATED");
         se8.setAttribute("type", "xsd:dateTime");
         se8.setAttribute("minOccurs", "0");
 
-        SOAPElement se9  = addChildElement(s, "element", "xsd");
+        SOAPElement se9 = addChildElement(s, "element", "xsd");
         se9.setAttribute("sql:field", "DATE_MODIFIED");
         se9.setAttribute("name", "DATE_MODIFIED");
         se9.setAttribute("type", "xsd:dateTime");
         se9.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaCubesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
+    private static SOAPElement addMdSchemaCubesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
 
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
 
-        SOAPElement se1  = addChildElement(s, "element", "xsd");
+        SOAPElement se1 = addChildElement(s, "element", "xsd");
         se1.setAttribute("sql:field", "CATALOG_NAME");
         se1.setAttribute("name", "CATALOG_NAME");
         se1.setAttribute("type", "xsd:string");
         se1.setAttribute("minOccurs", "0");
 
-        SOAPElement se2  = addChildElement(s, "element", "xsd");
+        SOAPElement se2 = addChildElement(s, "element", "xsd");
         se2.setAttribute("sql:field", "SCHEMA_NAME");
         se2.setAttribute("name", "SCHEMA_NAME");
         se2.setAttribute("type", "xsd:string");
         se2.setAttribute("minOccurs", "0");
 
-        SOAPElement se3  = addChildElement(s, "element", "xsd");
+        SOAPElement se3 = addChildElement(s, "element", "xsd");
         se3.setAttribute("sql:field", "CUBE_NAME");
         se3.setAttribute("name", "CUBE_NAME");
         se3.setAttribute("type", "xsd:string");
 
-        SOAPElement se4  = addChildElement(s, "element", "xsd");
+        SOAPElement se4 = addChildElement(s, "element", "xsd");
         se4.setAttribute("sql:field", "CUBE_TYPE");
         se4.setAttribute("name", "CUBE_TYPE");
         se4.setAttribute("type", "xsd:string");
 
-        SOAPElement se5  = addChildElement(s, "element", "xsd");
+        SOAPElement se5 = addChildElement(s, "element", "xsd");
         se5.setAttribute("sql:field", "CUBE_GUID");
         se5.setAttribute("name", "CUBE_GUID");
         se5.setAttribute("type", "xsd:string");
         se2.setAttribute("minOccurs", "0");
 
-        SOAPElement se6  = addChildElement(s, "element", "xsd");
+        SOAPElement se6 = addChildElement(s, "element", "xsd");
         se6.setAttribute("sql:field", "CREATED_ON");
         se6.setAttribute("name", "CREATED_ON");
         se6.setAttribute("type", "xsd:dateTime");
         se6.setAttribute("minOccurs", "0");
 
-        SOAPElement se7  = addChildElement(s, "element", "xsd");
+        SOAPElement se7 = addChildElement(s, "element", "xsd");
         se7.setAttribute("sql:field", "LAST_SCHEMA_UPDATE");
         se7.setAttribute("name", "LAST_SCHEMA_UPDATE");
         se7.setAttribute("type", "xsd:dateTime");
         se7.setAttribute("minOccurs", "0");
 
-        SOAPElement se8  = addChildElement(s, "element", "xsd");
+        SOAPElement se8 = addChildElement(s, "element", "xsd");
         se8.setAttribute("sql:field", "SCHEMA_UPDATED_BY");
         se8.setAttribute("name", "SCHEMA_UPDATED_BY");
         se8.setAttribute("type", "xsd:string");
         se8.setAttribute("minOccurs", "0");
 
-        SOAPElement se9  = addChildElement(s, "element", "xsd");
+        SOAPElement se9 = addChildElement(s, "element", "xsd");
         se9.setAttribute("sql:field", "LAST_DATA_UPDATE");
         se9.setAttribute("name", "LAST_DATA_UPDATE");
         se9.setAttribute("type", "xsd:dateTime");
         se9.setAttribute("minOccurs", "0");
 
-        SOAPElement se10  = addChildElement(s, "element", "xsd");
+        SOAPElement se10 = addChildElement(s, "element", "xsd");
         se10.setAttribute("sql:field", "DATA_UPDATED_BY");
         se10.setAttribute("name", "DATA_UPDATED_BY");
         se10.setAttribute("type", "xsd:string");
         se10.setAttribute("minOccurs", "0");
 
-        SOAPElement se11  = addChildElement(s, "element", "xsd");
+        SOAPElement se11 = addChildElement(s, "element", "xsd");
         se11.setAttribute("sql:field", "DESCRIPTION");
         se11.setAttribute("name", "DESCRIPTION");
         se11.setAttribute("type", "xsd:string");
         se11.setAttribute("minOccurs", "0");
 
-        SOAPElement se12  = addChildElement(s, "element", "xsd");
+        SOAPElement se12 = addChildElement(s, "element", "xsd");
         se12.setAttribute("sql:field", "IS_DRILLTHROUGH_ENABLED");
         se12.setAttribute("name", "IS_DRILLTHROUGH_ENABLED");
         se12.setAttribute("type", "xsd:boolean");
 
-        SOAPElement se13  = addChildElement(s, "element", "xsd");
+        SOAPElement se13 = addChildElement(s, "element", "xsd");
         se13.setAttribute("sql:field", "IS_LINKABLE");
         se13.setAttribute("name", "IS_LINKABLE");
         se13.setAttribute("type", "xsd:boolean");
 
-        SOAPElement se14  = addChildElement(s, "element", "xsd");
+        SOAPElement se14 = addChildElement(s, "element", "xsd");
         se14.setAttribute("sql:field", "IS_WRITE_ENABLED");
         se14.setAttribute("name", "IS_WRITE_ENABLED");
         se14.setAttribute("type", "xsd:boolean");
 
-        SOAPElement se15  = addChildElement(s, "element", "xsd");
+        SOAPElement se15 = addChildElement(s, "element", "xsd");
         se15.setAttribute("sql:field", "IS_SQL_ENABLED");
         se15.setAttribute("name", "IS_SQL_ENABLED");
         se15.setAttribute("type", "xsd:boolean");
 
-        SOAPElement se16  = addChildElement(s, "element", "xsd");
+        SOAPElement se16 = addChildElement(s, "element", "xsd");
         se16.setAttribute("sql:field", "CUBE_CAPTION");
         se16.setAttribute("name", "CUBE_CAPTION");
         se16.setAttribute("type", "xsd:string");
         se16.setAttribute("minOccurs", "0");
 
-        SOAPElement se17  = addChildElement(s, "element", "xsd");
+        SOAPElement se17 = addChildElement(s, "element", "xsd");
         se17.setAttribute("sql:field", "BASE_CUBE_NAME");
         se17.setAttribute("name", "BASE_CUBE_NAME");
         se17.setAttribute("type", "xsd:string");
         se17.setAttribute("minOccurs", "0");
 
-        SOAPElement se18  = addChildElement(s, "element", "xsd");
+        SOAPElement se18 = addChildElement(s, "element", "xsd");
         se18.setAttribute("sql:field", "DIMENSIONS");
         se18.setAttribute("name", "DIMENSIONS");
         se18.setAttribute("minOccurs", "0");
 
-        SOAPElement se19  = addChildElement(s, "element", "xsd");
+        SOAPElement se19 = addChildElement(s, "element", "xsd");
         se19.setAttribute("sql:field", "SETS");
         se19.setAttribute("name", "SETS");
         se19.setAttribute("minOccurs", "0");
 
-        SOAPElement se20  = addChildElement(s, "element", "xsd");
+        SOAPElement se20 = addChildElement(s, "element", "xsd");
         se20.setAttribute("sql:field", "MEASURES");
         se20.setAttribute("name", "MEASURES");
         se20.setAttribute("minOccurs", "0");
 
-        SOAPElement se21  = addChildElement(s, "element", "xsd");
+        SOAPElement se21 = addChildElement(s, "element", "xsd");
         se21.setAttribute("sql:field", "CUBE_SOURCE");
         se21.setAttribute("name", "CUBE_SOURCE");
         se21.setAttribute("type", "xsd:int");
         se21.setAttribute("minOccurs", "0");
 
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaHierarchiesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaHierarchiesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
-        addElement(s, "DIMENSION_UNIQUE_NAME","xsd:string", null);
+        addElement(s, "DIMENSION_UNIQUE_NAME", "xsd:string", null);
         addElement(s, "HIERARCHY_NAME", "xsd:string", null);
         addElement(s, "HIERARCHY_UNIQUE_NAME", "xsd:string", null);
         addElement(s, "HIERARCHY_GUID", "uuid", "0");
@@ -1950,18 +2054,19 @@ public class SoapUtil {
         addElement(s, "HIERARCHY_VISIBILITY", "xsd:unsignedShort", "0");
         addElement(s, "PARENT_CHILD", "xsd:boolean", "0");
         addElement(s, "LEVELS", null, "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaMeasuresRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaMeasuresRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "MEASURE_NAME", "xsd:string", null);
@@ -1975,21 +2080,22 @@ public class SoapUtil {
         addElement(s, "DESCRIPTION", "xsd:string", "0");
         addElement(s, "MEASUREGROUP_NAME", "xsd:string", "0");
         addElement(s, "MEASURE_DISPLAY_FOLDER", "xsd:string", "0");
-        addElement(s, "DEFAULT_FORMAT_STRING", "xsd:string","0");
+        addElement(s, "DEFAULT_FORMAT_STRING", "xsd:string", "0");
         addElement(s, "CUBE_SOURCE", "xsd:unsignedShort", "0");
         addElement(s, "MEASURE_VISIBILITY", "xsd:unsignedShort", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaDimensionsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaDimensionsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "DIMENSION_NAME", "xsd:string", null);
@@ -2007,36 +2113,38 @@ public class SoapUtil {
         addElement(s, "DIMENSION_MASTER_UNIQUE_NAME", "xsd:string", "0");
         addElement(s, "DIMENSION_IS_VISIBLE", "xsd:boolean", "0");
         addElement(s, "HIERARCHIES", null, "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaMeasureGroupsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaMeasureGroupsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "MEASUREGROUP_NAME", "xsd:string", "0");
         addElement(s, "DESCRIPTION", "xsd:string", "0");
         addElement(s, "IS_WRITE_ENABLED", "xsd:boolean", "0");
         addElement(s, "MEASUREGROUP_CAPTION", "xsd:string", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaMeasureGroupDimensionsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaMeasureGroupDimensionsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "MEASUREGROUP_NAME", "xsd:string", "0");
@@ -2047,18 +2155,19 @@ public class SoapUtil {
         addElement(s, "DIMENSION_IS_FACT_DIMENSION", "xsd:boolean", "0");
         addElement(s, "DIMENSION_PATH", "xsd:string", "0");
         addElement(s, "DIMENSION_GRANULARITY", "xsd:string", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaLevelsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaLevelsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "DIMENSION_UNIQUE_NAME", "xsd:string", null);
@@ -2077,18 +2186,19 @@ public class SoapUtil {
         addElement(s, "LEVEL_ORIGIN", "xsd:unsignedShort", "0");
         addElement(s, "CUBE_SOURCE", "xsd:unsignedShort", "0");
         addElement(s, "LEVEL_VISIBILITY", "xsd:unsignedShort", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaPropertiesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaPropertiesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "DIMENSION_UNIQUE_NAME", "xsd:string", "0");
@@ -2104,18 +2214,19 @@ public class SoapUtil {
         addElement(s, "PROPERTY_ORIGIN", "xsd:unsignedShort", "0");
         addElement(s, "CUBE_SOURCE", "xsd:unsignedShort", "0");
         addElement(s, "PROPERTY_VISIBILITY", "xsd:unsignedShort", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaMembersRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaMembersRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "DIMENSION_UNIQUE_NAME", "xsd:string", null);
@@ -2123,28 +2234,29 @@ public class SoapUtil {
         addElement(s, "LEVEL_UNIQUE_NAME", "xsd:string", null);
         addElement(s, "LEVEL_NUMBER", "xsd:unsignedInt", null);
         addElement(s, "MEMBER_ORDINAL", "xsd:unsignedInt", null);
-        addElement(s, "MEMBER_NAME","xsd:string", null);
+        addElement(s, "MEMBER_NAME", "xsd:string", null);
         addElement(s, "MEMBER_UNIQUE_NAME", "xsd:string", null);
         addElement(s, "MEMBER_TYPE", "xsd:int", null);
         addElement(s, "MEMBER_GUID", "uuid", "0");
-        addElement(s, "MEMBER_CAPTION","xsd:string", null);
+        addElement(s, "MEMBER_CAPTION", "xsd:string", null);
         addElement(s, "CHILDREN_CARDINALITY", "xsd:unsignedInt", null);
         addElement(s, "PARENT_LEVEL", "xsd:unsignedInt", null);
         addElement(s, "PARENT_UNIQUE_NAME", "xsd:string", "0");
         addElement(s, "PARENT_COUNT", "xsd:unsignedInt", null);
         addElement(s, "TREE_OP", "xsd:string", "0");
         addElement(s, "DEPTH", "xsd:int", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaTablesInfoRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDbSchemaTablesInfoRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "TABLE_CATALOG", "xsd:string", "0");
         addElement(s, "TABLE_SCHEMA", "xsd:string", "0");
         addElement(s, "TABLE_NAME", "xsd:string", null);
@@ -2159,46 +2271,49 @@ public class SoapUtil {
         addElement(s, "CARDINALITY", "xsd:unsignedLong", null);
         addElement(s, "DESCRIPTION", "xsd:string", "0");
         addElement(s, "TABLE_PROPID", "xsd:unsignedInt", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaSourceTablesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDbSchemaSourceTablesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "TABLE_CATALOG","xsd:string","0");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "TABLE_CATALOG", "xsd:string", "0");
         addElement(s, "TABLE_SCHEMA", "xsd:string", "0");
         addElement(s, "TABLE_NAME", "xsd:string", null);
         addElement(s, "TABLE_TYPE", "xsd:string", null);
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaSchemataRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDbSchemaSchemataRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
-        addElement(s, "CATALOG_NAME","xsd:string",null);
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
+        addElement(s, "CATALOG_NAME", "xsd:string", null);
         addElement(s, "SCHEMA_NAME", "xsd:string", null);
         addElement(s, "SCHEMA_OWNER", "xsd:string", null);
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaProviderTypesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDbSchemaProviderTypesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "TYPE_NAME", "xsd:string", null);
         addElement(s, "DATA_TYPE", "xsd:unsignedShort", null);
         addElement(s, "COLUMN_SIZE", "xsd:unsignedInt", null);
@@ -2212,17 +2327,18 @@ public class SoapUtil {
         addElement(s, "AUTO_UNIQUE_VALUE", "xsd:boolean", "0");
         addElement(s, "IS_LONG", "xsd:boolean", "0");
         addElement(s, "BEST_MATCH", "xsd:boolean", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDbSchemaColumnsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDbSchemaColumnsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "TABLE_CATALOG", "xsd:string", null);
         addElement(s, "TABLE_SCHEMA", "xsd:string", "0");
         addElement(s, "TABLE_NAME", "xsd:string", null);
@@ -2236,65 +2352,69 @@ public class SoapUtil {
         addElement(s, "CHARACTER_OCTET_LENGTH", "xsd:unsignedInt", "0");
         addElement(s, "NUMERIC_PRECISION", "xsd:unsignedShort", "0");
         addElement(s, "NUMERIC_SCALE", "xsd:short", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverXmlMetaDataRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDiscoverXmlMetaDataRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "METADATA", "xsd:string", null);
         addElement(s, "ObjectType", "xsd:string", "0");
         addElement(s, "DatabaseID", "xsd:string", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addDiscoverDataSourcesRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addDiscoverDataSourcesRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "LiteralName", "xsd:string", null);
         addElement(s, "LiteralValue", "xsd:string", "0");
         addElement(s, "LiteralInvalidChars", "xsd:string", "0");
         addElement(s, "LiteralInvalidStartingChars", "xsd:string", "0");
         addElement(s, "LiteralMaxLength", "xsd:int", "0");
         addElement(s, "LiteralNameEnumValue", "xsd:int", "0");
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaActionsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaActionsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "CATALOG_NAME", "xsd:string", "0");
         addElement(s, "SCHEMA_NAME", "xsd:string", "0");
         addElement(s, "CUBE_NAME", "xsd:string", null);
         addElement(s, "ACTION_NAME", "xsd:string", null);
         addElement(s, "COORDINATE", "xsd:string", null);
         addElement(s, "COORDINATE_TYPE", "xsd:int", null);
-        return root;
+        return seRoot;
     }
 
-    private static SOAPElement addMdSchemaFunctionsRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        SOAPElement schema = fillRoot(root);
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+    private static SOAPElement addMdSchemaFunctionsRoot(SOAPBody body) throws SOAPException {
+        SOAPElement seDicoverResponse = body.addChildElement(Constants.MSXMLA.QN_DISCOVER_RESPONSE);
+        SOAPElement seReturn = seDicoverResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+        SOAPElement schema = fillRoot(seRoot);
+
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement s  = addChildElement(ct, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct, "sequence", "xsd");
         addElement(s, "FUNCTION_NAME", "xsd:string", null);
         addElement(s, "DESCRIPTION", "xsd:string", "0");
         addElement(s, "PARAMETER_LIST", "xsd:string", "0");
@@ -2303,12 +2423,11 @@ public class SoapUtil {
         addElement(s, "INTERFACE_NAME", "xsd:string", null);
         addElement(s, "LIBRARY_NAME", "xsd:string", "0");
         addElement(s, "CAPTION", "xsd:string", "0");
-        return root;
+        return seRoot;
     }
 
-
     private static void addElement(SOAPElement s, String name, String type, String minOccurs) {
-        SOAPElement se  = addChildElement(s, "element", "xsd");
+        SOAPElement se = addChildElement(s, "element", "xsd");
         se.setAttribute("sql:field", name);
         se.setAttribute("name", name);
         if (type != null) {
@@ -2323,7 +2442,7 @@ public class SoapUtil {
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+        SOAPElement schema = addChildElement(root, "schema", "xsd");
         schema.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         schema.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -2331,7 +2450,7 @@ public class SoapUtil {
         schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("elementFormDefault", "qualified");
 
-        SOAPElement el  = addChildElement(schema, "element", "xsd");
+        SOAPElement el = addChildElement(schema, "element", "xsd");
         el.setAttribute("name", "root");
         SOAPElement ct = addChildElement(el, "complexType", "xsd");
         SOAPElement s = addChildElement(ct, "sequence", "xsd");
@@ -2341,50 +2460,53 @@ public class SoapUtil {
         se.setAttribute("minOccurs", "0");
         se.setAttribute("maxOccurs", "unbounded");
 
-        SOAPElement st  = addChildElement(schema, "simpleType", "xsd");
+        SOAPElement st = addChildElement(schema, "simpleType", "xsd");
         st.setAttribute("name", "uuid");
-        SOAPElement r  = addChildElement(st, "restriction", "xsd");
+        SOAPElement r = addChildElement(st, "restriction", "xsd");
         r.setAttribute("base", "xsd:string");
-        SOAPElement p  = addChildElement(r, "pattern", "xsd");
+        SOAPElement p = addChildElement(r, "pattern", "xsd");
         p.setAttribute("value", "[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}");
         return schema;
     }
 
-    private static SOAPElement addEmptyRoot(SOAPBody body) {
-        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", EMPTY);
-        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        return root;
+    private static SOAPElement addEmptyRoot(SOAPBody body) throws SOAPException {
+
+        SOAPElement seExecuteResponse = body.addChildElement(Constants.MSXMLA.QN_EXECUTE_RESPONSE);
+        SOAPElement seReturn = seExecuteResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.EMPTY.QN_ROOT);
+
+        seRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        seRoot.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        seRoot.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        return seRoot;
     }
 
-    private static SOAPElement addMddatasetRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", MDDATASET);
-        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        addMddatasetSchema(root);
-        return root;
+    private static SOAPElement addMddatasetRoot(SOAPElement body) throws SOAPException {
+        SOAPElement seExecuteResponse = body.addChildElement(Constants.MSXMLA.QN_EXECUTE_RESPONSE);
+        SOAPElement seReturn = seExecuteResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.MDDATASET.QN_ROOT);
+        seRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        seRoot.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        seRoot.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        addMddatasetSchema(seRoot);
+        return seRoot;
     }
 
-    private static SOAPElement addRowSetRoot(SOAPBody body, RowSet rowSet) {
-        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
-        SOAPElement ret = addChildElement(response, "return", MSXMLA);
-        SOAPElement root = addChildElement(ret, "root", ROWSET);
-        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        root.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
-        addRowsetSchema(root, rowSet);
-        return root;
-    }
+    private static SOAPElement addRowSetRoot(SOAPBody body, RowSet rowSet) throws SOAPException {
 
+        SOAPElement seExecuteResponse = body.addChildElement(Constants.MSXMLA.QN_EXECUTE_RESPONSE);
+        SOAPElement seReturn = seExecuteResponse.addChildElement(Constants.MSXMLA.QN_RETURN);
+        SOAPElement seRoot = seReturn.addChildElement(Constants.ROWSET.QN_ROOT);
+
+        seRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        seRoot.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+        seRoot.setAttribute("xmlns:EX", "urn:schemas-microsoft-com:xml-analysis:exception");
+        addRowsetSchema(seRoot, rowSet);
+        return seRoot;
+    }
 
     private static void addRowsetSchema(SOAPElement root, RowSet rowSet) {
-        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+        SOAPElement schema = addChildElement(root, "schema", "xsd");
         schema.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:rowset");
         schema.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis:rowset");
@@ -2392,30 +2514,30 @@ public class SoapUtil {
         schema.setAttribute("xmlns:sql", "urn:schemas-microsoft-com:xml-sql");
         schema.setAttribute("elementFormDefault", "qualified");
 
-        SOAPElement el1  = addChildElement(schema, "element", "xsd");
+        SOAPElement el1 = addChildElement(schema, "element", "xsd");
         el1.setAttribute("name", "root");
-        SOAPElement el1complexType  = addChildElement(el1, "complexType", "xsd");
-        SOAPElement el1complexTypeSequence  = addChildElement(el1complexType, "sequence", "xsd");
-        SOAPElement el1complexTypeSequenceEl  = addChildElement(el1complexTypeSequence, "element", "xsd");
+        SOAPElement el1complexType = addChildElement(el1, "complexType", "xsd");
+        SOAPElement el1complexTypeSequence = addChildElement(el1complexType, "sequence", "xsd");
+        SOAPElement el1complexTypeSequenceEl = addChildElement(el1complexTypeSequence, "element", "xsd");
         el1complexTypeSequenceEl.setAttribute("maxOccurs", "unbounded");
         el1complexTypeSequenceEl.setAttribute("minOccurs", "0");
         el1complexTypeSequenceEl.setAttribute("name", "row");
         el1complexTypeSequenceEl.setAttribute("type", "row");
 
-        SOAPElement simpleType  = addChildElement(schema, "simpleType", "xsd");
+        SOAPElement simpleType = addChildElement(schema, "simpleType", "xsd");
         simpleType.setAttribute("name", "uuid");
-        SOAPElement restriction  = addChildElement(simpleType, "restriction", "xsd");
+        SOAPElement restriction = addChildElement(simpleType, "restriction", "xsd");
         restriction.setAttribute("base", "xsd:string");
-        SOAPElement pattern  = addChildElement(restriction, "restriction", "xsd");
+        SOAPElement pattern = addChildElement(restriction, "restriction", "xsd");
         pattern.setAttribute("value", "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
 
-        SOAPElement ct  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct = addChildElement(schema, "complexType", "xsd");
         ct.setAttribute("name", "row");
-        SOAPElement ctSequence  = addChildElement(ct, "sequence", "xsd");
-        if ( rowSet.rowSetRows() != null && rowSet.rowSetRows().size() > 0
-            && rowSet.rowSetRows().get(0) != null && rowSet.rowSetRows().get(0).rowSetRowItem() != null) {
+        SOAPElement ctSequence = addChildElement(ct, "sequence", "xsd");
+        if (rowSet.rowSetRows() != null && rowSet.rowSetRows().size() > 0 && rowSet.rowSetRows().get(0) != null
+                && rowSet.rowSetRows().get(0).rowSetRowItem() != null) {
             for (RowSetRowItem item : rowSet.rowSetRows().get(0).rowSetRowItem()) {
-                SOAPElement ctSequenceEl1  = addChildElement(ctSequence, "element", "xsd");
+                SOAPElement ctSequenceEl1 = addChildElement(ctSequence, "element", "xsd");
                 ItemTypeEnum type = item.type().orElse(ItemTypeEnum.STRING);
                 ctSequenceEl1.setAttribute("minOccurs", "0");
                 ctSequenceEl1.setAttribute("name", item.tagName());
@@ -2426,302 +2548,370 @@ public class SoapUtil {
     }
 
     private static void addMddatasetSchema(SOAPElement root) {
-        SOAPElement schema  = addChildElement(root, "schema", "xsd");
+        SOAPElement schema = addChildElement(root, "schema", "xsd");
         schema.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         schema.setAttribute("targetNamespace", "urn:schemas-microsoft-com:xml-analysis:mddataset");
         schema.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis:mddataset");
         schema.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         schema.setAttribute("xmlns:sql", "urn:schemas-microsoft-com:xml-sql");
         schema.setAttribute("elementFormDefault", "qualified");
-        SOAPElement ct1  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct1 = addChildElement(schema, "complexType", "xsd");
         ct1.setAttribute("name", "MemberType");
         SOAPElement ct1Sequence = addChildElement(ct1, "sequence", "xsd");
-        SOAPElement e1  = addChildElement(ct1Sequence, "element", "xsd");
+        SOAPElement e1 = addChildElement(ct1Sequence, "element", "xsd");
         e1.setAttribute("name", "UName");
         e1.setAttribute("type", "xsd:string");
-        SOAPElement e2  = addChildElement(ct1Sequence, "element", "xsd");
+        SOAPElement e2 = addChildElement(ct1Sequence, "element", "xsd");
         e2.setAttribute("name", "Caption");
         e2.setAttribute("type", "xsd:string");
-        SOAPElement e3  = addChildElement(ct1Sequence, "element", "xsd");
+        SOAPElement e3 = addChildElement(ct1Sequence, "element", "xsd");
         e3.setAttribute("name", "LName");
         e3.setAttribute("type", "xsd:string");
-        SOAPElement e4  = addChildElement(ct1Sequence, "element", "xsd");
+        SOAPElement e4 = addChildElement(ct1Sequence, "element", "xsd");
         e4.setAttribute("name", "LNum");
         e4.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement e5  = addChildElement(ct1Sequence, "element", "xsd");
+        SOAPElement e5 = addChildElement(ct1Sequence, "element", "xsd");
         e5.setAttribute("name", "DisplayInfo");
         e5.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement s  = addChildElement(ct1Sequence, "sequence", "xsd");
+        SOAPElement s = addChildElement(ct1Sequence, "sequence", "xsd");
         s.setAttribute("maxOccurs", "unbounded");
         s.setAttribute("minOccurs", "0");
-        SOAPElement any  = addChildElement(ct1Sequence, "any", "xsd");
+        SOAPElement any = addChildElement(ct1Sequence, "any", "xsd");
         any.setAttribute("processContents", "lax");
         any.setAttribute("maxOccurs", "unbounded");
         SOAPElement ct1Attribute = addChildElement(ct1, "attribute", "xsd");
         ct1Attribute.setAttribute("name", "Hierarchy");
         ct1Attribute.setAttribute("type", "xsd:string");
 
-        SOAPElement ct2  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct2 = addChildElement(schema, "complexType", "xsd");
         ct2.setAttribute("name", "PropType");
-        SOAPElement ct2Attribute  = addChildElement(ct2, "attribute", "xsd");
+        SOAPElement ct2Attribute = addChildElement(ct2, "attribute", "xsd");
         ct2Attribute.setAttribute("name", "name");
         ct2Attribute.setAttribute("type", "xsd:string");
 
-        SOAPElement ct3  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct3 = addChildElement(schema, "complexType", "xsd");
         ct3.setAttribute("name", "TupleType");
-        SOAPElement ct3Sequence  = addChildElement(ct3, "sequence", "xsd");
+        SOAPElement ct3Sequence = addChildElement(ct3, "sequence", "xsd");
         ct3Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct3SequenceElement  = addChildElement(ct3Sequence, "element", "xsd");
+        SOAPElement ct3SequenceElement = addChildElement(ct3Sequence, "element", "xsd");
         ct3SequenceElement.setAttribute("name", "Member");
         ct3SequenceElement.setAttribute("type", "MemberType");
 
-        SOAPElement ct4  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct4 = addChildElement(schema, "complexType", "xsd");
         ct4.setAttribute("name", "MembersType");
-        SOAPElement ct4Sequence  = addChildElement(ct4, "sequence", "xsd");
+        SOAPElement ct4Sequence = addChildElement(ct4, "sequence", "xsd");
         ct4Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct4SequenceElement  = addChildElement(ct4Sequence, "element", "xsd");
+        SOAPElement ct4SequenceElement = addChildElement(ct4Sequence, "element", "xsd");
         ct4SequenceElement.setAttribute("name", "Member");
         ct4SequenceElement.setAttribute("type", "MemberType");
-        SOAPElement ct4Attribute  = addChildElement(ct4, "attribute", "xsd");
+        SOAPElement ct4Attribute = addChildElement(ct4, "attribute", "xsd");
         ct4Attribute.setAttribute("name", "Hierarchy");
         ct4Attribute.setAttribute("type", "xsd:string");
 
-        SOAPElement ct5  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct5 = addChildElement(schema, "complexType", "xsd");
         ct5.setAttribute("name", "TuplesType");
-        SOAPElement ct5Sequence  = addChildElement(ct5, "sequence", "xsd");
+        SOAPElement ct5Sequence = addChildElement(ct5, "sequence", "xsd");
         ct5Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct5SequenceElement  = addChildElement(ct5Sequence, "element", "xsd");
+        SOAPElement ct5SequenceElement = addChildElement(ct5Sequence, "element", "xsd");
         ct5SequenceElement.setAttribute("name", "Tuple");
         ct5SequenceElement.setAttribute("type", "TupleType");
 
-        SOAPElement ct6  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct6 = addChildElement(schema, "complexType", "xsd");
         ct6.setAttribute("name", "CrossProductType");
-        SOAPElement ct6Sequence  = addChildElement(ct6, "sequence", "xsd");
+        SOAPElement ct6Sequence = addChildElement(ct6, "sequence", "xsd");
         ct6Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct6SequenceChoice  = addChildElement(ct6Sequence, "choice", "xsd");
+        SOAPElement ct6SequenceChoice = addChildElement(ct6Sequence, "choice", "xsd");
         ct6SequenceChoice.setAttribute("minOccurs", "0");
         ct6SequenceChoice.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct6SequenceChoiceE1  = addChildElement(ct6SequenceChoice, "element", "xsd");
+        SOAPElement ct6SequenceChoiceE1 = addChildElement(ct6SequenceChoice, "element", "xsd");
         ct6SequenceChoiceE1.setAttribute("name", "Members");
         ct6SequenceChoiceE1.setAttribute("type", "MembersType");
-        SOAPElement ct6SequenceChoiceE2  = addChildElement(ct6SequenceChoice, "element", "xsd");
+        SOAPElement ct6SequenceChoiceE2 = addChildElement(ct6SequenceChoice, "element", "xsd");
         ct6SequenceChoiceE2.setAttribute("name", "Tuples");
         ct6SequenceChoiceE2.setAttribute("type", "TuplesType");
-        SOAPElement ct6Attribute  = addChildElement(ct6, "attribute", "xsd");
+        SOAPElement ct6Attribute = addChildElement(ct6, "attribute", "xsd");
         ct6Attribute.setAttribute("name", "Size");
         ct6Attribute.setAttribute("type", "xsd:unsignedInt");
 
-        SOAPElement ct7  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct7 = addChildElement(schema, "complexType", "xsd");
         ct7.setAttribute("name", "OlapInfo");
-        SOAPElement ct7Sequence  = addChildElement(ct7, "sequence", "xsd");
-        SOAPElement ct7SequenceElement1  = addChildElement(ct7Sequence, "element", "xsd");
+        SOAPElement ct7Sequence = addChildElement(ct7, "sequence", "xsd");
+        SOAPElement ct7SequenceElement1 = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement1.setAttribute("name", "CubeInfo");
 
-        SOAPElement ct7SequenceElement1Ct  = addChildElement(ct7SequenceElement1, "complexType", "xsd");
-        SOAPElement ct7SequenceElement1CtSequence  = addChildElement(ct7SequenceElement1Ct, "sequence", "xsd");
-        SOAPElement ct7SequenceElement1CtSequenceEl  = addChildElement(ct7SequenceElement1CtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement1Ct = addChildElement(ct7SequenceElement1, "complexType", "xsd");
+        SOAPElement ct7SequenceElement1CtSequence = addChildElement(ct7SequenceElement1Ct, "sequence", "xsd");
+        SOAPElement ct7SequenceElement1CtSequenceEl = addChildElement(ct7SequenceElement1CtSequence, "element", "xsd");
         ct7SequenceElement1CtSequenceEl.setAttribute("name", "Cube");
         ct7SequenceElement1CtSequenceEl.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement1CtSequenceElCt  = addChildElement(ct7SequenceElement1CtSequenceEl, "complexType", "xsd");
-        SOAPElement ct7SequenceElement1CtSequenceElCtSequence  = addChildElement(ct7SequenceElement1CtSequenceElCt, "sequence", "xsd");
-        SOAPElement ct7SequenceElement1CtSequenceElCtSequenceEl  = addChildElement(ct7SequenceElement1CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement1CtSequenceElCt = addChildElement(ct7SequenceElement1CtSequenceEl, "complexType",
+                "xsd");
+        SOAPElement ct7SequenceElement1CtSequenceElCtSequence = addChildElement(ct7SequenceElement1CtSequenceElCt,
+                "sequence", "xsd");
+        SOAPElement ct7SequenceElement1CtSequenceElCtSequenceEl = addChildElement(
+                ct7SequenceElement1CtSequenceElCtSequence, "element", "xsd");
         ct7SequenceElement1CtSequenceElCtSequenceEl.setAttribute("name", "CubeName");
         ct7SequenceElement1CtSequenceElCtSequenceEl.setAttribute("type", "xsd:string");
 
-        SOAPElement ct7SequenceElement2  = addChildElement(ct7Sequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2 = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement2.setAttribute("name", "AxesInfo");
-        SOAPElement ct7SequenceElement2Ct  = addChildElement(ct7SequenceElement2, "complexType", "xsd");
-        SOAPElement ct7SequenceElement2CtSequence  = addChildElement(ct7SequenceElement2Ct, "sequence", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceEl  = addChildElement(ct7SequenceElement2CtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2Ct = addChildElement(ct7SequenceElement2, "complexType", "xsd");
+        SOAPElement ct7SequenceElement2CtSequence = addChildElement(ct7SequenceElement2Ct, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceEl = addChildElement(ct7SequenceElement2CtSequence, "element", "xsd");
         ct7SequenceElement2CtSequenceEl.setAttribute("name", "AxisInfo");
         ct7SequenceElement2CtSequenceEl.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCt  = addChildElement(ct7SequenceElement2CtSequenceEl, "complexType", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequence  = addChildElement(ct7SequenceElement2CtSequenceElCt, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCt = addChildElement(ct7SequenceElement2CtSequenceEl, "complexType",
+                "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequence = addChildElement(ct7SequenceElement2CtSequenceElCt,
+                "sequence", "xsd");
 
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElement  = addChildElement(ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElement = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequence, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("name", "HierarchyInfo");
         ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceElCtSequenceElement.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCt  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElement, "complexType", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCt, "Sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCt = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceElement, "complexType", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceElementCt, "Sequence", "xsd");
 
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E1  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E1 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E1.setAttribute("name", "UName");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E1.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E2 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E2.setAttribute("name", "Caption");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E2.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E3  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E3 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E3.setAttribute("name", "LName");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E3.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E4  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E4 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E4.setAttribute("name", "LNum");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E4.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E5  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence1E5 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence1, "element", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("name", "DisplayInfo");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("type", "PropType");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceElCtSequenceSequence1E5.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2Any  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceSequence2, "any", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2 = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceElementCtSequence, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceSequence2Any = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceSequence2, "any", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("processContents", "lax");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceElCtSequenceSequence2Any.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute  = addChildElement(ct7SequenceElement2CtSequenceElCtSequenceElementCt, "attribute", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute = addChildElement(
+                ct7SequenceElement2CtSequenceElCtSequenceElementCt, "attribute", "xsd");
         ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("name", "name");
         ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("type", "xsd:string");
         ct7SequenceElement2CtSequenceElCtSequenceElementCtAttribute.setAttribute("use", "required");
-        SOAPElement ct7SequenceElement2CtAttribute  = addChildElement(ct7SequenceElement2CtSequenceElCt, "attribute", "xsd");
+        SOAPElement ct7SequenceElement2CtAttribute = addChildElement(ct7SequenceElement2CtSequenceElCt, "attribute",
+                "xsd");
         ct7SequenceElement2CtAttribute.setAttribute("name", "name");
         ct7SequenceElement2CtAttribute.setAttribute("type", "xsd:string");
 
-        SOAPElement ct7SequenceElement3  = addChildElement(ct7Sequence, "element", "xsd");
+        SOAPElement ct7SequenceElement3 = addChildElement(ct7Sequence, "element", "xsd");
         ct7SequenceElement3.setAttribute("name", "CellInfo");
-        SOAPElement ct7SequenceElement3Ct  = addChildElement(ct7SequenceElement3, "complexType", "xsd");
-        SOAPElement ct7SequenceElement3CtSequence  = addChildElement(ct7SequenceElement3Ct, "sequence", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1  = addChildElement(ct7SequenceElement3CtSequence, "sequence", "xsd");
+        SOAPElement ct7SequenceElement3Ct = addChildElement(ct7SequenceElement3, "complexType", "xsd");
+        SOAPElement ct7SequenceElement3CtSequence = addChildElement(ct7SequenceElement3Ct, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1 = addChildElement(ct7SequenceElement3CtSequence, "sequence",
+                "xsd");
         ct7SequenceElement2CtSequenceSequence1.setAttribute("minOccurs", "0");
         ct7SequenceElement2CtSequenceSequence1.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1Ch  = addChildElement(ct7SequenceElement2CtSequenceSequence1, "choice", "xsd");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE1  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1Ch = addChildElement(ct7SequenceElement2CtSequenceSequence1,
+                "choice", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE1 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE1.setAttribute("name", "Value");
         ct7SequenceElement2CtSequenceSequence1ChE1.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE2  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE2 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE2.setAttribute("name", "FmtValue");
         ct7SequenceElement2CtSequenceSequence1ChE2.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE3  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE3 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE3.setAttribute("name", "BackColor");
         ct7SequenceElement2CtSequenceSequence1ChE3.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE4  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE4 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE4.setAttribute("name", "ForeColor");
         ct7SequenceElement2CtSequenceSequence1ChE4.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE5  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE5 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE5.setAttribute("name", "FontName");
         ct7SequenceElement2CtSequenceSequence1ChE5.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE6  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE6 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE6.setAttribute("name", "FontSize");
         ct7SequenceElement2CtSequenceSequence1ChE6.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE7  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE7 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE7.setAttribute("name", "FontFlags");
         ct7SequenceElement2CtSequenceSequence1ChE7.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE8  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE8 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE8.setAttribute("name", "FormatString");
         ct7SequenceElement2CtSequenceSequence1ChE8.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE9  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE9 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE9.setAttribute("name", "NonEmptyBehavior");
         ct7SequenceElement2CtSequenceSequence1ChE9.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE10  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE10 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE10.setAttribute("name", "SolveOrder");
         ct7SequenceElement2CtSequenceSequence1ChE10.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE11  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE11 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE11.setAttribute("name", "Updateable");
         ct7SequenceElement2CtSequenceSequence1ChE11.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE12  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE12 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE12.setAttribute("name", "Visible");
         ct7SequenceElement2CtSequenceSequence1ChE12.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE13  = addChildElement(ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence1ChE13 = addChildElement(
+                ct7SequenceElement2CtSequenceSequence1Ch, "element", "xsd");
         ct7SequenceElement2CtSequenceSequence1ChE13.setAttribute("name", "Expression");
         ct7SequenceElement2CtSequenceSequence1ChE13.setAttribute("type", "PropType");
-        SOAPElement ct7SequenceElement2CtSequenceSequence2  = addChildElement(ct7SequenceElement3CtSequence, "sequence", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence2 = addChildElement(ct7SequenceElement3CtSequence, "sequence",
+                "xsd");
         ct7SequenceElement2CtSequenceSequence2.setAttribute("maxOccurs", "unbounded");
         ct7SequenceElement2CtSequenceSequence2.setAttribute("minOccurs", "0");
-        SOAPElement ct7SequenceElement2CtSequenceSequence2Any  = addChildElement(ct7SequenceElement2CtSequenceSequence2, "any", "xsd");
+        SOAPElement ct7SequenceElement2CtSequenceSequence2Any = addChildElement(ct7SequenceElement2CtSequenceSequence2,
+                "any", "xsd");
         ct7SequenceElement2CtSequenceSequence2Any.setAttribute("processContents", "lax");
         ct7SequenceElement2CtSequenceSequence2Any.setAttribute("maxOccurs", "unbounded");
 
-        SOAPElement ct8  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct8 = addChildElement(schema, "complexType", "xsd");
         ct8.setAttribute("name", "Axes");
-        SOAPElement ct8Sequence  = addChildElement(ct8, "sequence", "xsd");
+        SOAPElement ct8Sequence = addChildElement(ct8, "sequence", "xsd");
         ct8Sequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct8SequenceElement  = addChildElement(ct8Sequence, "element", "xsd");
+        SOAPElement ct8SequenceElement = addChildElement(ct8Sequence, "element", "xsd");
         ct8SequenceElement.setAttribute("name", "Axis");
-        SOAPElement ct8SequenceElementComplexType  = addChildElement(ct8SequenceElement, "complexType", "xsd");
-        SOAPElement ct8SequenceElementComplexTypeChoice  = addChildElement(ct8SequenceElementComplexType, "choice", "xsd");
+        SOAPElement ct8SequenceElementComplexType = addChildElement(ct8SequenceElement, "complexType", "xsd");
+        SOAPElement ct8SequenceElementComplexTypeChoice = addChildElement(ct8SequenceElementComplexType, "choice",
+                "xsd");
         ct8SequenceElementComplexTypeChoice.setAttribute("minOccurs", "0");
         ct8SequenceElementComplexTypeChoice.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct8SequenceElementComplexTypeChoiceE1  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct8SequenceElementComplexTypeChoiceE1 = addChildElement(ct8SequenceElementComplexTypeChoice,
+                "element", "xsd");
         ct8SequenceElementComplexTypeChoiceE1.setAttribute("name", "CrossProduct");
         ct8SequenceElementComplexTypeChoiceE1.setAttribute("type", "CrossProductType");
-        SOAPElement ct8SequenceElementComplexTypeChoiceE2  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct8SequenceElementComplexTypeChoiceE2 = addChildElement(ct8SequenceElementComplexTypeChoice,
+                "element", "xsd");
         ct8SequenceElementComplexTypeChoiceE2.setAttribute("name", "Tuples");
         ct8SequenceElementComplexTypeChoiceE2.setAttribute("type", "TuplesType");
-        SOAPElement ct8SequenceElementComplexTypeChoiceE3  = addChildElement(ct8SequenceElementComplexTypeChoice, "element", "xsd");
+        SOAPElement ct8SequenceElementComplexTypeChoiceE3 = addChildElement(ct8SequenceElementComplexTypeChoice,
+                "element", "xsd");
         ct8SequenceElementComplexTypeChoiceE3.setAttribute("name", "Members");
         ct8SequenceElementComplexTypeChoiceE3.setAttribute("type", "MembersType");
-        SOAPElement ct8SequenceElementComplexTypeAttribute  = addChildElement(ct8SequenceElementComplexType, "attribute", "xsd");
+        SOAPElement ct8SequenceElementComplexTypeAttribute = addChildElement(ct8SequenceElementComplexType, "attribute",
+                "xsd");
         ct8SequenceElementComplexTypeAttribute.setAttribute("name", "name");
         ct8SequenceElementComplexTypeAttribute.setAttribute("type", "xsd:string");
 
-        SOAPElement ct9  = addChildElement(schema, "complexType", "xsd");
+        SOAPElement ct9 = addChildElement(schema, "complexType", "xsd");
         ct9.setAttribute("name", "CellData");
-        SOAPElement ct9Sequence  = addChildElement(ct9, "sequence", "xsd");
-        SOAPElement ct9SequenceElement  = addChildElement(ct9Sequence, "element", "xsd");
+        SOAPElement ct9Sequence = addChildElement(ct9, "sequence", "xsd");
+        SOAPElement ct9SequenceElement = addChildElement(ct9Sequence, "element", "xsd");
         ct9SequenceElement.setAttribute("name", "Cell");
         ct9SequenceElement.setAttribute("minOccurs", "0");
         ct9SequenceElement.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct9SequenceElementComplexType  = addChildElement(ct9SequenceElement, "complexType", "xsd");
-        SOAPElement ct9SequenceElementComplexTypeSequence  = addChildElement(ct9SequenceElementComplexType, "sequence", "xsd");
+        SOAPElement ct9SequenceElementComplexType = addChildElement(ct9SequenceElement, "complexType", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequence = addChildElement(ct9SequenceElementComplexType, "sequence",
+                "xsd");
         ct9SequenceElementComplexTypeSequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoice  = addChildElement(ct9SequenceElementComplexTypeSequence, "choice", "xsd");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE1  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoice = addChildElement(ct9SequenceElementComplexTypeSequence,
+                "choice", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE1 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE1.setAttribute("name", "Value");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE2  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE2 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE2.setAttribute("name", "FmtValue");
         ct9SequenceElementComplexTypeSequenceChoiceE2.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE3  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE3 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE3.setAttribute("name", "BackColor");
         ct9SequenceElementComplexTypeSequenceChoiceE3.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE4  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE4 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE4.setAttribute("name", "ForeColor");
         ct9SequenceElementComplexTypeSequenceChoiceE4.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE5  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE5 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE5.setAttribute("name", "FontName");
         ct9SequenceElementComplexTypeSequenceChoiceE5.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE6  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE6 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE6.setAttribute("name", "FontSize");
         ct9SequenceElementComplexTypeSequenceChoiceE6.setAttribute("type", "xsd:unsignedShort");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE7  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE7 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE7.setAttribute("name", "FontFlags");
         ct9SequenceElementComplexTypeSequenceChoiceE7.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE8  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE8 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE8.setAttribute("name", "FormatString");
         ct9SequenceElementComplexTypeSequenceChoiceE8.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE9  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE9 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("name", "NonEmptyBehavior");
         ct9SequenceElementComplexTypeSequenceChoiceE9.setAttribute("type", "xsd:unsignedShort");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE10  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE10 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("name", "SolveOrder");
         ct9SequenceElementComplexTypeSequenceChoiceE10.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE11  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE11 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE11.setAttribute("name", "Updateable");
         ct9SequenceElementComplexTypeSequenceChoiceE11.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE12  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE12 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE12.setAttribute("name", "Visible");
         ct9SequenceElementComplexTypeSequenceChoiceE12.setAttribute("type", "xsd:unsignedInt");
-        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE13  = addChildElement(ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeSequenceChoiceE13 = addChildElement(
+                ct9SequenceElementComplexTypeSequenceChoice, "element", "xsd");
         ct9SequenceElementComplexTypeSequenceChoiceE13.setAttribute("name", "Expression");
         ct9SequenceElementComplexTypeSequenceChoiceE13.setAttribute("type", "xsd:string");
-        SOAPElement ct9SequenceElementComplexTypeAttribute  = addChildElement(ct9SequenceElementComplexType, "attribute", "xsd");
+        SOAPElement ct9SequenceElementComplexTypeAttribute = addChildElement(ct9SequenceElementComplexType, "attribute",
+                "xsd");
         ct9SequenceElementComplexTypeAttribute.setAttribute("name", "CellOrdinal");
         ct9SequenceElementComplexTypeAttribute.setAttribute("type", "xsd:unsignedInt");
         ct9SequenceElementComplexTypeAttribute.setAttribute("use", "required");
 
-        SOAPElement element  = addChildElement(schema, "element", "xsd");
+        SOAPElement element = addChildElement(schema, "element", "xsd");
         element.setAttribute("name", "root");
-        SOAPElement elementComplexType  = addChildElement(element, "complexType", "xsd");
-        SOAPElement elementComplexTypeSequence  = addChildElement(elementComplexType, "sequence", "xsd");
+        SOAPElement elementComplexType = addChildElement(element, "complexType", "xsd");
+        SOAPElement elementComplexTypeSequence = addChildElement(elementComplexType, "sequence", "xsd");
         elementComplexTypeSequence.setAttribute("maxOccurs", "unbounded");
-        SOAPElement elementComplexTypeSequenceE1  = addChildElement(elementComplexTypeSequence, "element", "xsd");
+        SOAPElement elementComplexTypeSequenceE1 = addChildElement(elementComplexTypeSequence, "element", "xsd");
         elementComplexTypeSequenceE1.setAttribute("name", "OlapInfo");
         elementComplexTypeSequenceE1.setAttribute("type", "OlapInfo");
-        SOAPElement elementComplexTypeSequenceE2  = addChildElement(elementComplexTypeSequence, "element", "xsd");
+        SOAPElement elementComplexTypeSequenceE2 = addChildElement(elementComplexTypeSequence, "element", "xsd");
         elementComplexTypeSequenceE2.setAttribute("name", "Axes");
         elementComplexTypeSequenceE2.setAttribute("type", "Axes");
-        SOAPElement elementComplexTypeSequenceE3  = addChildElement(elementComplexTypeSequence, "element", "xsd");
+        SOAPElement elementComplexTypeSequenceE3 = addChildElement(elementComplexTypeSequence, "element", "xsd");
         elementComplexTypeSequenceE3.setAttribute("name", "CellData");
         elementComplexTypeSequenceE3.setAttribute("type", "CellData");
+    }
+
+    private static SOAPElement addChildElement(SOAPElement element, QName qNameOfChild, String valueOfChild) {
+        try {
+            SOAPElement createdChild = element.addChildElement(qNameOfChild);
+            createdChild.setTextContent(valueOfChild);
+            return createdChild;
+
+        } catch (SOAPException e) {
+            LOGGER.error("addChildElement {} error", qNameOfChild);
+            throw new RuntimeException("addChildElement error", e);
+        }
     }
 
     private static void addChildElement(SOAPElement element, String childElementName, String prefix, String value) {
@@ -2741,12 +2931,12 @@ public class SoapUtil {
     }
 
     private static SOAPElement addChildElement(SOAPElement element, String childElementName, String prefix) {
+
         try {
             if (prefix == null) {
                 return element.addChildElement(childElementName);
 
-            }
-            else {
+            } else {
                 return element.addChildElement(childElementName, prefix);
             }
         } catch (SOAPException e) {
