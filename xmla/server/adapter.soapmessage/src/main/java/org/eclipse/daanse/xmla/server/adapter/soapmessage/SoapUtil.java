@@ -14,8 +14,6 @@
 package org.eclipse.daanse.xmla.server.adapter.soapmessage;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CATALOG_NAME;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.CUBE_NAME;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DATA_TYPE;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.DESCRIPTION_UC;
@@ -27,7 +25,6 @@ import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.LEVEL
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.MEASUREGROUP_NAME;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_PRECISION;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.NUMERIC_SCALE;
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCHEMA_NAME;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.SCOPE;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_CATALOG;
 import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.TABLE_NAME;
@@ -458,9 +455,10 @@ public class SoapUtil {
         String prefix = Constants.ROWSET.PREFIX;
 
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        addChildElement(row, CUBE_NAME, prefix, r.cubeName());
+        
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, r.cubeName());
         r.actionName().ifPresent(v -> addChildElement(row, "ACTION_NAME", prefix, v));
         r.actionType().ifPresent(v -> addChildElement(row, "ACTION_TYPE", prefix, String.valueOf(v.getValue())));
         addChildElement(row, "COORDINATE", prefix, r.coordinate());
@@ -549,7 +547,7 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.roles().ifPresent(v -> addChildElement(row, "ROLES", prefix, v));
         r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", prefix, v.format(formatter)));
@@ -653,8 +651,8 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
-        addChildElement(row, SCHEMA_NAME, prefix, r.schemaName());
+        addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, r.catalogName());
+        addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, r.schemaName());
         addChildElement(row, "SCHEMA_OWNER", prefix, r.schemaOwner());
     }
 
@@ -693,9 +691,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.hierarchyName().ifPresent(v -> addChildElement(row, "HIERARCHY_NAME", prefix, v));
         r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
@@ -734,9 +732,9 @@ public class SoapUtil {
 
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
 
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
         r.levelName().ifPresent(v -> addChildElement(row, "LEVEL_NAME", prefix, v));
@@ -777,9 +775,9 @@ public class SoapUtil {
             MdSchemaMeasureGroupDimensionsResponseRow r) throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.measureGroupCardinality().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CARDINALITY", prefix, v));
@@ -808,9 +806,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
         r.measureName().ifPresent(v -> addChildElement(row, "MEASURE_NAME", prefix, v));
         r.measureUniqueName().ifPresent(v -> addChildElement(row, "MEASURE_UNIQUE_NAME", prefix, v));
         r.measureCaption().ifPresent(v -> addChildElement(row, "MEASURE_CAPTION", prefix, v));
@@ -839,9 +837,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
         r.levelUniqueName().ifPresent(v -> addChildElement(row, LEVEL_UNIQUE_NAME, prefix, v));
@@ -868,9 +866,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
@@ -914,9 +912,9 @@ public class SoapUtil {
     private static void addMdSchemaSetsResponseRow(SOAPElement root, MdSchemaSetsResponseRow r) throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.setName().ifPresent(v -> addChildElement(row, "SET_NAME", prefix, v));
         r.scope().ifPresent(v -> addChildElement(row, SCOPE, prefix, String.valueOf(v.getValue())));
@@ -932,9 +930,9 @@ public class SoapUtil {
     private static void addMdSchemaKpisResponseRow(SOAPElement root, MdSchemaKpisResponseRow r) throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.kpiName().ifPresent(v -> addChildElement(row, "KPI_NAME", prefix, v));
@@ -958,9 +956,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
@@ -971,9 +969,9 @@ public class SoapUtil {
     private static void addMdSchemaCubesResponseRow(SOAPElement root, MdSchemaCubesResponseRow r) throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, r.catalogName());
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.cubeType().ifPresent(v -> addChildElement(row, "CUBE_TYPE", prefix, v.name()));
         r.cubeGuid().ifPresent(v -> addChildElement(row, "CUBE_GUID", prefix, String.valueOf(v)));
@@ -999,9 +997,9 @@ public class SoapUtil {
             throws SOAPException {
         String prefix = Constants.ROWSET.PREFIX;
         SOAPElement row = root.addChildElement(Constants.ROWSET.QN_ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CATALOG_NAME, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_SCHEMA_NAME, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, Constants.ROWSET.ROW_PROPERTY.QN_CUBE_NAME, v));
 
         r.dimensionName().ifPresent(v -> addChildElement(row, "DIMENSION_NAME", prefix, v));
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
@@ -1288,48 +1286,48 @@ public class SoapUtil {
         }
     }
 
-    private static void addType(SOAPElement e, Type it) {
-        if (it != null) {
-            if (it instanceof MembersType membersType) {
-                addMembersType(e, membersType);
+    private static void addType(SOAPElement soapElement, Type type) {
+        if (type != null) {
+            if (type instanceof MembersType membersType) {
+                addMembersType(soapElement, membersType);
             }
-            if (it instanceof TuplesType tuplesType) {
-                addTuplesType(e, tuplesType);
+            if (type instanceof TuplesType tuplesType) {
+                addTuplesType(soapElement, tuplesType);
             }
-            if (it instanceof SetListType setListType) {
-                addSetListType(e, setListType);
+            if (type instanceof SetListType setListType) {
+                addSetListType(soapElement, setListType);
             }
-            if (it instanceof NormTupleSet normTupleSet) {
-                addNormTupleSet(e, normTupleSet);
+            if (type instanceof NormTupleSet normTupleSet) {
+                addNormTupleSet(soapElement, normTupleSet);
             }
-            if (it instanceof Union union) {
-                addUnion(e, union);
+            if (type instanceof Union union) {
+                addUnion(soapElement, union);
             }
         }
     }
 
-    private static void addUnion(SOAPElement e, Union it) {
-        if (it != null) {
+    private static void addUnion(SOAPElement soapElement, Union union) {
+        if (union != null) {
             String prefix = Constants.MDDATASET.PREFIX;
-            SOAPElement el = addChildElement(e, "Union", prefix);
-            addTypeList(el, it.setType());
+            SOAPElement el = addChildElement(soapElement, "Union", prefix);
+            addTypeList(el, union.setType());
         }
     }
 
-    private static void addNormTupleSet(SOAPElement e, NormTupleSet it) {
-        if (it != null) {
+    private static void addNormTupleSet(SOAPElement soapElement, NormTupleSet normTupleSet) {
+        if (normTupleSet != null) {
             String prefix = Constants.MDDATASET.PREFIX;
-            SOAPElement el = addChildElement(e, "NormTupleSet", prefix);
-            addNormTuplesType(el, it.normTuples());
-            addTupleTypeList(el, it.membersLookup());
+            SOAPElement el = addChildElement(soapElement, "NormTupleSet", prefix);
+            addNormTuplesType(el, normTupleSet.normTuples());
+            addTupleTypeList(el, normTupleSet.membersLookup());
         }
     }
 
-    private static void addTupleTypeList(SOAPElement e, MembersLookup list) {
-        if (list != null) {
-            SOAPElement el = addChildElement(e, "MembersLookup", Constants.ROWSET.PREFIX);
-            if (list.members() != null) {
-                list.members().forEach(it -> addTupleType(el, "Members", it));
+    private static void addTupleTypeList(SOAPElement soapElement, MembersLookup membersLookup) {
+        if (membersLookup != null) {
+            SOAPElement el = addChildElement(soapElement, "MembersLookup", Constants.ROWSET.PREFIX);
+            if (membersLookup.members() != null) {
+                membersLookup.members().forEach(it -> addTupleType(el, "Members", it));
             }
         }
     }

@@ -13,8 +13,18 @@
  */
 package org.eclipse.daanse.xmla.server.adapter.soapmessage;
 
-import jakarta.xml.soap.Node;
-import jakarta.xml.soap.SOAPElement;
+import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.*;
+
+import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -45,121 +55,7 @@ import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEnd;
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
 import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
-import org.eclipse.daanse.xmla.api.xmla.AccessEnum;
-import org.eclipse.daanse.xmla.api.xmla.Account;
-import org.eclipse.daanse.xmla.api.xmla.Action;
-import org.eclipse.daanse.xmla.api.xmla.Aggregation;
-import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
-import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
-import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
-import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
-import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
-import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
-import org.eclipse.daanse.xmla.api.xmla.AndOrType;
-import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.Assembly;
-import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
-import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
-import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
-import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
-import org.eclipse.daanse.xmla.api.xmla.Binding;
-import org.eclipse.daanse.xmla.api.xmla.BoolBinop;
-import org.eclipse.daanse.xmla.api.xmla.CalculationProperty;
-import org.eclipse.daanse.xmla.api.xmla.CellPermission;
-import org.eclipse.daanse.xmla.api.xmla.ColumnBinding;
-import org.eclipse.daanse.xmla.api.xmla.Command;
-import org.eclipse.daanse.xmla.api.xmla.Cube;
-import org.eclipse.daanse.xmla.api.xmla.CubeAttribute;
-import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
-import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
-import org.eclipse.daanse.xmla.api.xmla.CubeHierarchy;
-import org.eclipse.daanse.xmla.api.xmla.CubePermission;
-import org.eclipse.daanse.xmla.api.xmla.CubeStorageModeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.DataItem;
-import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
-import org.eclipse.daanse.xmla.api.xmla.DataSource;
-import org.eclipse.daanse.xmla.api.xmla.DataSourcePermission;
-import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
-import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
-import org.eclipse.daanse.xmla.api.xmla.Database;
-import org.eclipse.daanse.xmla.api.xmla.DatabasePermission;
-import org.eclipse.daanse.xmla.api.xmla.Dimension;
-import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
-import org.eclipse.daanse.xmla.api.xmla.DimensionAttributeTypeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
-import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
-import org.eclipse.daanse.xmla.api.xmla.Event;
-import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
-import org.eclipse.daanse.xmla.api.xmla.EventSession;
-import org.eclipse.daanse.xmla.api.xmla.EventType;
-import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
-import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
-import org.eclipse.daanse.xmla.api.xmla.Group;
-import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
-import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
-import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
-import org.eclipse.daanse.xmla.api.xmla.Kpi;
-import org.eclipse.daanse.xmla.api.xmla.Level;
-import org.eclipse.daanse.xmla.api.xmla.MajorObject;
-import org.eclipse.daanse.xmla.api.xmla.MdxScript;
-import org.eclipse.daanse.xmla.api.xmla.Measure;
-import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
-import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
-import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
-import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
-import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.Member;
-import org.eclipse.daanse.xmla.api.xmla.MiningModel;
-import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
-import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
-import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
-import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
-import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
-import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
-import org.eclipse.daanse.xmla.api.xmla.NotType;
-import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
-import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
-import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
-import org.eclipse.daanse.xmla.api.xmla.Partition;
-import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.PartitionModes;
-import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.Permission;
-import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
-import org.eclipse.daanse.xmla.api.xmla.Perspective;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveDimension;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveKpi;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
-import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
-import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
-import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
-import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
-import org.eclipse.daanse.xmla.api.xmla.ReportParameter;
-import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
-import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
-import org.eclipse.daanse.xmla.api.xmla.Role;
-import org.eclipse.daanse.xmla.api.xmla.Scope;
-import org.eclipse.daanse.xmla.api.xmla.Server;
-import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
-import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
-import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
-import org.eclipse.daanse.xmla.api.xmla.Trace;
-import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
-import org.eclipse.daanse.xmla.api.xmla.Translation;
-import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
-import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
+import org.eclipse.daanse.xmla.api.xmla.*;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
@@ -200,134 +96,12 @@ import org.eclipse.daanse.xmla.model.record.engine300_300.RelationshipEndTransla
 import org.eclipse.daanse.xmla.model.record.engine300_300.RelationshipR;
 import org.eclipse.daanse.xmla.model.record.engine300_300.RelationshipsR;
 import org.eclipse.daanse.xmla.model.record.engine300_300.XEventR;
-import org.eclipse.daanse.xmla.model.record.xmla.AccountR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationInstanceAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationInstanceDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationInstanceMeasureR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationInstanceR;
-import org.eclipse.daanse.xmla.model.record.xmla.AggregationR;
-import org.eclipse.daanse.xmla.model.record.xmla.AlgorithmParameterR;
-import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
-import org.eclipse.daanse.xmla.model.record.xmla.AndOrTypeR;
-import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
-import org.eclipse.daanse.xmla.model.record.xmla.AssemblyR;
-import org.eclipse.daanse.xmla.model.record.xmla.AttributeBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.AttributePermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.AttributeTranslationR;
-import org.eclipse.daanse.xmla.model.record.xmla.BoolBinopR;
-import org.eclipse.daanse.xmla.model.record.xmla.CalculatedMeasureBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.CalculationPropertyR;
-import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
-import org.eclipse.daanse.xmla.model.record.xmla.CellPermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
-import org.eclipse.daanse.xmla.model.record.xmla.ColumnBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeAttributeBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionPermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeHierarchyR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubePermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.CubeR;
-import org.eclipse.daanse.xmla.model.record.xmla.DSVTableBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataItemR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataMiningMeasureGroupDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataSourcePermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataSourceR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewR;
-import org.eclipse.daanse.xmla.model.record.xmla.DatabasePermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DatabaseR;
-import org.eclipse.daanse.xmla.model.record.xmla.DegenerateMeasureGroupDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DimensionAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.DimensionBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.DimensionPermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.DrillThroughActionR;
-import org.eclipse.daanse.xmla.model.record.xmla.ErrorConfigurationR;
-import org.eclipse.daanse.xmla.model.record.xmla.EventColumnIDR;
-import org.eclipse.daanse.xmla.model.record.xmla.EventR;
-import org.eclipse.daanse.xmla.model.record.xmla.EventSessionR;
-import org.eclipse.daanse.xmla.model.record.xmla.EventTypeR;
-import org.eclipse.daanse.xmla.model.record.xmla.FoldingParametersR;
-import org.eclipse.daanse.xmla.model.record.xmla.GroupR;
-import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
-import org.eclipse.daanse.xmla.model.record.xmla.IncrementalProcessingNotificationR;
-import org.eclipse.daanse.xmla.model.record.xmla.InheritedBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.KpiR;
-import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
-import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
-import org.eclipse.daanse.xmla.model.record.xmla.ManyToManyMeasureGroupDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.MdxScriptR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupDimensionBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupR;
-import org.eclipse.daanse.xmla.model.record.xmla.MeasureR;
-import org.eclipse.daanse.xmla.model.record.xmla.MemberR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningModelColumnR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningModelPermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningModelR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningModelingFlagR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningStructurePermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningStructureR;
-import org.eclipse.daanse.xmla.model.record.xmla.NotTypeR;
-import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
-import org.eclipse.daanse.xmla.model.record.xmla.PartitionR;
-import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveActionR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveAttributeR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveCalculationR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveHierarchyR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveKpiR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureGroupR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureR;
-import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveR;
-import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingIncrementalProcessingBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingR;
-import org.eclipse.daanse.xmla.model.record.xmla.QueryBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.ReferenceMeasureGroupDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.RegularMeasureGroupDimensionR;
-import org.eclipse.daanse.xmla.model.record.xmla.ReportActionR;
-import org.eclipse.daanse.xmla.model.record.xmla.ReportFormatParameterR;
-import org.eclipse.daanse.xmla.model.record.xmla.ReportParameterR;
-import org.eclipse.daanse.xmla.model.record.xmla.RoleR;
-import org.eclipse.daanse.xmla.model.record.xmla.RowBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.ScalarMiningStructureColumnR;
-import org.eclipse.daanse.xmla.model.record.xmla.ServerPropertyR;
-import org.eclipse.daanse.xmla.model.record.xmla.ServerR;
-import org.eclipse.daanse.xmla.model.record.xmla.StandardActionR;
-import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
-import org.eclipse.daanse.xmla.model.record.xmla.TableBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.TableMiningStructureColumnR;
-import org.eclipse.daanse.xmla.model.record.xmla.TimeAttributeBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.TimeBindingR;
-import org.eclipse.daanse.xmla.model.record.xmla.TraceFilterR;
-import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
-import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
-import org.eclipse.daanse.xmla.model.record.xmla.UserDefinedGroupBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.*;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import static org.eclipse.daanse.xmla.server.adapter.soapmessage.Constants.*;
-
-import java.math.BigInteger;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPElement;
 
 public class Convert {
 
@@ -390,9 +164,9 @@ public class Convert {
     public static MdSchemaDimensionsRestrictionsR discoverMdSchemaDimensionsRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaDimensionsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
@@ -402,27 +176,27 @@ public class Convert {
 
     public static MdSchemaCubesRestrictionsR discoverMdSchemaCubesRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
-        return new MdSchemaCubesRestrictionsR(m.get(CATALOG_NAME),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+        return new MdSchemaCubesRestrictionsR(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(BASE_CUBE_NAME)),
             Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))));
     }
 
     public static MdSchemaMeasureGroupsRestrictionsR discoverMdSchemaMeasureGroups(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
-        return new MdSchemaMeasureGroupsRestrictionsR(Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+        return new MdSchemaMeasureGroupsRestrictionsR(Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(MEASUREGROUP_NAME))
         );
     }
 
     public static MdSchemaKpisRestrictionsR discoverMdSchemaKpisRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
-        return new MdSchemaKpisRestrictionsR(Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+        return new MdSchemaKpisRestrictionsR(Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(KPI_NAME)),
             Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE)))
         );
@@ -431,9 +205,9 @@ public class Convert {
     public static MdSchemaSetsRestrictionsR discoverMdSchemaSetsRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaSetsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(SET_NAME)),
             Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE))),
             Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
@@ -444,9 +218,9 @@ public class Convert {
     public static MdSchemaPropertiesRestrictionsR discoverMdSchemaPropertiesRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaPropertiesRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
@@ -462,9 +236,9 @@ public class Convert {
     public static MdSchemaMembersRestrictionsR discoverMdSchemaMembersRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMembersRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
@@ -481,9 +255,9 @@ public class Convert {
     public static MdSchemaMeasuresRestrictionsR discoverMdSchemaMeasuresRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMeasuresRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(MEASURE_NAME)),
             Optional.ofNullable(m.get(MEASURE_UNIQUE_NAME)),
             Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
@@ -497,9 +271,9 @@ public class Convert {
     ) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMeasureGroupDimensionsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
@@ -509,9 +283,9 @@ public class Convert {
     public static MdSchemaLevelsRestrictionsR discoverMdSchemaLevelsRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaLevelsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(m.get(LEVEL_NAME)),
@@ -526,9 +300,9 @@ public class Convert {
     public static MdSchemaHierarchiesRestrictionsR discoverMdSchemaHierarchiesRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaHierarchiesRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
@@ -562,8 +336,8 @@ public class Convert {
     public static DbSchemaSchemataRestrictionsR discoverDbSchemaSchemataRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaSchemataRestrictionsR(
-            m.get(CATALOG_NAME),
-            m.get(SCHEMA_NAME),
+            m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME),
+            m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME),
             m.get(SCHEMA_OWNER)
         );
     }
@@ -631,7 +405,7 @@ public class Convert {
     public static DbSchemaCatalogsRestrictionsR discoverDbSchemaCatalogsRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaCatalogsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME))
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME))
         );
     }
 
@@ -677,9 +451,9 @@ public class Convert {
     public static MdSchemaActionsRestrictionsR discoverMdSchemaActionsRestrictions(SOAPElement restriction) {
         Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaActionsRestrictionsR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            m.get(CUBE_NAME),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.CATALOG_NAME)),
+            Optional.ofNullable(m.get(Constants.ROWSET.ROW_PROPERTY.SCHEMA_NAME)),
+            m.get(Constants.ROWSET.ROW_PROPERTY.CUBE_NAME),
             Optional.ofNullable(m.get(ACTION_NAME)),
             Optional.ofNullable(ActionTypeEnum.fromValue(m.get(ACTION_TYPE))),
             Optional.ofNullable(m.get(COORDINATE)),

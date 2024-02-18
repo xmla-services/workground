@@ -44,6 +44,23 @@ public class Constants {
 		public static final String NS_URN = "urn:schemas-microsoft-com:xml-analysis:rowset";
 		public static final QName QN_ROOT = new QName(ROWSET.NS_URN, "root", ROWSET.PREFIX);
 		public static final QName QN_ROW = new QName(ROWSET.NS_URN, "row", ROWSET.PREFIX);
+
+		static class ROW_PROPERTY {
+			public static final String CATALOG_NAME = "CATALOG_NAME";
+			public static final QName QN_CATALOG_NAME = new QName(ROWSET.NS_URN, CATALOG_NAME, ROWSET.PREFIX);
+
+			
+			public static final String SCHEMA_NAME = "SCHEMA_NAME";
+			public static final QName QN_SCHEMA_NAME = new QName(ROWSET.NS_URN, SCHEMA_NAME, ROWSET.PREFIX);
+
+			
+			public static final String CUBE_NAME = "CUBE_NAME";
+			public static final QName QN_CUBE_NAME = new QName(ROWSET.NS_URN, CUBE_NAME, ROWSET.PREFIX);
+
+			
+			
+		}
+
 	}
 	/////
 
@@ -92,8 +109,7 @@ public class Constants {
 	public static final String CAPTION_IS_MDX = "CaptionIsMdx";
 	public static final String CAPTION = "Caption";
 	public static final String CUBE_SOURCE = "CUBE_SOURCE";
-	public static final String CUBE_NAME = "CUBE_NAME";
-	public static final String CATALOG_NAME = "CATALOG_NAME";
+
 	public static final String ATTRIBUTES = "Attributes";
 	public static final String ATTRIBUTE_ID = "AttributeID";
 	public static final String ATTRIBUTE_HIERARCHY_VISIBLE = "AttributeHierarchyVisible";
@@ -165,7 +181,7 @@ public class Constants {
 	public static final String STORAGE_LOCATION = "StorageLocation";
 	public static final String STATE = "State";
 	public static final String SORT_PROPERTIES_POSITION = "SortPropertiesPosition";
-	public static final String SCHEMA_NAME = "SCHEMA_NAME";
+//	public static final String SCHEMA_NAME = "SCHEMA_NAME";
 
 	public static final String AUTHENTICATION_MODE = "AuthenticationMode";
 	public static final String PROVIDER_TYPE = "ProviderType";
