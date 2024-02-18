@@ -41,7 +41,7 @@ public class Constants {
 	static class ROWSET {
 
 		public static final String PREFIX = "rowset";
-		public static final String NS_URN = "urn:schemas-microsoft-com:xml-analysis:rowse";
+		public static final String NS_URN = "urn:schemas-microsoft-com:xml-analysis:rowset";
 		public static final QName QN_ROOT = new QName(ROWSET.NS_URN, "root", ROWSET.PREFIX);
 		public static final QName QN_ROW = new QName(ROWSET.NS_URN, "row", ROWSET.PREFIX);
 	}
