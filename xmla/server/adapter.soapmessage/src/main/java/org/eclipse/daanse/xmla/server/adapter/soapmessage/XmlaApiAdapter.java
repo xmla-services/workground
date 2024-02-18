@@ -203,13 +203,14 @@ public class XmlaApiAdapter {
             SOAPMessage messageResponse = MessageFactory.newInstance().createMessage();
             SOAPPart soapPartResponse = messageResponse.getSOAPPart();
             SOAPEnvelope envelopeResponse = soapPartResponse.getEnvelope();
-            envelopeResponse.addNamespaceDeclaration("msxmla", "urn:schemas-microsoft-com:xml-analysis");
-            envelopeResponse.addNamespaceDeclaration("rowset", "urn:schemas-microsoft-com:xml-analysis:rowset");
-            envelopeResponse.addNamespaceDeclaration("mddataset", "urn:schemas-microsoft-com:xml-analysis:mddataset");
-            envelopeResponse.addNamespaceDeclaration("engine", "http://schemas.microsoft.com/analysisservices/2003/engine");
-            envelopeResponse.addNamespaceDeclaration("engine200", "http://schemas.microsoft.com/analysisservices/2010/engine/200");
-            envelopeResponse.addNamespaceDeclaration("empty", "urn:schemas-microsoft-com:xml-analysis:empty");
-            envelopeResponse.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            
+            envelopeResponse.addNamespaceDeclaration(Constants.MSXMLA.PREFIX, Constants.MSXMLA.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.ROWSET.PREFIX, Constants.ROWSET.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.MDDATASET.PREFIX, Constants.MDDATASET.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.ENGINE.PREFIX, Constants.ENGINE.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.ENGINE200.PREFIX, Constants.ENGINE200.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.EMPTY.PREFIX, Constants.EMPTY.NS_URN);
+            envelopeResponse.addNamespaceDeclaration(Constants.XSI.PREFIX, Constants.XSI.NS_URN);
 
             SOAPBody bodyResponse = envelopeResponse.getBody();
             //TODO real session id
