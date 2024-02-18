@@ -53,6 +53,7 @@ public class DemoSetup {
 	private Configuration cXmlaEndpoint3;
 
 	private Configuration cCtxs;
+	
 
 	@Activate
 	public void activate() throws IOException {

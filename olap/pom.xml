@@ -27,5 +27,6 @@
     <module>xmla</module>
     <module>filecatalog</module>
     <module>udf</module>
+    <module>documentation</module>
   </modules>
 </project>
