@@ -2,10 +2,7 @@
 -runvm: ${def;argLine}
 
 -runproperties: \
-<<<<<<< HEAD
     org.slf4j.simpleLogger.defaultLogLevel=error,\
-=======
->>>>>>> 697f31dca (setup logback, rm slf54j.simple)
 	org.osgi.service.http.port=8090,\
     osgi.console=,\
     osgi.console.enable.builtin=true
