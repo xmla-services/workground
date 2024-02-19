@@ -165,8 +165,11 @@ public class CsvDataLoader implements FileSystemWatcherListener {
                     b.append(" ( ");
                     b.append(headersTypeList.stream().map(i -> "?").collect(Collectors.joining(",")));
                     b.append(" ) ");
-                    System.out.println(b);
-                    try (PreparedStatement ps = connection.prepareStatement(b.toString())) {
+                    
+                    String sql=b.toString();
+                    LOGGER.debug(sql);
+
+                    try (PreparedStatement ps = connection.prepareStatement(sql)) {
                             if (dialect.supportBatchOperations()) {
                                 batchExecute(connection, ps, it, headersTypeList);
                             } else {
