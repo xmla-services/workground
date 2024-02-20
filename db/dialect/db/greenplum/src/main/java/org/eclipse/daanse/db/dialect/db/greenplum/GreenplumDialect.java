@@ -52,7 +52,7 @@ public class GreenplumDialect extends PostgreSqlDialect {
 
     @Override
     public StringBuilder generateCountExpression(CharSequence exp) {
-        return caseWhenElse(
+        return wrapIntoSqlIfThenElseFunction(
             new StringBuilder(exp).append(" ISNULL"),
             "'0'",
             new StringBuilder("TEXT(").append(exp).append(")"));

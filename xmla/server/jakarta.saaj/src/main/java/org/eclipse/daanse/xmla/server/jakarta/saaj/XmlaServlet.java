@@ -1,8 +1,7 @@
 
 package org.eclipse.daanse.xmla.server.jakarta.saaj;
 
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 
 import javax.xml.transform.OutputKeys;
@@ -10,6 +9,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.daanse.common.jakarta.servlet.soap.AbstractSoapServlet;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.model.record.RequestMetaDataR;
@@ -19,18 +19,20 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.servlet.whiteboard.propertytypes.HttpWhiteboardServletPattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.Servlet;
 import jakarta.xml.soap.MimeHeaders;
 import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPMessage;
 
 @HttpWhiteboardServletPattern("/xmla")
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
-public class XmlaServlet extends AbstractSAAJServlet {
+public class XmlaServlet extends AbstractSoapServlet {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(XmlaServlet.class);
 	private XmlaApiAdapter wsAdapter;
 
 	@Reference
@@ -43,11 +45,10 @@ public class XmlaServlet extends AbstractSAAJServlet {
 
 	@Override
 	public SOAPMessage onMessage(SOAPMessage soapMessage) {
-		System.out.println("On message call");
 		try {
-
-			System.out.println("> Message IN:");
-			prettyPrint(soapMessage, System.out);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("SoapMessage in:", prettyPrint(soapMessage).toString());
+			}
 
 			SOAPHeader header = soapMessage.getSOAPHeader();
 			SOAPBody body = soapMessage.getSOAPBody();
@@ -63,9 +64,9 @@ public class XmlaServlet extends AbstractSAAJServlet {
 			RequestMetaData metaData = new RequestMetaDataR(oUserAgent);
 
 			SOAPMessage returnMessage = wsAdapter.handleRequest(soapMessage, metaData);
-			System.out.println("< Message OUT:");
 
-			prettyPrint(returnMessage, System.out);
+			LOGGER.debug("SoapMessage out:", prettyPrint(returnMessage).toString());
+
 			return returnMessage;
 
 		} catch (Exception e) {
@@ -74,14 +75,22 @@ public class XmlaServlet extends AbstractSAAJServlet {
 		}
 	}
 
-	private static void prettyPrint(SOAPMessage msg, PrintStream printStream) throws IOException, SOAPException {
+	private static ByteArrayOutputStream prettyPrint(SOAPMessage msg) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(msg.getSOAPPart().getContent(), new StreamResult(printStream));
+			transformer.transform(msg.getSOAPPart().getContent(), new StreamResult(baos));
 		} catch (Exception e) {
-			e.printStackTrace();
-			msg.writeTo(System.out);
+			LOGGER.error("Exception while generate prettyPrint of SoapMessage.", e);
+			try {
+
+				msg.writeTo(baos);
+			} catch (Exception e1) {
+				LOGGER.error("Exception while generate prettyPrintfallback of SoapMessage.", e1);
+				baos.writeBytes(msg.toString().getBytes());
+			}
 		}
+		return baos;
 	}
 }

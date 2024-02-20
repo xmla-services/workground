@@ -1433,7 +1433,7 @@ public class SqlConstraintUtils {
           // rather than in Java (e.g. 'FOO') in case the DBMS is
           // running a different locale.
           if ( !SystemWideProperties.instance().CaseSensitive ) {
-            value = query.getDialect().toUpper( buf );
+            value = query.getDialect().wrapIntoSqlUpperCaseFunction( buf );
           }
         }
         values.add( value );
@@ -1441,7 +1441,7 @@ public class SqlConstraintUtils {
     }
 
     if ( caseSensitive && datatype == Datatype.STRING && !SystemWideProperties.instance().CaseSensitive ) {
-        columnStringBuilder = query.getDialect().toUpper( columnStringBuilder );
+        columnStringBuilder = query.getDialect().wrapIntoSqlUpperCaseFunction( columnStringBuilder );
     }
 
     if ( values.size() == 1 ) {

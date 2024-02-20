@@ -38,7 +38,7 @@ public class Db2Dialect extends JdbcDialectImpl {
     }
 
     @Override
-    public StringBuilder toUpper(CharSequence expr) {
+    public StringBuilder wrapIntoSqlUpperCaseFunction(CharSequence expr) {
         return new StringBuilder("UCASE(").append(expr).append(")");
     }
 

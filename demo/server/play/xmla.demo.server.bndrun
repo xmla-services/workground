@@ -132,4 +132,5 @@
 	org.eclipse.daanse.olap.documentation.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.documentation.common;version='[0.0.1,0.0.2)',\
 	ch.qos.logback.classic;version='[1.4.14,1.4.15)',\
-	ch.qos.logback.core;version='[1.4.14,1.4.15)'
+	ch.qos.logback.core;version='[1.4.14,1.4.15)',\
+	org.eclipse.daanse.common.jakarta.servlet.soap;version='[0.0.1,0.0.2)'

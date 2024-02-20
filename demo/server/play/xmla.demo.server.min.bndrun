@@ -67,6 +67,7 @@
 	org.apache.felix.scr;version='[2.2.10,2.2.11)',\
 	org.eclipse.daanse.common.io.fs.watcher.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.common.io.fs.watcher.watchservice;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.common.jakarta.servlet.soap;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.datasource.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.datasource.h2;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\

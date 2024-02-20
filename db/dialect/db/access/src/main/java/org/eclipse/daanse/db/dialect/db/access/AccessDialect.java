@@ -36,12 +36,12 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public StringBuilder toUpper(CharSequence expr) {
+    public StringBuilder wrapIntoSqlUpperCaseFunction(CharSequence expr) {
         return new StringBuilder("UCASE(").append(expr).append(")");
     }
 
     @Override
-    public StringBuilder caseWhenElse(CharSequence cond, CharSequence thenExpr, CharSequence elseExpr) {
+    public StringBuilder wrapIntoSqlIfThenElseFunction(CharSequence cond, CharSequence thenExpr, CharSequence elseExpr) {
         return new StringBuilder("IIF(").append(cond)
             .append(",").append(thenExpr).append(",").append(elseExpr).append(")");
     }
