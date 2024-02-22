@@ -64,14 +64,6 @@
       <version>8.0.31</version>
     </dependency>
     
-    
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.tooling.webconsole.branding</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-    
   
   </dependencies>
 </project>
