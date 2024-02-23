@@ -39,7 +39,8 @@
 	bnd.identity;id='ch.qos.logback.classic',\
 	bnd.identity;id='org.eclipse.daanse.olap.documentation.common',\
 	bnd.identity;id='org.eclipse.daanse.common.jdbc.datasource.metatype.h2',\
-	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api'
+	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.h2'
 
 
 
@@ -72,7 +73,7 @@
 	org.eclipse.daanse.common.jdbc.datasource.metatype.h2;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.monetdb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.h2;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.resolver.basic;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.csv;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.csvtoh2;version='[0.0.1,0.0.2)',\
@@ -92,6 +93,7 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.model.record;version='[0.0.1,0.0.2)',\
