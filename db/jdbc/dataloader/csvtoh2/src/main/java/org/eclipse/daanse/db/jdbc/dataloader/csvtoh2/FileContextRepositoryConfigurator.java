@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherListener;
 import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
 import org.eclipse.daanse.common.io.fs.watcher.api.propertytypes.FileSystemWatcherListenerProperties;
-
+import org.eclipse.daanse.common.jdbc.datasource.metatype.h2.api.Constants;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -35,7 +35,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 public class FileContextRepositoryConfigurator implements FileSystemWatcherListener {
 
 //	public static final String PID="org.eclipse.daanse.db.jdbc.dataloader.csvtoh2.FileContextRepositoryConfigurator";
-	public static final String PID_H2 = "org.eclipse.daanse.db.datasource.h2.H2DataSource";
+	public static final String PID_H2 = Constants.PID_DATASOURCE;//"org.eclipse.daanse.db.datasource.h2.H2DataSource";
 	public static final String PID_CSV = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoader";
 
 	@Reference
@@ -120,11 +120,14 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 		String matcherKey=pathString.replace("\\","-.-");;
 		try {
 			Configuration cH2 = configurationAdmin.getFactoryConfiguration(PID_H2, UUID.randomUUID().toString(), "?");
+		
 			Dictionary<String, Object> props = new Hashtable<>();
 			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, pathString);
-			props.put("url", "jdbc:h2:memFS:" + UUID.randomUUID().toString());
-			props.put("file.context.matcher", matcherKey);
+			props.put(Constants.DATASOURCE_PROPERTY_IDENTIFIER, UUID.randomUUID().toString());
+            props.put(Constants.DATASOURCE_PROPERTY_PUGABLE_FILESYSTEM, "memFS" );
+            props.put("file.context.matcher", matcherKey);
 			cH2.update(props);
+			
 			catalogFolderConfigsDS.put(path, cH2);
 
 			Configuration cCSV = configurationAdmin.getFactoryConfiguration(PID_CSV, UUID.randomUUID().toString(), "?");

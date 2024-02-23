@@ -28,7 +28,6 @@
     <module>clickhouse</module>
     <module>mysql</module>
     <module>postgresql</module>
-    <module>h2</module>
     <module>factory.meta</module>
   </modules>
 </project>

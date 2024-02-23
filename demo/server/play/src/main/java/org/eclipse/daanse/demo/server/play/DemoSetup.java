@@ -37,6 +37,7 @@ public class DemoSetup {
 	public static final String PID_EXP_COMP_FAC = "org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
 
 	public static final String PID_CONTEXT_GROUP = "org.eclipse.daanse.olap.core.BasicContextGroup";
+	
 	@Reference
 	ConfigurationAdmin configurationAdmin;
 	private Configuration cXmlaEndpoint;
