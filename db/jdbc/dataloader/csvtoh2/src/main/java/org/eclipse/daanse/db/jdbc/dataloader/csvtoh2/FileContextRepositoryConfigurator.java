@@ -124,7 +124,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 			Dictionary<String, Object> props = new Hashtable<>();
 			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, pathString);
 			props.put(Constants.DATASOURCE_PROPERTY_IDENTIFIER, UUID.randomUUID().toString());
-            props.put(Constants.DATASOURCE_PROPERTY_PUGABLE_FILESYSTEM, "memFS" );
+            props.put(Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM, Constants.OPTION_PLUGABLE_FILESYSTEM_MEM_FS );
             props.put("file.context.matcher", matcherKey);
 			cH2.update(props);
 			
