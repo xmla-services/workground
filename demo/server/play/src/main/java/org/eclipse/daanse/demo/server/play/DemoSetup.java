@@ -113,17 +113,17 @@ public class DemoSetup {
     }
 
     private void initVerifiers() throws IOException {
-        Dictionary<String, Object> propsDVC = new Hashtable<>();
-        dVC = configurationAdmin.getFactoryConfiguration(PID_DATABASE_VER, "1", "?");
-        dVC.update(propsDVC);
+//        Dictionary<String, Object> propsDVC = new Hashtable<>();
+//        dVC = configurationAdmin.getFactoryConfiguration(PID_DATABASE_VER, "1", "?");
+//        dVC.update(propsDVC);
 
         Dictionary<String, Object> propsDescVC = new Hashtable<>();
         descVC = configurationAdmin.getFactoryConfiguration(PID_DESCRIPTION_VER, "1", "?");
         descVC.update(propsDescVC);
 
-        Dictionary<String, Object> propsMVC = new Hashtable<>();
-        mVC = configurationAdmin.getFactoryConfiguration(PID_MANDATORIES_VER, "1", "?");
-        mVC.update(propsMVC);
+//        Dictionary<String, Object> propsMVC = new Hashtable<>();
+//        mVC = configurationAdmin.getFactoryConfiguration(PID_MANDATORIES_VER, "1", "?");
+//        mVC.update(propsMVC);
 
     }
 

@@ -93,8 +93,7 @@ public class MarkdownDocumentationProvider extends AbstractContextDocumentationP
 
     }
 
-    @Reference(name = REF_NAME_VERIFIERS, cardinality = ReferenceCardinality.MULTIPLE, target =
-        UnresolvableNamespace.UNRESOLVABLE_FILTER, policy = ReferencePolicy.DYNAMIC)
+    @Reference(name = REF_NAME_VERIFIERS, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     public void bindVerifiers(Verifyer verifyer) {
         verifyers.add(verifyer);
     }
