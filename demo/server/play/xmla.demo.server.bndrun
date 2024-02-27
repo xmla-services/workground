@@ -133,4 +133,5 @@
 	ch.qos.logback.core;version='[1.4.14,1.4.15)',\
 	org.eclipse.daanse.common.jakarta.servlet.soap;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.common.jdbc.datasource.metatype.h2;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.jdbc.metadata;version='[0.0.1,0.0.2)'
+	org.eclipse.daanse.db.jdbc.metadata;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;version='[0.0.1,0.0.2)'
