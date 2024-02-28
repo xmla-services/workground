@@ -14,15 +14,20 @@
 */
 package org.eclipse.daanse.ws.runtime.registrar;
 
+import java.util.Comparator;
 import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.daanse.ws.runtime.registrar.spi.EndpointPublisher;
+import org.eclipse.daanse.ws.runtime.registrar.spi.PublishedEndpoint;
 import org.osgi.annotation.bundle.Capability;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -30,10 +35,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.PrototypeServiceFactory;
-import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.component.AnyService;
@@ -44,6 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.osgi.service.component.propertytypes.ServiceRanking;
 import org.osgi.service.jakartaws.runtime.WebserviceServiceRuntime;
 import org.osgi.service.jakartaws.runtime.dto.EndpointDTO;
 import org.osgi.service.jakartaws.runtime.dto.HandlerDTO;
@@ -63,44 +66,53 @@ import jakarta.xml.ws.handler.MessageContext;
 		version = SoapWhiteboardConstants.SOAP_SPECIFICATION_VERSION)
 public class EndpointRegistrar implements WebserviceServiceRuntime {
 
-	private BundleContext bundleContext;
 	private Logger logger;
 
 	private Map<Bundle, BundleEndpointContext> contextMap = new WeakHashMap<>();
 	private Map<Handler<? extends MessageContext>, HandlerInfo> handlerMap = new ConcurrentHashMap<>();
 	private Map<Object, EndpointRegistration> endpointRegistrations = new ConcurrentHashMap<>();
+	private Map<EndpointPublisher, ServiceRanking> endpointPublisherMap = new ConcurrentHashMap<>();
 	private ComponentContext context;
 
 	@Activate
-	public EndpointRegistrar(BundleContext bc, @Reference(service = LoggerFactory.class) Logger logger,
-			ComponentContext context) {
-		this.bundleContext = bc;
+	public EndpointRegistrar(@Reference(service = LoggerFactory.class) Logger logger, ComponentContext context) {
 		this.logger = logger;
 		this.context = context;
+	}
+
+	@Reference(cardinality = ReferenceCardinality.AT_LEAST_ONE, policy = ReferencePolicy.DYNAMIC)
+	public void addEndpointPublisher(EndpointPublisher publisher, ServiceRanking ranking) {
+		System.out.println("EndpointRegistrar.addEndpointPublisher() " + publisher + " with ranking " + ranking);
+		logger.debug("BINDING publisher={} with ranking={}", publisher, ranking);
+		endpointPublisherMap.put(publisher, ranking);
+		updateAll();
+	}
+
+	public void removeEndpointPublisher(EndpointPublisher publisher) {
+		System.out.println("EndpointRegistrar.removeEndpointPublisher()");
+		ServiceRanking ranking = endpointPublisherMap.remove(publisher);
+		logger.debug("UNBINDING publisher={} with ranking={}", publisher, ranking);
+		updateAll();
 	}
 
 	@Reference(service = AnyService.class, target = "(" + SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR
 			+ "=true)", cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
 	public void bindEndpointImplementor(ServiceReference<?> endpointImplementorReference) {
 		System.out.println("EndpointRegistrar.bindEndpointImplementor()");
-		Map<String, Object> filteredProperties = FrameworkUtil.asMap(endpointImplementorReference.getProperties()).entrySet().stream()//
-				.filter(e -> !e.getKey().startsWith("."))// secret properties should not be propagated
-				.filter(e -> !SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR.equals(e.getKey()))// don't propagate
-																									// the implementor
-																									// property
-				.collect(Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue));
-		logger.debug(">> BINDING implementor={} properties={}, filtered={}", endpointImplementorReference, endpointImplementorReference.getProperties(),
-				filteredProperties);
-		EndpointRegistration registration = new EndpointRegistration(filteredProperties, endpointImplementorReference);
-		endpointRegistrations.put(endpointImplementorReference, registration);
-		registration.register();
+		logger.debug("BINDING implementor={}", endpointImplementorReference);
+		EndpointRegistration registration = new EndpointRegistration(endpointImplementorReference);
+		EndpointRegistration replaced = endpointRegistrations.put(endpointImplementorReference, registration);
+		if (replaced != null) {
+			replaced.dispose();
+		}
+		registration.refresh();
 	}
 
 	public void unbindEndpointImplementor(ServiceReference<?> endpointImplementorReference) {
 		logger.debug("UNBINDING implementor={}", endpointImplementorReference);
 		EndpointRegistration registration = endpointRegistrations.remove(endpointImplementorReference);
 		if (registration != null) {
-			registration.unregister();
+			registration.dispose();
 		}
 	}
 
@@ -133,93 +145,109 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 		endpointRegistrations.values().stream().forEach(EndpointRegistration::refresh);
 	}
 
-	private final class EndpointRegistration implements PrototypeServiceFactory<Endpoint> {
+	private final class EndpointRegistration {
 
-		private ServiceRegistration<?> registration;
-		private Map<Bundle, Endpoint> endpointMap = new ConcurrentHashMap<>();
-		private Map<String, Object> properties;
 		private List<Handler> handlerChain;
-		private ServiceReference<?> implementorReference;
+		private final ServiceReference<?> implementorReference;
+		private PublishedEndpoint publishedEndpoint;
 
-		public EndpointRegistration(Map<String, Object> properties, ServiceReference<?> implementorReference) {
-			this.properties = properties;
+		public EndpointRegistration(ServiceReference<?> implementorReference) {
 			this.implementorReference = implementorReference;
 		}
 
 		public void refresh() {
-			if (registration != null) {
-				unregister();
-				register();
-			}
-		}
-
-		public void unregister() {
-			try {
-				if (registration != null) {
-					registration.unregister();
-				}
-			} catch (IllegalStateException e) {
-				// no one cares then...
-			}
-			endpointMap.forEach((b, e) -> ungetService(b, null, e));
-		}
-
-		public void register() {
 			Dictionary<String, Object> dictionaryProperties = getServiceProperties();
-			handlerChain = handlers(dictionaryProperties).toList();
-			registration = bundleContext.registerService(Endpoint.class, this, dictionaryProperties);
+			BundleContext bc = context.getBundleContext();
+			Object implementor = bc.getService(implementorReference);
+			synchronized (this) {
+				internalDispose();
+				// the implementor might be prototype scope so better look it up on each call
+				if (implementor == null) {
+					// not valid anymore?!
+					return;
+				}
+				handlerChain = handlers(dictionaryProperties).toList();
+				try {
+					Endpoint endpoint = Endpoint.create(implementor);
+					try {
+						endpoint.getBinding().setHandlerChain(handlerChain);
+					} catch (UnsupportedOperationException | WebServiceException e) {
+						// can't set a handler chain then!
+						logger.warn("Can't update handler chain for {}: {}", endpoint, e.toString());
+					}
+					endpoint.setProperties(FrameworkUtil.asMap(dictionaryProperties));
+					BundleEndpointContext context = contextMap.computeIfAbsent(implementorReference.getBundle(),
+							BundleEndpointContext::new);
+					context.addEndpoint(endpoint);
+					endpoint.setEndpointContext(context);
+					publishedEndpoint = endpointPublisherMap.entrySet().stream()
+							.sorted(Comparator.comparing(Entry::getValue,
+									Comparator.comparingInt(ServiceRanking::value)))
+							.map(Entry::getKey).map(publisher -> publisher.publishEndpoint(endpoint))
+							.filter(Objects::nonNull).map(delegate -> new PublishedEndpoint() {
+								@Override
+								public String getAddress() {
+									return delegate.getAddress();
+								}
+
+								@Override
+								public void unpublish() {
+									context.removeEndpoint(endpoint);
+									try {
+										delegate.unpublish();
+									} finally {
+										bc.ungetService(implementorReference);
+									}
+								}
+
+							}).findFirst().orElse(null);
+				} catch (RuntimeException e) {
+					publishedEndpoint = new FailedEndpoint(e, implementor) {
+
+						@Override
+						public void unpublish() {
+							bc.ungetService(implementorReference);
+						}
+					};
+				}
+			}
 		}
 
-		@Override
-		public Endpoint getService(Bundle bundle, ServiceRegistration<Endpoint> registration) {
-			BundleContext requesting = bundle.getBundleContext();
-			if (requesting == null) {
-				//should never happen but better safe than sorry!
-				return null;
+		public void dispose() {
+			synchronized (this) {
+				internalDispose();
 			}
-			Object implementor = requesting.getService(implementorReference);
-			if (implementor == null) {
-				//bundle is maybe not allowed to fetch this service!
-				return null;
+		}
+
+		private void internalDispose() {
+			if (publishedEndpoint != null) {
+				try {
+					publishedEndpoint.unpublish();
+				} catch (RuntimeException e) {
+					// ignore
+				}
+				publishedEndpoint = null;
 			}
-			Endpoint endpoint = Endpoint.create(implementor);
-			endpointMap.put(bundle, endpoint);
-			try {
-				endpoint.getBinding().setHandlerChain(handlerChain);
-			} catch (UnsupportedOperationException | WebServiceException e) {
-				// can't set a handler chain then!
-				logger.warn("Can't update handler chain for {}: {}", endpoint, e.toString());
-			}
-			endpoint.setProperties(properties);
-			synchronized (contextMap) {
-				BundleEndpointContext context = contextMap.computeIfAbsent(bundle, BundleEndpointContext::new);
-				context.addEndpoint(endpoint);
-				endpoint.setEndpointContext(context);
-			}
-			return endpoint;
 		}
 
 		private Dictionary<String, Object> getServiceProperties() {
-			return FrameworkUtil.asDictionary(properties);
-		}
-
-		@Override
-		public void ungetService(Bundle bundle, ServiceRegistration<Endpoint> registration, Endpoint endpoint) {
-			BundleContext requesting = bundle.getBundleContext();
-			if (requesting != null) {
-				requesting.ungetService(implementorReference);
-			}
-			endpointMap.remove(bundle);
-			synchronized (contextMap) {
-				BundleEndpointContext context = contextMap.get(bundle);
-				if (context != null) {
-					context.removeEndpoint(endpoint);
-					if (context.getEndpoints().isEmpty()) {
-						contextMap.remove(bundle);
-					}
+			Hashtable<String, Object> hashtable = new Hashtable<>();
+			Dictionary<String, Object> properties = implementorReference.getProperties();
+			Enumeration<String> keys = properties.keys();
+			while (keys.hasMoreElements()) {
+				String key = (String) keys.nextElement();
+				if (key.startsWith(".")) {
+					// do not propagate secret properties
+					continue;
 				}
+				if (SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR.equals(key)) {
+					// don't propagate the implementor as otherwise this service will be assumed to
+					// be an implementor as well
+					continue;
+				}
+				hashtable.put(key, properties.get(key));
 			}
-			endpoint.stop();
+			return hashtable;
 		}
 
 		@SuppressWarnings("rawtypes"/* required by API */)
@@ -236,22 +264,52 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 			logger.debug("Handler {} filter {} NOT matches {}", handler, handlerInfo.filter(), properties);
 			return false;
 		}
+
+		private EndpointDTO getEndpointDTO() {
+			EndpointDTO dto;
+			synchronized (this) {
+				if (publishedEndpoint == null || publishedEndpoint instanceof FailedEndpoint) {
+					// currently not published or publish failed
+					return null;
+				}
+				dto = new EndpointDTO();
+				dto.address = publishedEndpoint.getAddress();
+				// TODO bound handlers!
+			}
+			dto.implementor = implementorReference.adapt(ServiceReferenceDTO.class);
+			return dto;
+		}
 	}
 
 	@Override
 	public RuntimeDTO getRuntimeDTO() {
-		// TODO implement me!
 		RuntimeDTO runtimeDTO = new RuntimeDTO();
-		runtimeDTO.endpoints = endpointRegistrations.values().stream().map(EndpointRegistrar::getEndpointDTO).toArray(EndpointDTO[]::new);
-		runtimeDTO.handlers = new HandlerDTO[0];
+		runtimeDTO.endpoints = endpointRegistrations.values().stream().map(EndpointRegistration::getEndpointDTO)
+				.filter(Objects::nonNull).toArray(EndpointDTO[]::new);
+		runtimeDTO.handlers = new HandlerDTO[0]; // TODO
 		runtimeDTO.serviceReference = context.getServiceReference().adapt(ServiceReferenceDTO.class);
 		return runtimeDTO;
 	}
-	
-	private static EndpointDTO getEndpointDTO(EndpointRegistration registration) {
-		EndpointDTO dto = new EndpointDTO();
-		dto.implementor = registration.implementorReference.adapt(ServiceReferenceDTO.class);
-		return dto;
+
+	private static abstract class FailedEndpoint implements PublishedEndpoint {
+
+		private RuntimeException e;
+		private Object implObject;
+
+		public FailedEndpoint(RuntimeException e, Object implObject) {
+			this.e = e;
+			this.implObject = implObject;
+		}
+
+		@Override
+		public String getAddress() {
+			return null;
+		}
+
+		@Override
+		public String toString() {
+			return "Failed publish of implementor " + implObject + ": " + e;
+		}
 	}
 
 }
