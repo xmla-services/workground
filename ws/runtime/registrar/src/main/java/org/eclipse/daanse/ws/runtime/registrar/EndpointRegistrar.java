@@ -14,6 +14,7 @@
 */
 package org.eclipse.daanse.ws.runtime.registrar;
 
+import java.lang.annotation.Annotation;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -81,7 +82,24 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 	}
 
 	@Reference(cardinality = ReferenceCardinality.AT_LEAST_ONE, policy = ReferencePolicy.DYNAMIC)
-	public void addEndpointPublisher(EndpointPublisher publisher, ServiceRanking ranking) {
+	//public void addEndpointPublisher(EndpointPublisher publisher, ServiceRanking ranking) {
+	public void addEndpointPublisher(EndpointPublisher publisher, Map<String, ?> properties) {
+		ServiceRanking ranking = new ServiceRanking() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return ServiceRanking.class;
+			}
+			
+			@Override
+			public int value() {
+				Object object = properties.get(Constants.SERVICE_RANKING);
+				if (object instanceof Integer) {
+					return ((Integer) object).intValue();
+				}
+				return 0;
+			}
+		};
 		System.out.println("EndpointRegistrar.addEndpointPublisher() " + publisher + " with ranking " + ranking);
 		logger.debug("BINDING publisher={} with ranking={}", publisher, ranking);
 		endpointPublisherMap.put(publisher, ranking);
@@ -156,9 +174,16 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 		}
 
 		public void refresh() {
+			System.out.println("EndpointRegistrar.EndpointRegistration.refresh()");
+			
 			Dictionary<String, Object> dictionaryProperties = getServiceProperties();
 			BundleContext bc = context.getBundleContext();
 			Object implementor = bc.getService(implementorReference);
+			System.out.println("implementor="+implementor);
+			if (endpointPublisherMap.isEmpty()) {
+				System.out.println("no implementors yet!");
+				return;
+			}
 			synchronized (this) {
 				internalDispose();
 				// the implementor might be prototype scope so better look it up on each call
@@ -180,6 +205,7 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 							BundleEndpointContext::new);
 					context.addEndpoint(endpoint);
 					endpoint.setEndpointContext(context);
+					System.out.println("endpointPublisherMap = "+endpointPublisherMap);
 					publishedEndpoint = endpointPublisherMap.entrySet().stream()
 							.sorted(Comparator.comparing(Entry::getValue,
 									Comparator.comparingInt(ServiceRanking::value)))
@@ -202,6 +228,7 @@ public class EndpointRegistrar implements WebserviceServiceRuntime {
 
 							}).findFirst().orElse(null);
 				} catch (RuntimeException e) {
+					e.printStackTrace();
 					publishedEndpoint = new FailedEndpoint(e, implementor) {
 
 						@Override
