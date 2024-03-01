@@ -28,7 +28,6 @@ import org.eclipse.daanse.xmla.model.jakarta.xml.bind.xmla.Return;
 import org.eclipse.daanse.xmla.model.jakarta.xml.bind.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.model.jakarta.xml.bind.xmla_rowset.Rowset;
 import org.eclipse.daanse.xmla.model.jakarta.xml.bind.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
-import org.eclipse.daanse.xmla.server.jakarta.jws.MsXmlAnalysisSoap;
 import org.eclipse.daanse.xmla.server.tck.Constants;
 import org.eclipse.daanse.xmla.server.tck.SOAPUtil;
 import org.eclipse.daanse.xmla.server.tck.XMLUtil;
@@ -37,12 +36,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
+import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.dictionary.Dictionaries;
 import org.xmlunit.assertj3.XmlAssert;
 
 import jakarta.xml.soap.SOAPMessage;
 
+@RequireHttpWhiteboard
+@RequireServiceComponentRuntime
 class MsXmlAnalysisSoapTest {
 
     @InjectBundleContext

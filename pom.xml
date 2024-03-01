@@ -683,6 +683,7 @@
 				<artifactId>org.apache.felix.http.jetty12</artifactId>
 				<version>1.0.2</version>
 				<scope>runtime</scope>
+				<classifier>light</classifier>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>

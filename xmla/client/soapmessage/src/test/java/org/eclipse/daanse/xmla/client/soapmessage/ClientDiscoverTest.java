@@ -177,6 +177,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
+import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
@@ -219,6 +220,7 @@ import static org.mockito.Mockito.when;
 @WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
         @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
+@RequireHttpWhiteboard
 class ClientDiscoverTest {
     XmlaServiceClientImpl client = new XmlaServiceClientImpl("http://localhost:8090/xmla");
     // Register a Provider using whiteboardpattern and xmlassert to check xml
