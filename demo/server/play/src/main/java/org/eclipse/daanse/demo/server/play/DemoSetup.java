@@ -6,6 +6,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.core.BasicContextGroup;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -66,6 +67,16 @@ public class DemoSetup {
 	private Configuration cCtxs;
 
 
+	
+	Context context;
+	
+	@Reference
+	public void bindContext(   Context context){
+	    this.context=context;
+	    
+	}
+	
+	
 	@Activate
 	public void activate() throws IOException {
 
@@ -77,9 +88,15 @@ public class DemoSetup {
 		initContext();
 
         initVerifiers();
+        
+        runTest();
 	}
 
-	private void initContext() throws IOException {
+	private void runTest() {
+        
+    }
+
+    private void initContext() throws IOException {
 
 
 //		String PATH_TO_OBSERVE = "./catalogs";
