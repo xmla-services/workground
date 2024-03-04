@@ -38,6 +38,7 @@ import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
@@ -238,21 +239,22 @@ public class OlapExecuteService implements ExecuteService {
 				String statement = statementRequest.command().statement();
 				if (statement != null && statement.length() > 0) {
 
-                    QueryComponent query = context.getConnection().parseStatement(statement);
-					if (query instanceof DrillThrough) {
+                    QueryComponent queryComponent = context.getConnection().parseStatement(statement);
+
+					if (queryComponent instanceof DrillThrough) {
 						return executeDrillThroughQuery(context, statementRequest);
-					} else if (query instanceof CalculatedFormula calculatedFormula) {
+					} else if (queryComponent instanceof CalculatedFormula calculatedFormula) {
 						return executeCalculatedFormula(context, calculatedFormula);
-					} else if (query instanceof DmvQuery dmvQuery) {
+					} else if (queryComponent instanceof DmvQuery dmvQuery) {
 						return executeDmvQuery(dmvQuery, statementRequest);
-					} else if (query instanceof Refresh refresh) {
+					} else if (queryComponent instanceof Refresh refresh) {
 						return executeRefresh(context, refresh);
-					} else if (query instanceof Update update) {
+					} else if (queryComponent instanceof Update update) {
 						return executeUpdate(context, update);
-					} else if (query instanceof TransactionCommand transactionCommand) {
+					} else if (queryComponent instanceof TransactionCommand transactionCommand) {
 						return executeTransactionCommand(context, statementRequest, transactionCommand);
-					} else {
-						return executeQuery(context, statementRequest);
+					} else if (queryComponent instanceof Query query){
+						return executeQuery(context, statementRequest,query);
 					}
 				}
 
@@ -261,11 +263,15 @@ public class OlapExecuteService implements ExecuteService {
 		return new StatementResponseR(null, null);
 	}
 
-    private StatementResponse executeQuery(Context context, StatementRequest statementRequest) {
+    private StatementResponse executeQuery(Context context, StatementRequest statementRequest, Query query) {
         Statement statement = context.getConnection().createStatement();
         String mdx = statementRequest.command().statement();
         if ((mdx != null) && (mdx.length() != 0)) {
-            CellSet cellSet = statement.executeQuery(statementRequest.command().statement());
+            
+            //TODO: not double execute , we have QueryComponent query
+            CellSet cellSet = statement.executeQuery(query);
+//            CellSet cellSet = statement.executeQuery(statementRequest.command().statement());
+
             Optional<Content> content = statementRequest.properties().content();
             boolean omitDefaultSlicerInfo = false;
             if (!content.isPresent() || !Content.DATA_INCLUDE_DEFAULT_SLICER.equals(content.get())) {

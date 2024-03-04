@@ -102,7 +102,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 					UUID.randomUUID().toString(), "?");
 			Dictionary<String, Object> props = new Hashtable<>();
 			props.put(FileSystemWatcherWhiteboardConstants.FILESYSTEM_WATCHER_PATH, path.toString());
-			props.put("name", basePath.resolve(path).toString());
+			props.put("name", basePath.relativize(path).toString());
 			c.update(props);
 			
 			catalogFolderConfigs.put(path, c);

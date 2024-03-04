@@ -1,13 +1,20 @@
 package org.eclipse.daanse.demo.server.play;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.eclipse.daanse.common.io.fs.watcher.api.FileSystemWatcherWhiteboardConstants;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.core.BasicContextGroup;
+import org.eclipse.daanse.olap.impl.RectangularCellSetFormatter;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -15,6 +22,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
 
 @Component(immediate = true)
@@ -66,15 +76,17 @@ public class DemoSetup {
 
 	private Configuration cCtxs;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
+    public void bindContext(Context context) {
 
-	
-	Context context;
-	
-	@Reference
-	public void bindContext(   Context context){
-	    this.context=context;
-	    
-	}
+        runTest(context);
+
+    }
+    
+    public void unbindContext(Context context) {
+
+
+    }
 	
 	
 	@Activate
@@ -89,10 +101,32 @@ public class DemoSetup {
 
         initVerifiers();
         
-        runTest();
 	}
 
-	private void runTest() {
+	private void runTest(Context context) {
+	    String mdxQueryString = """
+                SELECT NON EMPTY CrossJoin(Hierarchize(AddCalculatedMembers({DrilldownLevel({[Store].[All Stores]})})),Hierarchize(AddCalculatedMembers({DrilldownLevel({[Position].[All Position]})}))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS  FROM [HR] WHERE ([Measures].[Count]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS
+                """;
+	    System.err.println(mdxQueryString);
+
+        QueryComponent queryComponent = context.getConnection().parseStatement(mdxQueryString);
+
+        if (queryComponent instanceof Query query) {
+            Statement statement = context.getConnection().createStatement();
+            CellSet cellSet = statement.executeQuery(query);    
+
+            System.out.println(cellSet);
+            
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter= new PrintWriter(stringWriter);
+            new RectangularCellSetFormatter(true).format(cellSet, printWriter);
+
+            
+            System.out.println(stringWriter);
+            System.err.println(stringWriter);
+
+            System.out.println("...");
+        }
         
     }
 

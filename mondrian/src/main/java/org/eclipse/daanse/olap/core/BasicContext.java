@@ -98,8 +98,30 @@ public class BasicContext extends AbstractBasicContext {
 
 	public void activate1(BasicContextConfig configuration) throws Exception {
 
-		this.config = configuration;
+        this.config = configuration;
 		this.monitor = new NopEventBus();
+		//TODO: rm was just for testing
+		statisticsProvider=new StatisticsProvider(){
+	        @Override
+	        public void initialize(DataSource dataSource, Dialect dialect) {
+
+	        }
+
+	        @Override
+	        public long getTableCardinality(String catalog, String schema, String table) {
+	            return 0;
+	        }
+
+	        @Override
+	        public long getQueryCardinality(String sql) {
+	            return 0;
+	        }
+
+	        @Override
+	        public long getColumnCardinality(String catalog, String schema, String table, String column) {
+	            return 0;
+	        }
+	    };
 
 		queryLimitSemaphore = new Semaphore(config.queryLimit());
 

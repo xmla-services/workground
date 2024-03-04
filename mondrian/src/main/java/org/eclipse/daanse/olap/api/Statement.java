@@ -38,6 +38,7 @@ public interface Statement  {
     Result executeSelect(String mdx) throws Exception;
 
     CellSet executeQuery(String statement);
+    CellSet executeQuery(Query query);
 
     ResultSet executeQuery(String statement, Optional<Boolean> advanced, Optional<String> tabFields, int[] rowCountSlot);
 

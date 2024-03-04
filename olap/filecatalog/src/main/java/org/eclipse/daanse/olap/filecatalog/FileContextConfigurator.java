@@ -98,7 +98,7 @@ public class FileContextConfigurator implements FileSystemWatcherListener {
 		if(name==null || name.isEmpty()) {
 			name="not_set"+UUID.randomUUID().toString();
 		}
-		props.put("name", config.name());
+		props.put("name", name);
 		props.put("description", theDescription);
 		props.put("catalog.path", catalog_path);
 		cContext.update(props);

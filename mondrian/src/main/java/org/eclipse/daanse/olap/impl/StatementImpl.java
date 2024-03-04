@@ -64,8 +64,14 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
 
     @Override
     public CellSet executeQuery(String mdx) {
-        final Pair<Query, CellSetMetaDataImpl> pair = parseQuery(mdx);
-        return executeOlapQueryInternal(pair.left, pair.right);
+        final Query query = parseQuery(mdx);
+        return executeOlapQueryInternal(query);
+
+    }
+    
+    @Override
+    public CellSet executeQuery(Query query) {
+        return executeOlapQueryInternal(query);
 
     }
 
@@ -93,7 +99,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
             final Query query = drillThrough.getQuery();
             query.setResultStyle(ResultStyle.LIST);
             //setQuery(query);
-            CellSet cellSet = executeOlapQueryInternal(query, null);
+            CellSet cellSet = executeOlapQueryInternal(query);
             final List<Integer> coords = Collections.nCopies(
                 cellSet.getAxes().size(), 0);
             final Cell cell =
@@ -147,8 +153,7 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
         return sw.toString();
     }
 
-    private CellSet executeOlapQueryInternal(Query query,
-                                             CellSetMetaDataImpl cellSetMetaData) {
+    private CellSet executeOlapQueryInternal(Query query) {
         // Close the previous open CellSet, if there is one.
         synchronized (this) {
             if (openCellSet != null) {
@@ -185,14 +190,14 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
         return openCellSet;
     }
 
-    private Pair<Query, CellSetMetaDataImpl> parseQuery(String mdx) {
+    private Query parseQuery(String mdx) {
         try {
             return LocusImpl.execute(
                 (RolapConnection) connection,
                 "Parsing query",
-                new LocusImpl.Action<Pair<Query, CellSetMetaDataImpl>>() {
+                new LocusImpl.Action<Query>() {
                     @Override
-                    public Pair<Query, CellSetMetaDataImpl> execute()
+                    public Query execute()
                     {
                         final Query query =
                             (Query) ((ConnectionBase)connection).parseStatementN(
@@ -200,10 +205,8 @@ public class StatementImpl extends mondrian.server.StatementImpl implements Stat
                                 mdx,
                                 context.getFunctionService(),
                                 false);
-                        final CellSetMetaDataImpl cellSetMetaData =
-                            new CellSetMetaDataImpl(
-                                StatementImpl.this, query);
-                        return Pair.of(query, cellSetMetaData);
+                        return query;
+
                     }
                 });
         } catch (MondrianException e) {

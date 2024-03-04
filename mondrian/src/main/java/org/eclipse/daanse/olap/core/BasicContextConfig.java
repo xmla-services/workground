@@ -556,7 +556,7 @@ public interface BasicContextConfig {
 
     //<p>Property that controls the maximum number of results contained in a NativizeSet result set.</p> <p>If the number of tuples contained in the result set exceeds this value Mondrian throws a LimitExceededDuringCrossjoin error.</p>
     @AttributeDefinition(name = "%nativizeMaxResults.name", description = "%nativizeMaxResults.description", type = AttributeType.INTEGER)
-    default Integer nativizeMaxResults() { return -150000; }
+    default Integer nativizeMaxResults() { return 150000; }
 
     //<p>Property that defines whether to enable new naming behavior.</p> <p>If true, hierarchies are named [Dimension].[Hierarchy]; if false, [Dimension.Hierarchy].</p>
     @AttributeDefinition(name = "%ssasCompatibleNaming.name", description = "%ssasCompatibleNaming.description", type = AttributeType.BOOLEAN)

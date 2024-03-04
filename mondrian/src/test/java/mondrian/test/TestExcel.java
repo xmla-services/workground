@@ -13,28 +13,48 @@
  */
 package mondrian.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.impl.RectangularCellSetFormatter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalog;
 
-import static mondrian.olap.Util.assertTrue;
-import static org.opencube.junit5.TestUtil.executeQuery;
-
 public class TestExcel {
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void test(Context context) {
-        String query = """
-  SELECT NON EMPTY CrossJoin(Hierarchize(AddCalculatedMembers({DrilldownLevel({[Store].[All Stores]})})),Hierarchize(AddCalculatedMembers({DrilldownLevel({[Position].[All Position]})}))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS  FROM [HR] WHERE ([Measures].[Count]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS
-  """;
+        String mdxQueryString = """
+                SELECT NON EMPTY CrossJoin(Hierarchize(AddCalculatedMembers({DrilldownLevel({[Store].[All Stores]})})),Hierarchize(AddCalculatedMembers({DrilldownLevel({[Position].[All Position]})}))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS  FROM [HR] WHERE ([Measures].[Count]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS
+                """;
 
-        Result result =
-            executeQuery(context.getConnection(), query );
+        QueryComponent queryComponent = context.getConnection().parseStatement(mdxQueryString);
 
-        assertTrue ( result != null );
+        assertThat(queryComponent).isInstanceOf(Query.class);
+        if (queryComponent instanceof Query query) {
+            Statement statement = context.getConnection().createStatement();
+            CellSet cellSet = statement.executeQuery(query);
+
+            System.out.println(cellSet);
+            
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter= new PrintWriter(stringWriter);
+            new RectangularCellSetFormatter(true).format(cellSet, printWriter);
+
+            
+            System.out.println(stringWriter);
+            System.out.println("...");
+        }
+
     }
 }
