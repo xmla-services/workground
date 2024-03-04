@@ -17,7 +17,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
-    <module>csv</module>
     <module>ods</module>
     <module>csvtoh2</module>
   </modules>

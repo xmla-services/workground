@@ -104,8 +104,8 @@
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
 
-#-runproperties.tester: \
-    #tester.names='mondrian.test.DeadlockTest'
+-runproperties.tester: \
+    tester.names='mondrian.test.TestExcel'
     #mondrian.olap.fun.VisualTotalsTest,\
     #mondrian.rolap.agg.DrillThroughQuerySpecTest,\
     #mondrian.test.I18nTest,\

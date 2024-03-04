@@ -36,7 +36,7 @@ public class FileContextRepositoryConfigurator implements FileSystemWatcherListe
 
 //	public static final String PID="org.eclipse.daanse.db.jdbc.dataloader.csvtoh2.FileContextRepositoryConfigurator";
 	public static final String PID_H2 = Constants.PID_DATASOURCE;//"org.eclipse.daanse.db.datasource.h2.H2DataSource";
-	public static final String PID_CSV = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoader";
+	public static final String PID_CSV = org.eclipse.daanse.common.jdbc.loader.csv.api.Constants.PID_LOADER_FILEWATCHER;
 
 	@Reference
 	ConfigurationAdmin configurationAdmin;
