@@ -78,10 +78,12 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=FoodMart",
+@Component(service = DatabaseMappingSchemaProvider.class, configurationPid = FoodMartRecordDbMappingSchemaProvider.PID,
+scope = ServiceScope.SINGLETON, property = {"sample.name=FoodMart",
     "sample.type=record"})
 public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 
+    public static final String PID="org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider";
 	private static final String CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME =
         "CONCAT(CONCAT(\"customer\".\"fname\", ' '), \"customer\".\"lname\")";
 	private static final String STORE_MANAGER_COLUMN = "store_manager";

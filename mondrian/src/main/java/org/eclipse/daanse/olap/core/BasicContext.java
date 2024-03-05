@@ -29,6 +29,7 @@ import org.eclipse.daanse.olap.api.ConnectionProps;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
+import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
@@ -58,7 +59,7 @@ public class BasicContext extends AbstractBasicContext {
 	public static final String REF_NAME_DIALECT_RESOLVER = "dialectResolver";
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
-	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
+//	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
 	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProviders";
 	public static final String REF_NAME_EXPRESSION_COMPILER_FACTORY = "expressionCompilerFactory";
 
