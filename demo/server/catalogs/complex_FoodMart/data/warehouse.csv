@@ -1,5 +1,5 @@
 warehouse_id,warehouse_class_id,stores_id,warehouse_name,wa_address1,wa_address2,wa_address3,wa_address4,warehouse_city,warehouse_state_province,warehouse_postal_code,warehouse_country,warehouse_owner_name,warehouse_phone,warehouse_fax
-INTEGER,INTEGER,INTEGER,STRING,STRING,STRING,STRING,STRING,STRING,STRING,STRING,STRING,STRING,STRING,STRING
+INTEGER,INTEGER,INTEGER,VARCHAR(60),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30)
 1,1,1,Salka Warehousing,9716 Alovera Road,NULL,NULL,NULL,Acapulco,Guerrero,55555,Mexico,NULL,821-555-1658,594-555-2908
 2,2,2,Foster Products,958 Hilltop Dr,NULL,NULL,NULL,Bellingham,WA,55555,USA,NULL,315-555-8947,119-555-3826
 3,3,3,"Destination, Inc.",4162 Euclid Ave,NULL,NULL,NULL,Bremerton,WA,55555,USA,NULL,517-555-3022,136-555-4501

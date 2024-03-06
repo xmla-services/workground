@@ -1,5 +1,5 @@
 employee_id,full_name,first_name,last_name,position_id,position_title,store_id,department_id,birth_date,hire_date,end_date,salary,supervisor_id,education_level,marital_status,gender
-INTEGER,STRING,STRING,STRING,INTEGER,STRING,INTEGER,INTEGER,TIMESTAMP,TIMESTAMP,TIMESTAMP,NUMERIC,INTEGER,STRING,STRING,STRING
+INTEGER,VARCHAR(30),VARCHAR(30),VARCHAR(30),INTEGER,VARCHAR(30),INTEGER,INTEGER,TIMESTAMP,TIMESTAMP,TIMESTAMP,DECIMAL,INTEGER,VARCHAR(30),VARCHAR(30),VARCHAR(30)
 1157,Maryann Backlin,Maryann,Backlin,NULL,NULL,0,0,1946-08-15 00:00:00,NULL,NULL,0,0,Graduate Degree,S,M
 1158,Kevin Sharp,Kevin,Sharp,NULL,NULL,0,0,1912-04-06 00:00:00,NULL,NULL,0,0,Graduate Degree,S,M
 1159,Michael Torres,Michael,Torres,NULL,NULL,0,0,1951-09-27 00:00:00,NULL,NULL,0,0,High School Degree,M,F

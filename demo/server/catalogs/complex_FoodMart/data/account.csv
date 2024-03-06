@@ -1,5 +1,5 @@
 account_id,account_parent,account_description,account_type,account_rollup,Custom_Members
-INTEGER,INTEGER,STRING,STRING,STRING,STRING
+INTEGER,INTEGER,VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(255)
 1000,NULL,Assets,Asset,~,NULL
 2000,NULL,Liabilities,Liability,~,NULL
 3000,5000,Net Sales,Income,+,NULL

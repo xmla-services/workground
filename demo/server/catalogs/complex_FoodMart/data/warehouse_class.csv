@@ -1,5 +1,5 @@
 warehouse_class_id,description
-INTEGER,STRING
+INTEGER,VARCHAR(60)
 1,Small Independent
 2,Medium Independent
 3,Large Independent

@@ -1,5 +1,5 @@
 region_id,sales_city,sales_state_province,sales_district,sales_region,sales_country,sales_district_id
-INTEGER,STRING,STRING,STRING,STRING,STRING,INTEGER
+INTEGER,VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),INTEGER
 0,None,None,No District,No Region,No Country,0
 1,San Francisco,CA,San Francisco,Central West,USA,123
 2,Mexico City,DF,Mexico City,Mexico Central,Mexico,118

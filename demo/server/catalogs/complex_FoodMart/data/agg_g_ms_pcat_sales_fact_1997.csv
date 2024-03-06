@@ -1,5 +1,5 @@
 gender,marital_status,product_family,product_department,product_category,month_of_year,quarter,the_year,store_sales,store_cost,unit_sales,customer_count,fact_count
-STRING,STRING,STRING,STRING,STRING,INTEGER,STRING,INTEGER,NUMERIC,NUMERIC,NUMERIC,INTEGER,INTEGER
+VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),VARCHAR(30),SMALLINT,VARCHAR(30),SMALLINT,DECIMAL,DECIMAL,DECIMAL,INTEGER,INTEGER
 F,M,Drink,Alcoholic Beverages,Beer and Wine,1,Q1,1997,318.7,124.162,160,48,50
 F,M,Drink,Alcoholic Beverages,Beer and Wine,2,Q1,1997,258.99,104.4752,135,45,46
 F,M,Drink,Alcoholic Beverages,Beer and Wine,3,Q1,1997,369.21,146.2172,162,50,54
