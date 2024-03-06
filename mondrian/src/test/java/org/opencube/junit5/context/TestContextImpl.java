@@ -172,17 +172,17 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 
 		@Override
 		public long getTableCardinality(String catalog, String schema, String table) {
-			return 0;
+			return -1;
 		}
 
 		@Override
 		public long getQueryCardinality(String sql) {
-			return 0;
+			return -1;
 		}
 
 		@Override
 		public long getColumnCardinality(String catalog, String schema, String table, String column) {
-			return 0;
+			return -1;
 		}
 	}
 
