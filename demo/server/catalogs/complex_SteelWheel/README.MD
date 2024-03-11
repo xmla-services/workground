@@ -219,7 +219,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube SteelWheelsSales: [0.6000, 0.0001]
+Cube SteelWheelsSales: [0.6000, 0.0000]
 ```
 ---
 ### Database :
@@ -230,59 +230,59 @@ title: Diagram;
 ---
 erDiagram
 customer_w_ter{
-int CUSTOMERNUMBER
-string CUSTOMERNAME
-string CONTACTLASTNAME
-string CONTACTFIRSTNAME
-string PHONE
-string ADDRESSLINE1
-string ADDRESSLINE2
-string CITY
-string STATE
-string POSTALCODE
-string COUNTRY
-int EMPLOYEENUMBER
+null CUSTOMERNUMBER
+null CUSTOMERNAME
+null CONTACTLASTNAME
+null CONTACTFIRSTNAME
+null PHONE
+null ADDRESSLINE1
+null ADDRESSLINE2
+null CITY
+null STATE
+null POSTALCODE
+null COUNTRY
+null EMPLOYEENUMBER
 null CREDITLIMIT
-string TERRITORY
+null TERRITORY
 }
 orderfact{
-int ORDERNUMBER
-string PRODUCTCODE
-int QUANTITYORDERED
+null ORDERNUMBER
+null PRODUCTCODE
+null QUANTITYORDERED
 null PRICEEACH
-int ORDERLINENUMBER
+null ORDERLINENUMBER
 null TOTALPRICE
-timestamp ORDERDATE
-timestamp REQUIREDDATE
-timestamp SHIPPEDDATE
-string STATUS
-string COMMENTS
-int CUSTOMERNUMBER
-string TIME_ID
-int QTR_ID
-int MONTH_ID
-int YEAR_ID
+null ORDERDATE
+null REQUIREDDATE
+null SHIPPEDDATE
+null STATUS
+null COMMENTS
+null CUSTOMERNUMBER
+null TIME_ID
+null QTR_ID
+null MONTH_ID
+null YEAR_ID
 }
 products{
-string PRODUCTCODE
-string PRODUCTNAME
-string PRODUCTLINE
-string PRODUCTSCALE
-string PRODUCTVENDOR
-string PRODUCTDESCRIPTION
-int QUANTITYINSTOCK
+null PRODUCTCODE
+null PRODUCTNAME
+null PRODUCTLINE
+null PRODUCTSCALE
+null PRODUCTVENDOR
+null PRODUCTDESCRIPTION
+null QUANTITYINSTOCK
 null BUYPRICE
 null MSRP
 }
 time{
-string TIME_ID
-int MONTH_ID
-int QTR_ID
-int YEAR_ID
-string MONTH_NAME
-string MONTH_DESC
-string QTR_NAME
-string QTR_DESC
+null TIME_ID
+null MONTH_ID
+null QTR_ID
+null YEAR_ID
+null MONTH_NAME
+null MONTH_DESC
+null QTR_NAME
+null QTR_DESC
 }
 
 "orderfact" ||--o{ "customer_w_ter" : "CUSTOMERNUMBER-CUSTOMERNUMBER"

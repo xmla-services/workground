@@ -1,20 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-/*********************************************************************
-* Copyright (c) 2024 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-**********************************************************************/
--->
-<Schema name="Minimal_Cube_With_Inline_Tables"
-  description="Schema of a minimal cube consisting of one measurement and based on an virtual inline table">
+# Documentation
+### CatalogName : tutorial_01-03_Cube_InlineTable
+## Olap Context Details:
+## Schemas:
+### Schema Minimal_Cube_With_Inline_Tables : 
 
-  <Documentation>
-	<![CDATA[
+	
 		A minimal cube based on an inline table
 	
     	An inline table is a virtual table which is completely defined within the schema file instead of using an existing database table. Inline tables should only be used exceptionally.
@@ -29,21 +19,61 @@
 		It consists of the string column "KEY" and the numeric column "VALUE" (<ColumnDef> within <ColumnDefs>).
 		The table has one row which holds the text "A" in the "KEY" column and the value 100.5 in the "VALUE" column (<Row> & <Value> within <Rows>)
 		As the inline table is the only dataset the cube refers to, no external database is needed.	
-	]]></Documentation>
-  <Cube name="CubeOneMeasureInlineTable">
-    <InlineTable alias="Fact">
-      <ColumnDefs>
-        <ColumnDef name="KEY" type="String" />
-        <ColumnDef name="VALUE" type="Numeric" />
-      </ColumnDefs>
-      <Rows>
-        <Row>
-          <Value column="KEY">A</Value>
-          <Value column="VALUE">100.5</Value>
-        </Row>
-      </Rows>
-    </InlineTable>
-    <Measure aggregator="sum" name="Measure-Sum" column="VALUE" />
-  </Cube>
+	
+### Public Dimensions:
 
-</Schema>
+    
+
+---
+### Cubes :
+
+    CubeOneMeasureInlineTable
+
+---
+#### Cube "CubeOneMeasureInlineTable":
+
+    
+
+##### Table: ""
+
+##### Dimensions:
+### Cube "CubeOneMeasureInlineTable" diagram:
+
+---
+
+```mermaid
+%%{init: {
+"theme": "default",
+"themeCSS": [
+    ".er.entityBox {stroke: black;}",
+    ".er.attributeBoxEven {stroke: black;}",
+    ".er.attributeBoxOdd {stroke: black;}",
+    "[id^=entity-c] .er.entityBox { fill: lightgreen;} ",
+    "[id^=entity-d] .er.entityBox { fill: powderblue;} ",
+    "[id^=entity-h] .er.entityBox { fill: pink;} "
+]
+}}%%
+erDiagram
+c0["CubeOneMeasureInlineTable"]{
+M Measure-Sum ""}
+```
+---
+### Cube Matrix for Minimal_Cube_With_Inline_Tables:
+```mermaid
+quadrantChart
+title Cube Matrix
+x-axis small level number --> high level number
+y-axis Low row count --> High row count
+quadrant-1 Complex
+quadrant-2 Deep
+quadrant-3 Simple
+quadrant-4 Wide
+
+Cube CubeOneMeasureInlineTable: [0.0000, 0.0001]
+```
+---
+## Validation result for schema Minimal_Cube_With_Inline_Tables
+## <span style='color: red;'>ERROR</span> : 
+|Type|   |
+|----|---|
+|SCHEMA|Cube with name CubeOneMeasureInlineTable must contain Dimensions|

@@ -188,7 +188,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube Cube 1: [0.4000, 0.0001]
+Cube Cube 1: [0.4000, 0.0000]
 ```
 ---
 ### Database :
@@ -199,61 +199,61 @@ title: Diagram;
 ---
 erDiagram
 Cube1Fact{
-string D1
-string D2
-string D3
-int M1
+null D1
+null D2
+null D3
+null M1
 }
 D1H1L1Table{
-string D1H1L1
-string D1H1L1_NAME
-string D1H1L1_Ordinal
+null D1H1L1
+null D1H1L1_NAME
+null D1H1L1_Ordinal
 }
 D2H1L1Table{
-string D2H1L1
-string D2H1L1_NAME
-string D2H1L1_Ordinal
+null D2H1L1
+null D2H1L1_NAME
+null D2H1L1_Ordinal
 }
 D2H2L2Table{
-string D2H2L2
-string D2H2L1
-string D2H2L2_NAME
-string D2H2L1_NAME
-string D2H2L2_Ordinal
-string D2H2L1_Ordinal
+null D2H2L2
+null D2H2L1
+null D2H2L2_NAME
+null D2H2L1_NAME
+null D2H2L2_Ordinal
+null D2H2L1_Ordinal
 }
 D3H1L1Table{
-string D3H1L1
-string D3H1L1_NAME
-string D3H1L1_Ordinal
+null D3H1L1
+null D3H1L1_NAME
+null D3H1L1_Ordinal
 }
 D3H2L1Table{
-string D3H2L1
-string D3H2L1_NAME
-string D3H2L1_Ordinal
+null D3H2L1
+null D3H2L1_NAME
+null D3H2L1_Ordinal
 }
 D3H2L2Table{
-string D3H2L2
-string D3H2L1_id
-string D3H2L2_NAME
-string D3H2L2_Ordinal
+null D3H2L2
+null D3H2L1_id
+null D3H2L2_NAME
+null D3H2L2_Ordinal
 }
 D3H3L1Table{
-string D3H3L1
-string D3H3L1_NAME
-string D3H3L1_Ordinal
+null D3H3L1
+null D3H3L1_NAME
+null D3H3L1_Ordinal
 }
 D3H3L2Table{
-string D3H3L2
-string D3H3L1_id
-string D3H3L2_NAME
-string D3H3L2_Ordinal
+null D3H3L2
+null D3H3L1_id
+null D3H3L2_NAME
+null D3H3L2_Ordinal
 }
 D3H3L3Table{
-string D3H3L3
-string D3H3L2_id
-string D3H3L3_NAME
-string D3H3L3_Ordinal
+null D3H3L3
+null D3H3L2_id
+null D3H3L3_NAME
+null D3H3L3_Ordinal
 }
 
 "Cube1Fact" ||--o{ "D1H1L1Table" : "D1-D1H1L1"

@@ -91,7 +91,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube CubeTimeDimension: [0.1500, 0.0001]
+Cube CubeTimeDimension: [0.1500, 0.0000]
 ```
 ---
 ### Database :
@@ -102,13 +102,13 @@ title: Diagram;
 ---
 erDiagram
 Fact{
-timestamp DATE_KEY
-int VALUE
-int YEAR_ID
-string QTR_ID
-string QTR_NAME
-string MONTH_ID
-string MONTH_NAME
+null DATE_KEY
+null VALUE
+null YEAR_ID
+null QTR_ID
+null QTR_NAME
+null MONTH_ID
+null MONTH_NAME
 }
 
 ```

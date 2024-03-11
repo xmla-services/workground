@@ -107,7 +107,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube CubeMultipleHierarchy: [0.2000, 0.0001]
+Cube CubeMultipleHierarchy: [0.2000, 0.0000]
 ```
 ---
 ### Database :
@@ -118,22 +118,22 @@ title: Diagram;
 ---
 erDiagram
 Fact{
-int DIM_KEY
-int VALUE
+null DIM_KEY
+null VALUE
 }
 H1_L1{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 H2_L1{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 HX_L2{
-int KEY
-string NAME
-int H1L1_KEY
-int H2L1_KEY
+null KEY
+null NAME
+null H1L1_KEY
+null H2L1_KEY
 }
 
 "Fact" ||--o{ "HX_L2" : "DIM_KEY-KEY"

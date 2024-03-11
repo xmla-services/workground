@@ -215,9 +215,9 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube HiddenMembersIfParentName: [0.1000, 0.0001]
-Cube HiddenMembersIfBlankName: [0.1000, 0.0001]
-Cube HiddenMembersMultipleLevels: [0.1500, 0.0001]
+Cube HiddenMembersIfParentName: [0.1000, 0.0000]
+Cube HiddenMembersIfBlankName: [0.1000, 0.0000]
+Cube HiddenMembersMultipleLevels: [0.1500, 0.0000]
 ```
 ---
 ### Database :
@@ -228,40 +228,40 @@ title: Diagram;
 ---
 erDiagram
 Fact{
-int DIM_KEY
-int VALUE
+null DIM_KEY
+null VALUE
 }
 Fact_Multiple{
-int DIM_KEY
-int VALUE
+null DIM_KEY
+null VALUE
 }
 Level_1{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 Level_1_Multiple{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 Level_2{
-int KEY
-string NAME
-int L1_KEY
+null KEY
+null NAME
+null L1_KEY
 }
 Level_2_Multiple{
-int KEY
-string NAME
-int L1_KEY
+null KEY
+null NAME
+null L1_KEY
 }
 Level_2_NULL{
-int KEY
-string NAME
-int L1_KEY
+null KEY
+null NAME
+null L1_KEY
 }
 Level_3_Multiple{
-int KEY
-string NAME
-int L2_KEY
+null KEY
+null NAME
+null L2_KEY
 }
 
 "Fact" ||--o{ "Level_2" : "DIM_KEY-KEY"

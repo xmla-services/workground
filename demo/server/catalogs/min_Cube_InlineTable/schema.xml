@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Schema name="Minimal_Cubes_With_Inline_Tables">
 
-<!--
+	<Documentation>
 
 -->
   <Cube name="CubeOneMeasureInlineTable">

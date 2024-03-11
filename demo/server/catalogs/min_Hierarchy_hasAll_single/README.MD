@@ -79,7 +79,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube Cube1: [0.0500, 0.0001]
+Cube Cube1: [0.0500, 0.0000]
 ```
 ---
 ### Database :
@@ -90,8 +90,8 @@ title: Diagram;
 ---
 erDiagram
 Fact{
-string KEY
-int VALUE
+null KEY
+null VALUE
 }
 
 ```

@@ -79,7 +79,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube CubeParentChildOneTopMember: [0.0500, 0.0001]
+Cube CubeParentChildOneTopMember: [0.0500, 0.0000]
 ```
 ---
 ### Database :
@@ -90,13 +90,13 @@ title: Diagram;
 ---
 erDiagram
 Fact{
-int DIM_KEY
-int VALUE
+null DIM_KEY
+null VALUE
 }
 Hier_One_Top_Member{
-int KEY
-string NAME
-int PARENT_KEY
+null KEY
+null NAME
+null PARENT_KEY
 }
 
 "Fact" ||--o{ "Hier_One_Top_Member" : "DIM_KEY-KEY"

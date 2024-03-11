@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Schema name="01_Minimal_Cube_With_One_Measure" description="Schema of a minimal cube containing only one measurement but no other dimensions">
-	<!--
-	<documentation>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<Schema name="01_Minimal_Cube_With_One_Measure"
+  description="Schema of a minimal cube containing only one measurement but no other dimensions">
+  <Documentation>
 		<![CDATA[
 		A basic OLAP schema with a minimal cube
 		
@@ -14,10 +25,9 @@
 		Each measurement of the cube is defined in a separate <Measure> element.
 		The measurement in this example cube is named "Measure-Sum" (name attribute). It corresponds to the "VALUE" column (column attribute) in the database table "Fact" and is aggregated by summation (aggregator attribute).
 		]]>
-	</documentation>
-	-->
-	<Cube name="CubeOneMeasure">		
-		<Table name="Fact"/>
-		<Measure aggregator="sum" name="Measure-Sum" column="VALUE"/>
-	</Cube>
+  </Documentation>
+  <Cube name="CubeOneMeasure">
+    <Table name="Fact" />
+    <Measure aggregator="sum" name="Measure-Sum" column="VALUE" />
+  </Cube>
 </Schema>

@@ -79,7 +79,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube CubeParentChildClosure: [0.0500, 0.0001]
+Cube CubeParentChildClosure: [0.0500, 0.0000]
 ```
 ---
 ### Database :
@@ -90,18 +90,18 @@ title: Diagram;
 ---
 erDiagram
 Closure{
-int PARENT_KEY
-int CHILD_KEY
-int DIST
+null PARENT_KEY
+null CHILD_KEY
+null DIST
 }
 Fact{
-int DIM_KEY
-int VALUE
+null DIM_KEY
+null VALUE
 }
 Hierarchy{
-int KEY
-string NAME
-int PARENT_KEY
+null KEY
+null NAME
+null PARENT_KEY
 }
 
 "Fact" ||--o{ "Hierarchy" : "DIM_KEY-KEY"

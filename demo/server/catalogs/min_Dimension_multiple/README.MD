@@ -106,7 +106,7 @@ quadrant-2 Deep
 quadrant-3 Simple
 quadrant-4 Wide
 
-Cube CubeTwoDimensions: [0.1000, 0.0001]
+Cube CubeTwoDimensions: [0.1000, 0.0000]
 ```
 ---
 ### Database :
@@ -117,17 +117,17 @@ title: Diagram;
 ---
 erDiagram
 DIM_1{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 DIM_2{
-int KEY
-string NAME
+null KEY
+null NAME
 }
 Fact{
-int DIM1_KEY
-int DIM2_KEY
-int VALUE
+null DIM1_KEY
+null DIM2_KEY
+null VALUE
 }
 
 "Fact" ||--o{ "DIM_1" : "DIM1_KEY-KEY"

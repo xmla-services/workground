@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Schema name="Minimal_Virtual_Cubes_With_1_Dimension">
 
-<!--
+	<Documentation>
 
 -->
   
@@ -14,13 +14,13 @@
 
   <Cube name="Cube1">
     <Table name="C1_Fact"/>
-    <DimensionUsage name="Dimension1" source="Dimension1" foreignKey="DIM_1_KEY"/> <!-- name="DimensionA" -->
+    <DimensionUsage name="Dimension1" source="Dimension1" foreignKey="DIM_1_KEY"/> 	<Documentation> name="DimensionA" -->
     <Measure aggregator="sum" name="C1-Measure-Sum" column="VALUE"/>
   </Cube>
   
    <Cube name="Cube2">
     <Table name="C2_Fact"/>
-	<DimensionUsage name="Dimension1" source="Dimension1" foreignKey="DIM_1_KEY"/> <!-- name="DimensionB" -->
+	<DimensionUsage name="Dimension1" source="Dimension1" foreignKey="DIM_1_KEY"/> 	<Documentation> name="DimensionB" -->
     <Measure aggregator="sum" name="C2-Measure-Sum" column="VALUE"/>
   </Cube>
   
@@ -29,7 +29,7 @@
 	  <CubeUsage cubeName="Cube1"/>
 	  <CubeUsage cubeName="Cube2"/>
 	</CubeUsages>
-	<VirtualCubeDimension name="Dimension1"/> <!-- shared dimensions do not require a cube name, but in that case dimension names used in the physical cubes must match the shared dimenson's name -->
+	<VirtualCubeDimension name="Dimension1"/> 	<Documentation> shared dimensions do not require a cube name, but in that case dimension names used in the physical cubes must match the shared dimenson's name -->
 	<VirtualCubeMeasure cubeName="Cube1" name="[Measures].[C1-Measure-Sum]"/> 
     <VirtualCubeMeasure cubeName="Cube2" name="[Measures].[C2-Measure-Sum]"/>
 	<CalculatedMember name="Calculation1" dimension="Measures">
