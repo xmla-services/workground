@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="01-01_Minimal_Cube_With_One_Measure_And_Incorrect_Table_Reference" description="Schema of a minimal cube containing only one measurement with an incorrect fact table reference">
+	<!--
+	<documentation>
+	<![CDATA[
+    	This schema shows a minimal cube with an incorrect fact table reference.
+		In this example the table "Fakt", which is referred to as the database fact table in the <Table> tag, does not exist in the database.
+	]]></documentation>
+-->
+	<Cube name="CubeOneMeasure">
+		<Table name="Fakt"/>
+		<Measure aggregator="sum" name="Measure-Sum" column="VALUE"/>
+	</Cube>
+</Schema>

@@ -1,0 +1,4 @@
+id,traeger_kategorie
+INTEGER,STRING
+0,öffentlicher Träger
+1,freier Träger

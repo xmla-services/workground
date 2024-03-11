@@ -1,0 +1,4 @@
+id,klassenwiederholung
+INTEGER,STRING
+0,klasse erstmalig absolviert
+1,klasse wiederholt

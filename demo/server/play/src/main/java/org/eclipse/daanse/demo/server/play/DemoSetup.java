@@ -79,7 +79,7 @@ public class DemoSetup {
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
     public void bindContext(Context context) {
 
-        //runTest(context);
+//        runTest(context);
 
     }
     
@@ -135,7 +135,7 @@ public class DemoSetup {
 
 //		String PATH_TO_OBSERVE = "./catalogs";
 
-		String PATH_TO_OBSERVE = "./../../../../../catalogs";
+		String PATH_TO_OBSERVE = "./../../../../../activeCatalogs";
 
 		String path = Paths.get(PATH_TO_OBSERVE).toAbsolutePath().normalize().toString();
 

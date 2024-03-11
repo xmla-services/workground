@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="Minimal_Cubes_With_Two_Measures_Plus_One_Calculated_Measure" description="dfsdfdsfdsf dsg">
+	<!--
+	<documentation>
+		<![CDATA[
+		A mininmal cube with a simple measure-based calculated member
+		
+		.
+		
+		
+		]]>
+	</documentation>
+	-->
+	<Cube name="CubeTwoMeasuresPlusOneCalculatedMeasure">
+		<Table name="Fact"/>
+		<Measure aggregator="sum" name="Measure1-Sum" column="VALUE"/>
+		<Measure aggregator="count" name="Measure2-Count" column="VALUE"/>
+		<CalculatedMember name="Measure3-Calculated" dimension="Measures" formula="[Measures].[Measure1-Sum] / [Measures].[Measure2-Count]"/>
+	</Cube>
+</Schema>
