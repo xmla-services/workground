@@ -111,7 +111,7 @@ Levels: "Year, Week, Day"
 
 Hierarchies:
 
-    Hierarchy0
+    Hierarchy0, Product Family, Product Department, Product Category, Product Subcategory, Brand Name, Product Name
 
 ##### Hierarchy Hierarchy0:
 
@@ -138,6 +138,66 @@ Levels: "Product Family, Product Department, Product Category, Product Subcatego
 ###### Level "Brand Name" :
 
     column(s): brand_name
+
+###### Level "Product Name" :
+
+    column(s): product_name
+
+##### Hierarchy Product Family:
+
+Tables: "product,product_class"
+
+Levels: "Product Family"
+
+###### Level "Product Family" :
+
+    column(s): product_family
+
+##### Hierarchy Product Department:
+
+Tables: "product,product_class"
+
+Levels: "Product Department"
+
+###### Level "Product Department" :
+
+    column(s): product_department
+
+##### Hierarchy Product Category:
+
+Tables: "product,product_class"
+
+Levels: "Product Category"
+
+###### Level "Product Category" :
+
+    column(s): product_category
+
+##### Hierarchy Product Subcategory:
+
+Tables: "product,product_class"
+
+Levels: "Product Subcategory"
+
+###### Level "Product Subcategory" :
+
+    column(s): product_subcategory
+
+##### Hierarchy Brand Name:
+
+Tables: "product,product_class"
+
+Levels: "Brand Name"
+
+###### Level "Brand Name" :
+
+    column(s): brand_name
+
+##### Hierarchy Product Name:
+
+Tables: "product,product_class"
+
+Levels: "Product Name"
 
 ###### Level "Product Name" :
 
@@ -392,6 +452,12 @@ L Day ""
 }
 d04["Product"] {
 H _ ""
+H Product_Family ""
+H Product_Department ""
+H Product_Category ""
+H Product_Subcategory ""
+H Brand_Name ""
+H Product_Name ""
 }
 h040["_"] {
 L Product_Family ""
@@ -399,6 +465,24 @@ L Product_Department ""
 L Product_Category ""
 L Product_Subcategory ""
 L Brand_Name ""
+L Product_Name ""
+}
+h041["Product_Family"] {
+L Product_Family ""
+}
+h042["Product_Department"] {
+L Product_Department ""
+}
+h043["Product_Category"] {
+L Product_Category ""
+}
+h044["Product_Subcategory"] {
+L Product_Subcategory ""
+}
+h045["Brand_Name"] {
+L Brand_Name ""
+}
+h046["Product_Name"] {
 L Product_Name ""
 }
 d05["Promotion Media"] {
@@ -470,6 +554,18 @@ L Yearly_Income ""
 "d04" ||--|| "h040" : "product_id-product_subcategory"
 "d04" ||--|| "h040" : "product_id-brand_name"
 "d04" ||--|| "h040" : "product_id-product_name"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h041" : "product_id-product_family"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h042" : "product_id-product_department"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h043" : "product_id-product_category"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h044" : "product_id-product_subcategory"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h045" : "product_id-brand_name"
+"c0" ||--|| "d04" : "product_id-product_id"
+"d04" ||--|| "h046" : "product_id-product_name"
 "c0" ||--|| "d05" : "promotion_id-promotion_id"
 "d05" ||--|| "h050" : "promotion_id-media_type"
 "c0" ||--|| "d06" : "promotion_id-promotion_id"
@@ -578,6 +674,12 @@ L Day ""
 }
 d14["Product"] {
 H _ ""
+H Product_Family ""
+H Product_Department ""
+H Product_Category ""
+H Product_Subcategory ""
+H Brand_Name ""
+H Product_Name ""
 }
 h140["_"] {
 L Product_Family ""
@@ -585,6 +687,24 @@ L Product_Department ""
 L Product_Category ""
 L Product_Subcategory ""
 L Brand_Name ""
+L Product_Name ""
+}
+h141["Product_Family"] {
+L Product_Family ""
+}
+h142["Product_Department"] {
+L Product_Department ""
+}
+h143["Product_Category"] {
+L Product_Category ""
+}
+h144["Product_Subcategory"] {
+L Product_Subcategory ""
+}
+h145["Brand_Name"] {
+L Brand_Name ""
+}
+h146["Product_Name"] {
 L Product_Name ""
 }
 d15["Warehouse"] {
@@ -620,6 +740,18 @@ L Warehouse_Name ""
 "d14" ||--|| "h140" : "product_id-product_subcategory"
 "d14" ||--|| "h140" : "product_id-brand_name"
 "d14" ||--|| "h140" : "product_id-product_name"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h141" : "product_id-product_family"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h142" : "product_id-product_department"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h143" : "product_id-product_category"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h144" : "product_id-product_subcategory"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h145" : "product_id-brand_name"
+"c1" ||--|| "d14" : "product_id-product_id"
+"d14" ||--|| "h146" : "product_id-product_name"
 "c1" ||--|| "d15" : "warehouse_id-warehouse_id"
 "d15" ||--|| "h150" : "warehouse_id-warehouse_country"
 "d15" ||--|| "h150" : "warehouse_id-warehouse_state_province"
@@ -1242,6 +1374,12 @@ L Day ""
 }
 d45["Product"] {
 H _ ""
+H Product_Family ""
+H Product_Department ""
+H Product_Category ""
+H Product_Subcategory ""
+H Brand_Name ""
+H Product_Name ""
 }
 h450["_"] {
 L Product_Family ""
@@ -1249,6 +1387,24 @@ L Product_Department ""
 L Product_Category ""
 L Product_Subcategory ""
 L Brand_Name ""
+L Product_Name ""
+}
+h451["Product_Family"] {
+L Product_Family ""
+}
+h452["Product_Department"] {
+L Product_Department ""
+}
+h453["Product_Category"] {
+L Product_Category ""
+}
+h454["Product_Subcategory"] {
+L Product_Subcategory ""
+}
+h455["Brand_Name"] {
+L Brand_Name ""
+}
+h456["Product_Name"] {
 L Product_Name ""
 }
 d46["Promotion Media"] {
@@ -1324,6 +1480,18 @@ L Yearly_Income ""
 "d45" ||--|| "h450" : "product_id-product_subcategory"
 "d45" ||--|| "h450" : "product_id-brand_name"
 "d45" ||--|| "h450" : "product_id-product_name"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h451" : "product_id-product_family"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h452" : "product_id-product_department"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h453" : "product_id-product_category"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h454" : "product_id-product_subcategory"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h455" : "product_id-brand_name"
+"c4" ||--|| "d45" : "product_id-product_id"
+"d45" ||--|| "h456" : "product_id-product_name"
 "c4" ||--|| "d46" : "promotion_id-promotion_id"
 "d46" ||--|| "h460" : "promotion_id-media_type"
 "c4" ||--|| "d47" : "promotion_id-promotion_id"
@@ -1414,6 +1582,12 @@ L Day ""
 }
 d51["Product"] {
 H _ ""
+H Product_Family ""
+H Product_Department ""
+H Product_Category ""
+H Product_Subcategory ""
+H Brand_Name ""
+H Product_Name ""
 }
 h510["_"] {
 L Product_Family ""
@@ -1421,6 +1595,24 @@ L Product_Department ""
 L Product_Category ""
 L Product_Subcategory ""
 L Brand_Name ""
+L Product_Name ""
+}
+h511["Product_Family"] {
+L Product_Family ""
+}
+h512["Product_Department"] {
+L Product_Department ""
+}
+h513["Product_Category"] {
+L Product_Category ""
+}
+h514["Product_Subcategory"] {
+L Product_Subcategory ""
+}
+h515["Brand_Name"] {
+L Brand_Name ""
+}
+h516["Product_Name"] {
 L Product_Name ""
 }
 d52["Gender"] {
@@ -1444,6 +1636,18 @@ L Gender ""
 "d51" ||--|| "h510" : "product_id-product_subcategory"
 "d51" ||--|| "h510" : "product_id-brand_name"
 "d51" ||--|| "h510" : "product_id-product_name"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h511" : "product_id-product_family"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h512" : "product_id-product_department"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h513" : "product_id-product_category"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h514" : "product_id-product_subcategory"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h515" : "product_id-brand_name"
+"c5" ||--|| "d51" : "product_id-product_id"
+"d51" ||--|| "h516" : "product_id-product_name"
 "c5" ||--|| "d52" : "customer_id-customer_id"
 "d52" ||--|| "h520" : "customer_id-gender"
 ```
@@ -1470,7 +1674,7 @@ Cube Warehouse: [1, 0.0000]
 Cube Store: [0.3000, 0.0000]
 Cube HR: [0.6500, 0.0000]
 Cube Sales_Ragged: [1, 0.0000]
-Cube Sales_2: [0.6500, 0.0000]
+Cube Sales_2: [0.9500, 0.0000]
 ```
 ---
 ### Database :
@@ -1912,6 +2116,18 @@ string description
 "sales_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
 "sales_fact_1997" ||--o{ "product" : "product_id-product_id"
 "product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "sales_fact_1997" ||--o{ "promotion" : "promotion_id-promotion_id"
 "sales_fact_1997" ||--o{ "promotion" : "promotion_id-promotion_id"
 "sales_fact_1997" ||--o{ "customer" : "customer_id-customer_id"
@@ -1924,6 +2140,18 @@ string description
 "inventory_fact_1997" ||--o{ "store" : "store_id-store_id"
 "inventory_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
 "inventory_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "inventory_fact_1997" ||--o{ "product" : "product_id-product_id"
 "product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "inventory_fact_1997" ||--o{ "warehouse" : "warehouse_id-warehouse_id"
@@ -1945,6 +2173,18 @@ string description
 "sales_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
 "sales_fact_1997" ||--o{ "product" : "product_id-product_id"
 "product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "sales_fact_1997" ||--o{ "promotion" : "promotion_id-promotion_id"
 "sales_fact_1997" ||--o{ "promotion" : "promotion_id-promotion_id"
 "sales_fact_1997" ||--o{ "customer" : "customer_id-customer_id"
@@ -1954,6 +2194,18 @@ string description
 "sales_fact_1997" ||--o{ "customer" : "customer_id-customer_id"
 "sales_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
 "sales_fact_1997" ||--o{ "time_by_day" : "time_id-time_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
+"sales_fact_1997" ||--o{ "product" : "product_id-product_id"
+"product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "sales_fact_1997" ||--o{ "product" : "product_id-product_id"
 "product" ||--o{ "product_class" : "product_class_id-product_class_id"
 "sales_fact_1997" ||--o{ "customer" : "customer_id-customer_id"
