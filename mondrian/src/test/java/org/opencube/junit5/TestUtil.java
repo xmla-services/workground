@@ -76,6 +76,7 @@ import org.eclipse.daanse.olap.impl.CoordinateIterator;
 import org.eclipse.daanse.olap.impl.TraditionalCellSetFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.opencube.junit5.context.TestConfig;
 import org.opencube.junit5.context.TestContext;
 
@@ -1276,9 +1277,9 @@ public class TestUtil {
 		}
 	}
 
-	public static void withSchema(Context context, Function<MappingSchema, RDbMappingSchemaModifier> f) {
+	public static void withSchema(Context context, Function<SchemaMapping, RDbMappingSchemaModifier> f) {
           RolapSchemaPool.instance().clear();
-          MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+          SchemaMapping schema = context.getCatalogMapping().getSchemas().get(0);
           ((TestContext)context).setDatabaseMappingSchemaProviders(List.of(f.apply(schema)));
     }
 

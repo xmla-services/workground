@@ -103,7 +103,7 @@ public class TestContextImpl extends AbstractBasicContext implements TestContext
 	}
 
     @Override
-    public List<RolapContextMappingSupplier> getRolapContexts() {
+    public List<RolapContextMappingSupplier> getCatalogMapping() {
         return List.of();
     }
 
