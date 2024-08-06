@@ -74,6 +74,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.JoinQueryImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.JoinedQueryElementImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
+import org.eclipse.daanse.rolap.mapping.api.model.AnnotationMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -406,19 +407,19 @@ public class RolapHierarchy extends HierarchyBase {
     }
 
     public static Map<String, Object> createMetadataMap(
-        List<? extends MappingAnnotation> annotations)
+        List<? extends AnnotationMapping> list)
     {
-        if (annotations == null
-            || annotations.isEmpty())
+        if (list == null
+            || list.isEmpty())
         {
             return Map.of();
         }
         // Use linked hash map because it retains order.
         final Map<String, Object> map =
             new LinkedHashMap<>();
-        for (MappingAnnotation annotation : annotations) {
-            final String name = annotation.name();
-            final String value = annotation.content();
+        for (AnnotationMapping annotation : list) {
+            final String name = annotation.getName();
+            final String value = annotation.getValue();
             map.put(name, value);
         }
         return map;

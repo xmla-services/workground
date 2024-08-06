@@ -11,6 +11,7 @@ package mondrian.rolap.format;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
+import org.eclipse.daanse.rolap.mapping.api.model.CellFormatterMapping;
 
 import mondrian.olap.Util;
 
@@ -73,14 +74,12 @@ public class FormatterCreateContext {
          * Data from Mondrian xml schema file to create
          * a custom implementation of a requested formatter.
          */
-        public Builder formatterDef(MappingElementFormatter formatterDef) {
-            if (formatterDef != null) {
-                checkIfFormatterSpecifiedCorrectly(
-                    formatterDef.className(),
-                    formatterDef.script());
+        public Builder formatterDef(CellFormatterMapping cellFormatterMapping) {
+            if (cellFormatterMapping != null) {
+
                 formatterAsElement = true;
-                formatterClassName = formatterDef.className();
-                return script(formatterDef.script());
+                formatterClassName = cellFormatterMapping.getRef();
+                return script(cellFormatterMapping.script());
             }
             return this;
         }
@@ -125,18 +124,6 @@ public class FormatterCreateContext {
             return new FormatterCreateContext(this);
         }
 
-        private static void checkIfFormatterSpecifiedCorrectly(
-            String className,
-            MappingScript script)
-        {
-            if (className == null && script == null) {
-                throw Util.newError(
-                    "Must specify either className attribute or Script element");
-            }
-            if (className != null && script != null) {
-                throw Util.newError(
-                    "Must not specify both className attribute and Script element");
-            }
-        }
+ 
     }
 }
