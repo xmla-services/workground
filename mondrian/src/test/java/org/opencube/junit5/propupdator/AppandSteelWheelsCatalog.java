@@ -18,16 +18,13 @@
  */
 package org.opencube.junit5.propupdator;
 
-import java.util.List;
-
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record.SteelWheelRecordDbMappingSchemaProvider;
 import org.opencube.junit5.context.TestContext;
 
 public class AppandSteelWheelsCatalog implements TestContextUpdater {
 
 	@Override
 	public void updateContext(Context context) {
-        ((TestContext)context).setDatabaseMappingSchemaProviders(List.of(new SteelWheelRecordDbMappingSchemaProvider()));
+        ((TestContext)context).setCatalogMappingSupplier(new org.eclipse.daanse.rolap.mapping.example.complex.steelwheels.ExampleSupplier());
 	}
 }

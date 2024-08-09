@@ -46,7 +46,6 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 import mondrian.rolap.RolapSchema;
 

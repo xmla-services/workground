@@ -14,7 +14,6 @@ package mondrian.olap.fun;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static mondrian.olap.Util.assertTrue;
 import static mondrian.olap.exceptions.CousinHierarchyMismatchException.cousinHierarchyMismatch;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -59,23 +58,8 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.UserDefinedFunctionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -96,7 +80,6 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapSchemaPool;
 import mondrian.rolap.SchemaModifiers;
-import mondrian.test.BasicQueryTest;
 import mondrian.util.Bug;
 
 //import mondrian.spi.DialectManager;
@@ -2427,12 +2410,12 @@ class FunctionTest {//extends FoodMartTestCase {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
       */
-      class TestDefaultMemberModifier extends RDbMappingSchemaModifier {
+      class TestDefaultMemberModifier extends PojoMappingModifier {
 
-          public TestDefaultMemberModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestDefaultMemberModifier(CatalogMapping catalogMapping) {
+              super(catalogMapping);
           }
-
+/* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
               List<MappingCubeDimension> result = new ArrayList<>();
@@ -2506,7 +2489,7 @@ class FunctionTest {//extends FoodMartTestCase {
                   result.add(dimension);
               }
               return result;
-          }
+          }*/
       }
       withSchema(context, TestDefaultMemberModifier::new);
 
@@ -8118,12 +8101,12 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
     ((TestConfig)context.getConfig()).setQueryTimeout(3);
     SystemWideProperties.instance().EnableNativeNonEmpty = false;
     try {
-        class TestFilterWillTimeoutModifier extends RDbMappingSchemaModifier {
+        class TestFilterWillTimeoutModifier extends PojoMappingModifier {
 
-            public TestFilterWillTimeoutModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestFilterWillTimeoutModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
                 List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -8133,7 +8116,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
                     .className(BasicQueryTest.SleepUdf.class.getName())
                     .build());
                 return result;
-            }
+            }*/
         }
       /*
       String baseSchema = TestUtil.getRawSchema(context);
@@ -9581,12 +9564,12 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
     // a non-sense cube just to test ordering by order key
 
       RolapSchemaPool.instance().clear();
-      class TestOrderTupleMultiKeyswithVCubeModifier extends RDbMappingSchemaModifier {
+      class TestOrderTupleMultiKeyswithVCubeModifier extends PojoMappingModifier {
 
-          public TestOrderTupleMultiKeyswithVCubeModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestOrderTupleMultiKeyswithVCubeModifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingVirtualCube> virtualCubes(List<MappingVirtualCube> cubes) {
               List<MappingVirtualCube> result = new ArrayList<>();
@@ -9612,6 +9595,8 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
                   .build());
               return result;
           }
+ */
+      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);

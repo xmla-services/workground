@@ -21,7 +21,6 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,8 +41,8 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.opencube.junit5.TestUtil;
 import org.slf4j.LoggerFactory;
 
@@ -721,13 +720,13 @@ public class BatchTestCase{
     }
 
     protected void updateSchemaIfNeed(Context context, String currentTestCaseName){
-        Optional<Function<MappingSchema, RDbMappingSchemaModifier>> oModifier = getModifier(currentTestCaseName);
+        Optional<Function<CatalogMapping, PojoMappingModifier>> oModifier = getModifier(currentTestCaseName);
         if (oModifier.isPresent()) {
             withSchema(context, oModifier.get());
         }
     }
 
-    protected Optional<Function<MappingSchema, RDbMappingSchemaModifier>> getModifier(String currentTestCaseName) {
+    protected Optional<Function<CatalogMapping, PojoMappingModifier>> getModifier(String currentTestCaseName) {
         return Optional.empty();
     }
 

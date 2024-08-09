@@ -410,8 +410,8 @@ class NonCollapsedAggTest extends AggTableTestCase {
          */
         class TestSsasCompatNamingInAggModifier extends RDbMappingSchemaModifier {
 
-            public TestSsasCompatNamingInAggModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSsasCompatNamingInAggModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
@@ -664,8 +664,8 @@ class NonCollapsedAggTest extends AggTableTestCase {
 
         class TestMondrian1325Modifier extends RDbMappingSchemaModifier {
 
-            public TestMondrian1325Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMondrian1325Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingMeasure> cubeMeasures(MappingCube cube) {

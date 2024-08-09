@@ -869,8 +869,8 @@ class NamedSetTest {
     void testBadNamedSet(Context context) {
         class TestBadNamedSetModifier extends RDbMappingSchemaModifier {
 
-            public TestBadNamedSetModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBadNamedSetModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override

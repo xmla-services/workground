@@ -30,27 +30,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ExpressionViewRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SqlSelectQueryRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -700,12 +681,12 @@ class SqlQueryTest  extends BatchTestCase {
                 loadSqlLucidDB)
         };
 
-        class TestDoubleInListModifier extends RDbMappingSchemaModifier {
+        class TestDoubleInListModifier extends PojoMappingModifier {
 
-            public TestDoubleInListModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDoubleInListModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
@@ -754,6 +735,8 @@ class SqlQueryTest  extends BatchTestCase {
                     .build());
                 return result;
             }
+     
+       */ 
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -847,12 +830,12 @@ class SqlQueryTest  extends BatchTestCase {
                 MYSQL, forbiddenSqlMysql, null)
         };
 
-        class TestApproxRowCountOverridesCountModifier extends RDbMappingSchemaModifier {
+        class TestApproxRowCountOverridesCountModifier extends PojoMappingModifier {
 
-            public TestApproxRowCountOverridesCountModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestApproxRowCountOverridesCountModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
@@ -891,6 +874,9 @@ class SqlQueryTest  extends BatchTestCase {
                     .build());
                 return result;
             }
+    
+        */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -920,12 +906,12 @@ class SqlQueryTest  extends BatchTestCase {
         prepareContext(connection);
         final String mdx =
             "select NON EMPTY { [Store].[Store].[Store State].members } on 0 from [Sales]";
-        class TestLimitedRollupMemberRetrievableFromCacheModifier extends RDbMappingSchemaModifier {
+        class TestLimitedRollupMemberRetrievableFromCacheModifier extends PojoMappingModifier {
 
-            public TestLimitedRollupMemberRetrievableFromCacheModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLimitedRollupMemberRetrievableFromCacheModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingRole> roles(List<MappingRole> roles) {
                 List<MappingRole> result = new ArrayList<>();
@@ -959,6 +945,8 @@ class SqlQueryTest  extends BatchTestCase {
                     .build());
                 return result;
             }
+      */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

@@ -40,7 +40,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -58,6 +57,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDi
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -741,11 +742,12 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testStrMeasure(Context context) {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-      class TestStrMeasureModifier extends RDbMappingSchemaModifier {
-          public TestStrMeasureModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+      class TestStrMeasureModifier extends PojoMappingModifier {
+          public TestStrMeasureModifier(CatalogMapping catalog) {
+              super(catalog);
           }
 
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
@@ -781,6 +783,8 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+     
+      */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -816,11 +820,11 @@ class NonEmptyTest extends BatchTestCase {
   void testBug1515302(Context context) {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       RolapSchemaPool.instance().clear();
-      class TestBug1515302Modifier extends RDbMappingSchemaModifier {
-          public TestBug1515302Modifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+      class TestBug1515302Modifier extends PojoMappingModifier {
+          public TestBug1515302Modifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
@@ -893,6 +897,8 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+  
+      */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1931,7 +1937,7 @@ class NonEmptyTest extends BatchTestCase {
         + "</Dimension>" ) );
      */
       RolapSchemaPool.instance().clear();
-      MappingSchema schema = context.getDatabaseMappingSchemaProviders().get(0).get();
+      CatalogMapping catalogMapping= context.getCatalogMapping();
       ((TestContext)context).setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.NonEmptyTestModifier2(schema,
           HideMemberIfEnum.IF_PARENTS_NAME)));
 
@@ -2491,12 +2497,13 @@ class NonEmptyTest extends BatchTestCase {
         + "    ISNULL(`warehouse`.`wa_address1`) ASC, `warehouse`.`wa_address1` ASC,\n"
         + "    ISNULL(`warehouse`.`warehouse_name`) ASC, `warehouse`.`warehouse_name` ASC,\n"
         + "    ISNULL(`product_class`.`product_family`) ASC, `product_class`.`product_family` ASC" );
-      class TestMultiLevelMemberConstraintNullParentModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelMemberConstraintNullParentModifier extends PojoMappingModifier {
 
-          public TestMultiLevelMemberConstraintNullParentModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelMemberConstraintNullParentModifier(CatalogMapping catalog) {
+              super(catalog);
           }
 
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -2570,6 +2577,9 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+  
+      */
+      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -2674,12 +2684,13 @@ class NonEmptyTest extends BatchTestCase {
         + "    ISNULL(`warehouse`.`wa_address1`) ASC, `warehouse`.`wa_address1` ASC,\n"
         + "    ISNULL(`warehouse`.`warehouse_name`) ASC, `warehouse`.`warehouse_name` ASC,\n"
         + "    ISNULL(`product_class`.`product_family`) ASC, `product_class`.`product_family` ASC" );
-      class TestMultiLevelMemberConstraintMixedNullNonNullParentModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelMemberConstraintMixedNullNonNullParentModifier extends PojoMappingModifier {
 
-          public TestMultiLevelMemberConstraintMixedNullNonNullParentModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelMemberConstraintMixedNullNonNullParentModifier(CatalogMapping catalog) {
+              super(catalog);
           }
 
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -2748,6 +2759,8 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+   */
+      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -2855,12 +2868,13 @@ class NonEmptyTest extends BatchTestCase {
           + "`warehouse`.`wa_address2` ASC, ISNULL(`warehouse`.`warehouse_fax`) ASC, `warehouse`.`warehouse_fax` ASC, "
           + "ISNULL(`product_class`.`product_family`) ASC, `product_class`.`product_family` ASC" );
 
-      class TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier extends PojoMappingModifier {
 
-          public TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier(CatalogMapping catalog) {
+              super(catalog);
           }
 
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -2935,6 +2949,10 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+   
+      */
+      
+      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -5621,12 +5639,12 @@ class NonEmptyTest extends BatchTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testContextAtAllWorksWithConstraint(Context context)  {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
-      class TestContextAtAllWorksWithConstraintModifier extends RDbMappingSchemaModifier {
+      class TestContextAtAllWorksWithConstraintModifier extends PojoMappingModifier {
 
-          public TestContextAtAllWorksWithConstraintModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestContextAtAllWorksWithConstraintModifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
@@ -5665,6 +5683,9 @@ class NonEmptyTest extends BatchTestCase {
                   .build());
               return result;
           }
+    
+      
+      */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -5717,12 +5738,12 @@ class NonEmptyTest extends BatchTestCase {
   void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException(Context context)  {
       ((TestConfig)context.getConfig()).setLevelPreCacheThreshold(0);
       SystemWideProperties.instance().EnableNativeNonEmpty= true;
-      class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends RDbMappingSchemaModifier {
+      class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends PojoMappingModifier {
 
-          public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
               return SchemaRBuilder.builder()
@@ -5853,6 +5874,9 @@ class NonEmptyTest extends BatchTestCase {
                   ))
                   .build();
           }
+   
+      */
+      
       }
       /*
       withSchema(context,

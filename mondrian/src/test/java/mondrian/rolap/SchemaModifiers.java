@@ -90,6 +90,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDi
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 
 import mondrian.test.BasicQueryTest;
 import mondrian.test.PerformanceTest;
@@ -112,14 +115,14 @@ public class SchemaModifiers {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n";
     */
-    public static class RoleRestrictionWorksWaRoleDef extends RDbMappingSchemaModifier {
+    public static class RoleRestrictionWorksWaRoleDef extends PojoMappingModifier {
 
-        public RoleRestrictionWorksWaRoleDef(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RoleRestrictionWorksWaRoleDef(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(RoleRBuilder.builder()
@@ -166,7 +169,7 @@ public class SchemaModifiers {
                 ))
                 .build());
             return result;
-        }
+        }*/
     }
 
     /*
@@ -184,14 +187,14 @@ public class SchemaModifiers {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n";
     */
-    public static class RoleRestrictionWorksDfRoleDef extends RDbMappingSchemaModifier {
+    public static class RoleRestrictionWorksDfRoleDef extends PojoMappingModifier {
 
-        public RoleRestrictionWorksDfRoleDef(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RoleRestrictionWorksDfRoleDef(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(RoleRBuilder.builder()
@@ -238,15 +241,15 @@ public class SchemaModifiers {
                 ))
                 .build());
             return result;
-        }
+        }*/
     }
 
-    public static class CustomCountMeasureCubeName extends RDbMappingSchemaModifier {
+    public static class CustomCountMeasureCubeName extends PojoMappingModifier {
 
-        public CustomCountMeasureCubeName(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CustomCountMeasureCubeName(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCube> cubes(List<MappingCube> cubes) {
             List<MappingCube> result = new ArrayList<>();
@@ -327,9 +330,11 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+   
+    */
     }
 
-    public static class SharedDimensionTestModifier extends RDbMappingSchemaModifier {
+    public static class SharedDimensionTestModifier extends PojoMappingModifier {
         /*
         "<Cube name=\"Employee Store Analysis A\">\n"
         + "  <Table name=\"inventory_fact_1997\" alias=\"inventory\" />\n"
@@ -367,11 +372,11 @@ public class SchemaModifiers {
         + "</Dimension>";
 
         */
-        public SharedDimensionTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SharedDimensionTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
-
-        protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+        /* TODO: DENIS MAPPING-MODIFIER
+        protected List<MappingPrivateDimension> schemaDimensions(CatalogMapping catalogOriginal) {
             List<MappingPrivateDimension> result = new ArrayList<>();
             result.addAll(super.schemaDimensions(mappingSchemaOriginal));
             result.add(PrivateDimensionRBuilder.builder()
@@ -497,10 +502,10 @@ public class SchemaModifiers {
                 ))
                 .build());
             return result;
-        }
+        }*/
     }
 
-    public static class SharedDimensionTestModifier1 extends RDbMappingSchemaModifier {
+    public static class SharedDimensionTestModifier1 extends PojoMappingModifier {
 
         /*
                 "<Cube name=\"Alternate Sales\">\n"
@@ -517,10 +522,10 @@ public class SchemaModifiers {
         + "</Cube>";
 
          */
-        public SharedDimensionTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SharedDimensionTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
-
+/* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCube> schemaCubes(MappingSchema schema) {
             List<MappingCube> result = new ArrayList<>();
@@ -580,14 +585,15 @@ public class SchemaModifiers {
             return result;
         }
 
-
+*/
     }
 
-    public static class AggregationOnDistinctCountMeasuresTestModifier extends RDbMappingSchemaModifier {
+    public static class AggregationOnDistinctCountMeasuresTestModifier extends PojoMappingModifier {
 
-        public AggregationOnDistinctCountMeasuresTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AggregationOnDistinctCountMeasuresTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
+        /* TODO: DENIS MAPPING-MODIFIER
 
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
@@ -658,16 +664,19 @@ public class SchemaModifiers {
             result.addAll(super.schemaVirtualCubes(schema));
             return result;
         }
+  
+    
+    */
     }
 
     //storeDimensionLevelDependent,
     //cubeA,
-    public static class SelectNotInGroupByTestModifier1 extends RDbMappingSchemaModifier {
+    public static class SelectNotInGroupByTestModifier1 extends PojoMappingModifier {
 
-        public SelectNotInGroupByTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SelectNotInGroupByTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
             List<MappingPrivateDimension> result = new ArrayList<>();
@@ -743,6 +752,9 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+   
+    */
+    
     }
 
 
@@ -773,12 +785,12 @@ public class SchemaModifiers {
 
      */
 
-    public static class SelectNotInGroupByTestModifier2 extends RDbMappingSchemaModifier {
+    public static class SelectNotInGroupByTestModifier2 extends PojoMappingModifier {
 
-        public SelectNotInGroupByTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SelectNotInGroupByTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
             List<MappingPrivateDimension> result = new ArrayList<>();
@@ -853,15 +865,18 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+ */
     }
 
     //storeDimensionUniqueLevelDependentProp,
     //cubeA
-    public static class SelectNotInGroupByTestModifier3 extends RDbMappingSchemaModifier {
+    public static class SelectNotInGroupByTestModifier3 extends PojoMappingModifier {
 
-        public SelectNotInGroupByTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SelectNotInGroupByTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
+        
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
             List<MappingPrivateDimension> result = new ArrayList<>();
@@ -938,15 +953,19 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+  
+    */
     }
 
     //storeDimensionUniqueLevelIndependentProp,
     //cubeA
-    public static class SelectNotInGroupByTestModifier4 extends RDbMappingSchemaModifier {
+    public static class SelectNotInGroupByTestModifier4 extends PojoMappingModifier {
 
-        public SelectNotInGroupByTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SelectNotInGroupByTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
+        
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
             List<MappingPrivateDimension> result = new ArrayList<>();
@@ -1024,13 +1043,16 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+   
+   */ 
+    
     }
 
 
-    public static class IgnoreUnrelatedDimensionsTestModifier extends RDbMappingSchemaModifier {
+    public static class IgnoreUnrelatedDimensionsTestModifier extends PojoMappingModifier {
 
-        public IgnoreUnrelatedDimensionsTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public IgnoreUnrelatedDimensionsTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -1069,6 +1091,8 @@ public class SchemaModifiers {
             + "  </CalculatedMember>\n"
             + "</VirtualCube>",
          */
+        
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
@@ -1198,14 +1222,14 @@ public class SchemaModifiers {
                 .build());
             result.addAll(super.schemaVirtualCubes(schema));
             return result;
-        }
+        }*/
     }
 
     //cubeSales3
-    public static class IgnoreUnrelatedDimensionsTestModifier1 extends RDbMappingSchemaModifier {
+    public static class IgnoreUnrelatedDimensionsTestModifier1 extends PojoMappingModifier {
 
-        public IgnoreUnrelatedDimensionsTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public IgnoreUnrelatedDimensionsTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
             /*
@@ -1231,6 +1255,9 @@ public class SchemaModifiers {
                 + "   </Measure>\n"
                 + "</Cube>";
             */
+        /* TODO: DENIS MAPPING-MODIFIER
+        
+        
         @Override
         protected List<MappingCube> schemaCubes(MappingSchema schema) {
             List<MappingCube> result = new ArrayList<>();
@@ -1305,7 +1332,11 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
-
+    
+        
+        */
+        
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
             List<MappingVirtualCube> result = new ArrayList<>();
@@ -1361,12 +1392,12 @@ public class SchemaModifiers {
 
             return result;
         }
-    }
+   */ }
 
-    public static class ParentChildHierarchyTestModifier1 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier1 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
         /*
             "  <Dimension name=\"EmployeesClosure\" foreignKey=\"employee_id\">\n"
@@ -1383,6 +1414,8 @@ public class SchemaModifiers {
             + "      </Hierarchy>\n"
             + "  </Dimension>"));
          */
+        
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -1428,12 +1461,13 @@ public class SchemaModifiers {
             }
             return result;
         }
+*/
     }
 
-    public static class ParentChildHierarchyTestModifier2 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier2 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
         /*
             "<Dimension name=\"EmployeeSnowFlake\" foreignKey=\"employee_id\">"
@@ -1462,6 +1496,7 @@ public class SchemaModifiers {
             + "</Hierarchy>"
             + "</Dimension>"));
          */
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -1543,12 +1578,13 @@ public class SchemaModifiers {
             }
             return result;
         }
+        */
     }
 
-    public static class ParentChildHierarchyTestModifier3 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier3 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -1569,6 +1605,7 @@ public class SchemaModifiers {
             + "    formatString=\"#,#\"/>"
             + "</Cube>";
          */
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCube> schemaCubes(MappingSchema schema) {
             List<MappingCube> result = new ArrayList<>();
@@ -1625,6 +1662,7 @@ public class SchemaModifiers {
             return result;
         }
 
+        */
         /*
               "<Dimension name=\"SharedEmployee\">"
             + "<Hierarchy hasAll=\"true\""
@@ -1650,6 +1688,7 @@ public class SchemaModifiers {
             + "</Hierarchy>"
             + "</Dimension>";
          */
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
             List<MappingPrivateDimension> result = new ArrayList<>();
@@ -1715,12 +1754,15 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+  
+    */
+    
     }
 
-    public static class ParentChildHierarchyTestModifier4 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier4 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
         /*
             "<Dimension name=\"EmployeesNonClosure\" foreignKey=\"employee_id\">"
@@ -1740,6 +1782,7 @@ public class SchemaModifiers {
             + "</Hierarchy>"
             + "</Dimension>",
          */
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -1808,12 +1851,13 @@ public class SchemaModifiers {
             }
             return result;
         }
+ */
     }
 
-    public static class ParentChildHierarchyTestModifier5 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier5 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
         /*
                 "<Dimension name=\"EmployeesNoClosure\" foreignKey=\"employee_id\">\n"
@@ -1893,10 +1937,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ParentChildHierarchyTestModifier6 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier6 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2010,10 +2054,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ParentChildHierarchyTestModifier7 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier7 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2104,10 +2148,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ParentChildHierarchyTestModifier8 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier8 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier8(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier8(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2263,10 +2307,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ParentChildHierarchyTestModifier9 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier9 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2345,10 +2389,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class ParentChildHierarchyTestModifier10 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier10 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier10(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier10(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2417,10 +2461,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class ParentChildHierarchyTestModifier11 extends RDbMappingSchemaModifier {
+    public static class ParentChildHierarchyTestModifier11 extends PojoMappingModifier {
 
-        public ParentChildHierarchyTestModifier11(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ParentChildHierarchyTestModifier11(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2482,7 +2526,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingInlineTableQuery it = InlineTableRBuilder.builder()
                 .alias("bri_store_employee")
                 .columnDefs(List.of(
@@ -2613,10 +2657,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ValidMeasureFunDefTestModifier extends RDbMappingSchemaModifier {
+    public static class ValidMeasureFunDefTestModifier extends PojoMappingModifier {
 
-        public ValidMeasureFunDefTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ValidMeasureFunDefTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -2655,7 +2699,7 @@ public class SchemaModifiers {
     + "  </VirtualCube>\n" + "</Schema>";
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -2755,7 +2799,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class FunctionTestModifier extends RDbMappingSchemaModifier {
+    public static class FunctionTestModifier extends PojoMappingModifier {
 
         /*
          "<CalculatedMember "
@@ -2763,8 +2807,8 @@ public class SchemaModifiers {
         + "formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' "
         + "dimension='Time' />" ));
          */
-        public FunctionTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public FunctionTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -2782,7 +2826,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class FunctionTestModifier2 extends RDbMappingSchemaModifier {
+    public static class FunctionTestModifier2 extends PojoMappingModifier {
 
         /*
       "<CalculatedMember "
@@ -2794,8 +2838,8 @@ public class SchemaModifiers {
         + "formula='Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])' "
         + "dimension='Education Level' />"));
          */
-        public FunctionTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public FunctionTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -2819,7 +2863,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class FunctionTestModifier3 extends RDbMappingSchemaModifier {
+    public static class FunctionTestModifier3 extends PojoMappingModifier {
 
         /*
       "<Cube name=\"Sales_Hierarchize\">\n"
@@ -2850,12 +2894,12 @@ public class SchemaModifiers {
         + "      formatString=\"Standard\"/>\n"
         + "</Cube>"
          */
-        public FunctionTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public FunctionTestModifier3(CatalogMapping catalogMapping) {
+            super(catalogMapping);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -2935,7 +2979,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class FilterTestModifier extends RDbMappingSchemaModifier {
+    public static class FilterTestModifier extends PojoMappingModifier {
 
         /*
         "<Dimension name='Store Type'>\n"
@@ -2954,8 +2998,8 @@ public class SchemaModifiers {
           + "    </Hierarchy>\n"
           + "  </Dimension>\n" ));
          */
-        public FilterTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public FilterTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3024,7 +3068,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class MemberCacheControlTestModifier extends RDbMappingSchemaModifier {
+    public static class MemberCacheControlTestModifier extends PojoMappingModifier {
 
         /*
             "  <Dimension name=\"Retail\" foreignKey=\"store_id\">\n"
@@ -3046,8 +3090,8 @@ public class SchemaModifiers {
             + "    </Hierarchy>\n"
             + "   </Dimension>"));
          */
-        public MemberCacheControlTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public MemberCacheControlTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3125,7 +3169,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier extends PojoMappingModifier {
 
         /*
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -3138,8 +3182,8 @@ public class SchemaModifiers {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
          */
-        public NonEmptyTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3178,7 +3222,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier2 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier2 extends PojoMappingModifier {
 
         private final HideMemberIfEnum hideMemberIf;
 
@@ -3194,8 +3238,8 @@ public class SchemaModifiers {
                 + "</Dimension>" ) );
 
                  */
-        public NonEmptyTestModifier2(MappingSchema mappingSchema, HideMemberIfEnum hideMemberIf) {
-            super(mappingSchema);
+        public NonEmptyTestModifier2(CatalogMapping catalog, HideMemberIfEnum hideMemberIf) {
+            super(catalog);
             this.hideMemberIf = hideMemberIf;
         }
 
@@ -3240,7 +3284,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier3 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier3 extends PojoMappingModifier {
 
         /*
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -3253,8 +3297,8 @@ public class SchemaModifiers {
         + "  </Hierarchy>\n"
         + "</Dimension>" ) );
          */
-        public NonEmptyTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3293,7 +3337,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier4 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier4 extends PojoMappingModifier {
 
         /*
       "  <Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n"
@@ -3308,8 +3352,8 @@ public class SchemaModifiers {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
          */
-        public NonEmptyTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3356,7 +3400,7 @@ public class SchemaModifiers {
             return result;
         }
     }
-    public static class NonEmptyTestModifier5 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier5 extends PojoMappingModifier {
 
         /*
       "  <Dimension name=\"Store2\"  foreignKey=\"store_id\" >\n"
@@ -3370,8 +3414,8 @@ public class SchemaModifiers {
         + "    </Hierarchy>\n"
         + "  </Dimension>" ));
          */
-        public NonEmptyTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3413,7 +3457,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier6 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier6 extends PojoMappingModifier {
 
         /*
               "<?xml version=\"1.0\"?>\n"
@@ -3463,12 +3507,12 @@ public class SchemaModifiers {
         + "</Role> \n"
         + "</Schema>\n";
          */
-        public NonEmptyTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("custom")
                 .dimensions(List.of(
@@ -3606,7 +3650,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NonEmptyTestModifier7 extends RDbMappingSchemaModifier {
+    public static class NonEmptyTestModifier7 extends PojoMappingModifier {
 
         /*
         "<Schema name=\"FoodMart\">"
@@ -3645,12 +3689,12 @@ public class SchemaModifiers {
           + "  </VirtualCube>"
           + "</Schema>" );
          */
-        public NonEmptyTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NonEmptyTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -3767,7 +3811,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier1 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier1 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Gender2\" foreignKey=\"customer_id\">\n"
@@ -3789,8 +3833,8 @@ public class SchemaModifiers {
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>", null ));
          */
-        public BasicQueryTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3832,7 +3876,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier2 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier2 extends PojoMappingModifier {
 
         /*
             "   <Dimension name=\"ProdAmbiguousLevelName\" foreignKey=\"product_id\">\n"
@@ -3847,8 +3891,8 @@ public class SchemaModifiers {
                 + "      <Level name=\"Product Category\" table=\"product_class\" column=\"product_category\"\n"
                 + "          uniqueMembers=\"false\"/>\n" + "    </Hierarchy>\n" + "  </Dimension>\n", null ));
          */
-        public BasicQueryTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -3898,7 +3942,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier3 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier3 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"ProductView\" foreignKey=\"product_id\">\n"
@@ -3940,8 +3984,8 @@ public class SchemaModifiers {
                 + "       <Level name=\"Product Name\" column=\"product_name\" uniqueMembers=\"true\"/>\n"
                 + "   </Hierarchy>\n" + "</Dimension>" ));
          */
-        public BasicQueryTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4046,13 +4090,13 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier4 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier4 extends PojoMappingModifier {
 
         /*
             <DimensionUsage name="Other Store" source="Store" foreignKey="unit_sales" />
          */
-        public BasicQueryTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4070,7 +4114,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier5 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier5 extends PojoMappingModifier {
 
         /*
                         "<Dimension name=\"Gender3\" foreignKey=\"customer_id\">\n"
@@ -4081,8 +4125,8 @@ public class SchemaModifiers {
                 + "</Dimension>" ));
 
          */
-        public BasicQueryTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4115,7 +4159,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier6 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier6 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Position2608\" foreignKey=\"employee_id\">\n"
@@ -4127,8 +4171,8 @@ public class SchemaModifiers {
                 + "          column=\"position_title\" ordinalColumn=\"position_id\"/>\n" + " </Hierarchy>\n"
                 + "</Dimension>" ));
          */
-        public BasicQueryTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4167,15 +4211,15 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier7 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier7 extends PojoMappingModifier {
 
         /*
             "<Measure name='zero' aggregator='sum'>\n"
             + " <MeasureExpression>\n" + " <SQL dialect='generic'>\n" + " NULL" + " </SQL>"
             + " <SQL dialect='vertica'>\n" + " NULL::FLOAT" + " </SQL>" + "</MeasureExpression></Measure>"
         */
-        public BasicQueryTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4205,7 +4249,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier8 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier8 extends PojoMappingModifier {
 
         /*
             "<Dimension foreignKey=\"product_id\" type=\"StandardDimension\" visible=\"true\" highCardinality=\"false\" "
@@ -4232,8 +4276,8 @@ public class SchemaModifiers {
                 + "      </NameExpression>\n" + "    </Level>\n" + "  </Hierarchy>\n" + "</Dimension>\n", null, null,
          */
         private Dialect dialect;
-        public BasicQueryTestModifier8(MappingSchema mappingSchema, Dialect dialect) {
-            super(mappingSchema);
+        public BasicQueryTestModifier8(CatalogMapping catalog, Dialect dialect) {
+            super(catalog);
             this.dialect = dialect;
         }
 
@@ -4330,14 +4374,14 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier9 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier9 extends PojoMappingModifier {
 
         /*
             "<CalculatedMember dimension=\"Gender\" visible=\"true\" name=\"last\">"
                 + "<Formula>([Gender].LastChild)</Formula>" + "</CalculatedMember>" ));
         */
-        public BasicQueryTestModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4358,7 +4402,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier10 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier10 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Gender4\" foreignKey=\"customer_id\">\n"
@@ -4367,8 +4411,8 @@ public class SchemaModifiers {
                 + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>\n" + "  </Hierarchy>\n"
                 + "</Dimension>" ));
          */
-        public BasicQueryTestModifier10(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier10(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4401,7 +4445,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier11 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier11 extends PojoMappingModifier {
 
         /*
             "  <Dimension name=\"Customer_2\" foreignKey=\"customer_id\">\n" + "    <Hierarchy hasAll=\"true\" "
@@ -4411,8 +4455,8 @@ public class SchemaModifiers {
                 + "      <Level name=\"Name2\" column=\"customer_id\" uniqueMembers=\"true\"/>\n"
                 + "    </Hierarchy>\n" + "  </Dimension>" ));
          */
-        public BasicQueryTestModifier11(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier11(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4449,14 +4493,14 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier12 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier12 extends PojoMappingModifier {
 
         /*
             "<Measure name='zero' aggregator='sum'>\n"
             + "  <MeasureExpression>\n" + "  <SQL dialect='generic'>\n" + "    0"
             + "  </SQL></MeasureExpression></Measure>", null, null ));        */
-        public BasicQueryTestModifier12(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier12(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -4482,7 +4526,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier14 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier14 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2442\">\n"
@@ -4509,12 +4553,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
             */
-        public BasicQueryTestModifier14(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier14(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2442")
                 .cubes(List.of(
@@ -4601,7 +4645,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier15 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier15 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2285\">\n"
@@ -4624,12 +4668,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" "
             + "     formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
             */
-        public BasicQueryTestModifier15(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier15(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2285")
                 .cubes(List.of(
@@ -4712,7 +4756,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier16 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier16 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"tiny\">\n"
@@ -4764,12 +4808,12 @@ public class SchemaModifiers {
             + "  </VirtualCube>\n" + "</Schema>\n";
 
             */
-        public BasicQueryTestModifier16(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier16(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("tiny")
                 .dimensions(List.of(
@@ -4953,7 +4997,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier17 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier17 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
@@ -4981,12 +5025,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
             + "</Schema>";
             */
-        public BasicQueryTestModifier17(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier17(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2399 Rollup Type")
                 .cubes(List.of(
@@ -5074,7 +5118,7 @@ public class SchemaModifiers {
 
     }
 
-    public static class BasicQueryTestModifier18 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier18 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
@@ -5102,12 +5146,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
             + "</Schema>";
             */
-        public BasicQueryTestModifier18(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier18(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2399 Rollup Type")
                 .cubes(List.of(
@@ -5195,7 +5239,7 @@ public class SchemaModifiers {
 
     }
 
-    public static class BasicQueryTestModifier19 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier19 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"FoodMart 2399 Rollup Type\">\n"
@@ -5223,12 +5267,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
             + "</Schema>";
             */
-        public BasicQueryTestModifier19(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier19(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2399 Rollup Type")
                 .cubes(List.of(
@@ -5314,7 +5358,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier20 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier20 extends PojoMappingModifier {
 
         /*
             String cubeName = "Sales_MemberVis";
@@ -5334,12 +5378,12 @@ public class SchemaModifiers {
             + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
             + "  </CalculatedMember>\n" + "</Cube>", null, null, null, null );
             */
-        public BasicQueryTestModifier20(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier20(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5397,7 +5441,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier21 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier21 extends PojoMappingModifier {
 
         /*
             "<Cube name=\"Sales_DimWithoutAll\">\n"
@@ -5423,12 +5467,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Store Cost\" column=\"store_cost\" aggregator=\"sum\"\n"
             + "      formatString=\"#,###.00\"/>\n" + "</Cube>"
             */
-        public BasicQueryTestModifier21(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier21(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5529,7 +5573,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier22 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier22 extends PojoMappingModifier {
 
         /*
             final String cubeName = "Sales_withCities";
@@ -5560,12 +5604,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"#,###.00\"/>\n" + "</Cube>", null, null, null, null );
             */
-        public BasicQueryTestModifier22(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier22(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIERv
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5686,10 +5730,10 @@ public class SchemaModifiers {
                 ))
                 .build());
             return result;
-        }
+        }*/
     }
 
-    public static class BasicQueryTestModifier23 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier23 extends PojoMappingModifier {
 
         /*
             <Cube name=\"SalesWithBadMeasure\">\n"
@@ -5698,12 +5742,12 @@ public class SchemaModifiers {
             + "  <Measure name=\"Bad Measure\" aggregator=\"sum\"\n" + "      formatString=\"Standard\"/>\n"
             + "</Cube>
             */
-        public BasicQueryTestModifier23(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier23(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5725,9 +5769,11 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+ 
+    */
     }
 
-    public static class BasicQueryTestModifier24 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier24 extends PojoMappingModifier {
 
         /*
             "<Cube name=\"SalesWithBadMeasure2\">\n"
@@ -5738,12 +5784,12 @@ public class SchemaModifiers {
             + "         unit_sales\n" + "       </SQL>\n" + "    </MeasureExpression>\n" + "  </Measure>\n"
             + "</Cube>"
             */
-        public BasicQueryTestModifier24(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier24(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5776,16 +5822,18 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+   
+    */
     }
 
-    public static class BasicQueryTestModifier25 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier25 extends PojoMappingModifier {
 
         /*
             <UserDefinedFunction name=\"SleepUdf\" className=\""
             + SleepUdf.class.getName() + "\"/>"
             */
-        public BasicQueryTestModifier25(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier25(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -5800,7 +5848,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier26 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier26 extends PojoMappingModifier {
 
         /*
             <Cube name=\"DefaultMeasureTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -5811,12 +5859,12 @@ public class SchemaModifiers {
             + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
             + "aggregator=\"sum\"/>\n" + "</Cube>
             */
-        public BasicQueryTestModifier26(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier26(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5855,9 +5903,11 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+ 
+  */  
     }
 
-    public static class BasicQueryTestModifier27 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier27 extends PojoMappingModifier {
 
         private final String defaultMeasure;
 
@@ -5870,13 +5920,13 @@ public class SchemaModifiers {
                         + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
                         + "aggregator=\"sum\"/>\n" + "</Cube>"
                     */
-        public BasicQueryTestModifier27(MappingSchema mappingSchema, String defaultMeasure) {
-            super(mappingSchema);
+        public BasicQueryTestModifier27(CatalogMapping catalog, String defaultMeasure) {
+            super(catalog);
             this.defaultMeasure = defaultMeasure;
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5917,7 +5967,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class BasicQueryTestModifier28 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier28 extends PojoMappingModifier {
 
         /*
                         <Cube name='FooBarZerOneAnything'>\n" + "  <Table name='sales_fact_1997'/>\n"
@@ -5928,12 +5978,12 @@ public class SchemaModifiers {
             + "  </Dimension>" + "<Measure name='zero' aggregator='sum'>\n" + "  <MeasureExpression>\n"
             + "  <SQL dialect='generic'>\n" + "    0" + "  </SQL></MeasureExpression></Measure>" + "</Cube>
             */
-        public BasicQueryTestModifier28(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier28(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -5976,17 +6026,19 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+    */
+    
     }
 
-    public static class BasicQueryTestModifier29 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier29 extends PojoMappingModifier {
 
         /*
             <UserDefinedFunction name='CountConcurrentUdf' className='" + CountConcurrentUdf.class.getName() + "'/>
             */
-        public BasicQueryTestModifier29(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier29(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -5997,9 +6049,11 @@ public class SchemaModifiers {
                 .build());
             return result;
         }
+        
+        */
     }
 
-    public static class BasicQueryTestModifier30 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier30 extends PojoMappingModifier {
 
         /*
         "<Schema name=\"Foo\">\n" + "  <Cube name=\"Bar\">\n"
@@ -6009,12 +6063,12 @@ public class SchemaModifiers {
             + " <Measure name=\"Measure\" aggregator=\"sum\">\n" + "   <MeasureExpression>\n" + "     <SQL>1</SQL>\n"
             + "   </MeasureExpression>\n" + " </Measure>\n" + "  </Cube>\n" + "</Schema>\n"
             */
-        public BasicQueryTestModifier30(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier30(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("Foo")
                 .cubes(List.of(
@@ -6050,9 +6104,12 @@ public class SchemaModifiers {
                         .build()))
                 .build();
         }
+   
+    */
+    
     }
 
-    public static class BasicQueryTestModifier31 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier31 extends PojoMappingModifier {
 
         /*
         "" + "<?xml version=\"1.0\"?>\n" + "<Schema name=\"snowflake bug\">\n" + "  <Cube name=\"Bug\">\n"
@@ -6078,12 +6135,12 @@ public class SchemaModifiers {
             + "</Schema>";
 
             */
-        public BasicQueryTestModifier31(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier31(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("snowflake bug")
                 .cubes(List.of(
@@ -6165,9 +6222,12 @@ public class SchemaModifiers {
 
                 .build();
         }
+    
+    
+    */
     }
 
-    public static class BasicQueryTestModifier32 extends RDbMappingSchemaModifier {
+    public static class BasicQueryTestModifier32 extends PojoMappingModifier {
 
         /*
             "<Schema name=\"FoodMart\">\n"
@@ -6181,12 +6241,12 @@ public class SchemaModifiers {
             + "    <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/>\n"
             + "  </Cube>\n" + "</Schema>"
             */
-        public BasicQueryTestModifier32(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public BasicQueryTestModifier32(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -6236,9 +6296,11 @@ public class SchemaModifiers {
                         .build()))
                 .build();
         }
+  
+    */
     }
 
-    public static class RolapCubeTestModifier1 extends RDbMappingSchemaModifier {
+    public static class RolapCubeTestModifier1 extends PojoMappingModifier {
 
         /*
         String nonAccessibleMember =
@@ -6250,10 +6312,10 @@ public class SchemaModifiers {
             + "    <Formula>100</Formula>\n"
             + "  </CalculatedMember>\n";
         */
-        public RolapCubeTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RolapCubeTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
             List<MappingCalculatedMember> result = new ArrayList<>();
@@ -6272,9 +6334,12 @@ public class SchemaModifiers {
             }
             return result;
         }
+        
+        
+        */
     }
 
-    public static class OrderByAliasTestModifier1KE extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1KE extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6289,11 +6354,11 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1KE(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier1KE(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -6335,9 +6400,11 @@ public class SchemaModifiers {
             }
             return result;
         }
+ 
+    */
     }
 
-    public static class OrderByAliasTestModifier1OE extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1OE extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6352,11 +6419,11 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1OE(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier1OE(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -6398,9 +6465,12 @@ public class SchemaModifiers {
             }
             return result;
         }
+  
+*/
+    
     }
 
-    public static class OrderByAliasTestModifier1ME extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1ME extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6415,11 +6485,11 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1ME(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier1ME(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -6453,9 +6523,12 @@ public class SchemaModifiers {
             }
             return result;
         }
+   
+    */
+    
     }
 
-    public static class OrderByAliasTestModifier1CE extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1CE extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6470,11 +6543,11 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1CE(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier1CE(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
-
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
         protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
@@ -6516,9 +6589,12 @@ public class SchemaModifiers {
             }
             return result;
         }
+  
+    
+    */
     }
 
-    public static class OrderByAliasTestModifier1NE extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier1NE extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6533,8 +6609,8 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier1NE(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier1NE(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
 
@@ -6581,7 +6657,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderByAliasTestModifier2 extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier2 extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Employees\" foreignKey=\"employee_id\">\n"
@@ -6607,8 +6683,8 @@ public class SchemaModifiers {
         + "</Dimension>"));
          */
         private StringBuilder colName;
-        public OrderByAliasTestModifier2(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier2(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
 
@@ -6683,7 +6759,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderByAliasTestModifier3 extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier3 extends PojoMappingModifier {
 
         /*
         "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -6698,8 +6774,8 @@ public class SchemaModifiers {
          */
 
         private StringBuilder colName;
-        public OrderByAliasTestModifier3(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier3(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
 
@@ -6742,7 +6818,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderByAliasTestModifier4 extends RDbMappingSchemaModifier {
+    public static class OrderByAliasTestModifier4 extends PojoMappingModifier {
 
         /*
                 "<?xml version=\"1.0\"?>\n"
@@ -6790,12 +6866,12 @@ public class SchemaModifiers {
          */
 
 
-        public OrderByAliasTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public OrderByAliasTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -6924,15 +7000,15 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembersModifier1 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembersModifier1 extends PojoMappingModifier {
 
         /*
             "<CalculatedMember name='Profit With Spaces'"
             + "  dimension='Measures'"
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]'/>"));
         */
-        public TestCalculatedMembersModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembersModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -6950,7 +7026,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembersModifier2 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembersModifier2 extends PojoMappingModifier {
 
         /*
             "<CalculatedMember\n"
@@ -6964,8 +7040,8 @@ public class SchemaModifiers {
             + "\"/>\n"
             + "</CalculatedMember>\n"));
         */
-        public TestCalculatedMembersModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembersModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -6994,7 +7070,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembersModifier3 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembersModifier3 extends PojoMappingModifier {
 
         /*
                 "<CalculatedMember\n"
@@ -7003,8 +7079,8 @@ public class SchemaModifiers {
                 + "    visible=\"false\"\n"
                 + "    formula=\"StrToTuple('([Gender].[M], [Marital Status].[S])', [Gender], [Marital Status])\"/>\n"));
         */
-        public TestCalculatedMembersModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembersModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7023,7 +7099,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembersModifier4 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembersModifier4 extends PojoMappingModifier {
 
         /*
                 "  <CalculatedMember\n"
@@ -7035,8 +7111,8 @@ public class SchemaModifiers {
                 + "  <CalculatedMemberProperty name=\"CELL_FORMATTER\" value=\"mondrian.test.NonExistentCellFormatter\"/>\n"
                 + "</CalculatedMember>\n"));
         */
-        public TestCalculatedMembersModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembersModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7065,7 +7141,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier1 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier1 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -7080,8 +7156,8 @@ public class SchemaModifiers {
             + "</Dimension>"));
          */
 
-        public TestAggregationManagerModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7133,7 +7209,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier2 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier2 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -7148,8 +7224,8 @@ public class SchemaModifiers {
          */
         private final StringBuilder colName;
 
-        public TestAggregationManagerModifier2(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier2(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
 
@@ -7193,7 +7269,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier10 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier10 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Promotions\" foreignKey=\"promotion_id\">\n"
@@ -7208,8 +7284,8 @@ public class SchemaModifiers {
          */
         private final StringBuilder colName;
 
-        public TestAggregationManagerModifier10(MappingSchema mappingSchema, final StringBuilder colName) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier10(CatalogMapping catalog, final StringBuilder colName) {
+            super(catalog);
             this.colName = colName;
         }
 
@@ -7253,7 +7329,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier1 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier1 extends PojoMappingModifier {
 
         /*
             "  <Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -7273,8 +7349,8 @@ public class SchemaModifiers {
          */
 
 
-        public DrillThroughTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7339,7 +7415,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier2 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier2 extends PojoMappingModifier {
 
         /*
                 "  <Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -7352,8 +7428,8 @@ public class SchemaModifiers {
          */
 
 
-        public DrillThroughTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7391,7 +7467,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier3 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier3 extends PojoMappingModifier {
 
         /*
             "  <Dimension name=\"Education Level2\" foreignKey=\"customer_id\">\n"
@@ -7403,8 +7479,8 @@ public class SchemaModifiers {
          */
 
 
-        public DrillThroughTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7442,7 +7518,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class RaggedHierarchyTestModifier1 extends RDbMappingSchemaModifier {
+    public static class RaggedHierarchyTestModifier1 extends PojoMappingModifier {
 
         /*
                 "<Dimension name=\"Gender4\" foreignKey=\"customer_id\">\n"
@@ -7463,8 +7539,8 @@ public class SchemaModifiers {
          */
 
 
-        public RaggedHierarchyTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RaggedHierarchyTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7508,7 +7584,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class RaggedHierarchyTestModifier2 extends RDbMappingSchemaModifier {
+    public static class RaggedHierarchyTestModifier2 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"
@@ -7525,8 +7601,8 @@ public class SchemaModifiers {
          */
 
 
-        public RaggedHierarchyTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RaggedHierarchyTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7573,7 +7649,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class RolapResultTestModifier extends RDbMappingSchemaModifier {
+    public static class RolapResultTestModifier extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Promotions2\" foreignKey=\"promotion_id\">\n"
@@ -7585,8 +7661,8 @@ public class SchemaModifiers {
          */
 
 
-        public RolapResultTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public RolapResultTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7619,7 +7695,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class VirtualCubeTestModifier1 extends RDbMappingSchemaModifier {
+    public static class VirtualCubeTestModifier1 extends PojoMappingModifier {
 
         /*
             "  <CalculatedMember name=\"Shipped per Ordered\" dimension=\"Measures\">\n"
@@ -7627,8 +7703,8 @@ public class SchemaModifiers {
             + "    <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"#.0%\"/>\n"
             + "  </CalculatedMember>\n"));
         */
-        public VirtualCubeTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public VirtualCubeTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7654,13 +7730,13 @@ public class SchemaModifiers {
         }
     }
 
-    public static class VirtualCubeTestModifier2 extends RDbMappingSchemaModifier {
+    public static class VirtualCubeTestModifier2 extends PojoMappingModifier {
 
         /*
             <VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Customer Count]\"/>"
         */
-        public VirtualCubeTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public VirtualCubeTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7677,7 +7753,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class VirtualCubeTestModifier3 extends RDbMappingSchemaModifier {
+    public static class VirtualCubeTestModifier3 extends PojoMappingModifier {
 
         /*
             "<Schema name=\"FoodMart\">"
@@ -7721,12 +7797,12 @@ public class SchemaModifiers {
           + "</VirtualCube>"
           + "</Schema>";
          */
-        public VirtualCubeTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public VirtualCubeTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
 
             return SchemaRBuilder.builder()
                 .name("FoodMart")
@@ -7839,15 +7915,15 @@ public class SchemaModifiers {
         }
     }
 
-    public static class SqlQueryTestModifier extends RDbMappingSchemaModifier {
+    public static class SqlQueryTestModifier extends PojoMappingModifier {
 
         /*
                         " <Measure name=\"Avg Sales\" column=\"unit_sales\" aggregator=\"avg\"\n"
             + " formatString=\"#.###\"/>",
 
         */
-        public SqlQueryTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SqlQueryTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7867,7 +7943,7 @@ public class SchemaModifiers {
     }
 
 
-    public static class CompoundSlicerTestModifier1 extends RDbMappingSchemaModifier {
+    public static class CompoundSlicerTestModifier1 extends PojoMappingModifier {
 
         /*
                 "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
@@ -7875,8 +7951,8 @@ public class SchemaModifiers {
                         + UdfTest.FooBarCellFormatter.class.getName()
                         + "'/>";
         */
-        public CompoundSlicerTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CompoundSlicerTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7895,15 +7971,15 @@ public class SchemaModifiers {
         }
     }
 
-    public static class CompoundSlicerTestModifier2 extends RDbMappingSchemaModifier {
+    public static class CompoundSlicerTestModifier2 extends PojoMappingModifier {
 
         /*
                 "<Measure name='Avg Unit Sales' aggregator='avg' column='unit_sales'/>\n"
                         + "<Measure name='Count Unit Sales' aggregator='count' column='unit_sales'/>\n"
                         + "<Measure name='Sum Unit Sales' aggregator='sum' column='unit_sales'/>\n",
         */
-        public CompoundSlicerTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CompoundSlicerTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7931,7 +8007,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class CompoundSlicerTestModifier3 extends RDbMappingSchemaModifier {
+    public static class CompoundSlicerTestModifier3 extends PojoMappingModifier {
 
         /*
                             "<VirtualCubeMeasure cubeName=\"Sales\" name=\"[Measures].[Customer Count]\"/>\n",
@@ -7940,8 +8016,8 @@ public class SchemaModifiers {
                         + "</CalculatedMember>",
 
         */
-        public CompoundSlicerTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CompoundSlicerTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -7982,7 +8058,7 @@ public class SchemaModifiers {
 
     }
 
-    public static class XmlaHandlerTypeTestModifier extends RDbMappingSchemaModifier {
+    public static class XmlaHandlerTypeTestModifier extends PojoMappingModifier {
 
         /*
             "<Measure name='typeMeasure' " + aggregator + datatype + ">\n"
@@ -7993,8 +8069,8 @@ public class SchemaModifiers {
         */
         private final String expression;
         private final String type;
-        public XmlaHandlerTypeTestModifier(MappingSchema mappingSchema, String expression, String type) {
-            super(mappingSchema);
+        public XmlaHandlerTypeTestModifier(CatalogMapping catalog, String expression, String type) {
+            super(catalog);
             this.expression = expression;
             this.type = type;
         }
@@ -8029,7 +8105,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class MultipleHierarchyTestModifier1 extends RDbMappingSchemaModifier {
+    public static class MultipleHierarchyTestModifier1 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -8067,8 +8143,8 @@ public class SchemaModifiers {
          */
 
 
-        public MultipleHierarchyTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public MultipleHierarchyTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8215,7 +8291,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class MultipleHierarchyTestModifier2 extends RDbMappingSchemaModifier {
+    public static class MultipleHierarchyTestModifier2 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -8233,8 +8309,8 @@ public class SchemaModifiers {
             + "</Hierarchy>\n"
             + "</Dimension>"));
          */
-        public MultipleHierarchyTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public MultipleHierarchyTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8299,7 +8375,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class PerformanceTestModifier1 extends RDbMappingSchemaModifier {
+    public static class PerformanceTestModifier1 extends PojoMappingModifier {
 
         /*
       "      <Dimension name=\"ACC\" caption=\"Account\" type=\"StandardDimension\" foreignKey=\"customer_id\">\n"
@@ -8323,8 +8399,8 @@ public class SchemaModifiers {
         + "[Measures].[EXP2_4], NULL)\"/>\n" ));
          */
 
-        public PerformanceTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public PerformanceTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
         @Override
         protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
@@ -8399,7 +8475,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class Ssas2005CompatibilityTestModifier1 extends RDbMappingSchemaModifier {
+    public static class Ssas2005CompatibilityTestModifier1 extends PojoMappingModifier {
 
         /*
             "<Dimension name=\"Store Type 2\" foreignKey=\"store_id\">"
@@ -8409,8 +8485,8 @@ public class SchemaModifiers {
             + " </Hierarchy>"
             + "</Dimension>",
             */
-        public Ssas2005CompatibilityTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Ssas2005CompatibilityTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8442,7 +8518,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class Ssas2005CompatibilityTestModifier2 extends RDbMappingSchemaModifier {
+    public static class Ssas2005CompatibilityTestModifier2 extends PojoMappingModifier {
 
         /*
              "<Dimension name=\"SameName\" foreignKey=\"customer_id\">\n"
@@ -8463,8 +8539,8 @@ public class SchemaModifiers {
              + " </Hierarchy>\n"
              + "</Dimension>"));
             */
-        public Ssas2005CompatibilityTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Ssas2005CompatibilityTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8522,7 +8598,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class Ssas2005CompatibilityTestModifier3 extends RDbMappingSchemaModifier {
+    public static class Ssas2005CompatibilityTestModifier3 extends PojoMappingModifier {
 
         /*
                 "  <Dimension name=\"Customer Last Name\" "
@@ -8534,8 +8610,8 @@ public class SchemaModifiers {
                 + "    </Hierarchy>\n"
                 + "  </Dimension>\n"));
             */
-        public Ssas2005CompatibilityTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Ssas2005CompatibilityTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8569,7 +8645,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class Ssas2005CompatibilityTestModifier4 extends RDbMappingSchemaModifier {
+    public static class Ssas2005CompatibilityTestModifier4 extends PojoMappingModifier {
 
         /*
             final String cubeName = "Sales_inline";
@@ -8602,12 +8678,12 @@ public class SchemaModifiers {
             + "      formatString=\"#,###.00\"/>\n"
             + "</Cube>",
             */
-        public Ssas2005CompatibilityTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Ssas2005CompatibilityTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -8692,7 +8768,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class PerformanceTestModifier2 extends RDbMappingSchemaModifier {
+    public static class PerformanceTestModifier2 extends PojoMappingModifier {
 
         /*
           "<Dimension name=\"Gender%d \" foreignKey=\"customer_id\">"
@@ -8701,8 +8777,8 @@ public class SchemaModifiers {
             + "    <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\"/>"
             + "  </Hierarchy>"
             + "</Dimension>"         */
-        public PerformanceTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public PerformanceTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8736,10 +8812,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class PerformanceTestModifier3 extends RDbMappingSchemaModifier {
+    public static class PerformanceTestModifier3 extends PojoMappingModifier {
 
-        public PerformanceTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public PerformanceTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -8771,7 +8847,7 @@ public class SchemaModifiers {
           + "</Role>\n" );
          */
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(RoleRBuilder.builder()
@@ -8869,7 +8945,7 @@ public class SchemaModifiers {
         }
 
     }
-    public static class PerformanceTestModifier4 extends RDbMappingSchemaModifier {
+    public static class PerformanceTestModifier4 extends PojoMappingModifier {
 
         /*
       "<UserDefinedFunction name=\"StringMult\" className=\""
@@ -8879,8 +8955,8 @@ public class SchemaModifiers {
             */
 
 
-        public PerformanceTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public PerformanceTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8895,13 +8971,13 @@ public class SchemaModifiers {
         }
     }
 
-    public static class NativeSetEvaluationTestModifier extends RDbMappingSchemaModifier {
+    public static class NativeSetEvaluationTestModifier extends PojoMappingModifier {
 
         /*
                 <DimensionUsage name="PurchaseDate" source="Time" foreignKey="time_id"/>
             */
-        public NativeSetEvaluationTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public NativeSetEvaluationTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8919,13 +8995,13 @@ public class SchemaModifiers {
         }
     }
 
-    public static class Olap4jTestModifier extends RDbMappingSchemaModifier {
+    public static class Olap4jTestModifier extends PojoMappingModifier {
 
         /*
             <CalculatedMember name='H1 1997' formula='Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])' dimension='Time' />
          */
-        public Olap4jTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Olap4jTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -8943,7 +9019,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class ScenarioTestModifier1 extends RDbMappingSchemaModifier {
+    public static class ScenarioTestModifier1 extends PojoMappingModifier {
 
         /*
                 "<Dimension name='Scenario' foreignKey='time_id'>\n"
@@ -8961,8 +9037,8 @@ public class SchemaModifiers {
 
             */
 
-        public ScenarioTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public ScenarioTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9014,7 +9090,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class SolveOrderScopeIsolationTestModifier extends RDbMappingSchemaModifier {
+    public static class SolveOrderScopeIsolationTestModifier extends PojoMappingModifier {
 
         /*
         "<CalculatedMember\n"
@@ -9047,8 +9123,8 @@ public class SchemaModifiers {
         + "  <CalculatedMemberProperty name=\"SOLVE_ORDER\" value=\"20\"/>\n"
         + "</CalculatedMember>";
          */
-        public SolveOrderScopeIsolationTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SolveOrderScopeIsolationTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9117,7 +9193,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier1 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier1 extends PojoMappingModifier {
 
         /*
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
@@ -9125,8 +9201,8 @@ public class SchemaModifiers {
             + FooBarCellFormatter.class.getName()
             + "'/>");
         */
-        public UdfTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9146,7 +9222,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier2 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier2 extends PojoMappingModifier {
 
          /*
            "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
@@ -9159,8 +9235,8 @@ public class SchemaModifiers {
             + "</Measure>");
 
         */
-        public UdfTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9184,7 +9260,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier3 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier3 extends PojoMappingModifier {
 
         /*
                         "<CalculatedMember\n"
@@ -9197,8 +9273,8 @@ public class SchemaModifiers {
             + "</CalculatedMember>");
 
          */
-        public UdfTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9224,7 +9300,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier4 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier4 extends PojoMappingModifier {
 
         /*
             "<CalculatedMember\n"
@@ -9236,8 +9312,8 @@ public class SchemaModifiers {
             + "'/>\n"
             + "</CalculatedMember>");
          */
-        public UdfTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9260,7 +9336,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier5 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier5 extends PojoMappingModifier {
 
         /*
             "<CalculatedMember\n"
@@ -9274,8 +9350,8 @@ public class SchemaModifiers {
             + "  </CellFormatter>\n"
             + "</CalculatedMember>");
          */
-        public UdfTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9300,7 +9376,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier6 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier6 extends PojoMappingModifier {
 
         /*
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -9315,8 +9391,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9349,7 +9425,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier7 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier7 extends PojoMappingModifier {
 
         /*
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -9368,8 +9444,8 @@ public class SchemaModifiers {
 
             */
 
-        public UdfTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9407,7 +9483,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier8 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier8 extends PojoMappingModifier {
 
         /*
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -9424,8 +9500,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier8(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier8(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9466,7 +9542,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier9 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier9 extends PojoMappingModifier {
 
         /*
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -9485,8 +9561,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9528,7 +9604,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier10 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier10 extends PojoMappingModifier {
 
         /*
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -9551,8 +9627,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier10(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier10(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9597,7 +9673,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier11 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier11 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"PlusOne\" className=\""
@@ -9607,8 +9683,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier11(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier11(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9623,7 +9699,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier12 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier12 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"BadPlusOne\" className=\""
@@ -9633,8 +9709,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier12(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier12(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9649,7 +9725,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier14 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier14 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"GenericPlusOne\" className=\""
@@ -9662,8 +9738,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier14(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier14(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9682,7 +9758,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier15 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier15 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"StringMult\" className=\""
@@ -9691,8 +9767,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier15(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier15(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9707,7 +9783,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier16 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier16 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"PlusOne\" className=\""
@@ -9718,8 +9794,8 @@ public class SchemaModifiers {
             */
 
 
-        public UdfTestModifier16(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier16(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9738,7 +9814,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier17 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier17 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"Reverse\" className=\""
@@ -9748,8 +9824,8 @@ public class SchemaModifiers {
 
         private final Class<? extends UdfTest.ReverseFunction> functionClass;
 
-        public UdfTestModifier17(MappingSchema mappingSchema, final Class<? extends UdfTest.ReverseFunction> functionClass) {
-            super(mappingSchema);
+        public UdfTestModifier17(CatalogMapping catalog, final Class<? extends UdfTest.ReverseFunction> functionClass) {
+            super(catalog);
             this.functionClass = functionClass;
         }
 
@@ -9765,7 +9841,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier18 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier18 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"Reverse2\" className=\""
@@ -9774,8 +9850,8 @@ public class SchemaModifiers {
             + "\"/>\n");            */
 
 
-        public UdfTestModifier18(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier18(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9790,7 +9866,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier19 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier19 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"MemberName\" className=\""
@@ -9799,8 +9875,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier19(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier19(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9815,15 +9891,15 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier20 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier20 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name='StringMult'/>\n");
         */
 
 
-        public UdfTestModifier20(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier20(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9837,7 +9913,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier21 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier21 extends PojoMappingModifier {
 
         /*
                         "<UserDefinedFunction name='StringMult' className='foo'>\n"
@@ -9847,8 +9923,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier21(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier21(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9865,7 +9941,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier22 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier22 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name='StringMult'>\n"
@@ -9875,8 +9951,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier22(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier22(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9894,7 +9970,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier23 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier23 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name='StringMult'>\n"
@@ -9922,8 +9998,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier23(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier23(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -9960,7 +10036,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier24 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier24 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name='Factorial'>\n"
@@ -9985,8 +10061,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier24(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier24(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -10020,7 +10096,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UdfTestModifier25 extends RDbMappingSchemaModifier {
+    public static class UdfTestModifier25 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name='Factorial'>\n"
@@ -10045,8 +10121,8 @@ public class SchemaModifiers {
         */
 
 
-        public UdfTestModifier25(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UdfTestModifier25(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -10080,7 +10156,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier extends PojoMappingModifier {
 
         /*
                     "<Schema name=\"AMC\"><Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
@@ -10124,12 +10200,12 @@ public class SchemaModifiers {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube></Schema>\n";
          */
-        public TestAggregationManagerModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
@@ -10248,7 +10324,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier3 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier3 extends PojoMappingModifier {
 
         /*
                 "<Schema name=\"FoodMart\">"
@@ -10265,12 +10341,12 @@ public class SchemaModifiers {
                 + "</Cube>\n"
                 + "</Schema>");
          */
-        public TestAggregationManagerModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .cubes(List.of(
@@ -10313,7 +10389,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier4 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier4 extends PojoMappingModifier {
 
         /*
                 "<Schema name=\"FoodMart\">"
@@ -10348,12 +10424,12 @@ public class SchemaModifiers {
                 + "</Cube>\n"
                 + "</Schema>");
          */
-        public TestAggregationManagerModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
@@ -10451,7 +10527,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier5 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier5 extends PojoMappingModifier {
 
         /*
                 "<Schema name=\"FooSchema\"><Cube name=\"Sales_Foo\" defaultMeasure=\"Unit Sales\">\n"
@@ -10603,12 +10679,12 @@ public class SchemaModifiers {
                 + "</Cube></Schema>\n");
 
          */
-        public TestAggregationManagerModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
@@ -10888,7 +10964,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier6 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier6 extends PojoMappingModifier {
 
         /*
             "<?xml version=\"1.0\"?>\n"
@@ -10953,12 +11029,12 @@ public class SchemaModifiers {
             + "  </Cube>\n"
             + "</Schema>\n";
          */
-        public TestAggregationManagerModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
@@ -11144,7 +11220,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier7 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier7 extends PojoMappingModifier {
 
         /*
                 "<Schema name=\"FoodMart\">"
@@ -11178,12 +11254,12 @@ public class SchemaModifiers {
                 + "</Schema>");
 
          */
-        public TestAggregationManagerModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
@@ -11275,7 +11351,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier8 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier8 extends PojoMappingModifier {
 
         /*
             "<Schema name=\"AMC\"><Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
@@ -11315,12 +11391,12 @@ public class SchemaModifiers {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube></Schema>\n";
          */
-        public TestAggregationManagerModifier8(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier8(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t = new TableR("sales_fact_1997",
                 List.of(
                     AggExcludeRBuilder.builder().name("agg_g_ms_pcat_sales_fact_1997").build(),
@@ -11434,7 +11510,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestAggregationManagerModifier9 extends RDbMappingSchemaModifier {
+    public static class TestAggregationManagerModifier9 extends PojoMappingModifier {
 
         /*
             "<?xml version=\"1.0\"?>\n"
@@ -11533,12 +11609,12 @@ public class SchemaModifiers {
             + "</Schema>\n";
 
          */
-        public TestAggregationManagerModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestAggregationManagerModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             MappingTableQuery t1 = new TableR("sales_fact_1997",
                 List.of(),
                 List.of(
@@ -11870,7 +11946,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembers1 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembers1 extends PojoMappingModifier {
 
         /*
         final String cubeName = "Sales_Bug1410383";
@@ -11916,12 +11992,12 @@ public class SchemaModifiers {
                 + "</Cube>";
 
          */
-        public TestCalculatedMembers1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembers1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -12008,7 +12084,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembers2 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembers2 extends PojoMappingModifier {
 
         /*
             "<Cube name=\"Store5\"> \n"
@@ -12047,12 +12123,12 @@ public class SchemaModifiers {
 
 
          */
-        public TestCalculatedMembers2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembers2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -12135,7 +12211,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class TestCalculatedMembers3 extends RDbMappingSchemaModifier {
+    public static class TestCalculatedMembers3 extends PojoMappingModifier {
 
         /*
         final String cubeName = "Sales_BracketInCubeCalcMemberName";
@@ -12160,12 +12236,12 @@ public class SchemaModifiers {
             + "</Cube>";
 
          */
-        public TestCalculatedMembers3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public TestCalculatedMembers3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -12222,7 +12298,7 @@ public class SchemaModifiers {
     }
 
 
-    public static class CurrentDateMemberUdfTestModifier1 extends RDbMappingSchemaModifier {
+    public static class CurrentDateMemberUdfTestModifier1 extends PojoMappingModifier {
 
         /*
             "<UserDefinedFunction name=\"MockCurrentDateMember\" "
@@ -12231,8 +12307,8 @@ public class SchemaModifiers {
             */
 
 
-        public CurrentDateMemberUdfTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CurrentDateMemberUdfTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
@@ -12247,7 +12323,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class UsagePrefixTestModifier1 extends RDbMappingSchemaModifier {
+    public static class UsagePrefixTestModifier1 extends PojoMappingModifier {
 
         /*
             "<Schema name=\"usagePrefixTest\">"
@@ -12287,12 +12363,12 @@ public class SchemaModifiers {
             + "</Schema>";
 
          */
-        public UsagePrefixTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public UsagePrefixTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("usagePrefixTest")
                 .dimensions(List.of(PrivateDimensionRBuilder.builder()
@@ -12379,7 +12455,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughExcludeFilterTestModifier extends RDbMappingSchemaModifier {
+    public static class DrillThroughExcludeFilterTestModifier extends PojoMappingModifier {
 
         /*
     String schema = "<Schema name=\"MYFoodmart\">\n"
@@ -12424,12 +12500,12 @@ public class SchemaModifiers {
             + "</Schema>\n";
 
          */
-        public DrillThroughExcludeFilterTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughExcludeFilterTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("MYFoodmart")
                 .dimensions(List.of(
@@ -12617,7 +12693,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class CompatibilityTestModifier extends RDbMappingSchemaModifier {
+    public static class CompatibilityTestModifier extends PojoMappingModifier {
 
         /*
         final String cubeName = "Sales_inline";
@@ -12653,12 +12729,12 @@ public class SchemaModifiers {
             + "      formatString=\"#,###.00\"/>\n"
             + "</Cube>", null, null, null, null);
          */
-        public CompatibilityTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CompatibilityTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -12747,7 +12823,7 @@ public class SchemaModifiers {
 
     }
 
-    public static class CompatibilityTestModifier2 extends RDbMappingSchemaModifier {
+    public static class CompatibilityTestModifier2 extends PojoMappingModifier {
 
         /*
         final String cubeName = "Store_NullsCollation";
@@ -12787,12 +12863,12 @@ public class SchemaModifiers {
             + "      formatString=\"#,###\"/>\n"
             + "</Cube>",
          */
-        public CompatibilityTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public CompatibilityTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -12864,7 +12940,7 @@ public class SchemaModifiers {
 
     }
 
-    public static class AccessControlTestModifier1 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier1 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -12879,12 +12955,12 @@ public class SchemaModifiers {
                 + "</Role>");
         */
 
-        public AccessControlTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(RoleRBuilder.builder()
@@ -12923,7 +12999,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier2 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier2 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -12956,12 +13032,12 @@ public class SchemaModifiers {
                 + "</Role>\n");
         */
 
-        public AccessControlTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13070,7 +13146,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier3 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier3 extends PojoMappingModifier {
 
         /*
         String roleDefs =
@@ -13096,12 +13172,12 @@ public class SchemaModifiers {
             + "</Role>";
         */
 
-        public AccessControlTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13166,7 +13242,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier4 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier4 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -13185,12 +13261,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13236,7 +13312,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier5 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier5 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -13255,12 +13331,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13308,7 +13384,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier6 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier6 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -13322,12 +13398,12 @@ public class SchemaModifiers {
                 + "</Role>");
         */
 
-        public AccessControlTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13362,7 +13438,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier7 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier7 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"California manager\">\n"
@@ -13377,12 +13453,12 @@ public class SchemaModifiers {
                 + "</Role>");
         */
 
-        public AccessControlTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13421,7 +13497,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier8 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier8 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Buggy Role\">\n"
@@ -13442,12 +13518,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier8(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier8(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13495,7 +13571,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier9 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier9 extends PojoMappingModifier {
 
         /*
         "<Role name=\"role1\">\n"
@@ -13513,12 +13589,12 @@ public class SchemaModifiers {
         + "</Role>";
         */
 
-        public AccessControlTestModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13569,7 +13645,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier10 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier10 extends PojoMappingModifier {
 
         /*
             "<Role name=\"VCRole\">\n"
@@ -13590,12 +13666,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier10(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier10(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13654,7 +13730,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier11 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier11 extends PojoMappingModifier {
 
         /*
             "<Role name=\"role2\">"
@@ -13669,12 +13745,12 @@ public class SchemaModifiers {
             + "</Role>";
         */
 
-        public AccessControlTestModifier11(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier11(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13714,13 +13790,13 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier12 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier12 extends PojoMappingModifier {
 
         private List<MappingRole> roles;
 
 
-        public AccessControlTestModifier12(MappingSchema mappingSchema, List<MappingRole> roles) {
-            super(mappingSchema);
+        public AccessControlTestModifier12(CatalogMapping catalog, List<MappingRole> roles) {
+            super(catalog);
             this.roles = roles;
         }
 
@@ -13737,7 +13813,7 @@ public class SchemaModifiers {
 
         */
         @Override
-        protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingPrivateDimension> schemaDimensions(CatalogMapping catalogOriginal) {
             List<MappingPrivateDimension> result = new ArrayList<>();
             result.addAll(super.schemaDimensions(mappingSchemaOriginal));
             result.add(PrivateDimensionRBuilder.builder()
@@ -13788,7 +13864,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -13826,7 +13902,7 @@ public class SchemaModifiers {
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.addAll(roles);
@@ -13834,7 +13910,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier14 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier14 extends PojoMappingModifier {
 
         /*
                         "<Role name=\"REG1\"> \n"
@@ -13851,12 +13927,12 @@ public class SchemaModifiers {
                 + "</Role>");
         */
 
-        public AccessControlTestModifier14(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier14(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13904,7 +13980,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier15 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier15 extends PojoMappingModifier {
 
         /*
             "<Role name=\"CTO\">\n"
@@ -13926,12 +14002,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier15(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier15(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -13992,7 +14068,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier16 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier16 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -14005,12 +14081,12 @@ public class SchemaModifiers {
                 + "</Role>\n");
         */
 
-        public AccessControlTestModifier16(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier16(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14041,7 +14117,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier17 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier17 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -14060,12 +14136,12 @@ public class SchemaModifiers {
                 + "</Role>");
         */
 
-        public AccessControlTestModifier17(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier17(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14118,7 +14194,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier18 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier18 extends PojoMappingModifier {
 
         /*
                 "<Role name='Role1'>\n"
@@ -14140,12 +14216,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier18(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier18(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14208,7 +14284,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier19 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier19 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -14240,12 +14316,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier19(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier19(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14341,7 +14417,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier20 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier20 extends PojoMappingModifier {
 
         /*
                     "  <Role name=\"Role1\">\n"
@@ -14367,12 +14443,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier20(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier20(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14443,7 +14519,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier21 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier21 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Bacon\">\n"
@@ -14458,12 +14534,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier21(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier21(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14499,7 +14575,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier22 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier22 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -14513,12 +14589,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier22(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier22(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14554,7 +14630,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier23 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier23 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -14577,12 +14653,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier23(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier23(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14650,7 +14726,7 @@ public class SchemaModifiers {
     }
 
 
-    public static class AccessControlTestModifier24 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier24 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Admin\">\n"
@@ -14669,12 +14745,12 @@ public class SchemaModifiers {
                 + "</Role> \n");
         */
 
-        public AccessControlTestModifier24(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier24(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14722,7 +14798,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier25 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier25 extends PojoMappingModifier {
 
         /*
             "<Role name=\"test\">\n"
@@ -14747,12 +14823,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier25(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier25(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14818,7 +14894,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier26 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier26 extends PojoMappingModifier {
 
         /*
             "<Role name=\"dev\">"
@@ -14837,12 +14913,12 @@ public class SchemaModifiers {
             + "</Role>";
         */
 
-        public AccessControlTestModifier26(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier26(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14886,7 +14962,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier27 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier27 extends PojoMappingModifier {
 
         /*
             "<Role name=\"dev\">"
@@ -14905,12 +14981,12 @@ public class SchemaModifiers {
             + "</Role>";
         */
 
-        public AccessControlTestModifier27(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier27(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -14954,7 +15030,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier28 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier28 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Admin\">\n"
@@ -14969,12 +15045,12 @@ public class SchemaModifiers {
                 + "  </Role>\n");
         */
 
-        public AccessControlTestModifier28(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier28(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15011,7 +15087,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier39 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier39 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -15032,13 +15108,13 @@ public class SchemaModifiers {
 
         private final RollupPolicy policy;
 
-        public AccessControlTestModifier39(MappingSchema mappingSchema, RollupPolicy policy) {
-            super(mappingSchema);
+        public AccessControlTestModifier39(CatalogMapping catalog, RollupPolicy policy) {
+            super(catalog);
             this.policy = policy;
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15084,7 +15160,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier40 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier40 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -15103,13 +15179,13 @@ public class SchemaModifiers {
 
         private final RollupPolicy policy;
 
-        public AccessControlTestModifier40(MappingSchema mappingSchema, RollupPolicy policy) {
-            super(mappingSchema);
+        public AccessControlTestModifier40(CatalogMapping catalog, RollupPolicy policy) {
+            super(catalog);
             this.policy = policy;
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15150,7 +15226,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier41 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier41 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Role1\">\n"
@@ -15175,13 +15251,13 @@ public class SchemaModifiers {
 
         private final RollupPolicy policy;
 
-        public AccessControlTestModifier41(MappingSchema mappingSchema, RollupPolicy policy) {
-            super(mappingSchema);
+        public AccessControlTestModifier41(CatalogMapping catalog, RollupPolicy policy) {
+            super(catalog);
             this.policy = policy;
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal).stream()
                 .filter(r -> !"Role1".equals(r.name())).toList());
@@ -15238,7 +15314,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier42 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier42 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"California manager\">\n"
@@ -15257,13 +15333,13 @@ public class SchemaModifiers {
 
         private final RollupPolicy policy;
 
-        public AccessControlTestModifier42(MappingSchema mappingSchema, RollupPolicy policy) {
-            super(mappingSchema);
+        public AccessControlTestModifier42(CatalogMapping catalog, RollupPolicy policy) {
+            super(catalog);
             this.policy = policy;
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15304,7 +15380,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier29 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier29 extends PojoMappingModifier {
 
         /*
                 "<Role name=\"Admin\">\n"
@@ -15322,9 +15398,9 @@ public class SchemaModifiers {
         private final String defaultMem;
         private final RollupPolicy policy;
 
-        public AccessControlTestModifier29(MappingSchema mappingSchema,
+        public AccessControlTestModifier29(CatalogMapping catalog,
                                            Boolean hasAll, String defaultMem, RollupPolicy policy) {
-            super(mappingSchema);
+            super(catalog);
             this.hasAll = hasAll;
             this.defaultMem = defaultMem;
             this.policy = policy;
@@ -15338,7 +15414,7 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"/>\n"
             + "</Cube>";
          */
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal).stream()
                 .filter(c -> !"TinySales".equals(c.name())).toList());
@@ -15378,7 +15454,7 @@ public class SchemaModifiers {
             + "</Dimension>\n";
 
          */
-        protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingPrivateDimension> schemaDimensions(CatalogMapping catalogOriginal) {
             List<MappingPrivateDimension> result = new ArrayList<>();
             result.addAll(super.schemaDimensions(mappingSchemaOriginal).stream()
                 .filter(d -> !"Store2".equals(d.name())).toList());
@@ -15424,7 +15500,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal)
                 .stream().filter(r -> !"test".equals(r.name())).toList());
@@ -15470,7 +15546,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier30 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier30 extends PojoMappingModifier {
 
         /*
             "<Role name=\"noBaseCubes\">\n"
@@ -15483,12 +15559,12 @@ public class SchemaModifiers {
             + "</Role> ";
         */
 
-        public AccessControlTestModifier30(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier30(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15524,7 +15600,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier31 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier31 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -15546,12 +15622,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier31(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier31(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -15610,11 +15686,11 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier33 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier33 extends PojoMappingModifier {
 
 
-        public AccessControlTestModifier33(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier33(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -15702,7 +15778,7 @@ public class SchemaModifiers {
           + "</Cube>";
 
          */
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -15966,7 +16042,7 @@ public class SchemaModifiers {
             + "</Role>");
         */
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16014,7 +16090,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier34 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier34 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -16028,12 +16104,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier34(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier34(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16070,7 +16146,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier35 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier35 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -16106,12 +16182,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier35(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier35(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16226,7 +16302,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier36 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier36 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -16261,12 +16337,12 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier36(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier36(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16376,7 +16452,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier37 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier37 extends PojoMappingModifier {
 
         /*
             "<Role name=\"Role1\">\n"
@@ -16393,12 +16469,12 @@ public class SchemaModifiers {
             + "</Role>");
         */
 
-        public AccessControlTestModifier37(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier37(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16448,7 +16524,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier32 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier32 extends PojoMappingModifier {
 
         /*
       String schema =
@@ -16503,11 +16579,11 @@ public class SchemaModifiers {
 
         */
 
-        public AccessControlTestModifier32(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier32(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart.DimAndMeasure.Role")
                 .dimensions(List.of(
@@ -16661,7 +16737,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class AccessControlTestModifier38 extends RDbMappingSchemaModifier {
+    public static class AccessControlTestModifier38 extends PojoMappingModifier {
 
         /*
           "<Role name=\"Sales Ragged\">\n"
@@ -16671,12 +16747,12 @@ public class SchemaModifiers {
           + "</Role>";
         */
 
-        public AccessControlTestModifier38(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public AccessControlTestModifier38(CatalogMapping catalog) {
+            super(catalog);
         }
 
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -16699,7 +16775,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class OrderKeyOneToOneCheckTestModifier extends RDbMappingSchemaModifier {
+    public static class OrderKeyOneToOneCheckTestModifier extends PojoMappingModifier {
 
         /*
                     + "<Schema name=\"FoodMart 2358\">\n"
@@ -16722,11 +16798,11 @@ public class SchemaModifiers {
                     + "</Schema>");
         */
 
-        public OrderKeyOneToOneCheckTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public OrderKeyOneToOneCheckTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart 2358")
                 .dimensions(List.of(
@@ -16790,7 +16866,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DefaultRecognizerTestModifier extends RDbMappingSchemaModifier {
+    public static class DefaultRecognizerTestModifier extends PojoMappingModifier {
 
         /*
                     + "<Schema name=\"FoodMart\">\n"
@@ -16821,11 +16897,11 @@ public class SchemaModifiers {
                     + "</Schema>");
         */
 
-        public DefaultRecognizerTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DefaultRecognizerTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -16913,7 +16989,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DialectTestModifier1 extends RDbMappingSchemaModifier {
+    public static class DialectTestModifier1 extends PojoMappingModifier {
 
         /*
             "<?xml version=\"1.0\"?>\n"
@@ -16940,11 +17016,11 @@ public class SchemaModifiers {
                     + "</Schema>\n" );
         */
 
-        public DialectTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DialectTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -17003,7 +17079,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DialectTestModifier2 extends RDbMappingSchemaModifier {
+    public static class DialectTestModifier2 extends PojoMappingModifier {
 
         /*
             "<?xml version=\"1.0\"?>\n"
@@ -17044,11 +17120,11 @@ public class SchemaModifiers {
                     + "</Schema>\n" );
         */
 
-        public DialectTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DialectTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .dimensions(List.of(
@@ -17127,7 +17203,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier4 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier4 extends PojoMappingModifier {
 
         /*
             "<Schema name=\"dsad\">\n"
@@ -17173,11 +17249,11 @@ public class SchemaModifiers {
             + "</Schema>\n");
         */
 
-        public DrillThroughTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("dsad")
                 .dimensions(List.of(
@@ -17300,7 +17376,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier5 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier5 extends PojoMappingModifier {
 
         /*
         "<Schema name=\"FoodMartSalesOnly\">\n"
@@ -17323,11 +17399,11 @@ public class SchemaModifiers {
         + "</Schema>\n";
         */
 
-        public DrillThroughTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMartSalesOnly")
                 .cubes(List.of(
@@ -17392,7 +17468,7 @@ public class SchemaModifiers {
         }
     }
 
-    public static class DrillThroughTestModifier6 extends RDbMappingSchemaModifier {
+    public static class DrillThroughTestModifier6 extends PojoMappingModifier {
 
         /*
         "<Schema name=\"FoodMartSalesOnly\">\n"
@@ -17415,11 +17491,11 @@ public class SchemaModifiers {
         + "</Schema>\n";
         */
 
-        public DrillThroughTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public DrillThroughTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMartSalesOnly")
                 .cubes(List.of(
@@ -17483,7 +17559,7 @@ public class SchemaModifiers {
     }
 
 
-    public static class PropertiesTestModifier extends RDbMappingSchemaModifier {
+    public static class PropertiesTestModifier extends PojoMappingModifier {
 
         /*
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"
@@ -17500,11 +17576,11 @@ public class SchemaModifiers {
             + "</Cube>\n",
         */
 
-        public PropertiesTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public PropertiesTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
-        protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
             List<MappingCube> result = new ArrayList<>();
             result.addAll(super.schemaCubes(mappingSchemaOriginal));
             result.add(CubeRBuilder.builder()
@@ -17554,11 +17630,11 @@ public class SchemaModifiers {
 
     }
 
-    public static class Ssas2005CompatibilityTestModifier5 extends RDbMappingSchemaModifier {
+    public static class Ssas2005CompatibilityTestModifier5 extends PojoMappingModifier {
 
 
-        public Ssas2005CompatibilityTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public Ssas2005CompatibilityTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -17657,7 +17733,7 @@ public class SchemaModifiers {
                 + "</Schema>");
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FoodMart")
                 .cubes(List.of(
@@ -17956,11 +18032,11 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier1 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier1 extends PojoMappingModifier {
 
 
-        public SteelWheelsSchemaTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -18110,7 +18186,7 @@ public class SchemaModifiers {
             + "</Schema>\n";
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("SteelWheels")
                 .cubes(List.of(
@@ -18537,10 +18613,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier2 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier2 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier2(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier2(CatalogMapping catalog) {
+            super(catalog);
         }
 
         protected boolean hierarchyHasAll(MappingHierarchy hierarchy) {
@@ -18548,10 +18624,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class SteelWheelsSchemaTestModifier3 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier3 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier3(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier3(CatalogMapping catalog) {
+            super(catalog);
         }
 
         protected boolean hierarchyHasAll(MappingHierarchy hierarchy) {
@@ -18566,10 +18642,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class SteelWheelsSchemaTestModifier4 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier4 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier4(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier4(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -18690,7 +18766,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("test_namecolumn")
                 .dimensions(List.of(
@@ -19054,10 +19130,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier5 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier5 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier5(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier5(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -19090,7 +19166,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("FooBar")
                 .cubes(List.of(
@@ -19169,10 +19245,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier6 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier6 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier6(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier6(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -19249,7 +19325,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("SteelWheels")
                 .dimensions(List.of(
@@ -19477,10 +19553,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier7 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier7 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier7(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier7(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -19520,7 +19596,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected List<MappingRole> schemaRoles(MappingSchema mappingSchemaOriginal) {
+        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
             List<MappingRole> result = new ArrayList<>();
             result.addAll(super.schemaRoles(mappingSchemaOriginal));
             result.add(
@@ -19616,10 +19692,10 @@ public class SchemaModifiers {
         }
     }
 
-    public static class SteelWheelsSchemaTestModifier8 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier8 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier8(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier8(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -19666,7 +19742,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("SteelWheels")
                 .description("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
@@ -19796,10 +19872,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier9 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier9 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier9(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier9(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -19862,7 +19938,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("SteelWheels")
                 .description("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
@@ -20025,10 +20101,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class SteelWheelsSchemaTestModifier10 extends RDbMappingSchemaModifier {
+    public static class SteelWheelsSchemaTestModifier10 extends PojoMappingModifier {
 
-        public SteelWheelsSchemaTestModifier10(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public SteelWheelsSchemaTestModifier10(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -20109,7 +20185,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("rolesTest")
                 .dimensions(List.of(
@@ -20315,10 +20391,10 @@ public class SchemaModifiers {
 
     }
 
-    public static class XmlaBasicTestModifier extends RDbMappingSchemaModifier {
+    public static class XmlaBasicTestModifier extends PojoMappingModifier {
 
-        public XmlaBasicTestModifier(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public XmlaBasicTestModifier(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -20340,7 +20416,7 @@ public class SchemaModifiers {
 
          */
         @Override
-        protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
+        protected MappingSchema modifyMappingSchema(CatalogMapping catalogOriginal) {
             return SchemaRBuilder.builder()
                 .name("foodmart-xmla-alias-bug")
                 .dimensions(List.of(

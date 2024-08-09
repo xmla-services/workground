@@ -18,17 +18,15 @@
  */
 package org.opencube.junit5.propupdator;
 
-import java.util.List;
-
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
+import org.eclipse.daanse.rolap.mapping.example.complex.foodmart.ExampleSupplier;
 import org.opencube.junit5.context.TestContext;
 
 public class AppandFoodMartCatalog implements TestContextUpdater {
 
 	@Override
 	public void updateContext(Context context) {
-        ((TestContext)context).setDatabaseMappingSchemaProviders(List.of(new FoodMartRecordDbMappingSchemaProvider()));
+        ((TestContext)context).setCatalogMappingSupplier(new ExampleSupplier());
 	}
 
 }

@@ -1247,8 +1247,8 @@ class ParameterTest {
     void testSchemaProp(Context context) {
         class TestSchemaPropModifier extends RDbMappingSchemaModifier {
 
-            public TestSchemaPropModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSchemaPropModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -1285,8 +1285,8 @@ class ParameterTest {
     void testSchemaPropDupFails(Context context) {
         class TestSchemaPropDupFailsModifier extends RDbMappingSchemaModifier {
 
-            public TestSchemaPropDupFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSchemaPropDupFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -1337,8 +1337,8 @@ class ParameterTest {
     void testSchemaPropIllegalTypeFails(Context context) {
         class TestSchemaPropIllegalTypeFailsModifier extends RDbMappingSchemaModifier {
 
-            public TestSchemaPropIllegalTypeFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSchemaPropIllegalTypeFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -1377,8 +1377,8 @@ class ParameterTest {
     void testSchemaPropInvalidDefaultExpFails(Context context) {
         class TestSchemaPropInvalidDefaultExpFailsModifier extends RDbMappingSchemaModifier {
 
-            public TestSchemaPropInvalidDefaultExpFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSchemaPropInvalidDefaultExpFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -1419,8 +1419,8 @@ class ParameterTest {
     void testSchemaPropContext(Context context) {
         class TestSchemaPropContextModifier extends RDbMappingSchemaModifier {
 
-            public TestSchemaPropContextModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSchemaPropContextModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override

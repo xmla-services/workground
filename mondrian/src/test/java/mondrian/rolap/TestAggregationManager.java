@@ -57,6 +57,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimens
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SqlSelectQueryRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -1309,12 +1311,12 @@ class TestAggregationManager extends BatchTestCase {
                     cardinalitySqlMySql2,
                     cardinalitySqlMySql2)
             };
-        class TestKeyExpressionCardinalityCacheModifier extends RDbMappingSchemaModifier {
+        class TestKeyExpressionCardinalityCacheModifier extends PojoMappingModifier {
 
-            public TestKeyExpressionCardinalityCacheModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestKeyExpressionCardinalityCacheModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
                 List<MappingPrivateDimension> result = new ArrayList<>();
@@ -1466,6 +1468,9 @@ class TestAggregationManager extends BatchTestCase {
                     .build());
                 return result;
             }
+ 
+        
+       */ 
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1628,12 +1633,12 @@ class TestAggregationManager extends BatchTestCase {
         + "      formatString=\"#,###.00\"/>\n"
         + "</Cube>";
         */
-        class TestOrdinalExprAggTuplesAndChildrenModifier extends RDbMappingSchemaModifier {
+        class TestOrdinalExprAggTuplesAndChildrenModifier extends PojoMappingModifier {
 
-            public TestOrdinalExprAggTuplesAndChildrenModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestOrdinalExprAggTuplesAndChildrenModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
@@ -1736,6 +1741,8 @@ class TestAggregationManager extends BatchTestCase {
                     .build());
                 return result;
             }
+    
+        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -2418,12 +2425,12 @@ class TestAggregationManager extends BatchTestCase {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube>\n";
          */
-        class TestNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
+        class TestNonCollapsedAggregateModifier extends PojoMappingModifier {
 
-            public TestNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNonCollapsedAggregateModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
@@ -2555,6 +2562,9 @@ class TestAggregationManager extends BatchTestCase {
                     .build());
                 return result;
             }
+     
+        */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -2844,12 +2854,12 @@ class TestAggregationManager extends BatchTestCase {
             + "      formatString=\"Standard\"/>\n"
             + "</Cube>\n";
          */
-        class TestTwoNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
+        class TestTwoNonCollapsedAggregateModifier extends PojoMappingModifier {
 
-            public TestTwoNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestTwoNonCollapsedAggregateModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
                 List<MappingCube> result = new ArrayList<>();
@@ -3014,6 +3024,8 @@ class TestAggregationManager extends BatchTestCase {
                     .build());
                 return result;
             }
+  
+        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

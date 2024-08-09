@@ -14,20 +14,13 @@
 
 package mondrian.test.clearview;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberPropertyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+public class MiscTestModifier extends PojoMappingModifier {
 
-public class MiscTestModifier extends RDbMappingSchemaModifier {
-
-    public MiscTestModifier(MappingSchema mappingSchema) {
-        super(mappingSchema);
+    public MiscTestModifier(CatalogMapping catalog) {
+        super(catalog);
     }
 
     /*
@@ -38,6 +31,8 @@ public class MiscTestModifier extends RDbMappingSchemaModifier {
         <CalculatedMemberProperty name='FORMAT_STRING' value='####0.0%'/>
       </CalculatedMember>
      */
+    /* TODO: DENIS MAPPING-MODIFIER
+    
     protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
         List<MappingCalculatedMember> result = new ArrayList<>();
         result.addAll(super.cubeCalculatedMembers(cube));
@@ -56,4 +51,5 @@ public class MiscTestModifier extends RDbMappingSchemaModifier {
         }
         return result;
     }
+    */
 }
