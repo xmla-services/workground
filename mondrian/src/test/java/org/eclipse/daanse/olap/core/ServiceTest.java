@@ -32,8 +32,8 @@ import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.mdx.parser.api.MdxParserProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
+import org.eclipse.daanse.rolap.mapping.api.CatalogMappingSupplier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +75,7 @@ class ServiceTest {
 //    QueryProvider queryProvider;
 //
 	@Mock
-	DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
+	CatalogMappingSupplier catalogMappingSupplier;
 
 	@Mock
 	ExpressionCompilerFactory expressionCompilerFactory;
@@ -84,7 +84,7 @@ class ServiceTest {
 	MdxParserProvider mdxParserProvider;
 	
 	@Mock
-	MappingSchema mappingSchema;
+	CatalogMapping catalogMapping;
 
 	@BeforeEach
 	public void setup() throws SQLException {
@@ -98,8 +98,8 @@ class ServiceTest {
 
         when(dataSource.getConnection()).thenReturn(connection);
         when(dialectResolver.resolve((DataSource)any())).thenReturn(Optional.of(dialect));
-        when(databaseMappingSchemaProvider.get()).thenReturn(mappingSchema);
-        when(mappingSchema.name()).thenReturn("schemaName");
+        when(catalogMappingSupplier.get()).thenReturn(catalogMapping);
+        when(catalogMapping.getName()).thenReturn("schemaName");
 
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
@@ -112,7 +112,7 @@ class ServiceTest {
         bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("dr", "2"));
         bc.registerService(StatisticsProvider.class, statisticsProvider, dictionaryOf("sp", "3"));
         bc.registerService(ExpressionCompilerFactory.class, expressionCompilerFactory, dictionaryOf("ecf", "1"));
-        bc.registerService(DatabaseMappingSchemaProvider.class, databaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));
+        bc.registerService(CatalogMappingSupplier.class, catalogMappingSupplier, dictionaryOf("dbmsp", "1"));
         bc.registerService(MdxParserProvider.class, mdxParserProvider, dictionaryOf("parser", "1"));
         //        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
 
@@ -148,7 +148,7 @@ class ServiceTest {
             assertThat(x.getDialect()).isEqualTo(dialect);
             //assertThat(x.getStatisticsProvider()).isEqualTo(statisticsProvider);
             assertThat(x.getExpressionCompilerFactory()).isEqualTo(expressionCompilerFactory);
-            assertThat(x.getDatabaseMappingSchemaProviders()).hasSize(1).contains(databaseMappingSchemaProvider);
+            assertThat(x.getCatalogMapping()).isEqualTo(catalogMapping);
             //            assertThat(x.getQueryProvider()).isEqualTo(queryProvider);
         });
 

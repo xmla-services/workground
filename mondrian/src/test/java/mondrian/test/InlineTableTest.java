@@ -57,8 +57,8 @@ class InlineTableTest {
         final String cubeName = "Sales_inline";
         class TestInlineTableModifier extends RDbMappingSchemaModifier {
 
-            public TestInlineTableModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInlineTableModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -209,8 +209,8 @@ class InlineTableTest {
 
         class TestInlineTableInSharedDimModifier extends RDbMappingSchemaModifier {
 
-            public TestInlineTableInSharedDimModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInlineTableInSharedDimModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
                 List<MappingPrivateDimension> result = new ArrayList<>();
@@ -380,8 +380,8 @@ class InlineTableTest {
         final String cubeName = "Sales_inline_snowflake";
         class TestInlineTableSnowflakeModifier extends RDbMappingSchemaModifier {
 
-            public TestInlineTableSnowflakeModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInlineTableSnowflakeModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -582,8 +582,8 @@ class InlineTableTest {
         final String cubeName = "Sales_Inline_Date";
         class TestInlineTableDateModifier extends RDbMappingSchemaModifier {
 
-            public TestInlineTableDateModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInlineTableDateModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {

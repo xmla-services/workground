@@ -14,28 +14,15 @@
 
 package mondrian.test.clearview;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ColumnDefRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.InlineTableRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RowRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ValueRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 
 public class HangerDimensionTestModifiers {
 
-    public static class HangerDimensionTestModifier1 extends RDbMappingSchemaModifier {
+    public static class HangerDimensionTestModifier1 extends PojoMappingModifier {
 
-        public HangerDimensionTestModifier1(MappingSchema mappingSchema) {
-            super(mappingSchema);
+        public HangerDimensionTestModifier1(CatalogMapping catalog) {
+            super(catalog);
         }
 
         /*
@@ -56,8 +43,9 @@ public class HangerDimensionTestModifiers {
 </Dimension>
 
          */
+        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
+ protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
             List<MappingCubeDimension> result = new ArrayList<>();
             result.addAll(super.cubeDimensionUsageOrDimensions(cube)
                 .stream().filter(d -> !"Le System-Trend Hanger".equals(d.name())).toList());
@@ -99,6 +87,6 @@ public class HangerDimensionTestModifiers {
                 .build());
             return result;
         }
+         */
     }
-
 }

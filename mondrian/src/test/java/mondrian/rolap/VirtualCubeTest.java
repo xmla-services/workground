@@ -18,7 +18,6 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -28,24 +27,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberPropertyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CalculatedMemberRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.FormulaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -85,12 +68,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNoTimeDimension(Context context) {
-        class TestNoTimeDimensionModifier extends RDbMappingSchemaModifier {
+        class TestNoTimeDimensionModifier extends PojoMappingModifier {
 
-            public TestNoTimeDimensionModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNoTimeDimensionModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -115,6 +98,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+   */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -138,12 +123,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCalculatedMeasureAsDefaultMeasureInVC(Context context) {
-        class TestCalculatedMeasureAsDefaultMeasureInVCModifier extends RDbMappingSchemaModifier {
+        class TestCalculatedMeasureAsDefaultMeasureInVCModifier extends PojoMappingModifier {
 
-            public TestCalculatedMeasureAsDefaultMeasureInVCModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCalculatedMeasureAsDefaultMeasureInVCModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -169,6 +154,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+       
+        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -199,12 +186,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureInVCForIncorrectMeasureName(Context context) {
-        class TestDefaultMeasureInVCForIncorrectMeasureNameModifier extends RDbMappingSchemaModifier {
+        class TestDefaultMeasureInVCForIncorrectMeasureNameModifier extends PojoMappingModifier {
 
-            public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -235,6 +222,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+            
+            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -266,12 +255,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeMeasureInvalidCubeName(Context context) {
-        class TestVirtualCubeMeasureInvalidCubeNameModifier extends RDbMappingSchemaModifier {
+        class TestVirtualCubeMeasureInvalidCubeNameModifier extends PojoMappingModifier {
 
-            public TestVirtualCubeMeasureInvalidCubeNameModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestVirtualCubeMeasureInvalidCubeNameModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -297,6 +286,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+            
+            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -324,12 +315,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureInVCForCaseSensitivity(Context context) {
-        class TestDefaultMeasureInVCForCaseSensitivityModifier extends RDbMappingSchemaModifier {
+        class TestDefaultMeasureInVCForCaseSensitivityModifier extends PojoMappingModifier {
 
-            public TestDefaultMeasureInVCForCaseSensitivityModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDefaultMeasureInVCForCaseSensitivityModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -359,6 +350,9 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+       
+        */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -401,12 +395,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testWithTimeDimension(Context context) {
-        class TestWithTimeDimensionModifier extends RDbMappingSchemaModifier {
+        class TestWithTimeDimensionModifier extends PojoMappingModifier {
 
-            public TestWithTimeDimensionModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestWithTimeDimensionModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -434,6 +428,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+     */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -540,11 +536,13 @@ class VirtualCubeTest extends BatchTestCase {
      *     Warehouse dimension is USA
      */
     private void createContextWithNonDefaultAllMember(Context context) {
-        class CreateContextWithNonDefaultAllMemberModifier extends RDbMappingSchemaModifier {
+        class CreateContextWithNonDefaultAllMemberModifier extends PojoMappingModifier {
 
-            public CreateContextWithNonDefaultAllMemberModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public CreateContextWithNonDefaultAllMemberModifier(CatalogMapping catalog) {
+                super(catalog);
             }
+            
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> schemaCubes(MappingSchema schema) {
                 List<MappingCube> result = new ArrayList<>();
@@ -688,6 +686,9 @@ class VirtualCubeTest extends BatchTestCase {
 
                 return result;
             }
+ 
+        */
+        
         }
 
         /*
@@ -743,12 +744,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberVisibility(Context context) {
-        class TestMemberVisibilityModifier extends RDbMappingSchemaModifier {
+        class TestMemberVisibilityModifier extends PojoMappingModifier {
 
-            public TestMemberVisibilityModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMemberVisibilityModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -808,6 +809,9 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+    */
+        
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -894,11 +898,13 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFormatStringExpressionCubeNoCache(Context context) {
-        class TestFormatStringExpressionCubeNoCacheModifier extends RDbMappingSchemaModifier {
+        class TestFormatStringExpressionCubeNoCacheModifier extends PojoMappingModifier {
 
-            public TestFormatStringExpressionCubeNoCacheModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestFormatStringExpressionCubeNoCacheModifier(CatalogMapping catalog) {
+                super(catalog);
             }
+            
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> schemaCubes(MappingSchema schema) {
                 List<MappingCube> result = new ArrayList<>();
@@ -984,6 +990,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+    */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1429,12 +1437,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testOrdinalColumn(Context context) {
-        class TestOrdinalColumnModifier extends RDbMappingSchemaModifier {
+        class TestOrdinalColumnModifier extends PojoMappingModifier {
 
-            public TestOrdinalColumnModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestOrdinalColumnModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -1459,6 +1467,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+            
+            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1509,12 +1519,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMeasureProperty(Context context) {
-        class TestDefaultMeasurePropertyModifier extends RDbMappingSchemaModifier {
+        class TestDefaultMeasurePropertyModifier extends PojoMappingModifier {
 
-            public TestDefaultMeasurePropertyModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDefaultMeasurePropertyModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -1545,6 +1555,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+      
+        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1705,12 +1717,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian322(Context context) {
-        class TestBugMondrian322Modifier extends RDbMappingSchemaModifier {
+        class TestBugMondrian322Modifier extends PojoMappingModifier {
 
-            public TestBugMondrian322Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian322Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -1745,6 +1757,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+      */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1789,12 +1803,12 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian322a(Context context) {
-        class TestBugMondrian322aModifier extends RDbMappingSchemaModifier {
+        class TestBugMondrian322aModifier extends PojoMappingModifier {
 
-            public TestBugMondrian322aModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian322aModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
                 List<MappingVirtualCube> result = new ArrayList<>();
@@ -1829,6 +1843,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+    */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1866,11 +1882,13 @@ class VirtualCubeTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeMeasureCaption(Context context) {
-        class TestVirtualCubeMeasureCaptionModifier extends RDbMappingSchemaModifier {
+        class TestVirtualCubeMeasureCaptionModifier extends PojoMappingModifier {
 
-            public TestVirtualCubeMeasureCaptionModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestVirtualCubeMeasureCaptionModifier(CatalogMapping catalog) {
+                super(catalog);
             }
+            
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCube> schemaCubes(MappingSchema schema) {
                 List<MappingCube> result = new ArrayList<>();
@@ -1932,6 +1950,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
+    */
+        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

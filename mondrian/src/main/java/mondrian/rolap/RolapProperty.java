@@ -11,23 +11,23 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Property;
-import mondrian.spi.PropertyFormatter;
+import static mondrian.olap.Util.makeFqName;
+
+import java.text.MessageFormat;
+import java.util.Locale;
+
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.rolap.mapping.api.model.SQLExpressionMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-
-import static mondrian.olap.Util.makeFqName;
+import mondrian.olap.Property;
+import mondrian.spi.PropertyFormatter;
 
 /**
  * <code>RolapProperty</code> is the definition of a member property.

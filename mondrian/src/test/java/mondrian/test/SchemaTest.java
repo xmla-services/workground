@@ -234,8 +234,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSolveOrderInCalculatedMember(Context context) {
         class TestSolveOrderInCalculatedMemberModifier extends RDbMappingSchemaModifier{
-            public TestSolveOrderInCalculatedMemberModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSolveOrderInCalculatedMemberModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
@@ -305,8 +305,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyDefaultMember(Context context) {
         class TestHierarchyDefaultMemberModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyDefaultMemberModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyDefaultMemberModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -371,8 +371,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDefaultMemberName(Context context) {
         class TestDefaultMemberNameModifier extends RDbMappingSchemaModifier {
-            public TestDefaultMemberNameModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDefaultMemberNameModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -457,8 +457,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyAbbreviatedDefaultMember(Context context) {
         class TestHierarchyAbbreviatedDefaultMemberModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyAbbreviatedDefaultMemberModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyAbbreviatedDefaultMemberModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -520,8 +520,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNoLevelsFails(Context context) {
         class TestHierarchyNoLevelsFailsModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyNoLevelsFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyNoLevelsFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -565,8 +565,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyNonUniqueLevelsFails(Context context) {
         class TestHierarchyNonUniqueLevelsFailsModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyNonUniqueLevelsFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyNonUniqueLevelsFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -628,8 +628,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCountMeasure(Context context) {
         class TestCountMeasureModifier extends RDbMappingSchemaModifier {
-            public TestCountMeasureModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCountMeasureModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingMeasure> cubeMeasures(MappingCube cube) {
@@ -683,8 +683,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyTableNotFound(Context context) {
         class TestHierarchyTableNotFoundModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyTableNotFoundModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyTableNotFoundModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -738,8 +738,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPrimaryKeyTableNotFound(Context context) {
         class TestPrimaryKeyTableNotFoundModifier extends RDbMappingSchemaModifier {
-            public TestPrimaryKeyTableNotFoundModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestPrimaryKeyTableNotFoundModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -791,8 +791,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableNotFound(Context context) {
         class TestLevelTableNotFoundModifier extends RDbMappingSchemaModifier {
-            public TestLevelTableNotFoundModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLevelTableNotFoundModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -845,8 +845,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testHierarchyBadDefaultMember(Context context) {
         class TestHierarchyBadDefaultMemberModifier extends RDbMappingSchemaModifier {
-            public TestHierarchyBadDefaultMemberModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestHierarchyBadDefaultMemberModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -911,8 +911,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAlias(Context context) {
         class TestDuplicateTableAliasModifier extends RDbMappingSchemaModifier {
-            public TestDuplicateTableAliasModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDuplicateTableAliasModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -974,8 +974,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDuplicateTableAliasSameForeignKey(Context context) {
         class TestDuplicateTableAliasSameForeignKeyModifier extends RDbMappingSchemaModifier {
-            public TestDuplicateTableAliasSameForeignKeyModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDuplicateTableAliasSameForeignKeyModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -1042,8 +1042,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTable(Context context) {
         class TestDimensionsShareTableModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareTableModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareTableModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -1246,8 +1246,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableNativeNonEmptyCrossJoin(Context context) {
         class TestDimensionsShareTableNativeNonEmptyCrossJoinModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareTableNativeNonEmptyCrossJoinModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareTableNativeNonEmptyCrossJoinModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -1310,8 +1310,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareTableSameForeignKeys(Context context) {
         class TestDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareTableSameForeignKeysModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -1409,8 +1409,8 @@ class SchemaTest {
             return;
         }
         class TestSnowflakeHierarchyValidationNotNeededModifier extends RDbMappingSchemaModifier{
-            public TestSnowflakeHierarchyValidationNotNeededModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSnowflakeHierarchyValidationNotNeededModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -1650,8 +1650,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testSnowflakeHierarchyValidationNotNeeded2(Context context) {
         class TestSnowflakeHierarchyValidationNotNeeded2Modifier extends RDbMappingSchemaModifier {
-            public TestSnowflakeHierarchyValidationNotNeeded2Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestSnowflakeHierarchyValidationNotNeeded2Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -1892,8 +1892,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTable(Context context) {
         class TestDimensionsShareJoinTableModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareJoinTableModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareJoinTableModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2087,8 +2087,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableOneAlias(Context context) {
         class TestDimensionsShareJoinTableOneAliasModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareJoinTableOneAliasModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareJoinTableOneAliasModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2286,8 +2286,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionsShareJoinTableTwoAliases(Context context) {
         class TestDimensionsShareJoinTableTwoAliasesModifier extends RDbMappingSchemaModifier {
-            public TestDimensionsShareJoinTableTwoAliasesModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionsShareJoinTableTwoAliasesModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2485,8 +2485,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTable(Context context) {
         class TestTwoAliasesDimensionsShareTableModifier extends RDbMappingSchemaModifier {
-            public TestTwoAliasesDimensionsShareTableModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestTwoAliasesDimensionsShareTableModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2635,8 +2635,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoAliasesDimensionsShareTableSameForeignKeys(Context context) {
         class TestTwoAliasesDimensionsShareTableSameForeignKeysModifier extends RDbMappingSchemaModifier {
-            public TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestTwoAliasesDimensionsShareTableSameForeignKeysModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2784,8 +2784,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionUsages(Context context) {
         class TestMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
-            public TestMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMultipleDimensionUsagesModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2882,8 +2882,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMultipleDimensionHierarchyCaptionUsages(Context context) {
         class TestMultipleDimensionHierarchyCaptionUsagesModifier extends RDbMappingSchemaModifier {
-            public TestMultipleDimensionHierarchyCaptionUsagesModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMultipleDimensionHierarchyCaptionUsagesModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -2990,8 +2990,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionCreation(Context context) {
         class TestDimensionCreationModifier extends RDbMappingSchemaModifier {
-            public TestDimensionCreationModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionCreationModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3069,8 +3069,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDimensionUsageLevel(Context context) {
         class TestDimensionUsageLevelModifier extends RDbMappingSchemaModifier {
-            public TestDimensionUsageLevelModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDimensionUsageLevelModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3173,8 +3173,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberMultipleDimensionUsages(Context context) {
         class TestAllMemberMultipleDimensionUsagesModifier extends RDbMappingSchemaModifier {
-            public TestAllMemberMultipleDimensionUsagesModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestAllMemberMultipleDimensionUsagesModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3287,8 +3287,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonAliasedDimensionUsage(Context context) {
         class TestNonAliasedDimensionUsageModifier extends RDbMappingSchemaModifier {
-            public TestNonAliasedDimensionUsageModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNonAliasedDimensionUsageModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3377,8 +3377,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewDegenerateDims(Context context) {
         class TestViewDegenerateDimsModifier extends RDbMappingSchemaModifier {
-            public TestViewDegenerateDimsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestViewDegenerateDimsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3531,8 +3531,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable(Context context) {
         class TestViewFactTableModifier extends RDbMappingSchemaModifier {
-            public TestViewFactTableModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestViewFactTableModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3695,8 +3695,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testViewFactTable2(Context context) {
         class TestViewFactTable2Modifier extends RDbMappingSchemaModifier {
-            public TestViewFactTable2Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestViewFactTable2Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -3818,8 +3818,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testDeprecatedDistinctCountAggregator(Context context) {
         class TestDeprecatedDistinctCountAggregatorModifier extends RDbMappingSchemaModifier{
-            public TestDeprecatedDistinctCountAggregatorModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestDeprecatedDistinctCountAggregatorModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingMeasure> cubeMeasures(MappingCube cube) {
@@ -3899,8 +3899,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidAggregator(Context context) {
         class TestInvalidAggregatorModifier extends RDbMappingSchemaModifier{
-            public TestInvalidAggregatorModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInvalidAggregatorModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
@@ -3966,8 +3966,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages(Context context) {
         class TestUnknownUsagesModifier extends RDbMappingSchemaModifier {
-            public TestUnknownUsagesModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestUnknownUsagesModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected MappingSchema modifyMappingSchema(MappingSchema schema) {
@@ -4154,8 +4154,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnknownUsages1(Context context) {
         class TestUnknownUsages1Modifier extends RDbMappingSchemaModifier {
-            public TestUnknownUsages1Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestUnknownUsages1Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected MappingSchema modifyMappingSchema(MappingSchema schema) {
@@ -4395,8 +4395,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatter(Context context) {
         class TestPropertyFormatterModifier extends RDbMappingSchemaModifier {
-            public TestPropertyFormatterModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestPropertyFormatterModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -4486,8 +4486,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian233(Context context) {
         class TestBugMondrian233Modifier extends RDbMappingSchemaModifier {
-            public TestBugMondrian233Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian233Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4556,8 +4556,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBugMondrian303(Context context) {
         class TestBugMondrian303Modifier extends RDbMappingSchemaModifier {
-            public TestBugMondrian303Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian303Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -4681,8 +4681,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionOneMeasure(Context context) {
         class TestCubeWithOneDimensionOneMeasureModifier extends RDbMappingSchemaModifier {
-            public TestCubeWithOneDimensionOneMeasureModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeWithOneDimensionOneMeasureModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4760,8 +4760,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneDimensionUsageOneMeasure(Context context) {
         class TestCubeWithOneDimensionUsageOneMeasureModifier extends RDbMappingSchemaModifier {
-            public TestCubeWithOneDimensionUsageOneMeasureModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeWithOneDimensionUsageOneMeasureModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4824,8 +4824,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeHasFact(Context context) {
         class TestCubeHasFactModifier extends RDbMappingSchemaModifier {
-            public TestCubeHasFactModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeHasFactModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4865,8 +4865,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeCaption(Context context) throws SQLException {
         class TestCubeCaptionModifier extends RDbMappingSchemaModifier {
-            public TestCubeCaptionModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeCaptionModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4931,8 +4931,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoDimensions(Context context) {
         class TestCubeWithNoDimensionsModifier extends RDbMappingSchemaModifier {
-            public TestCubeWithNoDimensionsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeWithNoDimensionsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -4971,8 +4971,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithNoMeasuresFails(Context context) {
         class TestCubeWithNoMeasuresFailsModifier extends RDbMappingSchemaModifier {
-            public TestCubeWithNoMeasuresFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeWithNoMeasuresFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -5045,8 +5045,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCubeWithOneCalcMeasure(Context context) {
         class TestCubeWithOneCalcMeasureModifier extends RDbMappingSchemaModifier {
-            public TestCubeWithOneCalcMeasureModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCubeWithOneCalcMeasureModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -5136,8 +5136,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCalcMemberInCube(Context context) {
         class TestCalcMemberInCubeModifier1 extends RDbMappingSchemaModifier {
-            public TestCalcMemberInCubeModifier1(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCalcMemberInCubeModifier1(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
@@ -5662,8 +5662,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelTableAttributeAsView(Context context) {
         class TestLevelTableAttributeAsViewModifier extends RDbMappingSchemaModifier {
-            public TestLevelTableAttributeAsViewModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLevelTableAttributeAsViewModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -5792,8 +5792,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidSchemaAccess(Context context) {
         class TestInvalidSchemaAccess extends RDbMappingSchemaModifier {
-            public TestInvalidSchemaAccess(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInvalidSchemaAccess(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingRole> schemaRoles(MappingSchema schema) {
@@ -5825,8 +5825,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAllMemberNoStringReplace(Context context) {
         class TestAllMemberNoStringReplaceModifier extends RDbMappingSchemaModifier {
-            public TestAllMemberNoStringReplaceModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestAllMemberNoStringReplaceModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -5895,8 +5895,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRole(Context context) {
         class TestUnionRoleModifier extends RDbMappingSchemaModifier {
-            public TestUnionRoleModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestUnionRoleModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingRole> schemaRoles(MappingSchema schema) {
@@ -5963,8 +5963,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRoleContainsGrants(Context context) {
         class TestUnionRoleContainsGrantsModifier extends RDbMappingSchemaModifier {
-            public TestUnionRoleContainsGrantsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestUnionRoleContainsGrantsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingRole> schemaRoles(MappingSchema schema) {
@@ -6010,8 +6010,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUnionRoleIllegalForwardRef(Context context) {
         class TestUnionRoleIllegalForwardRefModifier extends RDbMappingSchemaModifier {
-            public TestUnionRoleIllegalForwardRefModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestUnionRoleIllegalForwardRefModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingRole> schemaRoles(MappingSchema schema) {
@@ -6058,8 +6058,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchema(Context context) {
         class TestVirtualCubeNamedSetSupportInSchemaModifier extends RDbMappingSchemaModifier {
-            public TestVirtualCubeNamedSetSupportInSchemaModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestVirtualCubeNamedSetSupportInSchemaModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingNamedSet> schemaNamedSets(MappingSchema schema) {
@@ -6119,8 +6119,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testVirtualCubeNamedSetSupportInSchemaError(Context context) {
         class TestVirtualCubeNamedSetSupportInSchemaErrorModifier extends RDbMappingSchemaModifier {
-            public TestVirtualCubeNamedSetSupportInSchemaErrorModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestVirtualCubeNamedSetSupportInSchemaErrorModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingNamedSet> virtualCubeNamedSet(MappingVirtualCube virtualCube) {
@@ -6177,8 +6177,8 @@ class SchemaTest {
     void _testValidatorFindsNumericLevel(Context context) {
 
         class TestValidatorFindsNumericLevelModifier extends RDbMappingSchemaModifier {
-            public TestValidatorFindsNumericLevelModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestValidatorFindsNumericLevelModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6229,8 +6229,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testInvalidRoleError(Context context) {
         class TestInvalidRoleErrorModifier extends RDbMappingSchemaModifier {
-            public TestInvalidRoleErrorModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestInvalidRoleErrorModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected String schemaDefaultRole(MappingSchema schema) {
@@ -6280,8 +6280,8 @@ class SchemaTest {
             return;
         }
         class TestBinaryLevelKeyModifier extends RDbMappingSchemaModifier {
-            public TestBinaryLevelKeyModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBinaryLevelKeyModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6433,8 +6433,8 @@ class SchemaTest {
         // One of the keys is larger than Integer.MAX_VALUE (2 billion), so
         // will only work if we use long values.
         class TestLevelInternalTypeModifier extends RDbMappingSchemaModifier {
-            public TestLevelInternalTypeModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLevelInternalTypeModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6550,8 +6550,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelInternalTypeErr(Context context) {
         class TestLevelInternalTypeErrModifier extends RDbMappingSchemaModifier {
-            public TestLevelInternalTypeErrModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLevelInternalTypeErrModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6688,8 +6688,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testScdJoin(Context context) {
         class TestScdJoinModifier extends RDbMappingSchemaModifier {
-            public TestScdJoinModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestScdJoinModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6755,8 +6755,8 @@ class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void _testNonUniqueAlias(Context context) {
         class TestNonUniqueAliasModifier extends RDbMappingSchemaModifier {
-            public TestNonUniqueAliasModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNonUniqueAliasModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -6846,8 +6846,8 @@ class SchemaTest {
             return;
         }
         class TestBugMondrian482Modifier extends RDbMappingSchemaModifier {
-            public TestBugMondrian482Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian482Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCube> cubes(List<MappingCube> cubes) {
@@ -6988,8 +6988,8 @@ class SchemaTest {
     public void checkBugMondrian355(Context context, String timeHalfYear) {
     	RolapSchemaPool.instance().clear();
         class CheckBugMondrian355Modifier1 extends RDbMappingSchemaModifier {
-            public CheckBugMondrian355Modifier1(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public CheckBugMondrian355Modifier1(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -7026,8 +7026,8 @@ class SchemaTest {
             }
         }
         class CheckBugMondrian355Modifier2 extends RDbMappingSchemaModifier {
-            public CheckBugMondrian355Modifier2(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public CheckBugMondrian355Modifier2(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -7143,8 +7143,8 @@ class SchemaTest {
         final String virtualCubeName = "DescWarehouseAndSales";
         final String warehouseCubeName = "Warehouse";
         class TestCaptionDescriptionAndAnnotationModifier extends RDbMappingSchemaModifier {
-            public TestCaptionDescriptionAndAnnotationModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCaptionDescriptionAndAnnotationModifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected MappingSchema modifyMappingSchema(MappingSchema schema) {
@@ -7794,8 +7794,8 @@ class SchemaTest {
     void testCaption(Context context) {
         class TestCaptionModifier extends RDbMappingSchemaModifier {
 
-            public TestCaptionModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCaptionModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -7906,8 +7906,8 @@ class SchemaTest {
 
         class TestBugMondrian747Modifier extends RDbMappingSchemaModifier {
 
-            public TestBugMondrian747Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian747Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -8295,8 +8295,8 @@ class SchemaTest {
         }
         class TestBugMondrian463Modifier1 extends RDbMappingSchemaModifier {
 
-            public TestBugMondrian463Modifier1(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian463Modifier1(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -8422,8 +8422,8 @@ class SchemaTest {
         }
         class TestBugMondrian463Modifier2 extends RDbMappingSchemaModifier {
 
-            public TestBugMondrian463Modifier2(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian463Modifier2(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -8648,8 +8648,8 @@ class SchemaTest {
     void testLeftDeepJoinFails(Context context) {
         class TestLeftDeepJoinFailsModifier extends RDbMappingSchemaModifier {
 
-            public TestLeftDeepJoinFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestLeftDeepJoinFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -8770,8 +8770,8 @@ class SchemaTest {
     	RolapSchemaPool.instance().clear();
         class TestCaptionWithOrdinalColumnModifier extends RDbMappingSchemaModifier {
 
-            public TestCaptionWithOrdinalColumnModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCaptionWithOrdinalColumnModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -8854,8 +8854,8 @@ class SchemaTest {
     void testBugMondrian923(Context context) throws Exception {
         class TestBugMondrian923Modifier extends RDbMappingSchemaModifier {
 
-            public TestBugMondrian923Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian923Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -9509,8 +9509,8 @@ class SchemaTest {
         RolapSchemaPool.instance().clear();
         class TestNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
 
-            public TestNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNonCollapsedAggregateModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -9705,8 +9705,8 @@ class SchemaTest {
         }
         class TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier extends RDbMappingSchemaModifier {
 
-            public TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestNonCollapsedAggregateOnNonUniqueLevelFailsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -9889,8 +9889,8 @@ class SchemaTest {
         }
         class TestTwoNonCollapsedAggregateModifier extends RDbMappingSchemaModifier {
 
-            public TestTwoNonCollapsedAggregateModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestTwoNonCollapsedAggregateModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -10275,8 +10275,8 @@ class SchemaTest {
         }
         class TestCollapsedErrorModifier extends RDbMappingSchemaModifier {
 
-            public TestCollapsedErrorModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestCollapsedErrorModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -10476,8 +10476,8 @@ class SchemaTest {
 
     public void checkBugMondrian1047(Context context, int n) {
         class CheckBugMondrian1047Modifier extends RDbMappingSchemaModifier{
-            public CheckBugMondrian1047Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public CheckBugMondrian1047Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -10556,8 +10556,8 @@ class SchemaTest {
             return;
         }
         class TestBugMondrian1065Modifier extends RDbMappingSchemaModifier{
-            public TestBugMondrian1065Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMondrian1065Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
@@ -10776,8 +10776,8 @@ class SchemaTest {
         ((TestConfig)context.getConfig()).setReadAggregates(false);
         class TestMondrian1499Modifier extends RDbMappingSchemaModifier {
 
-            public TestMondrian1499Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMondrian1499Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -11145,8 +11145,8 @@ class SchemaTest {
     void testMondrian1073(Context context) throws Exception {
         class TestMondrian1073Modifier extends RDbMappingSchemaModifier {
 
-            public TestMondrian1073Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMondrian1073Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -11238,8 +11238,8 @@ class SchemaTest {
         //String rawSchema = TestContext.getRawFoodMartSchema().replace(
         class TestMultiByteSchemaReadFromFile extends RDbMappingSchemaModifier {
 
-            public TestMultiByteSchemaReadFromFile(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMultiByteSchemaReadFromFile(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override
@@ -11292,8 +11292,8 @@ class SchemaTest {
     void testBugMonrian2528(Context context) {
         class TestBugMonrian2528Modifier extends RDbMappingSchemaModifier {
 
-            public TestBugMonrian2528Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestBugMonrian2528Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
             protected List<MappingRole> schemaRoles(MappingSchema schema) {
@@ -11409,8 +11409,8 @@ class SchemaTest {
     void testMondrian1275(Context context) throws Exception {
         class TestMondrian1275Modifier extends RDbMappingSchemaModifier {
 
-            public TestMondrian1275Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMondrian1275Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
             protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
                 MappingHierarchy h1 = HierarchyRBuilder.builder()

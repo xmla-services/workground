@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -34,18 +33,7 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
-import org.eclipse.daanse.rolap.mapping.modifier.AbstractMappingModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -320,10 +308,10 @@ TestUtil.flushSchemaCache(conn);
         */
         class VerifyMemberLevelNamesIdentityOlap4jDateDimModifier extends PojoMappingModifier {
 
-            public VerifyMemberLevelNamesIdentityOlap4jDateDimModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+           public VerifyMemberLevelNamesIdentityOlap4jDateDimModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+           /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
                 List<MappingCubeDimension> result = new ArrayList<>();
@@ -369,6 +357,8 @@ TestUtil.flushSchemaCache(conn);
                 }
                 return result;
             }
+            
+            */
         }
        /*
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
@@ -421,12 +411,13 @@ TestUtil.flushSchemaCache(conn);
 
 
         //((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
-        class VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier extends RDbMappingSchemaModifier {
+        class VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier extends PojoMappingModifier {
 
-            public VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier(CatalogMapping catalog) {
+                super(catalog);
             }
 
+/* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
                 List<MappingCubeDimension> result = new ArrayList<>();
@@ -473,6 +464,7 @@ TestUtil.flushSchemaCache(conn);
                 }
                 return result;
             }
+            */
         }
         withSchema(context, VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);

@@ -19,8 +19,8 @@ import java.util.function.Function;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.TestUtil;
 
@@ -81,8 +81,10 @@ public abstract class CsvDBTestCase extends BatchTestCase {
 
     protected abstract String getFileName();
 
-    protected Function<MappingSchema, RDbMappingSchemaModifier>  getModifierFunction(){
-        return RDbMappingSchemaModifier::new;
+    protected Function<CatalogMapping, PojoMappingModifier>  getModifierFunction(){
+     
+    	//constructor notz longer public. 
+    	return PojoMappingModifier::new;
     }
 
 }

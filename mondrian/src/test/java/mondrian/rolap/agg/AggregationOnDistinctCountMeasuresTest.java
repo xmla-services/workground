@@ -40,34 +40,8 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggColumnNameRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggExcludeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggLevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggMeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.AggNameRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MemberGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -707,11 +681,12 @@ class AggregationOnDistinctCountMeasuresTest {
             + "in (('5617 Saclan Terrace', 'Arnold and Sons'), "
             + "('3377 Coachman Place', 'Jones International'))))";
 
-      class TestMultiLevelMembersNullParentsModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelMembersNullParentsModifier extends PojoMappingModifier {
 
-          public TestMultiLevelMembersNullParentsModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelMembersNullParentsModifier(CatalogMapping catalog) {
+              super(catalog);
           }
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -780,6 +755,9 @@ class AggregationOnDistinctCountMeasuresTest {
               result.addAll(super.schemaCubes(schema));
               return result;
           }
+   
+      */
+      
       }
       /*
       String baseSchema = TestUtil.getRawSchema(context);
@@ -841,11 +819,13 @@ class AggregationOnDistinctCountMeasuresTest {
         String necjSqlMySql2 =
             "select count(distinct `inventory_fact_1997`.`warehouse_cost`) as `m0` from `warehouse` as `warehouse`, `inventory_fact_1997` as `inventory_fact_1997` where `inventory_fact_1997`.`warehouse_id` = `warehouse`.`warehouse_id` and ((`warehouse`.`warehouse_name` = 'Freeman And Co' and `warehouse`.`wa_address1` = '234 West Covina Pkwy' and `warehouse`.`warehouse_fax` is null) or (`warehouse`.`warehouse_name` = 'Jones International' and `warehouse`.`wa_address1` = '3377 Coachman Place' and `warehouse`.`warehouse_fax` = '971-555-6213'))";
 
-      class TestMultiLevelMembersMixedNullNonNullParentModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelMembersMixedNullNonNullParentModifier extends PojoMappingModifier {
 
-          public TestMultiLevelMembersMixedNullNonNullParentModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelMembersMixedNullNonNullParentModifier(CatalogMapping c) {
+              super(c);
           }
+          
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -909,6 +889,8 @@ class AggregationOnDistinctCountMeasuresTest {
                   .build());
               return result;
           }
+  
+    */  
       }
       /*
       String baseSchema = TestUtil.getRawSchema(context);
@@ -973,11 +955,14 @@ class AggregationOnDistinctCountMeasuresTest {
             "select count(distinct `inventory_fact_1997`.`warehouse_cost`) as `m0` from `warehouse` as `warehouse`, `inventory_fact_1997` as `inventory_fact_1997` where `inventory_fact_1997`.`warehouse_id` = `warehouse`.`warehouse_id` and ((`warehouse`.`warehouse_fax` is null and `warehouse`.`wa_address2` is null and `warehouse`.`wa_address3` is null) or (`warehouse`.`warehouse_fax` = '971-555-6213' and `warehouse`.`wa_address2` is null and `warehouse`.`wa_address3` is null))";
 
 
-      class TestMultiLevelsMixedNullNonNullChildModifier extends RDbMappingSchemaModifier {
+      class TestMultiLevelsMixedNullNonNullChildModifier extends PojoMappingModifier {
 
-          public TestMultiLevelsMixedNullNonNullChildModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMultiLevelsMixedNullNonNullChildModifier(CatalogMapping c) {
+              super(c);
           }
+          
+          /* TODO: DENIS MAPPING-MODIFIER
+          
           @Override
           protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
               List<MappingPrivateDimension> result = new ArrayList<>();
@@ -1041,6 +1026,9 @@ class AggregationOnDistinctCountMeasuresTest {
                   .build());
               return result;
           }
+   
+      */
+      
       }
       /*
       String baseSchema = TestUtil.getRawSchema(context);
@@ -1792,12 +1780,12 @@ class AggregationOnDistinctCountMeasuresTest {
   void testMondrian906(Context context) {
       prepareContext(context);
 
-      class TestMondrian906Modifier extends RDbMappingSchemaModifier {
+      class TestMondrian906Modifier extends PojoMappingModifier {
 
-          public TestMondrian906Modifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestMondrian906Modifier(CatalogMapping c) {
+              super(c);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingRole> schemaRoles(MappingSchema schema) {
               List<MappingRole> result = new ArrayList<>();
@@ -1836,6 +1824,9 @@ class AggregationOnDistinctCountMeasuresTest {
 
               return result;
           }
+   
+      */
+      
       }
 
 
@@ -2044,12 +2035,12 @@ class AggregationOnDistinctCountMeasuresTest {
         // should skip aggregate table, cannot aggregate
         ((TestConfig)context.getConfig()).setUseAggregates(true);
       ((TestConfig)context.getConfig()).setReadAggregates(true);
-      class TestDistinctCountAggMeasureModifier extends RDbMappingSchemaModifier {
+      class TestDistinctCountAggMeasureModifier extends PojoMappingModifier {
 
-          public TestDistinctCountAggMeasureModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestDistinctCountAggMeasureModifier(CatalogMapping c) {
+              super(c);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
               return SchemaRBuilder.builder()
@@ -2181,7 +2172,7 @@ class AggregationOnDistinctCountMeasuresTest {
                   ))
                   .build();
           }
-
+*/
       }
       withSchema(context, TestDistinctCountAggMeasureModifier::new);
         /*

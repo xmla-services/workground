@@ -336,20 +336,20 @@
 
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.api</artifactId>
+			<artifactId>org.eclipse.daanse.rolap.mapping.api</artifactId>
 			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record</artifactId>
+			<artifactId>org.eclipse.daanse.rolap.mapping.instance.complex.foodmart</artifactId>
 			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>
+			<artifactId>org.eclipse.daanse.rolap.mapping.instance.complex.steelwheels</artifactId>
 			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
@@ -357,11 +357,21 @@
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>
-				org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.record
+				org.eclipse.daanse.rolap.mapping.instance.complex.expressivenames
 			</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
+
+
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.rolap.mapping.modifier</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -399,6 +409,9 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
+    
+    
+    
 
   </dependencies>
 	<build>

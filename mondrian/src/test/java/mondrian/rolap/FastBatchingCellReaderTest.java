@@ -35,16 +35,8 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.Statement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.ExpressionViewRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SQLRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SqlSelectQueryRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -999,12 +991,12 @@ class FastBatchingCellReaderTest extends BatchTestCase{
             + "    [Measures].[Count All of Warehouses (Large Independent)],"
             + "    [Measures].[Count Distinct Store+Warehouse]," + "    [Measures].[Count All Store+Warehouse],"
             + "    [Measures].[Store Count]} on columns " + "from [Warehouse2]";
-      class TestLoadDistinctSqlMeasureModifier extends RDbMappingSchemaModifier {
+      class TestLoadDistinctSqlMeasureModifier extends PojoMappingModifier {
 
-          public TestLoadDistinctSqlMeasureModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestLoadDistinctSqlMeasureModifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
@@ -1101,6 +1093,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
                   .build());
               return result;
           }
+  */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1545,12 +1538,12 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     // tests that Aggregate( <set>, <count-distinct measure>) aggregates
     // the correct measure when a *different* count-distinct measure is
     // in context (MONDRIAN-2128)
-      class TestCountDistinctAggWithOtherCountDistinctInContextModifier extends RDbMappingSchemaModifier {
+      class TestCountDistinctAggWithOtherCountDistinctInContextModifier extends PojoMappingModifier {
 
-          public TestCountDistinctAggWithOtherCountDistinctInContextModifier(MappingSchema mappingSchema) {
-              super(mappingSchema);
+          public TestCountDistinctAggWithOtherCountDistinctInContextModifier(CatalogMapping catalog) {
+              super(catalog);
           }
-
+          /* TODO: DENIS MAPPING-MODIFIER
           @Override
           protected List<MappingCube> cubes(List<MappingCube> cubes) {
               List<MappingCube> result = new ArrayList<>();
@@ -1597,6 +1590,8 @@ class FastBatchingCellReaderTest extends BatchTestCase{
                   .build());
               return result;
           }
+     
+      */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);

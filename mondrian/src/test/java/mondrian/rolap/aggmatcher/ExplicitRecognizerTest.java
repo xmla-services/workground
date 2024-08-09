@@ -969,8 +969,8 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 return monthCaptionCol;
             }
 
-            public ExplicitRecognizerTestModifierInner(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public ExplicitRecognizerTestModifierInner(CatalogMapping catalog) {
+                super(catalog);
             }
 
             @Override

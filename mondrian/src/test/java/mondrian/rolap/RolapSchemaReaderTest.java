@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.hierarchyName;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,15 +29,8 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.RoleRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaGrantRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
@@ -164,12 +156,12 @@ class RolapSchemaReaderTest {
             hierarchyName("Time", "Weekly");
         final String timeTime =
             hierarchyName("Time", "Time");
-        class TestGetCubeDimensionsModifier extends RDbMappingSchemaModifier {
+        class TestGetCubeDimensionsModifier extends PojoMappingModifier {
 
-            public TestGetCubeDimensionsModifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestGetCubeDimensionsModifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
             protected List<MappingRole> roles(List<MappingRole> roles) {
                 List<MappingRole> result = new ArrayList<>();
@@ -206,6 +198,8 @@ class RolapSchemaReaderTest {
                     .build());
                 return result;
             }
+   
+       */ 
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

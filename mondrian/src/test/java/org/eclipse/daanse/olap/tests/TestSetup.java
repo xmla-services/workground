@@ -2,7 +2,6 @@ package org.eclipse.daanse.olap.tests;
 
 import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.core.BasicContext;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record.FoodMartRecordDbMappingSchemaProvider;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.Property.TemplateArgument;
 import org.osgi.test.common.annotation.Property.ValueSource;
@@ -38,8 +37,8 @@ public class TestSetup {
     @interface BasicContextNoReferences {
     }
 
-    @WithFactoryConfiguration(factoryPid = FoodMartRecordDbMappingSchemaProvider.PID, location = "?", properties = {
-            @Property(key = "test.exec", source = ValueSource.TestUniqueId), })
+//    @WithFactoryConfiguration(factoryPid = FoodMartRecordDbMappingSchemaProvider.PID, location = "?", properties = {
+//            @Property(key = "test.exec", source = ValueSource.TestUniqueId), })
     @interface WithFoodMartSchemaRecord {
     }
     

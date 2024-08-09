@@ -10,22 +10,9 @@ package mondrian.olap.fun;
 
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.modifier.record.RDbMappingSchemaModifier;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.modifier.PojoMappingModifier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -355,14 +342,15 @@ class CachedExistsTest{
 	};
 		((BaseContext) context).update(p);
     */
-        class TestMondrian2704Modifier extends RDbMappingSchemaModifier {
+        class TestMondrian2704Modifier extends PojoMappingModifier {
 
-            public TestMondrian2704Modifier(MappingSchema mappingSchema) {
-                super(mappingSchema);
+            public TestMondrian2704Modifier(CatalogMapping catalog) {
+                super(catalog);
             }
-
+            
+            /* TODO: DENIS MAPPING-MODIFIER
             @Override
-            protected List<MappingCube> schemaCubes(MappingSchema schema) {
+            protected List<CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<MappingCube> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
                 result.add(CubeRBuilder.builder()
@@ -432,7 +420,7 @@ class CachedExistsTest{
                     ))
                     .build());
                 return result;
-            }
+            }*/
         }
         withSchema(context, TestMondrian2704Modifier::new);
 
