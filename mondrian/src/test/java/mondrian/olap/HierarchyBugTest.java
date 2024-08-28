@@ -44,6 +44,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TimeDimensionMappingImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -363,54 +364,6 @@ TestUtil.flushSchemaCache(conn);
         	   }
                return result;
            }
-           /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
-                List<MappingCubeDimension> result = new ArrayList<>();
-                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
-                if ("Sales".equals(cube.name())) {
-
-                    MappingCubeDimension dimension = PrivateDimensionRBuilder
-                        .builder()
-                        .name("Date")
-                        .type(DimensionTypeEnum.TIME_DIMENSION)
-                        .foreignKey("time_id")
-                        .hierarchies(List.of(
-                            HierarchyRBuilder.builder()
-                                .hasAll(false)
-                                .primaryKey("time_id")
-                                .relation(new TableR("time_by_day"))
-                                .levels(List.of(
-                                    LevelRBuilder.builder()
-                                        .name("Year")
-                                        .column("the_year")
-                                        .type(TypeEnum.NUMERIC)
-                                        .uniqueMembers(true)
-                                        .levelType(LevelTypeEnum.TIME_YEARS)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Quarter")
-                                        .column("quarter")
-                                        .uniqueMembers(false)
-                                        .levelType(LevelTypeEnum.TIME_QUARTERS)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Month")
-                                        .column("month_of_year")
-                                        .uniqueMembers(false)
-                                        .type(TypeEnum.NUMERIC)
-                                        .levelType(LevelTypeEnum.TIME_MONTHS)
-                                        .build()
-                                ))
-                                .build()
-                        ))
-                        .build();
-                    result.add(dimension);
-                }
-                return result;
-            }
-            
-            */
         }
        /*
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
@@ -469,54 +422,56 @@ TestUtil.flushSchemaCache(conn);
                 super(catalog);
             }
 
-/* TODO: DENIS MAPPING-MODIFIER
             @Override
-            protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
-                List<MappingCubeDimension> result = new ArrayList<>();
-                result.addAll(super.cubeDimensionUsageOrDimensions(cube));
-                if ("Sales".equals(cube.name())) {
-                    MappingCubeDimension dimension = PrivateDimensionRBuilder
+            protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
+                List<DimensionConnectorMapping> result = new ArrayList<>();
+                result.addAll(super.cubeDimensionConnectors(cube));
+                if ("Sales".equals(cube.getName())) {
+                	DimensionConnectorMappingImpl dimension = DimensionConnectorMappingImpl
                         .builder()
-                        .name("Date")
-                        .type(DimensionTypeEnum.TIME_DIMENSION)
-                        .foreignKey("time_id")
-                        .hierarchies(List.of(
-                            HierarchyRBuilder.builder()
-                                .hasAll(true)
-                                .name("Weekly")
-                                .primaryKey("time_id")
-                                .relation(new TableR("time_by_day"))
-                                .levels(List.of(
-                                    LevelRBuilder.builder()
-                                        .name("Year")
-                                        .column("the_year")
-                                        .type(TypeEnum.NUMERIC)
-                                        .uniqueMembers(true)
-                                        .levelType(LevelTypeEnum.TIME_YEARS)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Week")
-                                        .column("week_of_year")
-                                        .type(TypeEnum.NUMERIC)
-                                        .uniqueMembers(false)
-                                        .levelType(LevelTypeEnum.TIME_WEEKS)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Day")
-                                        .column("day_of_month")
-                                        .uniqueMembers(false)
-                                        .type(TypeEnum.NUMERIC)
-                                        .levelType(LevelTypeEnum.TIME_DAYS)
+                        .withOverrideDimensionName("Date")
+                        .withForeignKey("time_id")
+                        .withDimension(TimeDimensionMappingImpl.builder()
+                                .withName("Date")
+                                .withHierarchies(List.of(
+                                    HierarchyMappingImpl.builder()
+                                        .withHasAll(true)
+                                        .withName("Weekly")
+                                        .withPrimaryKey("time_id")
+                                        .withQuery(TableQueryMappingImpl.builder().withName("time_by_day").build())                                        
+                                        .withLevels(List.of(
+                                            LevelMappingImpl.builder()
+                                                .withName("Year")
+                                                .withColumn("the_year")                                                
+                                                .withType(DataType.NUMERIC)
+                                                .withUniqueMembers(true)
+                                                .withLevelType(LevelType.TIME_YEARS)
+                                                .build(),
+                                            LevelMappingImpl.builder()
+                                            	.withName("Week")
+                                                .withColumn("week_of_year")
+                                                .withType(DataType.NUMERIC)
+                                                .withUniqueMembers(false)
+                                                .withLevelType(LevelType.TIME_WEEKS)
+                                                .build(),
+                                            LevelMappingImpl.builder()
+                                                .withName("Day")
+                                                .withColumn("day_of_month")
+                                                .withUniqueMembers(false)
+                                                .withType(DataType.NUMERIC)
+                                                .withLevelType(LevelType.TIME_DAYS)
+                                                .build()
+                                        ))
                                         .build()
                                 ))
-                                .build()
-                        ))
+                        		.build())
                         .build();
                     result.add(dimension);
                 }
                 return result;
+
             }
-            */
+            
         }
         withSchema(context, VerifyMemberLevelNamesIdentityOlap4jWeeklyModifier::new);
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
