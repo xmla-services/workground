@@ -14,13 +14,39 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -289,69 +315,99 @@ class NativeFilterMatchingTest extends BatchTestCase {
 
         class TestCachedNativeFilterModifier extends PojoMappingModifier {
 
+        	private static final HierarchyMappingImpl h = HierarchyMappingImpl.builder()
+            .withHasAll(true)
+            .withPrimaryKey("store_id")
+            .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+            .withLevels(List.of(
+                LevelMappingImpl.builder()
+                    .withName("Store Country")
+                    .withColumn("store_country")
+                    .withUniqueMembers(true)
+                    .build(),
+                LevelMappingImpl.builder()
+                    .withName("Store State")
+                    .withColumn("store_state")
+                    .withUniqueMembers(true)
+                    .build()
+            ))
+            .build();
+
+            
+        	private static final StandardDimensionMappingImpl dimensionStore2 = StandardDimensionMappingImpl.builder()
+            .withName("Store2")
+            .withHierarchies(List.of(h))                    
+            .build();
+        	
+        	private static final PhysicalCubeMappingImpl cube = PhysicalCubeMappingImpl.builder()
+            .withName("TinySales")
+            .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+            .withDimensionConnectors(List.of(
+            		DimensionConnectorMappingImpl.builder()
+            		.withOverrideDimensionName("Product")
+            		.withForeignKey("product_id")
+            		.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)
+            		.build(),
+            		DimensionConnectorMappingImpl.builder()
+            		.withOverrideDimensionName("Store2")
+            		.withForeignKey("store_id")
+            		.withDimension(dimensionStore2)
+            		.build()
+            		))                    
+            .withMeasureGroups(
+            	List.of(MeasureGroupMappingImpl.builder()
+            		.withMeasures(List.of(
+                            MeasureMappingImpl.builder()
+                            .withName("Unit Sales")
+                            .withColumn("unit_sales")
+                            .withAggregatorType(MeasureAggregatorType.SUM)                                    
+                            .withFormatString("Standard")
+                            .build()                    				
+            				))
+            		.build()))
+            .build();
+        	
             public TestCachedNativeFilterModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-                List<MappingPrivateDimension> result = new ArrayList<>();
-                result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Store2")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Country")
-                                    .column("store_country")
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store State")
-                                    .column("store_state")
-                                    .uniqueMembers(true)
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build());
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+            	List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.cubes(cubes));
+                result.add(cube);
                 return result;
             }
-
-            @Override
-            protected List<MappingRole> schemaRoles(MappingSchema schema) {
-                List<MappingRole> result = new ArrayList<>();
-                result.addAll(super.schemaRoles(schema));
-                result.add(RoleRBuilder.builder()
-                    .name("test")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("TinySales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store2]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("PARTIAL")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store2].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
+            
+            protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+                List<AccessRoleMapping> result = new ArrayList<>();
+                result.addAll(super.schemaAccessRoles(schema));
+                result.add(AccessRoleMappingImpl.builder()
+                    .withName("test")
+                    .withAccessSchemaGrants(List.of(
+                    		AccessSchemaGrantMappingImpl.builder()
+                            .withAccess(AccessSchema.NONE)
+                            .withCubeGrant(List.of(
+                            		AccessCubeGrantMappingImpl.builder()
+                                    .withCube(cube)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                            .withHierarchy(h)
+                                            .withAccess(AccessHierarchy.CUSTOM)                                            
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Store2].[USA].[CA]")
+                                                    .withAccess(AccessMember.ALL)
                                                     .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store2].[USA].[OR]")
-                                                    .access(MemberGrantAccessEnum.ALL)
+                                                AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Store2].[USA].[OR]")
+                                                    .withAccess(AccessMember.ALL)
                                                     .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store2].[Canada]")
-                                                    .access(MemberGrantAccessEnum.ALL)
+                                                AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Store2].[Canada]")
+                                                    .withAccess(AccessMember.ALL)
                                                     .build()
                                             ))
                                             .build()
@@ -362,41 +418,8 @@ class NativeFilterMatchingTest extends BatchTestCase {
                     ))
                     .build());
                 return result;
-            }
 
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
-                result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name("TinySales")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Product")
-                            .source("Product")
-                            .foreignKey("product_id")
-                            .build(),
-                        DimensionUsageRBuilder.builder()
-                            .name("Store2")
-                            .source("Store2")
-                            .foreignKey("store_id")
-                            .build()
-                    ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .build()
-                    ))
-                    .build());
-                return result;
             }
-   
-      */  
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
