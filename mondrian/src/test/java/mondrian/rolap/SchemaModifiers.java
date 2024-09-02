@@ -27,6 +27,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.HierarchyMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureGroupMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessDimension;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
@@ -38,6 +39,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
 import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessDimensionGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
@@ -13258,78 +13260,73 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
-            List<MappingCube> result = new ArrayList<>();
-            result.addAll(super.schemaCubes(mappingSchemaOriginal));
-            result.add(CubeRBuilder.builder()
-                .name("Store_NullsCollation")
-                .fact(new TableR("store"))
-                .dimensionUsageOrDimensions(List.of(
-                    PrivateDimensionRBuilder.builder()
-                        .name("Store")
-                        .foreignKey("store_id")
-                        .hierarchies(List.of(
-                            HierarchyRBuilder.builder()
-                                .hasAll(true)
-                                .primaryKey("store_id")
-                                .levels(List.of(
-                                    LevelRBuilder.builder()
-                                        .name("Store Name")
-                                        .column("store_name")
-                                        .uniqueMembers(true)
-                                        .ordinalExpression(ExpressionViewRBuilder.builder()
-                                            .sql(SqlSelectQueryRBuilder.builder()
-                                            .sqls(List.of(
-                                                new SQLR("Iif(store_name = 'HQ', null, store_name)", List.of("access")),
-                                                new SQLR("case \"store_name\" when 'HQ' then null else \"store_name\" end",
-                                                    List.of("oracle")),
-                                                new SQLR("case \"store_name\" when 'HQ' then null else \"store_name\" end",
-                                                    List.of("hsqldb")),
-                                                new SQLR("case \"store\".\"store_name\" when 'HQ' then null else \"store\".\"store_name\" end",
-                                                    List.of("db2")),
-                                                new SQLR("case \"store_name\" when 'HQ' then null else \"store_name\" end",
-                                                    List.of("luciddb")),
-                                                new SQLR("case \"store_name\" when 'HQ' then null else \"store_name\" end",
-                                                    List.of("netezza")),
-                                                new SQLR("case store_name when 'HQ' then null else store_name end",
-                                                    List.of("generic"))
-                                            )).build())
-                                            .build())
-                                        .properties(List.of(
-                                            PropertyRBuilder.builder()
-                                                .name("Store Sqft")
-                                                .column("store_sqft")
-                                                .type(PropertyTypeEnum.NUMERIC)
-                                                .build()
-                                        ))
-                                        .build()
-                                ))
+        protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+            List<CubeMapping> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(schema));
+            result.add(PhysicalCubeMappingImpl.builder()
+                .withName("Store_NullsCollation")
+                .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                .withDimensionConnectors(List.of(
+                	DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Store")
+                        .withForeignKey("store_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                        		.withName("Store")
+                        		.withHierarchies(List.of(
+                        			HierarchyMappingImpl.builder()
+                        				.withHasAll(true)
+                        				.withPrimaryKey("store_id")
+                        				.withLevels(List.of(
+                        					LevelMappingImpl.builder()
+                        						.withName("Store Name")
+                        						.withColumn("store_name")
+                        						.withUniqueMembers(true)
+                        						.withOrdinalExpression(SQLExpressionMappingImpl.builder()
+                        							.withSqls(List.of(
+                        								SQLMappingImpl.builder().withStatement("Iif(store_name = 'HQ', null, store_name)").withDialects(List.of("access")).build(),
+                        								SQLMappingImpl.builder().withStatement("case \"store_name\" when 'HQ' then null else \"store_name\" end").withDialects(List.of("oracle")).build(),
+                        								SQLMappingImpl.builder().withStatement("case \"store_name\" when 'HQ' then null else \"store_name\" end").withDialects(List.of("hsqldb")).build(),
+                        								SQLMappingImpl.builder().withStatement("case \"store\".\"store_name\" when 'HQ' then null else \"store\".\"store_name\" end").withDialects(List.of("db2")).build(),
+                        								SQLMappingImpl.builder().withStatement("case \"store_name\" when 'HQ' then null else \"store_name\" end").withDialects(List.of("luciddb")).build(),
+                        								SQLMappingImpl.builder().withStatement("case \"store_name\" when 'HQ' then null else \"store_name\" end").withDialects(List.of("netezza")).build(),
+                        								SQLMappingImpl.builder().withStatement("case store_name when 'HQ' then null else store_name end").withDialects(List.of("generic")).build()
+                        						)).build())
+                        						.withMemberProperties(List.of(
+                        							MemberPropertyMappingImpl.builder()
+                        								.withName("Store Sqft")
+                        								.withColumn("store_sqft")
+                        								.withDataType(DataType.NUMERIC)
+                        								.build()
+                        						))
+                        						.build()
+                        				)).build()))
+                                .build()
+                        )
+                        .build()
+                ))
+                .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                		.withMeasures(List.of(
+                           MeasureMappingImpl.builder()
+                                .withName("Unit Sales")
+                                .withColumn("unit_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                .withFormatString("Standard")
+                                .withVisible(false)
+                                .build(),
+                           MeasureMappingImpl.builder()
+                                .withName("Store Sales")
+                                .withColumn("store_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                .withFormatString("#,###.00")
                                 .build()
                         ))
-                        .build()
-                ))
-                .measures(List.of(
-                    MeasureRBuilder.builder()
-                        .name("Unit Sales")
-                        .column("unit_sales")
-                        .aggregator("sum")
-                        .formatString("Standard")
-                        .visible(false)
-                        .build(),
-                    MeasureRBuilder.builder()
-                        .name("Store Sales")
-                        .column("store_sales")
-                        .aggregator("sum")
-                        .formatString("#,###.00")
-                        .build()
-                ))
+                		.build()))
                 .build());
-            return result;
-
+            return result;        	
         }
-        */
+
+        	
 
     }
 
@@ -13352,34 +13349,33 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
-            result.add(RoleRBuilder.builder()
-                .name("Role1")
-                .schemaGrants(List.of(
-                    SchemaGrantRBuilder.builder()
-                        .access(AccessEnum.NONE)
-                        .cubeGrants(List.of(
-                            CubeGrantRBuilder.builder()
-                                .cube("Sales")
-                                .access("all")
-                                .hierarchyGrants(List.of(
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Customers]")
-                                        .access(AccessEnum.CUSTOM)
-                                        .rollupPolicy("bad")
-                                        .bottomLevel("[Customers].[City]")
-                                        .memberGrants(List.of(
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA]")
-                                                .access(MemberGrantAccessEnum.ALL)
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
+            result.add(AccessRoleMappingImpl.builder()
+                .withName("Role1")
+                .withAccessSchemaGrants(List.of(
+                	AccessSchemaGrantMappingImpl.builder()
+                		.withAccess(AccessSchema.NONE)
+                		.withCubeGrant(List.of(
+                			AccessCubeGrantMappingImpl.builder()
+                				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                				.withAccess(AccessCube.ALL)
+                				.withHierarchyGrants(List.of(
+                					AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withAccess(AccessHierarchy.CUSTOM)
+                                        .withRollupPolicyType(RollupPolicyType.HIDDEN) //should be bad
+                                        .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                        .withMemberGrants(List.of(
+                                        	AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Customers].[USA]")
+                                                .withAccess(AccessMember.ALL)
                                                 .build(),
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[CA].[Los Angeles]")
-                                                .access(MemberGrantAccessEnum.NONE)
+                                            AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Customers].[USA].[CA].[Los Angeles]")
+                                                .withAccess(AccessMember.NONE)
                                                 .build()
                                         ))
                                         .build()
@@ -13389,9 +13385,8 @@ public class SchemaModifiers {
                         .build()
                 ))
                 .build());
-            return result;
+            return result;        	
         }
-        */
     }
 
     public static class AccessControlTestModifier2 extends PojoMappingModifier {
@@ -13430,117 +13425,115 @@ public class SchemaModifiers {
         public AccessControlTestModifier2(CatalogMapping catalog) {
             super(catalog);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
-
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
-            result.add(
-                RoleRBuilder.builder()
-                .name("Role1")
-                .schemaGrants(List.of(
-                    SchemaGrantRBuilder.builder()
-                        .access(AccessEnum.NONE)
-                        .cubeGrants(List.of(
-                            CubeGrantRBuilder.builder()
-                                .cube("Sales")
-                                .access("all")
-                                .hierarchyGrants(List.of(
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Customers]")
-                                        .access(AccessEnum.CUSTOM)
-                                        .rollupPolicy("Partial")
-                                        .memberGrants(List.of(
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[CA]")
-                                                .access(MemberGrantAccessEnum.ALL)
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
+            result.add(AccessRoleMappingImpl.builder()
+                .withName("Role1")
+                .withAccessSchemaGrants(List.of(
+                	AccessSchemaGrantMappingImpl.builder()
+                		.withAccess(AccessSchema.NONE)
+                		.withCubeGrant(List.of(
+                			AccessCubeGrantMappingImpl.builder()
+                				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                				.withAccess(AccessCube.ALL)
+                				.withHierarchyGrants(List.of(
+                					AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withAccess(AccessHierarchy.CUSTOM)
+                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                        .withMemberGrants(List.of(
+                                        	AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Customers].[USA].[CA]")
+                                                .withAccess(AccessMember.ALL)
                                                 .build(),
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[CA].[San Francisco].[Gladys Evans]")
-                                                .access(MemberGrantAccessEnum.NONE)
+                                            AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Customers].[USA].[CA].[San Francisco].[Gladys Evans]")
+                                                .withAccess(AccessMember.NONE)
                                                 .build()
                                         ))
                                         .build(),
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Promotion Media]")
-                                        .access(AccessEnum.ALL)
+                   					AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_PROMOTION_MEDIA)
+                                        .withAccess(AccessHierarchy.ALL)
                                         .build(),
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Marital Status]")
-                                        .access(AccessEnum.NONE)
+                  					AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_MARITAL_STATUS)
+                                        .withAccess(AccessHierarchy.ALL)
                                         .build(),
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Gender]")
-                                        .access(AccessEnum.NONE)
+                      				AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                        .withAccess(AccessHierarchy.NONE)
                                         .build(),
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Store]")
-                                        .access(AccessEnum.CUSTOM)
-                                        .rollupPolicy("Partial")
-                                        .topLevel("[Store].[Store State]")
+                       				AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        .withAccess(AccessHierarchy.CUSTOM)
+                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                        .withTopLevel(FoodmartMappingSupplier.LEVEL_STORE_CYTY_UNIQUE_MEMBERS_TRUE)
                                         .build()
                                 ))
                                 .build(),
-                            CubeGrantRBuilder.builder()
-                                .cube("Warehouse")
-                                .access("all")
-                                .build()
+                            AccessCubeGrantMappingImpl.builder()
+                            	.withCube(FoodmartMappingSupplier.CUBE_WAREHOUSE)
+                            	.withAccess(AccessCube.ALL)
+                            	.build()    
                         ))
                         .build()
+                        
                 ))
-                .build()
-            );
-            result.add(
-                RoleRBuilder.builder()
-                .name("Role2")
-                .schemaGrants(List.of(
-                    SchemaGrantRBuilder.builder()
-                        .access(AccessEnum.NONE)
-                        .cubeGrants(List.of(
-                            CubeGrantRBuilder.builder()
-                                .cube("Sales")
-                                .access("none")
-                                .hierarchyGrants(List.of(
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Customers]")
-                                        .access(AccessEnum.CUSTOM)
-                                        .rollupPolicy("Hidden")
-                                        .memberGrants(List.of(
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA]")
-                                                .access(MemberGrantAccessEnum.ALL)
-                                                .build(),
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[CA]")
-                                                .access(MemberGrantAccessEnum.NONE)
-                                                .build(),
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[OR]")
-                                                .access(MemberGrantAccessEnum.NONE)
-                                                .build(),
-                                            MemberGrantRBuilder.builder()
-                                                .member("[Customers].[USA].[OR].[Portland]")
-                                                .access(MemberGrantAccessEnum.ALL)
-                                                .build()
-                                        ))
-                                        .build(),
-                                    HierarchyGrantRBuilder.builder()
-                                        .hierarchy("[Store]")
-                                        .access(AccessEnum.ALL)
-                                        .rollupPolicy("Hidden")
-                                        .build()
+                .build());
+            
+            result.add(AccessRoleMappingImpl.builder()
+                    .withName("Role2")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                    		.withAccess(AccessSchema.NONE)
+                    		.withCubeGrant(List.of(
+                    			AccessCubeGrantMappingImpl.builder()
+                    				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                    				.withAccess(AccessCube.NONE)
+                    				.withHierarchyGrants(List.of(
+                    					AccessHierarchyGrantMappingImpl.builder()
+                                            .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)                                            
+                                            .withRollupPolicyType(RollupPolicyType.HIDDEN)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Customers].[USA]")
+                                                    .withAccess(AccessMember.ALL)
+                                                    .build(),
+                                                AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Customers].[USA].[CA]")
+                                                    .withAccess(AccessMember.NONE)
+                                                    .build(),
+                                                AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Customers].[USA].[OR]")
+                                                    .withAccess(AccessMember.NONE)
+                                                    .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Customers].[USA].[OR].[Portland]")
+                                                    .withAccess(AccessMember.ALL)
+                                                    .build()
+                                            ))
+                                            .build(),
+                        				AccessHierarchyGrantMappingImpl.builder()
+                                            .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.ALL)                                            
+                                            .withRollupPolicyType(RollupPolicyType.HIDDEN)
+                                            .build()
+                                            
+                                    ))
+                                    .build()    
+                            ))
+                            .build()
+                            
+                    ))
+                    .build());
 
-                                ))
-                                .build()
-                        ))
-                        .build()
-                ))
-                .build()
-            );
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier3 extends PojoMappingModifier {
@@ -13573,72 +13566,69 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
-            result.add(
-                RoleRBuilder.builder()
-                    .name("USA manager")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .dimensionGrants(List.of(
-                                        DimensionGrantRBuilder.builder()
-                                            .access(AccessEnum.ALL)
-                                            .dimension("[Measures]")
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
+            result.add(AccessRoleMappingImpl.builder()
+                    .withName("USA manager")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                            .withAccess(AccessSchema.NONE)
+                            .withCubeGrant(List.of(
+                            	AccessCubeGrantMappingImpl.builder()
+                                    .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withDimensionGrants(List.of(
+                                    	AccessDimensionGrantMappingImpl.builder()
+                                            .withAccess(AccessDimension.ALL)
+                                            .withDimension(null)
+                                            //.dimension("[Measures]")
+                                            .withDimension(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE)
                                             .build()
                                     ))
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                            .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Customers].[USA]")
+                                                    .withAccess(AccessMember.ALL)
                                                     .build()
                                             ))
                                             .build()
                                     ))
                                     .build()
                             ))
+                            .build()))            		
+            		.build());
+            
+            result.add(
+            	AccessRoleMappingImpl.builder()
+                    .withName("parent of USA manager")
+                    .withReferencedAccessRoles(List.of(
+                    	AccessRoleMappingImpl.builder()
+                        	.withName("USA manager")
+                            .build()
+                     ))
+                     .build()
+            );
+
+            result.add(
+                AccessRoleMappingImpl.builder()
+                    .withName("grandparent of USA manager")
+                    .withReferencedAccessRoles(List.of(
+                    	AccessRoleMappingImpl.builder()
+                            .withName("parent of USA manager")
                             .build()
                     ))
                     .build()
             );
-            result.add(
-                RoleRBuilder.builder()
-                    .name("parent of USA manager")
-                    .union(UnionRBuilder.builder()
-                        .roleUsages(List.of(
-                            RoleUsageRBuilder.builder()
-                                .roleName("USA manager")
-                                .build()
-                        ))
-                        .build())
-                    .build()
-            );
-            result.add(
-                RoleRBuilder.builder()
-                    .name("grandparent of USA manager")
-                    .union(UnionRBuilder.builder()
-                        .roleUsages(List.of(
-                            RoleUsageRBuilder.builder()
-                                .roleName("parent of USA manager")
-                                .build()
-                        ))
-                        .build())
-                    .build()
-            );
-            return result;
-        }
-        */
+            
+            return result;            		
+        }    		
+
     }
 
     public static class AccessControlTestModifier4 extends PojoMappingModifier {
@@ -13664,53 +13654,51 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
-            result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .build()
-                    ))
-                    .build()
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
+            result.add(AccessRoleMappingImpl.builder()
+                .withName("Role1")
+                .withAccessSchemaGrants(List.of(
+                  	AccessSchemaGrantMappingImpl.builder()
+                         .withAccess(AccessSchema.NONE)
+                         .build()
+                ))
+                .build()
             );
+            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[OR]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
+            	AccessRoleMappingImpl.builder()
+                	.withName("Role2")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.ALL)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[OR]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                             ))
+                                             .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                ))
+                .build()
             );
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier5 extends PojoMappingModifier {
@@ -13736,55 +13724,54 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .topLevel("[Customers].[State Province]")
-                                            .bottomLevel("[Customers].[State Province]")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
+            	AccessRoleMappingImpl.builder()
+                	.withName("Role1")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.ALL)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                             ))
+                                             .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                ))
+                .build()
             );
+            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .build()
-                    ))
-                    .build()
-            );
+                    AccessRoleMappingImpl.builder()
+                        .withName("Role2")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .build()
+                        ))
+                        .build()
+            );            
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier6 extends PojoMappingModifier {
@@ -13805,42 +13792,41 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Product]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Product].[Drink]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
+            	AccessRoleMappingImpl.builder()
+                	.withName("Role1")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_PRODUCT1)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Product].[Drink]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                             ))
+                                             .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                ))
+                .build()
             );
+            
             return result;
-        }
-        */
+        }        
     }
 
     public static class AccessControlTestModifier7 extends PojoMappingModifier {
@@ -13862,46 +13848,46 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("California manager")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.NONE)
+            	AccessRoleMappingImpl.builder()
+                	.withName("California manager")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.NONE)
+                                             .build()     
+                                        ))
+                                        .build(),
+                                		AccessCubeGrantMappingImpl.builder()
+                                    	.withCube(FoodmartMappingSupplier.CUBE_SALES_RAGGED)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                            	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                 .build()     
+                                            ))
                                             .build()
-                                    ))
-                                    .build(),
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales Ragged")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
+                                        
+                                ))
+                                .build()
+                ))
+                .build()
             );
+            
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier8 extends PojoMappingModifier {
@@ -13929,55 +13915,54 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Buggy Role")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("HR")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Employees]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Employees].[All Employees].[Sheri Nowmer].[Darren Stanz]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[All Stores].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            	AccessRoleMappingImpl.builder()
+                	.withName("Buggy Role")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_HR)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Employees].[All Employees].[Sheri Nowmer].[Darren Stanz]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                             ))
+                                             .build(),
+                                         AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[All Stores].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                             ))
+                                             .build()
+                                             
+                                        ))
+                                        .build()
+                                        
+                                ))
+                                .build()
+                ))
+                .build()
+            );            
             return result;
-        }
-        */
+        }        
     }
 
     public static class AccessControlTestModifier9 extends PojoMappingModifier {
@@ -14001,59 +13986,71 @@ public class SchemaModifiers {
         public AccessControlTestModifier9(CatalogMapping catalog) {
             super(catalog);
         }
-
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Warehouse")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store Size in SQFT]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store Size in SQFT].[20319]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store Size in SQFT].[21215]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store Type]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store Type].[Supermarket]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
+            	AccessRoleMappingImpl.builder()
+                	.withName("VCRole")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                               		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()     
+                                             ))
+                                             .build(),
+                                         AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        	.withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
+                                        	.withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()                                                        
+                                             ))
+                                             .build(),
+                                         AccessHierarchyGrantMappingImpl.builder()
+                                         	.withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                         	.withAccess(AccessHierarchy.NONE)
+                                         	.build()                                             
+                                             
+                                        ))
+                                        .build()
+                                        
+                                ))
+                                .build()
+                ))
+                .build()
             );
+            
             return result;
-        }
-        */
+        }        
+        
     }
 
     public static class AccessControlTestModifier10 extends PojoMappingModifier {
@@ -14081,66 +14078,66 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("VCRole")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Warehouse and Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .topLevel("[Customers].[State Province]")
-                                            .bottomLevel("[Customers].[City]")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Gender]")
-                                            .access(AccessEnum.NONE)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            	AccessRoleMappingImpl.builder()
+                	.withName("VCRole")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)                                            
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                               		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()     
+                                             ))
+                                             .build(),                                             
+                                         AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                        	.withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
+                                        	.withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)                                            
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                               		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()     
+                                             ))
+                                             .build(),
+                                         AccessHierarchyGrantMappingImpl.builder()
+                                          	.withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                          	.withAccess(AccessHierarchy.NONE)
+                                          	.build()                                             
+                                             
+                                        ))
+                                        .build()
+                                        
+                                ))
+                                .build()
+                ))
+                .build()
+            );            
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier11 extends PojoMappingModifier {
@@ -14162,59 +14159,150 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));            
             result.add(
-                RoleRBuilder.builder()
-                    .name("role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            	AccessRoleMappingImpl.builder()
+                	.withName("role2")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                        	.withAccess(AccessSchema.NONE)
+                        	.withCubeGrant(List.of(
+                        		AccessCubeGrantMappingImpl.builder()
+                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                               		AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()     
+                                             ))
+                                             .build()                                                                                          
+                                        ))
+                                        .build()
+                                        
+                                ))
+                                .build()
+                ))
+                .build()
+            );            
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier12 extends PojoMappingModifier {
 
         private List<AccessRoleMapping> roles;
 
+        private static final StandardDimensionMappingImpl dCustomers = StandardDimensionMappingImpl.builder()
+		.withName("Customers")
+		.withHierarchies(List.of(
+			HierarchyMappingImpl.builder()
+				.withHasAll(true)
+				.withPrimaryKey("customer_id")
+				.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+				.withLevels(List.of(
+					LevelMappingImpl.builder()
+						.withName("Country")
+						.withColumn("country")
+                        .withUniqueMembers(true)
+                        .build(),
+    				LevelMappingImpl.builder()
+						.withName("State Province")
+						.withColumn("state_province")
+                        .withUniqueMembers(true)
+                        .build(),
+        			LevelMappingImpl.builder()
+    					.withName("City")
+    					.withColumn("city")
+                        .withUniqueMembers(false)                            
+                        .build(),
+                	LevelMappingImpl.builder()
+            		 	.withName("Name")
+            		    .withColumn("customer_id")
+            		    .withType(DataType.NUMERIC)
+                        .withUniqueMembers(true)                            
+                        .build()                            
+				))
+				.build()            						
+	    ))
+        .build();
+
 
         public AccessControlTestModifier12(CatalogMapping catalog, List<AccessRoleMapping> roles) {
             super(catalog);
             this.roles = roles;
         }
+        
+        @Override
+        protected List<CubeMapping> schemaCubes(SchemaMapping Schema) {
+            List<CubeMapping> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(Schema));
+            result.add(PhysicalCubeMappingImpl.builder()
+                .withName("Sales with multiple customers")
+                .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                .withDimensionConnectors(List.of(                
+                	DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Time")
+                		.withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                        .withForeignKey("time_id")
+                        .build(),
+                    DimensionConnectorMappingImpl.builder()
+                    	.withOverrideDimensionName("Product")
+                    	.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                        
+                        .withForeignKey("product_id")
+                        .build(),
+                    DimensionConnectorMappingImpl.builder()
+                        .withOverrideDimensionName("Customers")
+                        .withDimension(dCustomers)
+                        .withForeignKey("customer_id")
+                        .build(),
+                    DimensionConnectorMappingImpl.builder()
+                        .withOverrideDimensionName("Customers2")
+                        .withDimension(dCustomers)
+                        .withForeignKey("customer_id")
+                        .build(),
+                    DimensionConnectorMappingImpl.builder()
+                        .withOverrideDimensionName("Name")
+                        .withDimension(dCustomers)
+                        .withForeignKey("customer_id")
+                        .build()
+                ))
+                .withMeasureGroups(List.of(
+                		MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                			MeasureMappingImpl.builder()
+                				.withName("Unit Sales")
+                				.withColumn("unit_sales")
+                				.withAggregatorType(MeasureAggregatorType.SUM)
+                				.withFormatString("Standard")
+                				.build()
+                			))
+                			.build()
+                ))               
+                .build());
+            return result;
+        }
 
+        @Override
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
+            result.addAll(roles);
+            return result;
+        }    
+                	
                 /*
                     " <Dimension name=\"Customers\"> \n"
             + "    <Hierarchy hasAll=\"true\" primaryKey=\"customer_id\"> \n"
@@ -14228,47 +14316,9 @@ public class SchemaModifiers {
 
         */
 
-        /* TODO: DENIS MAPPING-MODIFIER
-        @Override
-        protected List<MappingPrivateDimension> schemaDimensions(CatalogMapping catalogOriginal) {
-            List<MappingPrivateDimension> result = new ArrayList<>();
-            result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-            result.add(PrivateDimensionRBuilder.builder()
-                .name("Customers")
-                .hierarchies(List.of(
-                    HierarchyRBuilder.builder()
-                        .hasAll(true)
-                        .primaryKeyTable("customer_id")
-                        .relation(new TableR("customer"))
-                        .levels(List.of(
-                            LevelRBuilder.builder()
-                                .name("Country")
-                                .column("country")
-                                .uniqueMembers(true)
-                                .build(),
-                            LevelRBuilder.builder()
-                                .name("State Province")
-                                .column("state_province")
-                                .uniqueMembers(true)
-                                .build(),
-                            LevelRBuilder.builder()
-                                .name("City")
-                                .column("city")
-                                .uniqueMembers(false)
-                                .build(),
-                            LevelRBuilder.builder()
-                                .name("Name")
-                                .column("customer_id")
-                                .type(TypeEnum.NUMERIC)
-                                .uniqueMembers(true)
-                                .build()
-                        ))
-                        .build()
-                ))
-                .build());
-            return result;
-        }
-        */
+        
+        
+
         /*
                     "  <Cube name=\"" + cubeName + "\"> \n"
             + "    <Table name=\"sales_fact_1997\"/> \n"
@@ -14281,53 +14331,6 @@ public class SchemaModifiers {
             + "  </Cube> \n",
 
          */
-        /* TODO: DENIS MAPPING-MODIFIER
-        @Override
-        protected List<MappingCube> schemaCubes(CatalogMapping catalogOriginal) {
-            List<MappingCube> result = new ArrayList<>();
-            result.addAll(super.schemaCubes(mappingSchemaOriginal));
-            result.add(CubeRBuilder.builder()
-                .name("Sales with multiple customers")
-                .fact(new TableR("sales_fact_1997"))
-                .dimensionUsageOrDimensions(List.of(
-                    DimensionUsageRBuilder.builder()
-                        .name("Time")
-                        .source("Time")
-                        .foreignKey("time_id")
-                        .build(),
-                    DimensionUsageRBuilder.builder()
-                        .name("Product")
-                        .source("Product")
-                        .foreignKey("product_id")
-                        .build(),
-                    DimensionUsageRBuilder.builder()
-                        .name("Customers")
-                        .source("Customers")
-                        .foreignKey("customer_id")
-                        .build(),
-                    DimensionUsageRBuilder.builder()
-                        .name("Customers2")
-                        .source("Customers")
-                        .foreignKey("customer_id")
-                        .build(),
-                    DimensionUsageRBuilder.builder()
-                        .name("Customers3")
-                        .source("Customers")
-                        .foreignKey("customer_id")
-                        .build()
-                ))
-                .build());
-            return result;
-        }
-
-        @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
-            result.addAll(roles);
-            return result;
-        }
-        */
     }
 
     public static class AccessControlTestModifier14 extends PojoMappingModifier {
@@ -14351,55 +14354,53 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("REG1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("HR")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("Employees")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Employees].[All Employees]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Steven Betsekas]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Arvid Ziegler]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Ann Weyerhaeuser]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                                ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("REG1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Employees].[All Employees]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Steven Betsekas]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Arvid Ziegler]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Employees].[Sheri Nowmer].[Derrick Whelply].[Laurie Borges].[Cody Goldey].[Shanay Steelman].[Ann Weyerhaeuser]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                    ))
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier15 extends PojoMappingModifier {
@@ -14428,68 +14429,70 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("CTO")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[XX]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[XX].[Yyy Yyyyyyy]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[Zzz Zzzz]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[San Francisco]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder().hierarchy("[Gender]").access(AccessEnum.NONE)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("CTO")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[XX]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[XX].[Yyy Yyyyyyy]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[Zzz Zzzz]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),                                                        
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[San Francisco]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()                                                        
+                                                    ))
+                                                .build(),
+                                            	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                                .withAccess(AccessHierarchy.NONE)
+                                                .build()
+                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier16 extends PojoMappingModifier {
@@ -14509,38 +14512,42 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("Partial")
-                                            .topLevel("[Store].[Store State]")
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[Store State]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build()
+                                                    ))
+                                                .build()
+                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
-        }
-        */
+        }   
     }
 
     public static class AccessControlTestModifier17 extends PojoMappingModifier {
@@ -14566,60 +14573,58 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("none")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Measures]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Measures].[Unit Sales]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.NONE)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                //.withHierarchy([Measures])
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Measures].[Unit Sales]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                    ))
+                                                .build()
+                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales Ragged")
-                                    .access("all")
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role2")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES_RAGGED)
+                                        .withAccess(AccessCube.ALL)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );            
             return result;
-        }
-        */
+        }           
     }
 
     public static class AccessControlTestModifier18 extends PojoMappingModifier {
@@ -14648,70 +14653,70 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store Type]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store Type].[All Store Types]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store Type].[Supermarket]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[All Customers]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[WA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store Type].[All Store Types]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store Type].[Supermarket]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()                                                        
+                                                    ))
+                                                .build(),
+                                            AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[All Customers]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[WA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),                                                        
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                    ))
+                                                .build()                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
-        }
-        */
+        }           
+        
     }
 
     public static class AccessControlTestModifier19 extends PojoMappingModifier {
@@ -14749,104 +14754,107 @@ public class SchemaModifiers {
         public AccessControlTestModifier19(CatalogMapping catalog) {
             super(catalog);
         }
-
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("custom")
-                                    .dimensionGrants(List.of(
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Measures]")
-                                            .access(AccessEnum.ALL)
-                                            .build(),
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Education Level]")
-                                            .access(AccessEnum.ALL)
-                                            .build(),
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Gender]")
-                                            .access(AccessEnum.ALL)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.CUSTOM)
+                                        .withDimensionGrants(List.of(
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                //.withDimension([Measures])
+                                                .withAccess(AccessDimension.ALL)
+                                                .build(),
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withAccess(AccessDimension.ALL)
+                                                .build(),
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                .withDimension(FoodmartMappingSupplier.DIMENSION_GENDER)
+                                                .withAccess(AccessDimension.ALL)
+                                                .build()                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
+            result.add(
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role2")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.CUSTOM)
+                                        .withDimensionGrants(List.of(
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                //.withDimension([Measures])
+                                                .withAccess(AccessDimension.ALL)
+                                                .build(),
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withAccess(AccessDimension.ALL)
+                                                .build(),
+                                       		AccessDimensionGrantMappingImpl.builder()
+                                                .withDimension(FoodmartMappingSupplier.DIMENSION_GENDER)
+                                                .withAccess(AccessDimension.NONE)
+                                                .build()                                                
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
+            result.add(
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role3")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                	AccessCubeGrantMappingImpl.builder()
+                                    	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.CUSTOM)
+                                        .withDimensionGrants(List.of(
+                                        	AccessDimensionGrantMappingImpl.builder()
+                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withAccess(AccessDimension.ALL)
+                                                .build(),
+                                            AccessDimensionGrantMappingImpl.builder()
+                                                //.withDimension("[Measures]")
+                                                .withAccess(AccessDimension.CUSTOM)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
+            
+            
 
-            result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("custom")
-                                    .dimensionGrants(List.of(
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Measures]")
-                                            .access(AccessEnum.ALL)
-                                            .build(),
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Education Level]")
-                                            .access(AccessEnum.ALL)
-                                            .build(),
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Gender]")
-                                            .access(AccessEnum.NONE)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
-            result.add(
-                RoleRBuilder.builder()
-                    .name("Role3")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("custom")
-                                    .dimensionGrants(List.of(
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Education Level]")
-                                            .access(AccessEnum.ALL)
-                                            .build(),
-                                        DimensionGrantRBuilder.builder()
-                                            .dimension("[Measures]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
 
             return result;
-        }
-        */
+        }  
+
     }
 
     public static class AccessControlTestModifier20 extends PojoMappingModifier {
@@ -14878,78 +14886,77 @@ public class SchemaModifiers {
         public AccessControlTestModifier20(CatalogMapping catalog) {
             super(catalog);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .topLevel("[Customers].[City]")
-                                            .bottomLevel("[Customers].[City]")
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[City].[Coronado]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.ALL)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[City].[Coronado]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
 
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .topLevel("[Customers].[City]")
-                                            .bottomLevel("[Customers].[City]")
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[City].[Burbank]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role2")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.ALL)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[City].[Burbank]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );                      
 
             return result;
-        }
-        */
+        }        
     }
 
     public static class AccessControlTestModifier21 extends PojoMappingModifier {
@@ -14970,44 +14977,43 @@ public class SchemaModifiers {
         public AccessControlTestModifier21(CatalogMapping catalog) {
             super(catalog);
         }
-
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Bacon")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Bacon")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
         }
-        */
+
     }
 
     public static class AccessControlTestModifier22 extends PojoMappingModifier {
@@ -15028,43 +15034,41 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
         }
-        */
     }
 
     public static class AccessControlTestModifier23 extends PojoMappingModifier {
@@ -15094,74 +15098,72 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role1")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role1")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
             result.add(
-                RoleRBuilder.builder()
-                    .name("Role2")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[OR]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("Role2")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[OR]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()	
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
+            
             return result;
         }
-        */
     }
 
 
@@ -15188,55 +15190,54 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Admin")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build(),
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Customers]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Customers].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("Admin")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build(),
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()                                        		
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
         }
-        */
+
     }
 
     public static class AccessControlTestModifier25 extends PojoMappingModifier {
@@ -15267,74 +15268,71 @@ public class SchemaModifiers {
         public AccessControlTestModifier25(CatalogMapping catalog) {
             super(catalog);
         }
-
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("test")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .topLevel("[Store].[Store Country]")
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[All Stores]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[Los Angeles]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[Alameda]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[Beverly Hills]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[San Francisco]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA].[San Diego]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[OR].[Portland]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[OR].[Salem]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+            		AccessRoleMappingImpl.builder()
+                        .withName("test")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        	AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_STORE_COUNTRY)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withMemberGrants(List.of(                                                        
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[All Stores]")
+                                                        .withAccess(AccessMember.NONE)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Alameda]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[Beverly Hills]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[San Francisco]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[CA].[San Diego]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[OR].[Portland]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build(),
+                                                    AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Store].[USA].[OR].[Salem]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))                                        		
+                                        		.build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build()
+                );
             return result;
-        }
-        */
+        }        
     }
 
     public static class AccessControlTestModifier26 extends PojoMappingModifier {
@@ -15360,51 +15358,50 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("dev")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .build(),
-                                CubeGrantRBuilder.builder()
-                                    .cube("HR")
-                                    .access("all")
-                                    .build(),
-                                CubeGrantRBuilder.builder()
-                                    .cube("Warehouse and Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("Measures")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Measures].[Warehouse Sales]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
+            		AccessRoleMappingImpl.builder()
+                        .withName("dev")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.ALL)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .build(),
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withAccess(AccessCube.ALL)
+                                        .build(),
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                //.withHierarchy("Measures")
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Measures].[Warehouse Sales]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))
+                                        		.build()
+                                        ))
+                                        .build()
+                                        
+                                 ))
+                                .build()
                             ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+                        .build()
+                   );
             return result;
-        }
-        */
+        }    
     }
 
     public static class AccessControlTestModifier27 extends PojoMappingModifier {
@@ -15430,51 +15427,50 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("dev")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("Measures")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Measures].[Unit Sales]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build(),
-                                CubeGrantRBuilder.builder()
-                                    .cube("HR")
-                                    .access("all")
-                                    .build(),
-                                CubeGrantRBuilder.builder()
-                                    .cube("Warehouse and Sales")
-                                    .access("all")
-                                    .build()
+            		AccessRoleMappingImpl.builder()
+                        .withName("dev")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.ALL)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                //.withHierarchy("Measures")
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Measures].[Unit Sales]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))
+                                        		.build()
+                                        ))                                        
+                                        .build(),
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withAccess(AccessCube.ALL)
+                                        .build(),
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .build()
+                                        
+                                 ))
+                                .build()
                             ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+                        .build()
+                   );
             return result;
-        }
-        */
+        }    
     }
 
     public static class AccessControlTestModifier28 extends PojoMappingModifier {
@@ -15496,44 +15492,41 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
         @Override
-        protected List<MappingRole> schemaRoles(CatalogMapping catalogOriginal) {
-            List<MappingRole> result = new ArrayList<>();
-            result.addAll(super.schemaRoles(mappingSchemaOriginal));
+        protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            List<AccessRoleMapping> result = new ArrayList<>();
+            result.addAll(super.schemaAccessRoles(schema));
             result.add(
-                RoleRBuilder.builder()
-                    .name("Admin")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Gender]")
-                                            .rollupPolicy("partial")
-                                            .access(AccessEnum.CUSTOM)
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Gender].[F]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
+            		AccessRoleMappingImpl.builder()
+                        .withName("Admin")
+                        .withAccessSchemaGrants(List.of(
+                        	AccessSchemaGrantMappingImpl.builder()
+                                .withAccess(AccessSchema.NONE)
+                                .withCubeGrant(List.of(
+                                    AccessCubeGrantMappingImpl.builder()
+                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withAccess(AccessCube.ALL)
+                                        .withHierarchyGrants(List.of(
+                                        		AccessHierarchyGrantMappingImpl.builder()
+                                                .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withAccess(AccessHierarchy.CUSTOM)
+                                                .withMemberGrants(List.of(
+                                                	AccessMemberGrantMappingImpl.builder()
+                                                        .withMember("[Gender].[F]")
+                                                        .withAccess(AccessMember.ALL)
+                                                        .build()
+                                                ))
+                                        		.build()
+                                        ))                                        
+                                        .build()
+                                 ))
+                                .build()
                             ))
-                            .build()
-                    ))
-                    .build()
-            );
-
+                        .build()
+                   );
             return result;
-        }
-        */
+        }    
     }
 
     public static class AccessControlTestModifier39 extends PojoMappingModifier {
