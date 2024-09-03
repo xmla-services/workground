@@ -2138,7 +2138,7 @@ public class RolapCube extends CubeBase {
                 }
 
                 // cube and dimension usage are in different tables
-                if (relation != null && !relation.equals(table.getRelation())) {
+                if (relation != null && !Utils.equalsQuery(relation, table.getRelation())) {
                     // HierarchyUsage should have checked this.
                     if (hierarchyUsage.getForeignKey() == null) {
                         throw new MondrianException(MessageFormat.format(
