@@ -37,7 +37,26 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.HideMemberIfType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MemberPropertyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SchemaMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.VirtualCubeMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -726,44 +745,49 @@ class NonEmptyTest extends BatchTestCase {
               super(catalog);
           }
 
-          /* TODO: DENIS MAPPING-MODIFIER
           @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("StrMeasure")
-                  .fact(new TableR("promotion"))
-                  .dimensionUsageOrDimensions(List.of(
-                      PrivateDimensionRBuilder.builder()
-                          .name("Promotions")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Promotion Name")
-                                          .column("promotion_name")
-                                          .uniqueMembers(true)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
+              result.add(PhysicalCubeMappingImpl.builder()
+                .withName("StrMeasure")
+                .withQuery(TableQueryMappingImpl.builder().withName("promotion").build())
+                .withDimensionConnectors(List.of(
+                		DimensionConnectorMappingImpl.builder()
+                		  .withOverrideDimensionName("Promotions")
+                		  .withDimension(
+                				  StandardDimensionMappingImpl.builder()
+                				  .withName("Promotions")
+                				  .withHierarchies(List.of(
+                						  HierarchyMappingImpl.builder()
+                						  	.withHasAll(true)
+                						  	.withLevels(List.of(
+                						  		LevelMappingImpl.builder()
+                						  			.withName("Promotion Name")
+                						  			.withColumn("promotion_name")
+                						  			.withUniqueMembers(true)
+                						  			.build()
+                						  	))
+                						  	.build()                						  	
+                				  ))
+                				  .build()
+                		  )
                           .build()
-                  ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Media")
-                          .column("media_type")
-                          .aggregator("max")
-                          .datatype(MeasureDataTypeEnum.STRING)
-                          .build()
-                  ))
-                  .build());
+                ))
+                .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                	.withMeasures(List.of(
+                		MeasureMappingImpl.builder()
+                			.withName("Media")
+                			.withColumn("media_type")
+                			.withAggregatorType(MeasureAggregatorType.MAX)
+                			.withDatatype(DataType.STRING)
+                			.build()
+                	))
+                    .build()
+                )).build());
               return result;
           }
-     
-      */
+
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -803,81 +827,92 @@ class NonEmptyTest extends BatchTestCase {
           public TestBug1515302Modifier(CatalogMapping catalog) {
               super(catalog);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
+          
           @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("Bug1515302")
-                  .fact(new TableR("sales_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      PrivateDimensionRBuilder.builder()
-                          .name("Promotions")
-                          .foreignKey("promotion_id")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(false)
-                                  .primaryKey("promotion_id")
-                                  .relation(new TableR("promotion"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Promotion Name")
-                                          .column("promotion_name")
-                                          .uniqueMembers(true)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
+              result.add(PhysicalCubeMappingImpl.builder()
+                .withName("Bug1515302")
+                .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                .withDimensionConnectors(List.of(
+                		DimensionConnectorMappingImpl.builder()
+                		  .withOverrideDimensionName("Promotions")
+                		  .withForeignKey("promotion_id")
+                		  .withDimension(
+                				  StandardDimensionMappingImpl.builder()
+                				  .withName("Promotions")
+                				  .withHierarchies(List.of(
+                						  HierarchyMappingImpl.builder()
+                						  	.withHasAll(true)
+                						  	.withPrimaryKey("promotion_id")
+                						  	.withQuery(TableQueryMappingImpl.builder().withName("promotion").build())
+                						  	.withLevels(List.of(
+                						  		LevelMappingImpl.builder()
+                						  			.withName("Promotion Name")
+                						  			.withColumn("promotion_name")
+                						  			.withUniqueMembers(true)
+                						  			.build()
+                						  	))
+                						  	.build()                						  	
+                				  ))
+                				  .build()
+                		  )
                           .build(),
-                      PrivateDimensionRBuilder.builder()
-                          .name("Customers")
-                          .foreignKey("customer_id")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .allMemberName("All Customers")
-                                  .primaryKey("customer_id")
-                                  .relation(new TableR("customer"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Country")
-                                          .column("country")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("State Province")
-                                          .column("state_province")
-                                          .uniqueMembers(true)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("City")
-                                          .column("city")
-                                          .uniqueMembers(false)
-                                          .build(),
-                                      LevelRBuilder.builder()
-                                          .name("Name")
-                                          .column("customer_id")
-                                          .type(TypeEnum.NUMERIC)
-                                          .uniqueMembers(true)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
-                          .build()
-                  ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Unit Sales")
-                          .column("unit_sales")
-                          .aggregator("sum")
-                          .build()
-                  ))
-                  .build());
+                       DimensionConnectorMappingImpl.builder()
+              		       .withOverrideDimensionName("Customers")
+              		  	   .withForeignKey("customer_id")
+              		  	   .withDimension(
+              				  StandardDimensionMappingImpl.builder()
+              				  .withName("Customers")
+              				  .withHierarchies(List.of(
+              						  HierarchyMappingImpl.builder()
+              						  	.withHasAll(true)
+              						  	.withAllMemberName("All Customers")
+              						  	.withPrimaryKey("customer_id")
+              						  	.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+              						  	.withLevels(List.of(
+              						  		LevelMappingImpl.builder()
+              						  			.withName("Country")
+              						  			.withColumn("country")
+              						  			.withUniqueMembers(true)
+              						  			.build(),
+                  						  	LevelMappingImpl.builder()
+              						  			.withName("State Province")
+              						  			.withColumn("state_province")
+              						  			.withUniqueMembers(true)
+              						  			.build(),
+                      						LevelMappingImpl.builder()
+                  						  			.withName("City")
+                  						  			.withColumn("city")
+                  						  			.withUniqueMembers(false)
+                  						  			.build(),
+                       						LevelMappingImpl.builder()
+                  						  			.withName("Name")
+                  						  			.withColumn("customer_id")
+                  						  			.withType(DataType.NUMERIC)
+                  						  			.withUniqueMembers(true)
+                  						  			.build()                  						  			
+              						  	))
+              						  	.build()                						  	
+              				  ))
+              				  .build()
+              		  )
+                        .build()                                              
+                ))
+                .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                	.withMeasures(List.of(
+                		MeasureMappingImpl.builder()
+                			.withName("Unit Sales")
+                			.withColumn("unit_sales")
+                			.withAggregatorType(MeasureAggregatorType.SUM)
+                			.build()
+                	))
+                    .build()
+                )).build());
               return result;
           }
-  
-      */
+
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1880,7 +1915,7 @@ class NonEmptyTest extends BatchTestCase {
       RolapSchemaPool.instance().clear();
       CatalogMapping catalog = context.getCatalogMapping();
       ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.NonEmptyTestModifier2(catalog,
-          "IfBlankName"));
+    		  HideMemberIfType.IF_BLANK_NAME));
 
       // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
@@ -1918,7 +1953,7 @@ class NonEmptyTest extends BatchTestCase {
       RolapSchemaPool.instance().clear();
       CatalogMapping catalogMapping = context.getCatalogMapping();
       ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.NonEmptyTestModifier2(catalogMapping,
-    		  "IfParentsName"));
+    		  HideMemberIfType.IF_PARENTS_NAME));
 
       // [Product Name] can be hidden if it it matches its parent name, so
     // native evaluation can not handle this query.
@@ -2023,7 +2058,7 @@ class NonEmptyTest extends BatchTestCase {
       RolapSchemaPool.instance().clear();
       CatalogMapping schema = context.getCatalogMapping();
       ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.NonEmptyTestModifier2(schema,
-    		  "IfBlankName"));
+    		  HideMemberIfType.IF_BLANK_NAME));
 
       // [Product Name] can be hidden if it is blank, but native evaluation
     // should be able to handle the query.
@@ -2478,87 +2513,82 @@ class NonEmptyTest extends BatchTestCase {
         + "    ISNULL(`product_class`.`product_family`) ASC, `product_class`.`product_family` ASC" );
       class TestMultiLevelMemberConstraintNullParentModifier extends PojoMappingModifier {
 
+          private static final StandardDimensionMappingImpl  d = StandardDimensionMappingImpl.builder()
+          .withName("Warehouse2")
+          .withHierarchies(List.of(
+              HierarchyMappingImpl.builder()
+                  .withHasAll(true)
+                  .withPrimaryKey("warehouse_id")
+                  .withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
+                  .withLevels(List.of(
+                      LevelMappingImpl.builder()
+                          .withName("address3")
+                          .withColumn("wa_address3")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("address2")
+                          .withColumn("wa_address2")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("address1")
+                          .withColumn("wa_address1")
+                          .withUniqueMembers(false)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("name")
+                          .withColumn("warehouse_name")
+                          .withUniqueMembers(false)
+                          .build()
+                      ))
+                  .build()
+          ))
+          .build();
+
+          
           public TestMultiLevelMemberConstraintNullParentModifier(CatalogMapping catalog) {
               super(catalog);
           }
 
-          /* TODO: DENIS MAPPING-MODIFIER
           @Override
-          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-              List<MappingPrivateDimension> result = new ArrayList<>();
-              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-              result.add(PrivateDimensionRBuilder.builder()
-                  .name("Warehouse2")
-                  .hierarchies(List.of(
-                      HierarchyRBuilder.builder()
-                          .hasAll(true)
-                          .primaryKey("warehouse_id")
-                          .relation(new TableR("warehouse"))
-                          .levels(List.of(
-                              LevelRBuilder.builder()
-                                  .name("address3")
-                                  .column("wa_address3")
-                                  .uniqueMembers(true)
-                                  .build(),
-                              LevelRBuilder.builder()
-                                  .name("address2")
-                                  .column("wa_address2")
-                                  .uniqueMembers(true)
-                                  .build(),
-                              LevelRBuilder.builder()
-                                  .name("address1")
-                                  .column("wa_address1")
-                                  .uniqueMembers(false)
-                                  .build(),
-                              LevelRBuilder.builder()
-                                  .name("name")
-                                  .column("warehouse_name")
-                                  .uniqueMembers(false)
-                                  .build()
-                              ))
-                          .build()
-                  ))
-                  .build());
-              return result;
-          }
-
-          @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("Warehouse2")
-                  .fact(new TableR("inventory_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      DimensionUsageRBuilder.builder()
-                          .name("Product")
-                          .source("Product")
-                          .foreignKey("product_id")
-                          .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Warehouse2")
-                          .source("Warehouse2")
-                          .foreignKey("warehouse_id")
+              result.add(PhysicalCubeMappingImpl.builder()
+                  .withName("Warehouse2")
+                  .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                	DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Product")
+                		.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                        
+                        .withForeignKey("product_id")
+                        .build(),
+                    DimensionConnectorMappingImpl.builder()
+                          .withOverrideDimensionName("Warehouse2")
+                          .withDimension(d)
+                          .withForeignKey("warehouse_id")
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Cost")
-                          .column("warehouse_cost")
-                          .aggregator("sum")
-                          .build(),
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Sales")
-                          .column("warehouse_sales")
-                          .aggregator("sum")
-                          .build()
-                  ))
+                  .withMeasureGroups(List.of(
+                		  MeasureGroupMappingImpl.builder()
+                		  .withMeasures(List.of(
+                             MeasureMappingImpl.builder()
+                                  .withName("Warehouse Cost")
+                                  .withColumn("warehouse_cost")
+                                  .withAggregatorType(MeasureAggregatorType.SUM)
+                                  .build(),
+                             MeasureMappingImpl.builder()
+                              	  .withName("Warehouse Sales")
+                                  .withColumn("warehouse_sales")
+                                  .withAggregatorType(MeasureAggregatorType.SUM)
+                                  .build()                				  
+                		   ))
+                		  .build()
+                   ))
                   .build());
               return result;
           }
-  
-      */
-      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -2669,77 +2699,72 @@ class NonEmptyTest extends BatchTestCase {
               super(catalog);
           }
 
-          /* TODO: DENIS MAPPING-MODIFIER
-          @Override
-          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-              List<MappingPrivateDimension> result = new ArrayList<>();
-              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-              result.add(              PrivateDimensionRBuilder.builder()
-                  .name("Warehouse2")
-                  .hierarchies(List.of(
-                      HierarchyRBuilder.builder()
-                          .hasAll(true)
-                          .primaryKey("warehouse_id")
-                          .relation(new TableR("warehouse"))
-                          .levels(List.of(
-                              LevelRBuilder.builder()
-                                  .name("fax")
-                                  .column("warehouse_fax")
-                                  .uniqueMembers(true)
-                                  .build(),
-              LevelRBuilder.builder()
-                                  .name("address1")
-                                  .column("wa_address1")
-                                  .uniqueMembers(false)
-                                  .build(),
-                              LevelRBuilder.builder()
-                                  .name("name")
-                                  .column("warehouse_name")
-                                  .uniqueMembers(false)
-                                  .build()
-                          ))
+          StandardDimensionMappingImpl warehouse2Dimension =  StandardDimensionMappingImpl.builder()
+          .withName("Warehouse2")
+          .withHierarchies(List.of(
+              HierarchyMappingImpl.builder()
+                  .withHasAll(true)
+                  .withPrimaryKey("warehouse_id")
+                  .withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
+                  .withLevels(List.of(
+                      LevelMappingImpl.builder()
+                          .withName("fax")
+                          .withColumn("warehouse_fax")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("address1")
+                          .withColumn("wa_address1")
+                          .withUniqueMembers(false)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("name")
+                          .withColumn("warehouse_name")
+                          .withUniqueMembers(false)
                           .build()
                   ))
-                  .build());
-              return result;
-          }
-
+                  .build()
+          ))
+          .build();
+          
           @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("Warehouse2")
-                  .fact(new TableR("inventory_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      DimensionUsageRBuilder.builder()
-                          .name("Product")
-                          .source("Product")
-                          .foreignKey("product_id")
+              result.add(PhysicalCubeMappingImpl.builder()
+                  .withName("Warehouse2")
+                  .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                	  DimensionConnectorMappingImpl.builder()
+                	      .withOverrideDimensionName("Product")
+                	      .withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                          
+                          .withForeignKey("product_id")
                           .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Warehouse2")
-                          .source("Warehouse2")
-                          .foreignKey("warehouse_id")
+                      DimensionConnectorMappingImpl.builder()
+                          .withOverrideDimensionName("Warehouse2")
+                          .withDimension(warehouse2Dimension)
+                          .withForeignKey("warehouse_id")
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Cost")
-                          .column("warehouse_cost")
-                          .aggregator("sum")
-                          .build(),
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Sales")
-                          .column("warehouse_sales")
-                          .aggregator("sum")
-                          .build()
-                  ))
-                  .build());
-              return result;
+                  .withMeasureGroups(List.of(
+                	  MeasureGroupMappingImpl.builder()
+                	  .withMeasures(List.of(	  
+                			  MeasureMappingImpl.builder()
+                			  	.withName("Warehouse Cost")
+                			  	.withColumn("warehouse_cost")
+                			  	.withAggregatorType(MeasureAggregatorType.SUM)
+                			  	.build(),
+                			  MeasureMappingImpl.builder()
+                			  	.withName("Warehouse Sales")
+                			  	.withColumn("warehouse_sales")
+                			  	.withAggregatorType(MeasureAggregatorType.SUM)
+                			  	.build()                			  	
+                	  ))
+                      .build()
+                      )).build()
+                  );
+              return result;        	  
           }
-   */
-      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -2849,89 +2874,80 @@ class NonEmptyTest extends BatchTestCase {
 
       class TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier extends PojoMappingModifier {
 
+          private static final StandardDimensionMappingImpl  d = StandardDimensionMappingImpl.builder()
+          .withName("Warehouse2")
+          .withHierarchies(List.of(
+              HierarchyMappingImpl.builder()
+                  .withHasAll(true)
+                  .withPrimaryKey("warehouse_id")
+                  .withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
+                  .withLevels(List.of(
+                      LevelMappingImpl.builder()
+                          .withName("address3")
+                          .withColumn("wa_address3")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("address2")
+                          .withColumn("wa_address2")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("fax")
+                          .withColumn("warehouse_fax")
+                          .withUniqueMembers(false)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("name")
+                          .withColumn("warehouse_name")
+                          .withUniqueMembers(false)
+                          .build()
+                      ))
+                  .build()
+          ))
+          .build();
+
           public TestMultiLevelMemberConstraintWithMixedNullNonNullChildModifier(CatalogMapping catalog) {
               super(catalog);
           }
 
-          /* TODO: DENIS MAPPING-MODIFIER
           @Override
-          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-              List<MappingPrivateDimension> result = new ArrayList<>();
-              result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-              result.add(
-            		  PrivateDimensionRBuilder.builder()
-                      .name("Warehouse2")
-                      .hierarchies(List.of(
-                          HierarchyRBuilder.builder()
-                              .hasAll(true)
-                              .primaryKey("warehouse_id")
-                              .relation(new TableR("warehouse"))
-                              .levels(List.of(
-                                  LevelRBuilder.builder()
-                                      .name("address3")
-                                      .column("wa_address3")
-                                      .uniqueMembers(true)
-                                      .build(),
-                                  LevelRBuilder.builder()
-                                      .name("address2")
-                                      .column("wa_address2")
-                                      .uniqueMembers(false)
-                                      .build(),
-                                  LevelRBuilder.builder()
-                                      .name("fax")
-                                      .column("warehouse_fax")
-                                      .uniqueMembers(false)
-                                      .build(),
-                                  LevelRBuilder.builder()
-                                      .name("name")
-                                      .column("warehouse_name")
-                                      .uniqueMembers(false)
-                                      .build()
-                              ))
-                              .build()
-                      ))
-                      .build());
-              return result;
-          }
-
-          @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("Warehouse2")
-                  .fact(new TableR("inventory_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      DimensionUsageRBuilder.builder()
-                          .name("Product")
-                          .source("Product")
-                          .foreignKey("product_id")
+              result.add(PhysicalCubeMappingImpl.builder()	  
+                  .withName("Warehouse2")
+                  .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                	  DimensionConnectorMappingImpl.builder()
+                	      .withOverrideDimensionName("Product")
+                	      .withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                          
+                          .withForeignKey("product_id")
                           .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Warehouse2")
-                          .source("Warehouse2")
-                          .foreignKey("warehouse_id")
+                      DimensionConnectorMappingImpl.builder()
+                          .withOverrideDimensionName("Warehouse2")
+                          .withDimension(d)
+                          .withForeignKey("warehouse_id")
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Cost")
-                          .column("warehouse_cost")
-                          .aggregator("sum")
-                          .build(),
-                      MeasureRBuilder.builder()
-                          .name("Warehouse Sales")
-                          .column("warehouse_sales")
-                          .aggregator("sum")
-                          .build()
-                  ))
+                  .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                		  .withMeasures(List.of(
+                              MeasureMappingImpl.builder()
+                                  .withName("Warehouse Cost")
+                                  .withColumn("warehouse_cost")
+                                  .withAggregatorType(MeasureAggregatorType.SUM)                                  
+                                  .build(),
+                              MeasureMappingImpl.builder()
+                                  .withName("Warehouse Sales")
+                                  .withColumn("warehouse_sales")
+                                  .withAggregatorType(MeasureAggregatorType.SUM)
+                                  .build()                				  
+                		   ))
+                		  .build())
+                  )
                   .build());
               return result;
-          }
-   
-      */
-      
-      
+          }      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -5623,48 +5639,53 @@ class NonEmptyTest extends BatchTestCase {
           public TestContextAtAllWorksWithConstraintModifier(CatalogMapping catalog) {
               super(catalog);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
           @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("onlyGender")
-                  .fact(new TableR("sales_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      PrivateDimensionRBuilder.builder()
-                          .name("Gender")
-                          .foreignKey("customer_id")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .allMemberName("All Gender")
-                                  .primaryKey("customer_id")
-                                  .relation(new TableR("customer"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Gender")
-                                          .column("gender")
-                                          .uniqueMembers(true)
-                                          .build()
-                                  ))
-                                  .build()
-                          ))
+              result.add(PhysicalCubeMappingImpl.builder()
+                  .withName("onlyGender")
+                  .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                	 DimensionConnectorMappingImpl.builder()
+                	 	  .withOverrideDimensionName("Gender")
+                          .withForeignKey("customer_id")
+                          .withDimension(StandardDimensionMappingImpl.builder()
+                        		  .withName("Gender")
+                        		  .withHierarchies(List.of(
+                        			  HierarchyMappingImpl.builder()
+                        			  .withHasAll(true)
+                        			  .withAllMemberName("All Gender")
+                        			  .withPrimaryKey("customer_id")
+                        			  .withQuery(TableQueryMappingImpl.builder().withName("customer").build())                                  
+                        			  .withLevels(List.of(
+                        					  LevelMappingImpl.builder()
+                        					  	.withName("Gender")
+                        					  	.withColumn("gender")
+                        					  	.withUniqueMembers(true)
+                        					  	.build()
+                                       ))
+                        			  .build()
+                        			))
+                        		  	.build()
+                        	)
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Unit Sales")
-                          .column("unit_sales")
-                          .aggregator("sum")
-                          .build()
+                  .withMeasureGroups(List.of(
+                	MeasureGroupMappingImpl.builder()
+                	.withMeasures(List.of(
+                			MeasureMappingImpl.builder()
+                            	.withName("Unit Sales")
+                            	.withColumn("unit_sales")
+                            	.withAggregatorType(MeasureAggregatorType.SUM)
+                            	.build()                			
+                	 ))
+                	.build()	  
                   ))
                   .build());
-              return result;
+              return result;        	  
           }
-    
-      
-      */
+
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -5719,143 +5740,159 @@ class NonEmptyTest extends BatchTestCase {
       SystemWideProperties.instance().EnableNativeNonEmpty= true;
       class TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier extends PojoMappingModifier {
 
+          private static final StandardDimensionMappingImpl d = StandardDimensionMappingImpl.builder()
+          .withName("Store")
+          .withHierarchies(List.of(
+              HierarchyMappingImpl.builder()
+                  .withHasAll(true)
+                  .withPrimaryKey("store_id")
+                  .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                  .withLevels(List.of(
+                      LevelMappingImpl.builder()
+                          .withName("Store Country")
+                          .withColumn("store_country")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("Store State")
+                          .withColumn("store_state")
+                          .withUniqueMembers(true)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("Store City")
+                          .withColumn("store_city")
+                          .withUniqueMembers(false)
+                          .build(),
+                      LevelMappingImpl.builder()
+                          .withName("Store Name")
+                          .withColumn("store_name")
+                          .withUniqueMembers(true)
+                          .withMemberProperties(List.of(
+                        	  MemberPropertyMappingImpl.builder()
+                                  .withName("Store Type")
+                                  .withColumn("store_type")
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Store Manager")
+                                  .withColumn("store_manager")
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Store Sqft")
+                                  .withColumn("store_sqft")
+                                  .withDataType(DataType.NUMERIC)
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Grocery Sqft")
+                                  .withColumn("grocery_sqft")
+                                  .withDataType(DataType.NUMERIC)
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Frozen Sqft")
+                                  .withColumn("frozen_sqft")
+                                  .withDataType(DataType.NUMERIC)
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Meat Sqft")
+                                  .withColumn("meat_sqft")
+                                  .withDataType(DataType.NUMERIC)
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Has coffee bar")
+                                  .withColumn("coffee_bar")
+                                  .withDataType(DataType.BOOLEAN)
+                                  .build(),
+                              MemberPropertyMappingImpl.builder()
+                                  .withName("Street address")
+                                  .withColumn("store_street_address")
+                                  .withDataType(DataType.STRING)
+                                  .build()
+                        		  ))
+                          .build()
+                      ))
+                  .build()
+          ))
+          .build();
+          
+          private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
+        		  .withName("Unit Sales")
+        		  .withColumn("unit_sales")
+        		  .withAggregatorType(MeasureAggregatorType.SUM)
+        		  .withFormatString("Standard")
+        		  .build();
+ 
+          
+          private static final PhysicalCubeMappingImpl salesCube = PhysicalCubeMappingImpl.builder()
+          .withName("Sales")
+          .withDefaultMeasure(m)
+          .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+          .withDimensionConnectors(List.of(
+        	 DimensionConnectorMappingImpl.builder()
+        	 	  .withOverrideDimensionName("Store")
+        	 	  .withDimension(d)
+                  .withForeignKey("store_id")
+                  .build()
+          ))
+          .withMeasureGroups(List.of(
+        		  MeasureGroupMappingImpl.builder()
+        		  .withMeasures(List.of(
+                          MeasureMappingImpl.builder()
+                          .withName("Unit Sales")
+                          .withColumn("unit_sales")
+                          .withAggregatorType(MeasureAggregatorType.SUM)
+                          .withFormatString("Standard")
+                          .build()                                				  
+        		  ))
+        		  .build()
+        		  ))
+          .withCalculatedMembers(List.of(
+        	  CalculatedMemberMappingImpl.builder()
+                  .withName("dummyMeasure")
+                  //.withDimension("Measures")
+                  .withFormatString("1")
+                  .build()
+          ))
+          .build();
+          
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(CatalogMapping catalog) {
               super(catalog);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
-          @Override
-          protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
-              return SchemaRBuilder.builder()
-                  .name("FoodMart")
-                  .dimensions(List.of(
-                    PrivateDimensionRBuilder.builder()
-                        .name("Store")
-                        .hierarchies(List.of(
-                            HierarchyRBuilder.builder()
-                                .hasAll(true)
-                                .primaryKey("store_id")
-                                .relation(new TableR("store"))
-                                .levels(List.of(
-                                    LevelRBuilder.builder()
-                                        .name("Store Country")
-                                        .column("store_country")
-                                        .uniqueMembers(true)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Store State")
-                                        .column("store_state")
-                                        .uniqueMembers(true)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Store City")
-                                        .column("store_city")
-                                        .uniqueMembers(false)
-                                        .build(),
-                                    LevelRBuilder.builder()
-                                        .name("Store Name")
-                                        .column("store_name")
-                                        .uniqueMembers(true)
-                                        .properties(List.of(
-                                            PropertyRBuilder.builder()
-                                                .name("Store Type")
-                                                .column("store_type")
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Store Manager")
-                                                .column("store_manager")
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Store Sqft")
-                                                .column("store_sqft")
-                                                .type(PropertyTypeEnum.NUMERIC)
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Grocery Sqft")
-                                                .column("grocery_sqft")
-                                                .type(PropertyTypeEnum.NUMERIC)
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Frozen Sqft")
-                                                .column("frozen_sqft")
-                                                .type(PropertyTypeEnum.NUMERIC)
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Meat Sqft")
-                                                .column("meat_sqft")
-                                                .type(PropertyTypeEnum.NUMERIC)
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Has coffee bar")
-                                                .column("coffee_bar")
-                                                .type(PropertyTypeEnum.BOOLEAN)
-                                                .build(),
-                                            PropertyRBuilder.builder()
-                                                .name("Street address")
-                                                .column("store_street_address")
-                                                .type(PropertyTypeEnum.STRING)
-                                                .build()
-                                        ))
-                                        .build()
-                                ))
-                                .build()
-                        ))
-                        .build()
-                  ))
-                  .cubes(List.of(
-                      CubeRBuilder.builder()
-                          .name("Sales")
-                          .defaultMeasure("Unit Sales")
-                          .fact(new TableR("sales_fact_1997"))
-                          .dimensionUsageOrDimensions(List.of(
-                              DimensionUsageRBuilder.builder()
-                                  .name("Store")
-                                  .source("Store")
-                                  .foreignKey("store_id")
-                                  .build()
+          
+          protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
+              return List.of(SchemaMappingImpl.builder()
+            		  .withName("FoodMart")
+                      .withCubes(List.of(
+                    		  salesCube,
+                              VirtualCubeMappingImpl.builder()
+                                  //.withDefaultMeasure("dummyMeasure") //TODO
+                                  .withDefaultMeasure(m)
+                                  .withName("virtual")
+                                  .withDimensionConnectors(List.of(
+                                		  DimensionConnectorMappingImpl.builder()
+                                		  .withPhysicalCube(salesCube)
+                                		  .withOverrideDimensionName("Store")
+                                		  .withDimension(d)
+                                		  .build()
+                                  ))
+                                  .withMeasureGroups(List.of(
+                                		  MeasureGroupMappingImpl.builder()  
+                                		  .withMeasures(List.of(
+                                			 MeasureMappingImpl.builder()
+                                             //.cubeName("Sales")
+                                             .withName("[Measures].[Unit Sales]")
+                                			 .build(),
+                                			 MeasureMappingImpl.builder()
+                                             //.cubeName("Sales")
+                                             .withName("[Measures].[dummyMeasure]")
+                                			 .build()	  
+
+                              			  ))
+                                		  .build()
+                                   ))
+                                  .build()                                  
                           ))
-                          .measures(List.of(
-                              MeasureRBuilder.builder()
-                                  .name("Unit Sales")
-                                  .column("unit_sales")
-                                  .aggregator("sum")
-                                  .formatString("Standard")
-                                  .build()
-                          ))
-                          .calculatedMembers(List.of(
-                              CalculatedMemberRBuilder.builder()
-                                  .name("dummyMeasure")
-                                  .dimension("Measures")
-                                  .formulaElement(FormulaRBuilder.builder().cdata("1").build())
-                                  .build()
-                          ))
-                          .build()
-                  ))
-                  .virtualCubes(List.of(
-                      VirtualCubeRBuilder.builder()
-                          .defaultMeasure("dummyMeasure")
-                          .name("virtual")
-                          .virtualCubeDimensions(List.of(
-                              VirtualCubeDimensionRBuilder.builder()
-                                  .name("Store")
-                                  .build()
-                          ))
-                          .virtualCubeMeasures(List.of(
-                              VirtualCubeMeasureRBuilder.builder()
-                                  .cubeName("Sales")
-                                  .name("[Measures].[Unit Sales]")
-                                  .build(),
-                              VirtualCubeMeasureRBuilder.builder()
-                                  .cubeName("Sales")
-                                  .name("[Measures].[dummyMeasure]")
-                                  .build()
-                          ))
-                          .build()
-                  ))
-                  .build();
+            		  .build());
           }
-   
-      */
-      
+               
       }
       /*
       withSchema(context,

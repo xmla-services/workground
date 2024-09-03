@@ -18,14 +18,19 @@ import static mondrian.rolap.util.RelationUtil.find;
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.daanse.emf.model.rolapmapping.InlineTableQuery;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.rolap.mapping.api.model.DimensionConnectorMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.DimensionMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.InlineTableQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.RelationalQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SQLExpressionMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SqlSelectQueryMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.TableQueryMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,7 +196,7 @@ public class HierarchyUsage {
         this.usagePrefix = du.getUsagePrefix();
 
         init(cube, hierarchy, cubeDim);
-        
+
         /*
         if (cubeDim instanceof MappingDimensionUsage du) {
             this.kind = Kind.SHARED;
@@ -443,7 +448,7 @@ public class HierarchyUsage {
 
         // Unless this hierarchy is drawing from the fact table, we need
         // a join expresion and a foreign key.
-        final boolean inFactTable = this.joinTable.equals(cube.getFact());
+        final boolean inFactTable = Utils.equalsQuery(this.joinTable, cube.getFact());
         if (!inFactTable) {
             if (this.joinExp == null) {
                 throw new MondrianException(MessageFormat.format(
