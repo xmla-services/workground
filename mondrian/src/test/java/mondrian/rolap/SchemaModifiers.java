@@ -15,6 +15,7 @@ package mondrian.rolap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -54,6 +55,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AnnotationMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberPropertyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CellFormatterMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
@@ -115,11 +117,11 @@ public class SchemaModifiers {
                         .withAccess(AccessSchema.NONE)
                         .withCubeGrant(List.of(
                         	AccessCubeGrantMappingImpl.builder()
-                                .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                 .withAccess(AccessCube.ALL)
                                 .withHierarchyGrants(List.of(
                                 	AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -188,11 +190,11 @@ public class SchemaModifiers {
                         .withAccess(AccessSchema.NONE)
                         .withCubeGrant(List.of(
                         	AccessCubeGrantMappingImpl.builder()
-                                .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                 .withAccess(AccessCube.ALL)
                                 .withHierarchyGrants(List.of(
                                 	AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -270,7 +272,7 @@ public class SchemaModifiers {
                         	.build(),
                      DimensionConnectorMappingImpl.builder()
                      	.withOverrideDimensionName("Store")
-                     	.withDimension(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE)
+                     	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
                         .withVisible(true)
                         .build(),
                      DimensionConnectorMappingImpl.builder()
@@ -2837,7 +2839,7 @@ public class SchemaModifiers {
                 result.add(CalculatedMemberMappingImpl.builder()
                     .withName("H1 1997")
                     .withFormula("Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])")
-                    .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME1)
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME1))
                     //.withDimension(FoodmartMappingSupplier.DIMENSION_TIME) //dimension absent in new model
                     .build());
             }
@@ -2868,13 +2870,13 @@ public class SchemaModifiers {
                 result.add(CalculatedMemberMappingImpl.builder()
                     .withName("H1 1997")
                     .withFormula("Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])")
-                    .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME1)
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME1))
                     //.withDimension(FoodmartMappingSupplier.DIMENSION_TIME) //dimension absent in new model
                     .build());
                 result.add(CalculatedMemberMappingImpl.builder()
                         .withName("Partial")
                         .withFormula("Aggregate([Education Level].[Partial College]:[Education Level].[Partial High School])")
-                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_EDUCATION_LEVEL)
+                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_EDUCATION_LEVEL))
                         //.withDimension(FoodmartMappingSupplier.DIMENSION_TIME) //dimension absent in new model
                         .build());                
             }
@@ -3036,8 +3038,13 @@ public class SchemaModifiers {
         protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
             List<DimensionConnectorMapping> result = new ArrayList<>();
             result.addAll(super.cubeDimensionConnectors(cube));
-            if ("Sales".equals(cube.getName())) {
-                result.add(DimensionConnectorMappingImpl.builder()
+            if ("Store".equals(cube.getName())) {
+                Optional<DimensionConnectorMapping> o = result.stream().filter(d -> d.getOverrideDimensionName().equals("Store")).findFirst();
+                int i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
+                result.add(i, DimensionConnectorMappingImpl.builder()
                 	.withOverrideDimensionName("Store")
                 	.withDimension(StandardDimensionMappingImpl.builder()
                 		.withName("Store")
@@ -3075,6 +3082,11 @@ public class SchemaModifiers {
                 		))
                 		.build())
                 	.build());
+                o = result.stream().filter(d -> d.getOverrideDimensionName().equals("Store Type")).findFirst();
+                i = 0;
+                if (o.isPresent()) {
+                    i = result.indexOf(o.get());
+                }
                 result.add(DimensionConnectorMappingImpl.builder()
                 		.withOverrideDimensionName("Store Type")
                 		.withDimension(StandardDimensionMappingImpl.builder()
@@ -6384,28 +6396,26 @@ public class SchemaModifiers {
         public RolapCubeTestModifier1(CatalogMapping catalog) {
             super(catalog);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
-        @Override
-        protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
-            List<MappingCalculatedMember> result = new ArrayList<>();
+        
+        protected List<? extends CalculatedMemberMapping> cubeCalculatedMembers(CubeMapping cube) {
+            List<CalculatedMemberMapping> result = new ArrayList<>();
             result.addAll(super.cubeCalculatedMembers(cube));
-            if ("Sales".equals(cube.name())) {
-                result.add(CalculatedMemberRBuilder.builder()
-                    .name("~Missing")
-                    .dimension("Gender")
-                    .formulaElement(FormulaRBuilder.builder().cdata("100").build())
+            if ("Sales".equals(cube.getName())) {
+                result.add(CalculatedMemberMappingImpl.builder()
+                    .withName("~Missing")
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
+                    //.withDimension("Gender")
+                    .withFormula("100")
                     .build());
-                result.add(CalculatedMemberRBuilder.builder()
-                    .name("~Missing")
-                    .dimension("Product")
-                    .formulaElement(FormulaRBuilder.builder().cdata("100").build())
+                result.add(CalculatedMemberMappingImpl.builder()
+                    .withName("~Missing")
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PRODUCT1))
+                    //.withDimension("Product")
+                    .withFormula("100")
                     .build());
             }
             return result;
-        }
-
-
-        */
+        }        
     }
 
     public static class OrderByAliasTestModifier1KE extends PojoMappingModifier {
@@ -8938,7 +8948,7 @@ public class SchemaModifiers {
                 	DimensionConnectorMappingImpl.builder()
                 		.withOverrideDimensionName("Time")
                 		.withForeignKey("time_id")
-                		.withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                 		.build(),
                     DimensionConnectorMappingImpl.builder()
                 		.withOverrideDimensionName("Alternative Promotion")
@@ -9116,11 +9126,11 @@ public class SchemaModifiers {
                 		.withAccess(AccessSchema.NONE)
                 		.withCubeGrant(List.of(
                 			AccessCubeGrantMappingImpl.builder()
-                                .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                 .withAccess(AccessCube.ALL)
                                 .withHierarchyGrants(List.of(
                                 	AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE)                                        
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE))                                        
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -9135,7 +9145,7 @@ public class SchemaModifiers {
                                         ))
                                         .build(),
                                     AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -9150,7 +9160,7 @@ public class SchemaModifiers {
                                         ))
                                         .build(),
                                     AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_PRODUCT1)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PRODUCT1))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -9165,7 +9175,7 @@ public class SchemaModifiers {
                                         ))
                                         .build(),
                                     AccessHierarchyGrantMappingImpl.builder()
-                                    	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_PROMOTION_MEDIA)
+                                    	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PROMOTION_MEDIA))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -9180,7 +9190,7 @@ public class SchemaModifiers {
                                         ))
                                         .build(),
                                     AccessHierarchyGrantMappingImpl.builder()
-                                    	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_EDUCATION_LEVEL)
+                                    	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_EDUCATION_LEVEL))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -9248,7 +9258,7 @@ public class SchemaModifiers {
             	result.add(DimensionConnectorMappingImpl.builder()
             		.withOverrideDimensionName("PurchaseDate")
             		.withForeignKey("time_id")
-            		.withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+            		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                     .build());
             }
             return result;
@@ -9271,7 +9281,7 @@ public class SchemaModifiers {
                 result.add(CalculatedMemberMappingImpl.builder()
                     .withName("H1 1997")
                     .withFormula("Aggregate([Time].[1997].[Q1]:[Time].[1997].[Q2])")
-                    .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME1)
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME1))
                     //.dimension("Time")
                     .build());
             }
@@ -9398,7 +9408,7 @@ public class SchemaModifiers {
                 result.add(CalculatedMemberMappingImpl.builder()
                     .withName("maleMinusFemale")                    
                     //.dimension("gender")
-                    .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                     .withVisible(false)
                     .withFormula("gender.m - gender.f")
                     .withCalculatedMemberProperties(List.of(
@@ -9440,7 +9450,7 @@ public class SchemaModifiers {
                     .build());
                 result.add(CalculatedMemberMappingImpl.builder()
                     .withName("Total")
-                    .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME1)
+                    .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME1))
                     .withVisible(false)
                     .withFormula("AGGREGATE({[Time].[1997].[Q1],[Time].[1997].[Q2]})")
                     .withCalculatedMemberProperties(List.of(
@@ -13156,7 +13166,7 @@ public class SchemaModifiers {
                 .withDimensionConnectors(List.of(
                 	DimensionConnectorMappingImpl.builder()
                         .withOverrideDimensionName("Time")
-                        .withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                        .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                         .withForeignKey("time_id")
                         .build(),
                     DimensionConnectorMappingImpl.builder()
@@ -13385,14 +13395,14 @@ public class SchemaModifiers {
                 		.withAccess(AccessSchema.NONE)
                 		.withCubeGrant(List.of(
                 			AccessCubeGrantMappingImpl.builder()
-                				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                				.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                 				.withAccess(AccessCube.ALL)
                 				.withHierarchyGrants(List.of(
                 					AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.HIDDEN) //should be bad
-                                        .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                        .withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                         .withMemberGrants(List.of(
                                         	AccessMemberGrantMappingImpl.builder()
                                                 .withMember("[Customers].[USA]")
@@ -13462,11 +13472,11 @@ public class SchemaModifiers {
                 		.withAccess(AccessSchema.NONE)
                 		.withCubeGrant(List.of(
                 			AccessCubeGrantMappingImpl.builder()
-                				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                				.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                 				.withAccess(AccessCube.ALL)
                 				.withHierarchyGrants(List.of(
                 					AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                         .withMemberGrants(List.of(
@@ -13481,27 +13491,27 @@ public class SchemaModifiers {
                                         ))
                                         .build(),
                    					AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_PROMOTION_MEDIA)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PROMOTION_MEDIA))
                                         .withAccess(AccessHierarchy.ALL)
                                         .build(),
                   					AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_MARITAL_STATUS)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_MARITAL_STATUS))
                                         .withAccess(AccessHierarchy.ALL)
                                         .build(),
                       				AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                                         .withAccess(AccessHierarchy.NONE)
                                         .build(),
                        				AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                        .withTopLevel(FoodmartMappingSupplier.LEVEL_STORE_CYTY_UNIQUE_MEMBERS_TRUE)
+                                        .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STORE_CYTY_UNIQUE_MEMBERS_TRUE))
                                         .build()
                                 ))
                                 .build(),
                             AccessCubeGrantMappingImpl.builder()
-                            	.withCube(FoodmartMappingSupplier.CUBE_WAREHOUSE)
+                            	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
                             	.withAccess(AccessCube.ALL)
                             	.build()    
                         ))
@@ -13517,11 +13527,11 @@ public class SchemaModifiers {
                     		.withAccess(AccessSchema.NONE)
                     		.withCubeGrant(List.of(
                     			AccessCubeGrantMappingImpl.builder()
-                    				.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                    				.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     				.withAccess(AccessCube.NONE)
                     				.withHierarchyGrants(List.of(
                     					AccessHierarchyGrantMappingImpl.builder()
-                                            .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)                                            
                                             .withRollupPolicyType(RollupPolicyType.HIDDEN)
                                             .withMemberGrants(List.of(
@@ -13544,7 +13554,7 @@ public class SchemaModifiers {
                                             ))
                                             .build(),
                         				AccessHierarchyGrantMappingImpl.builder()
-                                            .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.ALL)                                            
                                             .withRollupPolicyType(RollupPolicyType.HIDDEN)
                                             .build()
@@ -13602,19 +13612,19 @@ public class SchemaModifiers {
                             .withAccess(AccessSchema.NONE)
                             .withCubeGrant(List.of(
                             	AccessCubeGrantMappingImpl.builder()
-                                    .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withDimensionGrants(List.of(
                                     	AccessDimensionGrantMappingImpl.builder()
                                             .withAccess(AccessDimension.ALL)
                                             .withDimension(null)
                                             //.dimension("[Measures]")
-                                            .withDimension(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE)
+                                            .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
                                             .build()
                                     ))
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                            .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                            .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withMemberGrants(List.of(
                                             	AccessMemberGrantMappingImpl.builder()
@@ -13701,11 +13711,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.ALL)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
@@ -13762,14 +13772,14 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.ALL)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                            .withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
+                                            .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Customers].[USA].[CA]")
@@ -13829,11 +13839,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_PRODUCT1)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PRODUCT1))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
@@ -13885,21 +13895,21 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.NONE)
                                              .build()     
                                         ))
                                         .build(),
                                 		AccessCubeGrantMappingImpl.builder()
-                                    	.withCube(FoodmartMappingSupplier.CUBE_SALES_RAGGED)
+                                    	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES_RAGGED))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                            	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                            	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                  .build()     
                                             ))
@@ -13953,11 +13963,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_HR)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
@@ -13968,7 +13978,7 @@ public class SchemaModifiers {
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
@@ -14024,11 +14034,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
@@ -14043,9 +14053,9 @@ public class SchemaModifiers {
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
-                                        	.withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
-                                        	.withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
+                                        	.withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
+                                        	.withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
@@ -14060,7 +14070,7 @@ public class SchemaModifiers {
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                         	.withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                         	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                                          	.withAccess(AccessHierarchy.NONE)
                                          	.build()                                             
                                              
@@ -14115,11 +14125,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)                                            
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
@@ -14133,10 +14143,10 @@ public class SchemaModifiers {
                                              ))
                                              .build(),                                             
                                          AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
-                                        	.withTopLevel(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE)
-                                        	.withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)                                            
+                                        	.withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
+                                        	.withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Store].[USA].[CA]")
@@ -14149,7 +14159,7 @@ public class SchemaModifiers {
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                          	.withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                          	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                                           	.withAccess(AccessHierarchy.NONE)
                                           	.build()                                             
                                              
@@ -14197,11 +14207,11 @@ public class SchemaModifiers {
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
@@ -14281,12 +14291,12 @@ public class SchemaModifiers {
                 .withDimensionConnectors(List.of(                
                 	DimensionConnectorMappingImpl.builder()
                 		.withOverrideDimensionName("Time")
-                		.withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                         .withForeignKey("time_id")
                         .build(),
                     DimensionConnectorMappingImpl.builder()
                     	.withOverrideDimensionName("Product")
-                    	.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                        
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                         .withForeignKey("product_id")
                         .build(),
                     DimensionConnectorMappingImpl.builder()
@@ -14391,11 +14401,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_EMPLOYEES))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -14466,11 +14476,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -14505,7 +14515,7 @@ public class SchemaModifiers {
                                                     ))
                                                 .build(),
                                             	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                                                 .withAccess(AccessHierarchy.NONE)
                                                 .build()
                                                 
@@ -14549,11 +14559,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -14610,7 +14620,7 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.NONE)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
@@ -14640,7 +14650,7 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES_RAGGED)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES_RAGGED))
                                         .withAccess(AccessCube.ALL)
                                         .build()
                                 ))
@@ -14691,11 +14701,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -14710,7 +14720,7 @@ public class SchemaModifiers {
                                                     ))
                                                 .build(),
                                             AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -14792,7 +14802,7 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.CUSTOM)
                                         .withDimensionGrants(List.of(
                                        		AccessDimensionGrantMappingImpl.builder()
@@ -14800,11 +14810,11 @@ public class SchemaModifiers {
                                                 .withAccess(AccessDimension.ALL)
                                                 .build(),
                                        		AccessDimensionGrantMappingImpl.builder()
-                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL))
                                                 .withAccess(AccessDimension.ALL)
                                                 .build(),
                                        		AccessDimensionGrantMappingImpl.builder()
-                                                .withDimension(FoodmartMappingSupplier.DIMENSION_GENDER)
+                                                .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_GENDER))
                                                 .withAccess(AccessDimension.ALL)
                                                 .build()                                                
                                         ))
@@ -14823,7 +14833,7 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.CUSTOM)
                                         .withDimensionGrants(List.of(
                                        		AccessDimensionGrantMappingImpl.builder()
@@ -14831,11 +14841,11 @@ public class SchemaModifiers {
                                                 .withAccess(AccessDimension.ALL)
                                                 .build(),
                                        		AccessDimensionGrantMappingImpl.builder()
-                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL))
                                                 .withAccess(AccessDimension.ALL)
                                                 .build(),
                                        		AccessDimensionGrantMappingImpl.builder()
-                                                .withDimension(FoodmartMappingSupplier.DIMENSION_GENDER)
+                                                .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_GENDER))
                                                 .withAccess(AccessDimension.NONE)
                                                 .build()                                                
                                         ))
@@ -14854,11 +14864,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                 	AccessCubeGrantMappingImpl.builder()
-                                    	.withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                    	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.CUSTOM)
                                         .withDimensionGrants(List.of(
                                         	AccessDimensionGrantMappingImpl.builder()
-                                                .withDimension(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL)
+                                                .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL))
                                                 .withAccess(AccessDimension.ALL)
                                                 .build(),
                                             AccessDimensionGrantMappingImpl.builder()
@@ -14924,14 +14934,14 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.ALL)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
-                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
-                                                .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
+                                                .withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
                                                 	AccessMemberGrantMappingImpl.builder()
@@ -14956,14 +14966,14 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.ALL)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
-                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
-                                                .withBottomLevel(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY)
+                                                .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
+                                                .withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
                                                 	AccessMemberGrantMappingImpl.builder()
@@ -15015,11 +15025,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15071,11 +15081,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15135,11 +15145,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15165,11 +15175,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15228,11 +15238,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15243,7 +15253,7 @@ public class SchemaModifiers {
                                                 ))                                        		
                                         		.build(),
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.customersHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(
@@ -15306,13 +15316,13 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.storeHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
-                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_STORE_COUNTRY)
+                                                .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STORE_COUNTRY))
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withMemberGrants(List.of(                                                        
                                                     AccessMemberGrantMappingImpl.builder()
@@ -15396,15 +15406,15 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.ALL)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .build(),
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
                                         .withAccess(AccessCube.ALL)
                                         .build(),
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
@@ -15465,7 +15475,7 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.ALL)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
@@ -15481,11 +15491,11 @@ public class SchemaModifiers {
                                         ))                                        
                                         .build(),
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_HR)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
                                         .withAccess(AccessCube.ALL)
                                         .build(),
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .build()
                                         
@@ -15529,11 +15539,11 @@ public class SchemaModifiers {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                     AccessCubeGrantMappingImpl.builder()
-                                        .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                        .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         		AccessHierarchyGrantMappingImpl.builder()
-                                                .withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                                                .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withMemberGrants(List.of(
