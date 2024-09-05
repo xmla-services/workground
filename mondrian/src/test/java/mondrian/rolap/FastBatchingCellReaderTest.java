@@ -41,6 +41,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
@@ -1018,7 +1019,7 @@ class FastBatchingCellReaderTest extends BatchTestCase{
                        DimensionConnectorMappingImpl.builder()
                        	.withForeignKey("stores_id")
                        	.withOverrideDimensionName("Store Type")
-                       	.withDimension(FoodmartMappingSupplier.DIMENSION_STORE_TYPE_WITH_QUERY_STORE)
+                       	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_TYPE_WITH_QUERY_STORE))
                        	.build()
               		))
                   .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
@@ -1553,17 +1554,17 @@ class FastBatchingCellReaderTest extends BatchTestCase{
                   	DimensionConnectorMappingImpl.builder()
                   		.withForeignKey("time_id")
                   		.withOverrideDimensionName("Time")
-                  		.withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                  		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                   		.build(),
                       DimensionConnectorMappingImpl.builder()
                   		.withForeignKey("store_id")
                   		.withOverrideDimensionName("Store")
-                  		.withDimension(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE)
+                  		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
                   		.build(),
                        DimensionConnectorMappingImpl.builder()
                        	.withForeignKey("product_id")
                        	.withOverrideDimensionName("Product")
-                       	.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)
+                       	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                        	.build()
               		))
                   .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
