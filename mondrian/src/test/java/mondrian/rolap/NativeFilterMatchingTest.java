@@ -40,6 +40,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
@@ -333,12 +334,12 @@ class NativeFilterMatchingTest extends BatchTestCase {
             ))
             .build();
 
-            
+
         	private static final StandardDimensionMappingImpl dimensionStore2 = StandardDimensionMappingImpl.builder()
             .withName("Store2")
-            .withHierarchies(List.of(h))                    
+            .withHierarchies(List.of(h))
             .build();
-        	
+
         	private static final PhysicalCubeMappingImpl cube = PhysicalCubeMappingImpl.builder()
             .withName("TinySales")
             .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
@@ -353,32 +354,59 @@ class NativeFilterMatchingTest extends BatchTestCase {
             		.withForeignKey("store_id")
             		.withDimension(dimensionStore2)
             		.build()
-            		))                    
+            		))
             .withMeasureGroups(
             	List.of(MeasureGroupMappingImpl.builder()
             		.withMeasures(List.of(
                             MeasureMappingImpl.builder()
                             .withName("Unit Sales")
                             .withColumn("unit_sales")
-                            .withAggregatorType(MeasureAggregatorType.SUM)                                    
+                            .withAggregatorType(MeasureAggregatorType.SUM)
                             .withFormatString("Standard")
-                            .build()                    				
+                            .build()
             				))
             		.build()))
             .build();
-        	
+
             public TestCachedNativeFilterModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
             	List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
+                PhysicalCubeMappingImpl cube = PhysicalCubeMappingImpl.builder()
+                        .withName("TinySales")
+                        .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                        .withDimensionConnectors(List.of(
+                        		DimensionConnectorMappingImpl.builder()
+                        		.withOverrideDimensionName("Product")
+                        		.withForeignKey("product_id")
+                        		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
+                        		.build(),
+                        		DimensionConnectorMappingImpl.builder()
+                        		.withOverrideDimensionName("Store2")
+                        		.withForeignKey("store_id")
+                        		.withDimension(dimensionStore2)
+                        		.build()
+                        		))
+                        .withMeasureGroups(
+                        	List.of(MeasureGroupMappingImpl.builder()
+                        		.withMeasures(List.of(
+                                        MeasureMappingImpl.builder()
+                                        .withName("Unit Sales")
+                                        .withColumn("unit_sales")
+                                        .withAggregatorType(MeasureAggregatorType.SUM)
+                                        .withFormatString("Standard")
+                                        .build()
+                        				))
+                        		.build()))
+                        .build();
                 result.add(cube);
                 return result;
             }
-            
+
             protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
                 List<AccessRoleMapping> result = new ArrayList<>();
                 result.addAll(super.schemaAccessRoles(schema));
@@ -394,7 +422,7 @@ class NativeFilterMatchingTest extends BatchTestCase {
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
                                             .withHierarchy(h)
-                                            .withAccess(AccessHierarchy.CUSTOM)                                            
+                                            .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
                                             	AccessMemberGrantMappingImpl.builder()

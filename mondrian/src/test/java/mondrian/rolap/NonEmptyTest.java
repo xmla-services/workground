@@ -47,6 +47,7 @@ import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
 import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
@@ -768,7 +769,7 @@ class NonEmptyTest extends BatchTestCase {
                 						  			.withUniqueMembers(true)
                 						  			.build()
                 						  	))
-                						  	.build()                						  	
+                						  	.build()
                 				  ))
                 				  .build()
                 		  )
@@ -827,7 +828,7 @@ class NonEmptyTest extends BatchTestCase {
           public TestBug1515302Modifier(CatalogMapping catalog) {
               super(catalog);
           }
-          
+
           @Override
           protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
               List<CubeMapping> result = new ArrayList<>();
@@ -854,7 +855,7 @@ class NonEmptyTest extends BatchTestCase {
                 						  			.withUniqueMembers(true)
                 						  			.build()
                 						  	))
-                						  	.build()                						  	
+                						  	.build()
                 				  ))
                 				  .build()
                 		  )
@@ -892,13 +893,13 @@ class NonEmptyTest extends BatchTestCase {
                   						  			.withColumn("customer_id")
                   						  			.withType(DataType.NUMERIC)
                   						  			.withUniqueMembers(true)
-                  						  			.build()                  						  			
+                  						  			.build()
               						  	))
-              						  	.build()                						  	
+              						  	.build()
               				  ))
               				  .build()
               		  )
-                        .build()                                              
+                        .build()
                 ))
                 .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
                 	.withMeasures(List.of(
@@ -2546,7 +2547,7 @@ class NonEmptyTest extends BatchTestCase {
           ))
           .build();
 
-          
+
           public TestMultiLevelMemberConstraintNullParentModifier(CatalogMapping catalog) {
               super(catalog);
           }
@@ -2561,7 +2562,7 @@ class NonEmptyTest extends BatchTestCase {
                   .withDimensionConnectors(List.of(
                 	DimensionConnectorMappingImpl.builder()
                 		.withOverrideDimensionName("Product")
-                		.withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                        
+                		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                         .withForeignKey("product_id")
                         .build(),
                     DimensionConnectorMappingImpl.builder()
@@ -2582,7 +2583,7 @@ class NonEmptyTest extends BatchTestCase {
                               	  .withName("Warehouse Sales")
                                   .withColumn("warehouse_sales")
                                   .withAggregatorType(MeasureAggregatorType.SUM)
-                                  .build()                				  
+                                  .build()
                 		   ))
                 		  .build()
                    ))
@@ -2726,7 +2727,7 @@ class NonEmptyTest extends BatchTestCase {
                   .build()
           ))
           .build();
-          
+
           @Override
           protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
               List<CubeMapping> result = new ArrayList<>();
@@ -2737,7 +2738,7 @@ class NonEmptyTest extends BatchTestCase {
                   .withDimensionConnectors(List.of(
                 	  DimensionConnectorMappingImpl.builder()
                 	      .withOverrideDimensionName("Product")
-                	      .withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                          
+                	      .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                           .withForeignKey("product_id")
                           .build(),
                       DimensionConnectorMappingImpl.builder()
@@ -2748,7 +2749,7 @@ class NonEmptyTest extends BatchTestCase {
                   ))
                   .withMeasureGroups(List.of(
                 	  MeasureGroupMappingImpl.builder()
-                	  .withMeasures(List.of(	  
+                	  .withMeasures(List.of(
                 			  MeasureMappingImpl.builder()
                 			  	.withName("Warehouse Cost")
                 			  	.withColumn("warehouse_cost")
@@ -2758,12 +2759,12 @@ class NonEmptyTest extends BatchTestCase {
                 			  	.withName("Warehouse Sales")
                 			  	.withColumn("warehouse_sales")
                 			  	.withAggregatorType(MeasureAggregatorType.SUM)
-                			  	.build()                			  	
+                			  	.build()
                 	  ))
                       .build()
                       )).build()
                   );
-              return result;        	  
+              return result;
           }
       }
     /*
@@ -2915,13 +2916,13 @@ class NonEmptyTest extends BatchTestCase {
           protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
               List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(PhysicalCubeMappingImpl.builder()	  
+              result.add(PhysicalCubeMappingImpl.builder()
                   .withName("Warehouse2")
                   .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
                   .withDimensionConnectors(List.of(
                 	  DimensionConnectorMappingImpl.builder()
                 	      .withOverrideDimensionName("Product")
-                	      .withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)                          
+                	      .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                           .withForeignKey("product_id")
                           .build(),
                       DimensionConnectorMappingImpl.builder()
@@ -2935,19 +2936,19 @@ class NonEmptyTest extends BatchTestCase {
                               MeasureMappingImpl.builder()
                                   .withName("Warehouse Cost")
                                   .withColumn("warehouse_cost")
-                                  .withAggregatorType(MeasureAggregatorType.SUM)                                  
+                                  .withAggregatorType(MeasureAggregatorType.SUM)
                                   .build(),
                               MeasureMappingImpl.builder()
                                   .withName("Warehouse Sales")
                                   .withColumn("warehouse_sales")
                                   .withAggregatorType(MeasureAggregatorType.SUM)
-                                  .build()                				  
+                                  .build()
                 		   ))
                 		  .build())
                   )
                   .build());
               return result;
-          }      
+          }
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -5657,7 +5658,7 @@ class NonEmptyTest extends BatchTestCase {
                         			  .withHasAll(true)
                         			  .withAllMemberName("All Gender")
                         			  .withPrimaryKey("customer_id")
-                        			  .withQuery(TableQueryMappingImpl.builder().withName("customer").build())                                  
+                        			  .withQuery(TableQueryMappingImpl.builder().withName("customer").build())
                         			  .withLevels(List.of(
                         					  LevelMappingImpl.builder()
                         					  	.withName("Gender")
@@ -5678,12 +5679,12 @@ class NonEmptyTest extends BatchTestCase {
                             	.withName("Unit Sales")
                             	.withColumn("unit_sales")
                             	.withAggregatorType(MeasureAggregatorType.SUM)
-                            	.build()                			
+                            	.build()
                 	 ))
-                	.build()	  
+                	.build()
                   ))
                   .build());
-              return result;        	  
+              return result;
           }
 
       }
@@ -5812,15 +5813,15 @@ class NonEmptyTest extends BatchTestCase {
                   .build()
           ))
           .build();
-          
+
           private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
         		  .withName("Unit Sales")
         		  .withColumn("unit_sales")
         		  .withAggregatorType(MeasureAggregatorType.SUM)
         		  .withFormatString("Standard")
         		  .build();
- 
-          
+
+
           private static final PhysicalCubeMappingImpl salesCube = PhysicalCubeMappingImpl.builder()
           .withName("Sales")
           .withDefaultMeasure(m)
@@ -5840,7 +5841,7 @@ class NonEmptyTest extends BatchTestCase {
                           .withColumn("unit_sales")
                           .withAggregatorType(MeasureAggregatorType.SUM)
                           .withFormatString("Standard")
-                          .build()                                				  
+                          .build()
         		  ))
         		  .build()
         		  ))
@@ -5852,11 +5853,11 @@ class NonEmptyTest extends BatchTestCase {
                   .build()
           ))
           .build();
-          
+
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(CatalogMapping catalog) {
               super(catalog);
           }
-          
+
           protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
               return List.of(SchemaMappingImpl.builder()
             		  .withName("FoodMart")
@@ -5874,7 +5875,7 @@ class NonEmptyTest extends BatchTestCase {
                                 		  .build()
                                   ))
                                   .withMeasureGroups(List.of(
-                                		  MeasureGroupMappingImpl.builder()  
+                                		  MeasureGroupMappingImpl.builder()
                                 		  .withMeasures(List.of(
                                 			 MeasureMappingImpl.builder()
                                              //.cubeName("Sales")
@@ -5883,16 +5884,16 @@ class NonEmptyTest extends BatchTestCase {
                                 			 MeasureMappingImpl.builder()
                                              //.cubeName("Sales")
                                              .withName("[Measures].[dummyMeasure]")
-                                			 .build()	  
+                                			 .build()
 
                               			  ))
                                 		  .build()
                                    ))
-                                  .build()                                  
+                                  .build()
                           ))
             		  .build());
           }
-               
+
       }
       /*
       withSchema(context,

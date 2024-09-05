@@ -371,7 +371,8 @@ public class RolapLevel extends LevelBase {
             createProperties(mappingLevel),
             (mappingLevel.isUniqueMembers() ? FLAG_UNIQUE : 0),
             org.eclipse.daanse.db.dialect.api.Datatype.fromValue(mappingLevel.getDataType().getValue()),
-            toInternalType(mappingLevel.getDataType().getValue()),
+            null,
+            //toInternalType(mappingLevel.getDataType().getValue()),
             HideMemberCondition.fromValue(mappingLevel.getHideMemberIfType().getValue()),
             LevelType.fromValue(
                 "TimeHalfYear".equals(mappingLevel.getLevelType().getValue())
@@ -464,7 +465,7 @@ public class RolapLevel extends LevelBase {
         } else if ("Date".equalsIgnoreCase(type)) {
             return Property.Datatype.TYPE_DATE;
         } else {
-            
+
             //TODO: Do log as warn
 //            throw Util.newError(new StringBuilder("Unknown property type '")
 //                .append(type).append("'").toString());
@@ -584,7 +585,7 @@ public class RolapLevel extends LevelBase {
 
         /** A member appears unless its name matches its parent's. */
         IfParentsName;
-        
+
         public static HideMemberCondition fromValue(String v) {
             return Stream.of(HideMemberCondition.values())
                 .filter(e -> (e.toString().equalsIgnoreCase(v)))

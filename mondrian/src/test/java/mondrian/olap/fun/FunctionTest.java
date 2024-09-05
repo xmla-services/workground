@@ -59,7 +59,16 @@ import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.DimensionConnectorMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.LevelType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TimeDimensionMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -2415,81 +2424,83 @@ class FunctionTest {//extends FoodMartTestCase {
           public TestDefaultMemberModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-/* TODO: DENIS MAPPING-MODIFIER
-          @Override
-          protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
-              List<MappingCubeDimension> result = new ArrayList<>();
-              result.addAll(super.cubeDimensionUsageOrDimensions(cube));
-              if ("Sales".equals(cube.name())) {
-                  MappingCubeDimension dimension = PrivateDimensionRBuilder
+          
+          protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
+              List<DimensionConnectorMapping> result = new ArrayList<>();
+              result.addAll(super.cubeDimensionConnectors(cube));
+              if ("Sales".equals(cube.getName())) {
+            	  TimeDimensionMappingImpl dimension = TimeDimensionMappingImpl
                       .builder()
-                      .name("Time2")
-                      .type(DimensionTypeEnum.TIME_DIMENSION)
-                      .foreignKey("time_id")
-                      .hierarchies(List.of(
-                          HierarchyRBuilder.builder()
-                              .hasAll(false)
-                              .primaryKey("time_id")
-                              .relation(new TableR("time_by_day"))
-                              .levels(List.of(
-                                  LevelRBuilder.builder()
-                                      .name("Year")
-                                      .column("the_year")
-                                      .type(TypeEnum.NUMERIC)
-                                      .uniqueMembers(true)
-                                      .levelType(LevelTypeEnum.TIME_YEARS)
+                      .withName("Time2")
+                      //.withForeignKey("time_id")
+                      .withHierarchies(List.of(
+                          HierarchyMappingImpl.builder()
+                              .withHasAll(false)
+                              .withPrimaryKey("time_id")
+                              .withQuery(TableQueryMappingImpl.builder().withName("time_by_day").build())
+                              .withLevels(List.of(
+                                  LevelMappingImpl.builder()
+                                      .withName("Year")
+                                      .withColumn("the_year")
+                                      .withType(DataType.NUMERIC)
+                                      .withUniqueMembers(true)
+                                      .withLevelType(LevelType.TIME_YEARS)
                                       .build(),
-                                  LevelRBuilder.builder()
-                                      .name("Quarter")
-                                      .column("quarter")
-                                      .uniqueMembers(false)
-                                      .levelType(LevelTypeEnum.TIME_QUARTERS)
+                                  LevelMappingImpl.builder()
+                                      .withName("Quarter")
+                                      .withColumn("quarter")
+                                      .withUniqueMembers(false)
+                                      .withLevelType(LevelType.TIME_QUARTERS)
                                       .build(),
-                                  LevelRBuilder.builder()
-                                      .name("Month")
-                                      .column("month_of_year")
-                                      .uniqueMembers(false)
-                                      .type(TypeEnum.NUMERIC)
-                                      .levelType(LevelTypeEnum.TIME_MONTHS)
+                                  LevelMappingImpl.builder()
+                                      .withName("Month")
+                                      .withColumn("month_of_year")
+                                      .withUniqueMembers(false)
+                                      .withType(DataType.NUMERIC)
+                                      .withLevelType(LevelType.TIME_MONTHS)
                                       .build()
                               ))
                               .build(),
-                          HierarchyRBuilder.builder()
-                              .hasAll(true)
-                              .name("Weekly")
-                              .primaryKey("time_id")
-                              .defaultMember(memberUname)
-                              .relation(new TableR("time_by_day"))
-                              .levels(List.of(
-                                  LevelRBuilder.builder()
-                                      .name("Year")
-                                      .column("the_year")
-                                      .type(TypeEnum.NUMERIC)
-                                      .uniqueMembers(true)
-                                      .levelType(LevelTypeEnum.TIME_YEARS)
+                          HierarchyMappingImpl.builder()
+                              .withHasAll(true)
+                              .withName("Weekly")
+                              .withPrimaryKey("time_id")
+                              .withDefaultMember(memberUname)
+                              .withQuery(TableQueryMappingImpl.builder().withName("time_by_day").build())
+                              .withLevels(List.of(
+                                  LevelMappingImpl.builder()
+                                      .withName("Year")
+                                      .withColumn("the_year")
+                                      .withType(DataType.NUMERIC)
+                                      .withUniqueMembers(true)
+                                      .withLevelType(LevelType.TIME_YEARS)
                                       .build(),
-                                  LevelRBuilder.builder()
-                                      .name("Week")
-                                      .column("week_of_year")
-                                      .type(TypeEnum.NUMERIC)
-                                      .uniqueMembers(false)
-                                      .levelType(LevelTypeEnum.TIME_WEEKS)
+                                  LevelMappingImpl.builder()
+                                      .withName("Week")
+                                      .withColumn("week_of_year")
+                                      .withType(DataType.NUMERIC)
+                                      .withUniqueMembers(false)
+                                      .withLevelType(LevelType.TIME_WEEKS)
                                       .build(),
-                                  LevelRBuilder.builder()
-                                      .name("Day")
-                                      .column("day_of_month")
-                                      .uniqueMembers(false)
-                                      .type(TypeEnum.NUMERIC)
-                                      .levelType(LevelTypeEnum.TIME_DAYS)
+                                  LevelMappingImpl.builder()
+                                      .withName("Day")
+                                      .withColumn("day_of_month")
+                                      .withUniqueMembers(false)
+                                      .withType(DataType.NUMERIC)
+                                      .withLevelType(LevelType.TIME_DAYS)
                                       .build()
                               ))
                               .build()
                       ))
                       .build();
-                  result.add(dimension);
+                  result.add(DimensionConnectorMappingImpl.builder()
+                		  .withOverrideDimensionName("Time2")
+                		  .withForeignKey("time_id")
+                		  .withDimension(dimension)
+                		  .build());
               }
               return result;
-          }*/
+          }          
       }
       withSchema(context, TestDefaultMemberModifier::new);
 
