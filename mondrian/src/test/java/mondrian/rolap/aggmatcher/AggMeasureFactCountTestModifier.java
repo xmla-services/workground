@@ -32,11 +32,12 @@ import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MemberPropertyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.SchemaMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TimeDimensionMappingImpl;
 
 public class AggMeasureFactCountTestModifier extends PojoMappingModifier {
-	private static DimensionMappingImpl storeDimension = TimeDimensionMappingImpl.builder()
+	private static DimensionMappingImpl storeDimension = StandardDimensionMappingImpl.builder()
             .withName("Store")
             .withHierarchies(List.of(
             	HierarchyMappingImpl.builder()
