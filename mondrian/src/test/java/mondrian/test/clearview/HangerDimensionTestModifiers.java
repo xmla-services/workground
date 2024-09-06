@@ -14,8 +14,22 @@
 
 package mondrian.test.clearview;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.DimensionConnectorMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableColumnDefinitionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableRowCellMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableRowMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 
 public class HangerDimensionTestModifiers {
 
@@ -43,50 +57,56 @@ public class HangerDimensionTestModifiers {
 </Dimension>
 
          */
-        /* TODO: DENIS MAPPING-MODIFIER
-        @Override
- protected List<MappingCubeDimension> cubeDimensionUsageOrDimensions(MappingCube cube) {
-            List<MappingCubeDimension> result = new ArrayList<>();
-            result.addAll(super.cubeDimensionUsageOrDimensions(cube)
-                .stream().filter(d -> !"Le System-Trend Hanger".equals(d.name())).toList());
-            if (cube.name().equals("Sales"))
-            result.add(PrivateDimensionRBuilder.builder()
-                .name("Le System-Trend Hanger")
-                .foreignKey("store_id")
-                .hierarchies(List.of(
-                    HierarchyRBuilder.builder()
-                        .hasAll(true)
-                        .primaryKey("HANGER_KEY")
-                        .relation(InlineTableRBuilder.builder()
-                            .alias("LE_SYSTEM_TREND_HANGER")
-                            .columnDefs(List.of(
-                                ColumnDefRBuilder.builder()
-                                    .name("HANGER_KEY")
-                                    .type(TypeEnum.NUMERIC)
-                                    .build()
-                            ))
-                            .rows(List.of(
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("HANGER_KEY")
-                                            .content("1")
+
+        protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
+            List<DimensionConnectorMapping> result = new ArrayList<>();
+            result.addAll(super.cubeDimensionConnectors(cube)
+                .stream().filter(d -> !"Le System-Trend Hanger".equals(d.getOverrideDimensionName())).toList());
+            if (cube.getName().equals("Sales"))
+            result.add(DimensionConnectorMappingImpl.builder()
+            	.withOverrideDimensionName("Le System-Trend Hanger")
+                .withForeignKey("store_id")
+                .withDimension(
+                	StandardDimensionMappingImpl.builder()
+                		.withName("Le System-Trend Hanger")
+                		.withHierarchies(List.of(
+                			HierarchyMappingImpl.builder()
+            				.withHasAll(true)
+            				.withPrimaryKey("HANGER_KEY")
+            				.withQuery(InlineTableQueryMappingImpl.builder()
+                					.withAlias("LE_SYSTEM_TREND_HANGER")
+                					.withColumnDefinitions(List.of(
+                						InlineTableColumnDefinitionMappingImpl.builder()
+                                            .withName("HANGER_KEY")
+                                            .withType(DataType.NUMERIC)
                                             .build()
-                                    ))
-                                    .build()
+                					))
+                					.withRows(List.of(
+                						InlineTableRowMappingImpl.builder()
+                						.withCells(List.of(
+                							InlineTableRowCellMappingImpl.builder()
+                								.withColumnName("HANGER_KEY")
+                								.withValue("1")
+                                                .build()
+                                        ))
+                                        .build()
+                					))
+            						.build()
+            				)
+                            .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Hanger Level")
+                                        .withColumn("HANGER_KEY")
+                                        .withUniqueMembers(true)
+                                        .build()
                             ))
-                            .build())
-                        .levels(List.of(
-                            LevelRBuilder.builder()
-                                .name("Hanger Level")
-                                .column("HANGER_KEY")
-                                .uniqueMembers(true)
-                                .build()
-                        ))
-                        .build()))
+                            .build()
+                       ))
+                	   .build()
+                )
                 .build());
             return result;
+
         }
-         */
     }
 }

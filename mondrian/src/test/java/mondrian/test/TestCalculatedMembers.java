@@ -338,6 +338,7 @@ import mondrian.rolap.SchemaModifiers;
         assertNotNull(result);
     }
 
+    //TODO caption 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
      void testCalculatedMemberCaption(Context context) {

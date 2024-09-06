@@ -376,33 +376,6 @@ class NativeFilterMatchingTest extends BatchTestCase {
             protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
             	List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                PhysicalCubeMappingImpl cube = PhysicalCubeMappingImpl.builder()
-                        .withName("TinySales")
-                        .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
-                        .withDimensionConnectors(List.of(
-                        		DimensionConnectorMappingImpl.builder()
-                        		.withOverrideDimensionName("Product")
-                        		.withForeignKey("product_id")
-                        		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
-                        		.build(),
-                        		DimensionConnectorMappingImpl.builder()
-                        		.withOverrideDimensionName("Store2")
-                        		.withForeignKey("store_id")
-                        		.withDimension(dimensionStore2)
-                        		.build()
-                        		))
-                        .withMeasureGroups(
-                        	List.of(MeasureGroupMappingImpl.builder()
-                        		.withMeasures(List.of(
-                                        MeasureMappingImpl.builder()
-                                        .withName("Unit Sales")
-                                        .withColumn("unit_sales")
-                                        .withAggregatorType(MeasureAggregatorType.SUM)
-                                        .withFormatString("Standard")
-                                        .build()
-                        				))
-                        		.build()))
-                        .build();
                 result.add(cube);
                 return result;
             }
