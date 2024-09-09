@@ -82,6 +82,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessSchemaGrantMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CalculatedMemberMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.DimensionMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.LevelMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.NamedSetMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.ParameterMapping;
@@ -158,14 +159,14 @@ public class RolapSchema implements Schema {
      * Maps {@link String shared hierarchy name} to {@link MemberReader}.
      * Shared between all statements which use this connection.
      */
-    private final Map<String, MemberReader> mapSharedHierarchyToReader =
+    private final Map<DimensionMapping, MemberReader> mapSharedHierarchyToReader =
         new HashMap<>();
 
     /**
      * Maps {@link String names of shared hierarchies} to {@link
      * RolapHierarchy the canonical instance of those hierarchies}.
      */
-    private final Map<String, RolapHierarchy> mapSharedHierarchyNameToHierarchy
+    private final Map<DimensionMapping, RolapHierarchy> mapSharedHierarchyNameToHierarchy
         =
         new HashMap<>();
 
@@ -867,7 +868,7 @@ public class RolapSchema implements Schema {
         return hierarchies.toArray(new RolapHierarchy[hierarchies.size()]);
     }
 
-    RolapHierarchy getSharedHierarchy(final String name) {
+    RolapHierarchy getSharedHierarchy(final DimensionMapping name) {
         return mapSharedHierarchyNameToHierarchy.get(name);
     }
 
@@ -1016,18 +1017,18 @@ public class RolapSchema implements Schema {
      * <p>Synchronization: thread safe
      */
     synchronized MemberReader createMemberReader(
-        final String sharedName,
+        final DimensionMapping xmlDimension,
         final RolapHierarchy hierarchy,
         final String memberReaderClass)
     {
         MemberReader reader;
-        if (sharedName != null) {
-            reader = mapSharedHierarchyToReader.get(sharedName);
+        if (xmlDimension != null) {
+            reader = mapSharedHierarchyToReader.get(xmlDimension);
             if (reader == null) {
                 reader = createMemberReader(hierarchy, memberReaderClass);
                 // share, for other uses of the same shared hierarchy
                 if (false) {
-                    mapSharedHierarchyToReader.put(sharedName, reader);
+                    mapSharedHierarchyToReader.put(xmlDimension, reader);
                 }
 /*
 System.out.println("RolapSchema.createMemberReader: "+
@@ -1042,7 +1043,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 mapSharedHierarchyNameToHierarchy.put(sharedName, hierarchy);
 }
 */
-                mapSharedHierarchyNameToHierarchy.computeIfAbsent(sharedName, k -> hierarchy);
+                mapSharedHierarchyNameToHierarchy.computeIfAbsent(xmlDimension, k -> hierarchy);
 
                 //mapSharedHierarchyNameToHierarchy.put(sharedName, hierarchy);
             } else {
