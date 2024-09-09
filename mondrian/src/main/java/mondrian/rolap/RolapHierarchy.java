@@ -282,7 +282,7 @@ public class RolapHierarchy extends HierarchyBase {
         {
           // if cube is virtual than there is no fact in it,
           // so look for it in source cube
-          if(cube.isVirtual()) {  
+          if(cube.isVirtual()) {
             RolapCube sourceCube = cube.getSchema().lookupCube(cubeDimensionMapping.getPhysicalCube());
             if(sourceCube != null) {
               xmlHierarchyRelation = sourceCube.getFact();
@@ -474,7 +474,7 @@ public class RolapHierarchy extends HierarchyBase {
         // first create memberReader
         if (this.memberReader == null) {
             this.memberReader = getRolapSchema().createMemberReader(
-                sharedHierarchyName, this, memberReaderClass);
+                xmlDimension != null ? xmlDimension.getDimension() : null, this, memberReaderClass);
         }
         for (Level level : levels) {
             ((RolapLevel) level).init(xmlDimension);

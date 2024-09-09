@@ -29,6 +29,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.MeasureGroupMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.PhysicalCubeMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.StandardDimensionMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessDimension;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
@@ -599,7 +600,7 @@ public class SchemaModifiers {
         public AggregationOnDistinctCountMeasuresTestModifier(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
             List<CubeMapping> result = new ArrayList<>();
             result.addAll(super.schemaCubes(schema));
@@ -631,11 +632,11 @@ public class SchemaModifiers {
                     .withReferencedMeasures(List.of(
                     	look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
                     	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT)
-                    ))            		
+                    ))
             	.build());
-            return result;            		
-        }    		
-            		
+            return result;
+        }
+
     }
 
     //storeDimensionLevelDependent,
@@ -1061,58 +1062,58 @@ public class SchemaModifiers {
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Customers")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_CUSTOMERS))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_CUSTOMERS))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Education Level")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_EDUCATION_LEVEL))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Gender")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_GENDER))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_GENDER))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Marital Status")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_MARITAL_STATUS))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_MARITAL_STATUS))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Product")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Promotion Media")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PROMOTION_MEDIA))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PROMOTION_MEDIA))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Promotions")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PROMOTIONS))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PROMOTIONS))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Store")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Time")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Yearly Income")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_YEARLY_INCOME))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_YEARLY_INCOME))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                     	.withOverrideDimensionName("Warehouse")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_WAREHOUSE))                    	
-                    	.build()                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_WAREHOUSE))
+                    	.build()
                     ))
                     .withReferencedCalculatedMembers(List.of(
                     		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT),
@@ -1128,10 +1129,10 @@ public class SchemaModifiers {
                     		look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE),
                     		look(FoodmartMappingSupplier.MEASURE_SUPPLY_TIME),
                     		look(FoodmartMappingSupplier.MEASURE_UNITS_ORDERED),
-                    		look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED),                            
+                    		look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED),
                     		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_COST),
                     		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_PROFIT),
-                    		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES)                            
+                    		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES)
                     ))
                     .withCalculatedMembers(List.of(
                         CalculatedMemberMappingImpl.builder()
@@ -1186,7 +1187,7 @@ public class SchemaModifiers {
             StandardDimensionMappingImpl dGender;
             StandardDimensionMappingImpl dEducationLevel;
             MeasureMappingImpl mUnitSales;
-            		
+
             result.add(cubeSales3 = PhysicalCubeMappingImpl.builder()
                 .withName("Sales 3")
                 .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
@@ -1268,7 +1269,7 @@ public class SchemaModifiers {
                 	.build()
                 ))
                 .build());
-            
+
             result.add(VirtualCubeMappingImpl.builder()
                     .withName("Warehouse and Sales 3")
                     .withDefaultMeasure((MeasureMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE))
@@ -1286,35 +1287,35 @@ public class SchemaModifiers {
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube(cubeSales3)
                     	.withOverrideDimensionName("Gender")
-                    	.withDimension(dGender)                    	
+                    	.withDimension(dGender)
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube(cubeSales3)
                     	.withOverrideDimensionName("Education Level")
-                    	.withDimension(dEducationLevel)                    	
+                    	.withDimension(dEducationLevel)
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube(cubeSales3)
                     	.withOverrideDimensionName("Product")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube(cubeSales3)
                     	.withOverrideDimensionName("Time")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                     	.build(),
                     	DimensionConnectorMappingImpl.builder()
                     	.withPhysicalCube(FoodmartMappingSupplier.CUBE_WAREHOUSE)
                     	.withOverrideDimensionName("Warehouse")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_WAREHOUSE))                    	
-                    	.build()                    	
+                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_WAREHOUSE))
+                    	.build()
                     ))
                     .withReferencedMeasures(List.of(
                     	mUnitSales,
                     	look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE),
                     	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES)
                     ))
-                    .build());            
+                    .build());
             return result;
 
         }
@@ -2196,7 +2197,7 @@ public class SchemaModifiers {
                     ))
                     .build()
             );
-            
+
             result.add(PhysicalCubeMappingImpl.builder()
                 .withName("CustomHR")
                 .withQuery(TableQueryMappingImpl.builder().withName("salary").build())
@@ -2225,7 +2226,7 @@ public class SchemaModifiers {
             	    .withDimensionConnectors(List.of(
             	    	DimensionConnectorMappingImpl.builder()
             	    	.withOverrideDimensionName("Employees")
-            	    	.withDimension(d)            	    	
+            	    	.withDimension(d)
             	    	.build()
             	    ))
             	    .withReferencedMeasures((List<? extends MeasureMapping>) List.of(
@@ -2237,8 +2238,8 @@ public class SchemaModifiers {
             	    		.withFormula("[Measures].[Store Sales] / [Measures].[Org Salary]")
             	    		.build()))
             		.build());
-            		
-            
+
+
             return result;
         }
 
@@ -2267,8 +2268,8 @@ public class SchemaModifiers {
             + "<Formula>[Measures].[Store Sales] / [Measures].[Org Salary]</Formula>"
             + "</CalculatedMember>"
             + "</VirtualCube>",
-         */       
-        
+         */
+
     }
 
     public static class ParentChildHierarchyTestModifier9 extends PojoMappingModifier {
@@ -2503,7 +2504,7 @@ public class SchemaModifiers {
             + "</Schema>");
 
          */
-        
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
             InlineTableQueryMappingImpl it = InlineTableQueryMappingImpl.builder()
             		.withAlias("bri_store_employee")
@@ -2563,7 +2564,7 @@ public class SchemaModifiers {
 
                     ))
                     .build();
-            
+
                 TableQueryMappingImpl t = TableQueryMappingImpl.builder().withName("employee").withAlias("employee").build();
 
                 StandardDimensionMappingImpl employeeDimension = StandardDimensionMappingImpl.builder()
@@ -2599,7 +2600,7 @@ public class SchemaModifiers {
                                 .withParentChildLink(ParentChildLinkMappingImpl.builder()
                                     .withParentColumn("supervisor_id")
                                     .withChildColumn("employee_id")
-                                    .withTable(TableQueryMappingImpl.builder().withName("employee_closure").build())                                    
+                                    .withTable(TableQueryMappingImpl.builder().withName("employee_closure").build())
                                     .build())
                                 .build()
                         ))
@@ -2607,9 +2608,9 @@ public class SchemaModifiers {
                 ))
                 .build();
 
-                
+
                 return List.of(SchemaMappingImpl.builder()
-                    .withName("FoodMart")                    
+                    .withName("FoodMart")
                     .withCubes(List.of(
                         PhysicalCubeMappingImpl.builder()
                             .withName("Sales_Bug_441")
@@ -2632,7 +2633,7 @@ public class SchemaModifiers {
                                             .withFormatString("#,###.00")
                                             .withAggregatorType(MeasureAggregatorType.SUM)
                                             .withVisible(true)
-                                            .build()                            				
+                                            .build()
                             		))
                             		.build()))
                             .build()
@@ -2695,7 +2696,7 @@ public class SchemaModifiers {
     							.build()
 
     					))
-    					.build()                
+    					.build()
     			)).build();
 
         public ValidMeasureFunDefTestModifier(CatalogMapping catalog) {
@@ -2731,10 +2732,10 @@ public class SchemaModifiers {
                                         .withName("Unit Sales1")
                                         .withColumn("unit_sales")
                                         .withAggregatorType(MeasureAggregatorType.SUM)
-                                        .withFormatString("Standard")                            	
-                                    	.build()                            			
+                                        .withFormatString("Standard")
+                                    	.build()
                             	))
-                            	.build()	
+                            	.build()
                             ))
                             .build(),
                         VirtualCubeMappingImpl.builder()
@@ -2750,7 +2751,7 @@ public class SchemaModifiers {
                             .withReferencedMeasures(List.of(
                             	mUnitSales1
                             ))
-                            .build()                            
+                            .build()
             		))
             		.build());
         }
@@ -3714,7 +3715,7 @@ public class SchemaModifiers {
           + "  </VirtualCube>"
           + "</Schema>" );
          */
-    	
+
     	private static final StandardDimensionMappingImpl storeDimension = StandardDimensionMappingImpl.builder()
     			.withName("Store")
     			.withHierarchies(List.of(
@@ -3746,11 +3747,11 @@ public class SchemaModifiers {
 				.build()
 		))
 		.build();
-    	
+
     	private static final TimeDimensionMappingImpl timeDimension = TimeDimensionMappingImpl.builder()
     			.withName("Time")
     			.withHierarchies(List.of(timeHierarchy)).build();
-    	
+
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
@@ -3758,12 +3759,12 @@ public class SchemaModifiers {
     	        .withFormatString("Standard")
     	        .build();
 
-    	
+
         public NonEmptyTestModifier7(CatalogMapping catalog) {
             super(catalog);
         }
-        
-        
+
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
         	CalculatedMemberMappingImpl cmDummyMeasure;
         	DimensionConnectorMappingImpl dStore;
@@ -3777,7 +3778,7 @@ public class SchemaModifiers {
                             .withName("Sales")
                             .withDefaultMeasure(m)
                             .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
-                            .withDimensionConnectors(List.of(                            	
+                            .withDimensionConnectors(List.of(
                             	dStore = DimensionConnectorMappingImpl.builder()
                             		.withOverrideDimensionName("Store")
                             		.withDimension(storeDimension)
@@ -3797,7 +3798,7 @@ public class SchemaModifiers {
                                             .withColumn("unit_sales")
                                             .withAggregatorType(MeasureAggregatorType.SUM)
                                             .withFormatString("Standard")
-                                            .build()                            				
+                                            .build()
                             		))
                             		.build()
                             		))
@@ -3811,7 +3812,7 @@ public class SchemaModifiers {
                                     .withName("dummyMeasure2")
                                     //.dimension("Measures")
                                     .withFormula("[Measures].[dummyMeasure]")
-                                    .build()                            		
+                                    .build()
                             ))
                             .build(),
                         VirtualCubeMappingImpl.builder()
@@ -3820,18 +3821,18 @@ public class SchemaModifiers {
                         .withDimensionConnectors(List.of(
                         	DimensionConnectorMappingImpl.builder()
                         		.withOverrideDimensionName("Store")
-                        		.withDimension(storeDimension)                        	
+                        		.withDimension(storeDimension)
                         		.build(),
                         	DimensionConnectorMappingImpl.builder()
                         		.withOverrideDimensionName("Time")
-                        		.withDimension(timeDimension)                        	
+                        		.withDimension(timeDimension)
                         		.build()
 
                         ))
                         .withReferencedCalculatedMembers(List.of(
                         	dummyMeasure2Cm
                         ))
-                        .build()    
+                        .build()
                     ))
             		.build());
         }
@@ -3923,7 +3924,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier2(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
             List<DimensionConnectorMapping> result = new ArrayList<>();
             result.addAll(super.cubeDimensionConnectors(cube));
@@ -3949,7 +3950,7 @@ public class SchemaModifiers {
                         							.withQuery(TableQueryMappingImpl.builder().withName("product_class").build())
                         							.build())
                     						.build()
-                    				)                    				
+                    				)
                     				.withLevels(List.of(
                     					LevelMappingImpl.builder()
                     						.withName("Drink")
@@ -4025,7 +4026,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier3(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
             List<DimensionConnectorMapping> result = new ArrayList<>();
             result.addAll(super.cubeDimensionConnectors(cube));
@@ -4123,12 +4124,12 @@ public class SchemaModifiers {
                                     .build()
                         		))
                         		.build()
-                    	).build());            	
+                    	).build());
             }
             return result;
-        }    
+        }
 
-            	
+
     }
 
     public static class BasicQueryTestModifier4 extends PojoMappingModifier {
@@ -4430,7 +4431,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier9(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         @Override
         protected List<CalculatedMemberMapping> cubeCalculatedMembers(CubeMapping cube) {
             List<CalculatedMemberMapping> result = new ArrayList<>();
@@ -4460,7 +4461,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier10(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
             List<DimensionConnectorMapping> result = new ArrayList<>();
             result.addAll(super.cubeDimensionConnectors(cube));
@@ -4485,7 +4486,7 @@ public class SchemaModifiers {
                                                 .build()
                                         ))
                                         .build()
-                                ))                			
+                                ))
                 			.build())
                 		.build());
             }
@@ -4506,7 +4507,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier11(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<? extends DimensionConnectorMapping> cubeDimensionConnectors(CubeMapping cube) {
             List<DimensionConnectorMapping> result = new ArrayList<>();
             result.addAll(super.cubeDimensionConnectors(cube));
@@ -4519,7 +4520,7 @@ public class SchemaModifiers {
                             .withHierarchies(List.of(
                             	HierarchyMappingImpl.builder()
                                         .withHasAll(true)
-                                        .withAllMemberName("All Customers")                                        
+                                        .withAllMemberName("All Customers")
                                         .withPrimaryKey("customer_id")
                                         .withQuery(TableQueryMappingImpl.builder().withName("customer").build())
                                         .withLevels(List.of(
@@ -4532,10 +4533,10 @@ public class SchemaModifiers {
                                                 .withName("Name2")
                                                 .withColumn("customer_id")
                                                 .withUniqueMembers(true)
-                                                .build()                                                
+                                                .build()
                                         ))
                                         .build()
-                                ))                			
+                                ))
                 			.build())
                 		.build());
             }
@@ -4552,13 +4553,13 @@ public class SchemaModifiers {
         public BasicQueryTestModifier12(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         @Override
         protected List<? extends MeasureGroupMapping> physicalCubeMeasureGroups(PhysicalCubeMapping cube) {
             List<MeasureGroupMapping> result = new ArrayList<>();
             result.addAll(super.physicalCubeMeasureGroups(cube));
             if ("Sales".equals(cube.getName())) {
-            	
+
                 result.add(MeasureGroupMappingImpl.builder()
                 	.withMeasures(List.of(
                 		MeasureMappingImpl.builder()
@@ -4573,7 +4574,7 @@ public class SchemaModifiers {
                             ))
                         	.build())
                         .build()))
-                	.build());                	
+                	.build());
             }
             return result;
         }
@@ -4606,7 +4607,7 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
             */
-    	
+
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
@@ -4617,7 +4618,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier14(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
             return List.of(SchemaMappingImpl.builder()
             		.withName("FoodMart 2442")
@@ -4662,7 +4663,7 @@ public class SchemaModifiers {
                                 		.build())
                                 .withDimensionConnectors(List.of(
                                     DimensionConnectorMappingImpl.builder()
-                                    	.withOverrideDimensionName("Time")                                        
+                                    	.withOverrideDimensionName("Time")
                                         .withForeignKey("time_id")
                                         .withDimension(TimeDimensionMappingImpl.builder()
                                         		.withName("Time")
@@ -4700,10 +4701,10 @@ public class SchemaModifiers {
                                 		.build()
                                 ))
                                 .build()
-                        ))            		
+                        ))
             		.build());
-        }    
-        
+        }
+
     }
 
     public static class BasicQueryTestModifier15 extends PojoMappingModifier {
@@ -4729,7 +4730,7 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" "
             + "     formatString=\"Standard\"/>\n" + "</Cube>\n" + "</Schema>";
             */
-    	
+
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
@@ -4740,7 +4741,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier15(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
             return List.of(SchemaMappingImpl.builder()
             		.withName("FoodMart 2285")
@@ -4758,7 +4759,7 @@ public class SchemaModifiers {
                                 		.build())
                                 .withDimensionConnectors(List.of(
                                 	DimensionConnectorMappingImpl.builder()
-                                    	.withOverrideDimensionName("Product")                                        
+                                    	.withOverrideDimensionName("Product")
                                         .withForeignKey("product_id")
                                         .withDimension(TimeDimensionMappingImpl.builder()
                                         		.withName("Product")
@@ -4766,7 +4767,7 @@ public class SchemaModifiers {
                                                         HierarchyMappingImpl.builder()
                                                             .withHasAll(true)
                                                             .withPrimaryKey("product_id")
-                                                            .withPrimaryKeyTable("product")                                                            
+                                                            .withPrimaryKeyTable("product")
                                                             .withQuery(JoinQueryMappingImpl.builder()
                                         							.withLeft(JoinedQueryElementMappingImpl.builder()
                                                                 			.withKey("product_class_id")
@@ -4776,7 +4777,7 @@ public class SchemaModifiers {
                                                                 			.withKey("product_class_id")
                                                                 			.withQuery(TableQueryMappingImpl.builder().withName("product_class").build())
                                                                 			.build())
-                                        							.build()	
+                                        							.build()
                                         					)
                                                             .withLevels(List.of(
                                                                 LevelMappingImpl.builder()
@@ -4789,9 +4790,9 @@ public class SchemaModifiers {
                                                             .build()
                                                     ))
                                         		.build())
-                                        .build(),                                		
+                                        .build(),
                                     DimensionConnectorMappingImpl.builder()
-                                    	.withOverrideDimensionName("Time")                                        
+                                    	.withOverrideDimensionName("Time")
                                         .withForeignKey("time_id")
                                         .withDimension(TimeDimensionMappingImpl.builder()
                                         		.withName("Time")
@@ -4816,12 +4817,12 @@ public class SchemaModifiers {
                                                                     .withUniqueMembers(false)
                                                                     .withType(DataType.NUMERIC)
                                                                     .withLevelType(LevelType.TIME_MONTHS)
-                                                                    .build()                                                            		
+                                                                    .build()
                                                             ))
                                                             .build()
                                                     ))
                                         		.build())
-                                        .build()                                                                               
+                                        .build()
                                 ))
                                 .withMeasureGroups(List.of(
                                 		MeasureGroupMappingImpl.builder()
@@ -4829,9 +4830,9 @@ public class SchemaModifiers {
                                 		.build()
                                 ))
                                 .build()
-                        ))            		
+                        ))
             		.build());
-        }    
+        }
 
     }
 
@@ -4887,7 +4888,7 @@ public class SchemaModifiers {
             + "  </VirtualCube>\n" + "</Schema>\n";
 
             */
-    	
+
     	private static final HierarchyMappingImpl timeHierarchy = HierarchyMappingImpl.builder()
 		.withHasAll(false)
 		.withPrimaryKey("time_id")
@@ -4903,7 +4904,7 @@ public class SchemaModifiers {
                             SQLMappingImpl.builder()
                             	.withDialects(List.of("generic"))
                                 .withStatement("RTRIM(quarter)")
-                                .build()								
+                                .build()
 						))
 						.build())
 				.build()
@@ -4935,7 +4936,7 @@ public class SchemaModifiers {
                 .withTable("product_class")
                 .withColumn("product_family")
                 .withUniqueMembers(true)
-                .build()	
+                .build()
 		))
 		.build();
 
@@ -4947,7 +4948,7 @@ public class SchemaModifiers {
 		.withHasAll(true)
 		.withPrimaryKey("warehouse_id")
 		.withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
-		.withLevels(List.of(            
+		.withLevels(List.of(
             LevelMappingImpl.builder()
                 .withName("Country")
                 .withColumn("warehouse_country")
@@ -4968,7 +4969,7 @@ public class SchemaModifiers {
                 .withColumn("warehouse_name")
                 .withUniqueMembers(true)
                 .build()
-                
+
 		))
 		.build();
 
@@ -4979,7 +4980,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier16(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
         	PhysicalCubeMappingImpl warehouseCube;
         	MeasureMappingImpl mUnitSales;
@@ -5000,7 +5001,7 @@ public class SchemaModifiers {
                             	.withOverrideDimensionName("Product")
                             	.withDimension(productDimension)
                             	.withForeignKey("product_id")
-                            	.build()                            	
+                            	.build()
                             ))
                             .withMeasureGroups(List.of(
                             	MeasureGroupMappingImpl.builder()
@@ -5010,7 +5011,7 @@ public class SchemaModifiers {
                                         .withColumn("unit_sales")
                                         .withAggregatorType(MeasureAggregatorType.SUM)
                                         .withFormatString("Standard")
-                                        .build()                            		
+                                        .build()
                             	))
                             	.build()
                             ))
@@ -5033,7 +5034,7 @@ public class SchemaModifiers {
                                 	.withOverrideDimensionName("Warehouse")
                                 	.withDimension(warehouseDimension)
                                 	.withForeignKey("warehouse_id")
-                                	.build()                            	                                	
+                                	.build()
                              ))
                             .withMeasureGroups(List.of(
                             	MeasureGroupMappingImpl.builder()
@@ -5043,7 +5044,7 @@ public class SchemaModifiers {
                                         .withColumn("warehouse_sales")
                                         .withAggregatorType(MeasureAggregatorType.SUM)
                                         .withFormatString("Standard")
-                                        .build()                            			
+                                        .build()
                             	))
                             	.build()
                             ))
@@ -5060,20 +5061,20 @@ public class SchemaModifiers {
                             .withDimensionConnectors(List.of(
                             	DimensionConnectorMappingImpl.builder()
                             	.withOverrideDimensionName("Time")
-                            	.withDimension(timeDimension)                            	
+                            	.withDimension(timeDimension)
                             	.build(),
                             	DimensionConnectorMappingImpl.builder()
                             	.withOverrideDimensionName("Product")
-                            	.withDimension(productDimension)                            	
+                            	.withDimension(productDimension)
                             	.build(),
                             	DimensionConnectorMappingImpl.builder()
                             	.withOverrideDimensionName("Warehouse")
                             	.withPhysicalCube(warehouseCube)
-                            	.withDimension(warehouseDimension)                            	
-                            	.build()                            	
+                            	.withDimension(warehouseDimension)
+                            	.build()
                             ))
                             .withReferencedMeasures(List.of(
-                            	mUnitSales	
+                            	mUnitSales
                             ))
                             .withReferencedCalculatedMembers(List.of(
                             	mWarehouseSalesCalc
@@ -5083,7 +5084,7 @@ public class SchemaModifiers {
                     .build());
         }
 
-        
+
     }
 
     public static class BasicQueryTestModifier17 extends PojoMappingModifier {
@@ -5114,7 +5115,7 @@ public class SchemaModifiers {
             + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"avg\" />\n" + "</Cube>\n"
             + "</Schema>";
             */
-    	
+
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
@@ -5125,7 +5126,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier17(CatalogMapping catalog) {
             super(catalog);
         }
-        
+
     	private static final TableQueryMappingImpl t = TableQueryMappingImpl.builder()
     			.withName("sales_fact_1997")
     			.withAggregationExcludes(
@@ -5156,7 +5157,7 @@ public class SchemaModifiers {
                         .withAggregationLevels(List.of(
                         		AggregationLevelMappingImpl.builder()
                                 .withName("[Time].[Year]")
-                                .withColumn("THE_YEAR")                                
+                                .withColumn("THE_YEAR")
                                 .build(),
                         		AggregationLevelMappingImpl.builder()
                                 .withName("[Time].[Quarter]")
@@ -5167,7 +5168,7 @@ public class SchemaModifiers {
     			)
     			.build();
 
-        
+
         protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
             return List.of(SchemaMappingImpl.builder()
             		.withName("FoodMart 2399 Rollup Type")
@@ -5218,10 +5219,10 @@ public class SchemaModifiers {
                                         .withAggregatorType(MeasureAggregatorType.SUM)
                                         .build()
                                 ))
-                            	.build()                            		
+                            	.build()
                             ))
                             .build()))
-                    .build()                    		
+                    .build()
                     );
         }
     }
