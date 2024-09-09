@@ -1138,7 +1138,7 @@ public class RolapCube extends CubeBase {
     {
         RolapDimension dimension = null;
 
-        final RolapHierarchy sharedHierarchy = schema.getSharedHierarchy(mappingCubeDimension.getDimension().getName());
+        final RolapHierarchy sharedHierarchy = schema.getSharedHierarchy(mappingCubeDimension.getDimension());
         if (sharedHierarchy != null) {
             dimension =
                 (RolapDimension) sharedHierarchy.getDimension();
