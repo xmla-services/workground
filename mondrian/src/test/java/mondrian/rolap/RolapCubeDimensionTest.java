@@ -11,6 +11,7 @@
 package mondrian.rolap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
@@ -61,8 +63,8 @@ class RolapCubeDimensionTest {
   @Test
   void testLookupCube_null() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
-
-    assertEquals(null, rcd.lookupFactCube(null, null));
+    DimensionConnectorMappingImpl dimConnector = DimensionConnectorMappingImpl.builder().build();
+    assertEquals(null, rcd.lookupFactCube(dimConnector, null));
   }
 
   @Test
@@ -86,10 +88,10 @@ class RolapCubeDimensionTest {
     		.withPhysicalCube(cube)
     		.build();
     // explicit doReturn - just to make it evident
-    doReturn(null).when(schema).lookupCube(anyString());
+    doReturn(null).when(schema).lookupCube(any(CubeMapping.class));
 
     assertEquals(null, rcd.lookupFactCube(dimCon, schema));
-    Mockito.verify(schema).lookupCube(cubeName);
+    Mockito.verify(schema).lookupCube(cube);
   }
 
   @Test
@@ -102,7 +104,7 @@ class RolapCubeDimensionTest {
     		.build();
     RolapSchema schema = mock(RolapSchema.class);
     RolapCube factCube = mock(RolapCube.class);        
-    doReturn(factCube).when(schema).lookupCube(cubeName);
+    doReturn(factCube).when(schema).lookupCube(cube);
 
     assertEquals(factCube, rcd.lookupFactCube(cubeCon, schema));
   }
