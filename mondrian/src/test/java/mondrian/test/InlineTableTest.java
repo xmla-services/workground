@@ -14,9 +14,31 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableColumnDefinitionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableRowCellMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.InlineTableRowMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinedQueryElementMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -41,98 +63,105 @@ class InlineTableTest {
             public TestInlineTableModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name(cubeName)
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName(cubeName)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")                            
+                            .withForeignKey("time_id")
+                            .withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
                             .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Alternative Promotion")
-                            .foreignKey("promotion_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("promo_id")
-                                    .relation(InlineTableRBuilder.builder()
-                                    	.alias("alt_promotion")
-                                        .columnDefs(List.of(
-                                            ColumnDefRBuilder.builder()
-                                                .name("promo_id")
-                                                .type(TypeEnum.NUMERIC)
-                                                .build(),
-                                            ColumnDefRBuilder.builder()
-                                                .name("promo_name")
-                                                .type(TypeEnum.STRING)
-                                                .build()
-                                        ))
-                                        .rows(List.of(
-                                            RowRBuilder.builder()
-                                                .values(List.of(
-                                                    ValueRBuilder.builder()
-                                                        .column("promo_id")
-                                                        .content("0")
-                                                        .build(),
-                                                    ValueRBuilder.builder()
-                                                        .column("promo_name")
-                                                        .content("Promo0")
-                                                        .build()
-                                                ))
-                                                .build(),
-                                            RowRBuilder.builder()
-                                                .values(List.of(
-                                                    ValueRBuilder.builder()
-                                                        .column("promo_id")
-                                                        .content("1")
-                                                        .build(),
-                                                    ValueRBuilder.builder()
-                                                        .column("promo_name")
-                                                        .content("Promo1")
-                                                        .build()
-                                                ))
-                                                .build()
-                                        ))
-                                        .build())
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Alternative Promotion").column("promo_id")
-                                            .nameColumn("promo_name")
-                                            .uniqueMembers(true)
-                                            .build()
-                                    ))
-                                    .build()
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Alternative Promotion")
+                        	.withForeignKey("promotion_id")
+                        	.withDimension(
+                        		StandardDimensionMappingImpl.builder()
+                        			.withName("Alternative Promotion")                            
+                        			.withHierarchies(List.of(
+                        				HierarchyMappingImpl.builder()
+                        					.withHasAll(true)
+                        					.withPrimaryKey("promo_id")
+                        					.withQuery(InlineTableQueryMappingImpl.builder()
+                        							.withAlias("alt_promotion")
+                        							.withColumnDefinitions(List.of(
+                        								InlineTableColumnDefinitionMappingImpl.builder()
+                        									.withName("promo_id")
+                        									.withType(DataType.NUMERIC)
+                        									.build(),
+                        								InlineTableColumnDefinitionMappingImpl.builder()
+                        									.withName("promo_name")
+                        									.withType(DataType.STRING)
+                        									.build()
+                        							))
+                        							.withRows(List.of(
+                        								InlineTableRowMappingImpl.builder()
+                        									.withCells(List.of(
+                        										InlineTableRowCellMappingImpl.builder()
+                        										.withColumnName("promo_id")
+                        										.withValue("0")
+                        										.build(),
+                        										InlineTableRowCellMappingImpl.builder()
+                        										.withColumnName("promo_name")
+                        										.withValue("Promo0")
+                        										.build()
+                        									))
+                        									.build(),
+                        								InlineTableRowMappingImpl.builder()
+                        									.withCells(List.of(
+                        										InlineTableRowCellMappingImpl.builder()
+                        										.withColumnName("promo_id")
+                        										.withValue("1")
+                        										.build(),
+                        										InlineTableRowCellMappingImpl.builder()
+                        										.withColumnName("promo_name")
+                        										.withValue("Promo1")
+                        										.build()
+                        									))
+                        									.build()
+                        							))
+                        							.build()
+                        					)
+                        					.withLevels(List.of(
+                        						LevelMappingImpl.builder()
+                        							.withName("Alternative Promotion").withColumn("promo_id")
+                        							.withNameColumn("promo_name")
+                        							.withUniqueMembers(true)
+                        							.build()
+                        					))
+                        					.build()
                             ))
                             .build()
+                        ).build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(true)
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
-                            .build()
+                    .withMeasureGroups(List.of(
+                    	MeasureGroupMappingImpl.builder()
+                    	.withMeasures(List.of(
+                            MeasureMappingImpl.builder()
+                                .withName("Unit Sales")
+                                .withColumn("unit_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                .withFormatString("Standard")
+                                .withVisible(true)
+                                .build(),
+                            MeasureMappingImpl.builder()
+                                .withName("Store Sales")
+                                .withColumn("store_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)                                
+                                .withFormatString("#,###.00")
+                                .build()                    			
+                    	))
+                    	.build()
                     ))
                     .build());
                 return result;
             }
-*/
         }
-
+            
         /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -195,107 +224,106 @@ class InlineTableTest {
             public TestInlineTableInSharedDimModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER            
-            protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-                List<MappingPrivateDimension> result = new ArrayList<>();
-                result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Shared Alternative Promotion")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("promo_id")
-                            .relation(InlineTableRBuilder.builder()
-                                .alias("alt_promotion")
-                                .columnDefs(List.of(
-                                    ColumnDefRBuilder.builder()
-                                        .name("promo_id")
-                                        .type(TypeEnum.NUMERIC)
+                        
+            private static final StandardDimensionMappingImpl d = StandardDimensionMappingImpl.builder()
+                    .withName("Shared Alternative Promotion")
+                    .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("promo_id")
+                            .withQuery(InlineTableQueryMappingImpl.builder()                            		
+                                .withAlias("alt_promotion")
+                                .withColumnDefinitions(List.of(
+                                	InlineTableColumnDefinitionMappingImpl.builder()
+                                        .withName("promo_id")
+                                        .withType(DataType.NUMERIC)
                                         .build(),
-                                    ColumnDefRBuilder.builder()
-                                        .name("promo_name")
-                                        .type(TypeEnum.STRING)
+                                    InlineTableColumnDefinitionMappingImpl.builder()
+                                        .withName("promo_name")
+                                        .withType(DataType.STRING)
                                         .build()
                                     ))
-                                .rows(List.of(
-                                    RowRBuilder.builder()
-                                        .values(List.of(
-                                            ValueRBuilder.builder()
-                                                .column("promo_id")
-                                                .content("0")
+                                .withRows(List.of(
+                                	InlineTableRowMappingImpl.builder()
+                                		.withCells(List.of(
+                                			InlineTableRowCellMappingImpl.builder()                                			
+                                                .withColumnName("promo_id")
+                                                .withValue("0")
                                                 .build(),
-                                            ValueRBuilder.builder()
-                                                .column("promo_name")
-                                                .content("First promo")
+                                            InlineTableRowCellMappingImpl.builder()
+                                                .withColumnName("promo_name")
+                                                .withValue("First promo")
                                                 .build()
                                         ))
                                         .build(),
-                                    RowRBuilder.builder()
-                                        .values(List.of(
-                                            ValueRBuilder.builder()
-                                                .column("promo_id")
-                                                .content("1")
+                                    InlineTableRowMappingImpl.builder()
+                                    	.withCells(List.of(
+                                        	InlineTableRowCellMappingImpl.builder()
+                                        		.withColumnName("promo_id")
+                                        		.withValue("1")
                                                 .build(),
-                                            ValueRBuilder.builder()
-                                                .column("promo_name")
-                                                .content("Second promo")
+                                            InlineTableRowCellMappingImpl.builder()
+                                            	.withColumnName("promo_name")
+                                            	.withValue("Second promo")
                                                 .build()
                                         ))
                                         .build()
                                 ))
                                 .build())
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Alternative Promotion")
-                                    .column("promo_id")
-                                    .nameColumn("promo_name")
-                                    .uniqueMembers(true)
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Alternative Promotion")
+                                    .withColumn("promo_id")
+                                    .withNameColumn("promo_name")
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
-                            .build()
-                    ))
-                    .build());
-                return result;
-            }
+                            .build())).build();
+
             @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name(cubeName)
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName(cubeName)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))                            
+                            .withForeignKey("time_id")
                             .build(),
-                        DimensionUsageRBuilder.builder()
-                            .name("Shared Alternative Promotion")
-                            .source("Shared Alternative Promotion")
-                            .foreignKey("promotion_id")
+                        DimensionConnectorMappingImpl.builder()
+                            .withOverrideDimensionName("Shared Alternative Promotion")
+                            .withDimension(d)
+                            .withForeignKey("promotion_id")
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(false)
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
-                            .build()
+                    .withMeasureGroups(List.of(
+                    	MeasureGroupMappingImpl.builder()
+                    	.withMeasures(List.of(
+                            MeasureMappingImpl.builder()
+                                .withName("Unit Sales")
+                                .withColumn("unit_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)                                
+                                .withFormatString("Standard")
+                                .withVisible(false)
+                                .build(),
+                            MeasureMappingImpl.builder()
+                                .withName("Store Sales")
+                                .withColumn("store_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                .withFormatString("#,###.00")
+                                .build()                    			
+                    	))
+                    	.build()	
                         ))
                     .build());
                 return result;
             }
-            */
-        }
+            
+            }
+
        /*
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -368,135 +396,147 @@ class InlineTableTest {
             public TestInlineTableSnowflakeModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER            
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                MappingJoinQuery j = new JoinR(
-                    new JoinedQueryElementR(null, "store_country", new TableR("store")),
-                    new JoinedQueryElementR(null, "nation_name",
-                        InlineTableRBuilder.builder()
-                            .alias("nation")
-                            .columnDefs(List.of(
-                                ColumnDefRBuilder.builder()
-                                    .name("nation_name")
-                                    .type(TypeEnum.STRING)
-                                    .build(),
-                                ColumnDefRBuilder.builder()
-                                    .name("nation_shortcode")
-                                    .type(TypeEnum.STRING)
-                                    .build()
-                            ))
-                            .rows(List.of(
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("USA")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("US")
-                                            .build()
-                                    ))
-                                    .build(),
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("Mexico")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("MX")
-                                            .build()
-                                    ))
-                                    .build(),
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("Canada")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("CA")
-                                            .build()
-                                    ))
-                                    .build()
+                JoinQueryMappingImpl j = JoinQueryMappingImpl.builder()
+                		.withLeft(JoinedQueryElementMappingImpl.builder()
+                				.withKey("store_country")
+                				.withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                				.build())
+                		.withRight(JoinedQueryElementMappingImpl.builder()
+                				.withKey("nation_name")
+                				.withQuery(InlineTableQueryMappingImpl.builder()
+                                        .withAlias("nation")
+                                        .withColumnDefinitions(List.of(
+                                        	InlineTableColumnDefinitionMappingImpl.builder()
+                                        		.withName("nation_name")
+                                                .withType(DataType.STRING)
+                                                .build(),
+                                            InlineTableColumnDefinitionMappingImpl.builder()
+                                                .withName("nation_shortcode")
+                                                .withType(DataType.STRING)
+                                                .build()
+                                        ))
+                                        .withRows(List.of(
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                    	.withColumnName("nation_name")
+                                                        .withValue("USA")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("US")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_name")
+                                                        .withValue("Mexico")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("MX")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                            		InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_name")
+                                                        .withValue("Canada")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("CA")
+                                                        .build()
+                                                ))
+                                                .build()
 
-                            ))
-                            .build())
-                );
-                result.add(CubeRBuilder.builder()
-                    .name(cubeName)
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                                        )).build())
+                				.build())
+                		.build();
+                
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName(cubeName)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
+                            .withForeignKey("time_id")
                             .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Store")
-                            .foreignKey("store_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKeyTable("store")
-                                    .primaryKey("store_id")
-                                    .relation(j)
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Store Country")
-                                            .table("nation")
-                                            .column("nation_name")
-                                            .nameColumn("nation_shortcode")
-                                            .uniqueMembers(true)
+                      	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Store")                    		
+                            .withForeignKey("store_id")
+                            .withDimension(                            
+                            	StandardDimensionMappingImpl.builder()
+                            		.withName("Store")
+                            		.withHierarchies(List.of(
+                            			HierarchyMappingImpl.builder()
+                            				.withHasAll(true)
+                            				.withPrimaryKeyTable("store")
+                            				.withPrimaryKey("store_id")
+                            				.withQuery(j)
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Store Country")
+                                            .withTable("nation")
+                                            .withColumn("nation_name")
+                                            .withNameColumn("nation_shortcode")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Store State")
-                                            .table("store")
-                                            .column("store_state")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Store State")
+                                            .withTable("store")
+                                            .withColumn("store_state")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Store City")
-                                            .table("store")
-                                            .column("store_city")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Store City")
+                                            .withTable("store")
+                                            .withColumn("store_city")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Store Name")
-                                            .table("store")
-                                            .column("store_name")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Store Name")
+                                            .withTable("store")
+                                            .withColumn("store_name")
+                                            .withUniqueMembers(true)
                                             .build()
                                         ))
                                     .build()
                             ))
                             .build()
+                          ).build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(false)
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
-                            .build()
-                    ))
+                    .withMeasureGroups(List.of(
+                    		MeasureGroupMappingImpl.builder()
+                    		.withMeasures(List.of(
+                                MeasureMappingImpl.builder()
+                                    .withName("Unit Sales")
+                                    .withColumn("unit_sales")
+                                    .withAggregatorType(MeasureAggregatorType.SUM)
+                                    .withFormatString("Standard")
+                                    .withVisible(false)
+                                    .build(),
+                                MeasureMappingImpl.builder()
+                                    .withName("Store Sales")
+                                    .withColumn("store_sales")
+                                    .withAggregatorType(MeasureAggregatorType.SUM)
+                                    .withFormatString("#,###.00")
+                                    .build()                    				
+                    				))
+                    		.build()
+                    		))
                     .build());
-                return result;
+                return result;            	
             }
-            */
+            
         }
 
         /*
@@ -572,156 +612,168 @@ class InlineTableTest {
             public TestInlineTableDateModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER            
+            
             @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
 
-                MappingJoinQuery j = new JoinR(
-                    new JoinedQueryElementR(null, "store_country", new TableR("store")),
-                    new JoinedQueryElementR(null, "nation_name",
-                        InlineTableRBuilder.builder()
-                            .alias("nation")
-                            .columnDefs(List.of(
-                                ColumnDefRBuilder.builder()
-                                    .name("nation_name")
-                                    .type(TypeEnum.STRING)
-                                    .build(),
-                                ColumnDefRBuilder.builder()
-                                    .name("nation_shortcode")
-                                    .type(TypeEnum.STRING)
-                                    .build()
-                            ))
-                            .rows(List.of(
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("USA")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("US")
-                                            .build()
-                                    ))
-                                    .build(),
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("Mexico")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("MX")
-                                            .build()
-                                    ))
-                                    .build(),
-                                RowRBuilder.builder()
-                                    .values(List.of(
-                                        ValueRBuilder.builder()
-                                            .column("nation_name")
-                                            .content("Canada")
-                                            .build(),
-                                        ValueRBuilder.builder()
-                                            .column("nation_shortcode")
-                                            .content("CA")
-                                            .build()
-                                    ))
-                                    .build()
+                JoinQueryMappingImpl j = JoinQueryMappingImpl.builder()
+                		.withLeft(JoinedQueryElementMappingImpl.builder()
+                				.withKey("store_country")
+                				.withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                				.build())
+                		.withRight(JoinedQueryElementMappingImpl.builder()
+                				.withKey("nation_name")
+                				.withQuery(InlineTableQueryMappingImpl.builder()
+                                        .withAlias("nation")
+                                        .withColumnDefinitions(List.of(
+                                        	InlineTableColumnDefinitionMappingImpl.builder()
+                                        		.withName("nation_name")
+                                                .withType(DataType.STRING)
+                                                .build(),
+                                            InlineTableColumnDefinitionMappingImpl.builder()
+                                                .withName("nation_shortcode")
+                                                .withType(DataType.STRING)
+                                                .build()
+                                        ))
+                                        .withRows(List.of(
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                    	.withColumnName("nation_name")
+                                                        .withValue("USA")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("US")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_name")
+                                                        .withValue("Mexico")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("MX")
+                                                        .build()
+                                                ))
+                                                .build(),
+                                            InlineTableRowMappingImpl.builder()
+                                            	.withCells(List.of(
+                                            		InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_name")
+                                                        .withValue("Canada")
+                                                        .build(),
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("nation_shortcode")
+                                                        .withValue("CA")
+                                                        .build()
+                                                ))
+                                                .build()
 
-                            ))
-                            .build())
-                );
-
-                result.add(CubeRBuilder.builder()
-                    .name(cubeName)
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                                        )).build())
+                				.build())
+                		.build();
+                
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName(cubeName)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
+                            .withForeignKey("time_id")
                             .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Alternative Promotion")
-                            .foreignKey("promotion_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("id")
-                                    .relation(InlineTableRBuilder.builder()
-                                        .alias("inline_promo")
-                                        .columnDefs(List.of(
-                                            ColumnDefRBuilder.builder()
-                                                .name("id")
-                                                .type(TypeEnum.NUMERIC)
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Alternative Promotion")
+                        	.withForeignKey("promotion_id")
+                        	.withDimension(StandardDimensionMappingImpl.builder()
+                            .withName("Alternative Promotion")
+                            .withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withPrimaryKey("id")
+                                    .withQuery(InlineTableQueryMappingImpl.builder()
+                                        .withAlias("inline_promo")
+                                        .withColumnDefinitions(List.of(
+                                            InlineTableColumnDefinitionMappingImpl.builder()
+                                            	.withName("id")
+                                                .withType(DataType.NUMERIC)
                                                 .build(),
-                                            ColumnDefRBuilder.builder()
-                                                .name("date")
-                                                .type(TypeEnum.DATE)
+                                            InlineTableColumnDefinitionMappingImpl.builder()
+                                                .withName("date")
+                                                .withType(DataType.DATE)
                                                 .build()
                                         ))
-                                        .rows(List.of(
-                                            RowRBuilder.builder()
-                                                .values(List.of(
-                                                    ValueRBuilder.builder()
-                                                        .column("id")
-                                                        .content("1")
+                                        .withRows(List.of(
+                                        	InlineTableRowMappingImpl.builder()
+                                        		.withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                    	.withColumnName("id")
+                                                        .withValue("1")
                                                         .build(),
-                                                    ValueRBuilder.builder()
-                                                        .column("date")
-                                                        .content("2008-04-29")
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                    	.withColumnName("date")
+                                                        .withValue("2008-04-29")
                                                         .build()
                                                 ))
                                                 .build(),
-                                            RowRBuilder.builder()
-                                                .values(List.of(
-                                                    ValueRBuilder.builder()
-                                                        .column("id")
-                                                        .content("2")
+                                            InlineTableRowMappingImpl.builder()
+                                                .withCells(List.of(
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("id")
+                                                        .withValue("2")
                                                         .build(),
-                                                    ValueRBuilder.builder()
-                                                        .column("date")
-                                                        .content("2007-01-20")
+                                                    InlineTableRowCellMappingImpl.builder()
+                                                        .withColumnName("date")
+                                                        .withValue("2007-01-20")
                                                         .build()
                                                 ))
                                                 .build()
 
                                         ))
-                                        .build())
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Alternative Promotion")
-                                            .column("id")
-                                            .nameColumn("date")
-                                            .uniqueMembers(true)
+                                        .build()
+                                    )
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Alternative Promotion")
+                                            .withColumn("id")
+                                            .withNameColumn("date")
+                                            .withUniqueMembers(true)
                                             .build()
                                     ))
                                     .build()
                             ))
                             .build()
+                        ).build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(false)
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
-                            .build()
-                    ))
+                   .withMeasureGroups(List.of(
+                		   MeasureGroupMappingImpl.builder()
+                		   .withMeasures(List.of(
+                               MeasureMappingImpl.builder()
+                                   .withName("Unit Sales")
+                                   .withColumn("unit_sales")
+                                   .withAggregatorType(MeasureAggregatorType.SUM)
+                                   .withFormatString("Standard")
+                                   .withVisible(false)
+                                   .build(),
+                               MeasureMappingImpl.builder()
+                                   .withName("Store Sales")
+                                   .withColumn("store_sales")
+                                   .withAggregatorType(MeasureAggregatorType.SUM)
+                                   .withFormatString("#,###.00")
+                                   .build()
+                			))
+                		   .build()
+                	))
                     .build());
                 return result;
+            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

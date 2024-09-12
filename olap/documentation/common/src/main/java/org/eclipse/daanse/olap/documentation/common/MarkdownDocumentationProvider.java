@@ -804,24 +804,22 @@ public class MarkdownDocumentationProvider extends AbstractContextDocumentationP
                 writer.write(tableName);
                 writer.write("{");
                 writer.write(ENTER);
-                for (MeasureGroupMapping m : virtualCube.getMeasureGroups()) {
+                for (MeasureMapping mm : virtualCube.getReferencedMeasures()) {
                     String description = EMPTY_STRING;
-					for (MeasureMapping mm : m.getMeasures()) {
-						String cube = EMPTY_STRING;
-					    Optional<CubeMapping> oCubeSource = lookupCube(schema, mm);
-					    if (oCubeSource.isPresent()) {					     
-						    cube = oCubeSource.get().getName() != null ? oCubeSource.get().getName() : EMPTY_STRING;
-						} 
-						String measureName = prepare(mm.getName());
-						writer.write("M ");
-						writer.write(cube);
-						writer.write("_");
-						writer.write(measureName);
-						writer.write(" \"");
-						writer.write(description);
-						writer.write("\"");
-						writer.write(ENTER);
-					}
+					String cube = EMPTY_STRING;
+					Optional<CubeMapping> oCubeSource = lookupCube(schema, mm);
+					if (oCubeSource.isPresent()) {					     
+					    cube = oCubeSource.get().getName() != null ? oCubeSource.get().getName() : EMPTY_STRING;
+					} 
+					String measureName = prepare(mm.getName());
+					writer.write("M ");
+					writer.write(cube);
+					writer.write("_");
+					writer.write(measureName);
+					writer.write(" \"");
+					writer.write(description);
+					writer.write("\"");
+					writer.write(ENTER);
                 }
                 for (DimensionConnectorMapping d : virtualCube.getDimensionConnectors()) {
                     String description = d.getDimension().getDescription() == null ? EMPTY_STRING : d.getDimension().getDescription();
@@ -852,6 +850,16 @@ public class MarkdownDocumentationProvider extends AbstractContextDocumentationP
                     writer.write(description);
                     writer.write("\"");
                     writer.write(ENTER);
+                }
+                for (CalculatedMemberMapping cm : virtualCube.getReferencedCalculatedMembers()) {
+                    String description = cm.getDescription() == null ? EMPTY_STRING : cm.getDescription();
+                    String calculatedMemberName =  prepare(cm.getName());
+                    writer.write("CM ");
+                    writer.write(calculatedMemberName);
+                    writer.write(" \"");
+                    writer.write(description);
+                    writer.write("\"");
+                    writer.write(ENTER);                	
                 }
                 if (virtualCube.getKpis() != null) {
                 	for (KpiMapping kpi : virtualCube.getKpis()) {
