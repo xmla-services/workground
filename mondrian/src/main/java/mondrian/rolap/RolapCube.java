@@ -852,9 +852,9 @@ public class RolapCube extends CubeBase {
             throw Util.newInternal("measure not found in cube usages");
         }
         }
-            
-            
-         if (cm != null) {   
+
+
+         if (cm != null) {
          for (CalculatedMemberMapping calculatedMember : cm) {
         	measureHash.put(calculatedMember.getName(), calculatedMember);
         	if (calculatedMember.getPhysicalCube() != null) {
@@ -871,7 +871,7 @@ public class RolapCube extends CubeBase {
                     if (cubeMeasure.getName().equalsIgnoreCase(
                             mappingVirtualCube.getDefaultMeasure() != null ? mappingVirtualCube.getDefaultMeasure().getName() : null ))
                     {
-                      defaultMeasure = cubeMeasure;                      
+                      defaultMeasure = cubeMeasure;
                     }
                     found = true;
                     List<CalculatedMemberMapping> memberList =
@@ -3603,15 +3603,15 @@ public class RolapCube extends CubeBase {
                 ).filter(h -> hierarchy.equals(h.hierarchyMapping))
                 .findAny().orElse(null);
 	}
-	
-	public Level lookupLevel(LevelMapping level, Hierarchy h) {		
+
+	public Level lookupLevel(LevelMapping level, Hierarchy h) {
 		if (level != null && h != null && h.getLevels() != null) {
 			for (Level l : h.getLevels()) {
 				if (l instanceof RolapLevel rl) {
 					if (level.equals(rl.levelMapping)) {
 						return rl;
 					}
-				}				
+				}
 			}
 		}
 		return null;
