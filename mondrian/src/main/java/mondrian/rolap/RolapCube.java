@@ -705,7 +705,7 @@ public class RolapCube extends CubeBase {
         List<String> propNames = new ArrayList<>();
         List<String> propExprs = new ArrayList<>();
         validateMemberProps(
-            measureMapping.getCalculatedMemberProperty(), propNames, propExprs, measureMapping.getName());
+            measureMapping.getCalculatedMemberProperties(), propNames, propExprs, measureMapping.getName());
         for (int j = 0; j < propNames.size(); j++) {
             String propName = propNames.get(j);
             final Object propExpr = propExprs.get(j);
@@ -784,20 +784,17 @@ public class RolapCube extends CubeBase {
         this.cubeUsages = new RolapCubeUsages(mappingVirtualCube.getCubeUsages());
 
         HashMap<String, MeasureMapping> measureHash = new HashMap<>();
-        List<? extends MeasureMapping> ms = mappingVirtualCube.getMeasureGroups().stream().flatMap(mg -> mg.getMeasures().stream()).toList();
+        List<? extends MeasureMapping> ms = mappingVirtualCube.getReferencedMeasures();
         //for (MeasureGroupMapping measureGroup
         //    : mappingVirtualCube.getMeasureGroups())
         //{
             for (MeasureMapping mappingMeasure : ms) {
         	measureHash.put(mappingMeasure.getName(), mappingMeasure);
-
-            // Lookup a measure in an existing cube.
-        	Optional<CubeMapping> oCube = lookupCube(mappingSchema.getCubes(), mappingMeasure);
-        	if (oCube.isPresent()) {
-            RolapCube cube = schema.lookupCube(oCube.get());
+        	if (mappingMeasure.getMeasureGroup() != null && mappingMeasure.getMeasureGroup().getPhysicalCube() != null) {
+            RolapCube cube = schema.lookupCube(mappingMeasure.getMeasureGroup().getPhysicalCube());
             if (cube == null) {
                 throw Util.newError(
-                    new StringBuilder("Cube '").append(oCube.get().getName()).append("' not found").toString());
+                    new StringBuilder("Cube '").append(mappingMeasure.getMeasureGroup().getPhysicalCube().getName()).append("' not found").toString());
             }
 
             List<Member> cubeMeasures = cube.getMeasures();
@@ -821,12 +818,13 @@ public class RolapCube extends CubeBase {
                         // order for the members.
                         CalculatedMemberMapping calcMember =
                             schema.lookupXmlCalculatedMember(
-                                mappingMeasure.getName(), oCube.get().getName());
+                                mappingMeasure.getName(), mappingMeasure.getMeasureGroup().getPhysicalCube().getName());
+                        //TODO 
                         if (calcMember == null) {
                             throw Util.newInternal(
                                 new StringBuilder("Could not find XML Calculated Member '")
                                 .append(mappingMeasure.getName()).append("' in XML cube '")
-                                .append(oCube.get().getName()).append("'").toString());
+                                .append(mappingMeasure.getMeasureGroup().getPhysicalCube().getName()).append("'").toString());
                         }
                         List<CalculatedMemberMapping> memberList =
                             calculatedMembersMap.get(cube);
@@ -874,7 +872,7 @@ public class RolapCube extends CubeBase {
             if (!found) {
                 throw Util.newInternal(
                     new StringBuilder("could not find measure '").append(mappingMeasure.getName())
-                    .append("' in cube '").append(oCube.get().getName()).append("'").toString());
+                    .append("' in cube '").append(mappingMeasure.getMeasureGroup().getPhysicalCube().getName()).append("'").toString());
             }
         } else {
             throw Util.newInternal("measure not found in cube usages");
@@ -1043,25 +1041,6 @@ public class RolapCube extends CubeBase {
                     Util.<RolapMember>cast(finalMeasureMembers))));
         // Note: virtual cubes do not get aggregate
     }
-
-	private Optional<CubeMapping> lookupCube(List<? extends CubeMapping> cubeUsages,
-			MeasureMapping mappingMeasure) {
-		if (cubeUsages != null) {
-			for (CubeMapping cube : cubeUsages) {
-				if (cube.getMeasureGroups() != null) {
-					for (MeasureGroupMapping measureGroupMapping : cube.getMeasureGroups()) {
-						if (measureGroupMapping.getMeasures() != null) {
-							Optional<? extends MeasureMapping> oMeasure = measureGroupMapping.getMeasures().stream().filter(m -> m.equals(mappingMeasure)).findAny();
-							if (oMeasure.isPresent()) {
-								return Optional.of(cube);
-							}
-						}
-					}
-				}
-			}
-		}
-		return Optional.empty();
-	}
 
 	private boolean vcHasAllCalcMembers(
         List<? extends CalculatedMemberMapping> origCalcMeasureList,

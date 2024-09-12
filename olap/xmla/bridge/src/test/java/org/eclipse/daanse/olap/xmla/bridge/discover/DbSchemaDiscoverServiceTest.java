@@ -46,6 +46,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.HierarchyMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.LevelMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureGroupMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.PhysicalCubeMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
@@ -112,10 +113,10 @@ class DbSchemaDiscoverServiceTest {
     private AccessRoleMapping role2;
 
     @Mock
-    private CubeMapping cube1;
+    private PhysicalCubeMapping cube1;
 
     @Mock
-    private CubeMapping cube2;
+    private PhysicalCubeMapping cube2;
 
     @Mock
     private Cube cub1;

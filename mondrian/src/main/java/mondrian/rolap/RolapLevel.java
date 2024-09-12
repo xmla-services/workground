@@ -163,27 +163,27 @@ public class RolapLevel extends LevelBase {
         this.datatype = datatype;
         this.keyExp = keyExp;
         if (nameExp != null) {
-            //if (nameExp instanceof MappingColumn) {
-            //    checkColumn((MappingColumn) nameExp);
-            //}
+            if (nameExp instanceof RolapColumn rc) {
+                checkColumn(rc);
+            }
         }
         this.nameExp = nameExp;
         if (captionExp != null) {
-            //if (captionExp instanceof MappingColumn) {
-            //    checkColumn((MappingColumn) captionExp);
-            //}
+            if (captionExp instanceof RolapColumn rc) {
+                checkColumn(rc);
+            }
         }
         this.captionExp = captionExp;
         if (ordinalExp != null) {
-            //if (ordinalExp instanceof MappingColumn) {
-            //    checkColumn((MappingColumn) ordinalExp);
-            //}
+            if (ordinalExp instanceof RolapColumn rc) {
+                checkColumn(rc);
+            }
             this.ordinalExp = ordinalExp;
         } else {
             this.ordinalExp = this.keyExp;
         }
-        if (parentExp instanceof mondrian.rolap.RolapColumn) {
-            //checkColumn((MappingColumn) parentExp);
+        if (parentExp instanceof RolapColumn rc) {
+            checkColumn(rc);
         }
         this.parentExp = parentExp;
         if (parentExp != null) {
@@ -275,10 +275,10 @@ public class RolapLevel extends LevelBase {
     String getTableName() {
         String tableName = null;
 
-        //SQLExpressionMapping expr = getKeyExp();
-        //if (expr instanceof MappingColumn mc) {
-        //    tableName = ExpressionUtil.getTableAlias(mc);
-        //}
+        SQLExpressionMapping expr = getKeyExp();
+        if (expr instanceof RolapColumn mc) {
+            tableName = ExpressionUtil.getTableAlias(mc);
+        }
         return tableName;
     }
 

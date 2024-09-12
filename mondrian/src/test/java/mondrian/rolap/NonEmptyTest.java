@@ -5814,58 +5814,51 @@ class NonEmptyTest extends BatchTestCase {
           ))
           .build();
 
-          private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
-        		  .withName("Unit Sales")
-        		  .withColumn("unit_sales")
-        		  .withAggregatorType(MeasureAggregatorType.SUM)
-        		  .withFormatString("Standard")
-        		  .build();
-
-
-          private static final PhysicalCubeMappingImpl salesCube = PhysicalCubeMappingImpl.builder()
-          .withName("Sales")
-          .withDefaultMeasure(m)
-          .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
-          .withDimensionConnectors(List.of(
-        	 DimensionConnectorMappingImpl.builder()
-        	 	  .withOverrideDimensionName("Store")
-        	 	  .withDimension(d)
-                  .withForeignKey("store_id")
-                  .build()
-          ))
-          .withMeasureGroups(List.of(
-        		  MeasureGroupMappingImpl.builder()
-        		  .withMeasures(List.of(
-                          MeasureMappingImpl.builder()
-                          .withName("Unit Sales")
-                          .withColumn("unit_sales")
-                          .withAggregatorType(MeasureAggregatorType.SUM)
-                          .withFormatString("Standard")
-                          .build()
-        		  ))
-        		  .build()
-        		  ))
-          .withCalculatedMembers(List.of(
-        	  CalculatedMemberMappingImpl.builder()
-                  .withName("dummyMeasure")
-                  //.withDimension("Measures")
-                  .withFormatString("1")
-                  .build()
-          ))
-          .build();
-
           public TestCalculatedDefaultMeasureOnVirtualCubeNoThrowExceptionModifier(CatalogMapping catalog) {
               super(catalog);
           }
 
           protected List<SchemaMapping> catalogSchemas(CatalogMapping catalog2) {
+        	  MeasureGroupMappingImpl mgSales = MeasureGroupMappingImpl.builder().build();
+              MeasureMappingImpl m = MeasureMappingImpl.builder()
+            		  .withName("Unit Sales")
+            		  .withColumn("unit_sales")
+            		  .withAggregatorType(MeasureAggregatorType.SUM)
+            		  .withFormatString("Standard")
+            		  .withMeasureGroup(mgSales)
+            		  .build();
+              mgSales.setMeasures(List.of(m));
+
+              CalculatedMemberMappingImpl cm  = CalculatedMemberMappingImpl.builder()
+              .withName("dummyMeasure")
+              //.withDimension("Measures")
+              .withFormatString("1")
+              .build();
+
+              
+              PhysicalCubeMappingImpl salesCube = PhysicalCubeMappingImpl.builder()
+              .withName("Sales")
+              .withDefaultMeasure(m)
+              .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+              .withDimensionConnectors(List.of(
+            	 DimensionConnectorMappingImpl.builder()
+            	 	  .withOverrideDimensionName("Store")
+            	 	  .withDimension(d)
+                      .withForeignKey("store_id")
+                      .build()
+              ))
+              .withMeasureGroups(List.of(mgSales))
+              .withCalculatedMembers(List.of(cm))
+              .build();
+              mgSales.setPhysicalCube(salesCube);
+              cm.setPhysicalCube(salesCube);
+        	  
               return List.of(SchemaMappingImpl.builder()
             		  .withName("FoodMart")
                       .withCubes(List.of(
                     		  salesCube,
                               VirtualCubeMappingImpl.builder()
-                                  //.withDefaultMeasure("dummyMeasure") //TODO
-                                  .withDefaultMeasure(m)
+                                  //.withDefaultMeasure("dummyMeasure") //TODO                                  
                                   .withName("virtual")
                                   .withDimensionConnectors(List.of(
                                 		  DimensionConnectorMappingImpl.builder()
@@ -5874,21 +5867,8 @@ class NonEmptyTest extends BatchTestCase {
                                 		  .withDimension(d)
                                 		  .build()
                                   ))
-                                  .withMeasureGroups(List.of(
-                                		  MeasureGroupMappingImpl.builder()
-                                		  .withMeasures(List.of(
-                                			 MeasureMappingImpl.builder()
-                                             //.cubeName("Sales")
-                                             .withName("[Measures].[Unit Sales]")
-                                			 .build(),
-                                			 MeasureMappingImpl.builder()
-                                             //.cubeName("Sales")
-                                             .withName("[Measures].[dummyMeasure]")
-                                			 .build()
-
-                              			  ))
-                                		  .build()
-                                   ))
+                                  .withReferencedMeasures(List.of(m))
+                                  .withReferencedCalculatedMembers(List.of(cm))
                                   .build()
                           ))
             		  .build());

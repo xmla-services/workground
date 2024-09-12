@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.daanse.emf.model.rolapmapping.PhysicalCube;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.DrillThroughAction;
@@ -49,6 +50,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.HierarchyMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.KpiMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureGroupMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.PhysicalCubeMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.VirtualCubeMapping;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -158,8 +160,8 @@ public class Utils {
         Optional<String> oColumnName,
         Optional<ColumnOlapTypeEnum> oColumnOlapType
     ) {
-        return schema.getCubes().stream().sorted(Comparator.comparing(CubeMapping::getName))
-            .map(c -> getDbSchemaColumnsResponseRow(catalogName, schema.getName(), c, oTableName, oColumnName,
+        return schema.getCubes().stream().filter(c -> c instanceof PhysicalCubeMapping).sorted(Comparator.comparing(CubeMapping::getName))
+            .map(c -> getDbSchemaColumnsResponseRow(catalogName, schema.getName(), (PhysicalCubeMapping)c, oTableName, oColumnName,
                 oColumnOlapType))
             .flatMap(Collection::stream).toList();
     }
@@ -167,7 +169,7 @@ public class Utils {
     static List<DbSchemaColumnsResponseRow> getDbSchemaColumnsResponseRow(
         String catalogName,
         String schemaName,
-        CubeMapping cube,
+        PhysicalCubeMapping cube,
         Optional<String> oTableName,
         Optional<String> oColumnName,
         Optional<ColumnOlapTypeEnum> oColumnOlapType        
@@ -186,7 +188,7 @@ public class Utils {
             for (MeasureGroupMapping measureGroup : cube.getMeasureGroups()) {
             	for (MeasureMapping measure : measureGroup.getMeasures()) { 
                 Boolean visible = true;
-                Optional<? extends CalculatedMemberPropertyMapping> oP = measure.getCalculatedMemberProperty()
+                Optional<? extends CalculatedMemberPropertyMapping> oP = measure.getCalculatedMemberProperties()
                     .stream()
                     .filter(p -> "$visible".equals(p.getName())).findFirst();
                 if (oP.isPresent()) {
