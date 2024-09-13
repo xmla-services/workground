@@ -87,6 +87,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.JoinQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.LevelMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureGroupMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MeasureMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.MemberMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.NamedSetMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.PhysicalCubeMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.QueryMapping;
@@ -762,7 +763,7 @@ public class RolapCube extends CubeBase {
             mappingVirtualCube.getDimensionConnectors(),
             RolapHierarchy.createMetadataMap(mappingVirtualCube.getAnnotations()),
             context);
-
+        schema.addCube(mappingVirtualCube, this);
         // Since Measure and VirtualCubeMeasure cannot
         // be treated as the same, measure creation cannot be done in a common
         // constructor.
@@ -783,8 +784,9 @@ public class RolapCube extends CubeBase {
 
         this.cubeUsages = new RolapCubeUsages(mappingVirtualCube.getCubeUsages());
 
-        HashMap<String, MeasureMapping> measureHash = new HashMap<>();
+        HashMap<String, MemberMapping> measureHash = new HashMap<>();
         List<? extends MeasureMapping> ms = mappingVirtualCube.getReferencedMeasures();
+        List<? extends CalculatedMemberMapping> cm = mappingVirtualCube.getReferencedCalculatedMembers();
         //for (MeasureGroupMapping measureGroup
         //    : mappingVirtualCube.getMeasureGroups())
         //{
@@ -801,7 +803,7 @@ public class RolapCube extends CubeBase {
             boolean found = false;
             boolean isDefaultMeasureFound = false;
             for (Member cubeMeasure : cubeMeasures) {
-                if (cubeMeasure.getUniqueName().equals(mappingMeasure.getName())) {
+                if (cubeMeasure.getName().equals(mappingMeasure.getName())) {
                     if (cubeMeasure.getName().equalsIgnoreCase(
                             mappingVirtualCube.getDefaultMeasure() != null ? mappingVirtualCube.getDefaultMeasure().getName() : null ))
                     {
@@ -809,33 +811,6 @@ public class RolapCube extends CubeBase {
                       isDefaultMeasureFound = true;
                     }
                     found = true;
-                    if (cubeMeasure instanceof RolapCalculatedMember) {
-                        // We have a calculated member!  Keep track of which
-                        // base cube each calculated member is associated
-                        // with, so we can resolve the calculated member
-                        // relative to its base cube.  We're using a treeMap
-                        // to store the mapping to ensure a deterministic
-                        // order for the members.
-                        CalculatedMemberMapping calcMember =
-                            schema.lookupXmlCalculatedMember(
-                                mappingMeasure.getName(), mappingMeasure.getMeasureGroup().getPhysicalCube().getName());
-                        //TODO 
-                        if (calcMember == null) {
-                            throw Util.newInternal(
-                                new StringBuilder("Could not find XML Calculated Member '")
-                                .append(mappingMeasure.getName()).append("' in XML cube '")
-                                .append(mappingMeasure.getMeasureGroup().getPhysicalCube().getName()).append("'").toString());
-                        }
-                        List<CalculatedMemberMapping> memberList =
-                            calculatedMembersMap.get(cube);
-                        if (memberList == null) {
-                            memberList =
-                                new ArrayList<>();
-                        }
-                        memberList.add(calcMember);
-                        origCalcMeasureList.add(calcMember);
-                        calculatedMembersMap.put(cube, memberList);
-                    } else {
                         // This is the a standard measure. (Don't know
                         // whether it will confuse things that this
                         // measure still points to its 'real' cube.)
@@ -865,7 +840,6 @@ public class RolapCube extends CubeBase {
                         if (isDefaultMeasureFound) {
                           defaultMeasure = virtualCubeMeasure;
                         }
-                    }
                     break;
                 }
             }
@@ -876,6 +850,50 @@ public class RolapCube extends CubeBase {
             }
         } else {
             throw Util.newInternal("measure not found in cube usages");
+        }
+        }
+            
+            
+         if (cm != null) {   
+         for (CalculatedMemberMapping calculatedMember : cm) {
+        	measureHash.put(calculatedMember.getName(), calculatedMember);
+        	if (calculatedMember.getPhysicalCube() != null) {
+            RolapCube cube = schema.lookupCube(calculatedMember.getPhysicalCube());
+            if (cube == null) {
+                throw Util.newError(
+                    new StringBuilder("Cube '").append(calculatedMember.getPhysicalCube().getName()).append("' not found").toString());
+            }
+
+            List<Member> cubeMeasures = cube.getMeasures();
+            boolean found = false;
+            for (Member cubeMeasure : cubeMeasures) {
+                if (cubeMeasure.getName().equals(calculatedMember.getName()) && cubeMeasure instanceof RolapCalculatedMember) {
+                    if (cubeMeasure.getName().equalsIgnoreCase(
+                            mappingVirtualCube.getDefaultMeasure() != null ? mappingVirtualCube.getDefaultMeasure().getName() : null ))
+                    {
+                      defaultMeasure = cubeMeasure;                      
+                    }
+                    found = true;
+                    List<CalculatedMemberMapping> memberList =
+                        calculatedMembersMap.get(cube);
+                    if (memberList == null) {
+                        memberList =
+                            new ArrayList<>();
+                    }
+                    memberList.add(calculatedMember);
+                    origCalcMeasureList.add(calculatedMember);
+                    calculatedMembersMap.put(cube, memberList);
+                    break;
+                }
+            }
+            if (!found) {
+                throw Util.newInternal(
+                    new StringBuilder("could not find calculated member '").append(calculatedMember.getName())
+                    .append("' in cube '").append(calculatedMember.getPhysicalCube().getName()).append("'").toString());
+            }
+        } else {
+            throw Util.newInternal("calculated member not found in cube usages");
+        }
         }
         }
         //}
@@ -1022,7 +1040,7 @@ public class RolapCube extends CubeBase {
                         .setBaseCube(calcMeasuresWithBaseCube.get(calcMeasure.getUniqueName()).getBaseCube());
             }
 
-            MeasureMapping mappingMeasure = measureHash.get(calcMeasure.getUniqueName());
+            MemberMapping mappingMeasure = measureHash.get(calcMeasure.getUniqueName());
         	if(mappingMeasure != null) {
 	            Boolean visible = mappingMeasure.isVisible();
 	            if(visible != null) {
@@ -3412,7 +3430,7 @@ public class RolapCube extends CubeBase {
 
                 CalculatedMemberMapping mappingCalcMember =
                     schema.lookupXmlCalculatedMember(
-                        calcMember.getUniqueName(),
+                        calcMember.getName(),
                         baseCube.getName());
                 createCalcMembersAndNamedSets(
                     Collections.singletonList(mappingCalcMember),

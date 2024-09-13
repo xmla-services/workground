@@ -477,12 +477,11 @@ public class RolapSchema implements Schema {
                 RolapCube cube=null;
             	if (cubeMapping instanceof PhysicalCubeMapping physicalCubeMapping) {
             	  cube = new RolapCube(this, mappingSchema2, physicalCubeMapping, context);
-            	  addCube(cubeMapping, cube);
+            	  //addCube(cubeMapping, cube);
 
             	}
-            	//TODO Virtual Cube
             	if (cubeMapping instanceof VirtualCubeMapping virtualCubeMapping) {
-            		//cube = new RolapCube(this, mappingSchema2, virtualCubeMapping, context);
+            		cube = new RolapCube(this, mappingSchema2, virtualCubeMapping, context);
             		//addCube(cubeMapping, cube);
             	}
 //            }
@@ -810,7 +809,8 @@ public class RolapSchema implements Schema {
                 // and CalculatedMember.hierarchy is quoted
                 // (e.g. "[Time].[Weekly]").
                 if (Util.equalName(
-                        calcMemberFqName(mappingCalcMember),
+                        //calcMemberFqName(mappingCalcMember),
+                		mappingCalcMember.getName(),
                         calcMemberName))
                 {
                     return mappingCalcMember;
