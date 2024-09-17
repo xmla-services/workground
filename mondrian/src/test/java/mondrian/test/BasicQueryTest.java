@@ -78,6 +78,7 @@ import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -4801,10 +4802,9 @@ public class BasicQueryTest {
                 + "aggregator=\"sum\"/>\n" + "  <Measure name=\"Warehouse Cost\" column=\"warehouse_cost\" "
                 + "aggregator=\"sum\"/>\n" + "</Cube>", null, null, null, null );
        */
-    RolapSchemaPool.instance().clear();
-    SchemaMapping schema = context.getCatalogMapping().getSchemas().get(0);
-    //TODO: DENIS MAPPING-MODIFIER
-    //((TestContext)context).setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier27(schema, "Supply Time Error")));
+    RolapSchemaPool.instance().clear();    
+    CatalogMapping catalog = context.getCatalogMapping();
+    ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.BasicQueryTestModifier27(catalog, "Supply Time Error"));
     String queryWithoutFilter = "select store.members on 0 from " + "DefaultMeasureTesting";
     String queryWithFirstMeasure =
         "select store.members on 0 " + "from DefaultMeasureTesting where [measures].[Store Invoice]";
@@ -4826,9 +4826,8 @@ public class BasicQueryTest {
        */
 
     RolapSchemaPool.instance().clear();
-    SchemaMapping schema = context.getCatalogMapping().getSchemas().get(0);
-    //TODO: DENIS MAPPING-MODIFIER
-    //((TestContext)context).setCatalogMappingSupplier(List.of(new SchemaModifiers.BasicQueryTestModifier27(schema, "SUPPLY TIME")));
+    CatalogMapping catalog = context.getCatalogMapping();
+    ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.BasicQueryTestModifier27(catalog, "SUPPLY TIME"));    
     String queryWithoutFilter = "select store.members on 0 from " + "DefaultMeasureTesting";
     String queryWithFirstMeasure =
         "select store.members on 0 " + "from DefaultMeasureTesting where [measures].[Store Invoice]";
