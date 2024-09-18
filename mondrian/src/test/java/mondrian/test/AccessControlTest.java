@@ -1240,15 +1240,15 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRollupBottomLevel(Context foodMartContext) {
         rollupPolicyBottom(
-            foodMartContext, RollupPolicy.FULL, "74,748", "36,759", "266,773");
+            foodMartContext, RollupPolicyType.FULL, "74,748", "36,759", "266,773");
         rollupPolicyBottom(
-        		foodMartContext, RollupPolicy.PARTIAL, "72,739", "35,775", "264,764");
-        rollupPolicyBottom(foodMartContext, RollupPolicy.HIDDEN, "", "", "");
+        		foodMartContext, RollupPolicyType.PARTIAL, "72,739", "35,775", "264,764");
+        rollupPolicyBottom(foodMartContext, RollupPolicyType.HIDDEN, "", "", "");
     }
 
     private void rollupPolicyBottom(
 		Context foodMartContext,
-        RollupPolicy rollupPolicy,
+        RollupPolicyType rollupPolicy,
         String v1,
         String v2,
         String v3)
@@ -1342,16 +1342,16 @@ class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testRollupPolicyGreatGrandchildInvisible(Context foodMartContext) {
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, RollupPolicy.FULL, "266,773", "74,748");
+    		foodMartContext, RollupPolicyType.FULL, "266,773", "74,748");
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, RollupPolicy.PARTIAL, "266,767", "74,742");
+    		foodMartContext, RollupPolicyType.PARTIAL, "266,767", "74,742");
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, RollupPolicy.HIDDEN, "", "");
+    		foodMartContext, RollupPolicyType.HIDDEN, "", "");
     }
 
     private void rollupPolicyGreatGrandchildInvisible(
 		Context foodMartContext,
-        RollupPolicy policy,
+		RollupPolicyType policy,
         String v1,
         String v2)
     {
@@ -1378,16 +1378,16 @@ class AccessControlTest {
     void testRollupPolicySimultaneous(Context foodMartContext) {
 //         note that v2 is different for full vs partial, v3 is the same
         rollupPolicySimultaneous(
-    		foodMartContext, RollupPolicy.FULL, "266,773", "74,748", "25,635");
+    		foodMartContext, RollupPolicyType.FULL, "266,773", "74,748", "25,635");
         rollupPolicySimultaneous(
-    		foodMartContext, RollupPolicy.PARTIAL, "72,631", "72,631", "25,635");
+    		foodMartContext, RollupPolicyType.PARTIAL, "72,631", "72,631", "25,635");
         rollupPolicySimultaneous(
-    		foodMartContext, RollupPolicy.HIDDEN, "", "", "");
+    		foodMartContext, RollupPolicyType.HIDDEN, "", "", "");
     }
 
     private void rollupPolicySimultaneous(
 		Context foodMartContext,
-        RollupPolicy policy,
+        RollupPolicyType policy,
         String v1,
         String v2,
         String v3)
@@ -1847,7 +1847,7 @@ class AccessControlTest {
 
         // Note that total for [Store].[All Stores] and [Store].[USA] is sum
         // of visible children [Store].[CA] and [Store].[OR].[Portland].
-        setGoodmanContext(foodMartContext, RollupPolicy.PARTIAL);
+        setGoodmanContext(foodMartContext, RollupPolicyType.PARTIAL);
         ConnectionProps props = new RolapConnectionPropsR(List.of("California manager"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         Connection connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -1877,7 +1877,7 @@ class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 26,079\n");
 
-        setGoodmanContext(foodMartContext, RollupPolicy.FULL);
+        setGoodmanContext(foodMartContext, RollupPolicyType.FULL);
         props = new RolapConnectionPropsR(List.of("California manager"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -1907,7 +1907,7 @@ class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 67,659\n");
 
-        setGoodmanContext(foodMartContext, RollupPolicy.HIDDEN);
+        setGoodmanContext(foodMartContext, RollupPolicyType.HIDDEN);
         props = new RolapConnectionPropsR(List.of("California manager"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil.assertQueryReturns(
@@ -1939,7 +1939,7 @@ class AccessControlTest {
         checkQuery(connection, query);
     }
 
-    private static void setGoodmanContext(Context foodMartContext, final RollupPolicy policy) {
+    private static void setGoodmanContext(Context foodMartContext, final RollupPolicyType policy) {
         RolapSchemaPool.instance().clear();
         CatalogMapping catalogMapping = foodMartContext.getCatalogMapping();
         ((TestContext)foodMartContext).setCatalogMappingSupplier(new SchemaModifiers.AccessControlTestModifier42(catalogMapping, policy));
@@ -3394,7 +3394,7 @@ class AccessControlTest {
 
         String nonAllDefaultMem = "[Store2].[USA].[CA]";
 
-        for (RollupPolicy policy : RollupPolicy.values()) {
+        for (RollupPolicyType policy : RollupPolicyType.values()) {
             for (String defaultMember : new String[]{nonAllDefaultMem, null }) {
                 for (boolean hasAll : new Boolean[]{true, false}) {
                     // Results in this test should be the same regardless

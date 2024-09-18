@@ -118,6 +118,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 					.withEnv(env())//
 					.withHostConfig(hostConfig)
 					.withLabels(lbl)
+                    .withCmd("--max_connections=10000")
 					.exec();
 
 			String	containerId = containerResponse.getId();
