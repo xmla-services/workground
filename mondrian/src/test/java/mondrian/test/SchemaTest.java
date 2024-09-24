@@ -62,6 +62,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.HideMemberIfType;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.LevelType;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
@@ -96,6 +97,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.MemberMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MemberPropertyFormatterMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MemberPropertyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.NamedSetMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.ParentChildLinkMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.SQLExpressionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
@@ -8249,172 +8251,165 @@ class SchemaTest {
             public TestBugMondrian747Modifier(CatalogMapping catalog) {
                 super(catalog);
             }
-
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
-                MappingPrivateDimension sd1 = PrivateDimensionRBuilder.builder()
-                    .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                    .name("Store")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("country")
-                                    .column("store_country")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(false)
-                                    .levelType(LevelTypeEnum.REGULAR)
-                                    .hideMemberIf(HideMemberIfEnum.NEVER)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("state")
-                                    .column("store_state")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(false)
-                                    .levelType(LevelTypeEnum.REGULAR)
-                                    .hideMemberIf(HideMemberIfEnum.NEVER)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("city")
-                                    .column("store_city")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(false)
-                                    .levelType(LevelTypeEnum.REGULAR)
-                                    .hideMemberIf(HideMemberIfEnum.NEVER)
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
-
-                MappingPrivateDimension sd2 = PrivateDimensionRBuilder.builder()
-                    .type(DimensionTypeEnum.STANDARD_DIMENSION)
-                    .name("Product")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .name("New Hierarchy 0")
-                            .hasAll(true)
-                            .primaryKey("product_id")
-                            .relation(new TableR("product"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("product_name")
-                                    .column("product_name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(false)
-                                    .levelType(LevelTypeEnum.REGULAR)
-                                    .hideMemberIf(HideMemberIfEnum.NEVER)
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
-
-                MappingCube c1 = CubeRBuilder.builder()
-                    .name("cube1")
-                    .cache(true)
-                    .enabled(true)
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .source("Store")
-                            .name("Store")
-                            .foreignKey("store_id")
-                            .build(),
-                        DimensionUsageRBuilder.builder()
-                            .source("Product")
-                            .name("Product")
-                            .foreignKey("product_id")
-                            .build()
+            protected SchemaMapping schema(SchemaMapping schemaMappingOriginal) {
+            	LevelMappingImpl stateLevel;
+            	MeasureMappingImpl unitsales1Measure;
+            	MeasureMappingImpl unitsales2Measure;
+                StandardDimensionMappingImpl sd1 = StandardDimensionMappingImpl.builder()                        
+                        .withName("Store")
+                        .withHierarchies(List.of(
+                            HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withPrimaryKey("store_id")                                
+                                .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("country")
+                                        .withColumn("store_country")
+                                        .withType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.STRING)
+                                        .withUniqueMembers(false)
+                                        .withLevelType(LevelType.REGULAR)
+                                        .withHideMemberIfType(HideMemberIfType.NEVER)
+                                        .build(),
+                                    stateLevel = LevelMappingImpl.builder()
+                                        .withName("state")
+                                        .withColumn("store_state")
+                                        .withType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.STRING)
+                                        .withUniqueMembers(false)
+                                        .withLevelType(LevelType.REGULAR)
+                                        .withHideMemberIfType(HideMemberIfType.NEVER)
+                                        .build(),
+                                    LevelMappingImpl.builder()
+                                        .withName("city")
+                                        .withColumn("store_city")
+                                        .withType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.STRING)
+                                        .withUniqueMembers(false)
+                                        .withLevelType(LevelType.REGULAR)
+                                        .withHideMemberIfType(HideMemberIfType.NEVER)
+                                        .build()
+                                ))
+                                .build()
                         ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("unitsales1")
-                            .column("unit_sales")
-                            .datatype(MeasureDataTypeEnum.NUMERIC)
-                            .aggregator("sum")
-                            .visible(true)
-                            .build()
-                    ))
-                    .build();
+                        .build();
 
-                MappingCube c2 = CubeRBuilder.builder()
-                    .name("cube2")
-                    .cache(true)
-                    .enabled(true)
-                    .fact(ViewRBuilder.builder()
-                        .alias("sales_fact_1997_test").sql(SqlSelectQueryRBuilder.builder()
-                        .sqls(List.of(
-                            new SQLR("select \"product_id\", \"time_id\", \"customer_id\", \"promotion_id\", " +
-                                "\"store_id\", \"store_sales\", \"store_cost\", \"unit_sales\", (select \"store_state\" " +
- "from \"store\" where \"store_id\" = \"sales_fact_1997\".\"store_id\") as " +
-                                "\"sales_state_province\" from \"sales_fact_1997\"", List.of("generic"))
-                        )).build())
-                        .build())
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .source("Store")
-                            .level("state")
-                            .name("Store")
-                            .foreignKey("sales_state_province")
-                            .build(),
-                        DimensionUsageRBuilder.builder()
-                            .source("Product")
-                            .name("Product")
-                            .foreignKey("product_id")
-                            .build()
+                StandardDimensionMappingImpl sd2 = StandardDimensionMappingImpl.builder()                        
+                        .withName("Product")
+                        .withHierarchies(List.of(
+                            HierarchyMappingImpl.builder()
+                                .withName("New Hierarchy 0")
+                                .withHasAll(true)
+                                .withPrimaryKey("product_id")
+                                .withQuery(TableQueryMappingImpl.builder().withName("product").build())
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("product_name")
+                                        .withColumn("product_name")
+                                        .withType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.STRING)
+                                        .withUniqueMembers(false)
+                                        .withLevelType(LevelType.REGULAR)
+                                        .withHideMemberIfType(HideMemberIfType.NEVER)
+                                        .build()
+                                ))
+                                .build()
+                        ))
+                        .build();
 
-                    ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("unitsales2")
-                            .column("unit_sales")
-                            .datatype(MeasureDataTypeEnum.NUMERIC)
-                            .aggregator("sum")
-                            .visible(true)
-                            .build()
-                    ))
-                    .build();
-                MappingVirtualCube vc = VirtualCubeRBuilder.builder()
-                    .enabled(true)
-                    .name("virtual_cube")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Store")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
-                            .build()
-                    ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("cube1")
-                            .name("[Measures].[unitsales1]")
-                            .visible(true)
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("cube2")
-                            .name("[Measures].[unitsales2]")
-                            .visible(true)
-                            .build()
-                    ))
-                    .build();
-                return SchemaRBuilder.builder()
-                    .name("Test_DimensionUsage")
-                    .dimensions(List.of(
-                        sd1, sd2
-                    ))
-                    .cubes(List.of(
-                        c1, c2
-                    ))
-                    .virtualCubes(List.of(vc))
-                    .build();
+                    PhysicalCubeMappingImpl c1 = PhysicalCubeMappingImpl.builder()
+                        .withName("cube1")
+                        .withCache(true)
+                        .withEnabled(true)
+                        .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                        .withDimensionConnectors(List.of(
+                        	DimensionConnectorMappingImpl.builder()
+                                .withDimension(sd1)
+                                .withOverrideDimensionName("Store")
+                                .withForeignKey("store_id")
+                                .build(),
+                            DimensionConnectorMappingImpl.builder()
+                                .withDimension(sd2)
+                                .withOverrideDimensionName("Product")
+                                .withForeignKey("product_id")
+                                .build()
+                            ))
+                        .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                        		.withMeasures(List.of(
+                        				unitsales1Measure = MeasureMappingImpl.builder()
+                                        .withName("unitsales1")
+                                        .withColumn("unit_sales")
+                                        .withDatatype(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                        .withAggregatorType(MeasureAggregatorType.SUM)
+                                        .withVisible(true)
+                                        .build()
+                                ))
+                        		.build()))
+                        .build();
+
+                    PhysicalCubeMappingImpl c2 = PhysicalCubeMappingImpl.builder()
+                        .withName("cube2")
+                        .withCache(true)
+                        .withEnabled(true)
+                        .withQuery(SqlSelectQueryMappingImpl.builder()
+                        		.withAlias("sales_fact_1997_test")
+                        		.withSql(List.of(SQLMappingImpl.builder()
+                        				.withStatement("select \"product_id\", \"time_id\", \"customer_id\", \"promotion_id\", " +
+                                                "\"store_id\", \"store_sales\", \"store_cost\", \"unit_sales\", (select \"store_state\" " +
+                                                "from \"store\" where \"store_id\" = \"sales_fact_1997\".\"store_id\") as " +
+                                                                               "\"sales_state_province\" from \"sales_fact_1997\"")
+                        				.withDialects(List.of("generic"))
+                        				.build()))
+                        		.build())
+                        .withDimensionConnectors(List.of(
+                            	DimensionConnectorMappingImpl.builder()
+                                    .withDimension(sd1)
+                                    .withOverrideDimensionName("Store")
+                                    .withForeignKey("sales_state_province")
+                                    .withLevel(stateLevel)
+                                    .build(),
+                                DimensionConnectorMappingImpl.builder()
+                                    .withDimension(sd2)
+                                    .withOverrideDimensionName("Product")
+                                    .withForeignKey("product_id")
+                                    .build()                                   
+                        ))
+                        .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                        		.withMeasures(List.of(
+                        				unitsales2Measure = MeasureMappingImpl.builder()
+                                        .withName("unitsales2")
+                                        .withColumn("unit_sales")
+                                        .withDatatype(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                        .withAggregatorType(MeasureAggregatorType.SUM)
+                                        .withVisible(true)
+                                        .build()
+                                ))
+                        		.build()))
+                        .build();
+                    
+                    VirtualCubeMappingImpl vc = VirtualCubeMappingImpl.builder()
+                        .withEnabled(true)
+                        .withName("virtual_cube")
+                        .withDimensionConnectors(List.of(
+                            DimensionConnectorMappingImpl.builder()
+                            	.withOverrideDimensionName("Store")
+                                .build(),
+                            DimensionConnectorMappingImpl.builder()
+                            	.withOverrideDimensionName("Product")
+                                .build()
+                        ))
+                        .withReferencedMeasures(List.of(
+                        	unitsales1Measure,
+                        	unitsales2Measure
+                        ))
+                        .build();
+                    return SchemaMappingImpl.builder()
+                        .withName("Test_DimensionUsage")
+                        .withCubes(List.of(
+                            c1, c2, vc
+                        ))
+                        .build();
+
             }
-            */
         }
         /*
         withSchema(context,
@@ -9532,31 +9527,26 @@ class SchemaTest {
                 public TestVirtualDimensionVisibilityModifier(CatalogMapping catalogMapping) {
                     super(catalogMapping);
                 }
-                /* TODO: DENIS MAPPING-MODIFIER
                 @Override
-                protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                    List<MappingVirtualCube> result = new ArrayList<>();
-                    result.add(VirtualCubeRBuilder.builder()
-                        .name("Foo")
-                        .defaultMeasure("Store Sales")
-                        .virtualCubeDimensions(List.of(
-                            VirtualCubeDimensionRBuilder.builder()
-                                .cubeName("Sales")
-                                .name("Customers")
-                                .visible(testValue)
+                protected List<CubeMapping> schemaCubes(SchemaMapping schema) {
+                    List<CubeMapping> result = new ArrayList<>();
+                    result.add(VirtualCubeMappingImpl.builder()
+                        .withName("Foo")
+                        .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_SALES))
+                        .withDimensionConnectors(List.of(
+                        	DimensionConnectorMappingImpl.builder()
+                        		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                        		.withOverrideDimensionName("Customers")
+                                .withVisible(testValue)
                                 .build()
                         ))
-                        .virtualCubeMeasures(List.of(
-                            VirtualCubeMeasureRBuilder.builder()
-                                .cubeName("Sales")
-                                .name("[Measures].[Store Sales]")
-                                .build()
+                        .withReferencedMeasures(List.of(
+                        		FoodmartMappingSupplier.MEASURE_STORE_SALES
                         ))
                         .build());
-                    result.addAll(super.schemaVirtualCubes(schema).stream().filter(c -> !"Foo".equals(c.name())).toList());
-                    return result;
+                    result.addAll(super.schemaCubes(schema).stream().filter(c -> !"Foo".equals(c.getName())).toList());
+                    return result;                	
                 }
-                */
             }
             /*
             String cubeDef =
@@ -11208,246 +11198,279 @@ class SchemaTest {
             public TestMondrian1499Modifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
-                MappingPrivateDimension d1 = PrivateDimensionRBuilder.builder()
-                    .name("Store")
-                    .foreignKey("employee_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("employee_id")
-                            .primaryKeyTable("employee")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null , "store_id", new TableR("employee", new SQLR("1 = 1", List.of("generic")))),
-                                    new JoinedQueryElementR(null , "store_id", new TableR("store"))
+            protected SchemaMapping schema(SchemaMapping schemaMappingOriginal) {
+                DimensionConnectorMappingImpl d1 = DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Store")
+                        .withForeignKey("employee_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                        	.withName("Store")
+                        	.withHierarchies(List.of(
+                            HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withPrimaryKey("employee_id")
+                                .withPrimaryKeyTable("employee")
+                                .withQuery(
+                                		JoinQueryMappingImpl.builder()
+                                    	.withLeft(JoinedQueryElementMappingImpl.builder().withKey("store_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("employee")
+                            						.withSqlWhereExpression(SQLMappingImpl.builder().withStatement("1 = 1").withDialects(List.of("generic")).build())
+                            						.build())
+                            				.build())
+                                    	.withRight(JoinedQueryElementMappingImpl.builder().withKey("store_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                            				.build())
+                                    	.build()
                                 )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Country")
-                                    .table("store")
-                                    .column("store_country")
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store State")
-                                    .table("store")
-                                    .column("store_state")
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store City")
-                                    .table("store")
-                                    .column("store_city")
-                                    .uniqueMembers(false)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Store Name")
-                                    .table("store")
-                                    .column("store_name")
-                                    .uniqueMembers(true)
-                                    .properties(List.of(
-                                        PropertyRBuilder.builder()
-                                            .name("Store Type")
-                                            .column("store_type")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Store Manager")
-                                            .column("store_manager")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Store Sqft")
-                                            .column("store_sqft")
-                                            .type(PropertyTypeEnum.NUMERIC)
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Grocery Sqft")
-                                            .column("grocery_sqft")
-                                            .type(PropertyTypeEnum.NUMERIC)
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Frozen Sqft")
-                                            .column("frozen_sqft")
-                                            .type(PropertyTypeEnum.NUMERIC)
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Meat Sqft")
-                                            .column("meat_sqft")
-                                            .type(PropertyTypeEnum.NUMERIC)
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Has coffee bar")
-                                            .column("coffee_bar")
-                                            .type(PropertyTypeEnum.BOOLEAN)
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Street address")
-                                            .column("store_street_address")
-                                            .type(PropertyTypeEnum.STRING)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Store Country")
+                                        .withTable("store")
+                                        .withColumn("store_country")
+                                        .withUniqueMembers(true)
+                                        .build(),
+                                    LevelMappingImpl.builder()
+                                        .withName("Store State")
+                                        .withTable("store")
+                                        .withColumn("store_state")
+                                        .withUniqueMembers(true)
+                                        .build(),
+                                    LevelMappingImpl.builder()
+                                        .withName("Store City")
+                                        .withTable("store")
+                                        .withColumn("store_city")
+                                        .withUniqueMembers(false)
+                                        .build(),
+                                    LevelMappingImpl.builder()
+                                        .withName("Store Name")
+                                        .withTable("store")
+                                        .withColumn("store_name")
+                                        .withUniqueMembers(true)
+                                        .withMemberProperties(List.of(
+                                        	MemberPropertyMappingImpl.builder()
+                                                .withName("Store Type")
+                                                .withColumn("store_type")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Store Manager")
+                                                .withColumn("store_manager")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Store Sqft")
+                                                .withColumn("store_sqft")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Grocery Sqft")
+                                                .withColumn("grocery_sqft")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Frozen Sqft")
+                                                .withColumn("frozen_sqft")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Meat Sqft")
+                                                .withColumn("meat_sqft")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Has coffee bar")
+                                                .withColumn("coffee_bar")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.BOOLEAN)
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Street address")
+                                                .withColumn("store_street_address")
+                                                .withDataType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.STRING)
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        )).build()).build();
 
-                MappingPrivateDimension d2 = PrivateDimensionRBuilder.builder()
-                    .name("Pay Type")
-                    .foreignKey("employee_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("employee_id")
-                            .primaryKeyTable("employee")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "position_id", new TableR("employee", new SQLR("1 = 1", null))),
-                                    new JoinedQueryElementR(null, "position_id", new TableR("position"))
+                DimensionConnectorMappingImpl d2 = DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Pay Type")
+                        .withForeignKey("employee_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                            .withName("Pay Type")
+                            .withHierarchies(List.of(
+                            	HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withPrimaryKey("employee_id")
+                                .withPrimaryKeyTable("employee")
+                                .withQuery(
+                                		JoinQueryMappingImpl.builder()
+                                    	.withLeft(JoinedQueryElementMappingImpl.builder().withKey("position_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("employee")
+                            						.withSqlWhereExpression(SQLMappingImpl.builder().withStatement("1 = 1").build())
+                            						.build())
+                            				.build())
+                                    	.withRight(JoinedQueryElementMappingImpl.builder().withKey("position_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("position").build())
+                            				.build())
+                                    	.build()                                		
                                 )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Pay Type")
-                                    .table("position")
-                                    .column("pay_type")
-                                    .uniqueMembers(true)
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Pay Type")
+                                        .withTable("position")
+                                        .withColumn("pay_type")
+                                        .withUniqueMembers(true)
+                                        .build()
+                                ))
+                                .build()
+                        )).build())
+                        .build();
 
-                MappingPrivateDimension d3 = PrivateDimensionRBuilder.builder()
-                    .name("Store Type")
-                    .foreignKey("employee_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKeyTable("employee")
-                            .primaryKey("employee_id")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null , "store_id", new TableR("employee", new SQLR("1 = 1", null))),
-                                    new JoinedQueryElementR(null , "store_id", new TableR("store"))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Type")
-                                    .table("store")
-                                    .column("store_type")
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
+                DimensionConnectorMappingImpl d3 = DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Store Type")
+                        .withForeignKey("employee_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                                .withName("Store Type")
+                                .withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withPrimaryKeyTable("employee")
+                                .withPrimaryKey("employee_id")
+                                .withQuery(
+                                		JoinQueryMappingImpl.builder()
+                                    	.withLeft(JoinedQueryElementMappingImpl.builder().withKey("store_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("employee")
+                            						.withSqlWhereExpression(SQLMappingImpl.builder().withStatement("1 = 1").build())
+                            						.build())
+                            				.build())
+                                    	.withRight(JoinedQueryElementMappingImpl.builder().withKey("store_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                            				.build())
+                                    	.build()                                		
+                                )                                
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Store Type")
+                                        .withTable("store")
+                                        .withColumn("store_type")
+                                        .build()
+                                ))
+                                .build()
+                        )).build())
+                        .build();
 
-                MappingPrivateDimension d4 = PrivateDimensionRBuilder.builder()
-                    .name("Position")
-                    .foreignKey("employee_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .allMemberName("All Position")
-                            .primaryKey("employee_id")
-                            .relation(new TableR("employee", new SQLR("1 = 1", null)))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Management Role")
-                                    .uniqueMembers(true)
-                                    .column("management_role")
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Position Title")
-                                    .uniqueMembers(false)
-                                    .column("position_title")
-                                    .ordinalColumn("position_id")
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
+                DimensionConnectorMappingImpl d4 = DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Position")
+                        .withForeignKey("employee_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                                .withName("Position")
+                                .withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withAllMemberName("All Position")
+                                .withPrimaryKey("employee_id")
+                                .withQuery(TableQueryMappingImpl.builder().withName("employee")
+                						.withSqlWhereExpression(SQLMappingImpl.builder().withStatement("1 = 1").build())
+                						.build())
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Management Role")
+                                        .withUniqueMembers(true)
+                                        .withColumn("management_role")
+                                        .build(),
+                                    LevelMappingImpl.builder()
+                                        .withName("Position Title")
+                                        .withUniqueMembers(false)
+                                        .withColumn("position_title")
+                                        .withOrdinalColumn("position_id")
+                                        .build()
+                                ))
+                                .build()
+                        )).build())
+                        .build();
 
-                MappingPrivateDimension d5 = PrivateDimensionRBuilder.builder()
-                    .name("Employees")
-                    .foreignKey("employee_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .allMemberName("All Employees")
-                            .primaryKey("employee_id")
-                            .relation(new TableR("employee", new SQLR("1 = 1", null)))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Employee Id")
-                                    .type(TypeEnum.NUMERIC)
-                                    .uniqueMembers(true)
-                                    .column("employee_id")
-                                    .parentColumn("supervisor_id")
-                                    .nameColumn("full_name")
-                                    .nullParentValue("0")
-                                    .closure(ClosureRBuilder.builder()
-                                        .parentColumn("supervisor_id")
-                                        .childColumn("employee_id")
-                                        .table(new TableR("employee_closure"))
-                                        .build())
-                                    .properties(List.of(
-                                        PropertyRBuilder.builder()
-                                            .name("Marital Status")
-                                            .column("marital_status")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Position Title")
-                                            .column("position_title")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Gender")
-                                            .column("gender")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Salary")
-                                            .column("salary")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Education Level")
-                                            .column("education_level")
-                                            .build(),
-                                        PropertyRBuilder.builder()
-                                            .name("Management Role")
-                                            .column("management_role")
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
-                return SchemaRBuilder.builder()
-                    .name("FoodMart")
-                    .cubes(List.of(
-                        CubeRBuilder.builder()
-                            .name("HR")
-                            .fact(new TableR("salary"))
-                            .dimensionUsageOrDimensions(List.of(
-                                d1, d2, d3, d4, d5
-                            ))
-                            .measures(List.of(
-                                MeasureRBuilder.builder()
-                                    .name("Org Salary")
-                                    .column("salary_paid")
-                                    .aggregator("sum")
-                                    .formatString("Currency")
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build();
+                DimensionConnectorMappingImpl d5 = DimensionConnectorMappingImpl.builder()
+                		.withOverrideDimensionName("Employees")
+                        .withForeignKey("employee_id")
+                        .withDimension(StandardDimensionMappingImpl.builder()
+                                .withName("Employees")
+                                .withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                .withHasAll(true)
+                                .withAllMemberName("All Employees")
+                                .withPrimaryKey("employee_id")
+                                .withQuery(TableQueryMappingImpl.builder().withName("employee")
+                						.withSqlWhereExpression(SQLMappingImpl.builder().withStatement("1 = 1").build())
+                						.build())
+                                .withLevels(List.of(
+                                    LevelMappingImpl.builder()
+                                        .withName("Employee Id")
+                                        .withType(org.eclipse.daanse.rolap.mapping.api.model.enums.DataType.NUMERIC)
+                                        .withUniqueMembers(true)
+                                        .withColumn("employee_id")
+                                        .withParentColumn("supervisor_id")
+                                        .withNameColumn("full_name")
+                                        .withNullParentValue("0")
+                                        .withParentChildLink(ParentChildLinkMappingImpl.builder()
+                                            .withParentColumn("supervisor_id")
+                                            .withChildColumn("employee_id")
+                                            .withTable(TableQueryMappingImpl.builder().withName("employee_closure").build())
+                                            .build())
+                                        .withMemberProperties(List.of(
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Marital Status")
+                                                .withColumn("marital_status")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Position Title")
+                                                .withColumn("position_title")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Gender")
+                                                .withColumn("gender")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Salary")
+                                                .withColumn("salary")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Education Level")
+                                                .withColumn("education_level")
+                                                .build(),
+                                            MemberPropertyMappingImpl.builder()
+                                                .withName("Management Role")
+                                                .withColumn("management_role")
+                                                .build()
+                                        ))
+                                        .build()
+                                ))
+                                .build()
+                        )).build())
+                        .build();
+                    return SchemaMappingImpl.builder()
+                        .withName("FoodMart")
+                        .withCubes(List.of(
+                            PhysicalCubeMappingImpl.builder()
+                                .withName("HR")
+                                .withQuery(TableQueryMappingImpl.builder().withName("salary").build())
+                                .withDimensionConnectors(List.of(
+                                    d1, d2, d3, d4, d5
+                                ))
+                                .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                                		.withMeasures(List.of(
+                                                MeasureMappingImpl.builder()
+                                                .withName("Org Salary")
+                                                .withColumn("salary_paid")
+                                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                                .withFormatString("Currency")
+                                                .build()
+                                        ))
+                                		.build()))
+                                .build()
+                        ))
+                        .build();
+
             }
-            */
         }
         /*
         withSchema(context,
@@ -11924,65 +11947,7 @@ class SchemaTest {
                         .withCubes(List.of(c1))
                         .build();
 
-            }
-            /* TODO: DENIS MAPPING-MODIFIER
-            protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
-                MappingHierarchy h1 = HierarchyRBuilder.builder()
-                    .hasAll(true)
-                    .primaryKey("store_id")
-                    .relation(new TableR("store"))
-                    .levels(List.of(LevelRBuilder.builder()
-                        .name("Store Type").column("store_type").uniqueMembers(true).build()))
-                    .build();
-
-                MappingPrivateDimension d1 = PrivateDimensionRBuilder.builder()
-                    .name("Store Type")
-                    .annotations(List.of(
-                        AnnotationRBuilder.builder()
-                            .name("foo")
-                            .content("bar")
-                            .build()
-                    ))
-                    .hierarchies(List.of(h1))
-                    .build();
-
-                MappingDimensionUsage d2 = DimensionUsageRBuilder.builder()
-                    .name("Store Type")
-                    .source("Store Type")
-                    .foreignKey("store_id")
-                    .build();
-
-                MappingCube c1 = CubeRBuilder.builder()
-                    .name("Sales")
-                    .defaultMeasure("Unit Sales")
-                    .fact(new TableR("sales_fact_1997", List.of(
-                        AggExcludeRBuilder.builder().name("agg_c_special_sales_fact_1997").build(),
-                        AggExcludeRBuilder.builder().name("agg_lc_100_sales_fact_1997").build(),
-                        AggExcludeRBuilder.builder().name("agg_lc_10_sales_fact_1997").build(),
-                        AggExcludeRBuilder.builder().name("agg_pc_10_sales_fact_1997").build()
-                    ), List.of()))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Store Type")
-                            .source("Store Type")
-                            .foreignKey("store_id")
-                            .build()
-                    ))
-                    .measures(List.of(MeasureRBuilder.builder()
-                        .name("Unit Sales")
-                        .column("unit_sales")
-                        .aggregator("sum")
-                        .formatString("Standard")
-                        .build()))
-                    .build();
-
-                return SchemaRBuilder.builder()
-                    .name("FoodMart")
-                    .dimensions(List.of(d1))
-                    .cubes(List.of(c1))
-                    .build();
-            }
-            */
+            }            
         }
         /*
         withSchema(context,
