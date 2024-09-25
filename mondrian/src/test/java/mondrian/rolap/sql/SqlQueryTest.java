@@ -30,8 +30,34 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLExpressionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -686,57 +712,52 @@ class SqlQueryTest  extends BatchTestCase {
             public TestDoubleInListModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name("Sales 3")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("StoreEmpSalary")
-                            .foreignKey("store_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .allMemberName("All Salary")
-                                    .primaryKey("store_id")
-                                    .relation(new TableR("employee"))
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Salary").column("salary")
-                                            .type(TypeEnum.NUMERIC).uniqueMembers(true)
-                                            .approxRowCount("10000000")
-                                            .keyExpression(
-                                                ExpressionViewRBuilder.builder().sql(SqlSelectQueryRBuilder.builder()
-                                                    .sqls(List.of(
-                                                        SQLRBuilder.builder()
-                                                            .dialects(List.of("luciddb"))
-                                                            .statement("cast(cast(\"salary\" as double)*cast(1000.0 as double)/cast(3.1234567890123456 as double) as double)")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Sales 3")
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("StoreEmpSalary")
+                            .withForeignKey("store_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            	.withName("StoreEmpSalary")
+                            	.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withAllMemberName("All Salary")
+                                    .withPrimaryKey("store_id")
+                                    .withQuery(TableQueryMappingImpl.builder().withName("employee").build())
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Salary").withColumn("salary")
+                                            .withType(DataType.NUMERIC).withUniqueMembers(true)
+                                            .withApproxRowCount("10000000")
+                                            .withCaptionExpression(
+                                                SQLExpressionMappingImpl.builder()
+                                                    .withSqls(List.of(
+                                                        SQLMappingImpl.builder()
+                                                            .withDialects(List.of("luciddb"))
+                                                            .withStatement("cast(cast(\"salary\" as double)*cast(1000.0 as double)/cast(3.1234567890123456 as double) as double)")
                                                             .build()
                                                     ))
                                                     .build()
                                             )
                                             .build()
-                                    ).build()))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Store Cost")
-                            .column("store_cost")
-                            .aggregator("sum")
-                            .build()
-                    ))
+                                    )).build())).build())
+                                    .build()))
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                            MeasureMappingImpl.builder()
+                            .withName("Store Cost")
+                            .withColumn("store_cost")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
+                            .build()                    		
+                    )).build()))
                     .build());
-                return result;
+                return result;            	
             }
-     
-       */ 
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -835,48 +856,46 @@ class SqlQueryTest  extends BatchTestCase {
             public TestApproxRowCountOverridesCountModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name("ApproxTest")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("Gender")
-                            .foreignKey("customer_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .allMemberName("All Gender")
-                                    .primaryKey("customer_id")
-                                    .relation(new TableR("customer"))
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Gender").column("gender")
-                                            .type(TypeEnum.NUMERIC).uniqueMembers(true)
-                                            .approxRowCount("2")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("ApproxTest")
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Gender")
+                            .withForeignKey("customer_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            		.withName("Gender")
+                            		.withHierarchies(List.of(
+                            			HierarchyMappingImpl.builder()
+                            			.withHasAll(true)
+                            			.withAllMemberName("All Gender")
+                            			.withPrimaryKey("customer_id")
+                            			.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+                            			.withLevels(List.of(
+                            				LevelMappingImpl.builder()
+                                            .withName("Gender").withColumn("gender")
+                                            .withType(DataType.NUMERIC).withUniqueMembers(true)
+                                            .withApproxRowCount("2")
                                             .build()
                                     ))
                                     .build()
-                            ))
+                            )).build())
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .build()
-                    ))
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                        MeasureMappingImpl.builder()
+                            .withName("Unit Sales")
+                            .withColumn("unit_sales")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
+                            .build()                    		
+                    )).build()))
                     .build());
-                return result;
+                return result;            	
             }
-    
-        */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -911,29 +930,29 @@ class SqlQueryTest  extends BatchTestCase {
             public TestLimitedRollupMemberRetrievableFromCacheModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingRole> roles(List<MappingRole> roles) {
-                List<MappingRole> result = new ArrayList<>();
-                result.addAll(super.roles(roles));
-                result.add(RoleRBuilder.builder()
-                    .name("justCA")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.ALL)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Sales")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Store]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Store].[USA].[CA]")
-                                                    .access(MemberGrantAccessEnum.ALL)
+            protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+                List<AccessRoleMapping> result = new ArrayList<>();
+                result.addAll(super.accessRoles(roles));
+                result.add(AccessRoleMappingImpl.builder()
+                    .withName("justCA")
+                    .withAccessSchemaGrants(List.of(
+                    	AccessSchemaGrantMappingImpl.builder()
+                            .withAccess(AccessSchema.ALL)
+                            .withCubeGrant(List.of(
+                            	AccessCubeGrantMappingImpl.builder()
+                                    .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                                    .withAccess(AccessCube.ALL)
+                                    .withHierarchyGrants(List.of(
+                                    	AccessHierarchyGrantMappingImpl.builder()
+                                            .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withMember("[Store].[USA].[CA]")
+                                                    .withAccess(AccessMember.ALL)
                                                     .build()
                                             ))
                                             .build()
@@ -943,10 +962,8 @@ class SqlQueryTest  extends BatchTestCase {
                             .build()
                     ))
                     .build());
-                return result;
+                return result;            	
             }
-      */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

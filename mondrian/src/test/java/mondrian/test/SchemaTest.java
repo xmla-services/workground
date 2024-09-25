@@ -81,6 +81,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AnnotationMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberPropertyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
@@ -3790,6 +3791,7 @@ class SchemaTest {
                         
                     DimensionConnectorMappingImpl d4 = DimensionConnectorMappingImpl.builder()
                     	.withOverrideDimensionName("Warehouse")
+                    	.withForeignKey("warehouse_id")
                     	.withDimension(StandardDimensionMappingImpl.builder()
                     		.withName("Warehouse")
                     		.withHierarchies(List.of(h1)).build())
@@ -3940,7 +3942,7 @@ class SchemaTest {
 
                 PhysicalCubeMappingImpl c = PhysicalCubeMappingImpl
                     .builder()
-                    .withName("Store2)")
+                    .withName("Store2")
                     .withQuery(view)                    		
                     .withDimensionConnectors(List.of(d1))
                     .withMeasureGroups(List.of(
@@ -6369,7 +6371,7 @@ class SchemaTest {
                             .withFormula("EXCEPT({[Store].[Store Country].[USA].children},{[Store].[Store Country].[USA].[CA]})")
                             .build());            		
             	}
-                return namedSets(cube.getNamedSets());
+                return result;
             }            
         }
         /*
@@ -11716,7 +11718,7 @@ class SchemaTest {
             @Override
             protected HierarchyMapping hierarchy(HierarchyMapping hierarchy) {
                 HierarchyMapping h = super.hierarchy(hierarchy);
-                if (h.isHasAll()
+                if (h != null && h.isHasAll()
                     && "All Gender".equals(h.getAllMemberName())
                     && "customer_id".equals(h.getPrimaryKey())) {
                 	return createHierarchy(h.getAnnotations(), h.getId(), h.getDescription(), "地域", h.getDocumentation(), h.getLevels(),
@@ -11791,7 +11793,7 @@ class SchemaTest {
                                     .withAccess(AccessSchema.ALL)
                                     .withCubeGrant(List.of(
                                         AccessCubeGrantMappingImpl.builder()
-                                            .withCube(FoodmartMappingSupplier.CUBE_SALES)
+                                            .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
                                             .withAccess(AccessCube.ALL)
                                             .withHierarchyGrants(
                                                 List.of(

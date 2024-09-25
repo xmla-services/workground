@@ -18,6 +18,7 @@ import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -28,7 +29,25 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberPropertyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MemberMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.VirtualCubeMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -73,33 +92,25 @@ class VirtualCubeTest extends BatchTestCase {
             public TestNoTimeDimensionModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build()
+                    .withReferencedMeasures(List.of(
+                    	FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES,
+                    	FoodmartMappingSupplier.MEASURE_UNIT_SALES
                     ))
                     .build());
                 return result;
             }
-   */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -128,34 +139,28 @@ class VirtualCubeTest extends BatchTestCase {
             public TestCalculatedMeasureAsDefaultMeasureInVCModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .defaultMeasure("Profit")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Profit]")
-                            .build()
+                    .withReferencedMeasures(List.of(                    	
+                    		look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
+                    ))
+                    .withReferencedCalculatedMembers(List.of(
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
                     ))
                     .build());
                 return result;
             }
-       
-        */
+
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -191,39 +196,30 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .defaultMeasure("Profit Error")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    //.withDefaultMeasure("Profit Error")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Profit]")
-                            .build()
-
+                    .withReferencedMeasures(List.of(                    	
+                    		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                    		look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
+                    ))
+                    .withReferencedCalculatedMembers(List.of(
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
                     ))
                     .build());
                 return result;
             }
             
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -260,34 +256,26 @@ class VirtualCubeTest extends BatchTestCase {
             public TestVirtualCubeMeasureInvalidCubeNameModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .defaultMeasure("Profit Error")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    //.withDefaultMeasure("Profit Error")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Bad cube")
-                            .name("[Measures].[Unit Sales]")
-                            .build()
-                        ))
+                    .withReferencedMeasures(List.of(                    	
+                    	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                    	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES) //.cubeName("Bad cube")
+                    ))
                     .build());
                 return result;
-            }
-            
-            */
+            }            
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -320,39 +308,29 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasureInVCForCaseSensitivityModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .defaultMeasure("PROFIT")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_PROFIT))
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Profit]")
-                            .build()
+                    .withReferencedMeasures(List.of(                    	
+                    	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                    	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
+                    ))
+                    .withReferencedCalculatedMembers(List.of(
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
                     ))
                     .build());
                 return result;
             }
-       
-        */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -400,36 +378,31 @@ class VirtualCubeTest extends BatchTestCase {
             public TestWithTimeDimensionModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")                    
+                    .withDimensionConnectors(List.of(
+                        DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                            .build(),                    		
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build()
+                    .withReferencedMeasures(List.of(                    	
+                    	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                    	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
+                    ))
+                    .withReferencedCalculatedMembers(List.of(
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
                     ))
                     .build());
                 return result;
-            }
-     */
-        
+            }        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -541,154 +514,116 @@ class VirtualCubeTest extends BatchTestCase {
             public CreateContextWithNonDefaultAllMemberModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
-            /* TODO: DENIS MAPPING-MODIFIER
+
             @Override
-            protected List<MappingCube> schemaCubes(MappingSchema schema) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+            	PhysicalCubeMappingImpl warehouseDefaultUSA;
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
-                result.add(CubeRBuilder.builder()
-                    .name("Warehouse (Default USA)")
-                    .fact(new TableR("inventory_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                result.add(
+                  warehouseDefaultUSA = PhysicalCubeMappingImpl.builder()
+                    .withName("Warehouse (Default USA)")                    
+                    .withDimensionConnectors(List.of(
+                        DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
+                    		.withForeignKey("time_id")
+                            .build(),                    		
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
+                    		.withForeignKey("product_id")
                             .build(),
-                        DimensionUsageRBuilder.builder()
-                            .name("Product")
-                            .source("Product")
-                            .foreignKey("product_id")
+                        DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Store")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
+                    		.withForeignKey("store_id")
                             .build(),
-                        DimensionUsageRBuilder.builder()
-                            .name("Store")
-                            .source("Store")
-                            .foreignKey("store_id")
-                            .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Warehouse")
-                            .foreignKey("warehouse_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(false)
-                                    .defaultMember("[USA]")
-                                    .primaryKey("warehouse_id")
-                                    .relation(new TableR("warehouse"))
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Country")
-                                            .column("warehouse_country")
-                                            .uniqueMembers(true)
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Warehouse")
+                            .withForeignKey("warehouse_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            	.withName("Warehouse")
+                            	.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(false)
+                                    .withDefaultMember("[USA]")
+                                    .withPrimaryKey("warehouse_id")
+                                    .withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Country")
+                                            .withColumn("warehouse_country")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("State Province")
-                                            .column("warehouse_state_province")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("State Province")
+                                            .withColumn("warehouse_state_province")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("City")
-                                            .column("warehouse_city")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("City")
+                                            .withColumn("warehouse_city")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Warehouse Name")
-                                            .column("warehouse_name")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Warehouse Name")
+                                            .withColumn("warehouse_name")
+                                            .withUniqueMembers(true)
                                             .build()
 
                                     ))
                                     .build()
-                            ))
-                            .build()
+                            )).build())
+                            .build()                            
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Warehouse Cost")
-                            .column("warehouse_cost")
-                            .aggregator("sum")
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                        MeasureMappingImpl.builder()
+                            .withName("Warehouse Cost")
+                            .withColumn("warehouse_cost")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
                             .build(),
-                        MeasureRBuilder.builder()
-                            .name("Warehouse Sales")
-                            .column("warehouse_sales")
-                            .aggregator("sum")
+                        MeasureMappingImpl.builder()
+                            .withName("Warehouse Sales")
+                            .withColumn("warehouse_sales")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
                             .build()
-                    ))
+                    )).build()))
                     .build());
+                result.add(
+                	VirtualCubeMappingImpl.builder()
+                        .withName("Warehouse (Default USA) and Sales")
+                        .withDimensionConnectors(List.of(
+                            	DimensionConnectorMappingImpl.builder()
+                            		.withOverrideDimensionName("Product")
+                                    .build(),
+                                DimensionConnectorMappingImpl.builder()
+                            		.withOverrideDimensionName("Store")
+                                    .build(),
+                                DimensionConnectorMappingImpl.builder()
+                                	.withOverrideDimensionName("Time")
+                                    .build(),
+                                DimensionConnectorMappingImpl.builder()
+                                	.withOverrideDimensionName("Warehouse")
+                                	.withPhysicalCube(warehouseDefaultUSA)
+                                    .build()                                    
+                        ))
+                        .withReferencedMeasures(List.of(
+                        	look(FoodmartMappingSupplier.MEASURE_SALES_COUNT),
+                        	look(FoodmartMappingSupplier.MEASURE_STORE_COST),
+                        	look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
+                        	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES),
+                        	look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE),
+                        	look(FoodmartMappingSupplier.MEASURE_SUPPLY_TIME), 
+                        	look(FoodmartMappingSupplier.MEASURE_UNITS_ORDERED), 
+                        	look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED), 
+                        	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_COST), 
+                        	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES)
+                        ))
+                        .build()
+                );
                 return result;
             }
-
-            @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse (Default USA) and Sales")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Store")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Warehouse (Default USA)")
-                            .name("Warehouse")
-                            .build()
-                    ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales 2")
-                            .name("[Measures].[Sales Count]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales 2")
-                            .name("[Measures].[Store Cost]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales 2")
-                            .name("[Measures].[Store Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales 2")
-                            .name("[Measures].[Unit Sales]")
-                            .build(),
-
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Store Invoice]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Supply Time]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Units Ordered]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Units Shipped]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Cost]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build()
-                    ))
-                    .build());
-
-                return result;
-            }
- 
-        */
-        
         }
 
         /*
@@ -749,69 +684,43 @@ class VirtualCubeTest extends BatchTestCase {
             public TestMemberVisibilityModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse and Sales Member Visibility")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("Customers")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Warehouse and Sales Member Visibility")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                    		.withOverrideDimensionName("Customers")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Time")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Sales Count]")
-                            .visible(true)
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Cost]")
-                            .visible(false)
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Profit last Period]")
-                            .visible(true)
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Units Shipped]")
-                            .visible(false)
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Average Warehouse Sale]")
-                            .visible(false)
-                            .build()
+                    .withReferencedMeasures(List.of(
+                    		look(FoodmartMappingSupplier.MEASURE_SALES_COUNT),
+                    		look(FoodmartMappingSupplier.MEASURE_STORE_COST),
+                    		look(FoodmartMappingSupplier.MEASURE_STORE_SALES),                    		
+                    		look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED)                    		
                     ))
-                    .calculatedMembers(List.of(
-                        CalculatedMemberRBuilder.builder()
-                            .name("Profit")
-                            .dimension("Measures")
-                            .visible(false)
-                            .formulaElement(FormulaRBuilder.builder()
-                                .cdata("[Measures].[Store Sales] - [Measures].[Store Cost]")
-                                .build())
+                    .withReferencedCalculatedMembers(List.of(
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT_LAST_PERIOD),
+                    		look(FoodmartMappingSupplier.CALCULATED_MEMBER_AVERAGE_WAREHOUSE_SALE)
+                    ))
+                    .withCalculatedMembers(List.of(
+                        CalculatedMemberMappingImpl.builder()
+                            .withName("Profit")
+                            //.withDimension("Measures")
+                            .withVisible(false)
+                            .withFormula("[Measures].[Store Sales] - [Measures].[Store Cost]")
                             .build()
                     ))
                     .build());
-                return result;
+                return result;            	
             }
-    */
-        
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -904,94 +813,73 @@ class VirtualCubeTest extends BatchTestCase {
                 super(catalog);
             }
             
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> schemaCubes(MappingSchema schema) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+            	MeasureMappingImpl unitsShipped;
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
-                result.add(CubeRBuilder.builder()
-                    .name("Warehouse No Cache")
-                    .fact(new TableR("inventory_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Time")
-                            .source("Time")
-                            .foreignKey("time_id")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Warehouse No Cache")
+                    .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))                            
+                            .withForeignKey("time_id")
                             .build(),
-                        DimensionUsageRBuilder.builder()
-                            .name("Store")
-                            .source("Store")
-                            .foreignKey("store_id")
+                        DimensionConnectorMappingImpl.builder()
+                            .withOverrideDimensionName("Store")
+                            .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
+                            .withForeignKey("store_id")
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Units Shipped")
-                            .column("units_shipped")
-                            .aggregator("sum")
-                            .formatString("#.0")
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                    	unitsShipped = MeasureMappingImpl.builder()
+                            .withName("Units Shipped")
+                            .withColumn("units_shipped")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
+                            .withFormatString("#.0")
                             .build()
-                    ))
+                    )).build()))
                     .build());
-                return result;
-            }
+                
+                result.add(VirtualCubeMappingImpl.builder()
+                        .withName("Warehouse and Sales Format Expression Cube No Cache")
+                        .withDimensionConnectors(List.of(
+                        	DimensionConnectorMappingImpl.builder()
+                        		.withOverrideDimensionName("Store")
+                                .build(),
+                            DimensionConnectorMappingImpl.builder()
+                            	.withOverrideDimensionName("Time")
+                                .build()
+                        ))
+                        .withReferencedMeasures(List.of(
+                        	look(FoodmartMappingSupplier.MEASURE_STORE_COST),
+                        	look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
+                        	unitsShipped
+                        ))
+                        .withCalculatedMembers(List.of(
+                            CalculatedMemberMappingImpl.builder()
+                                .withName("Profit")
+                                //.withDimension("Measures")
+                                .withFormula("[Measures].[Store Sales] - [Measures].[Store Cost]")
+                                .build(),
+                            CalculatedMemberMappingImpl.builder()
+                                .withName("Profit Per Unit Shipped")
+                                //.withDimension("Measures")
+                                .withFormula("[Measures].[Profit] / [Measures].[Units Shipped]")
+                                .withCalculatedMemberProperties(List.of(
+                                	CalculatedMemberPropertyMappingImpl.builder()
+                                        .withName("FORMAT_STRING")
+                                        .withExpression("IIf(([Measures].[Profit Per Unit Shipped] > 2.0), '|0.#|style=green', '|0.#|style=red')")
+                                        .build()
+                                ))
+                                .build()
 
-            @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse and Sales Format Expression Cube No Cache")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Store")
-                            .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
-                            .build()
-                    ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Cost]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse No Cache")
-                            .name("[Measures].[Units Shipped]")
-                            .build()
-                    ))
-                    .calculatedMembers(List.of(
-                        CalculatedMemberRBuilder.builder()
-                            .name("Profit")
-                            .dimension("Measures")
-                            .formulaElement(FormulaRBuilder.builder()
-                                .cdata("[Measures].[Store Sales] - [Measures].[Store Cost]")
-                                .build())
-                            .build(),
-                        CalculatedMemberRBuilder.builder()
-                            .name("Profit Per Unit Shipped")
-                            .dimension("Measures")
-                            .formulaElement(FormulaRBuilder.builder()
-                                .cdata("[Measures].[Profit] / [Measures].[Units Shipped]")
-                                .build())
-                            .calculatedMemberProperties(List.of(
-                                CalculatedMemberPropertyRBuilder.builder()
-                                    .name("FORMAT_STRING")
-                                    .expression("IIf(([Measures].[Profit Per Unit Shipped] > 2.0), '|0.#|style=green', '|0.#|style=red')")
-                                    .build()
-                            ))
-                            .build()
-
-                    ))
-                    .build());
-                return result;
+                        ))
+                        .build());
+                
+                return result;            	
             }
-    */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1442,33 +1330,26 @@ class VirtualCubeTest extends BatchTestCase {
             public TestOrdinalColumnModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs HR")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Store")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs HR")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Store")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("HR")
-                            .name("Position")
+                        DimensionConnectorMappingImpl.builder()
+                        	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
+                            .withOverrideDimensionName("Position")
                             .build()
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("HR")
-                            .name("[Measures].[Org Salary]")
-                            .build()
-                    ))
+                    .withReferencedMeasures(List.of(look(FoodmartMappingSupplier.MEASURE_ORG_SALARY)))
                     .build());
                 return result;
-            }
-            
-            */
+            }            
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1524,39 +1405,28 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasurePropertyModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Sales vs Warehouse")
-                    .defaultMeasure("Unit Sales")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Product")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Sales vs Warehouse")
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
                             .build()
-
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("[Measures].[Warehouse Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Unit Sales]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Profit]")
-                            .build()
-                ))
+                    .withReferencedMeasures(List.of(
+                    		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                    		look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
+                    ))
+                    .withReferencedCalculatedMembers(List.of(
+                    	look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
+                    ))		
                     .build());
                 return result;
             }
-      
-        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1722,43 +1592,34 @@ class VirtualCubeTest extends BatchTestCase {
             public TestBugMondrian322Modifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse and Sales2")
-                    .defaultMeasure("Store Sales")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("Customers")
+            
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Warehouse and Sales2")
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_SALES))
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                    		.withOverrideDimensionName("Customers")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Time")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("Warehouse")
+                        DimensionConnectorMappingImpl.builder()                            
+                            .withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
+                            .withOverrideDimensionName("Warehouse")
                             .build()
 
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Customer Count]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Sales]")
-                            .build()
+                    .withReferencedMeasures(List.of(
+                    	FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT,
+                    	FoodmartMappingSupplier.MEASURE_STORE_SALES
                     ))
                     .build());
-                return result;
+                return result;            	
             }
-      */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1808,43 +1669,34 @@ class VirtualCubeTest extends BatchTestCase {
             public TestBugMondrian322aModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("Warehouse and Sales2")
-                    .defaultMeasure("Store Sales")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("Customers")
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+                List<CubeMapping> result = new ArrayList<>();
+                result.addAll(super.schemaCubes(schema));
+                result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Warehouse and Sales2")
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_SALES))
+                    .withDimensionConnectors(List.of(
+                        DimensionConnectorMappingImpl.builder()
+                        	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                        	.withOverrideDimensionName("Customers")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .name("Time")
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Time")
                             .build(),
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("Warehouse")
-                            .name("Warehouse")
+                        DimensionConnectorMappingImpl.builder()
+                        	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))	
+                            .withOverrideDimensionName("Warehouse")
                             .build()
 
                     ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Customer Count]")
-                            .build(),
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("Sales")
-                            .name("[Measures].[Store Sales]")
-                            .build()
+                    .withReferencedMeasures(List.of(
+                    		look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT),
+                    		look(FoodmartMappingSupplier.MEASURE_STORE_SALES)
                     ))
                     .build());
-                return result;
-            }
-    */
-        
+                return result;            	
+            }	
+
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1888,70 +1740,63 @@ class VirtualCubeTest extends BatchTestCase {
                 super(catalog);
             }
             
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> schemaCubes(MappingSchema schema) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+            	PhysicalCubeMappingImpl testStore;
+            	MeasureMappingImpl storeSqftMeasure;
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
-                result.add(CubeRBuilder.builder()
-                    .name("TestStore")
-                    .fact(new TableR("store"))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("HCB")
-                            .caption("Has coffee bar caption")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Has coffee bar")
-                                            .column("coffee_bar")
-                                            .uniqueMembers(true)
-                                            .type(TypeEnum.BOOLEAN)
+                result.add(
+                	testStore = PhysicalCubeMappingImpl.builder()
+                    .withName("TestStore")
+                    .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("HCB")
+                    		.withDimension(StandardDimensionMappingImpl.builder()
+                    			//.withCaption("Has coffee bar caption")
+                    			.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Has coffee bar")
+                                            .withColumn("coffee_bar")
+                                            .withUniqueMembers(true)
+                                            .withType(DataType.BOOLEAN)
                                             .build()
                                     ))
                                     .build()
-                            ))
+                            )).build())
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Store Sqft")
-                            .caption("Store Sqft Caption")
-                            .column("store_sqft")
-                            .aggregator("sum")
-                            .formatString("#,###")
-                            .build()
-                    ))
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                    	storeSqftMeasure = MeasureMappingImpl.builder()
+                            .withName("Store Sqft")
+                            //.withCaption("Store Sqft Caption")
+                            .withColumn("store_sqft")
+                            .withAggregatorType(MeasureAggregatorType.SUM)
+                            .withFormatString("#,###")
+                            .build()                    		
+                    )).build()))
                     .build());
+                
+                result.add(VirtualCubeMappingImpl.builder()
+                        .withName("VirtualTestStore")
+                        .withDimensionConnectors(List.of(
+                            DimensionConnectorMappingImpl.builder()
+                            	.withPhysicalCube(testStore)
+                            	.withOverrideDimensionName("HCB")
+                                .build()
+
+                        ))
+                        .withReferencedMeasures(List.of(
+                        	storeSqftMeasure
+                        ))
+                        .build());
+                
+                
                 return result;
             }
-
-            @Override
-            protected List<MappingVirtualCube> schemaVirtualCubes(MappingSchema schema) {
-                List<MappingVirtualCube> result = new ArrayList<>();
-                result.addAll(super.schemaVirtualCubes(schema));
-                result.add(VirtualCubeRBuilder.builder()
-                    .name("VirtualTestStore")
-                    .virtualCubeDimensions(List.of(
-                        VirtualCubeDimensionRBuilder.builder()
-                            .cubeName("TestStore")
-                            .name("HCB")
-                            .build()
-
-                    ))
-                    .virtualCubeMeasures(List.of(
-                        VirtualCubeMeasureRBuilder.builder()
-                            .cubeName("TestStore")
-                            .name("[Measures].[Store Sqft]")
-                            .build()
-                    ))
-                    .build());
-                return result;
-            }
-    */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
