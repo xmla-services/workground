@@ -45,7 +45,11 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.ParameterMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.ParameterMappingImpl;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -1247,19 +1251,18 @@ class ParameterTest {
             public TestSchemaPropModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
-                List<MappingParameter> result = new ArrayList<>();
+            protected List<? extends ParameterMapping> schemaParameters(SchemaMapping schema) {
+                List<ParameterMapping> result = new ArrayList<>();
                 result.addAll(super.schemaParameters(schema));
-                result.add(ParameterRBuilder.builder()
-                    .name("prop")
-                    .type(ParameterTypeEnum.STRING)
-                    .defaultValue("'foo bar'")
+                result.add(ParameterMappingImpl.builder()
+                    .withName("prop")
+                    .withType(DataType.STRING)
+                    .withDefaultValue("'foo bar'")
                     .build());
-                return result;
+                return result;            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1286,29 +1289,28 @@ class ParameterTest {
             public TestSchemaPropDupFailsModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
             @Override
-            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
-                List<MappingParameter> result = new ArrayList<>();
+            protected List<? extends ParameterMapping> schemaParameters(SchemaMapping schema) {
+                List<ParameterMapping> result = new ArrayList<>();
                 result.addAll(super.schemaParameters(schema));
-                result.add(ParameterRBuilder.builder()
-                    .name("foo")
-                    .type(ParameterTypeEnum.NUMERIC)
-                    .defaultValue("1")
+                result.add(ParameterMappingImpl.builder()
+                    .withName("foo")
+                    .withType(DataType.NUMERIC)
+                    .withDefaultValue("1")
                     .build());
-                result.add(ParameterRBuilder.builder()
-                    .name("bar")
-                    .type(ParameterTypeEnum.NUMERIC)
-                    .defaultValue("2")
-                    .build());
-                result.add(ParameterRBuilder.builder()
-                    .name("foo")
-                    .type(ParameterTypeEnum.NUMERIC)
-                    .defaultValue("3")
-                    .build());
-                return result;
+                result.add(ParameterMappingImpl.builder()
+                        .withName("bar")
+                        .withType(DataType.NUMERIC)
+                        .withDefaultValue("2")
+                        .build());
+                result.add(ParameterMappingImpl.builder()
+                        .withName("foo")
+                        .withType(DataType.NUMERIC)
+                        .withDefaultValue("3")
+                        .build());                
+
+                return result;            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1339,19 +1341,18 @@ class ParameterTest {
             public TestSchemaPropIllegalTypeFailsModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
-                List<MappingParameter> result = new ArrayList<>();
+            protected List<? extends ParameterMapping> schemaParameters(SchemaMapping schema) {
+                List<ParameterMapping> result = new ArrayList<>();
                 result.addAll(super.schemaParameters(schema));
-                result.add(ParameterRBuilder.builder()
-                    .name("foo")
-                    .type(ParameterTypeEnum.NUMERIC)
-                    .defaultValue("1")
+                result.add(ParameterMappingImpl.builder()
+                    .withName("foo")
+                    .withType(DataType.NUMERIC)
+                    .withDefaultValue("1")
                     .build());
-                return result;
+                return result;            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1380,19 +1381,18 @@ class ParameterTest {
             public TestSchemaPropInvalidDefaultExpFailsModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
-                List<MappingParameter> result = new ArrayList<>();
+            protected List<? extends ParameterMapping> schemaParameters(SchemaMapping schema) {
+                List<ParameterMapping> result = new ArrayList<>();
                 result.addAll(super.schemaParameters(schema));
-                result.add(ParameterRBuilder.builder()
-                    .name("Product Current Member")
-                    .type(ParameterTypeEnum.MEMBER)
-                    .defaultValue("[Product].DefaultMember.Children(2)")
+                result.add(ParameterMappingImpl.builder()
+                    .withName("Product Current Member")
+                    .withType(DataType.NUMERIC)
+                    .withDefaultValue("[Product].DefaultMember.Children(2)")
                     .build());
-                return result;
+                return result;            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1423,19 +1423,18 @@ class ParameterTest {
             public TestSchemaPropContextModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingParameter> schemaParameters(MappingSchema schema) {
-                List<MappingParameter> result = new ArrayList<>();
+            protected List<? extends ParameterMapping> schemaParameters(SchemaMapping schema) {
+                List<ParameterMapping> result = new ArrayList<>();
                 result.addAll(super.schemaParameters(schema));
-                result.add(ParameterRBuilder.builder()
-                    .name("Customer Current Member")
-                    .type(ParameterTypeEnum.MEMBER)
-                    .defaultValue("[Customers].DefaultMember.Children.Item(2)")
+                result.add(ParameterMappingImpl.builder()
+                    .withName("Customer Current Member")
+                    .withType(DataType.NUMERIC)
+                    .withDefaultValue("[Customers].DefaultMember.Children.Item(2)")
                     .build());
-                return result;
+                return result;            	
             }
-            */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
