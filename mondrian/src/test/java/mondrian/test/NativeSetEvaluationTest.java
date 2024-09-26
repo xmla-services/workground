@@ -20,14 +20,38 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -1083,105 +1107,108 @@ protected void assertQuerySql(Connection connection,
           public TestMultipleAllWithInExprModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
+          
           @Override
-          protected List<MappingCube> cubes(List<MappingCube> cubes) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.cubes(cubes));
-              result.add(CubeRBuilder.builder()
-                  .name("3StoreHCube")
-                  .fact(new TableR("sales_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      PrivateDimensionRBuilder.builder()
-                          .name("AltStore")
-                          .foreignKey("store_id")
-                          .hierarchies(List.of(
-                              HierarchyRBuilder.builder()
-                                  .hasAll(true)
-                                  .primaryKey("store_id")
-                                  .allMemberName("All")
-                                  .relation(new TableR("store"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Store Name")
-                                          .column("store_name")
-                                          .uniqueMembers(false)
+              result.add(PhysicalCubeMappingImpl.builder()
+                  .withName("3StoreHCube")
+                  .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withOverrideDimensionName("AltStore")
+                          .withForeignKey("store_id")
+                          .withDimension(StandardDimensionMappingImpl.builder()
+                        	  .withName("AltStore")  
+                        	  .withHierarchies(List.of(
+                              HierarchyMappingImpl.builder()
+                                  .withHasAll(true)
+                                  .withPrimaryKey("store_id")
+                                  .withAllMemberName("All")
+                                  .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                                  .withLevels(List.of(
+                                      LevelMappingImpl.builder()
+                                          .withName("Store Name")
+                                          .withColumn("store_name")
+                                          .withUniqueMembers(false)
                                           .build(),
-                                      LevelRBuilder.builder()
-                                          .name("Store City")
-                                          .column("store_city")
-                                          .uniqueMembers(false)
+                                      LevelMappingImpl.builder()
+                                          .withName("Store City")
+                                          .withColumn("store_city")
+                                          .withUniqueMembers(false)
                                           .build()
                                   ))
                                   .build(),
-                              HierarchyRBuilder.builder()
-                                  .name("City")
-                                  .hasAll(true)
-                                  .primaryKey("store_id")
-                                  .allMemberName("All")
-                                  .relation(new TableR("store"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Store City")
-                                          .column("store_city")
-                                          .uniqueMembers(false)
+                              HierarchyMappingImpl.builder()
+                                  .withName("City")
+                                  .withHasAll(true)
+                                  .withPrimaryKey("store_id")
+                                  .withAllMemberName("All")
+                                  .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                                  .withLevels(List.of(
+                                      LevelMappingImpl.builder()
+                                          .withName("Store City")
+                                          .withColumn("store_city")
+                                          .withUniqueMembers(false)
                                           .build(),
-                                      LevelRBuilder.builder()
-                                          .name("Store Name")
-                                          .column("store_name")
-                                          .uniqueMembers(false)
+                                      LevelMappingImpl.builder()
+                                          .withName("Store Name")
+                                          .withColumn("store_name")
+                                          .withUniqueMembers(false)
                                           .build()
                                   ))
                                   .build(),
-                              HierarchyRBuilder.builder()
-                                  .name("State")
-                                  .hasAll(true)
-                                  .primaryKey("store_id")
-                                  .allMemberName("All")
-                                  .relation(new TableR("store"))
-                                  .levels(List.of(
-                                      LevelRBuilder.builder()
-                                          .name("Store State")
-                                          .column("store_state")
-                                          .uniqueMembers(false)
+                              HierarchyMappingImpl.builder()
+                                  .withName("State")
+                                  .withHasAll(true)
+                                  .withPrimaryKey("store_id")
+                                  .withAllMemberName("All")
+                                  .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                                  .withLevels(List.of(
+                                      LevelMappingImpl.builder()
+                                          .withName("Store State")
+                                          .withColumn("store_state")
+                                          .withUniqueMembers(false)
                                           .build(),
-                                      LevelRBuilder.builder()
-                                          .name("Store City")
-                                          .column("store_city")
-                                          .uniqueMembers(false)
+                                      LevelMappingImpl.builder()
+                                          .withName("Store City")
+                                          .withColumn("store_city")
+                                          .withUniqueMembers(false)
                                           .build(),
-                                      LevelRBuilder.builder()
-                                          .name("Store Name")
-                                          .column("store_name")
-                                          .uniqueMembers(false)
+                                      LevelMappingImpl.builder()
+                                          .withName("Store Name")
+                                          .withColumn("store_name")
+                                          .withUniqueMembers(false)
                                           .build()
                                   ))
                                   .build()
-                          ))
+                          )).build())
                           .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Time")
-                          .source("Time")
-                          .foreignKey("time_id")
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withOverrideDimensionName("Time")
+                      	  .withDimension(FoodmartMappingSupplier.DIMENSION_TIME)
+                          .withForeignKey("time_id")
                           .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Product")
-                          .source("Product")
-                          .foreignKey("product_id")
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withOverrideDimensionName("Product")
+                          .withDimension(FoodmartMappingSupplier.DIMENSION_PRODUCT)
+                          .withForeignKey("product_id")
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Store Sales")
-                          .column("store_sales")
-                          .aggregator("sum")
-                          .formatString("#,###.00")
-                          .build()
-                  ))
+                  .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                		  .withMeasures(List.of(
+                              MeasureMappingImpl.builder()
+                                  .withName("Store Sales")
+                                  .withColumn("store_sales")
+                                  .withAggregatorType(MeasureAggregatorType.SUM)
+                                  .withFormatString("#,###.00")
+                                  .build()                				  
+                		  ))
+                		  .build()))
                   .build());
-              return result;
+              return result;        	  
           }
-          */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1561,33 +1588,33 @@ protected void assertQuerySql(Connection connection,
           public TestNativeVirtualRestrictedSetModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
+          
           @Override
-          protected List<MappingRole> roles(List<MappingRole> roles) {
-              List<MappingRole> result = new ArrayList<>();
-              result.addAll(super.roles(roles));
-              result.add(RoleRBuilder.builder()
-                  .name("F-MIS-BE-CLIENT")
-                  .schemaGrants(List.of(
-                      SchemaGrantRBuilder.builder()
-                          .access(AccessEnum.NONE)
-                          .cubeGrants(List.of(
-                              CubeGrantRBuilder.builder()
-                                  .cube("Warehouse and Sales")
-                                  .access("all")
-                                  .hierarchyGrants(List.of(
-                                      HierarchyGrantRBuilder.builder()
-                                          .hierarchy("[Store]")
-                                          .rollupPolicy("partial")
-                                          .access(AccessEnum.CUSTOM)
-                                          .memberGrants(List.of(
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Store].[All Stores]")
-                                                  .access(MemberGrantAccessEnum.NONE)
+          protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+              List<AccessRoleMapping> result = new ArrayList<>();
+              result.addAll(super.accessRoles(roles));
+              result.add(AccessRoleMappingImpl.builder()
+                  .withName("F-MIS-BE-CLIENT")
+                  .withAccessSchemaGrants(List.of(
+                		AccessSchemaGrantMappingImpl.builder()
+                          .withAccess(AccessSchema.NONE)
+                          .withCubeGrant(List.of(
+                        	  AccessCubeGrantMappingImpl.builder()
+                                  .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
+                                  .withAccess(AccessCube.ALL)
+                                  .withHierarchyGrants(List.of(
+                                		AccessHierarchyGrantMappingImpl.builder()
+                                          .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
+                                          .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                          .withAccess(AccessHierarchy.CUSTOM)
+                                          .withMemberGrants(List.of(
+                                        	  AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Store].[All Stores]")
+                                                  .withAccess(AccessMember.NONE)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Store].[USA]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Store].[USA]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build()
                                           ))
                                           .build()
@@ -1599,7 +1626,6 @@ protected void assertQuerySql(Connection connection,
                   .build());
               return result;
           }
-          */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1693,49 +1719,48 @@ protected void assertQuerySql(Connection connection,
           public TestNativeHonorsRoleRestrictionsModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
-          @Override
-          protected List<MappingRole> roles(List<MappingRole> roles) {
-              List<MappingRole> result = new ArrayList<>();
-              result.addAll(super.roles(roles));
-              result.add(RoleRBuilder.builder()
-                  .name("Test")
-                  .schemaGrants(List.of(
-                      SchemaGrantRBuilder.builder()
-                          .access(AccessEnum.NONE)
-                          .cubeGrants(List.of(
-                              CubeGrantRBuilder.builder()
-                                  .cube("Sales")
-                                  .access("all")
-                                  .hierarchyGrants(List.of(
-                                      HierarchyGrantRBuilder.builder()
-                                          .hierarchy("[Product]")
-                                          .rollupPolicy("partial")
-                                          .access(AccessEnum.CUSTOM)
-                                          .memberGrants(List.of(
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+          
+          protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+              List<AccessRoleMapping> result = new ArrayList<>();
+              result.addAll(super.accessRoles(roles));
+              result.add(AccessRoleMappingImpl.builder()
+                  .withName("Test")
+                  .withAccessSchemaGrants(List.of(
+                	 AccessSchemaGrantMappingImpl.builder()
+                          .withAccess(AccessSchema.NONE)
+                          .withCubeGrant(List.of(
+                        	 AccessCubeGrantMappingImpl.builder()
+                                  .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                                  .withAccess(AccessCube.ALL)
+                                  .withHierarchyGrants(List.of(
+                                	 AccessHierarchyGrantMappingImpl.builder()
+                                          .withHierarchy(FoodmartMappingSupplier.HIERARCHY_PRODUCT1)
+                                          .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                          .withAccess(AccessHierarchy.CUSTOM)
+                                          .withMemberGrants(List.of(
+                                        	  AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AA-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AAA-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant AAA-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant C-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Cormorant].[Cormorant C-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AA-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AA-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AAA-Size Batteries]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Product].[Non-Consumable].[Household].[Electrical].[Batteries].[Denny].[Denny AAA-Size Batteries]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build()
                                           ))
                                           .build()
@@ -1747,7 +1772,6 @@ protected void assertQuerySql(Connection connection,
                   .build());
               return result;
           }
-          */
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);

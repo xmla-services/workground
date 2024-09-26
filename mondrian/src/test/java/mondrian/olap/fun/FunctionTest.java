@@ -63,12 +63,15 @@ import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.DimensionConnectorMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.LevelType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TimeDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.VirtualCubeMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -8105,7 +8108,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
   }
 
   //TODO: reanable
-  @Disabled
+  @Disabled //UserDefinedFunction
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testFilterWillTimeout(Context context) {
@@ -8117,7 +8120,7 @@ mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCoun
             public TestFilterWillTimeoutModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            /* TODO: UserDefinedFunction
             @Override
             protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
                 List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -9580,34 +9583,25 @@ mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarch
           public TestOrderTupleMultiKeyswithVCubeModifier(CatalogMapping catalog) {
               super(catalog);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
-          @Override
-          protected List<MappingVirtualCube> virtualCubes(List<MappingVirtualCube> cubes) {
-              List<MappingVirtualCube> result = new ArrayList<>();
-              result.addAll(super.virtualCubes(cubes));
-              result.add(VirtualCubeRBuilder.builder()
-                  .name("Sales vs HR")
-                  .virtualCubeDimensions(List.of(
-                      VirtualCubeDimensionRBuilder.builder()
-                          .cubeName("Sales")
-                          .name("Customers")
+          protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+              List<CubeMapping> result = new ArrayList<>();
+              result.addAll(super.cubes(cubes));
+              result.add(VirtualCubeMappingImpl.builder()
+                  .withName("Sales vs HR")
+                  .withDimensionConnectors(List.of(
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))	
+                      	  .withOverrideDimensionName("Customers")
                           .build(),
-                      VirtualCubeDimensionRBuilder.builder()
-                          .cubeName("HR")
-                          .name("Position")
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
+                      	  .withOverrideDimensionName("Position")
                           .build()
                   ))
-                  .virtualCubeMeasures(List.of(
-                          VirtualCubeMeasureRBuilder.builder()
-                          .cubeName("HR")
-                          .name("[Measures].[Org Salary]")
-                          .build()
-                		  ))
+                  .withReferencedMeasures(List.of(look(FoodmartMappingSupplier.MEASURE_ORG_SALARY)))
                   .build());
-              return result;
-          }
- */
-      
+              return result;        	  
+          }      
       }
     /*
     String baseSchema = TestUtil.getRawSchema(context);

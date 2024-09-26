@@ -13,8 +13,23 @@
  */
 package mondrian.rolap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class RolapResultTestModifier extends PojoMappingModifier {
 
@@ -107,236 +122,248 @@ public class RolapResultTestModifier extends PojoMappingModifier {
 
      */
     
-    /* TODO: DENIS MAPPING-MODIFIER
     @Override
-    protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
-        result.add(CubeRBuilder.builder()
-            .name("FTAll")
-            .fact(new TableR("FT1"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("D1")
-                    .foreignKey("d1_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("d1_id")
-                            .relation(new TableR("D1"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+    protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+        List<CubeMapping> result = new ArrayList<>();
+        result.addAll(super.schemaCubes(schema));
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("FTAll")
+            .withQuery(TableQueryMappingImpl.builder().withName("FT1").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                	.withOverrideDimensionName("D1")
+                    .withForeignKey("d1_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("d1_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D1").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("D2")
-                    .foreignKey("d2_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("d2_id")
-                            .relation(new TableR("D2"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D2")
+                    .withForeignKey("d2_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("d2_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D2").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Value")
-                    .column("value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Value")
+                    .withColumn("value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
 
-        result.add(CubeRBuilder.builder()
-            .name("FT1")
-            .fact(new TableR("FT1"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("D1")
-                    .foreignKey("d1_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(false)
-                            .defaultMember("[D1].[d]")
-                            .primaryKey("d1_id")
-                            .relation(new TableR("D1"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("FT1")
+            .withQuery(TableQueryMappingImpl.builder().withName("FT1").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D1")
+                    .withForeignKey("d1_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("D1")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(false)
+                            .withDefaultMember("[D1].[d]")
+                            .withPrimaryKey("d1_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D1").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("D2")
-                    .foreignKey("d2_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(false)
-                            .defaultMember("[D2].[w]")
-                            .primaryKey("d2_id")
-                            .relation(new TableR("D2"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D2")
+                    .withForeignKey("d2_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("D2")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(false)
+                            .withDefaultMember("[D2].[w]")
+                            .withPrimaryKey("d2_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D2").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Value")
-                    .column("value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                 MeasureMappingImpl.builder()
+                    .withName("Value")
+                    .withColumn("value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
 
-        result.add(CubeRBuilder.builder()
-            .name("FT2")
-            .fact(new TableR("FT2"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("D1")
-                    .foreignKey("d1_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .defaultMember("[D1].[d]")
-                            .primaryKey("d1_id")
-                            .relation(new TableR("D1"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("FT2")
+            .withQuery(TableQueryMappingImpl.builder().withName("FT2").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D1")
+                    .withForeignKey("d1_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("D1")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withDefaultMember("[D1].[d]")
+                            .withPrimaryKey("d1_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D1").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("D2")
-                    .foreignKey("d2_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .defaultMember("[D2].[w]")
-                            .primaryKey("d2_id")
-                            .relation(new TableR("D2"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D2")
+                    .withForeignKey("d2_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("D2")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withDefaultMember("[D2].[w]")
+                            .withPrimaryKey("d2_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D2").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Value")
-                    .column("value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Value")
+                    .withColumn("value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
 
-        result.add(CubeRBuilder.builder()
-            .name("FT2Extra")
-            .fact(new TableR("FT2"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("D1")
-                    .foreignKey("d1_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .defaultMember("[D1].[d]")
-                            .primaryKey("d1_id")
-                            .relation(new TableR("D1"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("FT2Extra")
+            .withQuery(TableQueryMappingImpl.builder().withName("FT2").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D1")
+                    .withForeignKey("d1_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                        .withName("D1")
+                        .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withDefaultMember("[D1].[d]")
+                            .withPrimaryKey("d1_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D1").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build(),
-        PrivateDimensionRBuilder.builder()
-                    .name("D2")
-                    .foreignKey("d2_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(false)
-                            .defaultMember("[D2].[w]")
-                            .primaryKey("d2_id")
-                            .relation(new TableR("D2"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Name")
-                                    .column("name")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("D2")
+                    .withForeignKey("d2_id")
+                    	.withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("D2")                    
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(false)
+                            .withDefaultMember("[D2].[w]")
+                            .withPrimaryKey("d2_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("D2").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Name")
+                                    .withColumn("name")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("VExtra")
-                    .column("vextra")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("VExtra")
+                    .withColumn("vextra")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Value")
-                    .column("value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+                MeasureMappingImpl.builder()
+                    .withName("Value")
+                    .withColumn("value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
         return result;
 
     }
-    */
 }
