@@ -40,8 +40,33 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -961,73 +986,61 @@ class AggregationOnDistinctCountMeasuresTest {
               super(c);
           }
           
-          /* TODO: DENIS MAPPING-MODIFIER
-          
           @Override
-          protected List<MappingPrivateDimension> schemaDimensions(MappingSchema schema) {
-              List<MappingPrivateDimension> result = new ArrayList<>();
-              result.addAll(super.schemaDimensions(schema));
-              result.add(PrivateDimensionRBuilder.builder()
-                  .name("Warehouse2")
-                  .hierarchies(List.of(
-                      HierarchyRBuilder.builder()
-                          .hasAll(true)
-                          .primaryKey("warehouse_id")
-                          .relation(new TableR("warehouse"))
-                          .levels(List.of(
-                              LevelRBuilder.builder()
-                                  .name("address3")
-                                  .column("wa_address3")
-                                  .uniqueMembers(true)
-                                  .build(),
-                             LevelRBuilder.builder()
-                                  .name("address2")
-                                  .column("wa_address2")
-                                  .uniqueMembers(false)
-                                  .build(),
-                              LevelRBuilder.builder()
-                                  .name("fax")
-                                  .column("warehouse_fax")
-                                  .uniqueMembers(false)
-                                  .build()
-                          ))
-                          .build()
-                  ))
-                  .build());
-              return result;
-          }
-
-          @Override
-          protected List<MappingCube> schemaCubes(MappingSchema schema) {
-              List<MappingCube> result = new ArrayList<>();
+          protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+        	  StandardDimensionMappingImpl warehouse2Dimension = StandardDimensionMappingImpl.builder()
+              .withName("Warehouse2")
+              .withHierarchies(List.of(
+                  HierarchyMappingImpl.builder()
+                      .withHasAll(true)
+                      .withPrimaryKey("warehouse_id")
+                      .withQuery(TableQueryMappingImpl.builder().withName("warehouse").build())
+                      .withLevels(List.of(
+                         LevelMappingImpl.builder()
+                              .withName("address3")
+                              .withColumn("wa_address3")
+                              .withUniqueMembers(true)
+                              .build(),
+                         LevelMappingImpl.builder()
+                              .withName("address2")
+                              .withColumn("wa_address2")
+                              .withUniqueMembers(false)
+                              .build(),
+                         LevelMappingImpl.builder()
+                              .withName("fax")
+                              .withColumn("warehouse_fax")
+                              .withUniqueMembers(false)
+                              .build()
+                      ))
+                      .build())).build();
+        	  
+              List<CubeMapping> result = new ArrayList<>();
               result.addAll(super.schemaCubes(schema));
-              result.add(CubeRBuilder.builder()
-                  .name("Warehouse2")
-                  .fact(new TableR("inventory_fact_1997"))
-                  .dimensionUsageOrDimensions(List.of(
-                      DimensionUsageRBuilder.builder()
-                          .name("Product")
-                          .source("Product")
-                          .foreignKey("product_id")
+              result.add(PhysicalCubeMappingImpl.builder()
+                  .withName("Warehouse2")
+                  .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
+                  .withDimensionConnectors(List.of(
+                      DimensionConnectorMappingImpl.builder()
+                      	  .withOverrideDimensionName("Product")
+                      	  .withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
+                          .withForeignKey("product_id")
                           .build(),
-                      DimensionUsageRBuilder.builder()
-                          .name("Warehouse2")
-                          .source("Warehouse2")
-                          .foreignKey("warehouse_id")
+                      DimensionConnectorMappingImpl.builder()
+                          .withOverrideDimensionName("Warehouse2")
+                          .withDimension(warehouse2Dimension)
+                          .withForeignKey("warehouse_id")
                           .build()
                   ))
-                  .measures(List.of(
-                      MeasureRBuilder.builder()
-                          .name("Cost Count")
-                          .column("warehouse_cost")
-                          .aggregator("distinct-count")
-                          .build()
-                  ))
+                  .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                          MeasureMappingImpl.builder()
+                          .withName("Cost Count")
+                          .withColumn("warehouse_cost")
+                          .withAggregatorType(MeasureAggregatorType.DICTINCT_COUNT)
+                          .build()                		  
+                  )).build()))
                   .build());
               return result;
           }
-   
-      */
       
       }
       /*
@@ -1785,33 +1798,32 @@ class AggregationOnDistinctCountMeasuresTest {
           public TestMondrian906Modifier(CatalogMapping c) {
               super(c);
           }
-          /* TODO: DENIS MAPPING-MODIFIER
           @Override
-          protected List<MappingRole> schemaRoles(MappingSchema schema) {
-              List<MappingRole> result = new ArrayList<>();
-              result.addAll(super.schemaRoles(schema));
-              result.add(RoleRBuilder.builder()
-                  .name("Role1")
-                  .schemaGrants(List.of(
-                      SchemaGrantRBuilder.builder()
-                          .access(AccessEnum.ALL)
-                          .cubeGrants(List.of(
-                              CubeGrantRBuilder.builder()
-                                  .cube("Sales")
-                                  .access("all")
-                                  .hierarchyGrants(List.of(
-                                      HierarchyGrantRBuilder.builder()
-                                          .hierarchy("[Customers]")
-                                          .access(AccessEnum.CUSTOM)
-                                          .rollupPolicy("partial")
-                                          .memberGrants(List.of(
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Customers].[USA].[OR]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+          protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+              List<AccessRoleMapping> result = new ArrayList<>();
+              result.addAll(super.schemaAccessRoles(schema));
+              result.add(AccessRoleMappingImpl.builder()
+                  .withName("Role1")
+                  .withAccessSchemaGrants(List.of(
+                	AccessSchemaGrantMappingImpl.builder()
+                          .withAccess(AccessSchema.ALL)
+                          .withCubeGrant(List.of(
+                        	 AccessCubeGrantMappingImpl.builder()
+                                  .withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                                  .withAccess(AccessCube.ALL)
+                                  .withHierarchyGrants(List.of(
+                                	  AccessHierarchyGrantMappingImpl.builder()
+                                          .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
+                                          .withAccess(AccessHierarchy.CUSTOM)
+                                          .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                          .withMemberGrants(List.of(
+                                        	  AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Customers].[USA].[OR]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build(),
-                                              MemberGrantRBuilder.builder()
-                                                  .member("[Customers].[USA].[WA]")
-                                                  .access(MemberGrantAccessEnum.ALL)
+                                              AccessMemberGrantMappingImpl.builder()
+                                                  .withMember("[Customers].[USA].[WA]")
+                                                  .withAccess(AccessMember.ALL)
                                                   .build()
                                           ))
                                           .build()
@@ -1824,9 +1836,6 @@ class AggregationOnDistinctCountMeasuresTest {
 
               return result;
           }
-   
-      */
-      
       }
 
 

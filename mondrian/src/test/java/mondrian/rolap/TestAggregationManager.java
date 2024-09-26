@@ -54,6 +54,8 @@ import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLExpressionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -1313,161 +1315,156 @@ class TestAggregationManager extends BatchTestCase {
             public TestKeyExpressionCardinalityCacheModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingPrivateDimension> schemaDimensions(MappingSchema mappingSchemaOriginal) {
-                List<MappingPrivateDimension> result = new ArrayList<>();
-                result.addAll(super.schemaDimensions(mappingSchemaOriginal));
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Store1")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Country")
-                                    .uniqueMembers(true)
-                                    .keyExpression(ExpressionViewRBuilder.builder().sql(SqlSelectQueryRBuilder.builder()
-                                        .sqls(List.of(
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("oracle"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("hsqldb"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("derby"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("luciddb"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("mysql"))
-                                                .statement("`store_country`")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("netezza"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("neoview"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("generic"))
-                                                .statement("store_country")
-                                                .build()
-                                            )).build())
-                                        .build())
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build());
-                result.add(PrivateDimensionRBuilder.builder()
-                    .name("Store2")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store_ragged"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Country")
-                                    .uniqueMembers(true)
-                                    .keyExpression(ExpressionViewRBuilder.builder().sql(SqlSelectQueryRBuilder.builder()
-                                        .sqls(List.of(
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("oracle"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("derby"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("luciddb"))
-                                                .statement("\"store_country\"")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("mysql"))
-                                                .statement("`store_country`")
-                                                .build(),
-                                            SQLRBuilder.builder()
-                                                .dialects(List.of("generic"))
-                                                .statement("store_country")
-                                                .build()
+            
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+            	StandardDimensionMappingImpl store1Dimension = StandardDimensionMappingImpl.builder()
+                .withName("Store1")
+                .withHierarchies(List.of(
+                    HierarchyMappingImpl.builder()
+                        .withHasAll(true)
+                        .withPrimaryKey("store_id")
+                        .withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                        .withLevels(List.of(
+                            LevelMappingImpl.builder()
+                                .withName("Store Country")
+                                .withUniqueMembers(true)
+                                .withKeyExpression(SQLExpressionMappingImpl.builder()
+                                		.withSqls(List.of(
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("oracle"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("hsqldb"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("derby"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("luciddb"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("mysql"))
+                                            .withStatement("`store_country`")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("netezza"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("neoview"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("generic"))
+                                            .withStatement("store_country")
+                                            .build()
                                         )).build())
-                                        .build())
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build());
-                return result;
-            }
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+                                .build()
+                        ))
+                        .build()
+                ))
+                .build();
+            	StandardDimensionMappingImpl store2Dimension = StandardDimensionMappingImpl.builder()
+                .withName("Store2")
+                .withHierarchies(List.of(
+                    HierarchyMappingImpl.builder()
+                        .withHasAll(true)
+                        .withPrimaryKey("store_id")
+                        .withQuery(TableQueryMappingImpl.builder().withName("store_ragged").build())
+                        .withLevels(List.of(
+                            LevelMappingImpl.builder()
+                                .withName("Store Country")
+                                .withUniqueMembers(true)
+                                .withKeyExpression(SQLExpressionMappingImpl.builder()
+                                    .withSqls(List.of(
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("oracle"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("derby"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("luciddb"))
+                                            .withStatement("\"store_country\"")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("mysql"))
+                                            .withStatement("`store_country`")
+                                            .build(),
+                                        SQLMappingImpl.builder()
+                                            .withDialects(List.of("generic"))
+                                            .withStatement("store_country")
+                                            .build()
+                                    )).build())
+                                    .build()))
+                                .build()
+                        ))
+                        .build();
+            	
+            	MeasureMappingImpl sales1UnitSales = MeasureMappingImpl.builder()
+                .withName("Unit Sales")
+                .withColumn("unit_sales")
+                .withAggregatorType(MeasureAggregatorType.SUM)
+                .withFormatString("Standard")
+                .build();
+            	
+            	MeasureMappingImpl sales2UnitSales = MeasureMappingImpl.builder()
+            		.withName("Unit Sales")
+                    .withColumn("unit_sales")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("Standard")
+                    .build();
+
+            	
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
 
-                result.add(CubeRBuilder.builder()
-                    .name("Sales1")
-                    .defaultMeasure("Unit Sales")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Store1")
-                            .source("Store1")
-                            .foreignKey("store_id")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Sales1")
+                    .withDefaultMeasure(sales1UnitSales)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Store1")
+                    		.withDimension(store1Dimension)
+                            .withForeignKey("store_id")
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Sales")
-                            .column("store_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .build()
-                    ))
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                    	sales1UnitSales,
+                        MeasureMappingImpl.builder()
+                        .withName("Store Sales")
+                        .withColumn("store_sales")
+                        .withAggregatorType(MeasureAggregatorType.SUM)
+                        .withFormatString("Standard")
+                        .build()
+                    )).build()))
                     .build());
-                result.add(CubeRBuilder.builder()
-                    .name("Sales2")
-                    .defaultMeasure("Unit Sales")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Store2")
-                            .source("Store2")
-                            .foreignKey("store_id")
+                
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Sales2")
+                    .withDefaultMeasure(sales2UnitSales)
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Store2")
+                        	.withDimension(store2Dimension)
+                            .withForeignKey("store_id")
                             .build()
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .build()
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                    		sales2UnitSales)).build()                        
                     ))
                     .build());
                 return result;
-            }
- 
-        
-       */ 
+            	
+            }            
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1635,111 +1632,118 @@ class TestAggregationManager extends BatchTestCase {
             public TestOrdinalExprAggTuplesAndChildrenModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
+            
             @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name("Sales_Prod_Ord")
-                    .fact(new TableR("sales_fact_1997"))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("Product")
-                            .foreignKey("product_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("product_id")
-                                    .primaryKeyTable("product")
-                                    .relation(new JoinR(
-                                        new JoinedQueryElementR(null, "product_class_id", new TableR("product")),
-                                        new JoinedQueryElementR(null, "product_class_id", new TableR("product_class"))
-                                        )
-                                    )
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Product Family")
-                                            .table("product_class")
-                                            .column("product_family")
-                                            .uniqueMembers(true)
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Sales_Prod_Ord")
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Product")
+                            .withForeignKey("product_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            	.withName("Product")
+                            	.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withPrimaryKey("product_id")
+                                    .withPrimaryKeyTable("product")
+                                    .withQuery(JoinQueryMappingImpl.builder()
+                                    		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                    				.withKey("product_class_id")
+                                    				.withQuery(TableQueryMappingImpl.builder().withName("product").build())
+                                    				.build())
+                                    		.withRight(JoinedQueryElementMappingImpl.builder()
+                                    				.withKey("product_class_id")
+                                    				.withQuery(TableQueryMappingImpl.builder().withName("product_class").build())
+                                    				.build())
+                                    		.build())
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Family")
+                                            .withTable("product_class")
+                                            .withColumn("product_family")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Department")
-                                            .table("product_class")
-                                            .column("product_department")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Department")
+                                            .withTable("product_class")
+                                            .withColumn("product_department")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Category")
-                                            .table("product_class")
-                                            .captionColumn("product_family")
-                                            .column("product_category")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Category")
+                                            .withTable("product_class")
+                                            .withCaptionColumn("product_family")
+                                            .withColumn("product_category")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Subcategory")
-                                            .table("product_class")
-                                            .column("product_subcategory")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Subcategory")
+                                            .withTable("product_class")
+                                            .withColumn("product_subcategory")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Brand Name")
-                                            .table("product")
-                                            .column("brand_name")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Brand Name")
+                                            .withTable("product")
+                                            .withColumn("brand_name")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Name")
-                                            .table("product")
-                                            .column("product_name")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Name")
+                                            .withTable("product")
+                                            .withColumn("product_name")
+                                            .withUniqueMembers(true)
                                             .build()
                                         ))
                                     .build()
-                            ))
+                            )).build())
                             .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Gender")
-                            .foreignKey("customer_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(false)
-                                    .primaryKey("customer_id")
-                                    .relation(new TableR("customer"))
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Gender")
-                                            .column("gender")
-                                            .uniqueMembers(true)
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Gender")
+                            .withForeignKey("customer_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            	.withName("Gender")
+                            	.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(false)
+                                    .withPrimaryKey("customer_id")
+                                    .withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Gender")
+                                            .withColumn("gender")
+                                            .withUniqueMembers(true)
                                             .build()
                                     ))
                                     .build()
-                            ))
+                            )).build())
                             .build()
                     ))
-
-
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(false)
-                            .build(),
-                        MeasureRBuilder.builder()
-                            .name("Store Cost")
-                            .column("store_cost")
-                            .aggregator("sum")
-                            .formatString("#,###.00")
-                            .build()
-                    ))
+                    .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                    		.withMeasures(List.of(
+                                MeasureMappingImpl.builder()
+                                    .withName("Unit Sales")
+                                    .withColumn("unit_sales")
+                                    .withAggregatorType(MeasureAggregatorType.SUM)
+                                    .withFormatString("Standard")
+                                    .withVisible(false)
+                                    .build(),
+                                MeasureMappingImpl.builder()
+                                    .withName("Store Cost")
+                                    .withColumn("store_cost")
+                                    .withAggregatorType(MeasureAggregatorType.SUM)
+                                    .withFormatString("#,###.00")
+                                    .build()                    				
+                    		))
+                    		.build()))
                     .build());
                 return result;
             }
-    
-        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -2577,142 +2581,6 @@ class TestAggregationManager extends BatchTestCase {
                     .build());
                 return result;
             }
-            
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
-                result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                        .name("Foo")
-                        .defaultMeasure("Unit Sales")
-                    .fact(new TableR("sales_fact_1997", List.of(
-                        AggExcludeRBuilder.builder()
-                            .name("agg_g_ms_pcat_sales_fact_1997")
-                            .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_c_14_sales_fact_1997")
-                            .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_pl_01_sales_fact_1997")
-                            .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_ll_01_sales_fact_1997")
-                            .build()
-                    ), List.of(
-                        AggNameRBuilder.builder()
-                            .name("agg_l_05_sales_fact_1997")
-                            .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
-                            .aggIgnoreColumns(List.of(
-                                AggColumnNameRBuilder.builder()
-                                    .column("customer_id")
-                                    .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("store_id")
-                                    .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("promotion_id")
-                                    .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("store_sales")
-                                    .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("store_cost")
-                                    .build()
-                            ))
-                            .aggMeasures(List.of(
-                                AggMeasureRBuilder.builder()
-                                    .name("[Measures].[Unit Sales]")
-                                    .column("unit_sales")
-                                    .build()
-                            ))
-                            .aggLevels(List.of(
-                                AggLevelRBuilder.builder()
-                                    .name("[Product].[Product Id]")
-                                    .column("product_id")
-                                    .collapsed(false)
-                                    .build()
-                            ))
-                            .build()
-                    )))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("Product")
-                            .foreignKey("product_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("product_id")
-                                    .primaryKeyTable("product")
-                                    .relation(
-                                        new JoinR(
-                                            new JoinedQueryElementR(null,"product_class_id", new TableR("product")),
-                                            new JoinedQueryElementR(null,"product_class_id", new TableR("product_class"))
-                                            )
-                                    )
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Product Family")
-                                            .table("product_class")
-                                            .column("product_family")
-                                            .uniqueMembers(true)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Department")
-                                            .table("product_class")
-                                            .column("product_department")
-                                            .uniqueMembers(false)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Category")
-                                            .table("product_class")
-                                            .column("product_category")
-                                            .uniqueMembers(false)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Subcategory")
-                                            .table("product_class")
-                                            .column("product_subcategory")
-                                            .uniqueMembers(false)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Brand Name")
-                                            .table("product")
-                                            .column("brand_name")
-                                            .uniqueMembers(false)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Name")
-                                            .table("product")
-                                            .column("product_name")
-                                            .uniqueMembers(false)
-                                            .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Id")
-                                            .table("product")
-                                            .column("product_id")
-                                            .uniqueMembers(true)
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .visible(false)
-                            .build()
-                    ))
-                    .build());
-                return result;
-            }
-     
-        */
-        
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -3007,173 +2875,200 @@ class TestAggregationManager extends BatchTestCase {
             public TestTwoNonCollapsedAggregateModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingCube> cubes(List<MappingCube> cubes) {
-                List<MappingCube> result = new ArrayList<>();
+            protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
+            	MeasureMappingImpl m = MeasureMappingImpl.builder()
+                        .withName("Unit Sales")
+                        .withColumn("unit_sales")
+                        .withAggregatorType(MeasureAggregatorType.SUM)
+                        .withFormatString("Standard")
+                        .build();
+            	
+                List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
-                result.add(CubeRBuilder.builder()
-                    .name("Foo")
-                    .defaultMeasure("Unit Sales")
-                    .fact(new TableR("sales_fact_1997", List.of(
-                        AggExcludeRBuilder.builder()
-                            .name("agg_g_ms_pcat_sales_fact_1997")
+                result.add(PhysicalCubeMappingImpl.builder()
+                    .withName("Foo")
+                    .withDefaultMeasure(m)
+                    .withQuery(TableQueryMappingImpl.builder()
+                    	.withName("sales_fact_1997")
+                    	.withAggregationExcludes(List.of(	
+                    		AggregationExcludeMappingImpl.builder()
+                            .withName("agg_g_ms_pcat_sales_fact_1997")
                             .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_c_14_sales_fact_1997")
+                            AggregationExcludeMappingImpl.builder()
+                            .withName("agg_c_14_sales_fact_1997")
                             .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_pl_01_sales_fact_1997")
+                            AggregationExcludeMappingImpl.builder()
+                            .withName("agg_pl_01_sales_fact_1997")
                             .build(),
-                        AggExcludeRBuilder.builder()
-                            .name("agg_ll_01_sales_fact_1997")
+                            AggregationExcludeMappingImpl.builder()
+                            .withName("agg_ll_01_sales_fact_1997")
                             .build()
-                    ), List.of(
-                        AggNameRBuilder.builder()
-                            .name("agg_l_05_sales_fact_1997")
-                            .aggFactCount(AggColumnNameRBuilder.builder().column("fact_count").build())
-                            .aggIgnoreColumns(List.of(
-                                AggColumnNameRBuilder.builder()
-                                    .column("customer_id")
+                    	))
+                    	.withAggregationTables(List.of(
+                    		AggregationNameMappingImpl.builder()
+                            .withName("agg_l_05_sales_fact_1997")
+                            .withAggregationFactCount(AggregationColumnNameMappingImpl.builder().withColumn("fact_count").build())
+                            .withAggregationIgnoreColumns(List.of(
+                            	AggregationColumnNameMappingImpl.builder()
+                                    .withColumn("customer_id")
                                     .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("promotion_id")
+                                AggregationColumnNameMappingImpl.builder()
+                                    .withColumn("promotion_id")
                                     .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("store_sales")
+                                AggregationColumnNameMappingImpl.builder()
+                                    .withColumn("store_sales")
                                     .build(),
-                                AggColumnNameRBuilder.builder()
-                                    .column("store_cost")
+                                AggregationColumnNameMappingImpl.builder()
+                                    .withColumn("store_cost")
                                     .build()
                             ))
-                            .aggMeasures(List.of(
-                                AggMeasureRBuilder.builder()
-                                    .name("[Measures].[Unit Sales]")
-                                    .column("unit_sales")
+                            .withAggregationMeasures(List.of(
+                            	AggregationMeasureMappingImpl.builder()
+                                    .withName("[Measures].[Unit Sales]")
+                                    .withColumn("unit_sales")
                                     .build()
                             ))
-                            .aggLevels(List.of(
-                                AggLevelRBuilder.builder()
-                                    .name("[Product].[Product Id]")
-                                    .column("product_id")
-                                    .collapsed(false)
+                            .withAggregationLevels(List.of(
+                            	AggregationLevelMappingImpl.builder()
+                                    .withName("[Product].[Product Id]")
+                                    .withColumn("product_id")
+                                    .withCollapsed(false)
                                     .build(),
-                                AggLevelRBuilder.builder()
-                                    .name("[Store].[Store Id]")
-                                    .column("store_id")
-                                    .collapsed(false)
+                                AggregationLevelMappingImpl.builder()
+                                    .withName("[Store].[Store Id]")
+                                    .withColumn("store_id")
+                                    .withCollapsed(false)
                                     .build()
                             ))
                             .build()
-                    )))
-                    .dimensionUsageOrDimensions(List.of(
-                        PrivateDimensionRBuilder.builder()
-                            .name("Product")
-                            .foreignKey("product_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("product_id")
-                                    .primaryKeyTable("product")
-                                    .relation(
-                                        new JoinR(
-                                            new JoinedQueryElementR(null,"product_class_id", new TableR("product")),
-                                            new JoinedQueryElementR(null,"product_class_id", new TableR("product_class")))
+                    	)).build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
+                            .withForeignKey("product_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()                            		                            		
+                            	.withHierarchies(List.of(
+                                HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withPrimaryKey("product_id")
+                                    .withPrimaryKeyTable("product")
+                                    .withQuery(
+                                            JoinQueryMappingImpl.builder()
+                                            .withLeft(
+                                            	JoinedQueryElementMappingImpl.builder()
+                                            		.withKey("product_class_id")
+                                            		.withQuery(TableQueryMappingImpl.builder().withName("product").build())
+                                            		.build())
+                                            .withRight(
+                                            	JoinedQueryElementMappingImpl.builder()
+                                            		.withKey("product_class_id")
+                                            		.withQuery(TableQueryMappingImpl.builder().withName("product_class").build())
+                                            		.build())
+                                            .build()
                                     )
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Product Family")
-                                            .table("product_class")
-                                            .column("product_family")
-                                            .uniqueMembers(true)
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Family")
+                                            .withTable("product_class")
+                                            .withColumn("product_family")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Department")
-                                            .table("product_class")
-                                            .column("product_department")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Department")
+                                            .withTable("product_class")
+                                            .withColumn("product_department")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Category")
-                                            .table("product_class")
-                                            .column("product_category")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Category")
+                                            .withTable("product_class")
+                                            .withColumn("product_category")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Subcategory")
-                                            .table("product_class")
-                                            .column("product_subcategory")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Subcategory")
+                                            .withTable("product_class")
+                                            .withColumn("product_subcategory")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Brand Name")
-                                            .table("product")
-                                            .column("brand_name")
-                                            .uniqueMembers(false)
+                                        LevelMappingImpl.builder()
+                                            .withName("Brand Name")
+                                            .withTable("product")
+                                            .withColumn("brand_name")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Name")
-                                            .table("product")
-                                            .column("product_name")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Name")
+                                            .withTable("product")
+                                            .withColumn("product_name")
+                                            .withUniqueMembers(true)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Product Id")
-                                            .table("product")
-                                            .column("product_id")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Product Id")
+                                            .withTable("product")
+                                            .withColumn("product_id")
+                                            .withUniqueMembers(true)
                                             .build()
                                     ))
                                     .build()
-                            ))
+                            )).build())
                             .build(),
-                        PrivateDimensionRBuilder.builder()
-                            .name("Store")
-                            .foreignKey("store_id")
-                            .hierarchies(List.of(
-                                HierarchyRBuilder.builder()
-                                    .hasAll(true)
-                                    .primaryKey("store_id")
-                                    .primaryKeyTable("store")
-                                    .relation(
-                                        new JoinR(
-                                            new JoinedQueryElementR(
-                                            null,"region_id", new TableR("store")),
-                                            new JoinedQueryElementR(null,"region_id", new TableR("region"))
-                                        )
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Store")
+                            .withForeignKey("store_id")
+                            .withDimension(StandardDimensionMappingImpl.builder()
+                            		.withName("Store")
+                                	.withHierarchies(List.of(
+                                    HierarchyMappingImpl.builder()
+                                    .withHasAll(true)
+                                    .withPrimaryKey("store_id")
+                                    .withPrimaryKeyTable("store")
+                                    .withQuery(
+                                            JoinQueryMappingImpl.builder()
+                                            .withLeft(
+                                            	JoinedQueryElementMappingImpl.builder()
+                                            		.withKey("region_id")
+                                            		.withQuery(TableQueryMappingImpl.builder().withName("store").build())
+                                            		.build())
+                                            .withRight(
+                                            	JoinedQueryElementMappingImpl.builder()
+                                            		.withKey("region_id")
+                                            		.withQuery(TableQueryMappingImpl.builder().withName("region").build())
+                                            		.build())
+                                            .build()
                                     )
-                                    .levels(List.of(
-                                        LevelRBuilder.builder()
-                                            .name("Store Region")
-                                            .table("region")
-                                            .column("sales_city")
-                                            .uniqueMembers(false)
+                                    .withLevels(List.of(
+                                        LevelMappingImpl.builder()
+                                            .withName("Store Region")
+                                            .withTable("region")
+                                            .withColumn("sales_city")
+                                            .withUniqueMembers(false)
                                             .build(),
-                                        LevelRBuilder.builder()
-                                            .name("Store Id")
-                                            .table("store")
-                                            .column("store_id")
-                                            .uniqueMembers(true)
+                                        LevelMappingImpl.builder()
+                                            .withName("Store Id")
+                                            .withTable("store")
+                                            .withColumn("store_id")
+                                            .withUniqueMembers(true)
                                             .build()
                                     ))
                                     .build()
-                            ))
+                            )).build())
                             .build()
 
                     ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Unit Sales")
-                            .column("unit_sales")
-                            .aggregator("sum")
-                            .formatString("Standard")
-                            .build()
-                    ))
+                   .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder()
+                	    .withMeasures(List.of(
+                	    	MeasureMappingImpl.builder()
+                            	.withName("Unit Sales")
+                                .withColumn("unit_sales")
+                                .withAggregatorType(MeasureAggregatorType.SUM)
+                                .withFormatString("Standard")
+                                .build()
+
+                        )).build()))
                     .build());
                 return result;
             }
-  
-        */
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);

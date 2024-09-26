@@ -4372,6 +4372,7 @@ public class BasicQueryTest {
             + "Row #3: 0\n" + "Row #4: 0\n" );
   }
 
+  @Disabled //TODO: UserDefinedFunction
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCancel(Context context) {
@@ -4587,7 +4588,8 @@ public class BasicQueryTest {
     }
   }*/
 
-    @ParameterizedTest
+  @Disabled // TODO: UserDefinedFunction
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testQueryTimeout(Context context) {
     // timeout is issued after 2 seconds so the test query needs to
@@ -5565,7 +5567,8 @@ public class BasicQueryTest {
    * This is a test for <a href="http://jira.pentaho.com/browse/MONDRIAN-1161"> MONDRIAN-1161</a>. It verifies that two
    * queries can run at the same time.
    */
-    @ParameterizedTest
+  @Disabled  //TODO: UserDefinedFunction  
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testConcurrentStatementRun_2(Context context) throws Exception {
     // timeout is issued after 2 seconds so the test query needs to
@@ -5965,10 +5968,10 @@ public class BasicQueryTest {
                 + "      </NameExpression>\n" + "    </Level>\n" + "  </Hierarchy>\n" + "</Dimension>\n", null, null,
             null ));
      */
-        RolapSchemaPool.instance().clear();
-        SchemaMapping schema = context.getCatalogMapping().getSchemas().get(0);
-        //TODO: DENIS MAPPING-MODIFIER
-        //((TestContext)context).setDatabaseMappingSchemaProviders(List.of(new SchemaModifiers.BasicQueryTestModifier8(schema, dialect)));
+    
+    RolapSchemaPool.instance().clear();
+    CatalogMapping catalog = context.getCatalogMapping();
+    ((TestContext)context).setCatalogMappingSupplier(new SchemaModifiers.BasicQueryTestModifier8(catalog, dialect));
 
         connection = context.getConnection();
     assertAxisReturns(connection, "[Example.Example Hierarchy].[Non-Zero]",

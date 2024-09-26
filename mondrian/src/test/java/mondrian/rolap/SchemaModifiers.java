@@ -6003,7 +6003,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -6238,7 +6238,7 @@ public class SchemaModifiers {
         public BasicQueryTestModifier29(CatalogMapping catalog) {
             super(catalog);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -9237,7 +9237,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -9984,7 +9984,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10012,7 +10012,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10043,7 +10043,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10074,7 +10074,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10102,7 +10102,7 @@ public class SchemaModifiers {
         public UdfTestModifier16(CatalogMapping catalog) {
             super(catalog);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10135,7 +10135,7 @@ public class SchemaModifiers {
             this.functionClass = functionClass;
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10162,7 +10162,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10189,7 +10189,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10214,7 +10214,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10241,7 +10241,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10271,7 +10271,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10320,7 +10320,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10385,7 +10385,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -10447,7 +10447,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();
@@ -12747,7 +12747,7 @@ public class SchemaModifiers {
             super(catalog);
         }
 
-        /* TODO: DENIS MAPPING-MODIFIER
+        /* TODO: UserDefinedFunction
         @Override
         protected List<MappingUserDefinedFunction> schemaUserDefinedFunctions(MappingSchema schema) {
             List<MappingUserDefinedFunction> result = new ArrayList<>();

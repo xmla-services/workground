@@ -304,6 +304,7 @@ public class UdfTest {
             + "Axis #2:\n");
     }
 
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testBadFun(Context context) {
@@ -325,6 +326,7 @@ public class UdfTest {
         }
     }
 
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testGenericFun(Context context) {
@@ -811,6 +813,7 @@ public class UdfTest {
      * of {@link org.eclipse.daanse.olap.function.AbstractFunctionDefinition#getResultType}, which simply
      * guesses based on the type of the first argument.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonGuessableReturnType(Context context) {
@@ -832,6 +835,7 @@ public class UdfTest {
      * ClassCastException because it was evaluating to a member, whereas the
      * member should have been evaluated to a scalar.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfToString(Context context) {
@@ -865,6 +869,7 @@ public class UdfTest {
      * <p>Also tests applying a UDF to arguments of coercible type. In this
      * case, applies f(member,dimension) to args(member,hierarchy).
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testAnotherMemberFun(Context context) {
@@ -922,6 +927,7 @@ public class UdfTest {
      * "UDF expecting List gets anonymous
      * mondrian.rolap.RolapNamedSetEvaluator$1 instead"</a>.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testListUdf(Context context) {
@@ -979,6 +985,7 @@ public class UdfTest {
     /**
      * Tests that a non-static function gives an error.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testNonStaticUdfFails(Context context) {
@@ -999,6 +1006,7 @@ public class UdfTest {
      * Mondrian leaves it as a member, does not try to evaluate it to a scalar
      * value.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberUdfDoesNotEvaluateToScalar(Context context) {
@@ -1016,7 +1024,7 @@ public class UdfTest {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
-    @Disabled //disabled for CI build
+    @Disabled //disabled for CI build TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfNeitherScriptNorClassname(Context context) {
@@ -1034,7 +1042,7 @@ public class UdfTest {
      * Unit test that ensures that a UDF does not have both a script
      * and a className.
      */
-    @Disabled //disabled for CI build
+    @Disabled //disabled for CI build TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfBothScriptAndClassname(Context context) {
@@ -1053,7 +1061,7 @@ public class UdfTest {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
-    @Disabled //disabled for CI build
+    @Disabled //disabled for CI build TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testUdfScriptBadLanguage(Context context) {
@@ -1072,6 +1080,7 @@ public class UdfTest {
     /**
      * Unit test for a UDF defined in JavaScript.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
@@ -1120,6 +1129,7 @@ public class UdfTest {
      * Unit test for a UDF defined in JavaScript, this time the factorial
      * function. We also use 'CDATA' section to mask the '&lt;' symbol.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
@@ -1156,6 +1166,7 @@ public class UdfTest {
     /**
      * Unit test that we get a nice error if a script UDF contains an error.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)

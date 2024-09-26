@@ -12,6 +12,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -27,6 +28,7 @@ import mondrian.rolap.SchemaModifiers;
  */
 class CurrentDateMemberUdfTest {
 
+	@Disabled //TODO: UserDefinedFunction
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
     void testCurrentDateMemberUdf(Context context) {

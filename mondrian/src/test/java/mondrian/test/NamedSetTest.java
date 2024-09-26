@@ -22,11 +22,21 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.rolap.mapping.api.model.CalculatedMemberMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.NamedSetMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CalculatedMemberPropertyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.NamedSetMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -862,18 +872,16 @@ class NamedSetTest {
             public TestBadNamedSetModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            /* TODO: DENIS MAPPING-MODIFIER
-            @Override
-            protected List<MappingNamedSet> schemaNamedSets(MappingSchema schema) {
-                List<MappingNamedSet> result = new ArrayList<>();
+            
+            protected List<? extends NamedSetMapping> schemaNamedSets(SchemaMapping schema) {
+                List<NamedSetMapping> result = new ArrayList<>();
                 result.addAll(super.schemaNamedSets(schema));
-                result.add(NamedSetRBuilder.builder()
-                    .name("Bad")
-                    .formula("{[Store].[USA].[WA].Children}}")
+                result.add(NamedSetMappingImpl.builder()
+                    .withName("Bad")
+                    .withFormula("{[Store].[USA].[WA].Children}}")
                     .build());
-                return result;
-            }
-            */
+                return result;                
+            }            
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1315,23 +1323,19 @@ class NamedSetTest {
         public NamedSetsInCubeModifier(CatalogMapping catalogMapping) {
             super(catalogMapping);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
-        protected List<MappingNamedSet> schemaNamedSets(MappingSchema mappingSchemaOriginal) {
-            List<MappingNamedSet> result = new ArrayList<>();
-            result.addAll(super.schemaNamedSets(mappingSchemaOriginal));
-            result.add(NamedSetRBuilder.builder()
-                .name("CA Cities")
-                .formula("{[Store].[USA].[CA].Children}")
-                .build());
-            result.add(NamedSetRBuilder.builder()
-                .name("Top CA Cities")
-                .formulaElement(FormulaRBuilder.builder()
-                    .cdata("TopCount([CA Cities], 2, [Measures].[Unit Sales])")
-                    .build())
-                .build());
-            return result;
-        }
-        */
+        protected List<? extends NamedSetMapping> schemaNamedSets(SchemaMapping schema) {
+            List<NamedSetMapping> result = new ArrayList<>();
+            result.addAll(super.schemaNamedSets(schema));
+            result.add(NamedSetMappingImpl.builder()
+                    .withName("CA Cities")
+                    .withFormula("{[Store].[USA].[CA].Children}")
+                    .build());
+                result.add(NamedSetMappingImpl.builder()
+                    .withName("Top CA Cities")
+                    .withFormula("TopCount([CA Cities], 2, [Measures].[Unit Sales])")
+                    .build());
+                return result;
+        }    
     }
 
 
@@ -1342,33 +1346,24 @@ class NamedSetTest {
         public NamedSetsInCubeAndSchemaModifier(CatalogMapping catalogMapping) {
             super(catalogMapping);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
-        protected List<MappingNamedSet> schemaNamedSets(MappingSchema mappingSchemaOriginal) {
-            List<MappingNamedSet> result = new ArrayList<>();
-            result.addAll(super.schemaNamedSets(mappingSchemaOriginal));
-            result.add(NamedSetRBuilder.builder()
-                .name("CA Cities")
-                .formula("{[Store].[USA].[CA].Children}")
-                .build());
-            result.add(NamedSetRBuilder.builder()
-                .name("Top CA Cities")
-                .formulaElement(FormulaRBuilder.builder()
-                    .cdata("TopCount([CA Cities], 2, [Measures].[Unit Sales])")
-                    .build())
-                .build());
-            //result.add(NamedSetRBuilder.builder()
-            //    .name("CA Cities")
-            //    .formula("{[Store].[USA].[WA].Children}")
-            //    .build());
-            result.add(NamedSetRBuilder.builder()
-                .name("Top USA Stores")
-                .formulaElement(FormulaRBuilder.builder()
-                    .cdata("TopCount(Descendants([Store].[USA]), 7)")
-                    .build())
-                .build());
-            return result;
+        
+        protected List<? extends NamedSetMapping> schemaNamedSets(SchemaMapping schema) {
+            List<NamedSetMapping> result = new ArrayList<>();
+            result.addAll(super.schemaNamedSets(schema));
+            result.add(NamedSetMappingImpl.builder()
+                    .withName("CA Cities")
+                    .withFormula("{[Store].[USA].[CA].Children}")
+                    .build());
+                result.add(NamedSetMappingImpl.builder()
+                    .withName("Top CA Cities")
+                    .withFormula("TopCount([CA Cities], 2, [Measures].[Unit Sales])")
+                    .build());
+                result.add(NamedSetMappingImpl.builder()
+                        .withName("Top USA Stores")
+                        .withFormula("TopCount(Descendants([Store].[USA]), 7)")
+                        .build());
+                return result;
         }
-        */
     }
 
 
@@ -1380,45 +1375,42 @@ class NamedSetTest {
         public MixedNamedSetSchemaModifier(CatalogMapping catalogMapping) {
             super(catalogMapping);
         }
-        /* TODO: DENIS MAPPING-MODIFIER
-        protected List<MappingNamedSet> cubeNamedSets(MappingCube cube) {
-            List<MappingNamedSet> result = new ArrayList<>();
+        
+        protected List<? extends NamedSetMapping> cubeNamedSets(CubeMapping cube) {
+            List<NamedSetMapping> result = new ArrayList<>();
             result.addAll(super.cubeNamedSets(cube));
-            if ("Sales".equals(cube.name())) {
-                result.add(NamedSetRBuilder.builder()
-                    .name("Top Products In CA")
-                    .formulaElement(FormulaRBuilder.builder()
-                        .cdata("TopCount([Product].[Product Department].MEMBERS, 3, ([Time].[1997].[Q3], [Measures].[CA City Sales]))")
-                        .build())
+            if ("Sales".equals(cube.getName())) {
+                result.add(NamedSetMappingImpl.builder()
+                    .withName("Top Products In CA")
+                    .withFormula("TopCount([Product].[Product Department].MEMBERS, 3, ([Time].[1997].[Q3], [Measures].[CA City Sales]))")
                     .build());
-                result.add(NamedSetRBuilder.builder()
-                    .name("CA Cities")
-                    .formula("{[Store].[USA].[CA].Children}")
+                result.add(NamedSetMappingImpl.builder()
+                    .withName("CA Cities")
+                    .withFormula("{[Store].[USA].[CA].Children}")
                     .build());
             }
             return result;
         }
 
-        protected List<MappingCalculatedMember> cubeCalculatedMembers(MappingCube cube) {
-            List<MappingCalculatedMember> result = new ArrayList<>();
+        protected List<? extends CalculatedMemberMapping> cubeCalculatedMembers(CubeMapping cube) {
+            List<CalculatedMemberMapping> result = new ArrayList<>();
             result.addAll(super.cubeCalculatedMembers(cube));
-            if ("Sales".equals(cube.name())) {
-                result.add(CalculatedMemberRBuilder.builder()
-                    .name("CA City Sales")
-                    .dimension("Measures")
-                    .visible(false)
-                    .formula("Aggregate([CA Cities], [Measures].[Unit Sales])")
-                    .calculatedMemberProperties(List.of(
-                        CalculatedMemberPropertyRBuilder.builder()
-                            .name("FORMAT_STRING")
-                            .value("$#,##0.0")
+            if ("Sales".equals(cube.getName())) {
+                result.add(CalculatedMemberMappingImpl.builder()
+                    .withName("CA City Sales")
+                    //.withDimension("Measures")
+                    .withVisible(false)
+                    .withFormula("Aggregate([CA Cities], [Measures].[Unit Sales])")
+                    .withCalculatedMemberProperties(List.of(
+                    	CalculatedMemberPropertyMappingImpl.builder()
+                            .withName("FORMAT_STRING")
+                            .withValue("$#,##0.0")
                             .build()
                     ))
                     .build());
             }
             return result;
         }
-        */
     }
 
 
