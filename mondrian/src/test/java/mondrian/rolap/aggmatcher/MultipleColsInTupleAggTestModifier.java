@@ -13,8 +13,30 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationColumnNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationMeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinedQueryElementMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MemberPropertyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class MultipleColsInTupleAggTestModifier extends PojoMappingModifier {
 
@@ -74,147 +96,152 @@ public class MultipleColsInTupleAggTestModifier extends PojoMappingModifier {
            + "</Cube>";
 
      */
-    /* TODO: DENIS MAPPING-MODIFIER  modifiers
+
     @Override
-    protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
-        result.add(CubeRBuilder.builder()
-            .name("Fact")
-            .fact(new TableR("fact",
-                List.of(),
+    protected List<? extends CubeMapping> schemaCubes(SchemaMapping schemaMappingOriginal) {
+        List<CubeMapping> result = new ArrayList<>();
+        result.addAll(super.schemaCubes(schemaMappingOriginal));
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("Fact")
+            .withQuery(TableQueryMappingImpl.builder().withName("fact").withAggregationTables(
                 List.of(
-                    AggNameRBuilder.builder()
-                        .name("test_lp_xxx_fact")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("fact_count")
+                    AggregationNameMappingImpl.builder()
+                        .withName("test_lp_xxx_fact")
+                        .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                            .withColumn("fact_count")
                             .build())
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .column("amount")
-                                .name("[Measures].[Total]")
+                        .withAggregationMeasures(List.of(
+                            AggregationMeasureMappingImpl.builder()
+                                .withColumn("amount")
+                                .withName("[Measures].[Total]")
                                 .build()
                         ))
-                        .aggLevels(List.of(
-                            AggLevelRBuilder.builder()
-                                .column("category")
-                                .name("[Product].[Category]")
+                        .withAggregationLevels(List.of(
+                            AggregationLevelMappingImpl.builder()
+                                .withColumn("category")
+                                .withName("[Product].[Category]")
                                 .build(),
-                            AggLevelRBuilder.builder()
-                                .column("product_category")
-                                .name("[Product].[Product Category]")
+                            AggregationLevelMappingImpl.builder()
+                                .withColumn("product_category")
+                                .withName("[Product].[Product Category]")
                                 .build()
                         ))
                         .build(),
-                    AggNameRBuilder.builder()
-                        .name("test_lp_xx2_fact")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("fact_count")
+                    AggregationNameMappingImpl.builder()
+                        .withName("test_lp_xx2_fact")
+                        .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                            .withColumn("fact_count")
                             .build())
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .column("amount")
-                                .name("[Measures].[Total]")
+                        .withAggregationMeasures(List.of(
+                            AggregationMeasureMappingImpl.builder()
+                                .withColumn("amount")
+                                .withName("[Measures].[Total]")
                                 .build()
                         ))
-                        .aggLevels(List.of(
-                            AggLevelRBuilder.builder()
-                                .column("prodname")
-                                .name("[Product].[Product Name]")
-                                .collapsed(false)
+                        .withAggregationLevels(List.of(
+                            AggregationLevelMappingImpl.builder()
+                                .withColumn("prodname")
+                                .withName("[Product].[Product Name]")
+                                .withCollapsed(false)
                                 .build()
                         ))
                         .build()
-                )))
+                )).build())
 
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("Store")
-                    .foreignKey("store_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store_csv"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .column("value")
-                                    .name("Store Value")
-                                    .uniqueMembers(true)
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                	.withOverrideDimensionName("Store")
+                    .withForeignKey("store_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                        .withName("Store")
+                        .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("store_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("store_csv").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withColumn("value")
+                                    .withName("Store Value")
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
 
-                    ))
+                    )).build())
                     .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("Product")
-                    .foreignKey("prod_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("prod_id")
-                            .primaryKeyTable("product_csv")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "prod_cat", new TableR("product_csv")),
-                                    new JoinedQueryElementR("product_cat", "prod_cat",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "cat", new TableR("product_cat")),
-                                            new JoinedQueryElementR(null, "cat", new TableR("cat"))
-                                        )
-                                    )
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Category")
-                                    .table("cat")
-                                    .column("cat")
-                                    .ordinalColumn("ord")
-                                    .captionColumn("cap")
-                                    .nameColumn("name3")
-                                    .uniqueMembers(false)
-                                    .type(TypeEnum.NUMERIC)
+                DimensionConnectorMappingImpl.builder()
+                	.withOverrideDimensionName("Product")
+                    .withForeignKey("prod_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                        .withName("Product")
+                        .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("prod_id")
+                            .withPrimaryKeyTable("product_csv")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder().withKey("prod_cat")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("product_csv").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder().withAlias("product_cat").withKey("prod_cat")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder().withKey("cat")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("product_cat").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder().withKey("cat")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("cat").build())
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Category")
+                                    .withTable("cat")
+                                    .withColumn("cat")
+                                    .withOrdinalColumn("ord")
+                                    .withCaptionColumn("cap")
+                                    .withNameColumn("name3")
+                                    .withUniqueMembers(false)
+                                    .withType(DataType.NUMERIC)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("Product Category")
-                                    .table("product_cat")
-                                    .column("name2")
-                                    .ordinalColumn("ord")
-                                    .captionColumn("cap")
-                                    .uniqueMembers(false)
+                                LevelMappingImpl.builder()
+                                    .withName("Product Category")
+                                    .withTable("product_cat")
+                                    .withColumn("name2")
+                                    .withOrdinalColumn("ord")
+                                    .withCaptionColumn("cap")
+                                    .withUniqueMembers(false)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("Product Name")
-                                    .table("product_csv")
-                                    .column("name1")
-                                    .uniqueMembers(true)
-                                    .properties(List.of(
-                                        PropertyRBuilder.builder()
-                                        .name("Product Color")
+                                LevelMappingImpl.builder()
+                                    .withName("Product Name")
+                                    .withTable("product_csv")
+                                    .withColumn("name1")
+                                    .withUniqueMembers(true)
+                                    .withMemberProperties(List.of(
+                                    	MemberPropertyMappingImpl.builder()
+                                        .withName("Product Color")
                                         //.table("product_csv")
-                                        .column("color")
+                                        .withColumn("color")
                                         .build()
                                     ))
                                     .build()
                             ))
                             .build()
 
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Total")
-                    .column("amount")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Total")
+                    .withColumn("amount")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
         return result;
     }
-    */
-
 }
