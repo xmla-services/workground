@@ -13,8 +13,38 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationColumnNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationMeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinedQueryElementMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SchemaMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class SpeciesNonCollapsedAggTestModifier extends PojoMappingModifier {
 
@@ -63,144 +93,151 @@ public class SpeciesNonCollapsedAggTestModifier extends PojoMappingModifier {
         + "  </Role>\n"
         + "</Schema>";
      */
-    /* TODO: DENIS MAPPING-MODIFIER  modifiers
-    protected MappingSchema modifyMappingSchema(MappingSchema mappingSchemaOriginal) {
-        return SchemaRBuilder.builder()
-            .name("Testmart")
-            .dimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("Animal")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .name("Animals")
-                            .hasAll(true)
-                            .allMemberName("All Animals")
-                            .primaryKey("SPECIES_ID")
-                            .primaryKeyTable("DIM_SPECIES")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "GENUS_ID", new TableR("DIM_SPECIES")),
-                                    new JoinedQueryElementR("DIM_GENUS", "GENUS_ID",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "FAMILY_ID", new TableR("DIM_GENUS")),
-                                            new JoinedQueryElementR(null, "FAMILY_ID", new TableR("DIM_FAMILY"))
-                                        ))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Family")
-                                    .table("DIM_FAMILY")
-                                    .column("FAMILY_ID")
-                                    .nameColumn("FAMILY_NAME")
-                                    .uniqueMembers(true)
-                                    .type(TypeEnum.NUMERIC)
-                                    .approxRowCount("2")
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Genus")
-                                    .table("DIM_GENUS")
-                                    .column("GENUS_ID")
-                                    .nameColumn("GENUS_NAME")
-                                    .uniqueMembers(true)
-                                    .type(TypeEnum.NUMERIC)
-                                    .approxRowCount("4")
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .name("Species")
-                                    .table("DIM_SPECIES")
-                                    .column("SPECIES_ID")
-                                    .nameColumn("SPECIES_NAME")
-                                    .uniqueMembers(true)
-                                    .type(TypeEnum.NUMERIC)
-                                    .approxRowCount("8")
+
+    @Override
+    protected SchemaMapping schema(SchemaMapping schemaMappingOriginal) {
+    	HierarchyMappingImpl animalsHierarchy;
+        StandardDimensionMappingImpl animal = StandardDimensionMappingImpl.builder()
+        .withName("Animal")
+        .withHierarchies(List.of(
+        	animalsHierarchy = HierarchyMappingImpl.builder()
+                .withName("Animals")
+                .withHasAll(true)
+                .withAllMemberName("All Animals")
+                .withPrimaryKey("SPECIES_ID")
+                .withPrimaryKeyTable("DIM_SPECIES")
+                .withQuery(JoinQueryMappingImpl.builder()
+                		.withLeft(JoinedQueryElementMappingImpl.builder().withKey("GENUS_ID")
+                				.withQuery(TableQueryMappingImpl.builder().withName("DIM_SPECIES").build())
+                				.build())
+                		.withRight(JoinedQueryElementMappingImpl.builder().withAlias("DIM_GENUS").withKey("GENUS_ID")
+                                .withQuery(JoinQueryMappingImpl.builder()
+                                		.withLeft(JoinedQueryElementMappingImpl.builder().withKey("FAMILY_ID")
+                                				.withQuery(TableQueryMappingImpl.builder().withName("DIM_GENUS").build())
+                                				.build())
+                                		.withRight(JoinedQueryElementMappingImpl.builder().withKey("FAMILY_ID")
+                                				.withQuery(TableQueryMappingImpl.builder().withName("DIM_FAMILY").build())
+                                				.build())
+                                		.build())
+
+                				.build())
+                		.build())
+
+                .withLevels(List.of(
+                    LevelMappingImpl.builder()
+                        .withName("Family")
+                        .withTable("DIM_FAMILY")
+                        .withColumn("FAMILY_ID")
+                        .withNameColumn("FAMILY_NAME")
+                        .withUniqueMembers(true)
+                        .withType(DataType.NUMERIC)
+                        .withApproxRowCount("2")
+                        .build(),
+                    LevelMappingImpl.builder()
+                        .withName("Genus")
+                        .withTable("DIM_GENUS")
+                        .withColumn("GENUS_ID")
+                        .withNameColumn("GENUS_NAME")
+                        .withUniqueMembers(true)
+                        .withType(DataType.NUMERIC)
+                        .withApproxRowCount("4")
+                        .build(),
+                    LevelMappingImpl.builder()
+                        .withName("Species")
+                        .withTable("DIM_SPECIES")
+                        .withColumn("SPECIES_ID")
+                        .withNameColumn("SPECIES_NAME")
+                        .withUniqueMembers(true)
+                        .withType(DataType.NUMERIC)
+                        .withApproxRowCount("8")
+                        .build()
+                ))
+                .build()
+        ))
+        .build();
+
+        MeasureMappingImpl populationMeasure = MeasureMappingImpl.builder()
+        .withName("Population")
+        .withColumn("POPULATION")
+        .withAggregatorType(MeasureAggregatorType.SUM)
+        .build();
+        PhysicalCubeMappingImpl testCube;
+
+        return SchemaMappingImpl.builder()
+        .withName("Testmart")
+        .withCubes(List.of(
+        	testCube = PhysicalCubeMappingImpl.builder()
+                .withName("Test")
+                .withDefaultMeasure(populationMeasure)
+                .withQuery(TableQueryMappingImpl.builder().withName("species_mart").withAggregationTables(
+                    List.of(
+                        AggregationNameMappingImpl.builder()
+                            .withName("AGG_SPECIES_MART")
+                            .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                                .withColumn("FACT_COUNT")
+                                .build())
+                            .withAggregationMeasures(List.of(
+                            	AggregationMeasureMappingImpl.builder()
+                                    .withName("Measures.[Population]")
+                                    .withColumn("POPULATION")
+                                    .build()
+                            ))
+                            .withAggregationLevels(List.of(
+                                AggregationLevelMappingImpl.builder()
+                                    .withName("[Animal.Animals].[Genus]")
+                                    .withColumn("GEN_ID")
+                                    .withCollapsed(false)
                                     .build()
                             ))
                             .build()
-                    ))
-                    .build()
-            ))
-            .cubes(List.of(
-                CubeRBuilder.builder()
-                    .name("Test")
-                    .defaultMeasure("Population")
-                    .fact(new TableR("species_mart",
-                        List.of(),
-                        List.of(
-                            AggNameRBuilder.builder()
-                                .name("AGG_SPECIES_MART")
-                                .aggFactCount(AggColumnNameRBuilder.builder()
-                                    .column("FACT_COUNT")
-                                    .build())
-                                .aggMeasures(List.of(
-                                    AggMeasureRBuilder.builder()
-                                        .name("Measures.[Population]")
-                                        .column("POPULATION")
-                                        .build()
-                                ))
-                                .aggLevels(List.of(
-                                    AggLevelRBuilder.builder()
-                                        .name("[Animal.Animals].[Genus]")
-                                        .column("GEN_ID")
-                                        .collapsed(false)
+                    )).build())
+                .withDimensionConnectors(List.of(
+                    DimensionConnectorMappingImpl.builder()
+                        .withOverrideDimensionName("Animal")
+                        .withDimension(animal)
+                        .withForeignKey("SPECIES_ID")
+                        .build()
+                ))
+                .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(populationMeasure)).build()))
+                .build()
+        ))
+        .withAccessRoles(List.of(
+            AccessRoleMappingImpl.builder()
+                .withName("Test role")
+                .withAccessSchemaGrants(List.of(
+                	AccessSchemaGrantMappingImpl.builder()
+                        .withAccess(AccessSchema.NONE)
+                        .withCubeGrant(List.of(
+                        	AccessCubeGrantMappingImpl.builder()
+                        		.withCube(testCube)
+                                .withAccess(AccessCube.ALL)
+                                .withHierarchyGrants(List.of(
+                                	AccessHierarchyGrantMappingImpl.builder()
+                                        .withHierarchy(animalsHierarchy)
+                                        .withAccess(AccessHierarchy.CUSTOM)
+                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                        .withMemberGrants(List.of(
+                                        	AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Animal.Animals].[Family].[Loricariidae]")
+                                                .withAccess(AccessMember.ALL)
+                                                .build(),
+                                            AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Animal.Animals].[Family].[Cichlidae]")
+                                                .withAccess(AccessMember.ALL)
+                                                .build(),
+                                            AccessMemberGrantMappingImpl.builder()
+                                                .withMember("[Animal.Animals].[Family].[Cyprinidae]")
+                                                .withAccess(AccessMember.NONE)
+                                                .build()
+                                        ))
                                         .build()
                                 ))
                                 .build()
-                        )))
-                    .dimensionUsageOrDimensions(List.of(
-                        DimensionUsageRBuilder.builder()
-                            .name("Animal")
-                            .source("Animal")
-                            .foreignKey("SPECIES_ID")
-                            .build()
-                    ))
-                    .measures(List.of(
-                        MeasureRBuilder.builder()
-                            .name("Population")
-                            .column("POPULATION")
-                            .aggregator("sum")
-                            .build()
-                    ))
-                    .build()
-            ))
-            .roles(List.of(
-                RoleRBuilder.builder()
-                    .name("Test role")
-                    .schemaGrants(List.of(
-                        SchemaGrantRBuilder.builder()
-                            .access(AccessEnum.NONE)
-                            .cubeGrants(List.of(
-                                CubeGrantRBuilder.builder()
-                                    .cube("Test")
-                                    .access("all")
-                                    .hierarchyGrants(List.of(
-                                        HierarchyGrantRBuilder.builder()
-                                            .hierarchy("[Animal.Animals]")
-                                            .access(AccessEnum.CUSTOM)
-                                            .rollupPolicy("partial")
-                                            .memberGrants(List.of(
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Animal.Animals].[Family].[Loricariidae]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Animal.Animals].[Family].[Cichlidae]")
-                                                    .access(MemberGrantAccessEnum.ALL)
-                                                    .build(),
-                                                MemberGrantRBuilder.builder()
-                                                    .member("[Animal.Animals].[Family].[Cyprinidae]")
-                                                    .access(MemberGrantAccessEnum.NONE)
-                                                    .build()
-                                            ))
-                                            .build()
-                                    ))
-                                    .build()
-                            ))
-                            .build()
-                    ))
-                    .build()
-            ))
-            .build();
-    }
-    */
+                        ))
+                        .build()
+                ))
+                .build()
+        ))
+        .build();
+}
 }

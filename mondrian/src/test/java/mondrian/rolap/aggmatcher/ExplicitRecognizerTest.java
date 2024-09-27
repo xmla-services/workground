@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.MemberPropertyMapping;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationColumnNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationExcludeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationForeignKeyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelPropertyMappingImpl;
@@ -523,7 +524,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             "the_year",
             "quarter",
             "the_month", null, null,  "month_of_year",
-            List.of(AggregationLevelPropertyMappingImpl.builder()
+            List.of(MemberPropertyMappingImpl.builder()
                 .withName("aProperty")
                 .withColumn("fiscal_period")
                 .build()));
@@ -935,16 +936,16 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
     public static void setupMultiColDimCube(
         Context context, List<AggregationTableMappingImpl> aggTables, String yearCols, String qtrCols, String monthCols,
-        String monthCaptionCol, String monthOrdinalCol, String monthNameCol, List<AggregationLevelPropertyMappingImpl> monthProp)
+        String monthCaptionCol, String monthOrdinalCol, String monthNameCol, List<MemberPropertyMappingImpl> monthProp)
     {
         setupMultiColDimCube(context,
-            aggTables, yearCols, qtrCols, monthCols, monthCaptionCol, monthOrdinalCol, monthNameCol, monthProp, "Unit Sales");
+            aggTables, yearCols, qtrCols, monthCols, monthCaptionCol, monthOrdinalCol, monthNameCol, monthProp);
     }
 
     public static void setupMultiColDimCube(
         Context context, List<AggregationTableMappingImpl> aggTables, String yearCol, String qtrCol, String monthCol,
         String monthCaptionCol, String monthOrdinalCol, String monthNameCol,
-        List<AggregationLevelPropertyMappingImpl> monthProp, String defaultMeasure)
+        List<MemberPropertyMappingImpl> monthProp, String defaultMeasure)
     {
         class ExplicitRecognizerTestModifierInner extends ExplicitRecognizerTestModifier {
 
@@ -952,9 +953,8 @@ class ExplicitRecognizerTest extends AggTableTestCase {
                 super(catalog);
             }
 
-        	 /* TODO: DENIS MAPPING-MODIFIER  modifiers
             @Override
-            protected List<MappingProperty> getMonthProp() {
+            protected List<MemberPropertyMappingImpl> getMonthProp() {
                 return monthProp;
             }
 
@@ -975,17 +975,17 @@ class ExplicitRecognizerTest extends AggTableTestCase {
 
 
             @Override
-            protected List<MappingAggTable> getAggTables() {
+            protected List<AggregationTableMappingImpl> getAggTables() {
                 return aggTables;
             }
 
             @Override
-            protected List<MappingAggExclude> getAggExcludes() {
+            protected List<AggregationExcludeMappingImpl> getAggExcludes() {
                 return List.of();
             }
 
             @Override
-            protected String getdefaultMeasure() {
+            protected String getDefaultMeasure() {
                 return defaultMeasure;
             }
 
@@ -1003,8 +1003,6 @@ class ExplicitRecognizerTest extends AggTableTestCase {
             protected String getYearCol() {
                 return yearCol;
             }
-            */
-
         }
 
         withSchema(context, ExplicitRecognizerTestModifierInner::new);
