@@ -13,8 +13,23 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.DataType;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class Checkin_7641Modifier  extends PojoMappingModifier {
 
@@ -53,105 +68,107 @@ public class Checkin_7641Modifier  extends PojoMappingModifier {
             + "</Cube>";
 
      */
-    /* TODO: DENIS MAPPING-MODIFIER  modifiers
+
     @Override
-    protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
-        result.add(CubeRBuilder.builder()
-            .name("ImplicitMember")
-            .fact(new TableR("checkin7641"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("Geography")
-                    .foreignKey("cust_loc_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .allMemberName("All Regions")
-                            .primaryKey("cust_loc_id")
-                            .relation(new TableR("geography7641"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .column("state_cd")
-                                    .name("State")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+    protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+        List<CubeMapping> result = new ArrayList<>();
+        result.addAll(super.schemaCubes(schema));
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("ImplicitMember")
+            .withQuery(TableQueryMappingImpl.builder().withName("checkin7641").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                	.withOverrideDimensionName("Geography")
+                    .withForeignKey("cust_loc_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("Geography")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withAllMemberName("All Regions")
+                            .withPrimaryKey("cust_loc_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("geography7641").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withColumn("state_cd")
+                                    .withName("State")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .column("city_nm")
-                                    .name("City")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withColumn("city_nm")
+                                    .withName("City")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .column("zip_cd")
-                                    .name("Zip Code")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withColumn("zip_cd")
+                                    .withName("Zip Code")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    )).build())
+                    .build(),
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("Product")
+                    .withForeignKey("prod_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                        .withName("Product")
+                        .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(false)
+                            .withDefaultMember("Class2")
+                            .withPrimaryKey("prod_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("prod7611").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withColumn("class")
+                                    .withName("Class")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
+                                    .build(),
+                                LevelMappingImpl.builder()
+                                    .withColumn("brand")
+                                    .withName("Brand")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
+                                    .build(),
+                                LevelMappingImpl.builder()
+                                    .withColumn("item")
+                                    .withName("Item")
+                                    .withType(DataType.STRING)
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
 
-                    ))
-                    .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("Product")
-                    .foreignKey("prod_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(false)
-                            .defaultMember("Class2")
-                            .primaryKey("prod_id")
-                            .relation(new TableR("prod7611"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .column("class")
-                                    .name("Class")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .column("brand")
-                                    .name("Brand")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
-                                    .build(),
-                                LevelRBuilder.builder()
-                                    .column("item")
-                                    .name("Item")
-                                    .type(TypeEnum.STRING)
-                                    .uniqueMembers(true)
-                                    .build()
-                            ))
-                            .build()
-
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("First Measure")
-                    .column("first")
-                    .aggregator("sum")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("First Measure")
+                    .withColumn("first")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Requested Value")
-                    .column("request_value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+                MeasureMappingImpl.builder()
+                    .withName("Requested Value")
+                    .withColumn("request_value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Shipped Value")
-                    .column("shipped_value")
-                    .aggregator("sum")
-                    .formatString("#,###")
+                MeasureMappingImpl.builder()
+                    .withName("Shipped Value")
+                    .withColumn("shipped_value")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build()
-            ))
+            )).build()))
             .build());
         return result;
-    }
-    */
 
+    }
 }

@@ -13,8 +13,26 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationColumnNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationForeignKeyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationMeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class BUG_1541077Modifier extends PojoMappingModifier {
 
@@ -60,101 +78,104 @@ public class BUG_1541077Modifier extends PojoMappingModifier {
                    + "</Cube>";
 
      */
-    /* TODO: DENIS MAPPING-MODIFIER
-    @Override
-    protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
-        result.add(CubeRBuilder.builder()
-            .name("Cheques")
-            .fact(new TableR("cheques",
-                List.of(),
-                List.of(
-                    AggNameRBuilder.builder()
-                        .name("agg_lp_xxx_cheques")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("FACT_COUNT")
-                            .build())
-                        .aggForeignKeys(List.of(
-                            AggForeignKeyRBuilder.builder()
-                                .factColumn("store_id")
-                                .aggColumn("store_id")
-                                .build()
-                        ))
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .name("[Measures].[Avg Amount]")
-                                .column("amount_AVG")
-                                .build()
-                        ))
-                        .build()
-                )))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("StoreX")
-                    .foreignKey("store_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("store_id")
-                            .relation(new TableR("store_x"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Value")
-                                    .column("value")
-                                    .uniqueMembers(true)
+
+    protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+        List<CubeMapping> result = new ArrayList<>();
+        result.addAll(super.schemaCubes(schema));
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("Cheques")
+            .withQuery(TableQueryMappingImpl.builder().withName("cheques")
+            		.withAggregationTables(List.of(
+                            AggregationNameMappingImpl.builder()
+                            .withName("agg_lp_xxx_cheques")
+                            .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                                .withColumn("FACT_COUNT")
+                                .build())
+                            .withAggregationForeignKeys(List.of(
+                            	AggregationForeignKeyMappingImpl.builder()
+                                    .withFactColumn("store_id")
+                                    .withAggregationColumn("store_id")
+                                    .build()
+                            ))
+                            .withAggregationMeasures(List.of(
+                                AggregationMeasureMappingImpl.builder()
+                                    .withName("[Measures].[Avg Amount]")
+                                    .withColumn("amount_AVG")
                                     .build()
                             ))
                             .build()
-                    ))
-                    .build(),
-                PrivateDimensionRBuilder.builder()
-                    .name("ProductX")
-                    .foreignKey("prod_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .hasAll(true)
-                            .primaryKey("prod_id")
-                            .relation(new TableR("product_x"))
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("Store Name")
-                                    .column("name")
-                                    .uniqueMembers(true)
+            		))
+            		.build())
+            .withDimensionConnectors(List.of(
+            	DimensionConnectorMappingImpl.builder()
+            		.withOverrideDimensionName("StoreX")
+                    .withForeignKey("store_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("StoreX")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("store_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("store_x").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Store Value")
+                                    .withColumn("value")
+                                    .withUniqueMembers(true)
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
+                    .build(),
+                DimensionConnectorMappingImpl.builder()
+                    .withOverrideDimensionName("ProductX")
+                    .withForeignKey("prod_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                        .withName("StoreX")
+                        .withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withHasAll(true)
+                            .withPrimaryKey("prod_id")
+                            .withQuery(TableQueryMappingImpl.builder().withName("product_x").build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("Store Name")
+                                    .withColumn("name")
+                                    .withUniqueMembers(true)
+                                    .build()
+                            ))
+                            .build()
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Sales Count")
-                    .column("prod_id")
-                    .aggregator("count")
-                    .formatString("#,###")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Sales Count")
+                    .withColumn("prod_id")
+                    .withAggregatorType(MeasureAggregatorType.COUNT)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Store Count")
-                    .column("store_id")
-                    .aggregator("distinct-count")
-                    .formatString("#,###")
+                MeasureMappingImpl.builder()
+                    .withName("Store Count")
+                    .withColumn("store_id")
+                    .withAggregatorType(MeasureAggregatorType.DICTINCT_COUNT)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Total Amount")
-                    .column("amount")
-                    .aggregator("sum")
-                    .formatString("#,###")
+                MeasureMappingImpl.builder()
+                    .withName("Total Amount")
+                    .withColumn("amount")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("#,###")
                     .build(),
-                MeasureRBuilder.builder()
-                    .name("Avg Amount")
-                    .column("amount")
-                    .aggregator("avg")
-                    .formatString("00.0")
+                MeasureMappingImpl.builder()
+                    .withName("Avg Amount")
+                    .withColumn("amount")
+                    .withAggregatorType(MeasureAggregatorType.AVG)
+                    .withFormatString("00.0")
                     .build()
-            ))
+            )).build()))
             .build());
         return result;
+
     }
-*/
 }

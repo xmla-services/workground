@@ -13,8 +13,29 @@
  */
 package mondrian.rolap.aggmatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.PhysicalCubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.enums.MeasureAggregatorType;
 import org.eclipse.daanse.rolap.mapping.modifier.pojo.PojoMappingModifier;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationColumnNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationMeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.JoinedQueryElementMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.LevelMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureGroupMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.MeasureMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 
 public class NonCollapsedAggTestModifier extends PojoMappingModifier {
 
@@ -159,362 +180,480 @@ public class NonCollapsedAggTestModifier extends PojoMappingModifier {
         + "</Cube>\n";
 
      */
-    /* TODO: DENIS MAPPING-MODIFIER  modifiers
+
     @Override
-    protected List<MappingCube> schemaCubes(MappingSchema mappingSchemaOriginal) {
-        List<MappingCube> result = new ArrayList<>();
-        result.add(CubeRBuilder.builder()
-            .name("foo")
-                .fact(new TableR("foo_fact",
-                List.of(),
-                List.of(
-                    AggNameRBuilder.builder()
-                        .name("agg_tenant")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("fact_count")
+    protected List<? extends CubeMapping> schemaCubes(SchemaMapping schemaMappingOriginal) {
+        List<CubeMapping> result = new ArrayList<>();
+        result.add(PhysicalCubeMappingImpl.builder()
+        	.withName("foo")
+            .withQuery(TableQueryMappingImpl.builder().withName("foo_fact")
+            	.withAggregationTables(List.of(
+                	AggregationNameMappingImpl.builder()
+                        .withName("agg_tenant")
+                        .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                            .withColumn("fact_count")
                             .build())
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .name("[Measures].[Unit Sales]").column("unit_sales")
+                        .withAggregationMeasures(List.of(
+                        		AggregationMeasureMappingImpl.builder()
+                                .withName("[Measures].[Unit Sales]").withColumn("unit_sales")
                                 .build()
                         ))
-                        .aggLevels(List.of(
-                            AggLevelRBuilder.builder()
-                                .name("[dimension.tenant].[tenant]")
-                                .column("tenant_id").collapsed(false)
+                        .withAggregationLevels(List.of(
+                        		AggregationLevelMappingImpl.builder()
+                                .withName("[dimension.tenant].[tenant]")
+                                .withColumn("tenant_id").withCollapsed(false)
                                 .build()
                         ))
                         .build(),
-                    AggNameRBuilder.builder()
-                        .name("agg_line_class")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("fact_count")
+                    AggregationNameMappingImpl.builder()
+                        .withName("agg_line_class")
+                        .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                            .withColumn("fact_count")
                             .build())
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .name("[Measures].[Unit Sales]").column("unit_sales")
+                        .withAggregationMeasures(List.of(
+                            AggregationMeasureMappingImpl.builder()
+                                .withName("[Measures].[Unit Sales]").withColumn("unit_sales")
                                 .build()
                         ))
-                        .aggLevels(List.of(
-                            AggLevelRBuilder.builder()
-                                .name("[dimension.distributor].[line class]")
-                                .column("line_class_id").collapsed(false)
+                        .withAggregationLevels(List.of(
+                            AggregationLevelMappingImpl.builder()
+                                .withName("[dimension.distributor].[line class]")
+                                .withColumn("line_class_id").withCollapsed(false)
                                 .build()
                         ))
                         .build(),
-                    AggNameRBuilder.builder()
-                        .name("agg_line_class")
-                        .aggFactCount(AggColumnNameRBuilder.builder()
-                            .column("fact_count")
+                    AggregationNameMappingImpl.builder()
+                        .withName("agg_line_class")
+                        .withAggregationFactCount(AggregationColumnNameMappingImpl.builder()
+                            .withColumn("fact_count")
                             .build())
-                        .aggMeasures(List.of(
-                            AggMeasureRBuilder.builder()
-                                .name("[Measures].[Unit Sales]").column("unit_sales")
+                        .withAggregationMeasures(List.of(
+                            AggregationMeasureMappingImpl.builder()
+                                .withName("[Measures].[Unit Sales]").withColumn("unit_sales")
                                 .build()
                         ))
-                        .aggLevels(List.of(
-                            AggLevelRBuilder.builder()
-                                .name("[dimension.network].[line class]")
-                                .column("line_class_id").collapsed(false)
+                        .withAggregationLevels(List.of(
+                            AggregationLevelMappingImpl.builder()
+                                .withName("[dimension.network].[line class]")
+                                .withColumn("line_class_id").withCollapsed(false)
                                 .build()
                         ))
                         .build()
-                )))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("dimension")
-                    .foreignKey("line_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .name("tenant")
-                            .hasAll(true)
-                            .allMemberName("All tenants")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_tenant", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "tenant_id", new TableR("line_tenant")),
-                                            new JoinedQueryElementR(null, "tenant_id", new TableR("tenant"))
-                                        ))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("tenant")
-                                    .table("tenant")
-                                    .column("tenant_id")
-                                    .nameColumn("tenant_name")
-                                    .uniqueMembers(true)
+             )).build())
+            .withDimensionConnectors(List.of(
+            	DimensionConnectorMappingImpl.builder()
+            		.withOverrideDimensionName("dimension")
+                    .withForeignKey("line_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("dimension")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withName("tenant")
+                            .withHasAll(true)
+                            .withAllMemberName("All tenants")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_tenant")
+                            				.withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("tenant_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_tenant").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("tenant_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("tenant").build())
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("tenant")
+                                    .withTable("tenant")
+                                    .withColumn("tenant_id")
+                                    .withNameColumn("tenant_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
 
                             ))
                             .build(),
-                        HierarchyRBuilder.builder()
-                            .name("distributor")
-                            .hasAll(true)
-                            .allMemberName("All distributors")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_line_class", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "line_class_id", new TableR("line_line_class")),
-                                            new JoinedQueryElementR("line_class", "line_class_id",
-                                                new JoinR(
-                                                    new JoinedQueryElementR(null, "line_class_id", new TableR("line_class")),
-                                                    new JoinedQueryElementR("line_class_distributor", "line_class_id",
-                                                        new JoinR(
-                                                            new JoinedQueryElementR(null, "distributor_id", new TableR("line_class_distributor")),
-                                                            new JoinedQueryElementR(null, "distributor_id", new TableR("distributor"))
-                                                        ))
-                                                ))
-                                        ))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("distributor")
-                                    .table("distributor")
-                                    .column("distributor_id")
-                                    .nameColumn("distributor_name")
+                        HierarchyMappingImpl.builder()
+                            .withName("distributor")
+                            .withHasAll(true)
+                            .withAllMemberName("All distributors")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_line_class")
+                            				.withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("line_class_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_line_class").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withAlias("line_class")
+                                            				.withKey("line_class_id")
+                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                            				.withKey("line_class_id")
+                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class").build())
+                                                            				.build())
+                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                            				.withAlias("line_class_distributor")
+                                                            				.withKey("line_class_id")
+                                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("distributor_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class_distributor").build())
+                                                                            				.build())
+                                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("distributor_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("distributor").build())
+                                                                            				.build())
+                                                                            		.build())
+                                                            				.build())
+                                                            		.build())
+
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("distributor")
+                                    .withTable("distributor")
+                                    .withColumn("distributor_id")
+                                    .withNameColumn("distributor_name")
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line class")
-                                    .table("line_class")
-                                    .column("line_class_id")
-                                    .nameColumn("line_class_name")
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withName("line class")
+                                    .withTable("line_class")
+                                    .withColumn("line_class_id")
+                                    .withNameColumn("line_class_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
                             ))
                             .build(),
-                        HierarchyRBuilder.builder()
-                            .name("network")
-                            .hasAll(true)
-                            .allMemberName("All networks")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_line_class", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "line_class_id", new TableR("line_line_class")),
-                                            new JoinedQueryElementR("line_class", "line_class_id",
-                                                new JoinR(
-                                                    new JoinedQueryElementR(null, "line_class_id", new TableR("line_class")),
-                                                    new JoinedQueryElementR("line_class_network", "line_class_id",
-                                                        new JoinR(
-                                                            new JoinedQueryElementR(null, "network_id", new TableR("line_class_network")),
-                                                            new JoinedQueryElementR(null, "network_id", new TableR("network"))
-                                                        ))
-                                                ))
-                                        ))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("network")
-                                    .table("network")
-                                    .column("network_id")
-                                    .nameColumn("network_name")
+                        HierarchyMappingImpl.builder()
+                            .withName("network")
+                            .withHasAll(true)
+                            .withAllMemberName("All networks")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_line_class")
+                            				.withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("line_class_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_line_class").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withAlias("line_class")
+                                            				.withKey("line_class_id")
+                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                            				.withKey("line_class_id")
+                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class").build())
+                                                            				.build())
+                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                            				.withAlias("line_class_network")
+                                                            				.withKey("line_class_id")
+                                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("network_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class_network").build())
+                                                                            				.build())
+                                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("network_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("network").build())
+                                                                            				.build())
+                                                                            		.build())
+                                                            				.build())
+                                                            		.build())
+
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("network")
+                                    .withTable("network")
+                                    .withColumn("network_id")
+                                    .withNameColumn("network_name")
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line class")
-                                    .table("line_class")
-                                    .column("line_class_id")
-                                    .nameColumn("line_class_name")
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withName("line class")
+                                    .withTable("line_class")
+                                    .withColumn("line_class_id")
+                                    .withNameColumn("line_class_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Unit Sales")
-                    .column("unit_sales")
-                    .aggregator("sum")
-                    .formatString("Standard")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Unit Sales")
+                    .withColumn("unit_sales")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("Standard")
                     .build()
-            ))
+
+            )).build()))
             .build());
 
-        result.add(CubeRBuilder.builder()
-            .name("foo2")
-            .fact(new TableR("foo_fact"))
-            .dimensionUsageOrDimensions(List.of(
-                PrivateDimensionRBuilder.builder()
-                    .name("dimension")
-                    .foreignKey("line_id")
-                    .hierarchies(List.of(
-                        HierarchyRBuilder.builder()
-                            .name("tenant")
-                            .hasAll(true)
-                            .allMemberName("All tenants")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_tenant", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "tenant_id", new TableR("line_tenant")),
-                                            new JoinedQueryElementR(null, "tenant_id", new TableR("tenant"))
-                                        ))
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("tenant")
-                                    .table("tenant")
-                                    .column("tenant_id")
-                                    .nameColumn("tenant_name")
-                                    .uniqueMembers(true)
+        result.add(PhysicalCubeMappingImpl.builder()
+            .withName("foo2")
+            .withQuery(TableQueryMappingImpl.builder().withName("foo_fact").build())
+            .withDimensionConnectors(List.of(
+                DimensionConnectorMappingImpl.builder()
+                	.withOverrideDimensionName("dimension")
+                    .withForeignKey("line_id")
+                    .withDimension(StandardDimensionMappingImpl.builder()
+                    	.withName("dimension")
+                    	.withHierarchies(List.of(
+                        HierarchyMappingImpl.builder()
+                            .withName("tenant")
+                            .withHasAll(true)
+                            .withAllMemberName("All tenants")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_tenant")
+                            				.withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("tenant_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_tenant").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("tenant_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("tenant").build())
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("tenant")
+                                    .withTable("tenant")
+                                    .withColumn("tenant_id")
+                                    .withNameColumn("tenant_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
                             ))
                             .build(),
-                        HierarchyRBuilder.builder()
-                            .name("distributor")
-                            .hasAll(true)
-                            .allMemberName("All distributors")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_line_class", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "line_class_id", new TableR("line_line_class")),
-                                            new JoinedQueryElementR("line_class", "line_class_id",
-                                                new JoinR(
-                                                    new JoinedQueryElementR(null, "line_class_id", new TableR("line_class")),
-                                                    new JoinedQueryElementR("line_class_distributor", "line_class_id",
-                                                        new JoinR(
-                                                            new JoinedQueryElementR(null, "distributor_id", new TableR("line_class_distributor")),
-                                                            new JoinedQueryElementR(null, "distributor_id", new TableR("distributor"))
-                                                        ))
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("distributor")
-                                    .table("distributor")
-                                    .column("distributor_id")
-                                    .nameColumn("distributor_name")
+                        HierarchyMappingImpl.builder()
+                            .withName("distributor")
+                            .withHasAll(true)
+                            .withAllMemberName("All distributors")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_line_class")
+                            				.withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("line_class_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_line_class").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withAlias("line_class")
+                                            				.withKey("line_class_id")
+                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                            				.withKey("line_class_id")
+                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class").build())
+                                                            				.build())
+                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                            				.withAlias("line_class")
+                                                            				.withKey("line_class_id")
+                                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("line_class_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class").build())
+                                                                            				.build())
+                                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withAlias("line_class_distributor")
+                                                                            				.withKey("line_class_id")
+                                                                            				.withQuery(JoinQueryMappingImpl.builder()
+                                                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                                                            				.withKey("distributor_id")
+                                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class_distributor").build())
+                                                                                            				.build())
+                                                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                                                            				.withKey("distributor_id")
+                                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("distributor").build())
+                                                                                            				.build())
+                                                                                            		.build())
+                                                                            				.build())
+                                                                            		.build())
+                                                            				.build())
+                                                            		.build())
+
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            		.build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("distributor")
+                                    .withTable("distributor")
+                                    .withColumn("distributor_id")
+                                    .withNameColumn("distributor_name")
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line class")
-                                    .table("line_class")
-                                    .column("line_class_id")
-                                    .nameColumn("line_class_name")
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withName("line class")
+                                    .withTable("line_class")
+                                    .withColumn("line_class_id")
+                                    .withNameColumn("line_class_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
                             ))
                             .build(),
-                        HierarchyRBuilder.builder()
-                            .name("network")
-                            .hasAll(true)
-                            .allMemberName("All networks")
-                            .primaryKey("line_id")
-                            .primaryKeyTable("line")
-                            .relation(
-                                new JoinR(
-                                    new JoinedQueryElementR(null, "line_id", new TableR("line")),
-                                    new JoinedQueryElementR("line_line_class", "line_id",
-                                        new JoinR(
-                                            new JoinedQueryElementR(null, "line_class_id", new TableR("line_line_class")),
-                                                new JoinedQueryElementR("line_class", "line_class_id",
-                                                    new JoinR(
-                                                        new JoinedQueryElementR(null, "line_class_id", new TableR("line_class")),
-                                                        new JoinedQueryElementR("line_class_network", "line_class_id",
-                                                            new JoinR(
-                                                                new JoinedQueryElementR(null, "network_id", new TableR("line_class_network")),
-                                                                new JoinedQueryElementR(null, "network_id", new TableR("network"))
-                                                            )
-                                                        )
-                                                    ))
-                                            )
-                                        )
-                                )
-                            )
-                            .levels(List.of(
-                                LevelRBuilder.builder()
-                                    .name("network")
-                                    .table("network")
-                                    .column("network_id")
-                                    .nameColumn("network_name")
+                        HierarchyMappingImpl.builder()
+                            .withName("network")
+                            .withHasAll(true)
+                            .withAllMemberName("All networks")
+                            .withPrimaryKey("line_id")
+                            .withPrimaryKeyTable("line")
+
+
+                            .withQuery(JoinQueryMappingImpl.builder()
+                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                            				.withKey("line_id")
+                            				.withQuery(TableQueryMappingImpl.builder().withName("line").build())
+                            				.build())
+                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                            				.withAlias("line_line_class").withKey("line_id")
+                                            .withQuery(JoinQueryMappingImpl.builder()
+                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                            				.withKey("line_class_id")
+                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_line_class").build())
+                                            				.build())
+                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                            				.withAlias("line_class").withKey("line_class_id")//-
+                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                            				.withKey("line_class_id")
+                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class").build()) //----
+                                                            				.build())
+                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                            				.withAlias("line_class_network").withKey("line_class_id") //++
+                                                                            .withQuery(JoinQueryMappingImpl.builder()
+                                                                            		.withLeft(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("network_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("line_class_network").build())
+                                                                            				.build())
+                                                                            		.withRight(JoinedQueryElementMappingImpl.builder()
+                                                                            				.withKey("network_id")
+                                                                            				.withQuery(TableQueryMappingImpl.builder().withName("network").build())
+                                                                            				.build())
+                                                                            		.build())
+                                                            				.build())
+                                                            		.build())
+
+                                            				.build())
+                                            		.build())
+                            				.build())
+                            .build())
+                            .withLevels(List.of(
+                                LevelMappingImpl.builder()
+                                    .withName("network")
+                                    .withTable("network")
+                                    .withColumn("network_id")
+                                    .withNameColumn("network_name")
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line class")
-                                    .table("line_class")
-                                    .column("line_class_id")
-                                    .nameColumn("line_class_name")
-                                    .uniqueMembers(true)
+                                LevelMappingImpl.builder()
+                                    .withName("line class")
+                                    .withTable("line_class")
+                                    .withColumn("line_class_id")
+                                    .withNameColumn("line_class_name")
+                                    .withUniqueMembers(true)
                                     .build(),
-                                LevelRBuilder.builder()
-                                    .name("line")
-                                    .table("line")
-                                    .column("line_id")
-                                    .nameColumn("line_name")
+                                LevelMappingImpl.builder()
+                                    .withName("line")
+                                    .withTable("line")
+                                    .withColumn("line_id")
+                                    .withNameColumn("line_name")
                                     .build()
                             ))
                             .build()
-                    ))
+                    )).build())
                     .build()
             ))
-            .measures(List.of(
-                MeasureRBuilder.builder()
-                    .name("Unit Sales")
-                    .column("unit_sales")
-                    .aggregator("sum")
-                    .formatString("Standard")
+            .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                MeasureMappingImpl.builder()
+                    .withName("Unit Sales")
+                    .withColumn("unit_sales")
+                    .withAggregatorType(MeasureAggregatorType.SUM)
+                    .withFormatString("Standard")
                     .build()
-            ))
+            )).build()))
             .build());
-        result.addAll(super.schemaCubes(mappingSchemaOriginal));
+        result.addAll(super.schemaCubes(schemaMappingOriginal));
         return result;
-
     }
-    */
-
 }
