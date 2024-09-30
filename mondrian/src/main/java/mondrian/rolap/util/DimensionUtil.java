@@ -83,7 +83,7 @@ public class DimensionUtil {
         throw Util.newInternal(new StringBuilder("Cannot find cube '").append(cubeName).append("'").toString());
     }
 
-    private static DimensionMapping getDimension(CubeMapping cube, SchemaMapping schema, String dimensionName) {
+    public static DimensionMapping getDimension(CubeMapping cube, SchemaMapping schema, String dimensionName) {
         for (int i = 0; i < cube.getDimensionConnectors().size(); i++) {
             if (cube.getDimensionConnectors().get(i).getOverrideDimensionName().equals(dimensionName)) {
                 return getDimension(schema, cube.getDimensionConnectors().get(i));

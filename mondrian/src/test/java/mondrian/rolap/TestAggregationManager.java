@@ -2504,6 +2504,7 @@ class TestAggregationManager extends BatchTestCase {
                     .withDimensionConnectors(List.of(
                     		DimensionConnectorMappingImpl
                     		.builder()
+                    		.withOverrideDimensionName("Product")
                     		.withForeignKey("product_id")
                     		.withDimension(
                     				StandardDimensionMappingImpl.builder()

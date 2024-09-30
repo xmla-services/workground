@@ -92,7 +92,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestNoTimeDimensionModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -105,8 +105,8 @@ class VirtualCubeTest extends BatchTestCase {
                             .build()
                     ))
                     .withReferencedMeasures(List.of(
-                    	FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES,
-                    	FoodmartMappingSupplier.MEASURE_UNIT_SALES
+                    	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
+                        look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
                     ))
                     .build());
                 return result;
@@ -139,7 +139,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestCalculatedMeasureAsDefaultMeasureInVCModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -151,7 +151,7 @@ class VirtualCubeTest extends BatchTestCase {
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .withReferencedMeasures(List.of(                    	
+                    .withReferencedMeasures(List.of(
                     		look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
                     ))
                     .withReferencedCalculatedMembers(List.of(
@@ -196,7 +196,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasureInVCForIncorrectMeasureNameModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -209,7 +209,7 @@ class VirtualCubeTest extends BatchTestCase {
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .withReferencedMeasures(List.of(                    	
+                    .withReferencedMeasures(List.of(
                     		look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
                     		look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
                     ))
@@ -219,7 +219,7 @@ class VirtualCubeTest extends BatchTestCase {
                     .build());
                 return result;
             }
-            
+
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -256,7 +256,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestVirtualCubeMeasureInvalidCubeNameModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -269,13 +269,13 @@ class VirtualCubeTest extends BatchTestCase {
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .withReferencedMeasures(List.of(                    	
+                    .withReferencedMeasures(List.of(
                     	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
                     	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES) //.cubeName("Bad cube")
                     ))
                     .build());
                 return result;
-            }            
+            }
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -308,7 +308,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasureInVCForCaseSensitivityModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -321,7 +321,7 @@ class VirtualCubeTest extends BatchTestCase {
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .withReferencedMeasures(List.of(                    	
+                    .withReferencedMeasures(List.of(
                     	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
                     	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
                     ))
@@ -378,22 +378,22 @@ class VirtualCubeTest extends BatchTestCase {
             public TestWithTimeDimensionModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
                 result.add(VirtualCubeMappingImpl.builder()
-                    .withName("Sales vs Warehouse")                    
+                    .withName("Sales vs Warehouse")
                     .withDimensionConnectors(List.of(
                         DimensionConnectorMappingImpl.builder()
                     		.withOverrideDimensionName("Time")
-                            .build(),                    		
+                            .build(),
                     	DimensionConnectorMappingImpl.builder()
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
-                    .withReferencedMeasures(List.of(                    	
+                    .withReferencedMeasures(List.of(
                     	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES),
                     	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES)
                     ))
@@ -402,7 +402,7 @@ class VirtualCubeTest extends BatchTestCase {
                     ))
                     .build());
                 return result;
-            }        
+            }
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -522,13 +522,14 @@ class VirtualCubeTest extends BatchTestCase {
                 result.addAll(super.schemaCubes(schema));
                 result.add(
                   warehouseDefaultUSA = PhysicalCubeMappingImpl.builder()
-                    .withName("Warehouse (Default USA)")                    
+                    .withName("Warehouse (Default USA)")
+                    .withQuery(TableQueryMappingImpl.builder().withName("inventory_fact_1997").build())
                     .withDimensionConnectors(List.of(
                         DimensionConnectorMappingImpl.builder()
                     		.withOverrideDimensionName("Time")
                     		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                     		.withForeignKey("time_id")
-                            .build(),                    		
+                            .build(),
                     	DimensionConnectorMappingImpl.builder()
                     		.withOverrideDimensionName("Product")
                     		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
@@ -575,7 +576,7 @@ class VirtualCubeTest extends BatchTestCase {
                                     ))
                                     .build()
                             )).build())
-                            .build()                            
+                            .build()
                     ))
                     .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
                         MeasureMappingImpl.builder()
@@ -606,7 +607,7 @@ class VirtualCubeTest extends BatchTestCase {
                                 DimensionConnectorMappingImpl.builder()
                                 	.withOverrideDimensionName("Warehouse")
                                 	.withPhysicalCube(warehouseDefaultUSA)
-                                    .build()                                    
+                                    .build()
                         ))
                         .withReferencedMeasures(List.of(
                         	look(FoodmartMappingSupplier.MEASURE_SALES_COUNT),
@@ -614,10 +615,10 @@ class VirtualCubeTest extends BatchTestCase {
                         	look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
                         	look(FoodmartMappingSupplier.MEASURE_UNIT_SALES),
                         	look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE),
-                        	look(FoodmartMappingSupplier.MEASURE_SUPPLY_TIME), 
-                        	look(FoodmartMappingSupplier.MEASURE_UNITS_ORDERED), 
-                        	look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED), 
-                        	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_COST), 
+                        	look(FoodmartMappingSupplier.MEASURE_SUPPLY_TIME),
+                        	look(FoodmartMappingSupplier.MEASURE_UNITS_ORDERED),
+                        	look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED),
+                        	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_COST),
                         	look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_SALES)
                         ))
                         .build()
@@ -684,7 +685,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestMemberVisibilityModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -703,8 +704,8 @@ class VirtualCubeTest extends BatchTestCase {
                     .withReferencedMeasures(List.of(
                     		look(FoodmartMappingSupplier.MEASURE_SALES_COUNT),
                     		look(FoodmartMappingSupplier.MEASURE_STORE_COST),
-                    		look(FoodmartMappingSupplier.MEASURE_STORE_SALES),                    		
-                    		look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED)                    		
+                    		look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
+                    		look(FoodmartMappingSupplier.MEASURE_UNITS_SHIPPED)
                     ))
                     .withReferencedCalculatedMembers(List.of(
                     		look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT_LAST_PERIOD),
@@ -719,7 +720,7 @@ class VirtualCubeTest extends BatchTestCase {
                             .build()
                     ))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*
@@ -812,7 +813,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestFormatStringExpressionCubeNoCacheModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
             	MeasureMappingImpl unitsShipped;
                 List<CubeMapping> result = new ArrayList<>();
@@ -823,7 +824,7 @@ class VirtualCubeTest extends BatchTestCase {
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
                     		.withOverrideDimensionName("Time")
-                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))                            
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                             .withForeignKey("time_id")
                             .build(),
                         DimensionConnectorMappingImpl.builder()
@@ -841,7 +842,7 @@ class VirtualCubeTest extends BatchTestCase {
                             .build()
                     )).build()))
                     .build());
-                
+
                 result.add(VirtualCubeMappingImpl.builder()
                         .withName("Warehouse and Sales Format Expression Cube No Cache")
                         .withDimensionConnectors(List.of(
@@ -877,8 +878,8 @@ class VirtualCubeTest extends BatchTestCase {
 
                         ))
                         .build());
-                
-                return result;            	
+
+                return result;
             }
         }
         /*
@@ -1330,7 +1331,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestOrdinalColumnModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -1349,7 +1350,7 @@ class VirtualCubeTest extends BatchTestCase {
                     .withReferencedMeasures(List.of(look(FoodmartMappingSupplier.MEASURE_ORG_SALARY)))
                     .build());
                 return result;
-            }            
+            }
         }
         /*
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1405,7 +1406,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestDefaultMeasurePropertyModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
@@ -1423,7 +1424,7 @@ class VirtualCubeTest extends BatchTestCase {
                     ))
                     .withReferencedCalculatedMembers(List.of(
                     	look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT)
-                    ))		
+                    ))
                     .build());
                 return result;
             }
@@ -1592,7 +1593,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestBugMondrian322Modifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
                 List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.schemaCubes(schema));
@@ -1607,18 +1608,18 @@ class VirtualCubeTest extends BatchTestCase {
                         DimensionConnectorMappingImpl.builder()
                         	.withOverrideDimensionName("Time")
                             .build(),
-                        DimensionConnectorMappingImpl.builder()                            
+                        DimensionConnectorMappingImpl.builder()
                             .withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
                             .withOverrideDimensionName("Warehouse")
                             .build()
 
                     ))
                     .withReferencedMeasures(List.of(
-                    	FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT,
-                    	FoodmartMappingSupplier.MEASURE_STORE_SALES
+                    	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT),
+                    	look(FoodmartMappingSupplier.MEASURE_STORE_SALES)
                     ))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*
@@ -1684,7 +1685,7 @@ class VirtualCubeTest extends BatchTestCase {
                         	.withOverrideDimensionName("Time")
                             .build(),
                         DimensionConnectorMappingImpl.builder()
-                        	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))	
+                        	.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
                             .withOverrideDimensionName("Warehouse")
                             .build()
 
@@ -1694,8 +1695,8 @@ class VirtualCubeTest extends BatchTestCase {
                     		look(FoodmartMappingSupplier.MEASURE_STORE_SALES)
                     ))
                     .build());
-                return result;            	
-            }	
+                return result;
+            }
 
         }
         /*
@@ -1739,7 +1740,7 @@ class VirtualCubeTest extends BatchTestCase {
             public TestVirtualCubeMeasureCaptionModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
             	PhysicalCubeMappingImpl testStore;
             	MeasureMappingImpl storeSqftMeasure;
@@ -1776,10 +1777,10 @@ class VirtualCubeTest extends BatchTestCase {
                             .withColumn("store_sqft")
                             .withAggregatorType(MeasureAggregatorType.SUM)
                             .withFormatString("#,###")
-                            .build()                    		
+                            .build()
                     )).build()))
                     .build());
-                
+
                 result.add(VirtualCubeMappingImpl.builder()
                         .withName("VirtualTestStore")
                         .withDimensionConnectors(List.of(
@@ -1793,8 +1794,8 @@ class VirtualCubeTest extends BatchTestCase {
                         	storeSqftMeasure
                         ))
                         .build());
-                
-                
+
+
                 return result;
             }
         }

@@ -773,7 +773,7 @@ public class RolapSchema implements Schema {
 
     @Override
     public RolapCube lookupCube(String cubeName) {
-        return mapMappingToRolapCube.entrySet().stream().filter(e -> e.getKey().getName().equals(cubeName)).findFirst()
+        return mapMappingToRolapCube.entrySet().stream().filter(e -> Util.normalizeName(e.getKey().getName()).equals(Util.normalizeName(cubeName))).findFirst()
                 .map(Entry::getValue).orElse(null);
 
     }

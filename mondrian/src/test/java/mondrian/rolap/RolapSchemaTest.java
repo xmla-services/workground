@@ -29,13 +29,10 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import mondrian.olap.exceptions.RoleUnionGrantsException;
-import mondrian.olap.exceptions.UnknownRoleException;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -43,6 +40,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessCubeGrantMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessHierarchyGrantMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.HierarchyMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.RelationalQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessDimension;
@@ -56,6 +55,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessMemberGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
@@ -68,6 +68,8 @@ import org.opencube.junit5.context.TestConfig;
 import mondrian.olap.MondrianException;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SystemWideProperties;
+import mondrian.olap.exceptions.RoleUnionGrantsException;
+import mondrian.olap.exceptions.UnknownRoleException;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
@@ -224,7 +226,7 @@ class RolapSchemaTest {
 
         RolapCube cube = mockCube(schema);
         when(cube.getSchemaReader(any())).thenReturn(reader);
-        doReturn(cube).when(schema).lookupCube("cube");
+        doReturn(cube).when(schema).lookupCube(any(CubeMapping.class));
 
         AccessDimensionGrantMappingImpl dimensionGrant =
         		AccessDimensionGrantMappingImpl.builder().build();
@@ -390,17 +392,18 @@ class RolapSchemaTest {
 
         AccessMemberGrantMappingImpl memberGrant = AccessMemberGrantMappingImpl.builder().withMember("member").withAccess(AccessMember.ALL).build();
 
+        HierarchyMappingImpl h = HierarchyMappingImpl.builder().build(); 
         AccessHierarchyGrantMappingImpl grant = AccessHierarchyGrantMappingImpl.builder().build();
         grant.setAccess(AccessHierarchy.CUSTOM);
         grant.setRollupPolicyType(RollupPolicyType.FULL);
-        //grant.setHierarchy("hierarchy");
+        grant.setHierarchy(h);
         grant.setMemberGrants(List.of(memberGrant));
 
         Level level = mock(Level.class);
         Hierarchy hierarchy = mock(Hierarchy.class);
         when(hierarchy.getLevels()).thenReturn(new Level[]{level});
         when(level.getHierarchy()).thenReturn(hierarchy);
-
+        when(cube.lookupHierarchy(any(HierarchyMapping.class))).thenReturn(hierarchy);
         Dimension dimension = mock(Dimension.class);
         when(hierarchy.getDimension()).thenReturn(dimension);
 

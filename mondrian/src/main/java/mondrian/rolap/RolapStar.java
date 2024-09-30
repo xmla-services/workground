@@ -51,13 +51,17 @@ import org.eclipse.daanse.rolap.mapping.api.model.JoinQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.QueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.RelationalQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SQLExpressionMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SQLMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.SqlSelectQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.TableQueryMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.TableQueryOptimizationHintMapping;
 import org.eclipse.daanse.rolap.mapping.pojo.InlineTableQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.JoinQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.JoinedQueryElementMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.SqlSelectQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.TableQueryOptimizationHintMappingImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -310,11 +314,13 @@ public class RolapStar {
         String possibleName)
     {
         if (rel instanceof TableQueryMapping tbl) {
+        	String aliasOrName = tbl.getAlias() == null ? tbl.getName() : tbl.getAlias();
         	return TableQueryMappingImpl.builder()
         	.withAlias(possibleName)
         	.withName(tbl.getName())
         	.withSchema(tbl.getSchema())
-        	.withOptimizationHints(null)
+        	.withOptimizationHints(tableQueryOptimizationHints(tbl.getOptimizationHints()))
+        	.withSqlWhereExpression(sql(tbl.getSqlWhereExpression(), possibleName, aliasOrName))
         	.build();
         } else if (rel instanceof SqlSelectQueryMapping view) {
             return SqlSelectQueryMappingImpl.builder().withAlias(possibleName).withSql(PojoUtil.getSqls(view.getSQL())).build();
@@ -328,7 +334,36 @@ public class RolapStar {
             throw new UnsupportedOperationException();
         }
     }
+    
+    protected SQLMappingImpl sql(SQLMapping sql, String possibleName, String aliasOrName) {
+        if (sql != null) {
+            List<String> dialects = sql.getDialects();
+            String statement = sql.getStatement();
+            return SQLMappingImpl.builder().withStatement(statement != null ?
+                    statement.replace(aliasOrName, possibleName) : null).withDialects(dialects).build();
+        }
+        return null;
+    }
+    
+    protected List<TableQueryOptimizationHintMappingImpl> tableQueryOptimizationHints(
+            List<? extends TableQueryOptimizationHintMapping> optimizationHints
+        ) {
+            if (optimizationHints != null) {
+                return optimizationHints.stream().map(this::tableQueryOptimizationHint).toList();
+            }
+            return List.of();
+    }
 
+    protected TableQueryOptimizationHintMappingImpl tableQueryOptimizationHint(
+            TableQueryOptimizationHintMapping tableQueryOptimizationHint
+        ) {
+            if (tableQueryOptimizationHint != null) {
+                String value = tableQueryOptimizationHint.getValue();
+                String type = tableQueryOptimizationHint.getType();
+                return TableQueryOptimizationHintMappingImpl.builder().withValue(value).withValue(value).build();
+            }
+            return null;
+        }
 	/**
      * Generates a unique relational join to the fact table via re-aliasing
      * Relations

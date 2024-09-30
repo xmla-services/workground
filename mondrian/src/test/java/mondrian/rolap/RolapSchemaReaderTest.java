@@ -32,6 +32,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessDimension;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
@@ -45,6 +46,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestContext;
@@ -175,9 +177,10 @@ class RolapSchemaReaderTest {
             public TestGetCubeDimensionsModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> accessRoles) {
-                List<AccessRoleMapping> result = new ArrayList<>();
-                result.addAll(super.accessRoles(accessRoles));
+            
+            protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
+            	List<AccessRoleMapping> result = new ArrayList<>();
+                result.addAll(super.schemaAccessRoles(schema));
                 result.add(AccessRoleMappingImpl.builder()
                     .withName("REG1")
                     .withAccessSchemaGrants(List.of(
@@ -195,11 +198,11 @@ class RolapSchemaReaderTest {
                                     ))
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                            .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME1)
+                                            .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME1))
                                             .withAccess(AccessHierarchy.NONE)
                                             .build(),
                                         AccessHierarchyGrantMappingImpl.builder()
-                                        .withHierarchy(FoodmartMappingSupplier.HIERARCHY_TIME2)
+                                        .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_TIME2))
                                             .withAccess(AccessHierarchy.ALL)
                                             .build()
                                     ))
@@ -208,7 +211,7 @@ class RolapSchemaReaderTest {
                             .build()
                     ))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*
