@@ -58,11 +58,11 @@ public class RolapCubeDimension extends RolapDimension {
                 ? cubeDim.getOverrideDimensionName()
                 : rolapDim.getCaption(),
             cubeDim.isVisible(),
-            cubeDim.getDimension().getDescription() != null
+            cubeDim.getDimension() != null
                 ? cubeDim.getDimension().getDescription()
                 : rolapDim.getDescription(),
             null,
-            (cubeDim.getDimension().getAnnotations() != null && !cubeDim.getDimension().getAnnotations().isEmpty())
+            (cubeDim.getDimension() != null && !cubeDim.getDimension().getAnnotations().isEmpty())
                 ? RolapHierarchy.createMetadataMap(cubeDim.getDimension().getAnnotations())
                 : rolapDim.getMetadata());
         this.xmlDimension = cubeDim;

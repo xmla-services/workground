@@ -378,7 +378,8 @@ public class RolapHierarchy extends HierarchyBase {
             }
         }
 
-        String sharedDimensionName = cubeDimensionMapping.getDimension().getName();
+        String sharedDimensionName = cubeDimensionMapping.getDimension() != null && cubeDimensionMapping.getDimension().getName() != null 
+        		? cubeDimensionMapping.getDimension().getName() : cubeDimensionMapping.getOverrideDimensionName();
         this.sharedHierarchyName = sharedDimensionName;
         if (subName != null) {
             this.sharedHierarchyName += "." + subName; // e.g. "Time.Weekly"

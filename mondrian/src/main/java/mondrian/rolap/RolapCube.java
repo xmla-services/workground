@@ -129,6 +129,7 @@ import mondrian.rolap.aggmatcher.ExplicitRules;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
+import mondrian.rolap.util.DimensionUtil;
 import mondrian.rolap.util.PojoUtil;
 import mondrian.server.LocusImpl;
 import mondrian.spi.CellFormatter;
@@ -1016,7 +1017,7 @@ public class RolapCube extends CubeBase {
         }
 
         for (Formula calcMember : calculatedMemberList) {
-            if (calcMember.getName().equalsIgnoreCase(
+            if (mappingVirtualCube.getDefaultMeasure() != null && calcMember.getName().equalsIgnoreCase(
                     mappingVirtualCube.getDefaultMeasure().getName()))
             {
                 this.measuresHierarchy.setDefaultMember(
@@ -1146,10 +1147,15 @@ public class RolapCube extends CubeBase {
 
 
         if (dimension == null) {
-            DimensionMapping mappingDimension = mappingCubeDimension.getDimension();
+            DimensionMapping mappingDimension = mappingCubeDimension.getDimension();            
+            if (mappingDimension == null) {
+            	if (mappingCubeDimension.getPhysicalCube() != null) { //for virtual cube
+            		mappingDimension = DimensionUtil.getDimension(mappingCubeDimension.getPhysicalCube(), mappingSchema, mappingCubeDimension.getOverrideDimensionName());
+            	}            	
+            }	
             dimension =
-                new RolapDimension(
-                    schema, this, mappingDimension, mappingCubeDimension);
+            		new RolapDimension(
+            				schema, this, mappingDimension, mappingCubeDimension);
         }
 
         // wrap the shared or regular dimension with a

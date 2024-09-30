@@ -106,12 +106,12 @@ class RolapDimension extends DimensionBase {
     {
         this(
             schema,
-            mappingDimension.getName(),
-            mappingDimension.getName(),
-            mappingDimension.isVisible(),
-            mappingDimension.getDescription(),
+            mappingCubeDimension.getOverrideDimensionName(),
+            mappingCubeDimension.getOverrideDimensionName(),
+            mappingCubeDimension.isVisible(),
+            mappingDimension != null ? mappingDimension.getDescription() : null,
             DimensionTypeUtil.getDimensionType(mappingDimension),
-            RolapHierarchy.createMetadataMap(mappingDimension.getAnnotations()));
+            RolapHierarchy.createMetadataMap(mappingDimension != null ? mappingDimension.getAnnotations() : null));
 
         Util.assertPrecondition(schema != null);
 
@@ -119,15 +119,17 @@ class RolapDimension extends DimensionBase {
             Util.assertTrue(cube.getSchema() == schema);
         }
 
-        if (!Util.isEmpty(mappingDimension.getName())) {
-            setCaption(mappingDimension.getName());
+        if (!Util.isEmpty(mappingCubeDimension.getOverrideDimensionName())) {
+            setCaption(mappingCubeDimension.getOverrideDimensionName());
         }
-        this.hierarchies = new RolapHierarchy[mappingDimension.getHierarchies().size()];
-        for (int i = 0; i < mappingDimension.getHierarchies().size(); i++) {
-            RolapHierarchy hierarchy = new RolapHierarchy(
-                cube, this, mappingDimension.getHierarchies().get(i), mappingCubeDimension);
-            hierarchies[i] = hierarchy;
-        }
+        if (mappingDimension != null) {
+        	this.hierarchies = new RolapHierarchy[mappingDimension.getHierarchies().size()];
+        	for (int i = 0; i < mappingDimension.getHierarchies().size(); i++) {
+        		RolapHierarchy hierarchy = new RolapHierarchy(
+        				cube, this, mappingDimension.getHierarchies().get(i), mappingCubeDimension);
+        		hierarchies[i] = hierarchy;
+        	}
+        }        
 
         // if there was no dimension type assigned, determine now.
         if (dimensionType == null) {

@@ -33,6 +33,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
@@ -753,10 +754,10 @@ class SqlQueryTest  extends BatchTestCase {
                             .withName("Store Cost")
                             .withColumn("store_cost")
                             .withAggregatorType(MeasureAggregatorType.SUM)
-                            .build()                    		
+                            .build()
                     )).build()))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*
@@ -856,7 +857,7 @@ class SqlQueryTest  extends BatchTestCase {
             public TestApproxRowCountOverridesCountModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
                 List<CubeMapping> result = new ArrayList<>();
                 result.addAll(super.cubes(cubes));
@@ -891,10 +892,10 @@ class SqlQueryTest  extends BatchTestCase {
                             .withName("Unit Sales")
                             .withColumn("unit_sales")
                             .withAggregatorType(MeasureAggregatorType.SUM)
-                            .build()                    		
+                            .build()
                     )).build()))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*
@@ -930,11 +931,11 @@ class SqlQueryTest  extends BatchTestCase {
             public TestLimitedRollupMemberRetrievableFromCacheModifier(CatalogMapping catalog) {
                 super(catalog);
             }
-            
+
             @Override
-            protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+            protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
                 List<AccessRoleMapping> result = new ArrayList<>();
-                result.addAll(super.accessRoles(roles));
+                result.addAll(super.schemaAccessRoles(schema));
                 result.add(AccessRoleMappingImpl.builder()
                     .withName("justCA")
                     .withAccessSchemaGrants(List.of(
@@ -962,7 +963,7 @@ class SqlQueryTest  extends BatchTestCase {
                             .build()
                     ))
                     .build());
-                return result;            	
+                return result;
             }
         }
         /*

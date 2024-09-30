@@ -30,6 +30,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CubeMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessCube;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
@@ -1107,7 +1108,7 @@ protected void assertQuerySql(Connection connection,
           public TestMultipleAllWithInExprModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          
+
           @Override
           protected List<CubeMapping> cubes(List<? extends CubeMapping> cubes) {
               List<CubeMapping> result = new ArrayList<>();
@@ -1120,7 +1121,7 @@ protected void assertQuerySql(Connection connection,
                       	  .withOverrideDimensionName("AltStore")
                           .withForeignKey("store_id")
                           .withDimension(StandardDimensionMappingImpl.builder()
-                        	  .withName("AltStore")  
+                        	  .withName("AltStore")
                         	  .withHierarchies(List.of(
                               HierarchyMappingImpl.builder()
                                   .withHasAll(true)
@@ -1203,11 +1204,11 @@ protected void assertQuerySql(Connection connection,
                                   .withColumn("store_sales")
                                   .withAggregatorType(MeasureAggregatorType.SUM)
                                   .withFormatString("#,###.00")
-                                  .build()                				  
+                                  .build()
                 		  ))
                 		  .build()))
                   .build());
-              return result;        	  
+              return result;
           }
       }
     /*
@@ -1588,11 +1589,11 @@ protected void assertQuerySql(Connection connection,
           public TestNativeVirtualRestrictedSetModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          
+
           @Override
-          protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+          protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
               List<AccessRoleMapping> result = new ArrayList<>();
-              result.addAll(super.accessRoles(roles));
+              result.addAll(super.schemaAccessRoles(schema));
               result.add(AccessRoleMappingImpl.builder()
                   .withName("F-MIS-BE-CLIENT")
                   .withAccessSchemaGrants(List.of(
@@ -1719,10 +1720,10 @@ protected void assertQuerySql(Connection connection,
           public TestNativeHonorsRoleRestrictionsModifier(CatalogMapping catalogMapping) {
               super(catalogMapping);
           }
-          
-          protected List<AccessRoleMapping> accessRoles(List<? extends AccessRoleMapping> roles) {
+
+          protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
               List<AccessRoleMapping> result = new ArrayList<>();
-              result.addAll(super.accessRoles(roles));
+              result.addAll(super.schemaAccessRoles(schema));
               result.add(AccessRoleMappingImpl.builder()
                   .withName("Test")
                   .withAccessSchemaGrants(List.of(
@@ -1734,7 +1735,7 @@ protected void assertQuerySql(Connection connection,
                                   .withAccess(AccessCube.ALL)
                                   .withHierarchyGrants(List.of(
                                 	 AccessHierarchyGrantMappingImpl.builder()
-                                          .withHierarchy(FoodmartMappingSupplier.HIERARCHY_PRODUCT1)
+                                          .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_PRODUCT1))
                                           .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                           .withAccess(AccessHierarchy.CUSTOM)
                                           .withMemberGrants(List.of(
