@@ -634,7 +634,14 @@ public class RolapSchema implements Schema {
         SchemaReader reader,
         AccessHierarchyGrantMapping hierarchyGrant)
     {
-    	Hierarchy hierarchy = cube.lookupHierarchy(hierarchyGrant.getHierarchy());
+    	Hierarchy hierarchy;
+    	if (hierarchyGrant.getHierarchy() != null) {
+    		hierarchy = cube.lookupHierarchy(hierarchyGrant.getHierarchy());
+    	} else {	
+    		hierarchy =
+                lookup(cube, reader, DataType.HIERARCHY, "[Measures]");
+    	}
+
         final Access hierarchyAccess =
             getAccess(hierarchyGrant.getAccess().name(), hierarchyAllowed);
         //Level topLevel = findLevelForHierarchyGrant(

@@ -75,7 +75,6 @@ public class FormatterCreateContext {
 
                 formatterAsElement = true;
                 formatterClassName = cellFormatterMapping.getRef();
-                return null;
             }
             return this;
         }

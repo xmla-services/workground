@@ -635,6 +635,35 @@ public class SchemaModifiers {
                     	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT)
                     ))
             	.build());
+            
+            result.add(VirtualCubeMappingImpl.builder()
+                    .withName("Warehouse and Sales3")
+                    .withDefaultMeasure((MeasureMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE))
+                    .withCubeUsages(List.of(CubeConnectorMappingImpl.builder()
+                    		.withCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                    		.withIgnoreUnrelatedDimensions(true)
+                    		.build()))
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                    		.withOverrideDimensionName("Gender")
+                    		.build(),
+                        DimensionConnectorMappingImpl.builder()                    		
+                    		.withOverrideDimensionName("Store")
+                    		.build(),                    		
+                       	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Product")
+                    		.build(),
+                        DimensionConnectorMappingImpl.builder()
+                        		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
+                        		.withOverrideDimensionName("Warehouse")
+                        		.build()
+                    ))
+                    .withReferencedMeasures(List.of(
+                    	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT)
+                    ))
+            	.build());
+
             return result;
         }
 
@@ -13535,7 +13564,7 @@ public class SchemaModifiers {
                                         .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
                                         .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                        .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STORE_CYTY_UNIQUE_MEMBERS_TRUE))
+                                        .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STORE_STATE_UNIQUE_MEMBERS_TRUE))
                                         .build()
                                 ))
                                 .build(),
@@ -18787,7 +18816,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Markets")
                                     	.withForeignKey("CUSTOMERNUMBER")
-                                    	.withDimension(TimeDimensionMappingImpl.builder()
+                                    	.withDimension(StandardDimensionMappingImpl.builder()
                                     		.withName("Markets")
                                     		.withHierarchies(List.of(
                                     			marketsHierarchy = HierarchyMappingImpl.builder()
