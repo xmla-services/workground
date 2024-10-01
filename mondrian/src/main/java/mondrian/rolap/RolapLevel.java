@@ -425,7 +425,7 @@ public class RolapLevel extends LevelBase {
             FormatterCreateContext formatterContext =
                     new FormatterCreateContext.Builder(xmlProperty.getName())
                         .formatterDef(xmlProperty.getFormatter())
-                        .formatterAttr(null)
+                        .formatterAttr(xmlProperty.getFormatter() != null ? xmlProperty.getFormatter().getRef() : null)
                         .build();
             PropertyFormatter formatter =
                 FormatterFactory.instance()
