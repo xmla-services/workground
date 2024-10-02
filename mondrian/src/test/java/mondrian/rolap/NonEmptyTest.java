@@ -5832,7 +5832,7 @@ class NonEmptyTest extends BatchTestCase {
               CalculatedMemberMappingImpl cm  = CalculatedMemberMappingImpl.builder()
               .withName("dummyMeasure")
               //.withDimension("Measures")
-              .withFormatString("1")
+              .withFormula("1")
               .build();
 
               

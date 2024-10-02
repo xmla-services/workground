@@ -1084,6 +1084,13 @@ public class RolapCube extends CubeBase {
                             mappingCalcMember.getHierarchy().getName(),
                             Quoting.UNQUOTED),
                         true);
+            } else {
+            	hierarchy =
+            		lookupHierarchy(
+                        new IdImpl.NameSegmentImpl(
+                        	"[Measures]",
+                            Quoting.UNQUOTED),
+                        true);
             }
             if (formula.getName().equals(mappingCalcMember.getName())
                 && formula.getMdxMember().getHierarchy().equals(
