@@ -101,6 +101,7 @@ class VirtualCubeTest extends BatchTestCase {
                     .withName("Sales vs Warehouse")
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
@@ -146,8 +147,10 @@ class VirtualCubeTest extends BatchTestCase {
                 result.addAll(super.schemaCubes(schema));
                 result.add(VirtualCubeMappingImpl.builder()
                     .withName("Sales vs Warehouse")
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT))
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
@@ -315,9 +318,10 @@ class VirtualCubeTest extends BatchTestCase {
                 result.addAll(super.schemaCubes(schema));
                 result.add(VirtualCubeMappingImpl.builder()
                     .withName("Sales vs Warehouse")
-                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_WAREHOUSE_PROFIT))
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.CALCULATED_MEMBER_PROFIT))
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
@@ -387,9 +391,11 @@ class VirtualCubeTest extends BatchTestCase {
                     .withName("Sales vs Warehouse")
                     .withDimensionConnectors(List.of(
                         DimensionConnectorMappingImpl.builder()
+                        	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                     		.withOverrideDimensionName("Time")
                             .build(),
                     	DimensionConnectorMappingImpl.builder()
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
@@ -698,6 +704,7 @@ class VirtualCubeTest extends BatchTestCase {
                     		.withOverrideDimensionName("Customers")
                             .build(),
                         DimensionConnectorMappingImpl.builder()
+                        	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                         	.withOverrideDimensionName("Time")
                             .build()
                     ))
@@ -847,9 +854,11 @@ class VirtualCubeTest extends BatchTestCase {
                         .withName("Warehouse and Sales Format Expression Cube No Cache")
                         .withDimensionConnectors(List.of(
                         	DimensionConnectorMappingImpl.builder()
+                        		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
                         		.withOverrideDimensionName("Store")
                                 .build(),
                             DimensionConnectorMappingImpl.builder()
+                            	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
                             	.withOverrideDimensionName("Time")
                                 .build()
                         ))
@@ -1340,6 +1349,7 @@ class VirtualCubeTest extends BatchTestCase {
                     .withName("Sales vs HR")
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
+                    		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_HR))
                     		.withOverrideDimensionName("Store")
                             .build(),
                         DimensionConnectorMappingImpl.builder()
@@ -1413,8 +1423,10 @@ class VirtualCubeTest extends BatchTestCase {
                 result.addAll(super.schemaCubes(schema));
                 result.add(VirtualCubeMappingImpl.builder()
                     .withName("Sales vs Warehouse")
+                    .withDefaultMeasure((MemberMappingImpl) look(FoodmartMappingSupplier.MEASURE_UNIT_SALES))
                     .withDimensionConnectors(List.of(
                     	DimensionConnectorMappingImpl.builder()
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
                     		.withOverrideDimensionName("Product")
                             .build()
                     ))
