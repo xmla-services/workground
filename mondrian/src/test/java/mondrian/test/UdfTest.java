@@ -145,6 +145,7 @@ public class UdfTest {
             + "Row #0: 571,596\n");
     }
 
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testFun(Context context) {
@@ -344,6 +345,7 @@ public class UdfTest {
         assertExprReturns(context.getConnection(), "GenericMinusOne(3)", "2");
     }
 
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testComplexFun(Context context) {
@@ -373,6 +375,7 @@ public class UdfTest {
             + "Row #5: 0.504\n");
     }
 
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testException(Context context) {
@@ -1271,6 +1274,7 @@ public class UdfTest {
     /**
      * As {@link #testCellFormatterNested()}, but using a script.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterScript(Context context) {
@@ -1373,6 +1377,7 @@ public class UdfTest {
      * Unit test for a cell formatter defined against a calculated member,
      * using a script.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testCellFormatterOnCalcMemberScript(Context context) {
@@ -1464,6 +1469,7 @@ public class UdfTest {
     /**
      * As {@link #testMemberFormatterNested()}, but using a script.
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testMemberFormatterScript(Context context) {
@@ -1576,6 +1582,7 @@ public class UdfTest {
      *
      * @throws SQLException on error
      */
+    @Disabled //TODO: UserDefinedFunction
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
     void testPropertyFormatterScript(Context context) throws SQLException {

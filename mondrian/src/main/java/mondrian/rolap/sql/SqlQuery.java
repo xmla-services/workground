@@ -40,6 +40,7 @@ import mondrian.olap.SystemWideProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapUtil;
+import mondrian.rolap.Utils;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.util.Pair;
 
@@ -466,7 +467,7 @@ public class SqlQuery {
     private int find(List<RelInfo> relations, RelationalQueryMapping relation) {
         for (int i = 0, n = relations.size(); i < n; i++) {
             RelInfo relInfo = relations.get(i);
-            if (relInfo.relation.equals(relation)) {
+            if (Utils.equalsQuery(relInfo.relation, relation)) {
                 return i;
             }
         }

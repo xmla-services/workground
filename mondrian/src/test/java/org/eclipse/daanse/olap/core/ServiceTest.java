@@ -20,25 +20,30 @@ import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.mdx.parser.api.MdxParserProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.rolap.mapping.api.CatalogMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SchemaMapping;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
@@ -83,6 +88,9 @@ class ServiceTest {
 	@Mock
 	CatalogMapping catalogMapping;
 
+	@Mock
+	SchemaMapping schemaMapping;
+	
 	@BeforeEach
 	public void setup() throws SQLException {
 
@@ -96,7 +104,8 @@ class ServiceTest {
         when(dataSource.getConnection()).thenReturn(connection);
         when(dialectResolver.resolve((DataSource)any())).thenReturn(Optional.of(dialect));
         when(catalogMappingSupplier.get()).thenReturn(catalogMapping);
-        when(catalogMapping.getName()).thenReturn("schemaName");
+        when(schemaMapping.getName()).thenReturn("schemaName");
+        when(catalogMapping.getSchemas()).thenAnswer(setupDummyListAnswer(schemaMapping));
 
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
@@ -149,4 +158,17 @@ class ServiceTest {
         });
 
     }
+	
+    private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
+        final List<N> someList = new LinkedList<>(Arrays.asList(values));
+
+        Answer<List<N>> answer = new Answer<>() {
+            @Override
+			public List<N> answer(InvocationOnMock invocation) throws Throwable {
+                return someList;
+            }
+        };
+        return answer;
+    }
+
 }

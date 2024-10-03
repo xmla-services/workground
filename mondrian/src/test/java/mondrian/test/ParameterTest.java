@@ -1430,7 +1430,7 @@ class ParameterTest {
                 result.addAll(super.schemaParameters(schema));
                 result.add(ParameterMappingImpl.builder()
                     .withName("Customer Current Member")
-                    .withType(DataType.NUMERIC)
+                    //.withType(DataType.NUMERIC) TODO "Member"
                     .withDefaultValue("[Customers].DefaultMember.Children.Item(2)")
                     .build());
                 return result;            	

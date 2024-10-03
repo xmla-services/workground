@@ -613,8 +613,14 @@ public class RolapSchema implements Schema {
         for (AccessDimensionGrantMapping accessDimGrantMapping
             : cubeGrant.getDimensionGrants())
         {
-            Dimension dimension =
-                lookup(cube, reader, DataType.DIMENSION, accessDimGrantMapping.getDimension().getName());//not sure here with switch to mapping
+        	Dimension dimension;
+        	if (accessDimGrantMapping.getDimension() != null) {
+        		dimension =
+        			lookup(cube, reader, DataType.DIMENSION, accessDimGrantMapping.getDimension().getName());//not sure here with switch to mapping
+        	} else {
+        		dimension =
+            			lookup(cube, reader, DataType.DIMENSION, "Measures");        		
+        	}
             role.grant(
                 dimension,
                 getAccess(accessDimGrantMapping.getAccess().name(), dimensionAllowed));
