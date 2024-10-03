@@ -41,6 +41,7 @@ import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
+import mondrian.rolap.Utils;
 import mondrian.rolap.sql.SqlQuery;
 
 /**
@@ -804,7 +805,7 @@ public abstract class Recognizer {
         String aggColumnWithoutPrefix = aggColumnName.substring(
             usagePrefix.length());
 
-        return aggUsage.relation.equals(rel)
+        return Utils.equalsQuery(aggUsage.relation, rel)
             && aggColumnWithoutPrefix.equalsIgnoreCase(levelColumnName);
     }
 

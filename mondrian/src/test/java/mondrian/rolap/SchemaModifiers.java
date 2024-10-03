@@ -1075,6 +1075,7 @@ public class SchemaModifiers {
 
         protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
             List<CubeMapping> result = new ArrayList<>();
+            result.addAll(super.schemaCubes(schema));
             result.add(VirtualCubeMappingImpl.builder()
                     .withName("Warehouse and Sales2")
                     .withDefaultMeasure((MeasureMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_SALES))
@@ -1171,9 +1172,7 @@ public class SchemaModifiers {
                             .withFormula("[Measures].[Profit] / [Measures].[Units Shipped]")
                             .build()
                     ))
-                    .build());
-
-            result.addAll(super.schemaCubes(schema));
+                    .build());            
             return result;
         }
     }
@@ -4469,7 +4468,7 @@ public class SchemaModifiers {
             if ("Sales".equals(cube.getName())) {
                 result.add(CalculatedMemberMappingImpl.builder()
                 	//.dimension("Gender")
-                	.withHierarchy(FoodmartMappingSupplier.genderHierarchy)
+                	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
                     .withVisible(true)
                     .withName("last")
                     .withFormula("([Gender].LastChild)")
@@ -4791,7 +4790,7 @@ public class SchemaModifiers {
                                 	DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Product")
                                         .withForeignKey("product_id")
-                                        .withDimension(TimeDimensionMappingImpl.builder()
+                                        .withDimension(StandardDimensionMappingImpl.builder()
                                         		.withName("Product")
                                                 .withHierarchies(List.of(
                                                         HierarchyMappingImpl.builder()
@@ -4970,7 +4969,7 @@ public class SchemaModifiers {
 		))
 		.build();
 
-    	private static final TimeDimensionMappingImpl productDimension = TimeDimensionMappingImpl.builder()
+    	private static final StandardDimensionMappingImpl productDimension = StandardDimensionMappingImpl.builder()
     			.withName("Product")
     			.withHierarchies(List.of(productHierarchy)).build();
 
@@ -5003,7 +5002,7 @@ public class SchemaModifiers {
 		))
 		.build();
 
-    	private static final TimeDimensionMappingImpl warehouseDimension = TimeDimensionMappingImpl.builder()
+    	private static final StandardDimensionMappingImpl warehouseDimension = StandardDimensionMappingImpl.builder()
     			.withName("Warehouse")
     			.withHierarchies(List.of(warehouseHierarchy)).build();
 
@@ -7148,12 +7147,13 @@ public class SchemaModifiers {
         ))
         .build();
 
-        private static final TimeDimensionMappingImpl dProduct = TimeDimensionMappingImpl.builder()
+        private static final StandardDimensionMappingImpl dProduct = StandardDimensionMappingImpl.builder()
         .withName("Product")
         .withHierarchies(List.of(
             HierarchyMappingImpl.builder()
                 .withHasAll(true)
                 .withPrimaryKey("product_id")
+                .withPrimaryKeyTable("product")
                 .withQuery(JoinQueryMappingImpl.builder()
         				.withLeft(JoinedQueryElementMappingImpl.builder()
                     			.withKey("product_class_id")
@@ -8439,6 +8439,11 @@ public class SchemaModifiers {
                                             .withUniqueMembers(true)
                                             .build(),
                     					LevelMappingImpl.builder()
+                								.withName("NuStore City")
+                								.withColumn("store_city")
+                                                .withUniqueMembers(false)
+                                                .build(),                                            
+                    					LevelMappingImpl.builder()
                 								.withName("NuStore Name")
                 								.withColumn("store_name")
                                                 .withUniqueMembers(true)
@@ -8486,8 +8491,6 @@ public class SchemaModifiers {
             						))
             						.build(),
                 					HierarchyMappingImpl.builder()
-
-
                                     .withName("NuStore2")
                                     .withAllMemberName("All NuStore2s")
             						.withHasAll(true)
@@ -8780,6 +8783,7 @@ public class SchemaModifiers {
             				.withName("Store Type 2")
             				.withHierarchies(List.of(
             					HierarchyMappingImpl.builder()
+            						.withName("Store Type 2")
             						.withHasAll(true)
             						.withPrimaryKey("store_id")
             						.withQuery(TableQueryMappingImpl.builder().withName("store").build())
@@ -14086,52 +14090,41 @@ public class SchemaModifiers {
             result.addAll(super.schemaAccessRoles(schema));
             result.add(
             	AccessRoleMappingImpl.builder()
-                	.withName("VCRole")
+                	.withName("role1")
                     .withAccessSchemaGrants(List.of(
                     	AccessSchemaGrantMappingImpl.builder()
                         	.withAccess(AccessSchema.NONE)
                         	.withCubeGrant(List.of(
                         		AccessCubeGrantMappingImpl.builder()
-                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_VIRTIAL_WAREHOUSE_AND_SALES))
+                                	.withCube((CubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
                                     .withAccess(AccessCube.ALL)
                                     .withHierarchyGrants(List.of(
                                     	AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_STORE_SIZE_IN_SQFT))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withMember("[Store Size in SQFT].[20319]")
                                                         .withAccess(AccessMember.ALL)
                                                         .build(),
                                                		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withMember("[Store Size in SQFT]")
                                                         .withAccess(AccessMember.NONE)
                                                         .build()
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
-                                        	.withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
-                                        	.withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_STORE_TYPE))
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Customers].[USA].[CA]")
+                                                        .withMember("[Store Type].[Supermarket]")
                                                         .withAccess(AccessMember.ALL)
-                                                        .build(),
-                                                	AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
-                                                        .withAccess(AccessMember.NONE)
                                                         .build()
                                              ))
-                                             .build(),
-                                         AccessHierarchyGrantMappingImpl.builder()
-                                         	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
-                                         	.withAccess(AccessHierarchy.NONE)
-                                         	.build()
-
+                                             .build()
                                         ))
                                         .build()
 
@@ -17984,6 +17977,7 @@ public class SchemaModifiers {
                                                         //.withCaption("Customer Level Caption")
                                                         .withDescription("Customer Level Description")
                                                         .withColumn("customer_id")
+                                                        .withNameColumn("fullname")
                                                         .withType(DataType.STRING)
                                                         .withUniqueMembers(true)
                                                         .build()
@@ -18006,6 +18000,7 @@ public class SchemaModifiers {
                                                         //.withCaption("Product Level Caption")
                                                         .withDescription("Product Level Description")
                                                         .withColumn("product_id")
+                                                        .withNameColumn("product_name")
                                                         .withType(DataType.STRING)
                                                         .withUniqueMembers(true)
                                                         .build()
@@ -18445,7 +18440,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Product")
                                     	.withForeignKey("product_id")
-                                    	.withDimension(TimeDimensionMappingImpl.builder()
+                                    	.withDimension(StandardDimensionMappingImpl.builder()
                                     		.withName("Product")
                                     		.withHierarchies(List.of(
                                             HierarchyMappingImpl.builder()
@@ -18537,7 +18532,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     		.withOverrideDimensionName("Promotion")
                                             .withForeignKey("promotion_id")
-                                            .withDimension(TimeDimensionMappingImpl.builder()
+                                            .withDimension(StandardDimensionMappingImpl.builder()
                                             	.withName("Promotion")
                                             	.withHierarchies(List.of(
                                             	HierarchyMappingImpl.builder()
@@ -18559,7 +18554,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Currency")
                                     	.withForeignKey("promotion_id")
-                                    	.withDimension(TimeDimensionMappingImpl.builder()
+                                    	.withDimension(StandardDimensionMappingImpl.builder()
                                     		.withName("Currency")
                                     		.withHierarchies(List.of(
                                         	HierarchyMappingImpl.builder()
@@ -18579,7 +18574,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Customer")
                                     	.withForeignKey("customer_id")
-                                    	.withDimension(TimeDimensionMappingImpl.builder()
+                                    	.withDimension(StandardDimensionMappingImpl.builder()
                                     		.withName("Customer")
                                     		.withHierarchies(List.of(
                                     		HierarchyMappingImpl.builder()
@@ -18616,7 +18611,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Store Size in SQFT")
                                         .withForeignKey("store_id")
-                                        .withDimension(TimeDimensionMappingImpl.builder()
+                                        .withDimension(StandardDimensionMappingImpl.builder()
                                         	.withName("Store Size in SQFT")
                                         	.withHierarchies(List.of(
                                         	HierarchyMappingImpl.builder()
@@ -18899,7 +18894,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Customers")
                                         .withForeignKey("CUSTOMERNUMBER")
-                                        .withDimension(TimeDimensionMappingImpl.builder()
+                                        .withDimension(StandardDimensionMappingImpl.builder()
                                         	.withName("Customers")
                                         	.withHierarchies(List.of(
                                             HierarchyMappingImpl.builder()
@@ -18956,7 +18951,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                     	.withOverrideDimensionName("Customers")
                                         .withForeignKey("PRODUCTCODE")
-                                        .withDimension(TimeDimensionMappingImpl.builder()
+                                        .withDimension(StandardDimensionMappingImpl.builder()
                                         	.withName("Product")
                                         	.withHierarchies(List.of(
                                         	HierarchyMappingImpl.builder()
@@ -19078,7 +19073,7 @@ public class SchemaModifiers {
                                     DimensionConnectorMappingImpl.builder()
                                         .withOverrideDimensionName("Order Status")
                                         .withForeignKey("STATUS")
-                                        .withDimension(TimeDimensionMappingImpl.builder()
+                                        .withDimension(StandardDimensionMappingImpl.builder()
                                         	.withName("Order Status")
                                         	.withHierarchies(List.of(
                                             HierarchyMappingImpl.builder()

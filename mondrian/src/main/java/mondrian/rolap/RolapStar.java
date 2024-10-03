@@ -1792,7 +1792,7 @@ public class RolapStar {
             Condition joinCondition)
         {
             for (Table child : getChildren()) {
-                if (child.relation.equals(relation)) {
+                if (Utils.equalsQuery(child.relation, relation)) {
                     Condition condition = joinCondition;
                     if (!Util.equalName(RelationUtil.getAlias(relation), child.alias)) {
                         // Make the two conditions comparable, by replacing

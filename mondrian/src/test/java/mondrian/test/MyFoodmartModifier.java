@@ -13,6 +13,8 @@
  */
 package mondrian.test;
 
+import static org.assertj.core.api.Assertions.withMarginOf;
+
 import java.util.List;
 
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
@@ -1971,7 +1973,7 @@ public class MyFoodmartModifier extends PojoMappingModifier {
                             DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Education Level").build(),
                             DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Gender").build(),
                             DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Marital Status").build(),
-                            DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).build(),
+                            DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Product").build(),
                             DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Promotion Media").build(),
                             DimensionConnectorMappingImpl.builder().withPhysicalCube(sales).withOverrideDimensionName("Promotions").build(),
                             DimensionConnectorMappingImpl.builder().withOverrideDimensionName("Store").build(),

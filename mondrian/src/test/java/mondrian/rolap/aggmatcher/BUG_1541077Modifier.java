@@ -131,7 +131,7 @@ public class BUG_1541077Modifier extends PojoMappingModifier {
                     .withOverrideDimensionName("ProductX")
                     .withForeignKey("prod_id")
                     .withDimension(StandardDimensionMappingImpl.builder()
-                        .withName("StoreX")
+                        .withName("ProductX")
                         .withHierarchies(List.of(
                         HierarchyMappingImpl.builder()
                             .withHasAll(true)
