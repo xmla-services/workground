@@ -64,6 +64,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.AggregationExcludeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationLevelMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationMeasureMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AggregationNameMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.CubeConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.CubeMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionConnectorMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.DimensionMappingImpl;
@@ -76,6 +77,7 @@ import org.eclipse.daanse.rolap.mapping.pojo.SchemaMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TimeDimensionMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.VirtualCubeMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -1783,13 +1785,78 @@ class AggregationOnDistinctCountMeasuresTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class)
   void testMondrian906(Context context) {
-      prepareContext(context);
+      //prepareContext(context);
 
       class TestMondrian906Modifier extends PojoMappingModifier {
 
           public TestMondrian906Modifier(CatalogMapping c) {
               super(c);
           }
+          protected List<? extends CubeMapping> schemaCubes(SchemaMapping schema) {
+              List<CubeMapping> result = new ArrayList<>();
+              result.addAll(super.schemaCubes(schema));
+              result.add(VirtualCubeMappingImpl.builder()
+                      .withName("Warehouse and Sales2")
+                      .withDefaultMeasure((MeasureMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_SALES))
+                      .withDimensionConnectors(List.of(
+                      	DimensionConnectorMappingImpl.builder()
+                      		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                      		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_GENDER))
+                      		.withOverrideDimensionName("Gender")
+                      		.build(),
+                         	DimensionConnectorMappingImpl.builder()
+                      		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                      		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_STORE_WITH_QUERY_STORE))
+                      		.withOverrideDimensionName("Store")
+                      		.build(),
+                          DimensionConnectorMappingImpl.builder()
+                          		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                          		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
+                          		.withOverrideDimensionName("Product")
+                          		.build(),
+                          DimensionConnectorMappingImpl.builder()
+                          		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
+                          		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_WAREHOUSE))
+                          		.withOverrideDimensionName("Warehouse")
+                          		.build()
+                      ))
+                      .withReferencedMeasures(List.of(
+                      	look(FoodmartMappingSupplier.MEASURE_STORE_SALES),
+                      	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT)
+                      ))
+              	.build());
+              
+              result.add(VirtualCubeMappingImpl.builder()
+                      .withName("Warehouse and Sales3")
+                      .withDefaultMeasure((MeasureMappingImpl) look(FoodmartMappingSupplier.MEASURE_STORE_INVOICE))
+                      .withCubeUsages(List.of(CubeConnectorMappingImpl.builder()
+                      		.withCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                      		.withIgnoreUnrelatedDimensions(true)
+                      		.build()))
+                      .withDimensionConnectors(List.of(
+                      	DimensionConnectorMappingImpl.builder()
+                      		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_SALES))
+                      		.withOverrideDimensionName("Gender")
+                      		.build(),
+                          DimensionConnectorMappingImpl.builder()                    		
+                      		.withOverrideDimensionName("Store")
+                      		.build(),                    		
+                         	DimensionConnectorMappingImpl.builder()
+                      		.withOverrideDimensionName("Product")
+                      		.build(),
+                          DimensionConnectorMappingImpl.builder()
+                          		.withPhysicalCube((PhysicalCubeMappingImpl) look(FoodmartMappingSupplier.CUBE_WAREHOUSE))
+                          		.withOverrideDimensionName("Warehouse")
+                          		.build()
+                      ))
+                      .withReferencedMeasures(List.of(
+                      	look(FoodmartMappingSupplier.MEASURE_CUSTOMER_COUNT)
+                      ))
+              	.build());
+
+              return result;
+          }
+
           @Override
           protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
               List<AccessRoleMapping> result = new ArrayList<>();
@@ -1848,6 +1915,17 @@ class AggregationOnDistinctCountMeasuresTest {
       withSchema(context, schema);
        */
       withSchema(context, TestMondrian906Modifier::new);
+      Connection connection = context.getConnection();
+
+      schemaReader =
+              connection.getSchemaReader().withLocus();
+      salesCube = (RolapCube) cubeByName(
+              connection,
+              cubeNameSales);
+      salesCubeSchemaReader =
+              salesCube.getSchemaReader(
+                      connection.getRole()).withLocus();
+
 
       final String mdx =
             "select {[Customers].[USA], [Customers].[USA].[OR], [Customers].[USA].[WA]} on columns, {[Measures].[Customer Count]} on rows from [Sales]";

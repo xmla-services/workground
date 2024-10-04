@@ -14,19 +14,27 @@ package mondrian.rolap;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.rolap.mapping.api.model.SQLExpressionMapping;
+import org.eclipse.daanse.rolap.mapping.api.model.SQLMapping;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import mondrian.olap.Property;
 import mondrian.rolap.aggmatcher.AggStar;
@@ -46,17 +54,27 @@ class SqlTupleReaderTest {
     SqlQuery sqlQuery = mock( SqlQuery.class, Answers.RETURNS_MOCKS );
     RolapCube baseCube = mock( RolapCube.class );
     RolapLevel targetLevel = mock( RolapLevel.class );
-    SQLExpressionMapping expression =  mock(mondrian.rolap.RolapColumn.class);
+    RolapColumn expression =  mock(mondrian.rolap.RolapColumn.class);
     RolapCubeLevel levelIter = mock( RolapCubeLevel.class, Answers.RETURNS_MOCKS );
     RolapProperty rolapProperty = mock( TestPublicRolapProperty.class, Answers.RETURNS_MOCKS );
     String propertyName = "property_1";
+    Dialect dialect = mock( Dialect.class );
+    when(dialect.getDialectName()).thenReturn( "generic" );
+    when(dialect.quoteIdentifier(any(String.class), any(String.class))).thenReturn( "generic" );
+    SQLMapping sql = mock(SQLMapping.class );
+    when(sql.getDialects()).thenAnswer(setupDummyListAnswer("generic"));
+    when(sql.getStatement()).thenReturn( "SQL" );
+    when(expression.getSqls()).thenAnswer(setupDummyListAnswer(sql));
+    when(expression.getName()).thenReturn( "name" );
+    when(expression.getTable()).thenReturn( "table" );
+    when(sqlQuery.getDialect()).thenReturn( dialect );   
     when( rolapProperty.getName() ).thenReturn( propertyName );
     when( rolapProperty.getType() ).thenReturn(Property.Datatype.TYPE_STRING);
     when(rolapProperty.getExp()).thenReturn(expression);
     RolapProperty[] properties = { rolapProperty };
     when( levelIter.getProperties() ).thenReturn( properties );
-    when( levelIter.getKeyExp() ).thenReturn( mock( mondrian.rolap.RolapColumn.class ) );
-    when( levelIter.getOrdinalExp() ).thenReturn( mock( mondrian.rolap.RolapColumn.class ) );
+    when( levelIter.getKeyExp() ).thenReturn( expression );
+    when( levelIter.getOrdinalExp() ).thenReturn( expression );
     when( levelIter.getParentExp() ).thenReturn( null );
     RolapHierarchy hierarchy = mock( RolapHierarchy.class, Answers.RETURNS_MOCKS );
     when( targetLevel.getHierarchy() ).thenReturn( hierarchy );
@@ -65,9 +83,10 @@ class SqlTupleReaderTest {
     JdbcSchema.Table dbTable = mock( JdbcSchema.Table.class, Answers.RETURNS_MOCKS );
     when( dbTable.getColumnUsages( any() ) ).thenReturn( mock( Iterator.class ) );
     RolapStar star = mock( RolapStar.class );
-    when( star.getColumnCount() ).thenReturn( 1 );
+    when( star.getColumnCount() ).thenReturn( 1 );    
     AggStar aggStar = spy( AggStar.makeAggStar( star, dbTable,  10 ) );
     AggStar.Table.Column column = mock( AggStar.Table.Column.class, Answers.RETURNS_MOCKS );
+    when(column.getExpression()).thenReturn(expression);
     doReturn( column ).when( aggStar ).lookupColumn( 0 );
     RolapStar.Column starColumn = mock( RolapStar.Column.class, Answers.RETURNS_MOCKS );
     when( starColumn.getBitPosition() ).thenReturn( 0 );
@@ -78,14 +97,14 @@ class SqlTupleReaderTest {
         new Object[] { aggStar, dbTable }, AggStar.FactTable.class.getClassLoader() );
     factTable = spy( factTable );
     Map<String, SQLExpressionMapping> propertiesAgg = new HashMap<>();
-    propertiesAgg.put( propertyName, mock( mondrian.rolap.RolapColumn.class ) );
+    propertiesAgg.put( propertyName, expression );
     Class[] constructorArgsClasses =
       { mondrian.rolap.aggmatcher.AggStar.Table.class, String.class, SQLExpressionMapping.class, int.class,
         RolapStar.Column.class, boolean.class,
         SQLExpressionMapping.class, SQLExpressionMapping.class, Map.class };
     Object[] constructorArgs =
-      { factTable, "name", mock( mondrian.rolap.RolapColumn.class ), 0, starColumn, true,
-        mock( mondrian.rolap.RolapColumn.class ), null,
+      { factTable, "name", expression, 0, starColumn, true,
+    	  expression, null,
         propertiesAgg };
     AggStar.Table.Level aggStarLevel =
       (AggStar.Table.Level) createInstance( "mondrian.rolap.aggmatcher.AggStar$Table$Level", constructorArgsClasses,
@@ -105,6 +124,18 @@ class SqlTupleReaderTest {
     Constructor constructor = cl.getDeclaredConstructor( constructorArgsClasses );
     constructor.setAccessible( true );
     return constructor.newInstance( constructorArgs );
+  }
+
+  private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
+      final List<N> someList = new LinkedList<>(Arrays.asList(values));
+
+      Answer<List<N>> answer = new Answer<>() {
+          @Override
+			public List<N> answer(InvocationOnMock invocation) throws Throwable {
+              return someList;
+          }
+      };
+      return answer;
   }
 
 
