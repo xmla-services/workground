@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.daanse.rolap.mapping.api.model.InlineTableQueryMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.RelationalQueryMapping;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.SchemaUtil;
@@ -38,7 +39,15 @@ class RolapUtilTest {
   @Test
   void testMakeRolapStarKeyUnmodifiable() throws Exception {
     try {
-      fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+      //fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+      fact = TableQueryMappingImpl.builder()
+    		  .withName("getFactTable()")
+    		  .withAlias("TableAlias")
+    		  .withSqlWhereExpression(SQLMappingImpl.builder()
+    				  .withDialects(List.of("mysql"))
+    				  .withStatement("`TableAlias`.`promotion_id` = 112")
+    				  .build())
+    		  .build();
       List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
       assertNotNull(polapStarKey);
       polapStarKey.add("OneMore");
@@ -52,7 +61,15 @@ class RolapUtilTest {
 
   @Test
   void testMakeRolapStarKey_ByFactTableName() throws Exception {
-    fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+    //fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+    fact = TableQueryMappingImpl.builder()
+    		  .withName("getFactTable()")
+    		  .withAlias("TableAlias")
+    		  .withSqlWhereExpression(SQLMappingImpl.builder()
+    				  .withDialects(List.of("mysql"))
+    				  .withStatement("`TableAlias`.`promotion_id` = 112")
+    				  .build())
+    		  .build();
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());
@@ -61,7 +78,15 @@ class RolapUtilTest {
 
   @Test
   void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
-    fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+    //fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+    fact = TableQueryMappingImpl.builder()
+  		  .withName("getFactTable()")
+  		  .withAlias("TableAlias")
+  		  .withSqlWhereExpression(SQLMappingImpl.builder()
+  				  .withDialects(List.of("mysql"))
+  				  .withStatement("`TableAlias`.`promotion_id` = 112")
+  				  .build())
+  		  .build();
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(3, polapStarKey.size());
@@ -73,7 +98,15 @@ class RolapUtilTest {
   @Test
   void testMakeRolapStarKey_FactTableWithEmptyFilter()
       throws Exception {
-    fact = SchemaUtil.parse(getFactTableWithEmptySQLFilter(), TableQueryMappingImpl.class);
+    //fact = SchemaUtil.parse(getFactTableWithEmptySQLFilter(), TableQueryMappingImpl.class);
+    fact = TableQueryMappingImpl.builder()
+  		  .withName("getFactTable()")
+  		  .withAlias("TableAlias")
+  		  .withSqlWhereExpression(SQLMappingImpl.builder()
+  				  .withDialects(List.of("mysql"))
+  				  .build())
+  		  .build();
+
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());
@@ -83,7 +116,11 @@ class RolapUtilTest {
   @Test
   void testMakeRolapStarKey_FactTableWithoutSQLFilter()
       throws Exception {
-    fact = SchemaUtil.parse(getFactTableWithoutSQLFilter(), TableQueryMappingImpl.class);
+    //fact = SchemaUtil.parse(getFactTableWithoutSQLFilter(), TableQueryMappingImpl.class);
+    fact = TableQueryMappingImpl.builder()
+    		  .withName("getFactTable()")
+    		  .withAlias("TableAlias")
+    		  .build();
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());

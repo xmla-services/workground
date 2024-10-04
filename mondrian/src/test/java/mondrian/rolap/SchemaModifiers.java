@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.rolap.mapping.api.model.AccessRoleMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CalculatedMemberMapping;
 import org.eclipse.daanse.rolap.mapping.api.model.CatalogMapping;
@@ -13666,8 +13669,10 @@ public class SchemaModifiers {
         @Override
         protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
             List<AccessRoleMapping> result = new ArrayList<>();
+            AccessRoleMappingImpl roleUSAmanager;
+            AccessRoleMappingImpl roleParentUSAmanager;
             result.addAll(super.schemaAccessRoles(schema));
-            result.add(AccessRoleMappingImpl.builder()
+            result.add(roleUSAmanager = AccessRoleMappingImpl.builder()
                     .withName("USA manager")
                     .withAccessSchemaGrants(List.of(
                     	AccessSchemaGrantMappingImpl.builder()
@@ -13702,12 +13707,10 @@ public class SchemaModifiers {
             		.build());
 
             result.add(
-            	AccessRoleMappingImpl.builder()
+            		roleParentUSAmanager = AccessRoleMappingImpl.builder()
                     .withName("parent of USA manager")
                     .withReferencedAccessRoles(List.of(
-                    	AccessRoleMappingImpl.builder()
-                        	.withName("USA manager")
-                            .build()
+                    	roleUSAmanager
                      ))
                      .build()
             );
@@ -13716,9 +13719,7 @@ public class SchemaModifiers {
                 AccessRoleMappingImpl.builder()
                     .withName("grandparent of USA manager")
                     .withReferencedAccessRoles(List.of(
-                    	AccessRoleMappingImpl.builder()
-                            .withName("parent of USA manager")
-                            .build()
+                    	roleParentUSAmanager
                     ))
                     .build()
             );
@@ -14109,7 +14110,7 @@ public class SchemaModifiers {
                                                         .withAccess(AccessMember.ALL)
                                                         .build(),
                                                		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store Size in SQFT]")
+                                                        .withMember("[Store Size in SQFT].[21215]")
                                                         .withAccess(AccessMember.NONE)
                                                         .build()
                                              ))
@@ -14200,11 +14201,11 @@ public class SchemaModifiers {
                                         	.withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store].[USA].[CA]")
+                                                        .withMember("[Customers].[USA].[CA]")
                                                         .withAccess(AccessMember.ALL)
                                                         .build(),
                                                		AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store].[USA].[CA].[Los Angeles]")
+                                                        .withMember("[Customers].[USA].[CA].[Los Angeles]")
                                                         .withAccess(AccessMember.NONE)
                                                         .build()
                                              ))
@@ -14290,103 +14291,251 @@ public class SchemaModifiers {
 
     public static class AccessControlTestModifier12 extends PojoMappingModifier {
 
-        private List<AccessRoleMapping> roles;
+        private Result result;
+        private PhysicalCubeMappingImpl cube;
+
+        private static final HierarchyMappingImpl hCustomers = HierarchyMappingImpl.builder()
+		.withHasAll(true)
+		.withPrimaryKey("customer_id")
+		.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+		.withLevels(List.of(
+			LevelMappingImpl.builder()
+				.withName("Country")
+				.withColumn("country")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("State Province")
+				.withColumn("state_province")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("City")
+				.withColumn("city")
+                .withUniqueMembers(false)
+                .build(),
+        	LevelMappingImpl.builder()
+    		 	.withName("Name")
+    		    .withColumn("customer_id")
+    		    .withType(DataType.NUMERIC)
+                .withUniqueMembers(true)
+                .build()
+		))
+		.build();
+
+        private static final HierarchyMappingImpl hCustomers2 = HierarchyMappingImpl.builder()
+		.withHasAll(true)
+		.withPrimaryKey("customer_id")
+		.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+		.withLevels(List.of(
+			LevelMappingImpl.builder()
+				.withName("Country")
+				.withColumn("country")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("State Province")
+				.withColumn("state_province")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("City")
+				.withColumn("city")
+                .withUniqueMembers(false)
+                .build(),
+        	LevelMappingImpl.builder()
+    		 	.withName("Name")
+    		    .withColumn("customer_id")
+    		    .withType(DataType.NUMERIC)
+                .withUniqueMembers(true)
+                .build()
+		))
+		.build();
+
+        private static final HierarchyMappingImpl hCustomers3 = HierarchyMappingImpl.builder()
+		.withHasAll(true)
+		.withPrimaryKey("customer_id")
+		.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
+		.withLevels(List.of(
+			LevelMappingImpl.builder()
+				.withName("Country")
+				.withColumn("country")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("State Province")
+				.withColumn("state_province")
+                .withUniqueMembers(true)
+                .build(),
+			LevelMappingImpl.builder()
+				.withName("City")
+				.withColumn("city")
+                .withUniqueMembers(false)
+                .build(),
+        	LevelMappingImpl.builder()
+    		 	.withName("Name")
+    		    .withColumn("customer_id")
+    		    .withType(DataType.NUMERIC)
+                .withUniqueMembers(true)
+                .build()
+		))
+		.build();
 
         private static final StandardDimensionMappingImpl dCustomers = StandardDimensionMappingImpl.builder()
 		.withName("Customers")
 		.withHierarchies(List.of(
-			HierarchyMappingImpl.builder()
-				.withHasAll(true)
-				.withPrimaryKey("customer_id")
-				.withQuery(TableQueryMappingImpl.builder().withName("customer").build())
-				.withLevels(List.of(
-					LevelMappingImpl.builder()
-						.withName("Country")
-						.withColumn("country")
-                        .withUniqueMembers(true)
-                        .build(),
-    				LevelMappingImpl.builder()
-						.withName("State Province")
-						.withColumn("state_province")
-                        .withUniqueMembers(true)
-                        .build(),
-        			LevelMappingImpl.builder()
-    					.withName("City")
-    					.withColumn("city")
-                        .withUniqueMembers(false)
-                        .build(),
-                	LevelMappingImpl.builder()
-            		 	.withName("Name")
-            		    .withColumn("customer_id")
-            		    .withType(DataType.NUMERIC)
-                        .withUniqueMembers(true)
-                        .build()
-				))
-				.build()
+			hCustomers
 	    ))
         .build();
 
+        private static final StandardDimensionMappingImpl dCustomers2 = StandardDimensionMappingImpl.builder()
+		.withName("Customers2")
+		.withHierarchies(List.of(
+			hCustomers2
+	    ))
+        .build();
 
-        public AccessControlTestModifier12(CatalogMapping catalog, List<AccessRoleMapping> roles) {
+        private static final StandardDimensionMappingImpl dCustomers3 = StandardDimensionMappingImpl.builder()
+		.withName("Customers3")
+		.withHierarchies(List.of(
+			hCustomers3
+	    ))
+        .build();
+
+        
+        public AccessControlTestModifier12(CatalogMapping catalog, Result result) {
             super(catalog);
-            this.roles = roles;
+            this.result = result;
+            cube = PhysicalCubeMappingImpl.builder()
+                    .withName("Sales with multiple customers")
+                    .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
+                    .withDimensionConnectors(List.of(
+                    	DimensionConnectorMappingImpl.builder()
+                    		.withOverrideDimensionName("Time")
+                    		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
+                            .withForeignKey("time_id")
+                            .build(),
+                        DimensionConnectorMappingImpl.builder()
+                        	.withOverrideDimensionName("Product")
+                        	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
+                            .withForeignKey("product_id")
+                            .build(),
+                        DimensionConnectorMappingImpl.builder()
+                            .withOverrideDimensionName("Customers")
+                            .withDimension(dCustomers)
+                            .withForeignKey("customer_id")
+                            .build(),
+                        DimensionConnectorMappingImpl.builder()
+                            .withOverrideDimensionName("Customers2")
+                            .withDimension(dCustomers2)
+                            .withForeignKey("customer_id")
+                            .build(),
+                        DimensionConnectorMappingImpl.builder()
+                            .withOverrideDimensionName("Customers3")
+                            .withDimension(dCustomers3)
+                            .withForeignKey("customer_id")
+                            .build()
+                    ))
+                    .withMeasureGroups(List.of(
+                    		MeasureGroupMappingImpl.builder().withMeasures(List.of(
+                    			MeasureMappingImpl.builder()
+                    				.withName("Unit Sales")
+                    				.withColumn("unit_sales")
+                    				.withAggregatorType(MeasureAggregatorType.SUM)
+                    				.withFormatString("Standard")
+                    				.build()
+                    			))
+                    			.build()
+                    ))
+                    .build();
+
         }
 
+        
         @Override
         protected List<CubeMapping> schemaCubes(SchemaMapping Schema) {
-            List<CubeMapping> result = new ArrayList<>();
-            result.addAll(super.schemaCubes(Schema));
-            result.add(PhysicalCubeMappingImpl.builder()
-                .withName("Sales with multiple customers")
-                .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").build())
-                .withDimensionConnectors(List.of(
-                	DimensionConnectorMappingImpl.builder()
-                		.withOverrideDimensionName("Time")
-                		.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_TIME))
-                        .withForeignKey("time_id")
-                        .build(),
-                    DimensionConnectorMappingImpl.builder()
-                    	.withOverrideDimensionName("Product")
-                    	.withDimension((DimensionMappingImpl) look(FoodmartMappingSupplier.DIMENSION_PRODUCT))
-                        .withForeignKey("product_id")
-                        .build(),
-                    DimensionConnectorMappingImpl.builder()
-                        .withOverrideDimensionName("Customers")
-                        .withDimension(dCustomers)
-                        .withForeignKey("customer_id")
-                        .build(),
-                    DimensionConnectorMappingImpl.builder()
-                        .withOverrideDimensionName("Customers2")
-                        .withDimension(dCustomers)
-                        .withForeignKey("customer_id")
-                        .build(),
-                    DimensionConnectorMappingImpl.builder()
-                        .withOverrideDimensionName("Name")
-                        .withDimension(dCustomers)
-                        .withForeignKey("customer_id")
-                        .build()
-                ))
-                .withMeasureGroups(List.of(
-                		MeasureGroupMappingImpl.builder().withMeasures(List.of(
-                			MeasureMappingImpl.builder()
-                				.withName("Unit Sales")
-                				.withColumn("unit_sales")
-                				.withAggregatorType(MeasureAggregatorType.SUM)
-                				.withFormatString("Standard")
-                				.build()
-                			))
-                			.build()
-                ))
-                .build());
+            List<CubeMapping> result = new ArrayList<>();            
+            result.add(cube);
             return result;
         }
 
         @Override
         protected List<? extends AccessRoleMapping> schemaAccessRoles(SchemaMapping schema) {
-            List<AccessRoleMapping> result = new ArrayList<>();
-            result.addAll(super.schemaAccessRoles(schema));
-            result.addAll(roles);
-            return result;
+            List<AccessRoleMapping> res = new ArrayList<>();
+            List<AccessRoleMappingImpl> roleUsages = new ArrayList<>();
+            for (Position position : result.getAxes()[0].getPositions()) {
+                Member member = position.get(0);
+                String name = member.getParentMember().getName()
+                    + "."
+                    + member.getName(); // e.g. "BC.Burnaby"
+                // e.g. "[Customers].[State Province].[BC].[Burnaby]"
+                String uniqueName =
+                    member.getUniqueName().replace(".[All Customers]", "");
+                // e.g. "[Customers2].[State Province].[BC].[Burnaby]"
+                String uniqueName2 =
+                    uniqueName.replace("Customers", "Customers2");
+                // e.g. "[Customers3].[State Province].[BC].[Burnaby]"
+                String uniqueName3 =
+                    uniqueName.replace("Customers", "Customers3");
+                AccessRoleMappingImpl r = AccessRoleMappingImpl.builder()
+                    .withName(name)
+                    .withAccessSchemaGrants(List.of(
+                        AccessSchemaGrantMappingImpl.builder()
+                            .withAccess(AccessSchema.NONE)
+                            .withCubeGrant(List.of(
+                                AccessCubeGrantMappingImpl.builder()
+                                    .withAccess(AccessCube.ALL)
+                                    .withCube(cube)
+                                    .withHierarchyGrants(List.of(
+                                        AccessHierarchyGrantMappingImpl.builder()
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withHierarchy(hCustomers)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                                AccessMemberGrantMappingImpl.builder()
+                                                    .withAccess(AccessMember.ALL)
+                                                    .withMember(uniqueName)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        AccessHierarchyGrantMappingImpl.builder()
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withHierarchy(hCustomers2)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withAccess(AccessMember.ALL)
+                                                    .withMember(uniqueName2)
+                                                    .build()
+                                            ))
+                                            .build(),
+                                        AccessHierarchyGrantMappingImpl.builder()
+                                            .withAccess(AccessHierarchy.CUSTOM)
+                                            .withHierarchy(hCustomers3)
+                                            .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                            .withMemberGrants(List.of(
+                                            	AccessMemberGrantMappingImpl.builder()
+                                                    .withAccess(AccessMember.ALL)
+                                                    .withMember(uniqueName3)
+                                                    .build()
+                                            ))
+                                            .build()
+                                    ))
+                                    .build()
+                            ))
+                            .build()
+                    ))
+                    .build();
+                
+                res.add(r);
+                
+                roleUsages.add(r);
+            }
+            res.add(AccessRoleMappingImpl.builder()
+                .withName("Test")
+                .withReferencedAccessRoles(roleUsages)
+                .build());
+            return res;
         }
 
                 /*
@@ -14617,12 +14766,7 @@ public class SchemaModifiers {
                                                 .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                 .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                                .withMemberGrants(List.of(
-                                                	AccessMemberGrantMappingImpl.builder()
-                                                        .withMember("[Store].[Store State]")
-                                                        .withAccess(AccessMember.NONE)
-                                                        .build()
-                                                    ))
+                                                .withTopLevel(FoodmartMappingSupplier.LEVEL_STORE_STATE_UNIQUE_MEMBERS_TRUE)
                                                 .build()
 
                                         ))

@@ -50,6 +50,7 @@ import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessHierarchy;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessMember;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.RollupPolicyType;
+import org.eclipse.daanse.rolap.mapping.instance.complex.foodmart.FoodmartMappingSupplier;
 import org.eclipse.daanse.rolap.mapping.api.model.enums.AccessSchema;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessCubeGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessHierarchyGrantMappingImpl;
@@ -735,6 +736,7 @@ class AccessControlTest {
             + "Row #0: 4,617\n"
             + "Row #1: 10,319\n");
 
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier35::new);
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
@@ -812,6 +814,7 @@ class AccessControlTest {
             + "Row #0: 2,614\n"
             + "Row #1: 187\n");
 
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier36::new);
         props = new RolapConnectionPropsR(List.of("Role2"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
@@ -1241,8 +1244,10 @@ class AccessControlTest {
     void testRollupBottomLevel(Context foodMartContext) {
         rollupPolicyBottom(
             foodMartContext, RollupPolicyType.FULL, "74,748", "36,759", "266,773");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicyBottom(
         		foodMartContext, RollupPolicyType.PARTIAL, "72,739", "35,775", "264,764");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicyBottom(foodMartContext, RollupPolicyType.HIDDEN, "", "", "");
     }
 
@@ -1343,8 +1348,10 @@ class AccessControlTest {
     void testRollupPolicyGreatGrandchildInvisible(Context foodMartContext) {
         rollupPolicyGreatGrandchildInvisible(
     		foodMartContext, RollupPolicyType.FULL, "266,773", "74,748");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicyGreatGrandchildInvisible(
     		foodMartContext, RollupPolicyType.PARTIAL, "266,767", "74,742");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicyGreatGrandchildInvisible(
     		foodMartContext, RollupPolicyType.HIDDEN, "", "");
     }
@@ -1379,8 +1386,10 @@ class AccessControlTest {
 //         note that v2 is different for full vs partial, v3 is the same
         rollupPolicySimultaneous(
     		foodMartContext, RollupPolicyType.FULL, "266,773", "74,748", "25,635");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicySimultaneous(
     		foodMartContext, RollupPolicyType.PARTIAL, "72,631", "72,631", "25,635");
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         rollupPolicySimultaneous(
     		foodMartContext, RollupPolicyType.HIDDEN, "", "", "");
     }
@@ -1877,6 +1886,7 @@ class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 26,079\n");
 
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         setGoodmanContext(foodMartContext, RollupPolicyType.FULL);
         props = new RolapConnectionPropsR(List.of("California manager"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
@@ -1907,6 +1917,7 @@ class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 67,659\n");
 
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         setGoodmanContext(foodMartContext, RollupPolicyType.HIDDEN);
         props = new RolapConnectionPropsR(List.of("California manager"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
@@ -2266,6 +2277,7 @@ class AccessControlTest {
         // this test run.
         checkBugMondrian436(foodMartContext);
         SystemWideProperties.instance().populateInitial();
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         checkBugMondrian436(foodMartContext);
     }
 
@@ -2421,84 +2433,11 @@ class AccessControlTest {
         final Result result = TestUtil.executeQuery(
     		connection,
             "select [Customers].[City].Members on 0 from [Sales]");
-        List<AccessRoleMapping> roles = new ArrayList<>();
-        List<AccessRoleMappingImpl> roleUsages = new ArrayList<>();
-        for (Position position : result.getAxes()[0].getPositions()) {
-            Member member = position.get(0);
-            String name = member.getParentMember().getName()
-                + "."
-                + member.getName(); // e.g. "BC.Burnaby"
-            // e.g. "[Customers].[State Province].[BC].[Burnaby]"
-            String uniqueName =
-                member.getUniqueName().replace(".[All Customers]", "");
-            // e.g. "[Customers2].[State Province].[BC].[Burnaby]"
-            String uniqueName2 =
-                uniqueName.replace("Customers", "Customers2");
-            // e.g. "[Customers3].[State Province].[BC].[Burnaby]"
-            String uniqueName3 =
-                uniqueName.replace("Customers", "Customers3");
-            roles.add(AccessRoleMappingImpl.builder()
-                .withName(name)
-                .withAccessSchemaGrants(List.of(
-                    AccessSchemaGrantMappingImpl.builder()
-                        .withAccess(AccessSchema.NONE)
-                        .withCubeGrant(List.of(
-                            AccessCubeGrantMappingImpl.builder()
-                                .withAccess(AccessCube.ALL)
-                                .withCube(PhysicalCubeMappingImpl.builder().withName(cubeName).build())
-                                .withHierarchyGrants(List.of(
-                                    AccessHierarchyGrantMappingImpl.builder()
-                                        .withAccess(AccessHierarchy.CUSTOM)
-                                        .withHierarchy(HierarchyMappingImpl.builder().withName("Customers").build())
-                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                        .withMemberGrants(List.of(
-                                            AccessMemberGrantMappingImpl.builder()
-                                                .withAccess(AccessMember.ALL)
-                                                .withMember(uniqueName)
-                                                .build()
-                                        ))
-                                        .build(),
-                                    AccessHierarchyGrantMappingImpl.builder()
-                                        .withAccess(AccessHierarchy.CUSTOM)
-                                        .withHierarchy(HierarchyMappingImpl.builder().withName("Customers2").build())
-                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                        .withMemberGrants(List.of(
-                                        	AccessMemberGrantMappingImpl.builder()
-                                                .withAccess(AccessMember.ALL)
-                                                .withMember(uniqueName2)
-                                                .build()
-                                        ))
-                                        .build(),
-                                    AccessHierarchyGrantMappingImpl.builder()
-                                        .withAccess(AccessHierarchy.CUSTOM)
-                                        .withHierarchy(HierarchyMappingImpl.builder().withName("Customers3").build())
-                                        .withRollupPolicyType(RollupPolicyType.PARTIAL)
-                                        .withMemberGrants(List.of(
-                                        	AccessMemberGrantMappingImpl.builder()
-                                                .withAccess(AccessMember.ALL)
-                                                .withMember(uniqueName3)
-                                                .build()
-                                        ))
-                                        .build()
-                                ))
-                                .build()
-                        ))
-                        .build()
-                ))
-                .build()
-            );
-
-            roleUsages.add(AccessRoleMappingImpl.builder().withName(name).build());
-        }
-        roles.add(AccessRoleMappingImpl.builder()
-            .withName("Test")
-            .withReferencedAccessRoles(roleUsages)
-            .build());
 
         final long t0 = System.currentTimeMillis();
         RolapSchemaPool.instance().clear();
         CatalogMapping schema = foodMartContext.getCatalogMapping();
-        ((TestContext)foodMartContext).setCatalogMappingSupplier(new SchemaModifiers.AccessControlTestModifier12(schema, roles));
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new SchemaModifiers.AccessControlTestModifier12(schema, result));
         ConnectionProps props = new RolapConnectionPropsR(List.of("Test"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
         TestUtil.executeQuery(connection, "select from [" + cubeName + "]");
@@ -3295,7 +3234,8 @@ class AccessControlTest {
         TestUtil.executeQuery(
     		connection,
             " select from [Sales] where {[Measures].[Unit Sales]}");
-
+        
+        ((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
         TestUtil.withSchema(foodMartContext, SchemaModifiers.AccessControlTestModifier27::new);
         props = new RolapConnectionPropsR(List.of("dev"), true, Locale.getDefault(), -1, TimeUnit.SECONDS, Optional.empty(), Optional.empty());
         connection = foodMartContext.getConnection(props);
@@ -3405,6 +3345,7 @@ class AccessControlTest {
                     // MONDRIAN-1568 showed different results with different
                     // rollup policies and different default members
                     // RolapNativeCrossjoin
+                	((TestContext)foodMartContext).setCatalogMappingSupplier(new FoodmartMappingSupplier());
                     RolapSchemaPool.instance().clear();                                     
                     CatalogMapping catalogMapping = foodMartContext.getCatalogMapping();
                     ((TestContext)foodMartContext).setCatalogMappingSupplier(new SchemaModifiers.AccessControlTestModifier29(catalogMapping, hasAll, defaultMember, policy));

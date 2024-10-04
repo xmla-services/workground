@@ -57,12 +57,12 @@ import org.eclipse.daanse.rolap.mapping.pojo.AccessRoleMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.AccessSchemaGrantMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.HierarchyMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.PhysicalCubeMappingImpl;
+import org.eclipse.daanse.rolap.mapping.pojo.SQLMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.StandardDimensionMappingImpl;
 import org.eclipse.daanse.rolap.mapping.pojo.TableQueryMappingImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.context.TestConfig;
 
 import mondrian.olap.MondrianException;
@@ -276,8 +276,14 @@ class RolapSchemaTest {
     void testGetOrCreateStar_StarCreatedAndUsed()
         throws Exception {
       //Create the test fact
-      RelationalQueryMapping fact =
-          SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+      RelationalQueryMapping fact = TableQueryMappingImpl.builder()
+      		  .withName("getFactTable()")
+      		  .withAlias("TableAlias")
+      		  .withSqlWhereExpression(SQLMappingImpl.builder()
+      				  .withDialects(List.of("mysql"))
+      				  .withStatement("`TableAlias`.`promotion_id` = 112")
+      				  .build())
+      		  .build();
       List<String> rolapStarKey = RolapUtil.makeRolapStarKey(fact);
       //Expected result star
       RolapStar expectedStar = rlStarMock;
@@ -303,8 +309,14 @@ class RolapSchemaTest {
     @Test
     void testGetStarFromRegistryByStarKey() throws Exception {
       //Create the test fact
-      RelationalQueryMapping fact =
-          SchemaUtil.parse(getFactTableWithSQLFilter(), TableQueryMappingImpl.class);
+      RelationalQueryMapping fact = TableQueryMappingImpl.builder()
+    		  .withName("getFactTable()")
+    		  .withAlias("TableAlias")
+    		  .withSqlWhereExpression(SQLMappingImpl.builder()
+    				  .withDialects(List.of("mysql"))
+    				  .withStatement("`TableAlias`.`promotion_id` = 112")
+    				  .build())
+    		  .build();
       List<String> rolapStarKey = RolapUtil.makeRolapStarKey(fact);
       //Expected result star
       RolapStarRegistry rolapStarRegistry =
@@ -319,8 +331,11 @@ class RolapSchemaTest {
     @Test
     void testGetStarFromRegistryByFactTableName() throws Exception {
       //Create the test fact
-      RelationalQueryMapping fact =
-          SchemaUtil.parse(getFactTable(), TableQueryMappingImpl.class);
+      RelationalQueryMapping fact = TableQueryMappingImpl.builder()
+    		  .withName("getFactTable()")
+    		  .withAlias("TableAlias")
+    		  .build();
+
       //Expected result star
       RolapStarRegistry rolapStarRegistry =
           getStarRegistryLinkedToRolapSchemaSpy(schemaSpy, fact);

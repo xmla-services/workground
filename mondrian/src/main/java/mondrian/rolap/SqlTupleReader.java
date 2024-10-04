@@ -1402,7 +1402,7 @@ public TupleList readTuples(
           new RolapStar.Condition(
             currLevel.getKeyExp(),
             aggColumn.getExpression() );
-        sqlQuery.addWhere( condition.toString( sqlQuery ) );
+        sqlQuery.addWhere( condition.toString( sqlQuery ) );       
         aggColumn.getTable().addToFrom( sqlQuery, false, true );
       } else if ( levelCollapsed ) {
         RolapStar.Column starColumn =
