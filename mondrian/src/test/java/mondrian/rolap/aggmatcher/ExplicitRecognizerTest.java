@@ -939,7 +939,7 @@ class ExplicitRecognizerTest extends AggTableTestCase {
         String monthCaptionCol, String monthOrdinalCol, String monthNameCol, List<MemberPropertyMappingImpl> monthProp)
     {
         setupMultiColDimCube(context,
-            aggTables, yearCols, qtrCols, monthCols, monthCaptionCol, monthOrdinalCol, monthNameCol, monthProp);
+            aggTables, yearCols, qtrCols, monthCols, monthCaptionCol, monthOrdinalCol, monthNameCol, monthProp, "Unit Sales");
     }
 
     public static void setupMultiColDimCube(

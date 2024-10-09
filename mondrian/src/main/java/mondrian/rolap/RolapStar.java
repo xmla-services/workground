@@ -1575,6 +1575,7 @@ public class RolapStar {
                 case TYPE_LONG:
                     return Datatype.INTEGER;
                 case TYPE_BOOLEAN:
+                	return Datatype.BOOLEAN;
                 case TYPE_DATE:
                      return Datatype.DATE;
                 case TYPE_TIME:

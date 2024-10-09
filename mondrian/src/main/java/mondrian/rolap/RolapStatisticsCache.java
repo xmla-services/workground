@@ -9,7 +9,7 @@
 
 package mondrian.rolap;
 
-import static mondrian.rolap.util.ExpressionUtil.getExpression1;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,7 +148,7 @@ public class RolapStatisticsCache {
         } else {
             final SqlQuery sqlQuery = star.getSqlQuery();
             sqlQuery.setDistinct(true);
-            sqlQuery.addSelect(getExpression1( expression, sqlQuery), null);
+            sqlQuery.addSelect(getExpression( expression, sqlQuery), null);
             sqlQuery.addFrom(relation, null, true);
             return getQueryCardinality(sqlQuery.toString());
         }
